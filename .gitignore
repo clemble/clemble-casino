@@ -5,12 +5,16 @@
 *.war
 *.ear
 # Eclipse configurations #
+.idea
+*.iml
 .classpath
 .project
 .settings
 **/.classpath
 **/.project
 **/.settings
+**/.idea
+**/*.iml
 # Build directories #
 target
 bin
