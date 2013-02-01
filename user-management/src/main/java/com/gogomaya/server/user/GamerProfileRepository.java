@@ -1,12 +1,12 @@
 package com.gogomaya.server.user;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Component;
+import org.springframework.data.rest.repository.annotation.RestResource;
+import org.springframework.stereotype.Repository;
 
-@Component
-@GenericGenerator(name="system-uuid", strategy = "uuid")
+@Repository
+@RestResource(path="profile", exported = true)
 public interface GamerProfileRepository extends JpaRepository<GamerProfile, String>, JpaSpecificationExecutor<GamerProfile> {
 
 }

@@ -1,5 +1,7 @@
 package com.gogomaya.server.user;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +20,13 @@ public class GameProfileRepositoryTest {
     @Autowired
     private GamerProfileRepository gamerProfileRepository;
     
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
+    
     @Test
     public void testInitialized(){
         Assert.assertNotNull(gamerProfileRepository);
+        Assert.assertNotNull(entityManagerFactory);
     }
     
     @Test

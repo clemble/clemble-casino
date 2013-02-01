@@ -13,6 +13,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Email;
 
 @Entity
 @Table(name = "USER_PROFILE")
@@ -28,6 +29,10 @@ public class GamerProfile implements Serializable {
     @Column(name = "USER_ID")
     @JsonProperty("userId")
     private String userId;
+    
+    @Email
+    @Column(name = "EMAIL")
+    private String email;
 
     @Column(name = "NICK_NAME")
     @JsonProperty("nickName")
@@ -109,6 +114,14 @@ public class GamerProfile implements Serializable {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
