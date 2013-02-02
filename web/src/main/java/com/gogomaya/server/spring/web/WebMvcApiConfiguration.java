@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.rest.repository.UriToDomainObjectUriResolver;
 import org.springframework.data.rest.repository.context.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.repository.jpa.JpaRepositoryExporter;
@@ -23,11 +22,8 @@ import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcesso
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
-import com.gogomaya.server.spring.user.UserModuleSpringConfiguration;
-
 @Configuration
-@Import(UserModuleSpringConfiguration.class)
-public class RepositoryRestMvcConfiguration {
+public class WebMvcApiConfiguration {
 
     /**
      * {@link org.springframework.data.rest.repository.RepositoryExporter} implementation for exporting JPA repositories.

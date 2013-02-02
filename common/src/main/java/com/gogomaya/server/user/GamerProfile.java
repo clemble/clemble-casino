@@ -24,12 +24,13 @@ public class GamerProfile implements Serializable {
      */
     private static final long serialVersionUID = -7544343898430552989L;
 
-    @Id @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     @Column(name = "USER_ID")
     @JsonProperty("userId")
     private String userId;
-    
+
     @Email
     @Column(name = "EMAIL")
     private String email;
@@ -64,64 +65,72 @@ public class GamerProfile implements Serializable {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public GamerProfile setUserId(String userId) {
         this.userId = userId;
+        return this;
     }
 
     public String getNickName() {
         return nickName;
     }
 
-    public void setNickName(String nickName) {
+    public GamerProfile setNickName(String nickName) {
         this.nickName = nickName;
+        return this;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public GamerProfile setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public GamerProfile setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public GamerProfile setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
     }
 
     public Gender getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public GamerProfile setGender(Gender gender) {
         this.gender = gender;
+        return this;
     }
 
     public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public GamerProfile setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public GamerProfile setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     @Override
