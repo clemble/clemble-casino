@@ -16,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Email;
 
 @Entity
-@Table(name = "USER_PROFILE")
+@Table(name = "GAMER_PROFILE")
 public class GamerProfile implements Serializable {
 
     /**

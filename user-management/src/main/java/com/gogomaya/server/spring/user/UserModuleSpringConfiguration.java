@@ -2,6 +2,7 @@ package com.gogomaya.server.spring.user;
 
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
@@ -10,7 +11,9 @@ import javax.sql.DataSource;
 import org.cloudfoundry.runtime.env.CloudEnvironment;
 import org.cloudfoundry.runtime.service.AbstractServiceCreator.ServiceNameTuple;
 import org.cloudfoundry.runtime.service.relational.CloudDataSourceFactory;
+import org.hibernate.cfg.Environment;
 import org.hibernate.ejb.HibernatePersistence;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +35,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.user.GamerProfile;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
@@ -39,8 +43,8 @@ import com.google.common.collect.Collections2;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.user")
 @ComponentScan(basePackages = "com.gogomaya.server.user")
-@Import(value = { CommonModuleSpringConfiguration.class, UserModuleSpringConfiguration.CloudFoundryConfigurations.class, UserModuleSpringConfiguration.DefaultConfigurations.class,
-        UserModuleSpringConfiguration.TestConfigurations.class })
+@Import(value = { CommonModuleSpringConfiguration.class, UserModuleSpringConfiguration.CloudFoundryConfigurations.class,
+        UserModuleSpringConfiguration.DefaultConfigurations.class, UserModuleSpringConfiguration.TestConfigurations.class })
 public class UserModuleSpringConfiguration {
 
     @Inject
@@ -88,7 +92,7 @@ public class UserModuleSpringConfiguration {
     static class CloudFoundryConfigurations {
         @Inject
         CloudEnvironment cloudEnvironment;
-        
+
         @Bean
         @Singleton
         public JpaVendorAdapter jpaVendorAdapter() {
@@ -142,6 +146,23 @@ public class UserModuleSpringConfiguration {
     @Configuration
     @Profile(value = "test")
     static class TestConfigurations {
+
+        @PostConstruct
+        public void createSchemaFile() {
+            org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
+
+            configuration
+                .addAnnotatedClass(GamerProfile.class)
+                .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
+                 .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
+
+            new SchemaExport(configuration)
+                .setDelimiter(";")
+                .setFormat(true)
+                .setOutputFile("src/main/resources/sql/schema.sql")
+                .create(true, false);
+        }
+
         @Bean
         @Singleton
         public JpaVendorAdapter jpaVendorAdapter() {

@@ -3,6 +3,6 @@ package com.gogomaya.server.user;
 public enum GamerCategory {
 
     Novice,
-    Ameture,
+    Amateur,
     Professional;
 }

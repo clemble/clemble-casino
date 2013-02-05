@@ -5,16 +5,14 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-@Configuration
-public class RestExporterWebInitializer implements WebApplicationInitializer {
-
-    @Override
+//@Configuration
+public class RestExporterWebInitializer {
+//  implements WebApplicationInitializer {
+//    @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         // Step 0. Creating parent ApplicationContext
         AnnotationConfigApplicationContext parentContext = new AnnotationConfigApplicationContext();

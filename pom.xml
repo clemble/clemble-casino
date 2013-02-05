@@ -25,6 +25,7 @@
         <commons-lang.version>3.1</commons-lang.version>
         <guava.version>13.0</guava.version>
         <javax.inject.version>1</javax.inject.version>
+        <cglib.version>2.2</cglib.version>
         <!-- AMQP dependencies -->
         <spring.amqp.version>1.1.3.RELEASE</spring.amqp.version>
         <!-- Dependencies for ORM -->
@@ -53,7 +54,7 @@
         <!-- Plugin dependencies -->
         <maven.compile.plugin.version>2.3.2</maven.compile.plugin.version>
         <maven.war.plugin.version>2.1.1</maven.war.plugin.version>
-        <java.version>1.7</java.version>
+        <java.version>1.6</java.version>
         <jetty.version>9.0.0.M3</jetty.version>
     </properties>
     <repositories>
@@ -332,6 +333,11 @@
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>${javax.inject.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>${cglib.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

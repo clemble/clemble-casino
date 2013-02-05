@@ -1,16 +1,31 @@
 package com.gogomaya.server.spring.common;
 
+import org.cloudfoundry.runtime.env.CloudEnvironment;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Import(CommonModuleSpringConfiguration.CloudFoundryConfigurations.class)
 public class CommonModuleSpringConfiguration {
 
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper;
+    }
+
+    @Configuration
+    @Profile(value = "cloud")
+    public static class CloudFoundryConfigurations {
+
+        @Bean
+        public CloudEnvironment cloudEnvironment() {
+            return new CloudEnvironment();
+        }
+
     }
 
 }
