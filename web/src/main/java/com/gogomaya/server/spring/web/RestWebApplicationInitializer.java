@@ -9,19 +9,19 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-//@Configuration
-public class RestExporterWebInitializer {
-//  implements WebApplicationInitializer {
-//    @Override
+public class RestWebApplicationInitializer { 
+    //implements WebApplicationInitializer {
+
+    //@Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         // Step 0. Creating parent ApplicationContext
         AnnotationConfigApplicationContext parentContext = new AnnotationConfigApplicationContext();
         parentContext.register(WebGenericConfiguration.class);
         parentContext.refresh();
         parentContext.start();
-        
+
         // Registering exporter for API
-        
+
         // Step 1. Create Spring application context
         AnnotationConfigWebApplicationContext apiExporterContext = new AnnotationConfigWebApplicationContext();
         apiExporterContext.register(WebMvcApiConfiguration.class);
@@ -36,7 +36,7 @@ public class RestExporterWebInitializer {
         apiRegistration.addMapping("/api/*");
 
         // Registering exporter for SPI
-        
+
         // Step 1. Create Spring application context
         AnnotationConfigWebApplicationContext spiExporterContext = new AnnotationConfigWebApplicationContext();
         spiExporterContext.register(WebMvcSpiConfiguration.class);

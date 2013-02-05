@@ -1,4 +1,4 @@
-package com.gogomaya.server.web;
+package com.gogomaya.server.web.social;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ public class SocialConnectionDataController {
         this.socialConnectionDataAdapter = socialConnectionDataAdapter;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value="/profile/social", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value="/social", produces = "application/json")
     @ResponseStatus(value= HttpStatus.OK)
     public String createUser(@RequestBody SocialConnectionData socialConnectionData) {
         return socialConnectionDataAdapter.adapt(socialConnectionData);
