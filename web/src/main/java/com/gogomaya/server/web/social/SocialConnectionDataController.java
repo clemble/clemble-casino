@@ -5,9 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
+import com.gogomaya.server.user.GamerProfile;
 import com.gogomaya.server.user.SocialConnectionData;
 
 @Controller
@@ -20,8 +22,8 @@ public class SocialConnectionDataController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/social", produces = "application/json")
-    @ResponseStatus(value= HttpStatus.OK)
-    public String createUser(@RequestBody SocialConnectionData socialConnectionData) {
+    @ResponseStatus(value= HttpStatus.CREATED)
+    public @ResponseBody GamerProfile createUser(@RequestBody SocialConnectionData socialConnectionData) {
         return socialConnectionDataAdapter.adapt(socialConnectionData);
     }
 

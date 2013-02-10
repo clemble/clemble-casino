@@ -20,7 +20,7 @@ public class SocialConnectionData implements Serializable {
      */
     private static final long serialVersionUID = -6236465246404418965L;
 
-    @JsonProperty("provderId")
+    @JsonProperty("providerId")
     final private String providerId;
 
     @JsonProperty("providerUserId")

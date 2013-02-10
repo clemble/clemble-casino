@@ -75,7 +75,7 @@ public class SocialModuleSpringConfiguration {
     @Bean
     @Singleton
     public SocialConnectionDataAdapter socialConnectionDataAdapter() {
-        return new SocialConnectionDataAdapter(connectionFactoryLocator(), usersConnectionRepository(), rabbitTemplate());
+        return new SocialConnectionDataAdapter(connectionFactoryLocator(), usersConnectionRepository(), rabbitTemplate(), gamerProfileRepository);
     }
 
     @Bean
@@ -89,7 +89,7 @@ public class SocialModuleSpringConfiguration {
     @Bean
     @Singleton
     public FacebookConnectionFactory facebookConnectionFactory() {
-        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory("", "");
+        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory("486714778051999", "cd4976a1ae74d3e70e804e1ae82b7eb6");
         return facebookConnectionFactory;
     }
 

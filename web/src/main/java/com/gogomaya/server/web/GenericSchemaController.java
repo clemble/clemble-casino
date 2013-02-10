@@ -34,7 +34,7 @@ public class GenericSchemaController {
     final private Map<String, Class<?>> schemaMapping = new HashMap<String, Class<?>>();
 
     @RequestMapping(value = "/{entity}/schema", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
+    @ResponseBody()
     public ResponseEntity<?> schemaForRepository(HttpServletRequest servletRequest, @PathVariable String entity) throws IOException {
         Class<?> targetEntity = getSchemaMapping().get(entity);
         if (targetEntity == null)
