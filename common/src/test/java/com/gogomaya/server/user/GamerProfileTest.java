@@ -14,8 +14,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gogomaya.server.user.GamerProfile;
-import com.gogomaya.server.user.Gender;
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaValidationService;
 
 public class GamerProfileTest extends AbstractCommonTest {
 
@@ -37,18 +37,14 @@ public class GamerProfileTest extends AbstractCommonTest {
 
     }
 
-    final private String JSON_PRESENTATION = "{" +
-            "\"userId\":\"e22dwdewfwfdscsfwerfrev\"," +
-            "\"nickName\":\"michael.limbo\","+
-            "\"firstName\":\"Michael\"," +
-            "\"lastName\":\"Limbo\"," +
-            "\"gender\":\"M\"," +
-            "\"birthDate\":\"10/10/1990\"," +
-            "\"imageUrl\":\"https://limbozo.com/\"" +
-            "}";
+    final private String JSON_PRESENTATION = "{" + "\"userId\":\"e22dwdewfwfdscsfwerfrev\"," + "\"nickName\":\"michael.limbo\"," + "\"firstName\":\"Michael\","
+            + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\"," + "\"birthDate\":\"10/10/1990\"," + "\"imageUrl\":\"https://limbozo.com/\"" + "}";
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private GogomayaValidationService validationService;
 
     @Test
     public void testSerialization() throws JsonGenerationException, JsonMappingException, IOException, ParseException {
@@ -74,7 +70,7 @@ public class GamerProfileTest extends AbstractCommonTest {
         Assert.assertEquals(expected.getGender(), actual.getGender());
         Assert.assertEquals(expected.getBirthDate(), actual.getBirthDate());
     }
-    
+
     @Test
     public void testDeserialization() throws JsonGenerationException, JsonMappingException, IOException, ParseException {
         // Step 1. Reading data from the output stream
@@ -87,5 +83,12 @@ public class GamerProfileTest extends AbstractCommonTest {
         Assert.assertEquals(USER_ID, actual.getUserId());
         Assert.assertEquals(GENDER, actual.getGender());
         Assert.assertEquals(BIRTH_DATE, actual.getBirthDate());
+    }
+
+    @Test
+    public void testValidation() {
+        GamerProfile gamerProfile = new GamerProfile().setEmail("test_gmail.com");
+        GogomayaError gogomayaError = validationService.validate(gamerProfile);
+        Assert.assertNotNull(gogomayaError);
     }
 }

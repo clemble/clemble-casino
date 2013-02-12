@@ -14,6 +14,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Table(name = "GAMER_PROFILE")
@@ -31,7 +32,7 @@ public class GamerProfile implements Serializable {
     @JsonProperty("userId")
     private String userId;
 
-    @Email
+    @Email(message = "103")
     @Column(name = "EMAIL")
     private String email;
 
@@ -59,6 +60,7 @@ public class GamerProfile implements Serializable {
 
     @Column(name = "IMAGE_URL")
     @JsonProperty("imageUrl")
+    @URL(message = "105")
     private String imageUrl;
 
     @Column(name = "CATEGORY")
