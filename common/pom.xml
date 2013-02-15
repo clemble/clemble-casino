@@ -21,6 +21,23 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
+        <!-- Rabbit dependencies -->
+
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-amqp</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-core</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+        </dependency>
+
         <!-- JPA dependencies -->
 
         <dependency>
@@ -35,7 +52,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

@@ -2,9 +2,13 @@ package com.gogomaya.server.user;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.gogomaya.server.error.GogomayaError;
 
 /**
  * Minimum social ConnectionData, that is sufficient to create a user profile in internal network.
@@ -21,9 +25,11 @@ public class SocialConnectionData implements Serializable {
     private static final long serialVersionUID = -6236465246404418965L;
 
     @JsonProperty("providerId")
+    @NotNull(message = GogomayaError.SOCIAL_CONNECTION_PROVIDER_NULL_CODE)
     final private String providerId;
 
     @JsonProperty("providerUserId")
+    @NotNull(message = GogomayaError.SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE)
     final private String providerUserId;
 
     @JsonProperty("accessToken")
@@ -39,13 +45,7 @@ public class SocialConnectionData implements Serializable {
     final private long expireTime;
 
     @JsonCreator
-    public SocialConnectionData(
-            @JsonProperty("providerId") final String providerId,
-            @JsonProperty("providerUserId") final String providerUserId,
-            @JsonProperty("accessToken") final String accessToken,
-            @JsonProperty("secret") final String secret,
-            @JsonProperty("refreshToken") final String refreshToken,
-            @JsonProperty("expireTime") final long expireTime) {
+    public SocialConnectionData(@JsonProperty("providerId") final String providerId, @JsonProperty("providerUserId") final String providerUserId, @JsonProperty("accessToken") final String accessToken, @JsonProperty("secret") final String secret, @JsonProperty("refreshToken") final String refreshToken, @JsonProperty("expireTime") final long expireTime) {
         this.providerId = providerId;
         this.providerUserId = providerUserId;
         this.accessToken = accessToken;

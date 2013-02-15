@@ -11,22 +11,23 @@ import javax.validation.ValidatorFactory;
 public class GogomayaValidationService {
 
     final private ValidatorFactory validatorFactory;
-    
+
     public GogomayaValidationService(ValidatorFactory validatorFactory) {
         this.validatorFactory = checkNotNull(validatorFactory);
     }
-    
-    public <T> GogomayaError validate(T object) {
+
+    public <T> void validate(T object) {
         // Step 1. Validating provided input
         Set<ConstraintViolation<T>> errors = validatorFactory.getValidator().validate(object);
-        if(errors.isEmpty())
-            return null;
+        if (errors.isEmpty())
+            return;
         // Step 2. Accumulating error codes
         ArrayList<String> errorCodes = new ArrayList<String>();
-        for(ConstraintViolation<T> error: errors) {
+        for (ConstraintViolation<T> error : errors) {
             errorCodes.add(error.getMessage());
         }
         // Step 3. Generating Gogomaya error
-        return new GogomayaError(errorCodes);
+        if (errorCodes.size() > 0)
+            throw GogomayaException.create(errorCodes);
     }
 }

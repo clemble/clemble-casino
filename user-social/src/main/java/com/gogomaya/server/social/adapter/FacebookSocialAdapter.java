@@ -9,12 +9,12 @@ import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
 
-import com.gogomaya.server.social.SocialAdapter;
+import com.gogomaya.server.social.SocialConnectionAdapter;
 import com.gogomaya.server.user.GamerProfile;
 import com.gogomaya.server.user.Gender;
 import com.gogomaya.server.user.SocialConnectionData;
 
-public class FacebookSocialAdapter extends SocialAdapter<Facebook> {
+public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
 
     public FacebookSocialAdapter() {
         super("facebook");
@@ -39,7 +39,6 @@ public class FacebookSocialAdapter extends SocialAdapter<Facebook> {
         FacebookProfile facebookProfile = facebook.userOperations().getUserProfile();
         // Step 2. Generating appropriate GameProfile to return
         return new GamerProfile()
-            .setEmail(facebookProfile.getEmail())
             .setFirstName(facebookProfile.getFirstName())
             .setLastName(facebookProfile.getLastName())
             .setBirthDate(readDate(facebookProfile.getBirthday()))

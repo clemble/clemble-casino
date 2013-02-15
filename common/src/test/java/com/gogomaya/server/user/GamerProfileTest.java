@@ -14,7 +14,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaValidationService;
 
 public class GamerProfileTest extends AbstractCommonTest {
@@ -23,7 +22,7 @@ public class GamerProfileTest extends AbstractCommonTest {
     final private String LAST_NAME = "Limbo";
     final private String IMAGE_URL = "https://limbozo.com/";
     final private String NICK_NAME = "michael.limbo";
-    final private String USER_ID = "e22dwdewfwfdscsfwerfrev";
+    final private long USER_ID = 1L;
     final private Gender GENDER = Gender.M;
     final private Date BIRTH_DATE;
 
@@ -37,8 +36,9 @@ public class GamerProfileTest extends AbstractCommonTest {
 
     }
 
-    final private String JSON_PRESENTATION = "{" + "\"userId\":\"e22dwdewfwfdscsfwerfrev\"," + "\"nickName\":\"michael.limbo\"," + "\"firstName\":\"Michael\","
-            + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\"," + "\"birthDate\":\"10/10/1990\"," + "\"imageUrl\":\"https://limbozo.com/\"" + "}";
+    final private String JSON_PRESENTATION = "{" + "\"userId\":1," + "\"nickName\":\"michael.limbo\","
+            + "\"firstName\":\"Michael\"," + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\","
+            + "\"birthDate\":\"10/10/1990\"," + "\"imageUrl\":\"https://limbozo.com/\"" + "}";
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -48,26 +48,22 @@ public class GamerProfileTest extends AbstractCommonTest {
 
     @Test
     public void testSerialization() throws JsonGenerationException, JsonMappingException, IOException, ParseException {
-        GamerProfile expected = new GamerProfile();
-        expected.setFirstName(FIRST_NAME);
-        expected.setLastName(LAST_NAME);
-        expected.setImageUrl(IMAGE_URL);
-        expected.setNickName(NICK_NAME);
-        expected.setUserId(USER_ID);
-        expected.setGender(GENDER);
-        expected.setBirthDate(BIRTH_DATE);
+        GamerProfile expected = new GamerProfile().setFirstName(FIRST_NAME).setLastName(LAST_NAME)
+                .setImageUrl(IMAGE_URL).setNickName(NICK_NAME).setUserId(USER_ID).setGender(GENDER)
+                .setBirthDate(BIRTH_DATE);
         // Step 2. Saving data to the output stream
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         objectMapper.writeValue(arrayOutputStream, expected);
         // Step 3. Reading data from the output stream
         GamerProfile actual = objectMapper.readValue(arrayOutputStream.toByteArray(), GamerProfile.class);
         // Step 4. Check data value
+        Assert.assertEquals(expected.getUserId(), actual.getUserId());
+        // Assert.assertEquals(expected.getPassword(), actual.getPassword());
         Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
         Assert.assertEquals(expected.getImageUrl(), actual.getImageUrl());
         Assert.assertEquals(expected.getLastName(), actual.getLastName());
-        Assert.assertEquals(expected.getNickName(), actual.getNickName());
-        Assert.assertEquals(expected.getUserId(), actual.getUserId());
         Assert.assertEquals(expected.getGender(), actual.getGender());
+        Assert.assertEquals(expected.getNickName(), actual.getNickName());
         Assert.assertEquals(expected.getBirthDate(), actual.getBirthDate());
     }
 
@@ -85,10 +81,4 @@ public class GamerProfileTest extends AbstractCommonTest {
         Assert.assertEquals(BIRTH_DATE, actual.getBirthDate());
     }
 
-    @Test
-    public void testValidation() {
-        GamerProfile gamerProfile = new GamerProfile().setEmail("test_gmail.com");
-        GogomayaError gogomayaError = validationService.validate(gamerProfile);
-        Assert.assertNotNull(gogomayaError);
-    }
 }

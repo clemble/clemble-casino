@@ -14,6 +14,7 @@
         <module>session-management</module>
         <module>web</module>
         <module>user-social</module>
+        <module>integration-test</module>
     </modules>
     <properties>
         <cloudfoundry.runtime.version>0.8.2</cloudfoundry.runtime.version>

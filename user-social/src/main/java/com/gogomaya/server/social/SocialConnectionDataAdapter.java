@@ -6,12 +6,14 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.user.GamerProfile;
 import com.gogomaya.server.user.GamerProfileRepository;
 import com.gogomaya.server.user.SocialConnectionData;
@@ -19,24 +21,20 @@ import com.google.common.collect.ImmutableSet;
 
 public class SocialConnectionDataAdapter {
 
-    @Inject
     final private ConnectionFactoryLocator connectionFactoryLocator;
 
-    @Inject
-    final private UsersConnectionRepository connectionRepository;
+    final private UsersConnectionRepository usersConnectionRepository;
 
-    @Inject
-    final private AmqpTemplate amqpTemplate;
-
-    @Inject
     final private GamerProfileRepository gamerProfileRepository;
 
-    public SocialConnectionDataAdapter(final ConnectionFactoryLocator connectionFactoryLocator, final UsersConnectionRepository usersConnectionRepository,
-            final AmqpTemplate amqpTemplate, final GamerProfileRepository gamerProfileRepository) {
+    final private SocialConnectionAdapterRegistry socialAdapterRegistry;
+
+    @Inject
+    public SocialConnectionDataAdapter(final ConnectionFactoryLocator connectionFactoryLocator, final UsersConnectionRepository usersConnectionRepository, final GamerProfileRepository gamerProfileRepository, final SocialConnectionAdapterRegistry socialAdapterRegistry) {
         this.connectionFactoryLocator = checkNotNull(connectionFactoryLocator);
-        this.connectionRepository = checkNotNull(usersConnectionRepository);
-        this.amqpTemplate = checkNotNull(amqpTemplate);
+        this.usersConnectionRepository = checkNotNull(usersConnectionRepository);
         this.gamerProfileRepository = checkNotNull(gamerProfileRepository);
+        this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
     }
 
     public GamerProfile adapt(SocialConnectionData socialConnectionData) {
@@ -46,22 +44,35 @@ public class SocialConnectionDataAdapter {
         // Step 2. Checking if user already exists
         String gamerId = null;
 
-        Set<String> existingUsers = connectionRepository.findUserIdsConnectedTo(socialConnectionData.getProviderId(),
+        Set<String> existingUsers = usersConnectionRepository.findUserIdsConnectedTo(socialConnectionData.getProviderId(),
                 ImmutableSet.<String> of(socialConnectionData.getProviderUserId()));
-        if (existingUsers.size() > 0) {
-            amqpTemplate.convertAndSend(socialConnectionData);
-            gamerId = existingUsers.iterator().next();
-        } else {
+        if (existingUsers.size() == 1) {
+            // Step 3. Converting SocialConnectionData to ConnectionData in accordance with the provider
+            ConnectionData connectionData = socialAdapterRegistry.getSocialAdapter(socialConnectionData.getProviderId()).toConnectionData(socialConnectionData);
+            // Step 4. Creating connection appropriate for the provided data
+            Connection<?> connection = connectionFactoryLocator.getConnectionFactory(socialConnectionData.getProviderId()).createConnection(connectionData);
+            // Step 5. Checking if the provided connection was valid
+            if (connection.test()) {
+                // Step 6. Retrieving associated user identifiers
+                gamerId = existingUsers.iterator().next();
+                ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(gamerId);
+                connectionRepository.updateConnection(connection);
+            } else {
+                throw GogomayaException.create(GogomayaError.SOCIAL_CONNECTION_INVALID_CODE);
+            }
+        } else if (existingUsers.size() == 0) {
             // Step 2. Converting SocialConnectionData to ConnectionData in accordance with the provider
-            ConnectionData connectionData = SocialAdapter.getSocialAdapter(socialConnectionData.getProviderId()).toConnectionData(socialConnectionData);
+            ConnectionData connectionData = socialAdapterRegistry.getSocialAdapter(socialConnectionData.getProviderId()).toConnectionData(socialConnectionData);
             // Step 3. Creating connection appropriate for the provided
             Connection<?> connection = connectionFactoryLocator.getConnectionFactory(socialConnectionData.getProviderId()).createConnection(connectionData);
             // Step 4. Saving connection in the Database
             // This is done by calling UserConnectionRespository, which invokes ConnectionSignUp if there is no user with provided Connection
             // So The new user will be created and added to the DB, the Id will be actually generated by JdbcUsersConnectionRepository
             // Check that this logic remains intact
-            gamerId = connectionRepository.findUserIdsWithConnection(connection).iterator().next();
+            gamerId = usersConnectionRepository.findUserIdsWithConnection(connection).iterator().next();
+        } else {
+            throw GogomayaException.create(GogomayaError.SERVER_CRITICAL_ERROR_CODE);
         }
-        return gamerProfileRepository.findOne(gamerId);
+        return gamerProfileRepository.findOne(Long.valueOf(gamerId));
     }
 }

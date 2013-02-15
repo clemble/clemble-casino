@@ -12,7 +12,8 @@ import org.springframework.context.annotation.Profile;
 import com.gogomaya.server.error.GogomayaValidationService;
 
 @Configuration
-@Import(CommonModuleSpringConfiguration.CloudFoundryConfigurations.class)
+@Import({ CommonModuleSpringConfiguration.CommonModuleCloudFoundryConfigurations.class,
+        RabbitModuleSpringConfigurations.class })
 public class CommonModuleSpringConfiguration {
 
     @Bean
@@ -28,7 +29,7 @@ public class CommonModuleSpringConfiguration {
 
     @Configuration
     @Profile(value = "cloud")
-    public static class CloudFoundryConfigurations {
+    public static class CommonModuleCloudFoundryConfigurations {
 
         @Bean
         public CloudEnvironment cloudEnvironment() {

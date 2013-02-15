@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RestResource(path="profile", exported = true)
-public interface GamerProfileRepository extends JpaRepository<GamerProfile, String>, JpaSpecificationExecutor<GamerProfile> {
+public interface GamerProfileRepository extends JpaRepository<GamerProfile, Long>, JpaSpecificationExecutor<GamerProfile> {
 
 }

@@ -43,8 +43,8 @@ import com.google.common.collect.Collections2;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.user")
 @ComponentScan(basePackages = "com.gogomaya.server.user")
-@Import(value = { CommonModuleSpringConfiguration.class, UserModuleSpringConfiguration.CloudFoundryConfigurations.class,
-        UserModuleSpringConfiguration.DefaultConfigurations.class, UserModuleSpringConfiguration.TestConfigurations.class })
+@Import(value = { CommonModuleSpringConfiguration.class, UserModuleSpringConfiguration.UserModuleCloudFoundryConfigurations.class,
+        UserModuleSpringConfiguration.UserModuleDefaultConfigurations.class, UserModuleSpringConfiguration.UserModuleTestConfigurations.class })
 public class UserModuleSpringConfiguration {
 
     @Inject
@@ -89,7 +89,7 @@ public class UserModuleSpringConfiguration {
 
     @Configuration
     @Profile(value = "cloud")
-    static class CloudFoundryConfigurations {
+    static class UserModuleCloudFoundryConfigurations {
         @Inject
         CloudEnvironment cloudEnvironment;
 
@@ -123,7 +123,7 @@ public class UserModuleSpringConfiguration {
 
     @Configuration
     @Profile(value = "default")
-    static class DefaultConfigurations {
+    static class UserModuleDefaultConfigurations {
         @Bean
         @Singleton
         public JpaVendorAdapter jpaVendorAdapter() {
@@ -145,7 +145,7 @@ public class UserModuleSpringConfiguration {
 
     @Configuration
     @Profile(value = "test")
-    static class TestConfigurations {
+    static class UserModuleTestConfigurations {
 
         @PostConstruct
         public void createSchemaFile() {
