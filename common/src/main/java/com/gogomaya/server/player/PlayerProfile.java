@@ -1,4 +1,4 @@
-package com.gogomaya.server.user;
+package com.gogomaya.server.player;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,10 +19,12 @@ import org.hibernate.validator.constraints.URL;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.validation.BirthDateConstraint;
 import com.gogomaya.server.error.validation.NickNameConstraint;
+import com.gogomaya.server.json.CustomDateFormat.CustomDateDeserializer;
+import com.gogomaya.server.json.CustomDateFormat.CustomDateSerializer;
 
 @Entity
-@Table(name = "GAMER_PROFILE")
-public class GamerProfile implements Serializable {
+@Table(name = "PLAYER_PROFILE")
+public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
 
     /**
      * Generated 25/01/13
@@ -30,9 +32,9 @@ public class GamerProfile implements Serializable {
     private static final long serialVersionUID = -7544343898430552989L;
 
     @Id
-    @Column(name = "USER_ID")
-    @JsonProperty("userId")
-    private long userId;
+    @Column(name = "PLAYER_ID")
+    @JsonProperty("playerId")
+    private long playerId;
 
     @Column(name = "NICK_NAME", length = 64)
     @JsonProperty("nickName")
@@ -57,8 +59,8 @@ public class GamerProfile implements Serializable {
     @Column(name = "BIRTH_DATE")
     @Temporal(TemporalType.DATE)
     @JsonProperty("birthDate")
-    @JsonDeserialize(using = CustomDateFormat.CustomDateDeserializer.class)
-    @JsonSerialize(using = CustomDateFormat.CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
+    @JsonSerialize(using = CustomDateSerializer.class)
     @BirthDateConstraint(message = GogomayaError.BIRTH_DATE_INVALID_CODE)
     private Date birthDate;
 
@@ -69,14 +71,16 @@ public class GamerProfile implements Serializable {
 
     @Column(name = "CATEGORY")
     @JsonProperty("category")
-    private GamerCategory category = GamerCategory.Novice;
+    private PlayerCategory category = PlayerCategory.Novice;
 
-    public long getUserId() {
-        return userId;
+    @Override
+    public long getPlayerId() {
+        return playerId;
     }
 
-    public GamerProfile setUserId(long userId) {
-        this.userId = userId;
+    @Override
+    public PlayerProfile setPlayerId(long userId) {
+        this.playerId = userId;
         return this;
     }
 
@@ -84,7 +88,7 @@ public class GamerProfile implements Serializable {
         return nickName;
     }
 
-    public GamerProfile setNickName(String nickName) {
+    public PlayerProfile setNickName(String nickName) {
         this.nickName = nickName;
         return this;
     }
@@ -93,7 +97,7 @@ public class GamerProfile implements Serializable {
         return firstName;
     }
 
-    public GamerProfile setFirstName(String firstName) {
+    public PlayerProfile setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -102,7 +106,7 @@ public class GamerProfile implements Serializable {
         return lastName;
     }
 
-    public GamerProfile setLastName(String lastName) {
+    public PlayerProfile setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -111,7 +115,7 @@ public class GamerProfile implements Serializable {
         return imageUrl;
     }
 
-    public GamerProfile setImageUrl(String imageUrl) {
+    public PlayerProfile setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         return this;
     }
@@ -120,7 +124,7 @@ public class GamerProfile implements Serializable {
         return gender;
     }
 
-    public GamerProfile setGender(Gender gender) {
+    public PlayerProfile setGender(Gender gender) {
         this.gender = gender;
         return this;
     }
@@ -129,16 +133,16 @@ public class GamerProfile implements Serializable {
         return birthDate;
     }
 
-    public GamerProfile setBirthDate(Date birthDate) {
+    public PlayerProfile setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
         return this;
     }
 
-    public GamerCategory getCategory() {
+    public PlayerCategory getCategory() {
         return category;
     }
 
-    public GamerProfile setCategory(GamerCategory category) {
+    public PlayerProfile setCategory(PlayerCategory category) {
         this.category = category;
         return this;
     }
@@ -154,7 +158,7 @@ public class GamerProfile implements Serializable {
         result = prime * result + ((imageUrl == null) ? 0 : imageUrl.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((nickName == null) ? 0 : nickName.hashCode());
-        result = prime * result + (int) (userId ^ (userId >>> 32));
+        result = prime * result + (int) (playerId ^ (playerId >>> 32));
         return result;
     }
 
@@ -166,7 +170,7 @@ public class GamerProfile implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GamerProfile other = (GamerProfile) obj;
+        PlayerProfile other = (PlayerProfile) obj;
         if (birthDate == null) {
             if (other.birthDate != null)
                 return false;
@@ -196,7 +200,7 @@ public class GamerProfile implements Serializable {
                 return false;
         } else if (!nickName.equals(other.nickName))
             return false;
-        if (userId != other.userId)
+        if (playerId != other.playerId)
             return false;
         return true;
     }

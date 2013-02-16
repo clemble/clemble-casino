@@ -14,22 +14,22 @@ import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 
+import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.social.SocialConnectionAdapterRegistry;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.social.SocialGamerProfileCreator;
 import com.gogomaya.server.social.adapter.FacebookSocialAdapter;
-import com.gogomaya.server.spring.user.UserModuleSpringConfiguration;
-import com.gogomaya.server.user.GamerProfileRepository;
+import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
 
 @Configuration
-@Import(value = { UserModuleSpringConfiguration.class })
+@Import(value = { PlayerManagementSpringConfiguration.class })
 public class SocialModuleSpringConfiguration {
 
     @Inject
     DataSource dataSource;
 
     @Inject
-    GamerProfileRepository gamerProfileRepository;
+    PlayerProfileRepository gamerProfileRepository;
 
     @Bean
     @Singleton

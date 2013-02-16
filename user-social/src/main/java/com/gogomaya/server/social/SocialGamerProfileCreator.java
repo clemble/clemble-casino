@@ -7,17 +7,17 @@ import javax.inject.Inject;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 
-import com.gogomaya.server.user.GamerProfile;
-import com.gogomaya.server.user.GamerProfileRepository;
+import com.gogomaya.server.player.PlayerProfileRepository;
+import com.gogomaya.server.player.PlayerProfile;
 
 public class SocialGamerProfileCreator implements ConnectionSignUp {
 
-    final private GamerProfileRepository gamerProfileRepository;
+    final private PlayerProfileRepository gamerProfileRepository;
 
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
 
     @Inject
-    public SocialGamerProfileCreator(final GamerProfileRepository gamerProfileRepository, final SocialConnectionAdapterRegistry socialAdapterRegistry) {
+    public SocialGamerProfileCreator(final PlayerProfileRepository gamerProfileRepository, final SocialConnectionAdapterRegistry socialAdapterRegistry) {
         this.gamerProfileRepository = checkNotNull(gamerProfileRepository);
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
     }
@@ -33,10 +33,10 @@ public class SocialGamerProfileCreator implements ConnectionSignUp {
         if (socialAdapter == null)
             throw new IllegalArgumentException("No SocialAdapter exists for Connection");
         // Step 3. Generating gamer profile based on SocialConnection
-        GamerProfile gamerProfile = socialAdapter.fetchGamerProfile(connection.getApi());
+        PlayerProfile gamerProfile = socialAdapter.fetchGamerProfile(connection.getApi());
         gamerProfile = gamerProfileRepository.saveAndFlush(gamerProfile);
         // Step 4. Returning user identifier
-        return String.valueOf(gamerProfile.getUserId());
+        return String.valueOf(gamerProfile.getPlayerId());
     }
 
 }

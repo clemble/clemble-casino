@@ -1,4 +1,4 @@
-package com.gogomaya.server.security;
+package com.gogomaya.server.player.security;
 
 import java.io.Serializable;
 
@@ -16,10 +16,11 @@ import org.hibernate.validator.constraints.Email;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.validation.PasswordConstraint;
+import com.gogomaya.server.player.PlayerAware;
 
 @Entity
 @Table(name = "USER_CREDENTIALS")
-public class GamerCredential implements Serializable {
+public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializable {
 
     /**
      * Generated 15/02/13
@@ -29,7 +30,7 @@ public class GamerCredential implements Serializable {
     @Id
     @Column(name = "PROFILE_ID")
     @JsonProperty("profileId")
-    private int profileId;
+    private long playerId;
 
     @Column(name = "EMAIL")
     @JsonProperty("email")
@@ -48,11 +49,22 @@ public class GamerCredential implements Serializable {
     @NotNull(message = GogomayaError.PASSWORD_MISSING_CODE)
     private String password;
 
+    @Override
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    @Override
+    public PlayerCredential setPlayerId(long profileId) {
+        this.playerId = profileId;
+        return this;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public GamerCredential setEmail(String email) {
+    public PlayerCredential setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -61,17 +73,8 @@ public class GamerCredential implements Serializable {
         return password;
     }
 
-    public GamerCredential setPassword(String password) {
+    public PlayerCredential setPassword(String password) {
         this.password = password;
-        return this;
-    }
-
-    public int getProfileId() {
-        return profileId;
-    }
-
-    public GamerCredential setProfileId(int profileId) {
-        this.profileId = profileId;
         return this;
     }
 
@@ -79,7 +82,7 @@ public class GamerCredential implements Serializable {
         return credentialType;
     }
 
-    public GamerCredential setCredentialType(CredentialType credentialType) {
+    public PlayerCredential setCredentialType(CredentialType credentialType) {
         this.credentialType = credentialType;
         return this;
     }

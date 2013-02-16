@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
-import com.gogomaya.server.user.GamerProfile;
-import com.gogomaya.server.user.SocialConnectionData;
 
 @Controller
 public class SocialConnectionDataController {
@@ -23,7 +23,7 @@ public class SocialConnectionDataController {
 
     @RequestMapping(method = RequestMethod.POST, value="/social", produces = "application/json")
     @ResponseStatus(value= HttpStatus.CREATED)
-    public @ResponseBody GamerProfile createUser(@RequestBody SocialConnectionData socialConnectionData) {
+    public @ResponseBody PlayerProfile createUser(@RequestBody SocialConnectionData socialConnectionData) {
         return socialConnectionDataAdapter.adapt(socialConnectionData);
     }
 

@@ -1,4 +1,4 @@
-package com.gogomaya.server.security;
+package com.gogomaya.server.player.security;
 
 public enum CredentialType {
 

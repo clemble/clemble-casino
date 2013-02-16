@@ -1,4 +1,4 @@
-package com.gogomaya.server.user;
+package com.gogomaya.server.player;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 

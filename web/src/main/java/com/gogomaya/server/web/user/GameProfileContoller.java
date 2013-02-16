@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.user.GamerProfile;
-import com.gogomaya.server.user.GamerProfileRepository;
+import com.gogomaya.server.player.PlayerProfileRepository;
+import com.gogomaya.server.player.PlayerProfile;
 
 @Controller
 public class GameProfileContoller {
 
     @Inject
-    final private GamerProfileRepository gamerProfileRepository;
+    final private PlayerProfileRepository gamerProfileRepository;
 
-    public GameProfileContoller(final GamerProfileRepository gamerProfileRepository) {
+    public GameProfileContoller(final PlayerProfileRepository gamerProfileRepository) {
         this.gamerProfileRepository = checkNotNull(gamerProfileRepository);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/profile", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GamerProfile createUser(@RequestBody final GamerProfile gamerProfile) {
+    public @ResponseBody PlayerProfile createUser(@RequestBody final PlayerProfile gamerProfile) {
         return gamerProfileRepository.saveAndFlush(gamerProfile);
     }
 }

@@ -1,4 +1,4 @@
-package com.gogomaya.server.spring.user;
+package com.gogomaya.server.spring.player;
 
 import java.util.Collection;
 
@@ -34,18 +34,22 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.security.PlayerCredential;
+import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
-import com.gogomaya.server.user.GamerProfile;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
+import static com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration.*;
+
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "com.gogomaya.server.user")
-@ComponentScan(basePackages = "com.gogomaya.server.user")
-@Import(value = { CommonModuleSpringConfiguration.class, UserModuleSpringConfiguration.UserModuleCloudFoundryConfigurations.class,
-        UserModuleSpringConfiguration.UserModuleDefaultConfigurations.class, UserModuleSpringConfiguration.UserModuleTestConfigurations.class })
-public class UserModuleSpringConfiguration {
+@EnableJpaRepositories(basePackages = "com.gogomaya.server.player")
+@ComponentScan(basePackages = "com.gogomaya.server.player")
+@Import(value = { CommonModuleSpringConfiguration.class, PlayerManagementCloudFoundryConfigurations.class, PlayerManagementDefaultConfigurations.class,
+        PlayerManagementTestConfigurations.class })
+public class PlayerManagementSpringConfiguration {
 
     @Inject
     private DataSource dataSource;
@@ -73,7 +77,7 @@ public class UserModuleSpringConfiguration {
     public EntityManagerFactory entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
-        entityManagerFactory.setPackagesToScan(new String[] { "com.gogomaya.server.user" });
+        entityManagerFactory.setPackagesToScan(new String[] { "com.gogomaya.server.player" });
         entityManagerFactory.setPersistenceProvider(new HibernatePersistence());
         entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter);
         entityManagerFactory.setPersistenceUnitName("entityManager");
@@ -89,7 +93,7 @@ public class UserModuleSpringConfiguration {
 
     @Configuration
     @Profile(value = "cloud")
-    static class UserModuleCloudFoundryConfigurations {
+    static class PlayerManagementCloudFoundryConfigurations {
         @Inject
         CloudEnvironment cloudEnvironment;
 
@@ -123,7 +127,7 @@ public class UserModuleSpringConfiguration {
 
     @Configuration
     @Profile(value = "default")
-    static class UserModuleDefaultConfigurations {
+    static class PlayerManagementDefaultConfigurations {
         @Bean
         @Singleton
         public JpaVendorAdapter jpaVendorAdapter() {
@@ -145,22 +149,16 @@ public class UserModuleSpringConfiguration {
 
     @Configuration
     @Profile(value = "test")
-    static class UserModuleTestConfigurations {
+    static class PlayerManagementTestConfigurations {
 
         @PostConstruct
         public void createSchemaFile() {
             org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
 
-            configuration
-                .addAnnotatedClass(GamerProfile.class)
-                .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
-                 .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
+            configuration.addAnnotatedClass(PlayerProfile.class).addAnnotatedClass(PlayerCredential.class).addAnnotatedClass(PlayerIdentity.class)
+                    .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect").setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 
-            new SchemaExport(configuration)
-                .setDelimiter(";")
-                .setFormat(true)
-                .setOutputFile("src/main/resources/sql/schema.sql")
-                .create(true, false);
+            new SchemaExport(configuration).setDelimiter(";").setFormat(true).setOutputFile("src/main/resources/sql/schema.sql").create(true, false);
         }
 
         @Bean

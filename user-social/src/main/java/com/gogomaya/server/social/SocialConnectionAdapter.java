@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.social.connect.ConnectionData;
 
-import com.gogomaya.server.user.GamerProfile;
-import com.gogomaya.server.user.SocialConnectionData;
+import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.SocialConnectionData;
 
 public abstract class SocialConnectionAdapter<A> {
 
@@ -19,7 +19,7 @@ public abstract class SocialConnectionAdapter<A> {
         return providerId;
     }
 
-    abstract public GamerProfile fetchGamerProfile(A api);
+    abstract public PlayerProfile fetchGamerProfile(A api);
 
     abstract public ConnectionData toConnectionData(SocialConnectionData connectionData);
 

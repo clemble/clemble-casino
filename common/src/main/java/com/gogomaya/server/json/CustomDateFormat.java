@@ -1,4 +1,4 @@
-package com.gogomaya.server.user;
+package com.gogomaya.server.json;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -34,7 +34,7 @@ public class CustomDateFormat {
      * @author Anton Oparin
      *
      */
-    static class CustomDateDeserializer extends JsonDeserializer<Date> {
+    public static class CustomDateDeserializer extends JsonDeserializer<Date> {
         @Override
         public Date deserialize(JsonParser jsonparser, DeserializationContext deserializationcontext) throws IOException, JsonProcessingException {
             try {
@@ -51,7 +51,7 @@ public class CustomDateFormat {
      * @author Anton Oparin
      *
      */
-    static class CustomDateSerializer extends JsonSerializer<Date> {
+    public static class CustomDateSerializer extends JsonSerializer<Date> {
 
         @Override
         public void serialize(Date value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {

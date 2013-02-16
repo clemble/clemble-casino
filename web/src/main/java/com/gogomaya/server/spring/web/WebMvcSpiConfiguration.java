@@ -10,10 +10,10 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.player.PlayerProfileRepository;
+import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
-import com.gogomaya.server.user.GamerProfile;
-import com.gogomaya.server.user.GamerProfileRepository;
-import com.gogomaya.server.user.SocialConnectionData;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 import com.gogomaya.server.web.social.SocialConnectionDataController;
@@ -26,7 +26,7 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     SocialConnectionDataAdapter connectionDataAdapter;
 
     @Inject
-    GamerProfileRepository gamerProfileRepository;
+    PlayerProfileRepository gamerProfileRepository;
 
     @Inject
     ObjectMapper objectMapper;
@@ -45,7 +45,7 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     public GenericSchemaController jsonSchemaController() {
         GenericSchemaController genericSchemaController = new GenericSchemaController();
         genericSchemaController.addSchemaMapping("social", SocialConnectionData.class);
-        genericSchemaController.addSchemaMapping("profile", GamerProfile.class);
+        genericSchemaController.addSchemaMapping("profile", PlayerProfile.class);
         genericSchemaController.addSchemaMapping("error", GogomayaError.class);
         return genericSchemaController;
     }

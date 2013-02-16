@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
-import com.gogomaya.server.user.SocialConnectionData;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })

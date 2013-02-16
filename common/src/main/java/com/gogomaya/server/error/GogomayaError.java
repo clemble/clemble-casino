@@ -7,7 +7,8 @@ import java.util.Set;
 
 public class GogomayaError {
 
-    final public static String SERVER_CRITICAL_ERROR_CODE = "0A0";
+    final public static String SERVER_ERROR_CODE = "0C0";
+    final public static String SERVER_CRITICAL_ERROR_CODE = "0C1";
 
     // Credentials errors
     // Creation problems
@@ -60,4 +61,9 @@ public class GogomayaError {
             throw new RuntimeException("Message processing failed");
         }
     }
+
+    public static boolean isValid(String code) {
+        return EXISTING_CODES.contains(code);
+    }
+
 }

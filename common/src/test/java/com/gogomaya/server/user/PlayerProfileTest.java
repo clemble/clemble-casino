@@ -15,8 +15,10 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gogomaya.server.error.GogomayaValidationService;
+import com.gogomaya.server.player.Gender;
+import com.gogomaya.server.player.PlayerProfile;
 
-public class GamerProfileTest extends AbstractCommonTest {
+public class PlayerProfileTest extends AbstractCommonTest {
 
     final private String FIRST_NAME = "Michael";
     final private String LAST_NAME = "Limbo";
@@ -36,9 +38,8 @@ public class GamerProfileTest extends AbstractCommonTest {
 
     }
 
-    final private String JSON_PRESENTATION = "{" + "\"userId\":1," + "\"nickName\":\"michael.limbo\","
-            + "\"firstName\":\"Michael\"," + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\","
-            + "\"birthDate\":\"10/10/1990\"," + "\"imageUrl\":\"https://limbozo.com/\"" + "}";
+    final private String JSON_PRESENTATION = "{" + "\"playerId\":1," + "\"nickName\":\"michael.limbo\"," + "\"firstName\":\"Michael\","
+            + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\"," + "\"birthDate\":\"10/10/1990\"," + "\"imageUrl\":\"https://limbozo.com/\"" + "}";
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -48,16 +49,15 @@ public class GamerProfileTest extends AbstractCommonTest {
 
     @Test
     public void testSerialization() throws JsonGenerationException, JsonMappingException, IOException, ParseException {
-        GamerProfile expected = new GamerProfile().setFirstName(FIRST_NAME).setLastName(LAST_NAME)
-                .setImageUrl(IMAGE_URL).setNickName(NICK_NAME).setUserId(USER_ID).setGender(GENDER)
-                .setBirthDate(BIRTH_DATE);
+        PlayerProfile expected = new PlayerProfile().setFirstName(FIRST_NAME).setLastName(LAST_NAME).setImageUrl(IMAGE_URL).setNickName(NICK_NAME)
+                .setPlayerId(USER_ID).setGender(GENDER).setBirthDate(BIRTH_DATE);
         // Step 2. Saving data to the output stream
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         objectMapper.writeValue(arrayOutputStream, expected);
         // Step 3. Reading data from the output stream
-        GamerProfile actual = objectMapper.readValue(arrayOutputStream.toByteArray(), GamerProfile.class);
+        PlayerProfile actual = objectMapper.readValue(arrayOutputStream.toByteArray(), PlayerProfile.class);
         // Step 4. Check data value
-        Assert.assertEquals(expected.getUserId(), actual.getUserId());
+        Assert.assertEquals(expected.getPlayerId(), actual.getPlayerId());
         // Assert.assertEquals(expected.getPassword(), actual.getPassword());
         Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
         Assert.assertEquals(expected.getImageUrl(), actual.getImageUrl());
@@ -70,13 +70,13 @@ public class GamerProfileTest extends AbstractCommonTest {
     @Test
     public void testDeserialization() throws JsonGenerationException, JsonMappingException, IOException, ParseException {
         // Step 1. Reading data from the output stream
-        GamerProfile actual = objectMapper.readValue(JSON_PRESENTATION.getBytes(), GamerProfile.class);
+        PlayerProfile actual = objectMapper.readValue(JSON_PRESENTATION.getBytes(), PlayerProfile.class);
         // Step 4. Check data value
         Assert.assertEquals(FIRST_NAME, actual.getFirstName());
         Assert.assertEquals(IMAGE_URL, actual.getImageUrl());
         Assert.assertEquals(LAST_NAME, actual.getLastName());
         Assert.assertEquals(NICK_NAME, actual.getNickName());
-        Assert.assertEquals(USER_ID, actual.getUserId());
+        Assert.assertEquals(USER_ID, actual.getPlayerId());
         Assert.assertEquals(GENDER, actual.getGender());
         Assert.assertEquals(BIRTH_DATE, actual.getBirthDate());
     }

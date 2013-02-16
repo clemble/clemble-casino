@@ -9,10 +9,10 @@ import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
 
+import com.gogomaya.server.player.Gender;
+import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.social.SocialConnectionAdapter;
-import com.gogomaya.server.user.GamerProfile;
-import com.gogomaya.server.user.Gender;
-import com.gogomaya.server.user.SocialConnectionData;
 
 public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
 
@@ -34,11 +34,11 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
     }
 
     @Override
-    public GamerProfile fetchGamerProfile(Facebook facebook) {
+    public PlayerProfile fetchGamerProfile(Facebook facebook) {
         // Step 1. Retrieving facebook profile for associated user
         FacebookProfile facebookProfile = facebook.userOperations().getUserProfile();
         // Step 2. Generating appropriate GameProfile to return
-        return new GamerProfile()
+        return new PlayerProfile()
             .setFirstName(facebookProfile.getFirstName())
             .setLastName(facebookProfile.getLastName())
             .setBirthDate(readDate(facebookProfile.getBirthday()))

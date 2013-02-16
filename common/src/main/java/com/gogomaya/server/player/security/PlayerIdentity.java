@@ -1,4 +1,4 @@
-package com.gogomaya.server.security;
+package com.gogomaya.server.player.security;
 
 import java.io.Serializable;
 
@@ -9,9 +9,11 @@ import javax.persistence.Table;
 
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 
+import com.gogomaya.server.player.PlayerAware;
+
 @Entity
 @Table(name = "USER_IDENTITY")
-public class GamerIdentity implements Serializable {
+public class PlayerIdentity implements PlayerAware<PlayerIdentity>, Serializable {
 
     /**
      * Generated 15/02/13
@@ -26,11 +28,13 @@ public class GamerIdentity implements Serializable {
     @Column(name = "SECRET")
     private String secret;
 
-    public long getProfileId() {
+    @Override
+    public long getPlayerId() {
         return profileId;
     }
 
-    public GamerIdentity setProfileId(long profileId) {
+    @Override
+    public PlayerIdentity setPlayerId(long profileId) {
         this.profileId = profileId;
         return this;
     }
@@ -39,7 +43,7 @@ public class GamerIdentity implements Serializable {
         return secret;
     }
 
-    public GamerIdentity setSecret(String secret) {
+    public PlayerIdentity setSecret(String secret) {
         this.secret = secret;
         return this;
     }
