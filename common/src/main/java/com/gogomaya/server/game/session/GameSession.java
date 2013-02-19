@@ -2,12 +2,10 @@ package com.gogomaya.server.game.session;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.GameAware;
 import com.gogomaya.server.game.GameBoard;
 import com.gogomaya.server.game.GameBoardAware;
 
-public class GameSession implements GameSessionAware<GameSession>, GameAware<GameSession>, GameBoardAware<GameSession>,
-        GameSessionCurrentStateAware<GameSession> {
+public class GameSession implements GameSessionAware<GameSession>, GameBoardAware<GameSession> {
 
     /**
      * Generated 16/02/13
@@ -16,11 +14,9 @@ public class GameSession implements GameSessionAware<GameSession>, GameAware<Gam
 
     private String sessionId;
 
-    private String gameName;
+    private long sequence;
 
-    private long currentPlayerId;
-
-    private long currentStep;
+    private GameSessionState gameSessionState;
 
     private GameBoard gameBoard;
 
@@ -36,17 +32,6 @@ public class GameSession implements GameSessionAware<GameSession>, GameAware<Gam
     }
 
     @Override
-    public String getGameName() {
-        return gameName;
-    }
-
-    @Override
-    public GameSession setGameName(String newGameName) {
-        this.gameName = checkNotNull(gameName);
-        return this;
-    }
-
-    @Override
     public GameBoard getGameBoard() {
         return gameBoard;
     }
@@ -57,26 +42,20 @@ public class GameSession implements GameSessionAware<GameSession>, GameAware<Gam
         return this;
     }
 
-    @Override
-    public long getCurrentPlayerId() {
-        return currentPlayerId;
+    public long getSequence() {
+        return sequence;
     }
 
-    @Override
-    public GameSession setCurrentPlayerId(long activePlayerId) {
-        this.currentPlayerId = activePlayerId;
-        return this;
+    public void setSequence(long sequence) {
+        this.sequence = sequence;
     }
 
-    @Override
-    public long getCurrentStep() {
-        return currentStep;
+    public GameSessionState getGameSessionState() {
+        return gameSessionState;
     }
 
-    @Override
-    public GameSession setCurrentStep(long activeStep) {
-        this.currentStep = activeStep;
-        return this;
+    public void setGameSessionState(GameSessionState gameSessionState) {
+        this.gameSessionState = gameSessionState;
     }
 
 }

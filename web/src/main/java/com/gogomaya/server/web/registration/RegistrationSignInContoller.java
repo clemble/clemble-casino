@@ -51,7 +51,7 @@ public class RegistrationSignInContoller {
         this.validationService = checkNotNull(validationService);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/profile", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = "/registration/signin", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerIdentity createUser(@RequestBody final RegistrationRequest playerRegistrationRequest) {
         validationService.validate(playerRegistrationRequest);

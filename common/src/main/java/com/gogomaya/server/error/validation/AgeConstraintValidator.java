@@ -5,10 +5,10 @@ import java.util.Date;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class BirthDateConstraintValidator implements ConstraintValidator<BirthDateConstraint, Date>{
+public class AgeConstraintValidator implements ConstraintValidator<AgeConstraint, Date>{
 
     @Override
-    public void initialize(BirthDateConstraint constraintAnnotation) {
+    public void initialize(AgeConstraint constraintAnnotation) {
     }
 
     @Override

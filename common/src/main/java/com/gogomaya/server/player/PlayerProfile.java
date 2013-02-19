@@ -17,7 +17,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.URL;
 
 import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.validation.BirthDateConstraint;
+import com.gogomaya.server.error.validation.AgeConstraint;
 import com.gogomaya.server.error.validation.NickNameConstraint;
 import com.gogomaya.server.json.CustomDateFormat.CustomDateDeserializer;
 import com.gogomaya.server.json.CustomDateFormat.CustomDateSerializer;
@@ -61,7 +61,7 @@ public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
     @JsonProperty("birthDate")
     @JsonDeserialize(using = CustomDateDeserializer.class)
     @JsonSerialize(using = CustomDateSerializer.class)
-    @BirthDateConstraint(message = GogomayaError.BIRTH_DATE_INVALID_CODE)
+    @AgeConstraint(message = GogomayaError.BIRTH_DATE_INVALID_CODE)
     private Date birthDate;
 
     @Column(name = "IMAGE_URL")

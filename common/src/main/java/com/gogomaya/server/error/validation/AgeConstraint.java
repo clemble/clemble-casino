@@ -12,8 +12,8 @@ import com.gogomaya.server.error.GogomayaError;
 
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = BirthDateConstraintValidator.class)
-public @interface BirthDateConstraint {
+@Constraint(validatedBy = AgeConstraintValidator.class)
+public @interface AgeConstraint {
 
     String message() default GogomayaError.NICK_INVALID_CODE;
 
