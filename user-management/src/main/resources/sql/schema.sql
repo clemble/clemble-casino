@@ -19,8 +19,7 @@
 
     create table USER_CREDENTIALS (
         PROFILE_ID bigint not null,
-        CREDENTIAL_TYPE integer,
-        EMAIL varchar(255),
+        EMAIL varchar(128) unique,
         PASSWORD varchar(255),
         primary key (PROFILE_ID)
     ) ENGINE=InnoDB;

@@ -2,7 +2,7 @@ package com.gogomaya.server.game.session;
 
 public enum GameSessionState {
 
-    Pending,
+    Inactive,
     Active,
     Ended;
 

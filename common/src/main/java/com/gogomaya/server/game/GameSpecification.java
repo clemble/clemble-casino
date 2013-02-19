@@ -2,6 +2,13 @@ package com.gogomaya.server.game;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "GAME_SPECIFICATION")
 public class GameSpecification implements GameAware<GameSpecification> {
 
     /**
@@ -9,10 +16,14 @@ public class GameSpecification implements GameAware<GameSpecification> {
      */
     private static final long serialVersionUID = -243377038921039858L;
 
+    @Id
+    @Column(name = "GAME_NAME")
     private String gameName;
 
+    @Column(name = "MIN_PLAYERS")
     private int minPlayers;
 
+    @Column(name = "MAX_PLAYERS")
     private int maxPlayers;
 
     @Override

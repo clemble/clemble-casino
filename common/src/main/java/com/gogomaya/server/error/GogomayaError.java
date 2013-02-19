@@ -15,11 +15,14 @@ public class GogomayaError {
     // Email
     final public static String EMAIL_INVALID_CODE = "001";
     final public static String EMAIL_NOT_CONFIRMED_CODE = "002";
+    final public static String EMAIL_NOT_REGISTERED_CODE = "003";
+    final public static String EMAIL_ALREADY_REGISTERED_CODE = "004";
     // Password
     final public static String PASSWORD_MISSING_CODE = "010";
     final public static String PASSWORD_TOO_SHORT_CODE = "011";
     final public static String PASSWORD_TOO_WEAK_CODE = "012";
     final public static String PASSWORD_TOO_LONG_CODE = "013";
+    final public static String PASSWORD_IS_INCORRECT_CODE = "014";
     // Processing problems
     // Credentials authentication codes
     final public static String EMAIL_OR_PASSWORD_WRONG = "020";

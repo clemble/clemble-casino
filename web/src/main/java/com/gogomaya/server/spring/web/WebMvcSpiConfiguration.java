@@ -10,14 +10,18 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.player.PlayerProfileRepository;
+import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.SocialConnectionData;
+import com.gogomaya.server.player.security.PlayerCredentialRepository;
+import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
-import com.gogomaya.server.web.social.SocialConnectionDataController;
-import com.gogomaya.server.web.user.GameProfileContoller;
+import com.gogomaya.server.web.registration.RegistrationLoginController;
+import com.gogomaya.server.web.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.registration.RegistrationSocialConnectionController;
 
 @Configuration
 public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
@@ -26,14 +30,33 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     SocialConnectionDataAdapter connectionDataAdapter;
 
     @Inject
-    PlayerProfileRepository gamerProfileRepository;
+    PlayerProfileRepository playerProfileRepository;
+
+    @Inject
+    PlayerCredentialRepository playerCredentialRepository;
+
+    @Inject
+    PlayerIdentityRepository playerIdentityRepository;
+    
+    @Inject
+    GogomayaValidationService validationService;
 
     @Inject
     ObjectMapper objectMapper;
 
     @Bean
-    public SocialConnectionDataController connectionDataController() {
-        return new SocialConnectionDataController(connectionDataAdapter);
+    public RegistrationSocialConnectionController registrationSocialConnectionController() {
+        return new RegistrationSocialConnectionController(connectionDataAdapter, playerIdentityRepository, validationService);
+    }
+
+    @Bean
+    public RegistrationSignInContoller registrationSignInContoller() {
+        return new RegistrationSignInContoller(playerProfileRepository, playerCredentialRepository, playerIdentityRepository, validationService);
+    }
+
+    @Bean
+    public RegistrationLoginController registrationLoginController() {
+        return new RegistrationLoginController(playerCredentialRepository, playerIdentityRepository, validationService);
     }
 
     @Bean
@@ -48,11 +71,6 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
         genericSchemaController.addSchemaMapping("profile", PlayerProfile.class);
         genericSchemaController.addSchemaMapping("error", GogomayaError.class);
         return genericSchemaController;
-    }
-
-    @Bean
-    public GameProfileContoller gameProfileContoller() {
-        return new GameProfileContoller(gamerProfileRepository);
     }
 
     @Bean

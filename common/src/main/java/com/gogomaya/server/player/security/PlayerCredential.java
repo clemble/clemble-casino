@@ -11,7 +11,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 
 import com.gogomaya.server.error.GogomayaError;
@@ -32,14 +31,10 @@ public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializ
     @JsonProperty("profileId")
     private long playerId;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true, length = 128)
     @JsonProperty("email")
     @Email(message = GogomayaError.EMAIL_INVALID_CODE)
     private String email;
-
-    @Column(name = "CREDENTIAL_TYPE")
-    @JsonIgnore
-    private CredentialType credentialType;
 
     @Column(name = "PASSWORD")
     @JsonProperty("password")
@@ -75,15 +70,6 @@ public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializ
 
     public PlayerCredential setPassword(String password) {
         this.password = password;
-        return this;
-    }
-
-    public CredentialType getCredentialType() {
-        return credentialType;
-    }
-
-    public PlayerCredential setCredentialType(CredentialType credentialType) {
-        this.credentialType = credentialType;
         return this;
     }
 

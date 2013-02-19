@@ -14,8 +14,6 @@ import org.springframework.social.connect.UsersConnectionRepository;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.player.PlayerProfileRepository;
-import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.SocialConnectionData;
 import com.google.common.collect.ImmutableSet;
 
@@ -25,22 +23,19 @@ public class SocialConnectionDataAdapter {
 
     final private UsersConnectionRepository usersConnectionRepository;
 
-    final private PlayerProfileRepository gamerProfileRepository;
-
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
 
     @Inject
-    public SocialConnectionDataAdapter(final ConnectionFactoryLocator connectionFactoryLocator, final UsersConnectionRepository usersConnectionRepository, final PlayerProfileRepository gamerProfileRepository, final SocialConnectionAdapterRegistry socialAdapterRegistry) {
+    public SocialConnectionDataAdapter(final ConnectionFactoryLocator connectionFactoryLocator, final UsersConnectionRepository usersConnectionRepository, final SocialConnectionAdapterRegistry socialAdapterRegistry) {
         this.connectionFactoryLocator = checkNotNull(connectionFactoryLocator);
         this.usersConnectionRepository = checkNotNull(usersConnectionRepository);
-        this.gamerProfileRepository = checkNotNull(gamerProfileRepository);
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
     }
 
-    public PlayerProfile adapt(SocialConnectionData socialConnectionData) {
+    public Long register(SocialConnectionData socialConnectionData) {
         // Step 1. Sanity check
         if (socialConnectionData == null)
-            throw new IllegalArgumentException("Can't process null SocialConnectionData");
+            throw GogomayaException.create(GogomayaError.SOCIAL_CONNECTION_INVALID_CODE);
         // Step 2. Checking if user already exists
         String gamerId = null;
 
@@ -73,6 +68,6 @@ public class SocialConnectionDataAdapter {
         } else {
             throw GogomayaException.create(GogomayaError.SERVER_CRITICAL_ERROR_CODE);
         }
-        return gamerProfileRepository.findOne(Long.valueOf(gamerId));
+        return Long.valueOf(gamerId);
     }
 }

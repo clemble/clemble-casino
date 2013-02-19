@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlayerCredentialRepository extends JpaRepository<PlayerCredential, Long> {
 
+    public PlayerCredential findByEmail(String email);
+
 }
