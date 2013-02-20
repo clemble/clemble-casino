@@ -8,7 +8,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaError.Code;
 
 /**
  * Minimum social ConnectionData, that is sufficient to create a user profile in internal network.
@@ -25,11 +25,11 @@ public class SocialConnectionData implements Serializable {
     private static final long serialVersionUID = -6236465246404418965L;
 
     @JsonProperty("providerId")
-    @NotNull(message = GogomayaError.SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE)
+    @NotNull(message = Code.SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE)
     final private String providerId;
 
     @JsonProperty("providerUserId")
-    @NotNull(message = GogomayaError.SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE)
+    @NotNull(message = Code.SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE)
     final private String providerUserId;
 
     @JsonProperty("accessToken")

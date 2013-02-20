@@ -8,14 +8,14 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaError.Code;
 
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PasswordConstraintValidator.class)
 public @interface PasswordConstraint {
 
-    String message() default GogomayaError.PASSWORD_TOO_WEAK_CODE;
+    String message() default Code.PASSWORD_TOO_WEAK_CODE;
 
     Class<?>[] groups() default {};
 

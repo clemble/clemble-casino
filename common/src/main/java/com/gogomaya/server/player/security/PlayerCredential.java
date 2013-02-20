@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.validator.constraints.Email;
 
-import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaError.Code;
 import com.gogomaya.server.error.validation.PasswordConstraint;
 import com.gogomaya.server.player.PlayerAware;
 
@@ -32,14 +32,14 @@ public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializ
 
     @Column(name = "EMAIL", unique = true, length = 128)
     @JsonProperty("email")
-    @Email(message = GogomayaError.EMAIL_INVALID_CODE)
+    @Email(message = Code.EMAIL_INVALID_CODE)
     private String email;
 
     @Column(name = "PASSWORD")
     @JsonProperty("password")
     @PasswordConstraint
-    @Size(min = 6, max = 64, message = GogomayaError.PASSWORD_TOO_SHORT_CODE)
-    @NotNull(message = GogomayaError.PASSWORD_MISSING_CODE)
+    @Size(min = 6, max = 64, message = Code.PASSWORD_TOO_SHORT_CODE)
+    @NotNull(message = Code.PASSWORD_MISSING_CODE)
     private String password;
 
     @Override

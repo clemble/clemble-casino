@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaError.Code;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerProfileRepository;
@@ -66,7 +66,7 @@ public class RegistrationSignInContoller {
                 return playerIdentityRepository.findOne(fetchedCredentials.getPlayerId());
             } else {
                 // Step 2.2 If password does not match this is an error
-                throw GogomayaException.create(GogomayaError.EMAIL_ALREADY_REGISTERED_CODE);
+                throw GogomayaException.create(Code.EMAIL_ALREADY_REGISTERED_CODE);
             }
         }
         // Step 3. Create new profile

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.gogomaya.server.error.GogomayaError.Code;
 import com.google.common.collect.ImmutableSet;
 
 public class GogomayaException extends RuntimeException {
@@ -29,7 +30,7 @@ public class GogomayaException extends RuntimeException {
     }
 
     public static GogomayaException create(Collection<String> errorCodes) {
-        errorCodes = errorCodes == null || errorCodes.size() == 0 ? Collections.singleton(GogomayaError.SERVER_ERROR_CODE) : errorCodes;
+        errorCodes = errorCodes == null || errorCodes.size() == 0 ? Collections.singleton(Code.SERVER_ERROR_CODE) : errorCodes;
 
         Set<GogomayaError> verifiedErrors = new HashSet<GogomayaError>(errorCodes.size());
         for (String errorCode : errorCodes) {

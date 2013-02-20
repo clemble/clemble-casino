@@ -12,7 +12,7 @@ import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 
-import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaError.Code;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.player.SocialConnectionData;
 import com.google.common.collect.ImmutableSet;
@@ -35,7 +35,7 @@ public class SocialConnectionDataAdapter {
     public Long register(SocialConnectionData socialConnectionData) {
         // Step 1. Sanity check
         if (socialConnectionData == null)
-            throw GogomayaException.create(GogomayaError.SOCIAL_CONNECTION_INVALID_CODE);
+            throw GogomayaException.create(Code.SOCIAL_CONNECTION_INVALID_CODE);
         // Step 2. Checking if user already exists
         String gamerId = null;
 
@@ -53,7 +53,7 @@ public class SocialConnectionDataAdapter {
                 ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(gamerId);
                 connectionRepository.updateConnection(connection);
             } else {
-                throw GogomayaException.create(GogomayaError.SOCIAL_CONNECTION_INVALID_CODE);
+                throw GogomayaException.create(Code.SOCIAL_CONNECTION_INVALID_CODE);
             }
         } else if (existingUsers.size() == 0) {
             // Step 2. Converting SocialConnectionData to ConnectionData in accordance with the provider
@@ -66,7 +66,7 @@ public class SocialConnectionDataAdapter {
             // Check that this logic remains intact
             gamerId = usersConnectionRepository.findUserIdsWithConnection(connection).iterator().next();
         } else {
-            throw GogomayaException.create(GogomayaError.SERVER_CRITICAL_ERROR_CODE);
+            throw GogomayaException.create(Code.SERVER_CRITICAL_ERROR_CODE);
         }
         return Long.valueOf(gamerId);
     }

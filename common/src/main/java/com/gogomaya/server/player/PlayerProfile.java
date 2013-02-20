@@ -16,7 +16,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.validator.constraints.URL;
 
-import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaError.Code;
 import com.gogomaya.server.error.validation.AgeConstraint;
 import com.gogomaya.server.error.validation.NickNameConstraint;
 import com.gogomaya.server.json.CustomDateFormat.CustomDateDeserializer;
@@ -38,18 +38,18 @@ public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
 
     @Column(name = "NICK_NAME", length = 64)
     @JsonProperty("nickName")
-    @NickNameConstraint(message = GogomayaError.NICK_INVALID_CODE)
-    @Size(max = 64, message = GogomayaError.NICK_TOO_LONG_CODE)
+    @NickNameConstraint(message = Code.NICK_INVALID_CODE)
+    @Size(max = 64, message = Code.NICK_TOO_LONG_CODE)
     private String nickName;
 
     @Column(name = "FIRST_NAME", length = 64)
     @JsonProperty("firstName")
-    @Size(max = 64, message = GogomayaError.FIRST_NAME_TOO_LONG_CODE)
+    @Size(max = 64, message = Code.FIRST_NAME_TOO_LONG_CODE)
     private String firstName;
 
     @Column(name = "LAST_NAME", length = 64)
     @JsonProperty("lastName")
-    @Size(max = 64, message = GogomayaError.LAST_NAME_TOO_LONG_CODE)
+    @Size(max = 64, message = Code.LAST_NAME_TOO_LONG_CODE)
     private String lastName;
 
     @Column(name = "GENDER")
@@ -61,12 +61,12 @@ public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
     @JsonProperty("birthDate")
     @JsonDeserialize(using = CustomDateDeserializer.class)
     @JsonSerialize(using = CustomDateSerializer.class)
-    @AgeConstraint(message = GogomayaError.BIRTH_DATE_INVALID_CODE)
+    @AgeConstraint(message = Code.BIRTH_DATE_INVALID_CODE)
     private Date birthDate;
 
     @Column(name = "IMAGE_URL")
     @JsonProperty("imageUrl")
-    @URL(message = GogomayaError.IMAGE_URL_INVALID_CODE)
+    @URL(message = Code.IMAGE_URL_INVALID_CODE)
     private String imageUrl;
 
     @Column(name = "CATEGORY")
