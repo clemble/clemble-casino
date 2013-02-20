@@ -14,13 +14,13 @@ public class GogomayaException extends RuntimeException {
      */
     private static final long serialVersionUID = -8129180501783483734L;
 
-    final private Set<String> errorCodes;
+    final private Set<GogomayaError> errorCodes;
 
-    private GogomayaException(Set<String> errorCodes) {
-        this.errorCodes = ImmutableSet.<String>copyOf(errorCodes);
+    private GogomayaException(Set<GogomayaError> errorCodes) {
+        this.errorCodes = ImmutableSet.<GogomayaError> copyOf(errorCodes);
     }
 
-    public Set<String> getErrorCodes() {
+    public Set<GogomayaError> getErrorCodes() {
         return errorCodes;
     }
 
@@ -31,13 +31,10 @@ public class GogomayaException extends RuntimeException {
     public static GogomayaException create(Collection<String> errorCodes) {
         errorCodes = errorCodes == null || errorCodes.size() == 0 ? Collections.singleton(GogomayaError.SERVER_ERROR_CODE) : errorCodes;
 
-        Set<String> verifiedErrors = new HashSet<String>(errorCodes.size());
+        Set<GogomayaError> verifiedErrors = new HashSet<GogomayaError>(errorCodes.size());
         for (String errorCode : errorCodes) {
-            if (GogomayaError.isValid(errorCode)) {
-                verifiedErrors.add(errorCode);
-            } else {
-                verifiedErrors.add(GogomayaError.SERVER_ERROR_CODE);
-            }
+            GogomayaError gogomayaError = GogomayaError.forCode(errorCode);
+            verifiedErrors.add(gogomayaError != null ? gogomayaError : GogomayaError.ServerError);
         }
 
         return new GogomayaException(verifiedErrors);

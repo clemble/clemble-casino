@@ -4,13 +4,18 @@
     <parent>
         <groupId>com.gogomaya.server</groupId>
         <artifactId>parent</artifactId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>0.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>integration-test</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
             <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jbehave</groupId>
+            <artifactId>jbehave-core</artifactId>
+            <version>3.7.5</version>
         </dependency>
     </dependencies>
 </project>

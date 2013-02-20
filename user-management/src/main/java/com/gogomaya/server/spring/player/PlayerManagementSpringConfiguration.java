@@ -34,9 +34,11 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
+import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -155,8 +157,14 @@ public class PlayerManagementSpringConfiguration {
         public void createSchemaFile() {
             org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
 
-            configuration.addAnnotatedClass(PlayerProfile.class).addAnnotatedClass(PlayerCredential.class).addAnnotatedClass(PlayerIdentity.class)
-                    .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect").setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
+            configuration
+            .addAnnotatedClass(PlayerProfile.class)
+            .addAnnotatedClass(PlayerCredential.class)
+            .addAnnotatedClass(PlayerIdentity.class)
+            .addAnnotatedClass(PlayerWallet.class)
+            .addAnnotatedClass(GameSpecification.class)
+            .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
+            .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 
             new SchemaExport(configuration).setDelimiter(";").setFormat(true).setOutputFile("src/main/resources/sql/schema.sql").create(true, false);
         }

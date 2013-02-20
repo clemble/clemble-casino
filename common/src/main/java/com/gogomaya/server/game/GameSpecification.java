@@ -17,6 +17,7 @@ public class GameSpecification implements GameAware<GameSpecification> {
     private static final long serialVersionUID = -243377038921039858L;
 
     @Id
+    @Column(name = "GAME_SPECIFICATION")
     private long gameSpecificationId;
 
     @Column(name = "GAME_NAME")

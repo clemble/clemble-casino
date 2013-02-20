@@ -14,8 +14,11 @@ import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.SocialConnectionData;
+import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerCredentialRepository;
+import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.security.PlayerIdentityRepository;
+import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
@@ -67,8 +70,11 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     @Bean
     public GenericSchemaController jsonSchemaController() {
         GenericSchemaController genericSchemaController = new GenericSchemaController();
-        genericSchemaController.addSchemaMapping("social", SocialConnectionData.class);
         genericSchemaController.addSchemaMapping("profile", PlayerProfile.class);
+        genericSchemaController.addSchemaMapping("social", SocialConnectionData.class);
+        genericSchemaController.addSchemaMapping("identity", PlayerIdentity.class);
+        genericSchemaController.addSchemaMapping("credentials", PlayerCredential.class);
+        genericSchemaController.addSchemaMapping("registration", RegistrationRequest.class);
         genericSchemaController.addSchemaMapping("error", GogomayaError.class);
         return genericSchemaController;
     }

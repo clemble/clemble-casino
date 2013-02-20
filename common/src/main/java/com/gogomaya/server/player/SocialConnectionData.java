@@ -25,7 +25,7 @@ public class SocialConnectionData implements Serializable {
     private static final long serialVersionUID = -6236465246404418965L;
 
     @JsonProperty("providerId")
-    @NotNull(message = GogomayaError.SOCIAL_CONNECTION_PROVIDER_NULL_CODE)
+    @NotNull(message = GogomayaError.SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE)
     final private String providerId;
 
     @JsonProperty("providerUserId")

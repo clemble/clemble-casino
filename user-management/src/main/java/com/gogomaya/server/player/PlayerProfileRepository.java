@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.gogomaya.server.player.PlayerProfile;
 
 @Repository
-@RestResource(path="profile", exported = true)
+@RestResource(path="playerProfile", exported = true)
 public interface PlayerProfileRepository extends JpaRepository<PlayerProfile, Long>, JpaSpecificationExecutor<PlayerProfile> {
 
 }

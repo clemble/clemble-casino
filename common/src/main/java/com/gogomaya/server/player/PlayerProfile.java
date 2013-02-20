@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -39,17 +39,17 @@ public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
     @Column(name = "NICK_NAME", length = 64)
     @JsonProperty("nickName")
     @NickNameConstraint(message = GogomayaError.NICK_INVALID_CODE)
-    @Max(value = 64, message = GogomayaError.NICK_TOO_LONG_CODE)
+    @Size(max = 64, message = GogomayaError.NICK_TOO_LONG_CODE)
     private String nickName;
 
     @Column(name = "FIRST_NAME", length = 64)
     @JsonProperty("firstName")
-    @Max(value = 64, message = GogomayaError.FIRST_NAME_TOO_LONG_CODE)
+    @Size(max = 64, message = GogomayaError.FIRST_NAME_TOO_LONG_CODE)
     private String firstName;
 
     @Column(name = "LAST_NAME", length = 64)
     @JsonProperty("lastName")
-    @Max(value = 64, message = GogomayaError.LAST_NAME_TOO_LONG_CODE)
+    @Size(max = 64, message = GogomayaError.LAST_NAME_TOO_LONG_CODE)
     private String lastName;
 
     @Column(name = "GENDER")

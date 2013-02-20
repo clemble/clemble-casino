@@ -35,8 +35,7 @@ public class RegistrationLoginController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/registration/login", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PlayerIdentity createUser(@RequestBody PlayerCredential playerCredentials) {
+    public @ResponseBody PlayerIdentity createUser(@RequestBody PlayerCredential playerCredentials) {
         // Step 0. Validation check
         validationService.validate(playerCredentials);
         // Step 1. Fetch saved player credentials
@@ -45,7 +44,7 @@ public class RegistrationLoginController {
         if (fetchedCredentials == null)
             throw GogomayaException.create(GogomayaError.EMAIL_NOT_REGISTERED_CODE);
         // Step 3. Compare passwords
-        if (fetchedCredentials.getPassword().equals(playerCredentials.getPassword()))
+        if (!fetchedCredentials.getPassword().equals(playerCredentials.getPassword()))
             throw GogomayaException.create(GogomayaError.PASSWORD_IS_INCORRECT_CODE);
         // Step 4. Everything is fine, return Identity
         return playerIdentityRepository.findOne(fetchedCredentials.getPlayerId());

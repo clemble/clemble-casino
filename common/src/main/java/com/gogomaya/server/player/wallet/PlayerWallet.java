@@ -1,7 +1,14 @@
 package com.gogomaya.server.player.wallet;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.gogomaya.server.player.PlayerAware;
 
+@Entity
+@Table(name = "PLAYER_WALLET")
 public class PlayerWallet implements PlayerAware<PlayerWallet> {
 
     /**
@@ -9,8 +16,11 @@ public class PlayerWallet implements PlayerAware<PlayerWallet> {
      */
     private static final long serialVersionUID = 6508845694631953306L;
 
+    @Id
+    @Column(name = "PLAYER_ID")
     private long playerId;
 
+    @Column(name = "MONEY")
     private long playerMoney;
 
     @Override

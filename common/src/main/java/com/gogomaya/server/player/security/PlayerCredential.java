@@ -6,9 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.validator.constraints.Email;
@@ -18,7 +17,7 @@ import com.gogomaya.server.error.validation.PasswordConstraint;
 import com.gogomaya.server.player.PlayerAware;
 
 @Entity
-@Table(name = "USER_CREDENTIALS")
+@Table(name = "PLAYER_CREDENTIALS")
 public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializable {
 
     /**
@@ -27,8 +26,8 @@ public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializ
     private static final long serialVersionUID = 6796999437224779009L;
 
     @Id
-    @Column(name = "PROFILE_ID")
-    @JsonProperty("profileId")
+    @Column(name = "PLAYER_ID")
+    @JsonProperty("playerId")
     private long playerId;
 
     @Column(name = "EMAIL", unique = true, length = 128)
@@ -39,8 +38,7 @@ public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializ
     @Column(name = "PASSWORD")
     @JsonProperty("password")
     @PasswordConstraint
-    @Min(value = 6, message = GogomayaError.PASSWORD_TOO_SHORT_CODE)
-    @Max(value = 32, message = GogomayaError.PASSWORD_TOO_LONG_CODE)
+    @Size(min = 6, max = 64, message = GogomayaError.PASSWORD_TOO_SHORT_CODE)
     @NotNull(message = GogomayaError.PASSWORD_MISSING_CODE)
     private String password;
 

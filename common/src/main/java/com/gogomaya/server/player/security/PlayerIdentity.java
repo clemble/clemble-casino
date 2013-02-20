@@ -12,7 +12,7 @@ import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 import com.gogomaya.server.player.PlayerAware;
 
 @Entity
-@Table(name = "USER_IDENTITY")
+@Table(name = "PLAYER_IDENTITY")
 public class PlayerIdentity implements PlayerAware<PlayerIdentity>, Serializable {
 
     /**
@@ -21,8 +21,8 @@ public class PlayerIdentity implements PlayerAware<PlayerIdentity>, Serializable
     private static final long serialVersionUID = 7757779068859351877L;
 
     @Id
-    @Column(name = "PROFILE_ID")
-    @JsonProperty("profileId")
+    @Column(name = "PLAYER_ID")
+    @JsonProperty("playerId")
     private long profileId;
 
     @Column(name = "SECRET")
