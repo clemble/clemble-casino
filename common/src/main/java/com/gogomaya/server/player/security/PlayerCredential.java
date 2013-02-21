@@ -7,12 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.validator.constraints.Email;
 
 import com.gogomaya.server.error.GogomayaError.Code;
+import com.gogomaya.server.error.validation.MaxSize;
+import com.gogomaya.server.error.validation.MinSize;
 import com.gogomaya.server.error.validation.PasswordConstraint;
 import com.gogomaya.server.player.PlayerAware;
 
@@ -38,7 +39,8 @@ public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializ
     @Column(name = "PASSWORD")
     @JsonProperty("password")
     @PasswordConstraint
-    @Size(min = 6, max = 64, message = Code.PASSWORD_TOO_SHORT_CODE)
+    @MinSize(min = 6, message = Code.PASSWORD_TOO_SHORT_CODE)
+    @MaxSize(max = 64, message = Code.PASSWORD_TOO_LONG_CODE)
     @NotNull(message = Code.PASSWORD_MISSING_CODE)
     private String password;
 

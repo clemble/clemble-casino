@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.error.GogomayaError.Code;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerCredentialRepository;
 import com.gogomaya.server.player.security.PlayerIdentity;
@@ -25,19 +24,14 @@ public class RegistrationLoginController {
 
     final private PlayerIdentityRepository playerIdentityRepository;
 
-    final private GogomayaValidationService validationService;
-
-    public RegistrationLoginController(final PlayerCredentialRepository playerCredentialRepository, final PlayerIdentityRepository playerIdentityRepository, final GogomayaValidationService validationService) {
+    public RegistrationLoginController(final PlayerCredentialRepository playerCredentialRepository, final PlayerIdentityRepository playerIdentityRepository) {
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
         this.playerIdentityRepository = checkNotNull(playerIdentityRepository);
-        this.validationService = checkNotNull(validationService);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/registration/login", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerIdentity createUser(@RequestBody PlayerCredential playerCredentials) {
-        // Step 0. Validation check
-        validationService.validate(playerCredentials);
         // Step 1. Fetch saved player credentials
         PlayerCredential fetchedCredentials = playerCredentialRepository.findByEmail(playerCredentials.getEmail());
         // Step 2. If there is no such credentials, than user is unregistered

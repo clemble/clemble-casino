@@ -59,7 +59,7 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     public RegistrationLoginController registrationLoginController() {
-        return new RegistrationLoginController(playerCredentialRepository, playerIdentityRepository, validationService);
+        return new RegistrationLoginController(playerCredentialRepository, playerIdentityRepository);
     }
 
     @Bean

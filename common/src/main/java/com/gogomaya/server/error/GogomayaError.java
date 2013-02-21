@@ -7,6 +7,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.gogomaya.server.json.GogomayaErrorFormat.GogomayaErrorSerializer;
+
+@JsonSerialize(using = GogomayaErrorSerializer.class)
 public enum GogomayaError {
 
     ServerError(Code.SERVER_ERROR_CODE, "Server error"),
@@ -62,7 +68,9 @@ public enum GogomayaError {
         }
     }
 
+    @JsonProperty("code")
     final private String code;
+    @JsonProperty("description")
     final private String description;
 
     private GogomayaError(final String newCode, final String newDescription) {

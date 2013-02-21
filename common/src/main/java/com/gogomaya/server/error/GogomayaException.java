@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.gogomaya.server.error.GogomayaError.Code;
-import com.google.common.collect.ImmutableSet;
 
 public class GogomayaException extends RuntimeException {
 
@@ -15,14 +14,14 @@ public class GogomayaException extends RuntimeException {
      */
     private static final long serialVersionUID = -8129180501783483734L;
 
-    final private Set<GogomayaError> errorCodes;
+    final private GogomayaFailure failure;
 
-    private GogomayaException(Set<GogomayaError> errorCodes) {
-        this.errorCodes = ImmutableSet.<GogomayaError> copyOf(errorCodes);
+    private GogomayaException(GogomayaFailure gogomayaFailure) {
+        this.failure = gogomayaFailure;
     }
 
-    public Set<GogomayaError> getErrorCodes() {
-        return errorCodes;
+    public GogomayaFailure getFailure() {
+        return failure;
     }
 
     public static GogomayaException create(String errorCode) {
@@ -38,7 +37,8 @@ public class GogomayaException extends RuntimeException {
             verifiedErrors.add(gogomayaError != null ? gogomayaError : GogomayaError.ServerError);
         }
 
-        return new GogomayaException(verifiedErrors);
-    }
+        GogomayaFailure gogomayaFailure = new GogomayaFailure(verifiedErrors);
 
+        return new GogomayaException(gogomayaFailure);
+    }
 }

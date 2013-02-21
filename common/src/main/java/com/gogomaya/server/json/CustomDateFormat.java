@@ -36,9 +36,9 @@ public class CustomDateFormat {
      */
     public static class CustomDateDeserializer extends JsonDeserializer<Date> {
         @Override
-        public Date deserialize(JsonParser jsonparser, DeserializationContext deserializationcontext) throws IOException, JsonProcessingException {
+        public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
             try {
-                return DATE_FORMAT.get().parse(jsonparser.getText());
+                return DATE_FORMAT.get().parse(jsonParser.getText());
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -54,8 +54,8 @@ public class CustomDateFormat {
     public static class CustomDateSerializer extends JsonSerializer<Date> {
 
         @Override
-        public void serialize(Date value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-            jgen.writeString(value != null ? DATE_FORMAT.get().format(value) : "");
+        public void serialize(Date value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+            jsonGenerator.writeString(value != null ? DATE_FORMAT.get().format(value) : "");
         }
 
     }

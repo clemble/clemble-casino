@@ -39,17 +39,26 @@ public class GenericSchemaController {
         Class<?> targetEntity = getSchemaMapping().get(entity);
         if (targetEntity == null)
             throw new IllegalArgumentException("This entity not supported");
-        URI baseUri = ServletUriComponentsBuilder.fromServletMapping(servletRequest).build().toUri();
 
-        JsonSchema schema = mapper.generateJsonSchema(targetEntity);
+        StringBuilder output = new StringBuilder();
+        if (Enum.class.isAssignableFrom(targetEntity)) {
+            Object[] values = targetEntity.getEnumConstants();
+            output.append("{ values:[");
+            for (int i = 0; i < values.length; i++)
+                output.append(mapper.writeValueAsString(values[i])).append(i != values.length - 1 ? "," : "");
+            output.append("]}");
+        } else {
+            URI baseUri = ServletUriComponentsBuilder.fromServletMapping(servletRequest).build().toUri();
 
-        URI schemaUri = UriComponentsBuilder.fromUri(baseUri).pathSegment(entity, "schema").build().toUri();
-        URI requestUri = UriComponentsBuilder.fromUri(baseUri).pathSegment(entity).build().toUri();
-        Resource<JsonSchema> resource = new Resource<JsonSchema>(schema, new Link(schemaUri.toString(), "self"), new Link(requestUri.toString(), entity));
+            JsonSchema schema = mapper.generateJsonSchema(targetEntity);
 
-        String output = mapper.writeValueAsString(resource);
+            URI schemaUri = UriComponentsBuilder.fromUri(baseUri).pathSegment(entity, "schema").build().toUri();
+            URI requestUri = UriComponentsBuilder.fromUri(baseUri).pathSegment(entity).build().toUri();
+            Resource<JsonSchema> resource = new Resource<JsonSchema>(schema, new Link(schemaUri.toString(), "self"), new Link(requestUri.toString(), entity));
+            output.append(mapper.writeValueAsString(resource));
+        }
 
-        return new ResponseEntity<String>(output, HttpStatus.OK);
+        return new ResponseEntity<String>(output.toString(), HttpStatus.OK);
     }
 
     public Map<String, Class<?>> getSchemaMapping() {

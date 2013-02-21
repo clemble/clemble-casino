@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -18,6 +17,7 @@ import org.hibernate.validator.constraints.URL;
 
 import com.gogomaya.server.error.GogomayaError.Code;
 import com.gogomaya.server.error.validation.AgeConstraint;
+import com.gogomaya.server.error.validation.MaxSize;
 import com.gogomaya.server.error.validation.NickNameConstraint;
 import com.gogomaya.server.json.CustomDateFormat.CustomDateDeserializer;
 import com.gogomaya.server.json.CustomDateFormat.CustomDateSerializer;
@@ -39,17 +39,17 @@ public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
     @Column(name = "NICK_NAME", length = 64)
     @JsonProperty("nickName")
     @NickNameConstraint(message = Code.NICK_INVALID_CODE)
-    @Size(max = 64, message = Code.NICK_TOO_LONG_CODE)
+    @MaxSize(max = 64, message = Code.NICK_TOO_LONG_CODE)
     private String nickName;
 
     @Column(name = "FIRST_NAME", length = 64)
     @JsonProperty("firstName")
-    @Size(max = 64, message = Code.FIRST_NAME_TOO_LONG_CODE)
+    @MaxSize(max = 64, message = Code.FIRST_NAME_TOO_LONG_CODE)
     private String firstName;
 
     @Column(name = "LAST_NAME", length = 64)
     @JsonProperty("lastName")
-    @Size(max = 64, message = Code.LAST_NAME_TOO_LONG_CODE)
+    @MaxSize(max = 64, message = Code.LAST_NAME_TOO_LONG_CODE)
     private String lastName;
 
     @Column(name = "GENDER")
