@@ -25,7 +25,6 @@ public enum GogomayaError {
     PasswordTooShort(Code.PASSWORD_TOO_SHORT_CODE, "Password too short"),
     PasswordTooWeak(Code.PASSWORD_TOO_WEAK_CODE, "Password too weak"),
     PasswordTooLong(Code.PASSWORD_TOO_LONG_CODE, "Password too long"),
-    PasswordIsIncorrect(Code.PASSWORD_IS_INCORRECT_CODE, "Password is incorrect"),
     EmailOrPasswordIncorrect(Code.EMAIL_OR_PASSWORD_INCORRECT_CODE, "Email & password is incorrect"),
 
     IdentityInvalid(Code.IDENTITY_INVALID_CODE, "Identity invalid"),
@@ -109,8 +108,6 @@ public enum GogomayaError {
         final public static String PASSWORD_TOO_SHORT_CODE = "011";
         final public static String PASSWORD_TOO_WEAK_CODE = "012";
         final public static String PASSWORD_TOO_LONG_CODE = "013";
-        final public static String PASSWORD_IS_INCORRECT_CODE = "014";
-        // Processing problems
         // Credentials authentication codes
         final public static String EMAIL_OR_PASSWORD_INCORRECT_CODE = "020";
         // Identity errors

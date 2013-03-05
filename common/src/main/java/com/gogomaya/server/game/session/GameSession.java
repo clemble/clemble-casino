@@ -2,10 +2,9 @@ package com.gogomaya.server.game.session;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.GameBoard;
-import com.gogomaya.server.game.GameBoardAware;
+import com.gogomaya.server.game.GameRuleSpecification;
 
-public class GameSession implements GameSessionAware<GameSession>, GameBoardAware<GameSession> {
+public class GameSession implements GameSessionAware<GameSession> {
 
     /**
      * Generated 16/02/13
@@ -14,11 +13,11 @@ public class GameSession implements GameSessionAware<GameSession>, GameBoardAwar
 
     private String sessionId;
 
-    private long sequence;
+    private GameSessionState sessionState;
 
-    private GameSessionState gameSessionState;
+    private GameRuleSpecification gameRuleSpecification;
 
-    private GameBoard gameBoard;
+    private GameState gameState;
 
     @Override
     public String getSessionId() {
@@ -31,31 +30,28 @@ public class GameSession implements GameSessionAware<GameSession>, GameBoardAwar
         return this;
     }
 
-    @Override
-    public GameBoard getGameBoard() {
-        return gameBoard;
+    public GameSessionState getSessionState() {
+        return sessionState;
     }
 
-    @Override
-    public GameSession setGameBoard(GameBoard currentBoard) {
-        this.gameBoard = currentBoard;
-        return this;
+    public void setSessionState(GameSessionState gameSessionState) {
+        this.sessionState = gameSessionState;
     }
 
-    public long getSequence() {
-        return sequence;
+    public GameRuleSpecification getGameRuleSpecification() {
+        return gameRuleSpecification;
     }
 
-    public void setSequence(long sequence) {
-        this.sequence = sequence;
+    public void setGameRuleSpecification(GameRuleSpecification gameRuleSpecification) {
+        this.gameRuleSpecification = gameRuleSpecification;
     }
 
-    public GameSessionState getGameSessionState() {
-        return gameSessionState;
+    public GameState getGameState() {
+        return gameState;
     }
 
-    public void setGameSessionState(GameSessionState gameSessionState) {
-        this.gameSessionState = gameSessionState;
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 
 }

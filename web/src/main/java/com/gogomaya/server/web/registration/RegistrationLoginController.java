@@ -36,10 +36,10 @@ public class RegistrationLoginController {
         PlayerCredential fetchedCredentials = playerCredentialRepository.findByEmail(playerCredentials.getEmail());
         // Step 2. If there is no such credentials, than user is unregistered
         if (fetchedCredentials == null)
-            throw GogomayaException.create(Code.EMAIL_NOT_REGISTERED_CODE);
+            throw GogomayaException.create(Code.EMAIL_OR_PASSWORD_INCORRECT_CODE);
         // Step 3. Compare passwords
         if (!fetchedCredentials.getPassword().equals(playerCredentials.getPassword()))
-            throw GogomayaException.create(Code.PASSWORD_IS_INCORRECT_CODE);
+            throw GogomayaException.create(Code.EMAIL_OR_PASSWORD_INCORRECT_CODE);
         // Step 4. Everything is fine, return Identity
         return playerIdentityRepository.findOne(fetchedCredentials.getPlayerId());
     }

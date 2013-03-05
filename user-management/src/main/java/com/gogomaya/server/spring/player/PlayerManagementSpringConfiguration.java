@@ -34,16 +34,16 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration.PlayerManagementCloudFoundryConfigurations;
+import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration.PlayerManagementDefaultConfigurations;
+import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration.PlayerManagementTestConfigurations;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-
-import static com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration.*;
 
 @Configuration
 @EnableTransactionManagement
@@ -162,7 +162,6 @@ public class PlayerManagementSpringConfiguration {
             .addAnnotatedClass(PlayerCredential.class)
             .addAnnotatedClass(PlayerIdentity.class)
             .addAnnotatedClass(PlayerWallet.class)
-            .addAnnotatedClass(GameSpecification.class)
             .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
             .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 

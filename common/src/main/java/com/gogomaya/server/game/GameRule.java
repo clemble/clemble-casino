@@ -1,6 +1,5 @@
 package com.gogomaya.server.game;
 
-
-public class GameTable {
+abstract public class GameRule {
 
 }

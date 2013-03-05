@@ -57,6 +57,7 @@
         <maven.compile.plugin.version>2.3.2</maven.compile.plugin.version>
         <maven.war.plugin.version>2.1.1</maven.war.plugin.version>
         <java.version>1.6</java.version>
+        <jbehave.version>3.7.5</jbehave.version>
         <jetty.version>9.0.0.M3</jetty.version>
     </properties>
     <repositories>
@@ -353,7 +354,16 @@
         </dependency>
 
         <!-- Test dependencies common for every project -->
-
+        <dependency>
+            <groupId>org.jbehave</groupId>
+            <artifactId>jbehave-core</artifactId>
+            <version>${jbehave.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jbehave</groupId>
+            <artifactId>jbehave-spring</artifactId>
+            <version>${jbehave.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
