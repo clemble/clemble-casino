@@ -2,26 +2,26 @@ package com.gogomaya.server.game;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.rule.BetRule;
-import com.gogomaya.server.game.rule.GiveUpRule;
-import com.gogomaya.server.game.rule.ParticipationRule;
-import com.gogomaya.server.game.rule.TimeRule;
+import com.gogomaya.server.game.rule.bet.BetRule;
+import com.gogomaya.server.game.rule.giveup.GiveUpRule;
+import com.gogomaya.server.game.rule.participant.ParticipantRule;
+import com.gogomaya.server.game.rule.time.TimeRule;
 
 public class GameRuleSpecification {
 
     final private BetRule betRule;
 
-    final private TimeRule timeRule;
-
-    final private ParticipationRule participationRule;
-
     final private GiveUpRule giveUpRule;
 
-    public GameRuleSpecification(final BetRule betRule, final TimeRule timeRule, final ParticipationRule participationRule, final GiveUpRule giveUpRule) {
+    final private TimeRule timeRule;
+
+    final private ParticipantRule participationRule;
+
+    public GameRuleSpecification(final BetRule betRule, final GiveUpRule giveUpRule, final TimeRule timeRule, final ParticipantRule participationRule) {
         this.betRule = checkNotNull(betRule);
+        this.giveUpRule = checkNotNull(giveUpRule);
         this.timeRule = checkNotNull(timeRule);
         this.participationRule = checkNotNull(participationRule);
-        this.giveUpRule = giveUpRule;
     }
 
     public BetRule getBetRule() {
@@ -32,7 +32,7 @@ public class GameRuleSpecification {
         return timeRule;
     }
 
-    public ParticipationRule getParticipationRule() {
+    public ParticipantRule getParticipationRule() {
         return participationRule;
     }
 

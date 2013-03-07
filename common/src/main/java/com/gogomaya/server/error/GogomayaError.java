@@ -17,6 +17,7 @@ public enum GogomayaError {
 
     ServerError(Code.SERVER_ERROR_CODE, "Server error"),
     ServerCriticalError(Code.SERVER_CRITICAL_ERROR_CODE, "Server critical error"),
+    
     EmailInvalid(Code.EMAIL_INVALID_CODE, "Email invalid"),
     EmailNotConfirmed(Code.EMAIL_NOT_CONFIRMED_CODE, "Email not confirmed"),
     EmailNotRegistered(Code.EMAIL_NOT_REGISTERED_CODE, "Email not registered"),
@@ -38,7 +39,11 @@ public enum GogomayaError {
 
     SocialConnectionProviderUserNull(Code.SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE, "Social connection provider User can't be NULL"),
     SocialConnectionProviderIdNull(Code.SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE, "Social connection provider ID can't be NULL"),
-    SocialConnectionInvalid(Code.SOCIAL_CONNECTION_INVALID_CODE, "Social connection is invalid");
+    SocialConnectionInvalid(Code.SOCIAL_CONNECTION_INVALID_CODE, "Social connection is invalid"),
+    
+    ClientJsonInvalidError(Code.CLIENT_JSON_INVALID_ERROR_CODE, "Invalid Json"),
+    ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json")
+    ;
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
 
@@ -127,7 +132,10 @@ public enum GogomayaError {
         final public static String IMAGE_URL_INVALID_CODE = "080";
         // SocialConnectionData
         final public static String SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE = "090";
-        final public static String SOCIAL_CONNECTION_INVALID_CODE = "0B0";
-        final public static String SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE = "0A0";
+        final public static String SOCIAL_CONNECTION_INVALID_CODE = "091";
+        final public static String SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE = "092";
+        // Generic Client errors
+        final public static String CLIENT_JSON_INVALID_ERROR_CODE = "0D0";
+        final public static String CLIENT_JSON_FORMAT_ERROR_CODE = "0D1";
     }
 }
