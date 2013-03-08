@@ -23,6 +23,12 @@ import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.giveup.LooseAllGiveUpRule;
 import com.gogomaya.server.game.rule.giveup.LooseLostGiveUpRule;
 import com.gogomaya.server.game.rule.giveup.LooseMinGiveUpRule;
+import com.gogomaya.server.game.rule.participant.FixedParticipantRule;
+import com.gogomaya.server.game.rule.participant.LimitedParticipantRule;
+import com.gogomaya.server.game.rule.participant.ParticipantMatchType;
+import com.gogomaya.server.game.rule.participant.ParticipantPrivacyType;
+import com.gogomaya.server.game.rule.participant.ParticipantRule;
+import com.gogomaya.server.game.rule.participant.ParticipantType;
 import com.gogomaya.server.game.rule.time.LimitedGameTimeRule;
 import com.gogomaya.server.game.rule.time.LimitedMoveTimeRule;
 import com.gogomaya.server.game.rule.time.TimeBreachBehavior;
@@ -81,7 +87,7 @@ public class SeDeRelizationTest {
         assertTrue(betRule instanceof LimitedBetRule);
         Assert.assertEquals(((LimitedBetRule) betRule).getMinBet(), 100);
         Assert.assertEquals(((LimitedBetRule) betRule).getMaxBet(), 1000);
-        
+
         betRule = objectMapper.readValue("{\"betType\":\"Unlimited\"}", UnlimitedBetRule.class);
         assertTrue(betRule instanceof UnlimitedBetRule);
 
@@ -94,18 +100,38 @@ public class SeDeRelizationTest {
         Assert.assertEquals(((LimitedBetRule) betRule).getMinBet(), 100);
         Assert.assertEquals(((LimitedBetRule) betRule).getMaxBet(), 1000);
     }
-    
+
     @Test
     public void giveUpRule() throws JsonGenerationException, JsonMappingException, IOException {
         GiveUpRule giveUpRule = objectMapper.readValue("{\"looseType\":\"All\"}", GiveUpRule.class);
         Assert.assertEquals(giveUpRule, LooseAllGiveUpRule.INSTANCE);
-        
+
         giveUpRule = objectMapper.readValue("{\"looseType\":\"Lost\"}", GiveUpRule.class);
         Assert.assertEquals(giveUpRule, LooseLostGiveUpRule.INSTANCE);
-        
+
         giveUpRule = objectMapper.readValue("{\"looseType\":\"MinPart\",\"minPart\":5}", GiveUpRule.class);
         Assert.assertTrue(giveUpRule instanceof LooseMinGiveUpRule);
         Assert.assertEquals(((LooseMinGiveUpRule) giveUpRule).getMinPart(), 5);
+    }
+
+    @Test
+    public void participantRule() throws JsonGenerationException, JsonMappingException, IOException {
+        ParticipantRule participantRule = objectMapper.readValue(
+                "{\"participantType\":\"Fixed\",\"matchType\":\"Automatic\",\"privacyType\":\"Private\",\"players\":2}", ParticipantRule.class);
+        Assert.assertTrue(participantRule instanceof FixedParticipantRule);
+        Assert.assertEquals(participantRule.getMatchType(), ParticipantMatchType.Automatic);
+        Assert.assertEquals(participantRule.getParticipantType(), ParticipantType.Fixed);
+        Assert.assertEquals(participantRule.getPrivacyType(), ParticipantPrivacyType.Private);
+        Assert.assertEquals(((FixedParticipantRule) participantRule).getNumberOfParticipants(), 2);
+        participantRule = objectMapper.readValue(
+                "{\"participantType\":\"Limited\",\"matchType\":\"Automatic\",\"privacyType\":\"Private\",\"minPlayers\":2,\"maxPlayers\":4}",
+                ParticipantRule.class);
+        Assert.assertTrue(participantRule instanceof LimitedParticipantRule);
+        Assert.assertEquals(participantRule.getMatchType(), ParticipantMatchType.Automatic);
+        Assert.assertEquals(participantRule.getParticipantType(), ParticipantType.Limited);
+        Assert.assertEquals(participantRule.getPrivacyType(), ParticipantPrivacyType.Private);
+        Assert.assertEquals(((LimitedParticipantRule) participantRule).getMinPlayers(), 2);
+        Assert.assertEquals(((LimitedParticipantRule) participantRule).getMaxPlayers(), 4);
     }
 
 }

@@ -29,8 +29,7 @@ public class TimeRuleFormat {
                 throw GogomayaException.create(GogomayaError.ClientJsonFormatError);
 
             TimeRuleType timeRuleType = TimeRuleType.valueOf(jp.nextTextValue());
-            TimeBreachBehavior timeBreachBehavior = jp.nextFieldName(TIME_BREACH_TOKEN) ? TimeBreachBehavior.valueOf(jp.nextTextValue())
-                    : TimeBreachBehavior.PlayerLoose;
+            TimeBreachBehavior timeBreachBehavior = jp.nextFieldName(TIME_BREACH_TOKEN) ? TimeBreachBehavior.valueOf(jp.nextTextValue()) : TimeBreachBehavior.PlayerLoose;
 
             switch (timeRuleType) {
             case Unlimited:

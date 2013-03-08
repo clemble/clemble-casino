@@ -2,8 +2,15 @@ package com.gogomaya.server.game.rule.participant;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.GameRule;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.gogomaya.server.game.GameRule;
+import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomParticipantRuleDeserializer;
+import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomParticipantRuleSerializer;
+
+@JsonSerialize(using = CustomParticipantRuleSerializer.class)
+@JsonDeserialize(using = CustomParticipantRuleDeserializer.class)
 abstract public class ParticipantRule implements GameRule {
 
     final private ParticipantMatchType matchType;

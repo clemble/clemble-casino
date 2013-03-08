@@ -1,7 +1,14 @@
 package com.gogomaya.server.game.rule.participant;
 
-// Can additionally define player level
-public class LimitedParticipantRule extends ParticipantRule {
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomParticipantRuleDeserializer;
+import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomParticipantRuleSerializer;
+
+@JsonSerialize(using = CustomParticipantRuleSerializer.class)
+@JsonDeserialize(using = CustomParticipantRuleDeserializer.class)
+final public class LimitedParticipantRule extends ParticipantRule {
 
     final private int minParticipants;
 
