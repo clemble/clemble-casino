@@ -10,7 +10,10 @@ abstract public class ParticipantRule implements GameRule {
 
     final private ParticipantPrivacyType privacyType;
 
-    private ParticipantRule(final ParticipantMatchType matchType, final ParticipantPrivacyType privacyType) {
+    final private ParticipantType participantType;
+
+    protected ParticipantRule(final ParticipantType participantType, final ParticipantMatchType matchType, final ParticipantPrivacyType privacyType) {
+        this.participantType = checkNotNull(participantType);
         this.matchType = checkNotNull(matchType);
         this.privacyType = checkNotNull(privacyType);
     }
@@ -23,26 +26,8 @@ abstract public class ParticipantRule implements GameRule {
         return privacyType;
     }
 
-    // Can additionally define player level
-    public static class LimitedParticipantRule extends ParticipantRule {
-
-        final private int minParticipants;
-
-        final private int maxParticipants;
-
-        private LimitedParticipantRule(final ParticipantMatchType matchType, final ParticipantPrivacyType privacyType, final int minParticipants, final int maxParticipants) {
-            super(matchType, privacyType);
-            this.maxParticipants = maxParticipants;
-            this.minParticipants = minParticipants;
-        }
-
-        public int getMinPlayers() {
-            return minParticipants;
-        }
-
-        public int getMaxPlayers() {
-            return maxParticipants;
-        }
-
+    public ParticipantType getParticipantType() {
+        return participantType;
     }
+
 }

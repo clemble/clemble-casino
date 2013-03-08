@@ -36,11 +36,11 @@ public class BetRuleFormat {
 
             switch (betType) {
             case Fixed:
-                if (!jp.nextFieldName(PRICE_TOKEN))
+                if (!jp.getCurrentName().equals(PRICE_TOKEN.toString()) && !jp.nextFieldName(PRICE_TOKEN))
                     throw GogomayaException.create(GogomayaError.ClientJsonFormatError);
                 return FixedBetRule.create(cashType, jp.nextLongValue(0));
             case Limited:
-                if (!jp.nextFieldName(MIN_BET_TOKEN))
+                if (!jp.getCurrentName().equals(MIN_BET_TOKEN.toString()) && !jp.nextFieldName(MIN_BET_TOKEN))
                     throw GogomayaException.create(GogomayaError.ClientJsonFormatError);
                 long minBet = jp.nextLongValue(0);
                 if (!jp.nextFieldName(new SerializedString("maxBet")))

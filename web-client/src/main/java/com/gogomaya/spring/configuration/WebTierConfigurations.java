@@ -1,4 +1,4 @@
-package com.socialone.spring.configuration;
+package com.gogomaya.spring.configuration;
 
 import java.util.List;
 
@@ -27,12 +27,12 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 import org.springframework.web.servlet.view.xml.MarshallingView;
 
+import com.gogomaya.social.ConnectionRepositoryCache;
+import com.gogomaya.social.SimpleSignInAdapter;
+import com.gogomaya.social.UserCookieGenerator;
+import com.gogomaya.social.UserInterceptor;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.socialone.social.ConnectionRepositoryCache;
-import com.socialone.social.SimpleSignInAdapter;
-import com.socialone.social.UserCookieGenerator;
-import com.socialone.social.UserInterceptor;
 
 @Configuration
 @ComponentScan(basePackages = "com.socialone", excludeFilters = { @Filter(Configuration.class) })

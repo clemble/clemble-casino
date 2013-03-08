@@ -1,4 +1,4 @@
-package com.socialone.spring.configuration;
+package com.gogomaya.spring.configuration;
 
 import javax.inject.Singleton;
 

@@ -1,4 +1,4 @@
-package com.socialone.social;
+package com.gogomaya.social;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;

@@ -1,4 +1,4 @@
-package com.socialone.controller;
+package com.gogomaya.controller;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.socialone.social.ConnectionRepositoryCache;
-import com.socialone.social.UserCookieGenerator;
+import com.gogomaya.social.ConnectionRepositoryCache;
+import com.gogomaya.social.UserCookieGenerator;
 
 @Controller
 public class SocialNetworkController {

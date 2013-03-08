@@ -1,4 +1,4 @@
-package com.socialone.social;
+package com.gogomaya.social;
 
 import javax.servlet.http.HttpServletResponse;
 
