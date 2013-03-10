@@ -10,6 +10,11 @@ import com.gogomaya.server.game.rule.giveup.GiveUpRuleFormat.CustomGiveUpRuleSer
 @JsonDeserialize(using = CustomGiveUpRuleDeserializer.class)
 final public class LooseLostGiveUpRule extends GiveUpRule {
 
+    /**
+     * Generated 09/04/13
+     */
+    private static final long serialVersionUID = -3416635969563391335L;
+
     private LooseLostGiveUpRule() {
         super(LoosingType.Lost);
     }

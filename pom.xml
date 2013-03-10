@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>common</module>
-        <module>game-rule-engine</module>
+        <module>game-management</module>
         <module>user-management</module>
         <module>point-management</module>
         <module>room-management</module>

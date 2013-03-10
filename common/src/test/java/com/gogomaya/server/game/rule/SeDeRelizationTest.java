@@ -76,14 +76,14 @@ public class SeDeRelizationTest {
 
     @Test
     public void betRule() throws JsonGenerationException, JsonMappingException, IOException {
-        BetRule betRule = objectMapper.readValue("{\"betType\":\"Unlimited\", \"cashType\":\"FakeMoney\"}", UnlimitedBetRule.class);
+        BetRule betRule = objectMapper.readValue("{\"betType\":\"Unlimited\"}", UnlimitedBetRule.class);
         assertTrue(betRule instanceof UnlimitedBetRule);
 
-        betRule = objectMapper.readValue("{\"betType\":\"Fixed\", \"cashType\":\"FakeMoney\",\"price\":100}", BetRule.class);
+        betRule = objectMapper.readValue("{\"betType\":\"Fixed\",\"price\":100}", BetRule.class);
         assertTrue(betRule instanceof FixedBetRule);
         Assert.assertEquals(((FixedBetRule) betRule).getPrice(), 100);
 
-        betRule = objectMapper.readValue("{\"betType\":\"Limited\", \"cashType\":\"FakeMoney\",\"minBet\":100,\"maxBet\":1000}", BetRule.class);
+        betRule = objectMapper.readValue("{\"betType\":\"Limited\",\"minBet\":100,\"maxBet\":1000}", BetRule.class);
         assertTrue(betRule instanceof LimitedBetRule);
         Assert.assertEquals(((LimitedBetRule) betRule).getMinBet(), 100);
         Assert.assertEquals(((LimitedBetRule) betRule).getMaxBet(), 1000);

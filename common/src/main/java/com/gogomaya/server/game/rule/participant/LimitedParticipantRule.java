@@ -10,6 +10,11 @@ import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomPar
 @JsonDeserialize(using = CustomParticipantRuleDeserializer.class)
 final public class LimitedParticipantRule extends ParticipantRule {
 
+    /**
+     * Generated 09/04/13
+     */
+    private static final long serialVersionUID = -1983738788740436316L;
+
     final private int minParticipants;
 
     final private int maxParticipants;
@@ -28,7 +33,11 @@ final public class LimitedParticipantRule extends ParticipantRule {
         return maxParticipants;
     }
 
-    public static LimitedParticipantRule create(final ParticipantMatchType matchType, final ParticipantPrivacyType privacyType, final int minParticipants, final int maxParticipants) {
+    public static LimitedParticipantRule create(
+            final ParticipantMatchType matchType,
+            final ParticipantPrivacyType privacyType,
+            final int minParticipants,
+            final int maxParticipants) {
         return new LimitedParticipantRule(matchType, privacyType, minParticipants, maxParticipants);
     }
 

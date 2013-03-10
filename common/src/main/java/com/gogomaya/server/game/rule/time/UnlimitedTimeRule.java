@@ -10,6 +10,11 @@ import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleSerialize
 @JsonDeserialize(using = CustomTimeRuleDeseriler.class)
 final public class UnlimitedTimeRule extends TimeRule {
 
+    /**
+     * Generated 09/04/13
+     */
+    private static final long serialVersionUID = 1731476218744551572L;
+
     private UnlimitedTimeRule(TimeBreachBehavior ruleBreachBehavior) {
         super(TimeRuleType.Unlimited, ruleBreachBehavior);
     }

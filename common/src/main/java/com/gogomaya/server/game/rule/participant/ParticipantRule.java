@@ -5,13 +5,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.gogomaya.server.game.GameRule;
+import com.gogomaya.server.game.rule.GameRule;
 import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomParticipantRuleDeserializer;
 import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomParticipantRuleSerializer;
 
 @JsonSerialize(using = CustomParticipantRuleSerializer.class)
 @JsonDeserialize(using = CustomParticipantRuleDeserializer.class)
 abstract public class ParticipantRule implements GameRule {
+
+    /**
+     * Generated 09/04/13
+     */
+    private static final long serialVersionUID = -6212991143939664300L;
 
     final private ParticipantMatchType matchType;
 

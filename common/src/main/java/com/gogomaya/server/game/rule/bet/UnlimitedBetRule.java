@@ -5,18 +5,20 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.gogomaya.server.game.rule.bet.BetRuleFormat.CustomBetRuleDeserializer;
 import com.gogomaya.server.game.rule.bet.BetRuleFormat.CustomBetRuleSerializer;
-import com.gogomaya.server.player.wallet.CashType;
 
 @JsonSerialize(using = CustomBetRuleSerializer.class)
 @JsonDeserialize(using = CustomBetRuleDeserializer.class)
 final public class UnlimitedBetRule extends BetRule {
 
-    private UnlimitedBetRule(CashType cashType) {
-        super(BetType.Unlimited, cashType);
+    /**
+     * Generated 09/04/13
+     */
+    private static final long serialVersionUID = 6788161410535376939L;
+
+    private UnlimitedBetRule() {
+        super(BetType.Unlimited);
     }
 
-    public static UnlimitedBetRule create(CashType cashType) {
-        return new UnlimitedBetRule(cashType);
-    }
+    public static UnlimitedBetRule INCTANCE = new UnlimitedBetRule();
 
 }

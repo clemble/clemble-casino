@@ -12,11 +12,16 @@ import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleSerialize
 @JsonDeserialize(using = CustomTimeRuleDeseriler.class)
 final public class LimitedGameTimeRule extends TimeRule {
 
+    /**
+     * Generated 09/04/13
+     */
+    private static final long serialVersionUID = 7452918511506230595L;
+
     final private int gameTimeLimit;
 
     private LimitedGameTimeRule(final TimeBreachBehavior timeBreachBehavior, final int timeLimit) {
         super(TimeRuleType.LimitedGameTime, timeBreachBehavior);
-        if(timeLimit < 0)
+        if (timeLimit < 0)
             throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
         this.gameTimeLimit = timeLimit;
     }

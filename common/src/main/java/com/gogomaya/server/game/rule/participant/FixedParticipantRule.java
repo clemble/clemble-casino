@@ -10,6 +10,11 @@ import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomPar
 @JsonDeserialize(using = CustomParticipantRuleDeserializer.class)
 final public class FixedParticipantRule extends ParticipantRule {
 
+    /**
+     * Generated 09/04/13
+     */
+    private static final long serialVersionUID = 8684624696632702698L;
+
     final private int numberOfParticipants;
 
     private FixedParticipantRule(final ParticipantMatchType matchType, final ParticipantPrivacyType privacyType, final int numberOfParticipants) {

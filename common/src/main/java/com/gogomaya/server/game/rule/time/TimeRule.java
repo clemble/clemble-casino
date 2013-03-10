@@ -5,13 +5,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.gogomaya.server.game.GameRule;
+import com.gogomaya.server.game.rule.GameRule;
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleDeseriler;
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleSerializer;
 
 @JsonSerialize(using = CustomTimeRuleSerializer.class)
 @JsonDeserialize(using = CustomTimeRuleDeseriler.class)
 abstract public class TimeRule implements GameRule {
+
+    /**
+     * Generated 09/04/13
+     */
+    private static final long serialVersionUID = -698053197734249764L;
 
     final private TimeRuleType timeRuleType;
 

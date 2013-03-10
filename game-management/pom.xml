@@ -6,11 +6,28 @@
         <artifactId>parent</artifactId>
         <version>0.0.3-SNAPSHOT</version>
     </parent>
-    <artifactId>game-rule-engine</artifactId>
+    <artifactId>game-management</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
             <artifactId>common</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 </project>
