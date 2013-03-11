@@ -29,7 +29,7 @@ public class GameSession implements GameSessionAware<GameSession> {
     @Column(name = "SESSION_ID")
     private String sessionId;
 
-    @Column(name = "STATE")
+    @Column(name = "SESSION_STATE")
     private GameSessionState sessionState;
 
     @Embedded

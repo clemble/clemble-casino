@@ -54,7 +54,7 @@ public class BetRuleFormat {
             case Limited:
                 return LimitedBetRule.create(price, maxPrice);
             case Unlimited:
-                return UnlimitedBetRule.INCTANCE;
+                return UnlimitedBetRule.INSTANCE;
             }
             return null;
         }
@@ -106,7 +106,7 @@ public class BetRuleFormat {
             case Limited:
                 return LimitedBetRule.create(rs.getLong(names[1]), rs.getLong(names[2]));
             case Unlimited:
-                return UnlimitedBetRule.INCTANCE;
+                return UnlimitedBetRule.INSTANCE;
             }
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         }

@@ -6,44 +6,56 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.game.rule.bet.BetRule;
+import com.gogomaya.server.game.rule.bet.BetRuleFormat.CustomBetRuleType;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
+import com.gogomaya.server.game.rule.giveup.GiveUpRuleFormat.CustomGiveUpRuleType;
 import com.gogomaya.server.game.rule.participant.ParticipantRule;
+import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomParticipantRuleType;
 import com.gogomaya.server.game.rule.time.TimeRule;
+import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleType;
 import com.gogomaya.server.player.wallet.CashType;
 
 @Embeddable
+@TypeDefs(value = { @TypeDef(name = "betRule", typeClass = CustomBetRuleType.class), @TypeDef(name = "giveUpRule", typeClass = CustomGiveUpRuleType.class),
+        @TypeDef(name = "timeRule", typeClass = CustomTimeRuleType.class), @TypeDef(name = "participationRule", typeClass = CustomParticipantRuleType.class), })
 public class GameRuleSpecification {
 
-    @Column(name = "CASH_TYPE")
+    @Column(name = "BET_CASH_TYPE")
     @Enumerated(EnumType.STRING)
     private CashType cashType;
 
-//    @Columns(columns = {
-//        @Column(name = "BET_TYPE"),
-//        @Column(name = "MIN_PRICE"),
-//        @Column(name = "MAX_PRICE")
-//    })
-    @Transient
+    @Columns(columns = { @Column(name = "BET_TYPE"), @Column(name = "BET_MIN_PRICE"), @Column(name = "BET_MAX_PRICE") })
+    @Type(type = "betRule")
     private BetRule betRule;
 
-    @Transient
+    @Columns(columns = { @Column(name = "LOOSE_TYPE"), @Column(name = "LOOSE_MIN_PART") })
+    @Type(type = "giveUpRule")
     private GiveUpRule giveUpRule;
 
-    @Transient
+    @Columns(columns = { @Column(name = "TIME_TYPE"), @Column(name = "TIME_BREACH_TYPE"), @Column(name = "TIME_LIMIT") })
+    @Type(type = "timeRule")
     private TimeRule timeRule;
 
-    @Transient
+    @Type(type = "participationRule")
+    @Columns(columns = { @Column(name = "PARTICIPANT_TYPE"), @Column(name = "PARTICIPANT_MATCH_TYPE"), @Column(name = "PARTICIPANT_PRIVACY_TYPE"),
+            @Column(name = "PARTICIPANT_MIN"), @Column(name = "PARTICIPANT_MAX") })
     private ParticipantRule participationRule;
 
-    public GameRuleSpecification(){
+    public GameRuleSpecification() {
     }
 
-    public GameRuleSpecification(final CashType cashType, final BetRule betRule, final GiveUpRule giveUpRule, final TimeRule timeRule, final ParticipantRule participationRule) {
+    public GameRuleSpecification(final CashType cashType,
+            final BetRule betRule,
+            final GiveUpRule giveUpRule,
+            final TimeRule timeRule,
+            final ParticipantRule participationRule) {
         this.betRule = checkNotNull(betRule);
         this.giveUpRule = checkNotNull(giveUpRule);
         this.timeRule = checkNotNull(timeRule);

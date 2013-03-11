@@ -19,6 +19,6 @@ final public class UnlimitedBetRule extends BetRule {
         super(BetType.Unlimited);
     }
 
-    public static UnlimitedBetRule INCTANCE = new UnlimitedBetRule();
+    public static UnlimitedBetRule INSTANCE = new UnlimitedBetRule();
 
 }
