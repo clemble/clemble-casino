@@ -1,4 +1,4 @@
-package com.gogomaya.server.user;
+package com.gogomaya.server.schema;
 
 import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
@@ -9,6 +9,7 @@ import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.wallet.PlayerWallet;
+import com.gogomaya.server.user.AbstractCommonTest;
 
 public class SchemaGenerationCommonTest extends AbstractCommonTest {
 

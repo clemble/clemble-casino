@@ -23,9 +23,9 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 @Configuration
-@Import(value = {DataSourceModuleSpringConfiguration.DataSourceCloudFoundryConfigurations.class,
-        DataSourceModuleSpringConfiguration.DataSourceDefaultConfigurations.class, DataSourceModuleSpringConfiguration.DataSourceTestConfigurations.class })
-public class DataSourceModuleSpringConfiguration {
+@Import(value = {DataSourceSpringConfiguration.DataSourceCloudFoundryConfigurations.class,
+        DataSourceSpringConfiguration.DataSourceDefaultConfigurations.class, DataSourceSpringConfiguration.DataSourceTestConfigurations.class })
+public class DataSourceSpringConfiguration {
 
     @Configuration
     @Profile(value = "cloud")

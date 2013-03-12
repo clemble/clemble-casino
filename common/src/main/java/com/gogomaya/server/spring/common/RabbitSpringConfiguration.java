@@ -22,8 +22,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 @Configuration
-@Import({RabbitModuleSpringConfigurations.RabbitModuleCloudFoundryConfigurations.class, RabbitModuleSpringConfigurations.RabbitModuleDefaultConfigurations.class, RabbitModuleSpringConfigurations.RabbitModuleTestConfigurations.class})
-public class RabbitModuleSpringConfigurations {
+@Import({RabbitSpringConfiguration.RabbitCloudFoundryConfigurations.class, RabbitSpringConfiguration.RabbitDefaultConfigurations.class, RabbitSpringConfiguration.RabbitTestConfigurations.class})
+public class RabbitSpringConfiguration {
     
     @Inject
     ConnectionFactory connectionFactory;
@@ -42,7 +42,7 @@ public class RabbitModuleSpringConfigurations {
 
     @Configuration
     @Profile(value = "cloud")
-    static class RabbitModuleCloudFoundryConfigurations {
+    static class RabbitCloudFoundryConfigurations {
         @Inject
         CloudEnvironment cloudEnvironment;
 
@@ -68,7 +68,7 @@ public class RabbitModuleSpringConfigurations {
 
     @Configuration
     @Profile(value = "default")
-    static class RabbitModuleDefaultConfigurations {
+    static class RabbitDefaultConfigurations {
 
         @Bean
         @Singleton
@@ -80,7 +80,7 @@ public class RabbitModuleSpringConfigurations {
 
     @Configuration
     @Profile(value = "test")
-    static class RabbitModuleTestConfigurations {
+    static class RabbitTestConfigurations {
 
         @Bean
         @Singleton
