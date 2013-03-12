@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Profile;
 import com.gogomaya.server.error.GogomayaValidationService;
 
 @Configuration
-@Import({ CommonModuleSpringConfiguration.CommonModuleCloudFoundryConfigurations.class,
-        RabbitModuleSpringConfigurations.class })
+@Import({ CommonModuleSpringConfiguration.CommonModuleCloudFoundryConfigurations.class, RabbitModuleSpringConfigurations.class,
+        DataSourceModuleSpringConfiguration.class })
 public class CommonModuleSpringConfiguration {
 
     @Bean

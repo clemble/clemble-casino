@@ -33,10 +33,10 @@ public class GameSession implements GameSessionAware<GameSession> {
     private GameSessionState sessionState;
 
     @Embedded
-    private GameRuleSpecification gameRuleSpecification;
+    private GameRuleSpecification ruleSpecification;
 
     @Transient
-    private GameState gameState;
+    private GameState state;
 
     @Override
     public String getSessionId() {
@@ -58,19 +58,19 @@ public class GameSession implements GameSessionAware<GameSession> {
     }
 
     public GameRuleSpecification getGameRuleSpecification() {
-        return gameRuleSpecification;
+        return ruleSpecification;
     }
 
     public void setGameRuleSpecification(GameRuleSpecification gameRuleSpecification) {
-        this.gameRuleSpecification = gameRuleSpecification;
+        this.ruleSpecification = gameRuleSpecification;
     }
 
     public GameState getGameState() {
-        return gameState;
+        return state;
     }
 
     public void setGameState(GameState gameState) {
-        this.gameState = gameState;
+        this.state = gameState;
     }
 
 }
