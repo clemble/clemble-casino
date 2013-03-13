@@ -9,6 +9,7 @@ import java.util.Date;
 import junit.framework.Assert;
 
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
@@ -41,6 +42,14 @@ public class PlayerProfileTest extends AbstractCommonTest {
     final private String JSON_PRESENTATION = "{" + "\"playerId\":1," + "\"nickName\":\"michael.limbo\"," + "\"firstName\":\"Michael\","
             + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\"," + "\"birthDate\":\"10/10/1990\"," + "\"imageUrl\":\"https://limbozo.com/\"" + "}";
 
+    final private String ANOTHER_JSON_PRESENTATION ="{ \"lastName\" : \"Last Name\"," +
+        "\"category\" : \"Novice\"," +
+        "\"nickName\" : \"lizoblud\"," +
+        "\"gender\" : \"M\"," +
+        "\"birthDate\" : \"10/10/1985\"," +
+        "\"firstName\" : \"First Name\"" +
+      "}";
+    
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -79,6 +88,11 @@ public class PlayerProfileTest extends AbstractCommonTest {
         Assert.assertEquals(USER_ID, actual.getPlayerId());
         Assert.assertEquals(GENDER, actual.getGender());
         Assert.assertEquals(BIRTH_DATE, actual.getBirthDate());
+    }
+    
+    @Test
+    public void testAnotherDeserialization() throws JsonParseException, JsonMappingException, IOException {
+        PlayerProfile actual = objectMapper.readValue(ANOTHER_JSON_PRESENTATION.getBytes(), PlayerProfile.class);
     }
 
 }

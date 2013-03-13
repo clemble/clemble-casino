@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -28,8 +27,10 @@ public class RedisSpringConfiguration {
     RedisConnectionFactory redisConnectionFactory;
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate() {
-        return new StringRedisTemplate(redisConnectionFactory);
+    public RedisTemplate<byte[], Long> redisTemplate() {
+        RedisTemplate<byte[], Long> redisTemplate = new RedisTemplate<byte[], Long>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        return redisTemplate;
     }
 
     @Configuration

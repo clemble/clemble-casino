@@ -6,6 +6,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.webmvc.BaseUriMethodArgumentResolver;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -46,6 +47,13 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
     ObjectMapper objectMapper;
+    
+    @Bean
+    public MappingJacksonHttpMessageConverter jacksonHttpMessageConverter(){
+        MappingJacksonHttpMessageConverter messageConverter = new MappingJacksonHttpMessageConverter();
+        messageConverter.setObjectMapper(objectMapper);
+        return messageConverter;
+    }
 
     @Bean
     public RegistrationSocialConnectionController registrationSocialConnectionController() {

@@ -1,11 +1,17 @@
 package com.gogomaya.server.game.session;
 
+import java.util.Set;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -36,6 +42,10 @@ public class GameSession implements GameSessionAware<GameSession> {
 
     @Transient
     private GameState state;
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "GAME_SESSION_PLAYERS", joinColumns = @JoinColumn(name = "SESSION_ID"))
+    private Set<Long> players;
 
     @Override
     public long getSessionId() {
@@ -70,6 +80,18 @@ public class GameSession implements GameSessionAware<GameSession> {
 
     public void setGameState(GameState gameState) {
         this.state = gameState;
+    }
+
+    public Set<Long> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Set<Long> players) {
+        this.players = players;
+    }
+    
+    public void addPlayer(Long player) {
+        this.players.add(player);
     }
 
 }
