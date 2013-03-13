@@ -1,16 +1,15 @@
 package com.gogomaya.server.game.session;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.game.rule.GameRuleSpecification;
 
@@ -24,10 +23,10 @@ public class GameSession implements GameSessionAware<GameSession> {
     private static final long serialVersionUID = -6572596573895530995L;
 
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SESSION_ID")
-    private String sessionId;
+    @JsonProperty("sessionId")
+    private long sessionId;
 
     @Column(name = "SESSION_STATE")
     private GameSessionState sessionState;
@@ -39,13 +38,13 @@ public class GameSession implements GameSessionAware<GameSession> {
     private GameState state;
 
     @Override
-    public String getSessionId() {
+    public long getSessionId() {
         return sessionId;
     }
 
     @Override
-    public GameSession sesSessionId(String sessionId) {
-        this.sessionId = checkNotNull(sessionId);
+    public GameSession setSessionId(long newSessionId) {
+        this.sessionId = newSessionId;
         return this;
     }
 

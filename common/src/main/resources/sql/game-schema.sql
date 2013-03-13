@@ -2,7 +2,7 @@
     drop table if exists GAME_SESSION;
 
     create table GAME_SESSION (
-        SESSION_ID varchar(255) not null,
+        SESSION_ID bigint not null auto_increment,
         BET_TYPE varchar(255),
         BET_MIN_PRICE integer,
         BET_MAX_PRICE integer,

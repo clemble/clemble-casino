@@ -6,11 +6,11 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.gogomaya.server.game.rule.GameRule;
-import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleDeseriler;
+import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleDeserializer;
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleSerializer;
 
 @JsonSerialize(using = CustomTimeRuleSerializer.class)
-@JsonDeserialize(using = CustomTimeRuleDeseriler.class)
+@JsonDeserialize(using = CustomTimeRuleDeserializer.class)
 abstract public class TimeRule implements GameRule {
 
     /**

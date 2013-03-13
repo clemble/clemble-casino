@@ -1,6 +1,7 @@
 package com.gogomaya.server.game.rule.bet;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ import org.codehaus.jackson.map.SerializerProvider;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 
+import com.gogomaya.server.buffer.ByteBufferStream;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.hibernate.AbstractImmutableUserType;
@@ -33,16 +35,17 @@ public class BetRuleFormat {
         @Override
         public BetRule deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
             BetType betType = null;
-            long price = 0;
-            long maxPrice = 0;
+            int price = 0;
+            int maxPrice = 0;
+
             while (jp.nextToken() != JsonToken.END_OBJECT) {
                 String currentName = jp.getCurrentName();
                 if (BET_TYPE_TOKEN.equals(currentName)) {
                     betType = BetType.valueOf(jp.nextTextValue());
                 } else if (PRICE_TOKEN.equals(currentName) || MIN_BET_TOKEN.equals(currentName)) {
-                    price = jp.nextLongValue(0);
+                    price = jp.nextIntValue(0);
                 } else if (MAX_BET_TOKEN.equals(currentName)) {
-                    maxPrice = jp.nextLongValue(0);
+                    maxPrice = jp.nextIntValue(0);
                 } else {
                     throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
                 }
@@ -102,9 +105,9 @@ public class BetRuleFormat {
             BetType betType = BetType.valueOf(rs.getString(names[0]));
             switch (betType) {
             case Fixed:
-                return FixedBetRule.create(rs.getLong(names[1]));
+                return FixedBetRule.create(rs.getInt(names[1]));
             case Limited:
-                return LimitedBetRule.create(rs.getLong(names[1]), rs.getLong(names[2]));
+                return LimitedBetRule.create(rs.getInt(names[1]), rs.getInt(names[2]));
             case Unlimited:
                 return UnlimitedBetRule.INSTANCE;
             }
@@ -130,6 +133,43 @@ public class BetRuleFormat {
             }
         }
 
+    }
+
+    public static class CustomBetRuleByteBufferStream implements ByteBufferStream<BetRule> {
+
+        @Override
+        public ByteBuffer write(BetRule betRule, ByteBuffer buffer) {
+
+            buffer.put((byte) betRule.getRuleType().ordinal());
+
+            switch (betRule.getRuleType()) {
+            case Fixed:
+                buffer.putInt(((FixedBetRule) betRule).getPrice());
+                break;
+            case Limited:
+                buffer.putInt(((LimitedBetRule) betRule).getMinBet())
+                    .putInt(((LimitedBetRule) betRule).getMaxBet());
+                break;
+            case Unlimited:
+                break;
+            }
+            return buffer;
+        }
+
+        @Override
+        public BetRule read(ByteBuffer buffer) {
+            int betType = buffer.get();
+
+            if (betType == BetType.Fixed.ordinal()) {
+                return FixedBetRule.create(buffer.getInt());
+            } else if (betType == BetType.Limited.ordinal()) {
+                return LimitedBetRule.create(buffer.getInt(), buffer.getInt());
+            } else if (betType == BetType.Unlimited.ordinal()) {
+                return UnlimitedBetRule.INSTANCE;
+            }
+
+            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+        }
     }
 
 }

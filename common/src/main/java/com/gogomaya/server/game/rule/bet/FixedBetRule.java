@@ -22,29 +22,29 @@ final public class FixedBetRule extends BetRule {
      */
     private static final long serialVersionUID = 6656576325438885626L;
 
-    final private static LoadingCache<Long, FixedBetRule> INSTANCE_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<Long, FixedBetRule>() {
+    final private static LoadingCache<Integer, FixedBetRule> INSTANCE_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<Integer, FixedBetRule>() {
 
         @Override
-        public FixedBetRule load(Long priceToUse) throws Exception {
+        public FixedBetRule load(Integer priceToUse) throws Exception {
             return new FixedBetRule(priceToUse);
         }
 
     });
 
-    final private long price;
+    final private int price;
 
-    private FixedBetRule(final long priceToUse) {
+    private FixedBetRule(final int priceToUse) {
         super(BetType.Fixed);
         if (priceToUse < 0)
             throw GogomayaException.create(GogomayaError.ClientJsonFormatError);
         this.price = priceToUse;
     }
 
-    public long getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public static FixedBetRule create(long price) {
+    public static FixedBetRule create(int price) {
         try {
             return INSTANCE_CACHE.get(price);
         } catch (ExecutionException e) {

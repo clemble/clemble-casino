@@ -51,7 +51,7 @@ public class SeDeRelizationTest {
 
         timeRule = objectMapper.readValue("{\"timeType\":\"Unlimited\",\"timeBreach\":\"PlayerLoose\"}", TimeRule.class);
         Assert.assertTrue(timeRule instanceof UnlimitedTimeRule);
-        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.PlayerLoose);
+        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.DoNothing);
 
         timeRule = objectMapper.readValue("{\"timeType\":\"LimitedGameTime\",\"timeBreach\":\"DoNothing\",\"timeLimit\":1}", TimeRule.class);
         Assert.assertTrue(timeRule instanceof LimitedGameTimeRule);

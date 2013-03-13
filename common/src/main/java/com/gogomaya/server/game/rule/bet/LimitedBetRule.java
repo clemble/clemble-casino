@@ -1,9 +1,7 @@
 package com.gogomaya.server.game.rule.bet;
 
-import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -24,21 +22,20 @@ final public class LimitedBetRule extends BetRule {
      */
     final static private long serialVersionUID = -5560244451652751412L;
 
-    final private static LoadingCache<Entry<Long, Long>, LimitedBetRule> INSTANCE_CACHE = CacheBuilder.newBuilder().build(
-            new CacheLoader<Entry<Long, Long>, LimitedBetRule>() {
+    final private static LoadingCache<Long, LimitedBetRule> INSTANCE_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<Long, LimitedBetRule>() {
 
-                @Override
-                public LimitedBetRule load(Entry<Long, Long> entry) throws Exception {
-                    return new LimitedBetRule(entry.getKey(), entry.getValue());
-                }
+        @Override
+        public LimitedBetRule load(Long entry) throws Exception {
+            return new LimitedBetRule((int) (entry >> 32), (int) (entry & 0x00000000FFFFFFFFL));
+        }
 
-            });
+    });
 
-    final private long minBet;
+    final private int minBet;
 
-    final private long maxBet;
+    final private int maxBet;
 
-    private LimitedBetRule(final long minBet, final long maxBet) {
+    private LimitedBetRule(final int minBet, final int maxBet) {
         super(BetType.Limited);
         if (minBet > maxBet)
             throw new IllegalArgumentException("MIN bet can't be lesser, than MAX bet");
@@ -48,17 +45,17 @@ final public class LimitedBetRule extends BetRule {
         this.maxBet = maxBet;
     }
 
-    public long getMinBet() {
+    public int getMinBet() {
         return minBet;
     }
 
-    public long getMaxBet() {
+    public int getMaxBet() {
         return maxBet;
     }
 
-    public static LimitedBetRule create(long minBet, long maxBet) {
+    public static LimitedBetRule create(int minBet, int maxBet) {
         try {
-            return INSTANCE_CACHE.get(new ImmutablePair<Long, Long>(minBet, maxBet));
+            return INSTANCE_CACHE.get(((long) minBet << 32) | maxBet);
         } catch (ExecutionException e) {
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         }

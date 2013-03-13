@@ -1,6 +1,7 @@
 package com.gogomaya.server.game.rule.giveup;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,8 +10,7 @@ import java.sql.Types;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.SerializableString;
-import org.codehaus.jackson.io.SerializedString;
+import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.JsonDeserializer;
 import org.codehaus.jackson.map.JsonSerializer;
@@ -18,31 +18,41 @@ import org.codehaus.jackson.map.SerializerProvider;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 
+import com.gogomaya.server.buffer.ByteBufferStream;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.hibernate.AbstractImmutableUserType;
 
 public class GiveUpRuleFormat {
 
-    final public static SerializableString LOOSE_TYPE_TOKEN = new SerializedString("looseType");
-    final public static SerializableString MIN_PART_TOKEN = new SerializedString("minPart");
+    final public static String LOOSE_TYPE_TOKEN = "looseType";
+    final public static String MIN_PART_TOKEN = "minPart";
 
     public static class CustomGiveUpRuleDeserializer extends JsonDeserializer<GiveUpRule> {
 
         @Override
         public GiveUpRule deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            if (!jp.nextFieldName(LOOSE_TYPE_TOKEN))
-                throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
-            LoosingType loosingType = LoosingType.valueOf(jp.nextTextValue());
+            LoosingType loosingType = null;
+            int minPart = 100;
+
+            while (jp.nextToken() != JsonToken.END_OBJECT) {
+                String currentName = jp.getCurrentName();
+                if (LOOSE_TYPE_TOKEN.equals(currentName)) {
+                    loosingType = LoosingType.valueOf(jp.nextTextValue());
+                } else if (MIN_PART_TOKEN.equals(currentName)) {
+                    minPart = jp.nextIntValue(0);
+                } else {
+                    throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
+                }
+            }
+
             switch (loosingType) {
             case All:
                 return LooseAllGiveUpRule.INSTANCE;
             case Lost:
                 return LooseLostGiveUpRule.INSTANCE;
             case MinPart:
-                if (!jp.nextFieldName(MIN_PART_TOKEN))
-                    throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
-                return LooseMinGiveUpRule.create(jp.nextIntValue(0));
+                return LooseMinGiveUpRule.create(minPart);
             }
             throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
         }
@@ -98,6 +108,41 @@ public class GiveUpRuleFormat {
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
             st.setString(index++, ((GiveUpRule) value).getLoosingType().name());
             st.setInt(index, value instanceof LooseMinGiveUpRule ? ((LooseMinGiveUpRule) value).getMinPart() : 0);
+        }
+
+    }
+
+    public static class CustomGiveUpRuleByteBufferStream implements ByteBufferStream<GiveUpRule> {
+
+        @Override
+        public ByteBuffer write(GiveUpRule value, ByteBuffer writeBuffer) {
+            writeBuffer.put((byte) value.getLoosingType().ordinal());
+
+            switch (value.getLoosingType()) {
+            case MinPart:
+                writeBuffer.putInt(((LooseMinGiveUpRule) value).getMinPart());
+                break;
+            case All:
+            case Lost:
+                break;
+            }
+
+            return writeBuffer;
+        }
+
+        @Override
+        public GiveUpRule read(ByteBuffer readBuffer) {
+            int loosingType = (int) readBuffer.get();
+
+            if (loosingType == LoosingType.All.ordinal()) {
+                return LooseAllGiveUpRule.INSTANCE;
+            } else if (loosingType == LoosingType.Lost.ordinal()) {
+                return LooseLostGiveUpRule.INSTANCE;
+            } else if (loosingType == LoosingType.MinPart.ordinal()) {
+                return LooseMinGiveUpRule.create(readBuffer.getInt());
+            }
+
+            throw GogomayaException.create(GogomayaError.ServerCriticalError);
         }
 
     }

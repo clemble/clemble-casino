@@ -1,6 +1,7 @@
 package com.gogomaya.server.game.rule.time;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,8 +10,7 @@ import java.sql.Types;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.SerializableString;
-import org.codehaus.jackson.io.SerializedString;
+import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.JsonDeserializer;
 import org.codehaus.jackson.map.JsonSerializer;
@@ -18,38 +18,45 @@ import org.codehaus.jackson.map.SerializerProvider;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 
+import com.gogomaya.server.buffer.ByteBufferStream;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.hibernate.AbstractImmutableUserType;
 
 public class TimeRuleFormat {
 
-    final public static SerializableString TIME_TYPE_TOKEN = new SerializedString("timeType");
-    final public static SerializableString TIME_BREACH_TOKEN = new SerializedString("timeBreach");
-    final public static SerializableString TIME_LIMIT_TOKEN = new SerializedString("timeLimit");
+    final public static String TIME_TYPE_TOKEN = "timeType";
+    final public static String TIME_BREACH_TOKEN = "timeBreach";
+    final public static String TIME_LIMIT_TOKEN = "timeLimit";
 
-    public static class CustomTimeRuleDeseriler extends JsonDeserializer<TimeRule> {
+    public static class CustomTimeRuleDeserializer extends JsonDeserializer<TimeRule> {
 
         @Override
         public TimeRule deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            if (!jp.nextFieldName(TIME_TYPE_TOKEN))
-                throw GogomayaException.create(GogomayaError.ClientJsonFormatError);
+            TimeRuleType timeRuleType = TimeRuleType.Unlimited;
+            TimeBreachBehavior timeBreachBehavior = TimeBreachBehavior.PlayerLoose;
+            int timeLimit = Integer.MAX_VALUE;
 
-            TimeRuleType timeRuleType = TimeRuleType.valueOf(jp.nextTextValue());
-            TimeBreachBehavior timeBreachBehavior = jp.nextFieldName(TIME_BREACH_TOKEN) ? TimeBreachBehavior.valueOf(jp.nextTextValue())
-                    : TimeBreachBehavior.PlayerLoose;
+            while (jp.nextToken() != JsonToken.END_OBJECT) {
+                String currentName = jp.getCurrentName();
+                if (TIME_TYPE_TOKEN.equals(currentName)) {
+                    timeRuleType = TimeRuleType.valueOf(jp.nextTextValue());
+                } else if (TIME_BREACH_TOKEN.equals(currentName)) {
+                    timeBreachBehavior = TimeBreachBehavior.valueOf(jp.nextTextValue());
+                } else if (TIME_LIMIT_TOKEN.equals(currentName)) {
+                    timeLimit = jp.nextIntValue(0);
+                } else {
+                    throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
+                }
+            }
 
             switch (timeRuleType) {
             case Unlimited:
-                return UnlimitedTimeRule.create(timeBreachBehavior);
+                return UnlimitedTimeRule.INSTANCE;
             case LimitedGameTime:
-                if (!jp.nextFieldName(TIME_LIMIT_TOKEN))
-                    throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
-                return LimitedGameTimeRule.create(timeBreachBehavior, jp.nextIntValue(0));
+                return LimitedGameTimeRule.create(timeBreachBehavior, timeLimit);
             case LimitedMoveTime:
-                if (!jp.nextFieldName(TIME_LIMIT_TOKEN))
-                    throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
-                return LimitedMoveTimeRule.create(timeBreachBehavior, jp.nextIntValue(0));
+                return LimitedMoveTimeRule.create(timeBreachBehavior, timeLimit);
             }
             throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
         }
@@ -104,7 +111,7 @@ public class TimeRuleFormat {
             case LimitedMoveTime:
                 return LimitedMoveTimeRule.create(breachBehavior, rs.getInt(names[2]));
             case Unlimited:
-                return UnlimitedTimeRule.create(breachBehavior);
+                return UnlimitedTimeRule.INSTANCE;
             }
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         }
@@ -125,6 +132,53 @@ public class TimeRuleFormat {
                 st.setInt(index++, 0);
                 break;
 
+            }
+        }
+
+    }
+
+    public static class CustomTimeRuleByteBufferStream implements ByteBufferStream<TimeRule> {
+
+        @Override
+        public ByteBuffer write(TimeRule timeRule, ByteBuffer writeBuffer) {
+            writeBuffer.put((byte) timeRule.getRuleType().ordinal()).put((byte) timeRule.getBreachBehavior().ordinal());
+
+            switch (timeRule.getRuleType()) {
+            case LimitedGameTime:
+                writeBuffer.putInt(((LimitedGameTimeRule) timeRule).getGameTimeLimit());
+                break;
+            case LimitedMoveTime:
+                writeBuffer.putInt(((LimitedMoveTimeRule) timeRule).getMoveTimeLimit());
+                break;
+            case Unlimited:
+                break;
+            default:
+                throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            }
+
+            return writeBuffer;
+        }
+
+        @Override
+        public TimeRule read(ByteBuffer readBuffer) {
+            byte timeRule = readBuffer.get();
+            TimeRuleType timeRuleType = timeRule == TimeRuleType.LimitedGameTime.ordinal() ? TimeRuleType.LimitedGameTime
+                    : timeRule == TimeRuleType.LimitedMoveTime.ordinal() ? TimeRuleType.LimitedMoveTime
+                            : timeRule == TimeRuleType.Unlimited.ordinal() ? TimeRuleType.Unlimited : null;
+
+            byte breachType = readBuffer.get();
+            TimeBreachBehavior breachBehavior = breachType == TimeBreachBehavior.DoNothing.ordinal() ? TimeBreachBehavior.DoNothing
+                    : breachType == TimeBreachBehavior.PlayerLoose.ordinal() ? TimeBreachBehavior.PlayerLoose : null;
+
+            switch (timeRuleType) {
+            case LimitedGameTime:
+                return LimitedGameTimeRule.create(breachBehavior, readBuffer.getInt());
+            case LimitedMoveTime:
+                return LimitedMoveTimeRule.create(breachBehavior, readBuffer.getInt());
+            case Unlimited:
+                return UnlimitedTimeRule.INSTANCE;
+            default:
+                throw GogomayaException.create(GogomayaError.ServerCriticalError);
             }
         }
 

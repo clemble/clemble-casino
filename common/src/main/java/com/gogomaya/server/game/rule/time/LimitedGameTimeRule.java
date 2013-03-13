@@ -5,11 +5,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleDeseriler;
+import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleDeserializer;
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleSerializer;
 
 @JsonSerialize(using = CustomTimeRuleSerializer.class)
-@JsonDeserialize(using = CustomTimeRuleDeseriler.class)
+@JsonDeserialize(using = CustomTimeRuleDeserializer.class)
 final public class LimitedGameTimeRule extends TimeRule {
 
     /**

@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public interface GameSessionAware<T extends GameSessionAware<T>> extends Serializable {
 
-    public String getSessionId();
+    public long getSessionId();
 
-    public T sesSessionId(String newSessionId);
+    public T setSessionId(long newSessionId);
 
 }
