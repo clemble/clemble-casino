@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaValidationService;
+import com.gogomaya.server.game.match.GameMatchingService;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.SocialConnectionData;
@@ -22,6 +23,7 @@ import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
+import com.gogomaya.server.web.active.session.SessionController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 import com.gogomaya.server.web.registration.RegistrationLoginController;
 import com.gogomaya.server.web.registration.RegistrationSignInContoller;
@@ -41,15 +43,18 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
     PlayerIdentityRepository playerIdentityRepository;
-    
+
     @Inject
     GogomayaValidationService validationService;
 
     @Inject
+    GameMatchingService matchingService;
+
+    @Inject
     ObjectMapper objectMapper;
-    
+
     @Bean
-    public MappingJacksonHttpMessageConverter jacksonHttpMessageConverter(){
+    public MappingJacksonHttpMessageConverter jacksonHttpMessageConverter() {
         MappingJacksonHttpMessageConverter messageConverter = new MappingJacksonHttpMessageConverter();
         messageConverter.setObjectMapper(objectMapper);
         return messageConverter;
@@ -90,6 +95,11 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     @Bean
     public HandlerExceptionResolver handlerExceptionResolver() {
         return new GogomayaHandlerExceptionResolver(objectMapper);
+    }
+
+    @Bean
+    public SessionController sessionController() {
+        return new SessionController(matchingService);
     }
 
 }

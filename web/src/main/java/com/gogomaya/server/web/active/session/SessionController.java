@@ -1,20 +1,30 @@
 package com.gogomaya.server.web.active.session;
 
-import org.springframework.stereotype.Controller;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.web.active.PlayerIdentityVerificationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import com.gogomaya.server.game.match.GameMatchingService;
+import com.gogomaya.server.game.rule.GameRuleSpecification;
+import com.gogomaya.server.game.session.GameSession;
 
 @Controller
 public class SessionController {
 
-    final private PlayerIdentityVerificationService identityVerificationService;
+    final private GameMatchingService matchingService;
 
-    public SessionController(PlayerIdentityVerificationService identityVerificationService) {
-        this.identityVerificationService = identityVerificationService;
+    public SessionController(final GameMatchingService matchingService) {
+        this.matchingService = checkNotNull(matchingService);
     }
 
-    public void create(PlayerIdentity playerIdentity){
-        identityVerificationService.verify(playerIdentity);
+    @RequestMapping(method = RequestMethod.POST, value = "/active/session", produces = "application/json")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public GameSession create(@RequestHeader("userId") final long userId, final GameRuleSpecification ruleSpecification) {
+        return matchingService.create(userId, ruleSpecification);
     }
 }
