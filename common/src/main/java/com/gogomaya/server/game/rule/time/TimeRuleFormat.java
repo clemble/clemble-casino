@@ -88,7 +88,7 @@ public class TimeRuleFormat {
 
     public static class CustomTimeRuleType extends AbstractImmutableUserType<TimeRule> {
 
-        final private int[] TYPES = { Types.VARCHAR, Types.INTEGER, Types.INTEGER };
+        final private int[] TYPES = { Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
 
         @Override
         public int[] sqlTypes() {

@@ -14,12 +14,18 @@ import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.BetRuleFormat.CustomBetRuleType;
+import com.gogomaya.server.game.rule.bet.UnlimitedBetRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRuleFormat.CustomGiveUpRuleType;
+import com.gogomaya.server.game.rule.giveup.LooseAllGiveUpRule;
+import com.gogomaya.server.game.rule.participant.FixedParticipantRule;
+import com.gogomaya.server.game.rule.participant.ParticipantMatchType;
+import com.gogomaya.server.game.rule.participant.ParticipantPrivacyType;
 import com.gogomaya.server.game.rule.participant.ParticipantRule;
 import com.gogomaya.server.game.rule.participant.ParticipantRuleFormat.CustomParticipantRuleType;
 import com.gogomaya.server.game.rule.time.TimeRule;
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.CustomTimeRuleType;
+import com.gogomaya.server.game.rule.time.UnlimitedTimeRule;
 import com.gogomaya.server.player.wallet.CashType;
 
 @Embeddable
@@ -27,26 +33,33 @@ import com.gogomaya.server.player.wallet.CashType;
         @TypeDef(name = "timeRule", typeClass = CustomTimeRuleType.class), @TypeDef(name = "participationRule", typeClass = CustomParticipantRuleType.class), })
 public class GameRuleSpecification {
 
+    final private static CashType DEFAULT_CASH_TYPE = CashType.FakeMoney;
+    final private static BetRule DEFAULT_BET_RULE = UnlimitedBetRule.INSTANCE;
+    final private static GiveUpRule DEFAULT_GIVE_UP_RULE = LooseAllGiveUpRule.INSTANCE;
+    final private static TimeRule DEFAULT_TIME_RULE = UnlimitedTimeRule.INSTANCE;
+    final private static ParticipantRule DEFAULT_PARTICIPANT_RULE = FixedParticipantRule.create(ParticipantMatchType.Automatic, ParticipantPrivacyType.Public,
+            2);
+
     @Column(name = "BET_CASH_TYPE")
     @Enumerated(EnumType.STRING)
-    private CashType cashType;
+    private CashType cashType = DEFAULT_CASH_TYPE;
 
     @Columns(columns = { @Column(name = "BET_TYPE"), @Column(name = "BET_MIN_PRICE"), @Column(name = "BET_MAX_PRICE") })
     @Type(type = "betRule")
-    private BetRule betRule;
+    private BetRule betRule = DEFAULT_BET_RULE;
 
     @Columns(columns = { @Column(name = "LOOSE_TYPE"), @Column(name = "LOOSE_MIN_PART") })
     @Type(type = "giveUpRule")
-    private GiveUpRule giveUpRule;
+    private GiveUpRule giveUpRule = DEFAULT_GIVE_UP_RULE;
 
     @Columns(columns = { @Column(name = "TIME_TYPE"), @Column(name = "TIME_BREACH_TYPE"), @Column(name = "TIME_LIMIT") })
     @Type(type = "timeRule")
-    private TimeRule timeRule;
+    private TimeRule timeRule = DEFAULT_TIME_RULE;
 
     @Type(type = "participationRule")
     @Columns(columns = { @Column(name = "PARTICIPANT_TYPE"), @Column(name = "PARTICIPANT_MATCH_TYPE"), @Column(name = "PARTICIPANT_PRIVACY_TYPE"),
             @Column(name = "PARTICIPANT_MIN"), @Column(name = "PARTICIPANT_MAX") })
-    private ParticipantRule participationRule;
+    private ParticipantRule participationRule = DEFAULT_PARTICIPANT_RULE;
 
     public GameRuleSpecification() {
     }
@@ -67,19 +80,44 @@ public class GameRuleSpecification {
         return cashType;
     }
 
+    public void setCashType(CashType cashType) {
+        if (cashType != null)
+            this.cashType = cashType;
+    }
+
     public BetRule getBetRule() {
         return betRule;
+    }
+
+    public void setBetRule(BetRule betRule) {
+        if (betRule == null)
+            this.betRule = betRule;
     }
 
     public TimeRule getTimeRule() {
         return timeRule;
     }
 
+    public void setTimeRule(TimeRule timeRule) {
+        if (timeRule != null)
+            this.timeRule = timeRule;
+    }
+
     public ParticipantRule getParticipationRule() {
         return participationRule;
     }
 
+    public void setParticipationRule(ParticipantRule participantRule) {
+        if (participantRule != null)
+            this.participationRule = participantRule;
+    }
+
     public GiveUpRule getGiveUpRule() {
         return giveUpRule;
+    }
+
+    public void setGiveUpRule(GiveUpRule giveUpRule) {
+        if (giveUpRule != null)
+            this.giveUpRule = giveUpRule;
     }
 }

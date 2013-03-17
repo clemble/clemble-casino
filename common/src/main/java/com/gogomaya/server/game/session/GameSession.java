@@ -1,5 +1,6 @@
 package com.gogomaya.server.game.session;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -35,7 +36,7 @@ public class GameSession implements GameSessionAware<GameSession> {
     private long sessionId;
 
     @Column(name = "SESSION_STATE")
-    private GameSessionState sessionState;
+    private GameSessionState sessionState = GameSessionState.Inactive;
 
     @Embedded
     private GameRuleSpecification ruleSpecification;
@@ -45,7 +46,7 @@ public class GameSession implements GameSessionAware<GameSession> {
     
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "GAME_SESSION_PLAYERS", joinColumns = @JoinColumn(name = "SESSION_ID"))
-    private Set<Long> players;
+    private Set<Long> players = new HashSet<Long>();
 
     @Override
     public long getSessionId() {

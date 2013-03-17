@@ -28,7 +28,7 @@ public class GameMatchingService {
         this.sessionRepository = checkNotNull(sessionRepository);
     }
 
-    public GameSession create(long player, GameRuleSpecification ruleSpecification) {
+    public GameSession create(final long player, final GameRuleSpecification ruleSpecification) {
         GameSession resultSession = new GameSession();
         // Step 1. Generate GameRuleSpecification for key and trying to fetch first session
         BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(GameRuleSpecificationFormat.toByteArray(ruleSpecification));
