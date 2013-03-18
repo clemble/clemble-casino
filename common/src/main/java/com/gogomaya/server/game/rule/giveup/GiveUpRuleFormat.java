@@ -24,6 +24,8 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.hibernate.AbstractImmutableUserType;
 
 public class GiveUpRuleFormat {
+    
+    final public static GiveUpRule DEFAULT_GIVE_UP_RULE = LooseAllGiveUpRule.INSTANCE;
 
     final public static String LOOSE_TYPE_TOKEN = "looseType";
     final public static String MIN_PART_TOKEN = "minPart";
@@ -106,7 +108,8 @@ public class GiveUpRuleFormat {
 
         @Override
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
-            st.setString(index++, ((GiveUpRule) value).getLoosingType().name());
+            GiveUpRule giveUpRule = value != null ? (GiveUpRule) value : DEFAULT_GIVE_UP_RULE;
+            st.setString(index++, giveUpRule.getLoosingType().name());
             st.setInt(index, value instanceof LooseMinGiveUpRule ? ((LooseMinGiveUpRule) value).getMinPart() : 0);
         }
 

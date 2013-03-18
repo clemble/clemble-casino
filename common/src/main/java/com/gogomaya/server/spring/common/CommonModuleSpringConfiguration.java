@@ -13,7 +13,7 @@ import com.gogomaya.server.error.GogomayaValidationService;
 
 @Configuration
 @Import({ CommonModuleSpringConfiguration.CommonModuleCloudFoundryConfigurations.class, RabbitSpringConfiguration.class,
-        DataSourceSpringConfiguration.class, RedisSpringConfiguration.class })
+        JPASpringConfiguration.class, RedisSpringConfiguration.class })
 public class CommonModuleSpringConfiguration {
 
     @Bean

@@ -24,6 +24,8 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.hibernate.AbstractImmutableUserType;
 
 public class TimeRuleFormat {
+    
+    final public static TimeRule DEFAULT_TIME_RULE = UnlimitedTimeRule.INSTANCE;
 
     final public static String TIME_TYPE_TOKEN = "timeType";
     final public static String TIME_BREACH_TOKEN = "timeBreach";
@@ -118,15 +120,16 @@ public class TimeRuleFormat {
 
         @Override
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
-            TimeRuleType timeRule = ((TimeRule) value).getRuleType();
-            st.setString(index++, timeRule.name());
-            st.setString(index++, ((TimeRule) value).getBreachBehavior().name());
-            switch (timeRule) {
+            TimeRule timeRule = value != null ? ((TimeRule) value) : DEFAULT_TIME_RULE;
+            TimeRuleType timeRuleType = timeRule.getRuleType();
+            st.setString(index++, timeRuleType.name());
+            st.setString(index++, timeRule.getBreachBehavior().name());
+            switch (timeRuleType) {
             case LimitedGameTime:
-                st.setInt(index++, ((LimitedGameTimeRule) value).getGameTimeLimit());
+                st.setInt(index++, ((LimitedGameTimeRule) timeRule).getGameTimeLimit());
                 break;
             case LimitedMoveTime:
-                st.setInt(index++, ((LimitedMoveTimeRule) value).getMoveTimeLimit());
+                st.setInt(index++, ((LimitedMoveTimeRule) timeRule).getMoveTimeLimit());
                 break;
             case Unlimited:
                 st.setInt(index++, 0);

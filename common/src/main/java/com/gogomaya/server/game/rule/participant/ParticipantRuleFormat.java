@@ -24,6 +24,8 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.hibernate.AbstractImmutableUserType;
 
 public class ParticipantRuleFormat {
+    
+    final public static ParticipantRule DEFAULT_PARTICIPANT_RULE = FixedParticipantRule.create(ParticipantMatchType.Automatic, ParticipantPrivacyType.Public, 2);
 
     final public static String PARTICIPANT_TYPE_TOKEN = "participantType";
     final public static String MATCH_TYPE_TOKEN = "matchType";
@@ -126,7 +128,7 @@ public class ParticipantRuleFormat {
 
         @Override
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
-            ParticipantRule participantRule = (ParticipantRule) value;
+            ParticipantRule participantRule = value != null ? (ParticipantRule) value : DEFAULT_PARTICIPANT_RULE;
             st.setString(index++, participantRule.getParticipantType().name());
             st.setString(index++, participantRule.getMatchType().name());
             st.setString(index++, participantRule.getPrivacyType().name());

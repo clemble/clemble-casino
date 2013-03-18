@@ -25,7 +25,7 @@ public class SessionController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/session", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameSession create(@RequestHeader("userId") final long userId, final GameRuleSpecification ruleSpecification) {
+    public @ResponseBody GameSession create(@RequestHeader("playerId") final long userId, final GameRuleSpecification ruleSpecification) {
         return matchingService.create(userId, ruleSpecification);
     }
 }

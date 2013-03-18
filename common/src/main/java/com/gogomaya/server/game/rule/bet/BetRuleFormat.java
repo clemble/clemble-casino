@@ -24,11 +24,13 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.hibernate.AbstractImmutableUserType;
 
 public class BetRuleFormat {
+    
+    final public static BetRule DEFAULT_BET_RULE = UnlimitedBetRule.INSTANCE;
 
-    final private static String BET_TYPE_TOKEN = "betType";
-    final private static String PRICE_TOKEN = "price";
-    final private static String MIN_BET_TOKEN = "minBet";
-    final private static String MAX_BET_TOKEN = "maxBet";
+    final public static String BET_TYPE_TOKEN = "betType";
+    final public static String PRICE_TOKEN = "price";
+    final public static String MIN_BET_TOKEN = "minBet";
+    final public static String MAX_BET_TOKEN = "maxBet";
 
     public static class CustomBetRuleDeserializer extends JsonDeserializer<BetRule> {
 
@@ -116,19 +118,22 @@ public class BetRuleFormat {
 
         @Override
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
-            if (value instanceof UnlimitedBetRule) {
-                st.setString(index++, BetType.Unlimited.name());
-                st.setLong(index++, 0);
-                st.setLong(index++, 0);
-            } else if (value instanceof FixedBetRule) {
-                st.setString(index++, BetType.Fixed.name());
+            BetRule betRule = value != null ? (BetRule) value : DEFAULT_BET_RULE;
+            st.setString(index++, betRule.getRuleType().name());
+            switch(betRule.getRuleType()) {
+            case Fixed:
                 st.setLong(index++, ((FixedBetRule) value).getPrice());
-                st.setLong(index++, 0);
-            } else if (value instanceof LimitedBetRule) {
-                st.setString(index++, BetType.Limited.name());
+                st.setLong(index++, ((FixedBetRule) value).getPrice());
+                break;
+            case Limited:
                 st.setLong(index++, ((LimitedBetRule) value).getMinBet());
                 st.setLong(index++, ((LimitedBetRule) value).getMaxBet());
-            } else {
+                break;
+            case Unlimited:
+                st.setLong(index++, 0);
+                st.setLong(index++, 0);
+                break;
+            default:
                 throw GogomayaException.create(GogomayaError.ServerCriticalError);
             }
         }
