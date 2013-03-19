@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.game.match.GameMatchingService;
+import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.SocialConnectionData;
@@ -49,6 +50,9 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
     GameMatchingService matchingService;
+
+    @Inject
+    GameSessionRepository sessionRepository;
 
     @Inject
     ObjectMapper objectMapper;
@@ -99,7 +103,7 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     public SessionController sessionController() {
-        return new SessionController(matchingService);
+        return new SessionController(matchingService, sessionRepository);
     }
 
 }
