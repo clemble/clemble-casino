@@ -94,10 +94,10 @@ public class GameTableSpecificationFormats {
         @Override
         public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
 
-            PlayerMatchRule matchType = PlayerMatchRule.valueOf(rs.getString(names[1]));
-            PlayerPrivacyRule privacyType = PlayerPrivacyRule.valueOf(rs.getString(names[2]));
+            PlayerMatchRule matchType = PlayerMatchRule.valueOf(rs.getString(names[0]));
+            PlayerPrivacyRule privacyType = PlayerPrivacyRule.valueOf(rs.getString(names[1]));
 
-            return GameTableSpecification.create(matchType, privacyType, PlayerNumberRule.create(rs.getInt(names[3]), rs.getInt(names[4])));
+            return GameTableSpecification.create(matchType, privacyType, PlayerNumberRule.create(rs.getInt(names[2]), rs.getInt(names[3])));
         }
 
         @Override

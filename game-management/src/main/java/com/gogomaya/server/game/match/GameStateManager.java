@@ -41,7 +41,7 @@ public class GameStateManager {
 
             tableRepository.save(gameTable);
         } else {
-            tableRepository.save(gameTable);
+            gameTable = tableRepository.save(gameTable);
             tableManager.setReservable(gameTable);
         }
 

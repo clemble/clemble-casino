@@ -53,7 +53,7 @@ public class GameTable implements GameSpecificationAware {
             @Column(name = "TIME_BREACH_TYPE"), @Column(name = "TIME_LIMIT") })
     private GameSpecification specification = GameSpecification.DEFAULT_SPECIFICATION;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "GAME_TABLE_PLAYERS", joinColumns = @JoinColumn(name = "TABLE_ID"))
     private Set<Long> players = new HashSet<Long>();
 
