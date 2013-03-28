@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.game.match.GameMatchingService;
+import com.gogomaya.server.game.match.GameStateManager;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.spring.web.WebGenericConfiguration;
 
@@ -20,7 +20,7 @@ public class InitializationTest {
     GameSessionRepository gameSessionRepository;
 
     @Inject
-    GameMatchingService gameMatchingService;
+    GameStateManager gameMatchingService;
 
     @Test
     public void testInitialized() {

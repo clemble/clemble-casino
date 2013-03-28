@@ -21,7 +21,7 @@ import org.hibernate.engine.spi.SessionImplementor;
 import com.gogomaya.server.buffer.ByteBufferStream;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.hibernate.AbstractImmutableUserType;
+import com.gogomaya.server.hibernate.ImmutableHibernateType;
 
 public class GiveUpRuleFormat {
     
@@ -78,7 +78,7 @@ public class GiveUpRuleFormat {
         }
     }
 
-    public static class CustomGiveUpRuleType extends AbstractImmutableUserType<GiveUpRule> {
+    public static class GiveUpRuleHibernateType extends ImmutableHibernateType<GiveUpRule> {
 
         final private int[] TYPES = { Types.VARCHAR, Types.INTEGER };
 

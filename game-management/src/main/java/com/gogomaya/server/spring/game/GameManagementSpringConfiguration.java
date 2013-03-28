@@ -8,8 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.gogomaya.server.game.match.GameMatchingService;
+import com.gogomaya.server.game.connection.GameServerConnectionManager;
+import com.gogomaya.server.game.match.GameStateManager;
 import com.gogomaya.server.game.session.GameSessionRepository;
+import com.gogomaya.server.game.table.GameTableManager;
+import com.gogomaya.server.game.table.GameTableRepository;
 
 @Configuration
 @Import(value = { GameJPASpringConfiguration.class })
@@ -21,10 +24,22 @@ public class GameManagementSpringConfiguration {
     @Inject
     public RedisTemplate<byte[], Long> redisTemplate;
 
+    @Inject
+    public GameTableRepository tableRepository;
+
+    @Inject
+    public GameServerConnectionManager serverConnectionManager;
+
     @Bean
     @Singleton
-    public GameMatchingService gameMatchingService() {
-        return new GameMatchingService(redisTemplate, sessionRepository);
+    public GameTableManager tableManager() {
+        return new GameTableManager(redisTemplate, tableRepository, serverConnectionManager);
+    }
+
+    @Bean
+    @Singleton
+    public GameStateManager stateManager() {
+        return new GameStateManager(tableManager(), tableRepository, sessionRepository);
     }
 
 }

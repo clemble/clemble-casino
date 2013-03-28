@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.hibernate.HibernateException;
 import org.hibernate.usertype.UserType;
 
-abstract public class AbstractImmutableUserType<T extends Serializable> implements UserType {
+abstract public class ImmutableHibernateType<T extends Serializable> implements UserType {
 
     @Override
     final public boolean equals(Object x, Object y) throws HibernateException {

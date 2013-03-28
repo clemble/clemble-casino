@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,12 +28,14 @@ public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolve
         if (ex instanceof GogomayaException) {
             try {
                 objectMapper.writeValue(response.getOutputStream(), ((GogomayaException) ex).getFailure());
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             try {
                 objectMapper.writeValue(response.getOutputStream(), GogomayaFailure.ServerError);
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
             } catch (Exception e) {
                 e.printStackTrace();
             }

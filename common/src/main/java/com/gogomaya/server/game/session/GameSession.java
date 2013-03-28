@@ -6,19 +6,19 @@ import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.gogomaya.server.game.rule.GameRuleSpecification;
+import com.gogomaya.server.game.table.GameTable;
 
 @Entity
 @Table(name = "GAME_SESSION")
@@ -35,15 +35,16 @@ public class GameSession implements GameSessionAware<GameSession> {
     @JsonProperty("sessionId")
     private long sessionId;
 
+    @OneToOne
+    @JoinColumn(name = "TABLE_ID", nullable = false)
+    private GameTable table;
+
     @Column(name = "SESSION_STATE")
     private GameSessionState sessionState = GameSessionState.Inactive;
 
-    @Embedded
-    private GameRuleSpecification ruleSpecification;
-
     @Transient
     private GameState state;
-    
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "GAME_SESSION_PLAYERS", joinColumns = @JoinColumn(name = "SESSION_ID"))
     private Set<Long> players = new HashSet<Long>();
@@ -67,14 +68,6 @@ public class GameSession implements GameSessionAware<GameSession> {
         this.sessionState = gameSessionState;
     }
 
-    public GameRuleSpecification getGameRuleSpecification() {
-        return ruleSpecification;
-    }
-
-    public void setGameRuleSpecification(GameRuleSpecification gameRuleSpecification) {
-        this.ruleSpecification = gameRuleSpecification;
-    }
-
     public GameState getGameState() {
         return state;
     }
@@ -90,9 +83,17 @@ public class GameSession implements GameSessionAware<GameSession> {
     public void setPlayers(Set<Long> players) {
         this.players = players;
     }
-    
+
     public void addPlayer(Long player) {
         this.players.add(player);
+    }
+
+    public GameTable getTable() {
+        return table;
+    }
+
+    public void setTable(GameTable table) {
+        this.table = table;
     }
 
 }

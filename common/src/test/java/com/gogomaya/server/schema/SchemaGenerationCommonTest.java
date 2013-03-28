@@ -5,6 +5,7 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.junit.Test;
 
 import com.gogomaya.server.game.session.GameSession;
+import com.gogomaya.server.game.table.GameTable;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
@@ -34,6 +35,7 @@ public class SchemaGenerationCommonTest extends AbstractCommonTest {
 
         configuration
         .addAnnotatedClass(GameSession.class)
+        .addAnnotatedClass(GameTable.class)
         .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
         .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 

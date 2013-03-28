@@ -1,30 +1,34 @@
 
+    alter table GAME_SESSION 
+        drop 
+        foreign key FK8E8AE729955BF882;
+
     alter table GAME_SESSION_PLAYERS 
         drop 
         foreign key FK7D99A27C96971DCA;
+
+    alter table GAME_TABLE 
+        drop 
+        foreign key FK8D61AD2196971DCA;
+
+    alter table GAME_TABLE_PLAYERS 
+        drop 
+        foreign key FK9226F074955BF882;
 
     drop table if exists GAME_SESSION;
 
     drop table if exists GAME_SESSION_PLAYERS;
 
+    drop table if exists GAME_TABLE;
+
+    drop table if exists GAME_TABLE_PLAYERS;
+
     create table GAME_SESSION (
         SESSION_ID bigint not null auto_increment,
-        BET_TYPE varchar(255),
-        BET_MIN_PRICE integer,
-        BET_MAX_PRICE integer,
-        BET_CASH_TYPE varchar(255),
-        LOOSE_TYPE varchar(255),
-        LOOSE_MIN_PART integer,
-        PARTICIPANT_TYPE varchar(255),
-        PARTICIPANT_MATCH_TYPE varchar(255),
-        PARTICIPANT_PRIVACY_TYPE varchar(255),
-        PARTICIPANT_MIN integer,
-        PARTICIPANT_MAX integer,
-        TIME_TYPE varchar(255),
-        TIME_BREACH_TYPE varchar(255),
-        TIME_LIMIT integer,
         SESSION_STATE integer,
-        primary key (SESSION_ID)
+        TABLE_ID bigint not null,
+        primary key (SESSION_ID),
+        unique (TABLE_ID)
     ) ENGINE=InnoDB;
 
     create table GAME_SESSION_PLAYERS (
@@ -32,8 +36,52 @@
         players bigint
     ) ENGINE=InnoDB;
 
+    create table GAME_TABLE (
+        TABLE_ID bigint not null auto_increment,
+        NOTIFICATION_URL varchar(255),
+        PUBLISH_URL varchar(255),
+        TABLE_MATCH_RULE varchar(255),
+        TABLE_PRIVACY_RULE varchar(255),
+        TABLE_PLAYERS_MIN integer,
+        TABLE_PLAYERS_MAX integer,
+        BET_CASH_TYPE varchar(255),
+        BET_TYPE varchar(255),
+        BET_MIN_PRICE integer,
+        BET_MAX_PRICE integer,
+        LOOSE_TYPE varchar(255),
+        LOOSE_MIN_PART integer,
+        TIME_TYPE varchar(255),
+        TIME_BREACH_TYPE varchar(255),
+        TIME_LIMIT integer,
+        SESSION_ID bigint,
+        primary key (TABLE_ID)
+    ) ENGINE=InnoDB;
+
+    create table GAME_TABLE_PLAYERS (
+        TABLE_ID bigint not null,
+        players bigint
+    ) ENGINE=InnoDB;
+
+    alter table GAME_SESSION 
+        add index FK8E8AE729955BF882 (TABLE_ID), 
+        add constraint FK8E8AE729955BF882 
+        foreign key (TABLE_ID) 
+        references GAME_TABLE (TABLE_ID);
+
     alter table GAME_SESSION_PLAYERS 
         add index FK7D99A27C96971DCA (SESSION_ID), 
         add constraint FK7D99A27C96971DCA 
         foreign key (SESSION_ID) 
         references GAME_SESSION (SESSION_ID);
+
+    alter table GAME_TABLE 
+        add index FK8D61AD2196971DCA (SESSION_ID), 
+        add constraint FK8D61AD2196971DCA 
+        foreign key (SESSION_ID) 
+        references GAME_SESSION (TABLE_ID);
+
+    alter table GAME_TABLE_PLAYERS 
+        add index FK9226F074955BF882 (TABLE_ID), 
+        add constraint FK9226F074955BF882 
+        foreign key (TABLE_ID) 
+        references GAME_TABLE (TABLE_ID);

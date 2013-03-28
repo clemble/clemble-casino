@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.game.match.GameMatchingService;
+import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -18,14 +18,14 @@ import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 public class GameSessionRepositoryTest {
 
     @Inject
-    private GameSessionRepository gameSessionRepository;
+    private GameSessionRepository sessionRepository;
 
     @Inject
-    private GameMatchingService gameMatchingService;
+    private GameTableManager tableManager;
 
     @Test
     public void testInitialized() {
-        Assert.assertNotNull(gameSessionRepository);
-        Assert.assertNotNull(gameMatchingService);
+        Assert.assertNotNull(sessionRepository);
+        Assert.assertNotNull(tableManager);
     }
 }

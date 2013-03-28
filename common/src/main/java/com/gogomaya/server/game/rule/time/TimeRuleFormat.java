@@ -21,7 +21,7 @@ import org.hibernate.engine.spi.SessionImplementor;
 import com.gogomaya.server.buffer.ByteBufferStream;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.hibernate.AbstractImmutableUserType;
+import com.gogomaya.server.hibernate.ImmutableHibernateType;
 
 public class TimeRuleFormat {
     
@@ -88,7 +88,7 @@ public class TimeRuleFormat {
 
     }
 
-    public static class CustomTimeRuleType extends AbstractImmutableUserType<TimeRule> {
+    public static class TimeRuleHibernateType extends ImmutableHibernateType<TimeRule> {
 
         final private int[] TYPES = { Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
 
