@@ -3,6 +3,7 @@ package com.gogomaya.server.game.match;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.game.GameSpecification;
+import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.session.GameSession;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.session.GameSessionState;
@@ -16,11 +17,16 @@ public class GameStateManager {
     final private GameTableManager tableManager;
     final private GameTableRepository tableRepository;
     final private GameSessionRepository sessionRepository;
+    final private GameNotificationManager notificationManager;
 
-    public GameStateManager(final GameTableManager tableManager, final GameTableRepository tableRepository, final GameSessionRepository sessionRepository) {
+    public GameStateManager(final GameTableManager tableManager,
+            final GameTableRepository tableRepository,
+            final GameSessionRepository sessionRepository,
+            final GameNotificationManager notificationManager) {
         this.tableManager = checkNotNull(tableManager);
         this.tableRepository = checkNotNull(tableRepository);
         this.sessionRepository = checkNotNull(sessionRepository);
+        this.notificationManager = checkNotNull(notificationManager);
     }
 
     public GameTable reserve(final long playerId, final GameSpecification gameSpecification) {
@@ -44,6 +50,8 @@ public class GameStateManager {
             gameTable = tableRepository.save(gameTable);
             tableManager.setReservable(gameTable);
         }
+
+        notificationManager.notify(gameTable);
 
         return gameTable;
     }

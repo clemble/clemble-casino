@@ -8,7 +8,7 @@ import com.gogomaya.server.game.resource.connection.GameServerConnection;
 public class GameServerConnectionManager {
 
     public GameServerConnection reserve() {
-        return new GameServerConnection("notify", "publish");
+        return new GameServerConnection("ec2-50-16-93-157.compute-1.amazonaws.com", "publish");
     }
 
 }

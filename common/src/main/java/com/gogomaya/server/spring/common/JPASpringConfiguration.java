@@ -32,10 +32,9 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 @Configuration
-@Import(value = {JPASpringConfiguration.DataSourceCloudFoundryConfiguration.class,
-        JPASpringConfiguration.DataSourceDefaultConfiguration.class, JPASpringConfiguration.DataSourceTestConfiguration.class })
+@Import(value = { JPASpringConfiguration.DataSourceCloudFoundryConfiguration.class, JPASpringConfiguration.DataSourceDefaultConfiguration.class,
+        JPASpringConfiguration.DataSourceTestConfiguration.class })
 public class JPASpringConfiguration {
-
 
     @Inject
     DataSource dataSource;
@@ -77,7 +76,6 @@ public class JPASpringConfiguration {
         return new HibernateExceptionTranslator();
     }
 
-    
     @Configuration
     @Profile(value = "cloud")
     static class DataSourceCloudFoundryConfiguration {

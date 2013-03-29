@@ -7,15 +7,12 @@
     <packaging>pom</packaging>
     <modules>
         <module>common</module>
-        <module>game-management</module>
+        <module>game</module>
         <module>user-management</module>
-        <module>point-management</module>
-        <module>room-management</module>
-        <module>session-management</module>
-        <module>web</module>
         <module>user-social</module>
-        <module>integration-test</module>
+        <module>web</module>
         <module>web-client</module>
+        <module>integration-test</module>
     </modules>
     <properties>
         <cloudfoundry.runtime.version>0.8.2</cloudfoundry.runtime.version>

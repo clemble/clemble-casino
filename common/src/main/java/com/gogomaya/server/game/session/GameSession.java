@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.game.table.GameTable;
@@ -35,6 +36,7 @@ public class GameSession implements GameSessionAware<GameSession> {
     @JsonProperty("sessionId")
     private long sessionId;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "TABLE_ID", nullable = false)
     private GameTable table;

@@ -3,12 +3,14 @@ package com.gogomaya.server.spring.game;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.amqp.support.converter.JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
+import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.match.GameStateManager;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.table.GameTableManager;
@@ -30,6 +32,15 @@ public class GameManagementSpringConfiguration {
     @Inject
     public GameServerConnectionManager serverConnectionManager;
 
+    @Inject
+    public JsonMessageConverter jsonMessageConverter;
+
+    @Bean
+    @Singleton
+    public GameNotificationManager notificationManager() {
+        return new GameNotificationManager(jsonMessageConverter);
+    }
+
     @Bean
     @Singleton
     public GameTableManager tableManager() {
@@ -39,7 +50,7 @@ public class GameManagementSpringConfiguration {
     @Bean
     @Singleton
     public GameStateManager stateManager() {
-        return new GameStateManager(tableManager(), tableRepository, sessionRepository);
+        return new GameStateManager(tableManager(), tableRepository, sessionRepository, notificationManager());
     }
 
 }
