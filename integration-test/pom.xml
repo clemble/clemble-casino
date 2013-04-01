@@ -12,5 +12,27 @@
             <groupId>com.gogomaya.server</groupId>
             <artifactId>common</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.ning</groupId>
+            <artifactId>async-http-client</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.germane-software</groupId>
+            <artifactId>gozirra-client</artifactId>
+            <version>0.4.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/gozirra-client-0.4.1.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>de.roderick</groupId>
+            <artifactId>weberknecht</artifactId>
+            <version>0.1.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/weberknecht-0.1.1.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

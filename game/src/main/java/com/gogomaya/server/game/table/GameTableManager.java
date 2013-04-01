@@ -9,8 +9,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.GameSpecificationFormats;
+import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
-import com.gogomaya.server.game.resource.connection.GameServerConnection;
 
 public class GameTableManager {
 
@@ -46,6 +46,8 @@ public class GameTableManager {
             gameTable = new GameTable();
             gameTable.setSpecification(gameSpecification);
             gameTable.setServerResource(serverConnection);
+            // Step 2.3 Creating new table with provided specification
+            gameTable = tableRepository.save(gameTable);
         }
         // Step 3. Adding a new user and checking if we can state the session
         return gameTable;

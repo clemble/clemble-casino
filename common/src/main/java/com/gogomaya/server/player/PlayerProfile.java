@@ -57,7 +57,7 @@ public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
 
     @Column(name = "GENDER")
     @JsonProperty("gender")
-    private Gender gender;
+    private PlayerGender gender;
 
     @Column(name = "BIRTH_DATE")
     @Temporal(TemporalType.DATE)
@@ -123,11 +123,11 @@ public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
         return this;
     }
 
-    public Gender getGender() {
+    public PlayerGender getGender() {
         return gender;
     }
 
-    public PlayerProfile setGender(Gender gender) {
+    public PlayerProfile setGender(PlayerGender gender) {
         this.gender = gender;
         return this;
     }

@@ -22,7 +22,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 @Configuration
-@Import({RabbitSpringConfiguration.RabbitCloudFoundryConfigurations.class, RabbitSpringConfiguration.RabbitDefaultConfigurations.class, RabbitSpringConfiguration.RabbitTestConfigurations.class})
+@Import({RabbitSpringConfiguration.RabbitCloudFoundryConfigurations.class, RabbitSpringConfiguration.RabbitDefaultConfigurations.class})
 public class RabbitSpringConfiguration {
     
     @Inject
@@ -67,20 +67,8 @@ public class RabbitSpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = "default")
+    @Profile(value = {"default", "test"})
     static class RabbitDefaultConfigurations {
-
-        @Bean
-        @Singleton
-        public ConnectionFactory connectionFactory() {
-            return new CachingConnectionFactory();
-        }
-
-    }
-
-    @Configuration
-    @Profile(value = "test")
-    static class RabbitTestConfigurations {
 
         @Bean
         @Singleton

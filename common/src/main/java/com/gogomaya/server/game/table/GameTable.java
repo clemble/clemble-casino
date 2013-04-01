@@ -24,7 +24,7 @@ import org.hibernate.annotations.TypeDef;
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.GameSpecificationAware;
 import com.gogomaya.server.game.GameSpecificationFormats;
-import com.gogomaya.server.game.resource.connection.GameServerConnection;
+import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.session.GameSession;
 
 @Entity

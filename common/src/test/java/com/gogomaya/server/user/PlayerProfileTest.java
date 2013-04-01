@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gogomaya.server.error.GogomayaValidationService;
-import com.gogomaya.server.player.Gender;
+import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
 
 public class PlayerProfileTest extends AbstractCommonTest {
@@ -25,7 +25,7 @@ public class PlayerProfileTest extends AbstractCommonTest {
     final private String IMAGE_URL = "https://limbozo.com/";
     final private String NICK_NAME = "michael.limbo";
     final private long USER_ID = 1L;
-    final private Gender GENDER = Gender.M;
+    final private PlayerGender GENDER = PlayerGender.M;
     final private Date BIRTH_DATE;
 
     {

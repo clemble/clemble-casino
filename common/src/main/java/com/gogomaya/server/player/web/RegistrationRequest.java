@@ -13,16 +13,18 @@ public class RegistrationRequest {
         return playerProfile;
     }
 
-    public void setPlayerProfile(PlayerProfile playerProfile) {
+    public RegistrationRequest setPlayerProfile(PlayerProfile playerProfile) {
         this.playerProfile = playerProfile;
+        return this;
     }
 
     public PlayerCredential getPlayerCredential() {
         return playerCredential;
     }
 
-    public void setPlayerCredential(PlayerCredential playerCredential) {
+    public RegistrationRequest setPlayerCredential(PlayerCredential playerCredential) {
         this.playerCredential = playerCredential;
+        return this;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.resource.connection;
+package com.gogomaya.server.game.connection;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

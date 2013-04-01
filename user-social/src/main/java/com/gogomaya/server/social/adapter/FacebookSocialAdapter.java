@@ -9,7 +9,7 @@ import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
 
-import com.gogomaya.server.player.Gender;
+import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.social.SocialConnectionAdapter;
@@ -42,7 +42,7 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
             .setFirstName(facebookProfile.getFirstName())
             .setLastName(facebookProfile.getLastName())
             .setBirthDate(readDate(facebookProfile.getBirthday()))
-            .setGender(Gender.parse(facebookProfile.getGender()))
+            .setGender(PlayerGender.parse(facebookProfile.getGender()))
             .setImageUrl("http://graph.facebook.com/" + facebookProfile.getId() + "/picture")
             .setNickName(facebookProfile.getUsername());
     }

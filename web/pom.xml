@@ -20,7 +20,7 @@
         
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>game-management</artifactId>
+            <artifactId>game</artifactId>
         </dependency>
 
         <dependency>

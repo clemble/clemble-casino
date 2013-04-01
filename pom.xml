@@ -12,7 +12,7 @@
         <module>user-social</module>
         <module>web</module>
         <module>web-client</module>
-        <module>integration-test</module>
+        <!-- <module>integration-test</module> -->
     </modules>
     <properties>
         <cloudfoundry.runtime.version>0.8.2</cloudfoundry.runtime.version>
@@ -89,7 +89,7 @@
             </dependency>
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
-                <artifactId>game-rule-engine</artifactId>
+                <artifactId>game</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -100,21 +100,6 @@
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>user-social</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gogomaya.server</groupId>
-                <artifactId>game-management</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gogomaya.server</groupId>
-                <artifactId>point-management</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gogomaya.server</groupId>
-                <artifactId>room-management</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

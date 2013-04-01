@@ -23,9 +23,10 @@ public class GameNotificationManager {
         @Override
         public RabbitTemplate load(String server) throws Exception {
             ConnectionFactory connectionFactory = new CachingConnectionFactory(server);
-            RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-            rabbitTemplate.setMessageConverter(jsonMessageConverter);
-            return rabbitTemplate;
+            RabbitTemplate rabbitTemplagte = new RabbitTemplate(connectionFactory);
+            rabbitTemplagte.setMessageConverter(jsonMessageConverter);
+            rabbitTemplagte.setExchange("amq.topic");
+            return rabbitTemplagte;
         }
 
     });
@@ -41,6 +42,7 @@ public class GameNotificationManager {
         try {
             rabbitTemplate = RABBIT_CACHE.get(table.getServerResource().getNotificationURL());
         } catch (ExecutionException e) {
+            throw new RuntimeException(e);
         }
         // Step 2. Sending session update
         rabbitTemplate.convertAndSend(String.valueOf(table.getTableId()), table);
