@@ -35,11 +35,13 @@ public class GameTableManager {
         BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(key);
         // Step 2. Fetching available table
         Long tableId = boundSetOperations.pop();
-        GameTable gameTable;
+        GameTable gameTable = null;
         if (tableId != null) {
             // Seat at the table
             gameTable = tableRepository.findOne(tableId);
-        } else {
+        }
+        
+        if(gameTable == null){
             // Step 2.1 Fetching connection resource
             GameServerConnection serverConnection = serverConnectionManager.reserve();
             // Step 2.2 Creating new table with provided specification

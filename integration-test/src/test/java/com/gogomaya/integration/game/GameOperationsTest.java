@@ -69,11 +69,6 @@ public class GameOperationsTest {
     public void createAndListenStomp() {
         createAndListen(ListenerChannel.Stomp);
     }
-    
-//    @Test
-    public void createAndListenSockJS() {
-        createAndListen(ListenerChannel.SockJS);
-    }
 
     public void createAndListen(ListenerChannel listenerChannel) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);

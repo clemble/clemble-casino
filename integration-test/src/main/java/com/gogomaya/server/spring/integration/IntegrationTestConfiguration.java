@@ -14,6 +14,9 @@ import com.gogomaya.server.integration.player.RestPlayerOperations;
 @Configuration
 public class IntegrationTestConfiguration {
 
+    String baseUrl = "http://localhost:8080/web/";
+    //String baseUrl = "http://gogomaya.cloudfoundry.com/";
+    
     @Bean
     @Singleton
     public RestTemplate restTemplate() {
@@ -23,13 +26,13 @@ public class IntegrationTestConfiguration {
     @Bean
     @Singleton
     public PlayerOperations playerOperations() {
-        return new RestPlayerOperations("http://localhost:8080/web", restTemplate());
+        return new RestPlayerOperations(baseUrl, restTemplate());
     }
 
     @Bean
     @Singleton
     public GameOperations gameOperations() {
-        return new RestGameOperations("http://localhost:8080/web", restTemplate());
+        return new RestGameOperations(baseUrl, restTemplate());
     }
 
 }
