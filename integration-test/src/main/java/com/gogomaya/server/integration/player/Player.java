@@ -6,7 +6,7 @@ import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.wallet.PlayerWallet;
 
-public class Player implements PlayerAware<Player> {
+public class Player implements PlayerAware {
 
     /**
      * Generated
@@ -28,7 +28,6 @@ public class Player implements PlayerAware<Player> {
         return playerId;
     }
 
-    @Override
     public Player setPlayerId(long playerId) {
         this.playerId = playerId;
         return this;

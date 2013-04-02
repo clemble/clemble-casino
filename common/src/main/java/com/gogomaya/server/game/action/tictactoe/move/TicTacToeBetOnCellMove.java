@@ -1,6 +1,5 @@
 package com.gogomaya.server.game.action.tictactoe.move;
 
-
 public class TicTacToeBetOnCellMove extends TicTacToeMove {
 
     /**
@@ -11,7 +10,7 @@ public class TicTacToeBetOnCellMove extends TicTacToeMove {
     final private long bet;
 
     public TicTacToeBetOnCellMove(final long playerId, final long bet) {
-        super(TicTacToeMoveType.BetOnCell, playerId);
+        super(playerId, TicTacToeMoveType.BetOnCell);
         this.bet = bet;
     }
 

@@ -1,6 +1,5 @@
 package com.gogomaya.server.game.action.tictactoe.move;
 
-
 public class TicTacToeSelectCellMove extends TicTacToeMove {
 
     /**
@@ -13,7 +12,7 @@ public class TicTacToeSelectCellMove extends TicTacToeMove {
     final private byte column;
 
     public TicTacToeSelectCellMove(final long playerId, final byte row, final byte column) {
-        super(TicTacToeMoveType.SelectCell, playerId);
+        super(playerId, TicTacToeMoveType.SelectCell);
 
         this.row = row;
         this.column = column;

@@ -1,8 +1,8 @@
 package com.gogomaya.server.game.action.tictactoe.move;
 
-import com.gogomaya.server.game.action.GameMove;
+import com.gogomaya.server.game.action.AbstractGameMove;
 
-public class TicTacToeMove implements GameMove {
+public class TicTacToeMove extends AbstractGameMove {
 
     /**
      * Generated 02/04/13
@@ -11,19 +11,13 @@ public class TicTacToeMove implements GameMove {
 
     final private TicTacToeMoveType moveType;
 
-    final private long playerId;
-
-    public TicTacToeMove(final TicTacToeMoveType moveType, final long playerId) {
+    public TicTacToeMove(final long playerId, final TicTacToeMoveType moveType) {
+        super(playerId);
         this.moveType = moveType;
-        this.playerId = playerId;
     }
 
     public TicTacToeMoveType getMoveType() {
         return moveType;
-    }
-
-    public long getPlayerId() {
-        return playerId;
     }
 
 }

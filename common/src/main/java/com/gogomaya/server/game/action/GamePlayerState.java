@@ -1,9 +1,7 @@
 package com.gogomaya.server.game.action;
 
-import java.io.Serializable;
+import com.gogomaya.server.player.PlayerAware;
 
-public interface GamePlayerState extends Serializable {
-
-    public long getPlayerId();
+public interface GamePlayerState extends PlayerAware {
 
 }

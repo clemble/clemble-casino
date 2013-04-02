@@ -26,7 +26,7 @@ import com.gogomaya.server.json.CustomDateFormat.CustomDateSerializer;
 
 @Entity
 @Table(name = "PLAYER_PROFILE")
-public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
+public class PlayerProfile implements PlayerAware, Serializable {
 
     /**
      * Generated 25/01/13
@@ -34,7 +34,7 @@ public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
     private static final long serialVersionUID = -7544343898430552989L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PLAYER_ID")
     @JsonProperty("playerId")
     private long playerId;
@@ -81,7 +81,6 @@ public class PlayerProfile implements PlayerAware<PlayerProfile>, Serializable {
         return playerId;
     }
 
-    @Override
     public PlayerProfile setPlayerId(long userId) {
         this.playerId = userId;
         return this;

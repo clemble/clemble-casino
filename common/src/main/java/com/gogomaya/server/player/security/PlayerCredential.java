@@ -1,7 +1,5 @@
 package com.gogomaya.server.player.security;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,7 +17,7 @@ import com.gogomaya.server.player.PlayerAware;
 
 @Entity
 @Table(name = "PLAYER_CREDENTIALS")
-public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializable {
+public class PlayerCredential implements PlayerAware {
 
     /**
      * Generated 15/02/13
@@ -49,7 +47,6 @@ public class PlayerCredential implements PlayerAware<PlayerCredential>, Serializ
         return playerId;
     }
 
-    @Override
     public PlayerCredential setPlayerId(long profileId) {
         this.playerId = profileId;
         return this;

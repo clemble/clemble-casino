@@ -1,6 +1,7 @@
 package com.gogomaya.server.game.action;
 
-import java.io.Serializable;
+import com.gogomaya.server.player.PlayerAware;
 
-public interface GameMove extends Serializable {
+public interface GameMove extends PlayerAware {
+
 }

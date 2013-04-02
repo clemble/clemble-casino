@@ -46,7 +46,7 @@ public class GameSession implements GameSessionAware<GameSession> {
     private GameSessionState sessionState = GameSessionState.Inactive;
 
     @Transient
-    private GameState state;
+    private GameState<?, ?> state;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "GAME_SESSION_PLAYERS", joinColumns = @JoinColumn(name = "SESSION_ID"))
@@ -71,11 +71,11 @@ public class GameSession implements GameSessionAware<GameSession> {
         this.sessionState = gameSessionState;
     }
 
-    public GameState getGameState() {
+    public GameState<?, ?> getGameState() {
         return state;
     }
 
-    public void setGameState(GameState gameState) {
+    public void setGameState(GameState<?, ?> gameState) {
         this.state = gameState;
     }
 

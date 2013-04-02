@@ -9,7 +9,7 @@ import com.gogomaya.server.player.PlayerAware;
 
 @Entity
 @Table(name = "PLAYER_WALLET")
-public class PlayerWallet implements PlayerAware<PlayerWallet> {
+public class PlayerWallet implements PlayerAware {
 
     /**
      * Generated 16/02/13
@@ -28,7 +28,6 @@ public class PlayerWallet implements PlayerAware<PlayerWallet> {
         return playerId;
     }
 
-    @Override
     public PlayerWallet setPlayerId(long playerId) {
         this.playerId = playerId;
         return this;
