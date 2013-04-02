@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.table.GameTable;
 
 @Entity
