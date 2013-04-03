@@ -1,5 +1,9 @@
 package com.gogomaya.server.game.action.tictactoe.move;
 
+import java.util.Map.Entry;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 public class TicTacToeSelectCellMove extends TicTacToeMove {
 
     /**
@@ -7,23 +11,16 @@ public class TicTacToeSelectCellMove extends TicTacToeMove {
      */
     private static final long serialVersionUID = -3938747678529156779L;
 
-    final private byte row;
-
-    final private byte column;
+    final private Entry<Byte, Byte> cell;
 
     public TicTacToeSelectCellMove(final long playerId, final byte row, final byte column) {
         super(playerId, TicTacToeMoveType.SelectCell);
 
-        this.row = row;
-        this.column = column;
+        this.cell = new ImmutablePair<Byte, Byte>(row, column);
     }
 
-    public int getRow() {
-        return row;
-    }
-
-    public int getColumn() {
-        return column;
+    public Entry<Byte, Byte> getCell() {
+        return cell;
     }
 
 }

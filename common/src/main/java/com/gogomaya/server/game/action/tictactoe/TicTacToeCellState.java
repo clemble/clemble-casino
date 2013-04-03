@@ -2,27 +2,31 @@ package com.gogomaya.server.game.action.tictactoe;
 
 public class TicTacToeCellState {
 
-    final private int state;
+    final private long owner;
 
-    final private int firstPlayerBet;
+    final private long firstPlayerBet;
 
-    final private int secondPlayerBet;
+    final private long secondPlayerBet;
 
-    public TicTacToeCellState(int state, int firstPlayerBet, int secondPlayerBet) {
-        this.state = state;
+    public TicTacToeCellState(long owner, long firstPlayerBet, long secondPlayerBet) {
+        this.owner = owner;
         this.firstPlayerBet = firstPlayerBet;
         this.secondPlayerBet = secondPlayerBet;
     }
 
-    public int getState() {
-        return state;
+    public long getOwner() {
+        return owner;
+    }
+    
+    public boolean owned() {
+        return owner != 0;
     }
 
-    public int getFirstPlayerBet() {
+    public long getFirstPlayerBet() {
         return firstPlayerBet;
     }
 
-    public int getSecondPlayerBet() {
+    public long getSecondPlayerBet() {
         return secondPlayerBet;
     }
 }

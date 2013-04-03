@@ -12,7 +12,7 @@ public class PlayerAwareUtils {
         throw new IllegalAccessError();
     }
 
-    public static <M extends PlayerAware> Map<Long, M> toMap(Collection<M> sourceCollection) {
+    public static <M extends PlayerAware> Map<Long, M> toMap(Collection<? extends M> sourceCollection) {
         // Step 0. Sanity check
         if (sourceCollection == null || sourceCollection.isEmpty())
             return ImmutableMap.<Long, M> of();
@@ -23,7 +23,7 @@ public class PlayerAwareUtils {
                 tmpMap.put(value.getPlayerId(), value);
         }
         // Step 2. Creating immutable map from tmp map
-        return ImmutableMap.<Long, M> copyOf(tmpMap);
+        return tmpMap;
     }
 
 }

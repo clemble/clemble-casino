@@ -1,0 +1,66 @@
+package com.gogomaya.server.game.action.tictactoe;
+
+import java.util.Collection;
+
+import com.gogomaya.server.game.action.AbstractGameEngine;
+import com.gogomaya.server.game.action.tictactoe.move.TicTacToeBetOnCellMove;
+import com.gogomaya.server.game.action.tictactoe.move.TicTacToeMove;
+import com.gogomaya.server.game.action.tictactoe.move.TicTacToeSelectCellMove;
+import com.google.common.collect.ImmutableList;
+
+public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacToeMove, TicTacToePlayerState> {
+
+    @Override
+    final public TicTacToeState safeProcess(final TicTacToeState oldState, final TicTacToeMove move) {
+        // Step 1. Processing Select cell move
+        if (move instanceof TicTacToeSelectCellMove) {
+            return process(oldState, (TicTacToeSelectCellMove) move);
+        } else if (move instanceof TicTacToeBetOnCellMove) {
+            return process(oldState, (TicTacToeBetOnCellMove) move);
+        }
+        // Step 2. Returning default state
+        return oldState;
+    }
+
+    private TicTacToeState process(final TicTacToeState oldState, final TicTacToeBetOnCellMove betMove) {
+        oldState.getPlayerState(betMove.getPlayerId()).subMoneyLeft(betMove.getBet());
+        oldState.addMadeMove(betMove);
+
+        long[] players = oldState.getPlayerIterator().getPlayers();
+        TicTacToeBetOnCellMove firstPlayerMove = (TicTacToeBetOnCellMove) oldState.getMadeMove(players[0]);
+        TicTacToeBetOnCellMove secondPlayerMove = (TicTacToeBetOnCellMove) oldState.getMadeMove(players[1]);
+        if (firstPlayerMove != null && secondPlayerMove != null) {
+            long firstPlayerBet = firstPlayerMove.getBet();
+            long secondPlayerBet = secondPlayerMove.getBet();
+
+            long nextPlayer = firstPlayerBet == secondPlayerBet ? oldState.getPlayerIterator().current() : oldState.getPlayerIterator().next();
+
+            if (firstPlayerBet == secondPlayerBet) {
+                oldState.setActiveCellState(new TicTacToeCellState(0L, firstPlayerBet, secondPlayerBet));
+            } else {
+                oldState.setActiveCellState(new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet));
+            }
+
+            oldState.setNextMove(new TicTacToeSelectCellMove(nextPlayer, Byte.MIN_VALUE, Byte.MIN_VALUE));
+            oldState.setActiveCell(null);
+            oldState.cleanMadeMove();
+        }
+
+        return oldState;
+    }
+
+    private TicTacToeState process(final TicTacToeState oldState, final TicTacToeSelectCellMove selectCellMove) {
+        // Step 1. Sanity check
+        if (oldState.isOwned(selectCellMove.getCell()))
+            return oldState;
+        // Step 2. Generating next moves
+        Collection<TicTacToeMove> nextMoves = ImmutableList.<TicTacToeMove> of(new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[0], 0),
+                new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[1], 0));
+        oldState.setNextMoves(nextMoves);
+        oldState.setActiveCell(selectCellMove.getCell());
+        oldState.cleanMadeMove();
+        // Step 3. Returning modified old state
+        return oldState;
+    }
+
+}

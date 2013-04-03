@@ -9,22 +9,21 @@ public class TicTacToePlayerState extends AbstractGamePlayerState {
      */
     private static final long serialVersionUID = 250689205093466915L;
 
-    private final long moneyTotal;
+    private long moneyLeft;
 
-    private final long moneyOnTable;
-
-    public TicTacToePlayerState(final long playerId, final long money, final long moneyOnTable) {
+    public TicTacToePlayerState(final long playerId, final long moneyLeft) {
         super(playerId);
-        this.moneyTotal = money;
-        this.moneyOnTable = moneyOnTable;
+        this.moneyLeft = moneyLeft;
     }
 
-    public long getMoneyTotal() {
-        return moneyTotal;
+    public long getMoneyLeft() {
+        return moneyLeft;
     }
 
-    public long getMoneyOnTable() {
-        return moneyOnTable;
+    public void subMoneyLeft(long money) {
+        if (money > moneyLeft)
+            throw new IllegalArgumentException("Not enough money " + moneyLeft + " from " + money);
+        moneyLeft -= money;
     }
 
 }
