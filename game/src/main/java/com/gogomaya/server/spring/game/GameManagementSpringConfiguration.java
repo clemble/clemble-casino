@@ -13,8 +13,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.gogomaya.server.game.action.GameStateFactory;
+import com.gogomaya.server.game.action.tictactoe.TicTacToeStateFactory;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
+import com.gogomaya.server.game.connection.RabbitGameNotificationManager;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
 import com.gogomaya.server.game.match.GameStateManager;
 import com.gogomaya.server.game.session.GameSessionRepository;
@@ -26,7 +29,8 @@ import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.game", entityManagerFactoryRef = "entityManagerFactory")
 @ComponentScan(basePackages = "com.gogomaya.server.game")
-@Import(value = { CommonModuleSpringConfiguration.class, GameManagementSpringConfiguration.GameManagementTestConfiguration.class, GameManagementSpringConfiguration.GameManagementCloudConfiguration.class })
+@Import(value = { CommonModuleSpringConfiguration.class, GameManagementSpringConfiguration.GameManagementTestConfiguration.class,
+        GameManagementSpringConfiguration.GameManagementCloudConfiguration.class })
 public class GameManagementSpringConfiguration {
 
     @Inject
@@ -46,8 +50,8 @@ public class GameManagementSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameNotificationManager notificationManager() {
-        return new GameNotificationManager(jsonMessageConverter);
+    public GameNotificationManager gameNotificationManager() {
+        return new RabbitGameNotificationManager(jsonMessageConverter);
     }
 
     @Bean
@@ -59,7 +63,13 @@ public class GameManagementSpringConfiguration {
     @Bean
     @Singleton
     public GameStateManager stateManager() {
-        return new GameStateManager(tableManager(), tableRepository, sessionRepository, notificationManager());
+        return new GameStateManager(tableManager(), tableRepository, sessionRepository, gameNotificationManager(), gameStateFactory());
+    }
+
+    @Bean
+    @Singleton
+    public GameStateFactory gameStateFactory() {
+        return new TicTacToeStateFactory();
     }
 
     @Profile(value = { "default", "test" })

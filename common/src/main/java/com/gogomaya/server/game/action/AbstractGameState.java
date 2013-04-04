@@ -1,6 +1,7 @@
 package com.gogomaya.server.game.action;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -16,17 +17,14 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
 
     final private Map<Long, S> playersState;
 
-    final private Map<Long, M> nextMoves;
+    final private Map<Long, M> nextMoves = new HashMap<Long, M>();
     @JsonIgnore
     final private GamePlayerIterator playerIterator;
     @JsonIgnore
-    final private Map<Long, M> madeMoves;
+    final private Map<Long, M> madeMoves = new HashMap<Long, M>();
 
-    protected AbstractGameState(final Collection<S> playersStates, final Collection<? extends M> nextMoves, final Collection<? extends M> madeMoves) {
+    protected AbstractGameState(final Collection<S> playersStates) {
         this.playersState = PlayerAwareUtils.toMap(playersStates);
-        this.nextMoves = PlayerAwareUtils.toMap(nextMoves);
-        this.madeMoves = PlayerAwareUtils.toMap(madeMoves);
-
         this.playerIterator = new GamePlayerIterator(0, playersStates);
     }
 

@@ -41,7 +41,7 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
                 oldState.setActiveCellState(new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet));
             }
 
-            oldState.setNextMove(new TicTacToeSelectCellMove(nextPlayer, Byte.MIN_VALUE, Byte.MIN_VALUE));
+            oldState.setNextMove(new TicTacToeSelectCellMove(nextPlayer));
             oldState.setActiveCell(null);
             oldState.cleanMadeMove();
         }
@@ -54,8 +54,8 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
         if (oldState.isOwned(selectCellMove.getCell()))
             return oldState;
         // Step 2. Generating next moves
-        Collection<TicTacToeMove> nextMoves = ImmutableList.<TicTacToeMove> of(new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[0], 0),
-                new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[1], 0));
+        Collection<TicTacToeMove> nextMoves = ImmutableList.<TicTacToeMove> of(new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[0]),
+                new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[1]));
         oldState.setNextMoves(nextMoves);
         oldState.setActiveCell(selectCellMove.getCell());
         oldState.cleanMadeMove();

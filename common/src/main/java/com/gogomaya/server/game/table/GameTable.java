@@ -46,11 +46,7 @@ public class GameTable implements GameSpecificationAware {
     @Embedded
     private GameServerConnection serverResource;
 
-    @Type(type = "gameSpecification")
-    @Columns(columns = { @Column(name = "TABLE_MATCH_RULE"), @Column(name = "TABLE_PRIVACY_RULE"), @Column(name = "TABLE_PLAYERS_MIN"),
-            @Column(name = "TABLE_PLAYERS_MAX"), @Column(name = "BET_CASH_TYPE"), @Column(name = "BET_TYPE"), @Column(name = "BET_MIN_PRICE"),
-            @Column(name = "BET_MAX_PRICE"), @Column(name = "LOOSE_TYPE"), @Column(name = "LOOSE_MIN_PART"), @Column(name = "TIME_TYPE"),
-            @Column(name = "TIME_BREACH_TYPE"), @Column(name = "TIME_LIMIT") })
+    @Embedded
     private GameSpecification specification = GameSpecification.DEFAULT_SPECIFICATION;
 
     @ElementCollection(fetch = FetchType.EAGER)

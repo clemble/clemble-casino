@@ -2,6 +2,10 @@ package com.gogomaya.server.game.table.rule;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -13,6 +17,7 @@ import com.gogomaya.server.game.table.rule.GameTableSpecificationFormats.GameTab
 
 @JsonSerialize(using = GameTableSpecificationJsonSerializer.class)
 @JsonDeserialize(using = GameTableSpecificationJsonDeserializer.class)
+@Embeddable
 public class GameTableSpecification implements GameTableRule {
 
     final public static PlayerMatchRule DEFAULT_MATCH_RULE = PlayerMatchRule.Automatic;
@@ -27,28 +32,49 @@ public class GameTableSpecification implements GameTableRule {
      */
     private static final long serialVersionUID = -6212991143939664300L;
 
-    final private PlayerNumberRule numberRule;
+    @Embedded
+    private PlayerNumberRule numberRule;
 
-    final private PlayerMatchRule matchType;
+    @Column(name = "TABLE_MATCH_RULE")
+    private PlayerMatchRule matchRule;
 
-    final private PlayerPrivacyRule privacyType;
+    @Column(name = "TABLE_PRIVACY_RULE")
+    private PlayerPrivacyRule privacyType;
+
+    public GameTableSpecification() {
+    }
 
     private GameTableSpecification(final PlayerMatchRule matchType, final PlayerPrivacyRule privacyType, final PlayerNumberRule playerNumberRule) {
         this.numberRule = checkNotNull(playerNumberRule);
-        this.matchType = checkNotNull(matchType);
+        this.matchRule = checkNotNull(matchType);
         this.privacyType = checkNotNull(privacyType);
     }
 
     public PlayerMatchRule getMatchRule() {
-        return matchType;
+        return matchRule;
+    }
+
+    public GameTableSpecification setMatchRule(PlayerMatchRule newMatchRule) {
+        this.matchRule = newMatchRule;
+        return this;
     }
 
     public PlayerPrivacyRule getPrivacyRule() {
         return privacyType;
     }
 
+    public GameTableSpecification setPrivacyRule(PlayerPrivacyRule newPrivacyRule) {
+        this.privacyType = newPrivacyRule;
+        return this;
+    }
+
     public PlayerNumberRule getNumberRule() {
         return numberRule;
+    }
+
+    public GameTableSpecification setNumberRule(PlayerNumberRule newNumberRule) {
+        this.numberRule = newNumberRule;
+        return this;
     }
 
     @JsonCreator

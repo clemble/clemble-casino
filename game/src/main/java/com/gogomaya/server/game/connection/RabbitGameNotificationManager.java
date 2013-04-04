@@ -14,7 +14,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class GameNotificationManager {
+public class RabbitGameNotificationManager implements GameNotificationManager {
 
     final private JsonMessageConverter jsonMessageConverter;
 
@@ -32,10 +32,11 @@ public class GameNotificationManager {
     });
 
     @Inject
-    public GameNotificationManager(JsonMessageConverter jsonMessageConverter) {
+    public RabbitGameNotificationManager(JsonMessageConverter jsonMessageConverter) {
         this.jsonMessageConverter = jsonMessageConverter;
     }
 
+    @Override
     public void notify(final GameTable table) {
         // Step 1. Fetching new rabbit
         RabbitTemplate rabbitTemplate = null;

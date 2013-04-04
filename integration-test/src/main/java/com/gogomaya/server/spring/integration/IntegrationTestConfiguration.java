@@ -14,7 +14,7 @@ import com.gogomaya.server.integration.player.RestPlayerOperations;
 @Configuration
 public class IntegrationTestConfiguration {
 
-    String baseUrl = "http://localhost:8080/web/";
+    String baseUrl = "http://localhost:8080/gogomaya-web";
     //String baseUrl = "http://gogomaya.cloudfoundry.com/";
     
     @Bean

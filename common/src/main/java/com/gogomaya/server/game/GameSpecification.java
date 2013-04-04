@@ -2,12 +2,16 @@ package com.gogomaya.server.game;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.game.rule.GameRuleSpecification;
 import com.gogomaya.server.game.table.rule.GameTableSpecification;
 
+@Embeddable
 public class GameSpecification implements Serializable {
 
     /**
@@ -17,9 +21,14 @@ public class GameSpecification implements Serializable {
 
     final public static GameSpecification DEFAULT_SPECIFICATION = GameSpecification.create(null, null);
 
-    final private GameTableSpecification tableSpecification;
+    @Embedded
+    private GameTableSpecification tableSpecification;
 
-    final private GameRuleSpecification ruleSpecification;
+    @Embedded
+    private GameRuleSpecification ruleSpecification;
+
+    private GameSpecification() {
+    }
 
     private GameSpecification(final GameTableSpecification tableSpecification, final GameRuleSpecification ruleSpecification) {
         this.tableSpecification = tableSpecification == null ? GameTableSpecification.DEFAULT_TABLE_SPECIFICATION : tableSpecification;
@@ -30,8 +39,18 @@ public class GameSpecification implements Serializable {
         return tableSpecification;
     }
 
+    public GameSpecification setTableSpecification(GameTableSpecification tableSpecification) {
+        this.tableSpecification = tableSpecification;
+        return this;
+    }
+
     public GameRuleSpecification getRuleSpecification() {
         return ruleSpecification;
+    }
+
+    public GameSpecification setRuleSpecification(GameRuleSpecification ruleSpecification) {
+        this.ruleSpecification = ruleSpecification;
+        return this;
     }
 
     @JsonCreator

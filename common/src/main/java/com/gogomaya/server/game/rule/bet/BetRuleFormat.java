@@ -89,7 +89,7 @@ public class BetRuleFormat {
 
     }
 
-    public static class BetRuleHibernateType<T extends BetRule> extends ImmutableHibernateType<T> {
+    public static class BetRuleHibernateType extends ImmutableHibernateType<BetRule> {
         final private int[] TYPES = { Types.VARCHAR, Types.INTEGER, Types.INTEGER };
 
         @Override

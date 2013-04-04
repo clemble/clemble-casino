@@ -19,7 +19,7 @@ public class GameRuleSpecificationFormat {
     public static class GameRuleSpecificatinHybernateType extends CombinableImmutableUserType<GameRuleSpecification> {
 
         final private static ImmutableHibernateType<CashType> HIBERNATE_CASH_TYPE = new EnumStringHibernateType<CashType>(CashType.class);
-        final private static ImmutableHibernateType<BetRule> HIBERNATE_BET_RULE = new BetRuleFormat.BetRuleHibernateType<BetRule>();
+        final private static ImmutableHibernateType<BetRule> HIBERNATE_BET_RULE = new BetRuleFormat.BetRuleHibernateType();
         final private static ImmutableHibernateType<GiveUpRule> HIBERNATE_GIVE_UP_RULE = new GiveUpRuleFormat.GiveUpRuleHibernateType();
         final private static ImmutableHibernateType<TimeRule> HIBERNATE_TIME_RULE = new TimeRuleFormat.TimeRuleHibernateType();
 

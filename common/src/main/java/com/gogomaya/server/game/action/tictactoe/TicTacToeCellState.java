@@ -2,6 +2,8 @@ package com.gogomaya.server.game.action.tictactoe;
 
 public class TicTacToeCellState {
 
+    final public static TicTacToeCellState DEFAULT_CELL_STATE = new TicTacToeCellState(0, 0, 0);
+
     final private long owner;
 
     final private long firstPlayerBet;
@@ -17,7 +19,7 @@ public class TicTacToeCellState {
     public long getOwner() {
         return owner;
     }
-    
+
     public boolean owned() {
         return owner != 0;
     }

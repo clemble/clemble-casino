@@ -9,8 +9,15 @@ public class TicTacToeBetOnCellMove extends TicTacToeMove {
 
     final private long bet;
 
+    public TicTacToeBetOnCellMove(final long playerId) {
+        this(playerId, 0);
+    }
+
     public TicTacToeBetOnCellMove(final long playerId, final long bet) {
         super(playerId, TicTacToeMoveType.BetOnCell);
+        if (bet < 0)
+            throw new IllegalArgumentException("Bet can't be lesser than 0");
+
         this.bet = bet;
     }
 

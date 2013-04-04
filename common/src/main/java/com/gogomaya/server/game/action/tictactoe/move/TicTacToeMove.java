@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.action.tictactoe.move;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.gogomaya.server.game.action.AbstractGameMove;
 
 public class TicTacToeMove extends AbstractGameMove {
@@ -13,7 +15,7 @@ public class TicTacToeMove extends AbstractGameMove {
 
     public TicTacToeMove(final long playerId, final TicTacToeMoveType moveType) {
         super(playerId);
-        this.moveType = moveType;
+        this.moveType = checkNotNull(moveType);
     }
 
     public TicTacToeMoveType getMoveType() {

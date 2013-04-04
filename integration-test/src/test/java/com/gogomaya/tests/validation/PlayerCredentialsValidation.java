@@ -26,7 +26,7 @@ public class PlayerCredentialsValidation {
 
     @Given("user A")
     public void userA() {
-        playerCredential = new PlayerCredential().setEmail("test@gmail.com").setPassword("testMe").setPlayerId(-1);
+        playerCredential = new PlayerCredential().setEmail("test@gmail.com").setPassword("testMe").setPlayerId(-1L);
     }
 
     @Given("user A has invalid email")

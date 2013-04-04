@@ -40,12 +40,13 @@ public class GameTableManager {
             // Seat at the table
             gameTable = tableRepository.findOne(tableId);
         }
-        
-        if(gameTable == null){
+
+        if (gameTable == null) {
             // Step 2.1 Fetching connection resource
             GameServerConnection serverConnection = serverConnectionManager.reserve();
             // Step 2.2 Creating new table with provided specification
             gameTable = new GameTable();
+            // Step 2.4 Specifying appropriate values
             gameTable.setSpecification(gameSpecification);
             gameTable.setServerResource(serverConnection);
             // Step 2.3 Creating new table with provided specification

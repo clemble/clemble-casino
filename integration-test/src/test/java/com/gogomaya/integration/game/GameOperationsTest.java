@@ -14,6 +14,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.rule.GameRuleSpecification;
+import com.gogomaya.server.game.rule.bet.FixedBetRule;
+import com.gogomaya.server.game.rule.giveup.LooseAllGiveUpRule;
+import com.gogomaya.server.game.rule.time.UnlimitedTimeRule;
+import com.gogomaya.server.game.session.GameSessionState;
 import com.gogomaya.server.game.table.GameTable;
 import com.gogomaya.server.game.table.rule.GameTableSpecification;
 import com.gogomaya.server.game.table.rule.PlayerMatchRule;
@@ -25,6 +29,7 @@ import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.ListenerChannel;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
+import com.gogomaya.server.player.wallet.CashType;
 import com.gogomaya.server.spring.integration.IntegrationTestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
 
@@ -61,6 +66,24 @@ public class GameOperationsTest {
     }
 
     @Test
+    public void createTicTacToeSpecification() {
+        // Step 1. Creating player
+        Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
+        GameSpecification specification = GameSpecification.create(
+                GameTableSpecification.create(PlayerMatchRule.Automatic, PlayerPrivacyRule.Public, PlayerNumberRule.create(2, 2)),
+                GameRuleSpecification.create(CashType.FakeMoney, FixedBetRule.create(50), LooseAllGiveUpRule.INSTANCE, UnlimitedTimeRule.INSTANCE));
+        // Step 2. Creating game table
+        GameTable gameTable = gameOperations.create(player, specification);
+        Assert.assertNotNull(gameTable);
+        // Step 3. Adding another player to the table
+        Player anotherPlayer = playerOperations.createPlayer(DataGenerator.randomProfile());
+        Assert.assertNotSame(anotherPlayer.getPlayerId(), player.getPlayerId());
+        gameTable = gameOperations.create(anotherPlayer, specification);
+        Assert.assertNotNull(gameTable);
+        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), GameSessionState.Active);
+    }
+
+    @Test
     public void createAndListenRabbit() {
         createAndListen(ListenerChannel.Rabbit);
     }
@@ -74,11 +97,11 @@ public class GameOperationsTest {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification gameSpecification = GameSpecification.create(
+        GameSpecification specification = GameSpecification.create(
                 GameTableSpecification.create(PlayerMatchRule.Automatic, PlayerPrivacyRule.Public, PlayerNumberRule.create(2, 2)),
                 GameRuleSpecification.DEFAULT_RULE_SPECIFICATION);
         // Step 2. Creating game table
-        GameTable gameTable = gameOperations.create(player, gameSpecification);
+        GameTable gameTable = gameOperations.create(player, specification);
         Assert.assertNotNull(gameTable);
         // Step 3. Adding listener
         gameOperations.addListener(gameTable, new GameListener() {
@@ -90,7 +113,7 @@ public class GameOperationsTest {
         }, listenerChannel);
         // Step 4. Adding another player to the table
         player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        gameTable = gameOperations.create(player, gameSpecification);
+        gameTable = gameOperations.create(player, specification);
         // Step 5. Waiting for notification to happen
         try {
             countDownLatch.await(30, TimeUnit.SECONDS);

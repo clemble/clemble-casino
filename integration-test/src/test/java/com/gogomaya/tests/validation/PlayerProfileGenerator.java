@@ -20,7 +20,7 @@ public class PlayerProfileGenerator {
             .setGender(PlayerGender.M)
             .setImageUrl("http://test.com/test.png")
             .setNickName(name)
-            .setPlayerId(3);
+            .setPlayerId(3L);
     }
     
 }
