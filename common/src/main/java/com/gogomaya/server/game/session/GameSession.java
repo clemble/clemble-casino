@@ -14,16 +14,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.action.GameStateHibernateType;
 import com.gogomaya.server.game.table.GameTable;
 
 @Entity
 @Table(name = "GAME_SESSION")
+@TypeDef(name = "gameState", typeClass = GameStateHibernateType.class)
 public class GameSession implements GameSessionAware<GameSession> {
 
     /**
@@ -35,7 +38,7 @@ public class GameSession implements GameSessionAware<GameSession> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SESSION_ID")
     @JsonProperty("sessionId")
-    private long sessionId;
+    private Long sessionId;
 
     @JsonIgnore
     @OneToOne
@@ -45,7 +48,8 @@ public class GameSession implements GameSessionAware<GameSession> {
     @Column(name = "SESSION_STATE")
     private GameSessionState sessionState = GameSessionState.Inactive;
 
-    @Transient
+    @Column(name = "GAME_STATE", length = 4096)
+    @Type(type = "gameState")
     private GameState<?, ?> state;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -53,12 +57,12 @@ public class GameSession implements GameSessionAware<GameSession> {
     private Set<Long> players = new HashSet<Long>();
 
     @Override
-    public long getSessionId() {
+    public Long getSessionId() {
         return sessionId;
     }
 
     @Override
-    public GameSession setSessionId(long newSessionId) {
+    public GameSession setSessionId(Long newSessionId) {
         this.sessionId = newSessionId;
         return this;
     }

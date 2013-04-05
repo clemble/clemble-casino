@@ -124,4 +124,44 @@ public class GameRuleSpecification implements Serializable {
         return new GameRuleSpecification(cashType, betRule, giveUpRule, timeRule);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((betRule == null) ? 0 : betRule.hashCode());
+        result = prime * result + ((cashType == null) ? 0 : cashType.hashCode());
+        result = prime * result + ((giveUpRule == null) ? 0 : giveUpRule.hashCode());
+        result = prime * result + ((timeRule == null) ? 0 : timeRule.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GameRuleSpecification other = (GameRuleSpecification) obj;
+        if (betRule == null) {
+            if (other.betRule != null)
+                return false;
+        } else if (!betRule.equals(other.betRule))
+            return false;
+        if (cashType != other.cashType)
+            return false;
+        if (giveUpRule == null) {
+            if (other.giveUpRule != null)
+                return false;
+        } else if (!giveUpRule.equals(other.giveUpRule))
+            return false;
+        if (timeRule == null) {
+            if (other.timeRule != null)
+                return false;
+        } else if (!timeRule.equals(other.timeRule))
+            return false;
+        return true;
+    }
+
 }

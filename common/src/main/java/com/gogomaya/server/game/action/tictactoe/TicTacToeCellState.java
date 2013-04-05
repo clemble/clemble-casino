@@ -1,16 +1,23 @@
 package com.gogomaya.server.game.action.tictactoe;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class TicTacToeCellState {
 
     final public static TicTacToeCellState DEFAULT_CELL_STATE = new TicTacToeCellState(0, 0, 0);
 
+    @JsonProperty("owner")
     final private long owner;
 
+    @JsonProperty("firstPlayerBet")
     final private long firstPlayerBet;
 
+    @JsonProperty("secondPlayerBet")
     final private long secondPlayerBet;
 
-    public TicTacToeCellState(long owner, long firstPlayerBet, long secondPlayerBet) {
+    @JsonCreator
+    public TicTacToeCellState(@JsonProperty("owner") long owner, @JsonProperty("firstPlayerBet") long firstPlayerBet, @JsonProperty("secondPlayerBet") long secondPlayerBet) {
         this.owner = owner;
         this.firstPlayerBet = firstPlayerBet;
         this.secondPlayerBet = secondPlayerBet;

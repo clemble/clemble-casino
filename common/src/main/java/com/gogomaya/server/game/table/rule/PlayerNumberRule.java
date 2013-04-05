@@ -52,4 +52,29 @@ public class PlayerNumberRule implements GameTableRule {
         return new PlayerNumberRule(minPlayers, maxPlayers);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + maxPlayers;
+        result = prime * result + minPlayers;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PlayerNumberRule other = (PlayerNumberRule) obj;
+        if (maxPlayers != other.maxPlayers)
+            return false;
+        if (minPlayers != other.minPlayers)
+            return false;
+        return true;
+    }
+
 }

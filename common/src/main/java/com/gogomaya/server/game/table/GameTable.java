@@ -17,8 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.hibernate.annotations.Columns;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.GameSpecification;

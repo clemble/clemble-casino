@@ -34,4 +34,26 @@ final public class LimitedGameTimeRule extends TimeRule {
         return new LimitedGameTimeRule(timeRuleBreachBehavior, timeLimit);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + gameTimeLimit;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        LimitedGameTimeRule other = (LimitedGameTimeRule) obj;
+        if (gameTimeLimit != other.gameTimeLimit)
+            return false;
+        return true;
+    }
+
 }

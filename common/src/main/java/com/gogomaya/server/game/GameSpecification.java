@@ -60,4 +60,35 @@ public class GameSpecification implements Serializable {
         return new GameSpecification(tableSpecification, ruleSpecification);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((ruleSpecification == null) ? 0 : ruleSpecification.hashCode());
+        result = prime * result + ((tableSpecification == null) ? 0 : tableSpecification.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GameSpecification other = (GameSpecification) obj;
+        if (ruleSpecification == null) {
+            if (other.ruleSpecification != null)
+                return false;
+        } else if (!ruleSpecification.equals(other.ruleSpecification))
+            return false;
+        if (tableSpecification == null) {
+            if (other.tableSpecification != null)
+                return false;
+        } else if (!tableSpecification.equals(other.tableSpecification))
+            return false;
+        return true;
+    }
+
 }

@@ -35,4 +35,29 @@ abstract public class TimeRule implements GameRule {
         return timeRuleType;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((breachBehavior == null) ? 0 : breachBehavior.hashCode());
+        result = prime * result + ((timeRuleType == null) ? 0 : timeRuleType.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TimeRule other = (TimeRule) obj;
+        if (breachBehavior != other.breachBehavior)
+            return false;
+        if (timeRuleType != other.timeRuleType)
+            return false;
+        return true;
+    }
+
 }

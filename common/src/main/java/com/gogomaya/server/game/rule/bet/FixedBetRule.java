@@ -57,4 +57,26 @@ final public class FixedBetRule extends BetRule {
         return BetType.Fixed;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + price;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        FixedBetRule other = (FixedBetRule) obj;
+        if (price != other.price)
+            return false;
+        return true;
+    }
+
 }
