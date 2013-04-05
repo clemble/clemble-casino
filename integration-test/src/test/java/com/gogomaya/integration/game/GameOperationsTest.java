@@ -81,6 +81,7 @@ public class GameOperationsTest {
         gameTable = gameOperations.create(anotherPlayer, specification);
         Assert.assertNotNull(gameTable);
         Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), GameSessionState.Active);
+        Assert.assertNotNull(gameTable.getCurrentSession().getGameState());
     }
 
     @Test

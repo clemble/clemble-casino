@@ -26,6 +26,7 @@
     create table GAME_SESSION (
         SESSION_ID bigint not null auto_increment,
         SESSION_STATE integer,
+        GAME_STATE varchar(4096),
         TABLE_ID bigint not null,
         primary key (SESSION_ID),
         unique (TABLE_ID)

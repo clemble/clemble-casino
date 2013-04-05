@@ -85,4 +85,35 @@ public class GameTableSpecification implements GameTableRule {
         return new GameTableSpecification(matchRule, playerPrivacyRule, playerNumberRule);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((matchRule == null) ? 0 : matchRule.hashCode());
+        result = prime * result + ((numberRule == null) ? 0 : numberRule.hashCode());
+        result = prime * result + ((privacyType == null) ? 0 : privacyType.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GameTableSpecification other = (GameTableSpecification) obj;
+        if (matchRule != other.matchRule)
+            return false;
+        if (numberRule == null) {
+            if (other.numberRule != null)
+                return false;
+        } else if (!numberRule.equals(other.numberRule))
+            return false;
+        if (privacyType != other.privacyType)
+            return false;
+        return true;
+    }
+
 }

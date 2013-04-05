@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map.Entry;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import com.gogomaya.server.game.action.AbstractGameState;
 import com.gogomaya.server.game.action.tictactoe.move.TicTacToeMove;
 
@@ -13,22 +16,30 @@ public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePl
      * Generated 02/04/13
      */
     private static final long serialVersionUID = -3282042914639667829L;
+    
+    private TicTacToePlayerState[] players;
 
-    final private TicTacToeCellState[][] board = new TicTacToeCellState[3][3];
+    private TicTacToeCellState[][] board = new TicTacToeCellState[3][3];
 
     private Entry<Byte, Byte> activeCell;
 
-    public TicTacToeState(final Collection<TicTacToePlayerState> playerState) {
+    @JsonCreator()
+    public TicTacToeState(@JsonProperty("players") final Collection<TicTacToePlayerState> playerState) {
         super(playerState);
+        this.players = playerState.toArray(new TicTacToePlayerState[0]);
 
         for (TicTacToeCellState[] row : board) {
-            row = new TicTacToeCellState[3];
             Arrays.fill(row, TicTacToeCellState.DEFAULT_CELL_STATE);
         }
     }
 
     public TicTacToeCellState[][] getBoard() {
         return board;
+    }
+    
+    public TicTacToeState setBoard(TicTacToeCellState[][] board) {
+        this.board = board;
+        return this;
     }
 
     public boolean complete() {
@@ -76,6 +87,10 @@ public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePl
     public void setActiveCellState(TicTacToeCellState cellState) {
         TicTacToeCellState[][] newBoard = board.clone();
         newBoard[activeCell.getKey()][activeCell.getValue()] = cellState;
+    }
+
+    public TicTacToePlayerState[] getPlayers() {
+        return players;
     }
 
 }

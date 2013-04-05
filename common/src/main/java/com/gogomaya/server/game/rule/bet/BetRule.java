@@ -28,4 +28,26 @@ abstract public class BetRule implements GameRule {
         return ruleType;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((ruleType == null) ? 0 : ruleType.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BetRule other = (BetRule) obj;
+        if (ruleType != other.ruleType)
+            return false;
+        return true;
+    }
+
 }

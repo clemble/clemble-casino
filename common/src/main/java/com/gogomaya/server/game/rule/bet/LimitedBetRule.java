@@ -61,4 +61,29 @@ final public class LimitedBetRule extends BetRule {
         }
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + maxBet;
+        result = prime * result + minBet;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        LimitedBetRule other = (LimitedBetRule) obj;
+        if (maxBet != other.maxBet)
+            return false;
+        if (minBet != other.minBet)
+            return false;
+        return true;
+    }
+
 }

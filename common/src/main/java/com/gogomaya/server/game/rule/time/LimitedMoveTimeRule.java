@@ -30,4 +30,26 @@ final public class LimitedMoveTimeRule extends TimeRule {
         return new LimitedMoveTimeRule(timeRuleBreachBehavior, timeLimit);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + moveTimeLimit;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        LimitedMoveTimeRule other = (LimitedMoveTimeRule) obj;
+        if (moveTimeLimit != other.moveTimeLimit)
+            return false;
+        return true;
+    }
+
 }

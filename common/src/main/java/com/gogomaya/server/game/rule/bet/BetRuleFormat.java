@@ -25,7 +25,7 @@ import com.gogomaya.server.hibernate.ImmutableHibernateType;
 
 public class BetRuleFormat {
     
-    final public static BetRule DEFAULT_BET_RULE = UnlimitedBetRule.INSTANCE;
+    final public static BetRule DEFAULT_BET_RULE = FixedBetRule.create(50);
 
     final public static String BET_TYPE_TOKEN = "betType";
     final public static String PRICE_TOKEN = "price";

@@ -1,5 +1,8 @@
 package com.gogomaya.server.game.action.tictactoe;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import com.gogomaya.server.game.action.AbstractGamePlayerState;
 
 public class TicTacToePlayerState extends AbstractGamePlayerState {
@@ -11,7 +14,9 @@ public class TicTacToePlayerState extends AbstractGamePlayerState {
 
     private long moneyLeft;
 
-    public TicTacToePlayerState(final long playerId, final long moneyLeft) {
+    @JsonCreator
+    public TicTacToePlayerState(@JsonProperty("playerId") final long playerId,
+            @JsonProperty("moneyLeft") final long moneyLeft) {
         super(playerId);
         this.moneyLeft = moneyLeft;
     }
