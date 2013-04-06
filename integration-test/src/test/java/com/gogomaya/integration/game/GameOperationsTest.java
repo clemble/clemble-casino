@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.rule.GameRuleSpecification;
-import com.gogomaya.server.game.rule.bet.FixedBetRule;
-import com.gogomaya.server.game.rule.giveup.LooseAllGiveUpRule;
+import com.gogomaya.server.game.rule.bet.BetFixedRule;
+import com.gogomaya.server.game.rule.giveup.GiveUpAllRule;
 import com.gogomaya.server.game.rule.time.UnlimitedTimeRule;
 import com.gogomaya.server.game.session.GameSessionState;
 import com.gogomaya.server.game.table.GameTable;
@@ -71,7 +71,7 @@ public class GameOperationsTest {
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = GameSpecification.create(
                 GameTableSpecification.create(PlayerMatchRule.Automatic, PlayerPrivacyRule.Public, PlayerNumberRule.create(2, 2)),
-                GameRuleSpecification.create(CashType.FakeMoney, FixedBetRule.create(50), LooseAllGiveUpRule.INSTANCE, UnlimitedTimeRule.INSTANCE));
+                GameRuleSpecification.create(CashType.FakeMoney, BetFixedRule.create(50), GiveUpAllRule.INSTANCE, UnlimitedTimeRule.INSTANCE));
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, specification);
         Assert.assertNotNull(gameTable);

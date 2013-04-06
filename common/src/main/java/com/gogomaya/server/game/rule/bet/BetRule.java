@@ -10,9 +10,9 @@ import com.gogomaya.server.game.rule.GameRule;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "betType")
 @JsonSubTypes({
-    @Type(name = "fixed", value = FixedBetRule.class),
-    @Type(name = "limited", value = LimitedBetRule.class),
-    @Type(name = "unlimited", value = UnlimitedBetRule.class) })
+    @Type(name = "fixed", value = BetFixedRule.class),
+    @Type(name = "limited", value = BetLimitedRule.class),
+    @Type(name = "unlimited", value = BetUnlimitedRule.class) })
 abstract public class BetRule implements GameRule {
 
     /**

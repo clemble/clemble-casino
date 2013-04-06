@@ -16,7 +16,7 @@ import com.gogomaya.server.hibernate.ImmutableHibernateType;
 
 public class BetRuleFormat {
 
-    final public static BetRule DEFAULT_BET_RULE = FixedBetRule.create(50);
+    final public static BetRule DEFAULT_BET_RULE = BetFixedRule.create(50);
 
     public static enum BetType {
 
@@ -25,11 +25,11 @@ public class BetRuleFormat {
         Unlimited;
 
         public static BetType valueOf(Class<? extends BetRule> betRuleClass) {
-            if (betRuleClass.equals(FixedBetRule.class)) {
+            if (betRuleClass.equals(BetFixedRule.class)) {
                 return Fixed;
-            } else if (betRuleClass.equals(UnlimitedBetRule.class)) {
+            } else if (betRuleClass.equals(BetUnlimitedRule.class)) {
                 return Unlimited;
-            } else if (betRuleClass.equals(LimitedBetRule.class)) {
+            } else if (betRuleClass.equals(BetLimitedRule.class)) {
                 return Limited;
             }
             return null;
@@ -55,11 +55,11 @@ public class BetRuleFormat {
             BetType betType = BetType.valueOf(rs.getString(names[0]));
             switch (betType) {
             case Fixed:
-                return FixedBetRule.create(rs.getInt(names[1]));
+                return BetFixedRule.create(rs.getInt(names[1]));
             case Limited:
-                return LimitedBetRule.create(rs.getInt(names[1]), rs.getInt(names[2]));
+                return BetLimitedRule.create(rs.getInt(names[1]), rs.getInt(names[2]));
             case Unlimited:
-                return UnlimitedBetRule.INSTANCE;
+                return BetUnlimitedRule.INSTANCE;
             }
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         }
@@ -71,12 +71,12 @@ public class BetRuleFormat {
             st.setString(index++, betType.name());
             switch (betType) {
             case Fixed:
-                st.setLong(index++, ((FixedBetRule) value).getPrice());
-                st.setLong(index++, ((FixedBetRule) value).getPrice());
+                st.setLong(index++, ((BetFixedRule) value).getPrice());
+                st.setLong(index++, ((BetFixedRule) value).getPrice());
                 break;
             case Limited:
-                st.setLong(index++, ((LimitedBetRule) value).getMinBet());
-                st.setLong(index++, ((LimitedBetRule) value).getMaxBet());
+                st.setLong(index++, ((BetLimitedRule) value).getMinBet());
+                st.setLong(index++, ((BetLimitedRule) value).getMaxBet());
                 break;
             case Unlimited:
                 st.setLong(index++, 0);
@@ -99,10 +99,10 @@ public class BetRuleFormat {
 
             switch (betType) {
             case Fixed:
-                buffer.putInt(((FixedBetRule) betRule).getPrice());
+                buffer.putInt(((BetFixedRule) betRule).getPrice());
                 break;
             case Limited:
-                buffer.putInt(((LimitedBetRule) betRule).getMinBet()).putInt(((LimitedBetRule) betRule).getMaxBet());
+                buffer.putInt(((BetLimitedRule) betRule).getMinBet()).putInt(((BetLimitedRule) betRule).getMaxBet());
                 break;
             case Unlimited:
                 break;
@@ -115,11 +115,11 @@ public class BetRuleFormat {
             int betType = buffer.get();
 
             if (betType == BetType.Fixed.ordinal()) {
-                return FixedBetRule.create(buffer.getInt());
+                return BetFixedRule.create(buffer.getInt());
             } else if (betType == BetType.Limited.ordinal()) {
-                return LimitedBetRule.create(buffer.getInt(), buffer.getInt());
+                return BetLimitedRule.create(buffer.getInt(), buffer.getInt());
             } else if (betType == BetType.Unlimited.ordinal()) {
-                return UnlimitedBetRule.INSTANCE;
+                return BetUnlimitedRule.INSTANCE;
             }
 
             throw GogomayaException.create(GogomayaError.ServerCriticalError);

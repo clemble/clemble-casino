@@ -3,6 +3,7 @@ package com.gogomaya.server.game.rule.bet;
 import java.util.concurrent.ExecutionException;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.error.GogomayaError;
@@ -11,25 +12,26 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-final public class FixedBetRule extends BetRule {
+final public class BetFixedRule extends BetRule {
 
     /**
      * Generated 09/04/13
      */
     private static final long serialVersionUID = 6656576325438885626L;
 
-    final private static LoadingCache<Integer, FixedBetRule> INSTANCE_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<Integer, FixedBetRule>() {
+    final private static LoadingCache<Integer, BetFixedRule> INSTANCE_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<Integer, BetFixedRule>() {
 
         @Override
-        public FixedBetRule load(Integer priceToUse) throws Exception {
-            return new FixedBetRule(priceToUse);
+        public BetFixedRule load(Integer priceToUse) throws Exception {
+            return new BetFixedRule(priceToUse);
         }
 
     });
 
     final private int price;
 
-    private FixedBetRule(final int priceToUse) {
+    @JsonIgnore
+    private BetFixedRule(final int priceToUse) {
         if (priceToUse < 0)
             throw GogomayaException.create(GogomayaError.ClientJsonFormatError);
         this.price = priceToUse;
@@ -40,7 +42,7 @@ final public class FixedBetRule extends BetRule {
     }
 
     @JsonCreator
-    public static FixedBetRule create(@JsonProperty("price") int price) {
+    public static BetFixedRule create(@JsonProperty("price") int price) {
         try {
             return INSTANCE_CACHE.get(price);
         } catch (ExecutionException e) {
