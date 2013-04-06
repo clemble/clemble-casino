@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -18,6 +19,11 @@ public class SocialNetworkController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home() {
         return "index";
+    }
+
+    @RequestMapping(value = "view/{signout}", method = RequestMethod.GET)
+    public String showView(@PathVariable("signout") String signout) {
+        return signout;
     }
 
     @RequestMapping(value = "/{signout}", method = RequestMethod.GET)

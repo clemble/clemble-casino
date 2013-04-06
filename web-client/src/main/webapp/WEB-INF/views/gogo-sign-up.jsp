@@ -9,7 +9,7 @@ $(document).ready(function(){
 	$.ajax({
 	  type: "POST",
 	  url: "http://gogomaya.cloudfoundry.com/spi/registration/signin",
-	  data: {
+	  data: JSON.stringify({
    	   	playerProfile : {
   	      	nickName : $("#nickName").val(),
   	      	firstName : $("#firstName").val(),
@@ -17,7 +17,7 @@ $(document).ready(function(){
   	      	gender : $("#gender").val(),
   	      	birthDate : $("#birthDate").val(),
   	      	category : "Novice"
-  	   	},
+  	   	}, null, 2),
   	   	playerCredential: {
   	      	email : $("#email").val(),
   	      	password : $("#password").val()
