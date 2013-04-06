@@ -16,8 +16,8 @@ import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.BetRuleFormat;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRuleFormat;
-import com.gogomaya.server.game.rule.time.TimeRule;
-import com.gogomaya.server.game.rule.time.TimeRuleFormat;
+import com.gogomaya.server.game.rule.time.TimeLimitRule;
+import com.gogomaya.server.game.rule.time.TimeLimitRuleFormat;
 import com.gogomaya.server.player.wallet.CashType;
 
 @Embeddable
@@ -25,7 +25,7 @@ import com.gogomaya.server.player.wallet.CashType;
     value = {   
         @TypeDef(name = "betType", typeClass = BetRuleFormat.BetRuleHibernateType.class),
         @TypeDef(name = "giveUpType", typeClass = GiveUpRuleFormat.GiveUpRuleHibernateType.class),
-        @TypeDef(name = "timeType", typeClass = TimeRuleFormat.TimeRuleHibernateType.class)
+        @TypeDef(name = "timeType", typeClass = TimeLimitRuleFormat.TimeRuleHibernateType.class)
     }
 )
 public class GameRuleSpecification implements Serializable {
@@ -38,7 +38,7 @@ public class GameRuleSpecification implements Serializable {
     final private static CashType DEFAULT_CASH_TYPE = CashType.FakeMoney;
     final private static BetRule DEFAULT_BET_RULE = BetRuleFormat.DEFAULT_BET_RULE;
     final private static GiveUpRule DEFAULT_GIVE_UP_RULE = GiveUpRuleFormat.DEFAULT_GIVE_UP_RULE;
-    final private static TimeRule DEFAULT_TIME_RULE = TimeRuleFormat.DEFAULT_TIME_RULE;
+    final private static TimeLimitRule DEFAULT_TIME_RULE = TimeLimitRuleFormat.DEFAULT_TIME_RULE;
 
     final public static GameRuleSpecification DEFAULT_RULE_SPECIFICATION = GameRuleSpecification.create(DEFAULT_CASH_TYPE, DEFAULT_BET_RULE,
             DEFAULT_GIVE_UP_RULE, DEFAULT_TIME_RULE);
@@ -64,7 +64,7 @@ public class GameRuleSpecification implements Serializable {
             @Column(name = "TIME_BREACH_TYPE"),
             @Column(name = "TIME_LIMIT") 
     })
-    private TimeRule timeRule;
+    private TimeLimitRule timeRule;
 
     public GameRuleSpecification() {
     }
@@ -72,7 +72,7 @@ public class GameRuleSpecification implements Serializable {
     private GameRuleSpecification(@JsonProperty("cashType") final CashType cashType,
             @JsonProperty("betRule") final BetRule betRule,
             @JsonProperty("giveUpRule") final GiveUpRule giveUpRule,
-            @JsonProperty("timeRule") final TimeRule timeRule) {
+            @JsonProperty("timeRule") final TimeLimitRule timeRule) {
         this.betRule = betRule == null ? DEFAULT_BET_RULE : betRule;
         this.giveUpRule = giveUpRule == null ? DEFAULT_GIVE_UP_RULE : giveUpRule;
         this.timeRule = timeRule == null ? DEFAULT_TIME_RULE : timeRule;
@@ -97,11 +97,11 @@ public class GameRuleSpecification implements Serializable {
         return this;
     }
 
-    public TimeRule getTimeRule() {
+    public TimeLimitRule getTimeRule() {
         return timeRule;
     }
 
-    public GameRuleSpecification setTimeRule(TimeRule timeRule) {
+    public GameRuleSpecification setTimeRule(TimeLimitRule timeRule) {
         this.timeRule = timeRule;
         return this;
     }
@@ -120,7 +120,7 @@ public class GameRuleSpecification implements Serializable {
             @JsonProperty("cashType") final CashType cashType,
             @JsonProperty("betRule") final BetRule betRule,
             @JsonProperty("giveUpRule") final GiveUpRule giveUpRule,
-            @JsonProperty("timeRule") final TimeRule timeRule) {
+            @JsonProperty("timeRule") final TimeLimitRule timeRule) {
         return new GameRuleSpecification(cashType, betRule, giveUpRule, timeRule);
     }
 

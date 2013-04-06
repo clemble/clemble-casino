@@ -24,11 +24,11 @@ import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpAllRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpLostRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpLeastRule;
-import com.gogomaya.server.game.rule.time.LimitedGameTimeRule;
-import com.gogomaya.server.game.rule.time.LimitedMoveTimeRule;
+import com.gogomaya.server.game.rule.time.TimeLimitTotalRule;
+import com.gogomaya.server.game.rule.time.TimeLimitMoveRule;
 import com.gogomaya.server.game.rule.time.TimeBreachBehavior;
-import com.gogomaya.server.game.rule.time.TimeRule;
-import com.gogomaya.server.game.rule.time.UnlimitedTimeRule;
+import com.gogomaya.server.game.rule.time.TimeLimitRule;
+import com.gogomaya.server.game.rule.time.TimeLimitNoneRule;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,33 +40,29 @@ public class SeDeRelizationTest {
 
     @Test
     public void timeRule() throws JsonParseException, JsonMappingException, IOException {
-        TimeRule timeRule = objectMapper.readValue("{\"timeType\":\"Unlimited\",\"timeBreach\":\"DoNothing\"}", TimeRule.class);
-        Assert.assertTrue(timeRule instanceof UnlimitedTimeRule);
-        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.DoNothing);
+        TimeLimitRule timeRule = objectMapper.readValue("{\"timeLimitType\":\"none\"}", TimeLimitRule.class);
+        Assert.assertTrue(timeRule instanceof TimeLimitNoneRule);
+        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.nothing);
 
-        timeRule = objectMapper.readValue("{\"timeType\":\"Unlimited\",\"timeBreach\":\"PlayerLoose\"}", TimeRule.class);
-        Assert.assertTrue(timeRule instanceof UnlimitedTimeRule);
-        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.DoNothing);
+        timeRule = objectMapper.readValue("{\"timeLimitType\":\"total\",\"punishment\":\"nothing\",\"limit\":1}", TimeLimitRule.class);
+        Assert.assertTrue(timeRule instanceof TimeLimitTotalRule);
+        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.nothing);
+        Assert.assertEquals(((TimeLimitTotalRule) timeRule).getGameTimeLimit(), 1);
 
-        timeRule = objectMapper.readValue("{\"timeType\":\"LimitedGameTime\",\"timeBreach\":\"DoNothing\",\"timeLimit\":1}", TimeRule.class);
-        Assert.assertTrue(timeRule instanceof LimitedGameTimeRule);
-        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.DoNothing);
-        Assert.assertEquals(((LimitedGameTimeRule) timeRule).getGameTimeLimit(), 1);
+        timeRule = objectMapper.readValue("{\"timeLimitType\":\"total\",\"punishment\":\"loose\",\"limit\":1}", TimeLimitRule.class);
+        Assert.assertTrue(timeRule instanceof TimeLimitTotalRule);
+        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.loose);
+        Assert.assertEquals(((TimeLimitTotalRule) timeRule).getGameTimeLimit(), 1);
 
-        timeRule = objectMapper.readValue("{\"timeType\":\"LimitedGameTime\",\"timeBreach\":\"PlayerLoose\",\"timeLimit\":1}", TimeRule.class);
-        Assert.assertTrue(timeRule instanceof LimitedGameTimeRule);
-        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.PlayerLoose);
-        Assert.assertEquals(((LimitedGameTimeRule) timeRule).getGameTimeLimit(), 1);
+        timeRule = objectMapper.readValue("{\"timeLimitType\":\"move\",\"punishment\":\"nothing\",\"limit\":1}", TimeLimitRule.class);
+        Assert.assertTrue(timeRule instanceof TimeLimitMoveRule);
+        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.nothing);
+        Assert.assertEquals(((TimeLimitMoveRule) timeRule).getMoveTimeLimit(), 1);
 
-        timeRule = objectMapper.readValue("{\"timeType\":\"LimitedMoveTime\",\"timeBreach\":\"DoNothing\",\"timeLimit\":1}", TimeRule.class);
-        Assert.assertTrue(timeRule instanceof LimitedMoveTimeRule);
-        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.DoNothing);
-        Assert.assertEquals(((LimitedMoveTimeRule) timeRule).getMoveTimeLimit(), 1);
-
-        timeRule = objectMapper.readValue("{\"timeType\":\"LimitedMoveTime\",\"timeBreach\":\"PlayerLoose\",\"timeLimit\":1}", TimeRule.class);
-        Assert.assertTrue(timeRule instanceof LimitedMoveTimeRule);
-        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.PlayerLoose);
-        Assert.assertEquals(((LimitedMoveTimeRule) timeRule).getMoveTimeLimit(), 1);
+        timeRule = objectMapper.readValue("{\"timeLimitType\":\"move\",\"punishment\":\"loose\",\"limit\":1}", TimeLimitRule.class);
+        Assert.assertTrue(timeRule instanceof TimeLimitMoveRule);
+        Assert.assertEquals(timeRule.getBreachBehavior(), TimeBreachBehavior.loose);
+        Assert.assertEquals(((TimeLimitMoveRule) timeRule).getMoveTimeLimit(), 1);
     }
 
     @Test
