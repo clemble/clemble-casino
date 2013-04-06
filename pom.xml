@@ -25,6 +25,7 @@
         <guava.version>13.0</guava.version>
         <javax.inject.version>1</javax.inject.version>
         <cglib.version>2.2</cglib.version>
+        <cors-filter.version>1.3.2</cors-filter.version>
         <!-- AMQP dependencies -->
         <spring.amqp.version>1.1.3.RELEASE</spring.amqp.version>
         <!-- Dependencies for ORM -->
@@ -266,6 +267,11 @@
 
             <!-- Servlet dependencies -->
             <dependency>
+                <groupId>com.thetransactioncompany</groupId>
+                <artifactId>cors-filter</artifactId>
+                <version>${cors-filter.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${java.serlet-api.version}</version>
@@ -386,6 +392,25 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
+                <configuration>
+                    <stopPort>9966</stopPort>
+                    <contextPath>/</contextPath>
+                    <stopKey>stop</stopKey>
+                    <reload>manual</reload>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>spring.profiles.active</name>
+                            <value>test</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${h2.database.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
