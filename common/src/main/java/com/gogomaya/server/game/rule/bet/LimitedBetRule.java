@@ -2,19 +2,15 @@ package com.gogomaya.server.game.rule.bet;
 
 import java.util.concurrent.ExecutionException;
 
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.rule.bet.BetRuleFormat.CustomBetRuleDeserializer;
-import com.gogomaya.server.game.rule.bet.BetRuleFormat.CustomBetRuleSerializer;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-@JsonSerialize(using = CustomBetRuleSerializer.class)
-@JsonDeserialize(using = CustomBetRuleDeserializer.class)
 final public class LimitedBetRule extends BetRule {
 
     /**
@@ -36,7 +32,6 @@ final public class LimitedBetRule extends BetRule {
     final private int maxBet;
 
     private LimitedBetRule(final int minBet, final int maxBet) {
-        super(BetType.Limited);
         if (minBet > maxBet)
             throw new IllegalArgumentException("MIN bet can't be lesser, than MAX bet");
         if (minBet < 0)
@@ -53,37 +48,13 @@ final public class LimitedBetRule extends BetRule {
         return maxBet;
     }
 
-    public static LimitedBetRule create(int minBet, int maxBet) {
+    @JsonCreator
+    public static LimitedBetRule create(@JsonProperty("min") int minBet, @JsonProperty("max") int maxBet) {
         try {
             return INSTANCE_CACHE.get(((long) minBet << 32) | maxBet);
         } catch (ExecutionException e) {
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         }
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + maxBet;
-        result = prime * result + minBet;
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        LimitedBetRule other = (LimitedBetRule) obj;
-        if (maxBet != other.maxBet)
-            return false;
-        if (minBet != other.minBet)
-            return false;
-        return true;
     }
 
 }

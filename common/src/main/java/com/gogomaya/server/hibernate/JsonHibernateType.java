@@ -21,8 +21,8 @@ abstract public class JsonHibernateType<T extends Serializable> extends Immutabl
         return TYPES;
     }
 
-
     @Override
+    @SuppressWarnings("unchecked")
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         String jsonPresentation = rs.getString(names[0]);
         T result = null;

@@ -1,20 +1,11 @@
 package com.gogomaya.server.game.rule.bet;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.JsonToken;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.SerializerProvider;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 
@@ -24,67 +15,24 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.hibernate.ImmutableHibernateType;
 
 public class BetRuleFormat {
-    
+
     final public static BetRule DEFAULT_BET_RULE = FixedBetRule.create(50);
 
-    final public static String BET_TYPE_TOKEN = "betType";
-    final public static String PRICE_TOKEN = "price";
-    final public static String MIN_BET_TOKEN = "minBet";
-    final public static String MAX_BET_TOKEN = "maxBet";
+    public static enum BetType {
 
-    public static class CustomBetRuleDeserializer extends JsonDeserializer<BetRule> {
+        Fixed,
+        Limited,
+        Unlimited;
 
-        @Override
-        public BetRule deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            BetType betType = null;
-            int price = 0;
-            int maxPrice = 0;
-
-            while (jp.nextToken() != JsonToken.END_OBJECT) {
-                String currentName = jp.getCurrentName();
-                if (BET_TYPE_TOKEN.equals(currentName)) {
-                    betType = BetType.valueOf(jp.nextTextValue());
-                } else if (PRICE_TOKEN.equals(currentName) || MIN_BET_TOKEN.equals(currentName)) {
-                    price = jp.nextIntValue(0);
-                } else if (MAX_BET_TOKEN.equals(currentName)) {
-                    maxPrice = jp.nextIntValue(0);
-                } else {
-                    throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
-                }
-            }
-
-            switch (betType) {
-            case Fixed:
-                return FixedBetRule.create(price);
-            case Limited:
-                return LimitedBetRule.create(price, maxPrice);
-            case Unlimited:
-                return UnlimitedBetRule.INSTANCE;
+        public static BetType valueOf(Class<? extends BetRule> betRuleClass) {
+            if (betRuleClass.equals(FixedBetRule.class)) {
+                return Fixed;
+            } else if (betRuleClass.equals(UnlimitedBetRule.class)) {
+                return Unlimited;
+            } else if (betRuleClass.equals(LimitedBetRule.class)) {
+                return Limited;
             }
             return null;
-        }
-
-    }
-
-    public static class CustomBetRuleSerializer extends JsonSerializer<BetRule> {
-
-        @Override
-        public void serialize(BetRule value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-            jgen.writeStartObject();
-            jgen.writeFieldName(BET_TYPE_TOKEN);
-            jgen.writeString(value.getRuleType().name());
-            if (value instanceof FixedBetRule) {
-                jgen.writeFieldName(PRICE_TOKEN);
-                jgen.writeNumber(((FixedBetRule) value).getPrice());
-            } else if (value instanceof LimitedBetRule) {
-                jgen.writeFieldName(MIN_BET_TOKEN);
-                jgen.writeNumber(((LimitedBetRule) value).getMinBet());
-                jgen.writeFieldName(MAX_BET_TOKEN);
-                jgen.writeNumber(((LimitedBetRule) value).getMaxBet());
-            } else if (!(value instanceof UnlimitedBetRule)) {
-                throw GogomayaException.create(GogomayaError.ClientJsonInvalidError);
-            }
-            jgen.writeEndObject();
         }
 
     }
@@ -119,8 +67,9 @@ public class BetRuleFormat {
         @Override
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
             BetRule betRule = value != null ? (BetRule) value : DEFAULT_BET_RULE;
-            st.setString(index++, betRule.getRuleType().name());
-            switch(betRule.getRuleType()) {
+            BetType betType = BetType.valueOf(betRule.getClass());
+            st.setString(index++, betType.name());
+            switch (betType) {
             case Fixed:
                 st.setLong(index++, ((FixedBetRule) value).getPrice());
                 st.setLong(index++, ((FixedBetRule) value).getPrice());
@@ -144,16 +93,16 @@ public class BetRuleFormat {
 
         @Override
         public ByteBuffer write(BetRule betRule, ByteBuffer buffer) {
+            BetType betType = BetType.valueOf(betRule.getClass());
 
-            buffer.put((byte) betRule.getRuleType().ordinal());
+            buffer.put((byte) betType.ordinal());
 
-            switch (betRule.getRuleType()) {
+            switch (betType) {
             case Fixed:
                 buffer.putInt(((FixedBetRule) betRule).getPrice());
                 break;
             case Limited:
-                buffer.putInt(((LimitedBetRule) betRule).getMinBet())
-                    .putInt(((LimitedBetRule) betRule).getMaxBet());
+                buffer.putInt(((LimitedBetRule) betRule).getMinBet()).putInt(((LimitedBetRule) betRule).getMaxBet());
                 break;
             case Unlimited:
                 break;
