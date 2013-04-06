@@ -19,10 +19,10 @@ import com.gogomaya.server.game.rule.giveup.GiveUpAllRule;
 import com.gogomaya.server.game.rule.time.TimeLimitNoneRule;
 import com.gogomaya.server.game.session.GameSessionState;
 import com.gogomaya.server.game.table.GameTable;
-import com.gogomaya.server.game.table.rule.GameTableSpecification;
-import com.gogomaya.server.game.table.rule.PlayerMatchRule;
-import com.gogomaya.server.game.table.rule.PlayerNumberRule;
-import com.gogomaya.server.game.table.rule.PlayerPrivacyRule;
+import com.gogomaya.server.game.table.GameTableSpecification;
+import com.gogomaya.server.game.table.rule.GameTableMatchRule;
+import com.gogomaya.server.game.table.rule.GameTablePlayerNumberRule;
+import com.gogomaya.server.game.table.rule.GameTablePrivacyRule;
 import com.gogomaya.server.integration.data.DataGenerator;
 import com.gogomaya.server.integration.game.GameListener;
 import com.gogomaya.server.integration.game.GameOperations;
@@ -58,7 +58,7 @@ public class GameOperationsTest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification gameSpecification = GameSpecification.create(
-                GameTableSpecification.create(PlayerMatchRule.Automatic, PlayerPrivacyRule.Public, PlayerNumberRule.create(2, 2)),
+                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.Public, GameTablePlayerNumberRule.create(2, 2)),
                 GameRuleSpecification.DEFAULT_RULE_SPECIFICATION);
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, gameSpecification);
@@ -70,7 +70,7 @@ public class GameOperationsTest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = GameSpecification.create(
-                GameTableSpecification.create(PlayerMatchRule.Automatic, PlayerPrivacyRule.Public, PlayerNumberRule.create(2, 2)),
+                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.Public, GameTablePlayerNumberRule.create(2, 2)),
                 GameRuleSpecification.create(CashType.FakeMoney, BetFixedRule.create(50), GiveUpAllRule.INSTANCE, TimeLimitNoneRule.INSTANCE));
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, specification);
@@ -99,7 +99,7 @@ public class GameOperationsTest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = GameSpecification.create(
-                GameTableSpecification.create(PlayerMatchRule.Automatic, PlayerPrivacyRule.Public, PlayerNumberRule.create(2, 2)),
+                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.Public, GameTablePlayerNumberRule.create(2, 2)),
                 GameRuleSpecification.DEFAULT_RULE_SPECIFICATION);
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, specification);

@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.table.rule;
+package com.gogomaya.server.game.table;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -21,6 +21,9 @@ import org.hibernate.engine.spi.SessionImplementor;
 import com.gogomaya.server.buffer.ByteBufferStream;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.table.rule.GameTableMatchRule;
+import com.gogomaya.server.game.table.rule.GameTablePlayerNumberRule;
+import com.gogomaya.server.game.table.rule.GameTablePrivacyRule;
 import com.gogomaya.server.hibernate.ImmutableHibernateType;
 
 public class GameTableSpecificationFormats {
@@ -52,17 +55,17 @@ public class GameTableSpecificationFormats {
 
         @Override
         public GameTableSpecification deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            PlayerMatchRule matchRule = PlayerMatchRule.Automatic;
-            PlayerPrivacyRule privacyRule = PlayerPrivacyRule.Public;
+            GameTableMatchRule matchRule = GameTableMatchRule.automatic;
+            GameTablePrivacyRule privacyRule = GameTablePrivacyRule.Public;
             int minPlayers = 0;
             int maxPlayers = 0;
 
             while (jp.nextToken() != JsonToken.END_OBJECT) {
                 String currentName = jp.getCurrentName();
                 if (MATCH_TYPE_TOKEN.equals(currentName)) {
-                    matchRule = PlayerMatchRule.valueOf(jp.nextTextValue());
+                    matchRule = GameTableMatchRule.valueOf(jp.nextTextValue());
                 } else if (PRIVACY_TYPE_TOKEN.equals(currentName)) {
-                    privacyRule = PlayerPrivacyRule.valueOf(jp.nextTextValue());
+                    privacyRule = GameTablePrivacyRule.valueOf(jp.nextTextValue());
                 } else if (MIN_PLAYERS_TOKEN.equals(currentName)) {
                     minPlayers = jp.nextIntValue(0);
                 } else if (MAX_PLAYERS_TOKEN.equals(currentName)) {
@@ -72,7 +75,7 @@ public class GameTableSpecificationFormats {
                 }
             }
 
-            return GameTableSpecification.create(matchRule, privacyRule, PlayerNumberRule.create(minPlayers, maxPlayers));
+            return GameTableSpecification.create(matchRule, privacyRule, GameTablePlayerNumberRule.create(minPlayers, maxPlayers));
         }
 
     }
@@ -94,10 +97,10 @@ public class GameTableSpecificationFormats {
         @Override
         public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
 
-            PlayerMatchRule matchType = PlayerMatchRule.valueOf(rs.getString(names[0]));
-            PlayerPrivacyRule privacyType = PlayerPrivacyRule.valueOf(rs.getString(names[1]));
+            GameTableMatchRule matchType = GameTableMatchRule.valueOf(rs.getString(names[0]));
+            GameTablePrivacyRule privacyType = GameTablePrivacyRule.valueOf(rs.getString(names[1]));
 
-            return GameTableSpecification.create(matchType, privacyType, PlayerNumberRule.create(rs.getInt(names[2]), rs.getInt(names[3])));
+            return GameTableSpecification.create(matchType, privacyType, GameTablePlayerNumberRule.create(rs.getInt(names[2]), rs.getInt(names[3])));
         }
 
         @Override
@@ -126,14 +129,14 @@ public class GameTableSpecificationFormats {
         @Override
         public GameTableSpecification read(ByteBuffer readBuffer) {
             byte match = readBuffer.get();
-            PlayerMatchRule matchType = match == PlayerMatchRule.Automatic.ordinal() ? PlayerMatchRule.Automatic
-                    : match == PlayerMatchRule.Manual.ordinal() ? PlayerMatchRule.Manual : null;
+            GameTableMatchRule matchType = match == GameTableMatchRule.automatic.ordinal() ? GameTableMatchRule.automatic
+                    : match == GameTableMatchRule.manual.ordinal() ? GameTableMatchRule.manual : null;
 
             byte privacy = readBuffer.get();
-            PlayerPrivacyRule privacyType = privacy == PlayerPrivacyRule.Private.ordinal() ? PlayerPrivacyRule.Private : privacy == PlayerPrivacyRule.Public
-                    .ordinal() ? PlayerPrivacyRule.Public : null;
+            GameTablePrivacyRule privacyType = privacy == GameTablePrivacyRule.Private.ordinal() ? GameTablePrivacyRule.Private : privacy == GameTablePrivacyRule.Public
+                    .ordinal() ? GameTablePrivacyRule.Public : null;
 
-            return GameTableSpecification.create(matchType, privacyType, PlayerNumberRule.create(readBuffer.getInt(), readBuffer.getInt()));
+            return GameTableSpecification.create(matchType, privacyType, GameTablePlayerNumberRule.create(readBuffer.getInt(), readBuffer.getInt()));
         }
 
     }

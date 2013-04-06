@@ -16,10 +16,9 @@ import com.gogomaya.server.game.rule.GameRuleSpecification;
 import com.gogomaya.server.game.rule.bet.BetFixedRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpAllRule;
 import com.gogomaya.server.game.rule.time.TimeLimitNoneRule;
-import com.gogomaya.server.game.table.rule.GameTableSpecification;
-import com.gogomaya.server.game.table.rule.PlayerMatchRule;
-import com.gogomaya.server.game.table.rule.PlayerNumberRule;
-import com.gogomaya.server.game.table.rule.PlayerPrivacyRule;
+import com.gogomaya.server.game.table.rule.GameTableMatchRule;
+import com.gogomaya.server.game.table.rule.GameTablePlayerNumberRule;
+import com.gogomaya.server.game.table.rule.GameTablePrivacyRule;
 import com.gogomaya.server.player.wallet.CashType;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 
@@ -35,7 +34,7 @@ public class GameTableManagerTest {
     @Test
     public void testPlayersMapping(){
         GameSpecification specification = GameSpecification.create(
-                GameTableSpecification.create(PlayerMatchRule.Automatic, PlayerPrivacyRule.Public, PlayerNumberRule.create(2, 2)),
+                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.Public, GameTablePlayerNumberRule.create(2, 2)),
                 GameRuleSpecification.create(CashType.FakeMoney, BetFixedRule.create(50), GiveUpAllRule.INSTANCE, TimeLimitNoneRule.INSTANCE));
 
         GameTable table = gameStateManager.reserve(1, specification);

@@ -9,7 +9,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.game.rule.GameRuleSpecification;
-import com.gogomaya.server.game.table.rule.GameTableSpecification;
+import com.gogomaya.server.game.table.GameTableSpecification;
 
 @Embeddable
 public class GameSpecification implements Serializable {

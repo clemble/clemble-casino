@@ -6,9 +6,9 @@ import com.gogomaya.server.buffer.ByteBufferStream;
 import com.gogomaya.server.game.rule.GameRuleSpecification;
 import com.gogomaya.server.game.rule.GameRuleSpecificationFormat;
 import com.gogomaya.server.game.rule.GameRuleSpecificationFormat.GameRuleSpecificationByteBufferStream;
-import com.gogomaya.server.game.table.rule.GameTableSpecification;
-import com.gogomaya.server.game.table.rule.GameTableSpecificationFormats;
-import com.gogomaya.server.game.table.rule.GameTableSpecificationFormats.GameTableSpecificationByteBufferStream;
+import com.gogomaya.server.game.table.GameTableSpecification;
+import com.gogomaya.server.game.table.GameTableSpecificationFormats;
+import com.gogomaya.server.game.table.GameTableSpecificationFormats.GameTableSpecificationByteBufferStream;
 import com.gogomaya.server.hibernate.CombinableImmutableUserType;
 import com.gogomaya.server.hibernate.ImmutableHibernateType;
 

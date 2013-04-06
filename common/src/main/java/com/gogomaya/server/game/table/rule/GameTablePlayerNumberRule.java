@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 import com.gogomaya.server.game.table.GameTableRule;
 
 @Embeddable
-public class PlayerNumberRule implements GameTableRule {
+public class GameTablePlayerNumberRule implements GameTableRule {
 
     /**
      * Generated 21/03/13
@@ -19,10 +19,10 @@ public class PlayerNumberRule implements GameTableRule {
     @Column(name = "TABLE_PLAYERS_MAX")
     private int maxPlayers;
 
-    public PlayerNumberRule() {
+    public GameTablePlayerNumberRule() {
     }
 
-    private PlayerNumberRule(int minPlayers, int maxPlayers) {
+    private GameTablePlayerNumberRule(int minPlayers, int maxPlayers) {
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
         if (minPlayers > maxPlayers || minPlayers < 0) {
@@ -34,7 +34,7 @@ public class PlayerNumberRule implements GameTableRule {
         return minPlayers;
     }
     
-    public PlayerNumberRule setMinPlayers(int minPlayers) {
+    public GameTablePlayerNumberRule setMinPlayers(int minPlayers) {
         this.minPlayers = minPlayers;
         return this;
     }
@@ -43,13 +43,13 @@ public class PlayerNumberRule implements GameTableRule {
         return maxPlayers;
     }
     
-    public PlayerNumberRule setMaxPlayers(int maxPlayers) {
+    public GameTablePlayerNumberRule setMaxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
         return this;
     }
 
-    public static PlayerNumberRule create(final int minPlayers, final int maxPlayers) {
-        return new PlayerNumberRule(minPlayers, maxPlayers);
+    public static GameTablePlayerNumberRule create(final int minPlayers, final int maxPlayers) {
+        return new GameTablePlayerNumberRule(minPlayers, maxPlayers);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class PlayerNumberRule implements GameTableRule {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerNumberRule other = (PlayerNumberRule) obj;
+        GameTablePlayerNumberRule other = (GameTablePlayerNumberRule) obj;
         if (maxPlayers != other.maxPlayers)
             return false;
         if (minPlayers != other.minPlayers)
