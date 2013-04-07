@@ -33,7 +33,8 @@
     ) ENGINE=InnoDB;
 
     create table PLAYER_WALLET (
-        PLAYER_ID bigint not null,
-        MONEY bigint,
-        primary key (PLAYER_ID)
+        playerId bigint not null,
+        CURRENCY integer,
+        AMOUNT integer,
+        primary key (playerId)
     ) ENGINE=InnoDB;

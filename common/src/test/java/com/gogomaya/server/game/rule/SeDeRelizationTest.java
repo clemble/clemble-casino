@@ -1,7 +1,7 @@
 package com.gogomaya.server.game.rule;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -16,19 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.game.rule.bet.BetRule;
-import com.gogomaya.server.game.rule.bet.BetFixedRule;
-import com.gogomaya.server.game.rule.bet.BetLimitedRule;
-import com.gogomaya.server.game.rule.bet.BetUnlimitedRule;
-import com.gogomaya.server.game.rule.giveup.GiveUpRule;
-import com.gogomaya.server.game.rule.giveup.GiveUpAllRule;
-import com.gogomaya.server.game.rule.giveup.GiveUpLostRule;
-import com.gogomaya.server.game.rule.giveup.GiveUpLeastRule;
-import com.gogomaya.server.game.rule.time.TimeLimitTotalRule;
-import com.gogomaya.server.game.rule.time.TimeLimitMoveRule;
-import com.gogomaya.server.game.rule.time.TimeBreachBehavior;
-import com.gogomaya.server.game.rule.time.TimeLimitRule;
-import com.gogomaya.server.game.rule.time.TimeLimitNoneRule;
+import com.gogomaya.server.game.bet.rule.BetFixedRule;
+import com.gogomaya.server.game.bet.rule.BetLimitedRule;
+import com.gogomaya.server.game.bet.rule.BetRule;
+import com.gogomaya.server.game.bet.rule.BetUnlimitedRule;
+import com.gogomaya.server.game.giveup.rule.GiveUpRule;
+import com.gogomaya.server.game.time.rule.TimeBreachBehavior;
+import com.gogomaya.server.game.time.rule.TimeLimitMoveRule;
+import com.gogomaya.server.game.time.rule.TimeLimitNoneRule;
+import com.gogomaya.server.game.time.rule.TimeLimitRule;
+import com.gogomaya.server.game.time.rule.TimeLimitTotalRule;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -96,15 +93,11 @@ public class SeDeRelizationTest {
 
     @Test
     public void giveUpRule() throws JsonGenerationException, JsonMappingException, IOException {
-        GiveUpRule giveUpRule = objectMapper.readValue("{\"looseType\":\"all\"}", GiveUpRule.class);
-        Assert.assertEquals(giveUpRule, GiveUpAllRule.INSTANCE);
+        GiveUpRule giveUpRule = objectMapper.readValue("\"all\"", GiveUpRule.class);
+        Assert.assertEquals(giveUpRule, GiveUpRule.all);
 
-        giveUpRule = objectMapper.readValue("{\"looseType\":\"lost\"}", GiveUpRule.class);
-        Assert.assertEquals(giveUpRule, GiveUpLostRule.INSTANCE);
-
-        giveUpRule = objectMapper.readValue("{\"looseType\":\"min\",\"min\":5}", GiveUpRule.class);
-        Assert.assertTrue(giveUpRule instanceof GiveUpLeastRule);
-        Assert.assertEquals(((GiveUpLeastRule) giveUpRule).getMinPart(), 5);
+        giveUpRule = objectMapper.readValue("\"lost\"", GiveUpRule.class);
+        Assert.assertEquals(giveUpRule, GiveUpRule.lost);
     }
 
 }

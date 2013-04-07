@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.rule.time;
+package com.gogomaya.server.game.time.rule;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameStateFactory;
-import com.gogomaya.server.game.rule.bet.BetFixedRule;
+import com.gogomaya.server.game.bet.rule.BetFixedRule;
 
 public class TicTacToeStateFactory implements GameStateFactory {
 

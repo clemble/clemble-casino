@@ -13,23 +13,23 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.GameSpecification;
+import com.gogomaya.server.game.bet.rule.BetFixedRule;
+import com.gogomaya.server.game.giveup.rule.GiveUpRule;
 import com.gogomaya.server.game.rule.GameRuleSpecification;
-import com.gogomaya.server.game.rule.bet.BetFixedRule;
-import com.gogomaya.server.game.rule.giveup.GiveUpAllRule;
-import com.gogomaya.server.game.rule.time.TimeLimitNoneRule;
 import com.gogomaya.server.game.session.GameSessionState;
 import com.gogomaya.server.game.table.GameTable;
 import com.gogomaya.server.game.table.GameTableSpecification;
 import com.gogomaya.server.game.table.rule.GameTableMatchRule;
 import com.gogomaya.server.game.table.rule.GameTablePlayerNumberRule;
 import com.gogomaya.server.game.table.rule.GameTablePrivacyRule;
+import com.gogomaya.server.game.time.rule.TimeLimitNoneRule;
 import com.gogomaya.server.integration.data.DataGenerator;
 import com.gogomaya.server.integration.game.GameListener;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.ListenerChannel;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
-import com.gogomaya.server.player.wallet.CashType;
+import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.integration.IntegrationTestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
 
@@ -71,7 +71,7 @@ public class GameOperationsTest {
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = GameSpecification.create(
                 GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.Public, GameTablePlayerNumberRule.create(2, 2)),
-                GameRuleSpecification.create(CashType.FakeMoney, BetFixedRule.create(50), GiveUpAllRule.INSTANCE, TimeLimitNoneRule.INSTANCE));
+                GameRuleSpecification.create(Currency.FakeMoney, BetFixedRule.create(50), GiveUpRule.DEFAULT, TimeLimitNoneRule.INSTANCE));
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, specification);
         Assert.assertNotNull(gameTable);

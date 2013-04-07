@@ -19,7 +19,7 @@ abstract public class AbstractGameEngine<S extends GameState<M, PS>, M extends G
             return oldState;
         if (expectedMove.getClass() != move.getClass())
             return oldState;
-        // Step 1. Processing Select cell move
+        // Step 2. Processing Select cell move
         return safeProcess(oldState, move);
     }
 

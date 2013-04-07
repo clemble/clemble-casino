@@ -5,10 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
+import com.gogomaya.server.money.Money;
+import com.gogomaya.server.money.MoneyHibernate;
 import com.gogomaya.server.player.PlayerAware;
 
 @Entity
 @Table(name = "PLAYER_WALLET")
+@TypeDef(name = "money", typeClass = MoneyHibernate.class)
 public class PlayerWallet implements PlayerAware {
 
     /**
@@ -17,11 +24,14 @@ public class PlayerWallet implements PlayerAware {
     private static final long serialVersionUID = 6508845694631953306L;
 
     @Id
-    @Column(name = "PLAYER_ID")
     private long playerId;
 
-    @Column(name = "MONEY")
-    private long playerMoney;
+    @Type(type = "money")
+    @Columns(columns = {
+        @Column(name = "CURRENCY"),
+        @Column(name = "AMOUNT")
+    })
+    private Money playerMoney;
 
     @Override
     public long getPlayerId() {
@@ -33,13 +43,12 @@ public class PlayerWallet implements PlayerAware {
         return this;
     }
 
-    public long getPlayerMoney() {
-        return playerMoney;
+    public Money getPlayerMoney() {
+        return this.playerMoney;
     }
 
-    public PlayerWallet setPlayerMoney(long playerMoney) {
+    public void setPlayerMoney(final Money playerMoney) {
         this.playerMoney = playerMoney;
-        return this;
     }
 
 }

@@ -12,19 +12,17 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
-import com.gogomaya.server.game.rule.bet.BetRule;
-import com.gogomaya.server.game.rule.bet.BetRuleFormat;
-import com.gogomaya.server.game.rule.giveup.GiveUpRule;
-import com.gogomaya.server.game.rule.giveup.GiveUpRuleFormat;
-import com.gogomaya.server.game.rule.time.TimeLimitRule;
-import com.gogomaya.server.game.rule.time.TimeLimitRuleFormat;
-import com.gogomaya.server.player.wallet.CashType;
+import com.gogomaya.server.game.bet.rule.BetRule;
+import com.gogomaya.server.game.bet.rule.BetRuleFormat;
+import com.gogomaya.server.game.giveup.rule.GiveUpRule;
+import com.gogomaya.server.game.time.rule.TimeLimitRule;
+import com.gogomaya.server.game.time.rule.TimeLimitRuleFormat;
+import com.gogomaya.server.money.Currency;
 
 @Embeddable
 @TypeDefs(
     value = {   
         @TypeDef(name = "betType", typeClass = BetRuleFormat.BetRuleHibernateType.class),
-        @TypeDef(name = "giveUpType", typeClass = GiveUpRuleFormat.GiveUpRuleHibernateType.class),
         @TypeDef(name = "timeType", typeClass = TimeLimitRuleFormat.TimeRuleHibernateType.class)
     }
 )
@@ -35,16 +33,16 @@ public class GameRuleSpecification implements Serializable {
      */
     private static final long serialVersionUID = 4977326816846447559L;
 
-    final private static CashType DEFAULT_CASH_TYPE = CashType.FakeMoney;
+    final private static Currency DEFAULT_CASH_TYPE = Currency.FakeMoney;
     final private static BetRule DEFAULT_BET_RULE = BetRuleFormat.DEFAULT_BET_RULE;
-    final private static GiveUpRule DEFAULT_GIVE_UP_RULE = GiveUpRuleFormat.DEFAULT_GIVE_UP_RULE;
+    final private static GiveUpRule DEFAULT_GIVE_UP_RULE = GiveUpRule.DEFAULT;
     final private static TimeLimitRule DEFAULT_TIME_RULE = TimeLimitRuleFormat.DEFAULT_TIME_RULE;
 
     final public static GameRuleSpecification DEFAULT_RULE_SPECIFICATION = GameRuleSpecification.create(DEFAULT_CASH_TYPE, DEFAULT_BET_RULE,
             DEFAULT_GIVE_UP_RULE, DEFAULT_TIME_RULE);
 
     @Column(name = "BET_CASH_TYPE")
-    private CashType cashType;
+    private Currency cashType;
     @Type(type = "betType")
     @Columns( columns = {
             @Column(name = "BET_TYPE"),
@@ -52,11 +50,7 @@ public class GameRuleSpecification implements Serializable {
             @Column(name = "BET_MAX_PRICE")
     })
     private BetRule betRule;
-    @Type(type = "giveUpType")
-    @Columns( columns = {
-            @Column(name = "LOOSE_TYPE"),
-            @Column(name = "LOOSE_MIN_PART")
-    })
+    @Column(name = "GIVE_UP_TYPE")
     private GiveUpRule giveUpRule;
     @Type(type = "timeType")
     @Columns( columns = {
@@ -69,7 +63,7 @@ public class GameRuleSpecification implements Serializable {
     public GameRuleSpecification() {
     }
 
-    private GameRuleSpecification(@JsonProperty("cashType") final CashType cashType,
+    private GameRuleSpecification(@JsonProperty("cashType") final Currency cashType,
             @JsonProperty("betRule") final BetRule betRule,
             @JsonProperty("giveUpRule") final GiveUpRule giveUpRule,
             @JsonProperty("timeRule") final TimeLimitRule timeRule) {
@@ -79,11 +73,11 @@ public class GameRuleSpecification implements Serializable {
         this.cashType = cashType == null ? DEFAULT_CASH_TYPE : cashType;
     }
 
-    public CashType getCashType() {
+    public Currency getCashType() {
         return cashType;
     }
 
-    public GameRuleSpecification setCashType(CashType cashType) {
+    public GameRuleSpecification setCashType(Currency cashType) {
         this.cashType = cashType;
         return this;
     }
@@ -117,7 +111,7 @@ public class GameRuleSpecification implements Serializable {
 
     @JsonCreator
     public static GameRuleSpecification create(
-            @JsonProperty("cashType") final CashType cashType,
+            @JsonProperty("cashType") final Currency cashType,
             @JsonProperty("betRule") final BetRule betRule,
             @JsonProperty("giveUpRule") final GiveUpRule giveUpRule,
             @JsonProperty("timeRule") final TimeLimitRule timeRule) {

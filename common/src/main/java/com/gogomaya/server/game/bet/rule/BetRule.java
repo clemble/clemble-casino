@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.rule.bet;
+package com.gogomaya.server.game.bet.rule;
 
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonSubTypes.Type;

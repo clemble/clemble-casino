@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.rule.bet;
+package com.gogomaya.server.game.bet.rule;
 
 import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
