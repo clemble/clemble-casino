@@ -1,36 +1,43 @@
 package com.gogomaya.server.game;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.io.Serializable;
 import java.util.Collection;
 
-import javax.persistence.Embeddable;
-
+import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.game.rule.GameRule;
+import com.google.common.collect.ImmutableList;
 
-@Embeddable
-public class GameRuleOptions {
+public class GameRuleOptions implements Serializable {
+
+    /**
+     * Generated 09/04/12
+     */
+    private static final long serialVersionUID = 6572099322803191748L;
 
     @JsonProperty("default")
-    private GameRule defaultOption;
+    final private GameRule defaultOption;
 
-    @JsonProperty("all")
-    private Collection<GameRule> allOptions;
+    @JsonProperty("options")
+    final private Collection<GameRule> options;
+
+    @JsonCreator
+    public GameRuleOptions(@JsonProperty("default") final GameRule defaultOption, @JsonProperty("options") final Collection<GameRule> allOptions) {
+        this.defaultOption = checkNotNull(defaultOption);
+        if (!checkNotNull(allOptions).contains(defaultOption))
+            allOptions.add(defaultOption);
+        this.options = ImmutableList.<GameRule> copyOf(allOptions);
+    }
 
     public GameRule getDefault() {
         return defaultOption;
     }
 
-    public void setDefault(GameRule defaultOption) {
-        this.defaultOption = defaultOption;
-    }
-
-    public Collection<GameRule> getAll() {
-        return allOptions;
-    }
-
-    public void setAll(Collection<GameRule> allOptions) {
-        this.allOptions = allOptions;
+    public Collection<GameRule> getOptions() {
+        return options;
     }
 
 }

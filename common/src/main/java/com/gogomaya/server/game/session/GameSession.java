@@ -17,16 +17,19 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.GameStateHibernateType;
 import com.gogomaya.server.game.table.GameTable;
+import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_SESSION")
-@TypeDef(name = "gameState", typeClass = GameStateHibernateType.class)
+@TypeDef(name = "gameState", typeClass = JsonHibernateType.class, parameters = {
+    @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.action.GameState")
+})
 public class GameSession implements GameSessionAware<GameSession> {
 
     /**
