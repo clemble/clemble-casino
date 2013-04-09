@@ -68,7 +68,7 @@ public class PlayerOperationsTest {
         assertEquals(player.getProfile().getLastName(), "Oparin");
         assertEquals(player.getProfile().getGender(), PlayerGender.M);
         assertEquals(player.getProfile().getNickName(), "mavarazy");
-        
+
         try {
             System.out.println(new ObjectMapper().writeValueAsString(registrationRequest));
         } catch (JsonGenerationException e) {
@@ -81,5 +81,26 @@ public class PlayerOperationsTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void loginExistingUser() {
+        PlayerProfile profile = new PlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
+                .setNickName("mavarazy");
+
+        Player player = playerOperations.createPlayer(profile);
+
+        PlayerCredential loginCredential = new PlayerCredential().setEmail(player.getCredential().getEmail()).setPassword(player.getCredential().getPassword());
+
+        Player loginPlayer = playerOperations.login(loginCredential);
+
+        assertEquals(loginPlayer.getPlayerId(), player.getPlayerId());
+
+        assertEquals(loginPlayer.getCredential().getEmail(), player.getCredential().getEmail());
+        assertEquals(loginPlayer.getCredential().getPassword(), player.getCredential().getPassword());
+
+        assertEquals(loginPlayer.getIdentity().getSecret(), player.getIdentity().getSecret());
+        assertEquals(loginPlayer.getIdentity().getPlayerId(), player.getIdentity().getPlayerId());
+
     }
 }

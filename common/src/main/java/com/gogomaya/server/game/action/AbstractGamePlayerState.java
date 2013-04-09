@@ -1,7 +1,7 @@
 package com.gogomaya.server.game.action;
 
 
-public class AbstractGamePlayerState implements GamePlayerState {
+abstract public class AbstractGamePlayerState implements GamePlayerState {
 
     /**
      * Generated 02/04/13

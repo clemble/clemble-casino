@@ -14,6 +14,7 @@ import com.gogomaya.server.player.web.RegistrationRequest;
 public class RestPlayerOperations implements PlayerOperations {
 
     final private static String CREATE_URL = "/spi/registration/signin";
+    final private static String LOGIN_URL = "/spi/registration/login";
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
@@ -45,6 +46,17 @@ public class RestPlayerOperations implements PlayerOperations {
         // Step 2. Generating Player from created request
         return new Player().setPlayerId(playerIdentity.getPlayerId()).setIdentity(playerIdentity).setProfile(registrationRequest.getPlayerProfile())
                 .setCredential(registrationRequest.getPlayerCredential());
+    }
+
+    @Override
+    public Player login(PlayerCredential credential) {
+        // Step 0. Sanity check
+        checkNotNull(credential);
+        // Step 1. Performing actual player login
+        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + LOGIN_URL, credential, PlayerIdentity.class);
+        checkNotNull(playerIdentity);
+        // Step 2. Generating Player from credentials 
+        return new Player().setPlayerId(playerIdentity.getPlayerId()).setCredential(credential).setIdentity(playerIdentity);
     }
 
 }

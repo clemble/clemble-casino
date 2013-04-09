@@ -8,7 +8,7 @@ import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.bet.rule.BetFixedRule;
 
 public class TicTacToeStateFactory implements GameStateFactory {
-
+    
     @Override
     public TicTacToeState initialize(final GameSpecification gameSpecification, final Set<Long> playerIds) {
         // Step 0. Create initial state
