@@ -7,4 +7,6 @@ public enum GameTableMatchRule implements GameTableRule {
     automatic,
     manual;
 
+    final public static GameTableMatchRule DEFAULT = GameTableMatchRule.automatic;
+
 }

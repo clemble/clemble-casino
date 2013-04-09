@@ -45,7 +45,7 @@ public class GameTable implements GameSpecificationAware {
     private GameServerConnection serverResource;
 
     @Embedded
-    private GameSpecification specification = GameSpecification.DEFAULT_SPECIFICATION;
+    private GameSpecification specification = GameSpecification.DEFAULT;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "GAME_TABLE_PLAYERS", joinColumns = @JoinColumn(name = "TABLE_ID"))

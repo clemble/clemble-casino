@@ -13,6 +13,8 @@ public class GameTablePlayerNumberRule implements GameTableRule {
      */
     private static final long serialVersionUID = -2230312436839159909L;
 
+    final static public GameTablePlayerNumberRule DEFAULT = GameTablePlayerNumberRule.create(2, 2);
+
     @Column(name = "TABLE_PLAYERS_MIN")
     private int minPlayers;
 
@@ -33,7 +35,7 @@ public class GameTablePlayerNumberRule implements GameTableRule {
     public int getMinPlayers() {
         return minPlayers;
     }
-    
+
     public GameTablePlayerNumberRule setMinPlayers(int minPlayers) {
         this.minPlayers = minPlayers;
         return this;
@@ -42,7 +44,7 @@ public class GameTablePlayerNumberRule implements GameTableRule {
     public int getMaxPlayers() {
         return maxPlayers;
     }
-    
+
     public GameTablePlayerNumberRule setMaxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
         return this;

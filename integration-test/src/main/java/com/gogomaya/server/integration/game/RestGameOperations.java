@@ -57,7 +57,7 @@ public class RestGameOperations implements GameOperations {
 
     @Override
     public GameTable create(Player player, GameSpecification gameSpecification) {
-        gameSpecification = gameSpecification == null ? GameSpecification.DEFAULT_SPECIFICATION : gameSpecification;
+        gameSpecification = gameSpecification == null ? GameSpecification.DEFAULT : gameSpecification;
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(player.getPlayerId()));

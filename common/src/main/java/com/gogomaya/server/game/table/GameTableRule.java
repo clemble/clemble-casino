@@ -1,7 +1,7 @@
 package com.gogomaya.server.game.table;
 
-import java.io.Serializable;
+import com.gogomaya.server.game.rule.GameRule;
 
-public interface GameTableRule extends Serializable {
+public interface GameTableRule extends GameRule {
 
 }

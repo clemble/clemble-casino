@@ -19,7 +19,7 @@ public class GameSpecification implements Serializable {
      */
     private static final long serialVersionUID = -7713576722470320974L;
 
-    final public static GameSpecification DEFAULT_SPECIFICATION = GameSpecification.create(null, null);
+    final public static GameSpecification DEFAULT = GameSpecification.create(GameTableSpecification.DEFAULT, GameRuleSpecification.DEFAULT);
 
     @Embedded
     private GameTableSpecification tableSpecification;
@@ -31,8 +31,8 @@ public class GameSpecification implements Serializable {
     }
 
     private GameSpecification(final GameTableSpecification tableSpecification, final GameRuleSpecification ruleSpecification) {
-        this.tableSpecification = tableSpecification == null ? GameTableSpecification.DEFAULT_TABLE_SPECIFICATION : tableSpecification;
-        this.ruleSpecification = ruleSpecification == null ? GameRuleSpecification.DEFAULT_RULE_SPECIFICATION : ruleSpecification;
+        this.tableSpecification = tableSpecification == null ? GameTableSpecification.DEFAULT : tableSpecification;
+        this.ruleSpecification = ruleSpecification == null ? GameRuleSpecification.DEFAULT : ruleSpecification;
     }
 
     public GameTableSpecification getTableSpecification() {

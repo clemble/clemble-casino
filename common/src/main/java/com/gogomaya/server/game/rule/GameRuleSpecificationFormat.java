@@ -33,7 +33,7 @@ public class GameRuleSpecificationFormat {
 
         @Override
         public Object[] deConstruct(GameRuleSpecification writeValue) {
-            return new Object[] { writeValue.getCashType(), writeValue.getBetRule(), writeValue.getGiveUpRule(), writeValue.getTimeRule() };
+            return new Object[] { writeValue.getCurrency(), writeValue.getBetRule(), writeValue.getGiveUpRule(), writeValue.getTimeRule() };
         }
 
     }
@@ -46,7 +46,7 @@ public class GameRuleSpecificationFormat {
 
         @Override
         public ByteBuffer write(GameRuleSpecification value, ByteBuffer writeBuffer) {
-            writeBuffer.put((byte) value.getCashType().ordinal());
+            writeBuffer.put((byte) value.getCurrency().ordinal());
 
             betBufferStream.write(value.getBetRule(), writeBuffer);
             giveUpBufferStream.write(value.getGiveUpRule(), writeBuffer);

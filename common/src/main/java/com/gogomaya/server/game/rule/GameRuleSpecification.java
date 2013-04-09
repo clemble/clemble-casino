@@ -20,12 +20,8 @@ import com.gogomaya.server.game.time.rule.TimeLimitRuleFormat;
 import com.gogomaya.server.money.Currency;
 
 @Embeddable
-@TypeDefs(
-    value = {   
-        @TypeDef(name = "betType", typeClass = BetRuleFormat.BetRuleHibernateType.class),
-        @TypeDef(name = "timeType", typeClass = TimeLimitRuleFormat.TimeRuleHibernateType.class)
-    }
-)
+@TypeDefs(value = { @TypeDef(name = "betType", typeClass = BetRuleFormat.BetRuleHibernateType.class),
+        @TypeDef(name = "timeType", typeClass = TimeLimitRuleFormat.TimeRuleHibernateType.class) })
 public class GameRuleSpecification implements Serializable {
 
     /**
@@ -33,31 +29,18 @@ public class GameRuleSpecification implements Serializable {
      */
     private static final long serialVersionUID = 4977326816846447559L;
 
-    final private static Currency DEFAULT_CASH_TYPE = Currency.FakeMoney;
-    final private static BetRule DEFAULT_BET_RULE = BetRuleFormat.DEFAULT_BET_RULE;
-    final private static GiveUpRule DEFAULT_GIVE_UP_RULE = GiveUpRule.DEFAULT;
-    final private static TimeLimitRule DEFAULT_TIME_RULE = TimeLimitRuleFormat.DEFAULT_TIME_RULE;
-
-    final public static GameRuleSpecification DEFAULT_RULE_SPECIFICATION = GameRuleSpecification.create(DEFAULT_CASH_TYPE, DEFAULT_BET_RULE,
-            DEFAULT_GIVE_UP_RULE, DEFAULT_TIME_RULE);
+    final public static GameRuleSpecification DEFAULT = GameRuleSpecification.create(Currency.DEFAULT, BetRule.DEFAULT, GiveUpRule.DEFAULT,
+            TimeLimitRule.DEFAULT);
 
     @Column(name = "BET_CASH_TYPE")
-    private Currency cashType;
+    private Currency currency;
     @Type(type = "betType")
-    @Columns( columns = {
-            @Column(name = "BET_TYPE"),
-            @Column(name = "BET_MIN_PRICE"),
-            @Column(name = "BET_MAX_PRICE")
-    })
+    @Columns(columns = { @Column(name = "BET_TYPE"), @Column(name = "BET_MIN_PRICE"), @Column(name = "BET_MAX_PRICE") })
     private BetRule betRule;
     @Column(name = "GIVE_UP_TYPE")
     private GiveUpRule giveUpRule;
     @Type(type = "timeType")
-    @Columns( columns = {
-            @Column(name = "TIME_TYPE"),
-            @Column(name = "TIME_BREACH_TYPE"),
-            @Column(name = "TIME_LIMIT") 
-    })
+    @Columns(columns = { @Column(name = "TIME_TYPE"), @Column(name = "TIME_BREACH_TYPE"), @Column(name = "TIME_LIMIT") })
     private TimeLimitRule timeRule;
 
     public GameRuleSpecification() {
@@ -67,18 +50,18 @@ public class GameRuleSpecification implements Serializable {
             @JsonProperty("betRule") final BetRule betRule,
             @JsonProperty("giveUpRule") final GiveUpRule giveUpRule,
             @JsonProperty("timeRule") final TimeLimitRule timeRule) {
-        this.betRule = betRule == null ? DEFAULT_BET_RULE : betRule;
-        this.giveUpRule = giveUpRule == null ? DEFAULT_GIVE_UP_RULE : giveUpRule;
-        this.timeRule = timeRule == null ? DEFAULT_TIME_RULE : timeRule;
-        this.cashType = cashType == null ? DEFAULT_CASH_TYPE : cashType;
+        this.betRule = betRule == null ? BetRule.DEFAULT : betRule;
+        this.giveUpRule = giveUpRule == null ? GiveUpRule.DEFAULT : giveUpRule;
+        this.timeRule = timeRule == null ? TimeLimitRule.DEFAULT : timeRule;
+        this.currency = cashType == null ? Currency.DEFAULT : cashType;
     }
 
-    public Currency getCashType() {
-        return cashType;
+    public Currency getCurrency() {
+        return currency;
     }
 
-    public GameRuleSpecification setCashType(Currency cashType) {
-        this.cashType = cashType;
+    public GameRuleSpecification setCurrency(Currency cashType) {
+        this.currency = cashType;
         return this;
     }
 
@@ -123,7 +106,7 @@ public class GameRuleSpecification implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((betRule == null) ? 0 : betRule.hashCode());
-        result = prime * result + ((cashType == null) ? 0 : cashType.hashCode());
+        result = prime * result + ((currency == null) ? 0 : currency.hashCode());
         result = prime * result + ((giveUpRule == null) ? 0 : giveUpRule.hashCode());
         result = prime * result + ((timeRule == null) ? 0 : timeRule.hashCode());
         return result;
@@ -143,7 +126,7 @@ public class GameRuleSpecification implements Serializable {
                 return false;
         } else if (!betRule.equals(other.betRule))
             return false;
-        if (cashType != other.cashType)
+        if (currency != other.currency)
             return false;
         if (giveUpRule == null) {
             if (other.giveUpRule != null)

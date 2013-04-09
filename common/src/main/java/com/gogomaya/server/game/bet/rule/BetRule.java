@@ -9,16 +9,16 @@ import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 import com.gogomaya.server.game.rule.GameRule;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "betType")
-@JsonSubTypes({
-    @Type(name = "fixed", value = BetFixedRule.class),
-    @Type(name = "limited", value = BetLimitedRule.class),
-    @Type(name = "unlimited", value = BetUnlimitedRule.class) })
+@JsonSubTypes({ @Type(name = "fixed", value = BetFixedRule.class), @Type(name = "limited", value = BetLimitedRule.class),
+        @Type(name = "unlimited", value = BetUnlimitedRule.class) })
 abstract public class BetRule implements GameRule {
 
     /**
      * Generated 09/04/13
      */
     private static final long serialVersionUID = -1458557269866528512L;
+
+    final public static BetRule DEFAULT = BetFixedRule.create(50);
 
     protected BetRule() {
     }

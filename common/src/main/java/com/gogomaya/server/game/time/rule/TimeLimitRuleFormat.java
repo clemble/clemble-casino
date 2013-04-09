@@ -16,8 +16,6 @@ import com.gogomaya.server.hibernate.ImmutableHibernateType;
 
 public class TimeLimitRuleFormat {
 
-    final public static TimeLimitRule DEFAULT_TIME_RULE = TimeLimitNoneRule.INSTANCE;
-
     public static enum TimeRuleType {
 
         None,
@@ -70,7 +68,7 @@ public class TimeLimitRuleFormat {
 
         @Override
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
-            TimeLimitRule timeRule = value != null ? ((TimeLimitRule) value) : DEFAULT_TIME_RULE;
+            TimeLimitRule timeRule = value != null ? ((TimeLimitRule) value) : TimeLimitRule.DEFAULT;
             TimeRuleType timeRuleType = TimeRuleType.valueOf(timeRule.getClass());
             st.setString(index++, timeRuleType.name());
             st.setString(index++, timeRule.getBreachBehavior().name());

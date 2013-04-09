@@ -58,8 +58,8 @@ public class GameOperationsTest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification gameSpecification = GameSpecification.create(
-                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.Public, GameTablePlayerNumberRule.create(2, 2)),
-                GameRuleSpecification.DEFAULT_RULE_SPECIFICATION);
+                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2)),
+                GameRuleSpecification.DEFAULT);
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, gameSpecification);
         Assert.assertNotNull(gameTable);
@@ -70,7 +70,7 @@ public class GameOperationsTest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = GameSpecification.create(
-                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.Public, GameTablePlayerNumberRule.create(2, 2)),
+                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2)),
                 GameRuleSpecification.create(Currency.FakeMoney, BetFixedRule.create(50), GiveUpRule.DEFAULT, TimeLimitNoneRule.INSTANCE));
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, specification);
@@ -99,8 +99,8 @@ public class GameOperationsTest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = GameSpecification.create(
-                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.Public, GameTablePlayerNumberRule.create(2, 2)),
-                GameRuleSpecification.DEFAULT_RULE_SPECIFICATION);
+                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2)),
+                GameRuleSpecification.DEFAULT);
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, specification);
         Assert.assertNotNull(gameTable);

@@ -4,7 +4,9 @@ import com.gogomaya.server.game.table.GameTableRule;
 
 public enum GameTablePrivacyRule implements GameTableRule {
 
-    Private,
-    Public;
+    all,
+    players;
+
+    final public static GameTablePrivacyRule DEFAULT = GameTablePrivacyRule.all;
 
 }

@@ -56,7 +56,7 @@ public class GameTableSpecificationFormats {
         @Override
         public GameTableSpecification deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
             GameTableMatchRule matchRule = GameTableMatchRule.automatic;
-            GameTablePrivacyRule privacyRule = GameTablePrivacyRule.Public;
+            GameTablePrivacyRule privacyRule = GameTablePrivacyRule.all;
             int minPlayers = 0;
             int maxPlayers = 0;
 
@@ -105,7 +105,7 @@ public class GameTableSpecificationFormats {
 
         @Override
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
-            GameTableSpecification participantRule = value != null ? (GameTableSpecification) value : GameTableSpecification.DEFAULT_TABLE_SPECIFICATION;
+            GameTableSpecification participantRule = value != null ? (GameTableSpecification) value : GameTableSpecification.DEFAULT;
 
             st.setString(index++, participantRule.getMatchRule().name());
             st.setString(index++, participantRule.getPrivacyRule().name());
@@ -129,12 +129,12 @@ public class GameTableSpecificationFormats {
         @Override
         public GameTableSpecification read(ByteBuffer readBuffer) {
             byte match = readBuffer.get();
-            GameTableMatchRule matchType = match == GameTableMatchRule.automatic.ordinal() ? GameTableMatchRule.automatic
-                    : match == GameTableMatchRule.manual.ordinal() ? GameTableMatchRule.manual : null;
+            GameTableMatchRule matchType = match == GameTableMatchRule.automatic.ordinal() ? GameTableMatchRule.automatic : match == GameTableMatchRule.manual
+                    .ordinal() ? GameTableMatchRule.manual : null;
 
             byte privacy = readBuffer.get();
-            GameTablePrivacyRule privacyType = privacy == GameTablePrivacyRule.Private.ordinal() ? GameTablePrivacyRule.Private : privacy == GameTablePrivacyRule.Public
-                    .ordinal() ? GameTablePrivacyRule.Public : null;
+            GameTablePrivacyRule privacyType = privacy == GameTablePrivacyRule.players.ordinal() ? GameTablePrivacyRule.players
+                    : privacy == GameTablePrivacyRule.all.ordinal() ? GameTablePrivacyRule.all : null;
 
             return GameTableSpecification.create(matchType, privacyType, GameTablePlayerNumberRule.create(readBuffer.getInt(), readBuffer.getInt()));
         }

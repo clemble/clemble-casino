@@ -11,9 +11,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 import com.gogomaya.server.game.rule.GameRule;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "timeLimitType")
-@JsonSubTypes({
-        @Type(name = "move", value = TimeLimitMoveRule.class),
-        @Type(name = "total", value = TimeLimitTotalRule.class),
+@JsonSubTypes({ @Type(name = "move", value = TimeLimitMoveRule.class), @Type(name = "total", value = TimeLimitTotalRule.class),
         @Type(name = "none", value = TimeLimitNoneRule.class) })
 abstract public class TimeLimitRule implements GameRule {
 
@@ -21,6 +19,8 @@ abstract public class TimeLimitRule implements GameRule {
      * Generated 09/04/13
      */
     private static final long serialVersionUID = -698053197734249764L;
+
+    final public static TimeLimitRule DEFAULT = TimeLimitNoneRule.INSTANCE;
 
     final private TimeBreachBehavior breachBehavior;
 

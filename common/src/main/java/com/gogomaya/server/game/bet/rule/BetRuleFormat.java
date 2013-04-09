@@ -16,8 +16,6 @@ import com.gogomaya.server.hibernate.ImmutableHibernateType;
 
 public class BetRuleFormat {
 
-    final public static BetRule DEFAULT_BET_RULE = BetFixedRule.create(50);
-
     public static enum BetType {
 
         Fixed,
@@ -66,7 +64,7 @@ public class BetRuleFormat {
 
         @Override
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
-            BetRule betRule = value != null ? (BetRule) value : DEFAULT_BET_RULE;
+            BetRule betRule = value != null ? (BetRule) value : BetRule.DEFAULT;
             BetType betType = BetType.valueOf(betRule.getClass());
             st.setString(index++, betType.name());
             switch (betType) {

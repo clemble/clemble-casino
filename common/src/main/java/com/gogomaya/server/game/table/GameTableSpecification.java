@@ -2,6 +2,8 @@ package com.gogomaya.server.game.table;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -21,14 +23,10 @@ import com.gogomaya.server.game.table.rule.GameTablePrivacyRule;
 @JsonSerialize(using = GameTableSpecificationJsonSerializer.class)
 @JsonDeserialize(using = GameTableSpecificationJsonDeserializer.class)
 @Embeddable
-public class GameTableSpecification implements GameTableRule {
+public class GameTableSpecification implements Serializable {
 
-    final public static GameTableMatchRule DEFAULT_MATCH_RULE = GameTableMatchRule.automatic;
-    final public static GameTablePrivacyRule DEFAULT_PRIVACY_RULE = GameTablePrivacyRule.Public;
-    final public static GameTablePlayerNumberRule DEFAULT_NUMBER_RULE = GameTablePlayerNumberRule.create(2, 2);
-
-    final public static GameTableSpecification DEFAULT_TABLE_SPECIFICATION = GameTableSpecification.create(DEFAULT_MATCH_RULE, DEFAULT_PRIVACY_RULE,
-            DEFAULT_NUMBER_RULE);
+    final public static GameTableSpecification DEFAULT = GameTableSpecification.create(GameTableMatchRule.DEFAULT, GameTablePrivacyRule.DEFAULT,
+            GameTablePlayerNumberRule.DEFAULT);
 
     /**
      * Generated 09/04/13

@@ -34,7 +34,7 @@ public class GameTableManagerTest {
     @Test
     public void testPlayersMapping(){
         GameSpecification specification = GameSpecification.create(
-                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.Public, GameTablePlayerNumberRule.create(2, 2)),
+                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2)),
                 GameRuleSpecification.create(Currency.FakeMoney, BetFixedRule.create(50), GiveUpRule.DEFAULT, TimeLimitNoneRule.INSTANCE));
 
         GameTable table = gameStateManager.reserve(1, specification);

@@ -50,10 +50,10 @@ public class GameSessionRepositoryTest {
         players.add(1L);
         players.add(2L);
 
-        GameState<?, ?> gameState = stateFactory.initialize(GameSpecification.DEFAULT_SPECIFICATION, players);
+        GameState<?, ?> gameState = stateFactory.initialize(GameSpecification.DEFAULT, players);
 
         GameTable gameTable = new GameTable();
-        gameTable.setSpecification(GameSpecification.DEFAULT_SPECIFICATION);
+        gameTable.setSpecification(GameSpecification.DEFAULT);
         gameTable.setPlayers(players);
 
         gameTable = tableRepository.save(gameTable);
