@@ -1,6 +1,8 @@
 package com.gogomaya.server.money;
 
-public enum Currency {
+import com.gogomaya.server.game.rule.GameRule;
+
+public enum Currency implements GameRule {
 
     FakeMoney;
 

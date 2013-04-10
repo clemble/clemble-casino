@@ -42,7 +42,7 @@ public class GameStateManager {
         GameTable gameTable = tableManager.poll(gameSpecification);
         gameTable.addPlayer(playerId);
 
-        GameTablePlayerNumberRule numberRule = gameSpecification.getTableSpecification().getNumberRule();
+        GameTablePlayerNumberRule numberRule = gameSpecification.getNumberRule();
         if (gameTable.getPlayers().size() >= numberRule.getMinPlayers()) {
             GameState<?, ?> gameState = stateFactory.initialize(gameSpecification, gameTable.getPlayers());
             // Step 3. Initializing start of the game session

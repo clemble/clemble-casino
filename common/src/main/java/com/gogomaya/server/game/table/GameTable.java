@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.GameSpecification;
@@ -44,7 +46,20 @@ public class GameTable implements GameSpecificationAware {
     @Embedded
     private GameServerConnection serverResource;
 
-    @Embedded
+    @Type(type = "gameSpecification")
+    @Columns(columns = { 
+            @Column(name = "SPEC_CURRENCY"),
+            @Column(name = "SPEC_BET_TYPE"),
+            @Column(name = "SPEC_BET_MIN"),
+            @Column(name = "SPEC_BET_MAX"),
+            @Column(name = "SPEC_GIVE_UP"), 
+            @Column(name = "SPEC_TIME_TYPE"),
+            @Column(name = "SPEC_TIME_LIMIT"),
+            @Column(name = "SPEC_TIME_BREACH"),
+            @Column(name = "SPEC_MATCH"),
+            @Column(name = "SPEC_PRIVACY"),
+            @Column(name = "SPEC_PLAYERS_MIN"),
+            @Column(name = "SPEC_PLAYERS_MAX")})
     private GameSpecification specification = GameSpecification.DEFAULT;
 
     @ElementCollection(fetch = FetchType.EAGER)

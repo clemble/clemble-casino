@@ -1,8 +1,8 @@
 package com.gogomaya.server.game.table.rule;
 
-import com.gogomaya.server.game.table.GameTableRule;
+import com.gogomaya.server.game.rule.GameRule;
 
-public enum GameTablePrivacyRule implements GameTableRule {
+public enum GameTablePrivacyRule implements GameRule {
 
     all,
     players;

@@ -3,14 +3,20 @@ package com.gogomaya.server.game;
 import java.nio.ByteBuffer;
 
 import com.gogomaya.server.buffer.ByteBufferStream;
-import com.gogomaya.server.game.rule.GameRuleSpecification;
-import com.gogomaya.server.game.rule.GameRuleSpecificationFormat;
-import com.gogomaya.server.game.rule.GameRuleSpecificationFormat.GameRuleSpecificationByteBufferStream;
-import com.gogomaya.server.game.table.GameTableSpecification;
-import com.gogomaya.server.game.table.GameTableSpecificationFormats;
-import com.gogomaya.server.game.table.GameTableSpecificationFormats.GameTableSpecificationByteBufferStream;
+import com.gogomaya.server.buffer.EnumByteBufferStream;
+import com.gogomaya.server.game.bet.rule.BetRule;
+import com.gogomaya.server.game.bet.rule.BetRuleFormat;
+import com.gogomaya.server.game.giveup.rule.GiveUpRule;
+import com.gogomaya.server.game.table.rule.GameTableMatchRule;
+import com.gogomaya.server.game.table.rule.GameTablePlayerNumberRule;
+import com.gogomaya.server.game.table.rule.GameTablePrivacyRule;
+import com.gogomaya.server.game.table.rule.PlayerNumberHibernateType;
+import com.gogomaya.server.game.time.rule.TimeLimitRule;
+import com.gogomaya.server.game.time.rule.TimeLimitRuleFormat;
 import com.gogomaya.server.hibernate.CombinableImmutableUserType;
+import com.gogomaya.server.hibernate.EnumStringHibernateType;
 import com.gogomaya.server.hibernate.ImmutableHibernateType;
+import com.gogomaya.server.money.Currency;
 
 public class GameSpecificationFormats {
 
@@ -29,43 +35,87 @@ public class GameSpecificationFormats {
 
     public static class GameSpecificationHibernateType extends CombinableImmutableUserType<GameSpecification> {
 
-        final private static ImmutableHibernateType<GameTableSpecification> HIBERNATE_TABLE_SPECIFICATION = new GameTableSpecificationFormats.GameTableSpecificationHybernateType();
-        final private static ImmutableHibernateType<GameRuleSpecification> HIBERNATE_RULE_SPECIFICATION = new GameRuleSpecificationFormat.GameRuleSpecificatinHybernateType();
+        final private static ImmutableHibernateType<Currency> HIBERNATE_CURRENCY_TYPE = new EnumStringHibernateType<Currency>(Currency.class);
+        final private static ImmutableHibernateType<BetRule> HIBERNATE_BET_RULE = new BetRuleFormat.BetRuleHibernateType();
+        final private static ImmutableHibernateType<GiveUpRule> HIBERNATE_GIVE_UP_RULE = new EnumStringHibernateType<GiveUpRule>(GiveUpRule.class);
+        final private static ImmutableHibernateType<TimeLimitRule> HIBERNATE_TIME_RULE = new TimeLimitRuleFormat.TimeRuleHibernateType();
+        final private static ImmutableHibernateType<GameTableMatchRule> HIBERNATE_MATCH_RULE = new EnumStringHibernateType<GameTableMatchRule>(
+                GameTableMatchRule.class);
+        final private static ImmutableHibernateType<GameTablePrivacyRule> HIBERNATE_PRIVACY_RULE = new EnumStringHibernateType<GameTablePrivacyRule>(
+                GameTablePrivacyRule.class);
+        final private static ImmutableHibernateType<GameTablePlayerNumberRule> HIBERNATE_NUMBER_RULE = new PlayerNumberHibernateType();
 
         public GameSpecificationHibernateType() {
-            super(HIBERNATE_TABLE_SPECIFICATION, HIBERNATE_RULE_SPECIFICATION);
+            super(HIBERNATE_CURRENCY_TYPE, HIBERNATE_BET_RULE, HIBERNATE_GIVE_UP_RULE, HIBERNATE_TIME_RULE, HIBERNATE_MATCH_RULE, HIBERNATE_PRIVACY_RULE, HIBERNATE_NUMBER_RULE);
         }
 
         @Override
         public GameSpecification construct(Object[] readValues) {
-            return GameSpecification.create((GameTableSpecification) readValues[0], (GameRuleSpecification) readValues[1]);
+            return GameSpecification.create(
+                    (Currency) readValues[0],
+                    (BetRule) readValues[1], 
+                    (GiveUpRule) readValues[2],
+                    (TimeLimitRule) readValues[3],
+                    (GameTableMatchRule) readValues[4],
+                    (GameTablePrivacyRule) readValues[5],
+                    (GameTablePlayerNumberRule) readValues[6]);
         }
 
         @Override
         public Object[] deConstruct(GameSpecification writeValue) {
-            return new Object[] { writeValue.getTableSpecification(), writeValue.getRuleSpecification() };
+            return new Object[] {
+                    writeValue.getCurrency(),
+                    writeValue.getBetRule(),
+                    writeValue.getGiveUpRule(),
+                    writeValue.getTimeRule(),
+                    writeValue.getMatchRule(),
+                    writeValue.getPrivacyRule(),
+                    writeValue.getNumberRule()};
         }
 
     }
 
     public static class GameSpecificationByteBufferStream implements ByteBufferStream<GameSpecification> {
 
-        final private static ByteBufferStream<GameRuleSpecification> GAME_RULE_SPECIFICATION_STREAM = new GameRuleSpecificationByteBufferStream();
-        final private static ByteBufferStream<GameTableSpecification> GAME_TABLE_SPECIFICATION_STREAM = new GameTableSpecificationByteBufferStream();
+        final private ByteBufferStream<BetRule> betBufferStream = new BetRuleFormat.CustomBetRuleByteBufferStream();
+        final private ByteBufferStream<GiveUpRule> giveUpBufferStream = new EnumByteBufferStream<GiveUpRule>(GiveUpRule.class);
+        final private ByteBufferStream<TimeLimitRule> timeRuleBufferStream = new TimeLimitRuleFormat.CustomTimeRuleByteBufferStream();
 
         @Override
-        public ByteBuffer write(GameSpecification gameSpecification, ByteBuffer writeBuffer) {
-            GAME_RULE_SPECIFICATION_STREAM.write(gameSpecification.getRuleSpecification(), writeBuffer);
-            GAME_TABLE_SPECIFICATION_STREAM.write(gameSpecification.getTableSpecification(), writeBuffer);
+        public ByteBuffer write(GameSpecification value, ByteBuffer writeBuffer) {
+            writeBuffer.put((byte) value.getCurrency().ordinal());
+
+            betBufferStream.write(value.getBetRule(), writeBuffer);
+            giveUpBufferStream.write(value.getGiveUpRule(), writeBuffer);
+            timeRuleBufferStream.write(value.getTimeRule(), writeBuffer);
+
+            writeBuffer.put((byte) value.getMatchRule().ordinal());
+            writeBuffer.put((byte) value.getPrivacyRule().ordinal());
+            writeBuffer.putInt(value.getNumberRule().getMinPlayers());
+            writeBuffer.putInt(value.getNumberRule().getMaxPlayers());
+
             return writeBuffer;
         }
 
         @Override
         public GameSpecification read(ByteBuffer readBuffer) {
-            GameRuleSpecification ruleSpecification = GAME_RULE_SPECIFICATION_STREAM.read(readBuffer);
-            GameTableSpecification tableSpecification = GAME_TABLE_SPECIFICATION_STREAM.read(readBuffer);
+            byte cash = readBuffer.get();
+            Currency currency = cash == Currency.FakeMoney.ordinal() ? Currency.FakeMoney : null;
 
-            return GameSpecification.create(tableSpecification, ruleSpecification);
+            BetRule betRule = betBufferStream.read(readBuffer);
+            GiveUpRule giveUpRule = giveUpBufferStream.read(readBuffer);
+            TimeLimitRule timeRule = timeRuleBufferStream.read(readBuffer);
+
+            byte match = readBuffer.get();
+            GameTableMatchRule matchType = match == GameTableMatchRule.automatic.ordinal() ? GameTableMatchRule.automatic : match == GameTableMatchRule.manual
+                    .ordinal() ? GameTableMatchRule.manual : null;
+            byte privacy = readBuffer.get();
+            GameTablePrivacyRule privacyType = privacy == GameTablePrivacyRule.players.ordinal() ? GameTablePrivacyRule.players
+                    : privacy == GameTablePrivacyRule.all.ordinal() ? GameTablePrivacyRule.all : null;
+
+            GameTablePlayerNumberRule numberRule = GameTablePlayerNumberRule.create(readBuffer.getInt(), readBuffer.getInt());
+
+            return GameSpecification.create(currency, betRule, giveUpRule, timeRule, matchType, privacyType, numberRule);
         }
 
     }

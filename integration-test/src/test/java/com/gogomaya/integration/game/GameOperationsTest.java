@@ -15,10 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.bet.rule.BetFixedRule;
 import com.gogomaya.server.game.giveup.rule.GiveUpRule;
-import com.gogomaya.server.game.rule.GameRuleSpecification;
 import com.gogomaya.server.game.session.GameSessionState;
 import com.gogomaya.server.game.table.GameTable;
-import com.gogomaya.server.game.table.GameTableSpecification;
 import com.gogomaya.server.game.table.rule.GameTableMatchRule;
 import com.gogomaya.server.game.table.rule.GameTablePlayerNumberRule;
 import com.gogomaya.server.game.table.rule.GameTablePrivacyRule;
@@ -57,9 +55,7 @@ public class GameOperationsTest {
     public void createWithGameSpecification() {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification gameSpecification = GameSpecification.create(
-                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2)),
-                GameRuleSpecification.DEFAULT);
+        GameSpecification gameSpecification = GameSpecification.DEFAULT;
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, gameSpecification);
         Assert.assertNotNull(gameTable);
@@ -69,9 +65,7 @@ public class GameOperationsTest {
     public void createTicTacToeSpecification() {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification specification = GameSpecification.create(
-                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2)),
-                GameRuleSpecification.create(Currency.FakeMoney, BetFixedRule.create(50), GiveUpRule.DEFAULT, TimeLimitNoneRule.INSTANCE));
+        GameSpecification specification = GameSpecification.create(Currency.FakeMoney, BetFixedRule.create(50), GiveUpRule.DEFAULT, TimeLimitNoneRule.INSTANCE, GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2));
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, specification);
         Assert.assertNotNull(gameTable);
@@ -98,9 +92,7 @@ public class GameOperationsTest {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification specification = GameSpecification.create(
-                GameTableSpecification.create(GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2)),
-                GameRuleSpecification.DEFAULT);
+        GameSpecification specification = GameSpecification.DEFAULT;
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.create(player, specification);
         Assert.assertNotNull(gameTable);

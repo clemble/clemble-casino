@@ -3,10 +3,10 @@ package com.gogomaya.server.game.table.rule;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import com.gogomaya.server.game.table.GameTableRule;
+import com.gogomaya.server.game.rule.GameRule;
 
 @Embeddable
-public class GameTablePlayerNumberRule implements GameTableRule {
+public class GameTablePlayerNumberRule implements GameRule {
 
     /**
      * Generated 21/03/13
