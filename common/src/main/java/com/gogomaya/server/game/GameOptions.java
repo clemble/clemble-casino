@@ -17,6 +17,9 @@ public class GameOptions implements Serializable {
      */
     private static final long serialVersionUID = -9099690454645343595L;
 
+    final public static GameOptions DEFAULT = new GameOptions(BetRule.DEFAULT_OPTIONS, Currency.DEFAULT_OPTIONS, GiveUpRule.DEFAULT_OPTIONS,
+            GameTableMatchRule.DEFAULT_OPTIONS, GameTablePlayerNumberRule.DEFAULT_OPTIONS, GameTablePrivacyRule.DEFAULT_OPTIONS, TimeLimitRule.DEFAULT_OPTIONS);
+
     final private GameRuleOptions<Currency> currencyOptions;
 
     final private GameRuleOptions<BetRule> betOptions;

@@ -26,6 +26,7 @@ import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.active.session.SessionController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
+import com.gogomaya.server.web.game.GameOptionsController;
 import com.gogomaya.server.web.registration.RegistrationLoginController;
 import com.gogomaya.server.web.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.registration.RegistrationSocialConnectionController;
@@ -104,6 +105,11 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     @Bean
     public SessionController sessionController() {
         return new SessionController(stateManager, sessionRepository);
+    }
+    
+    @Bean
+    public GameOptionsController gameOptionsController() {
+        return new GameOptionsController();
     }
 
 }

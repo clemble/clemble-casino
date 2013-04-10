@@ -3,6 +3,7 @@ package com.gogomaya.server.game.table.rule;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.gogomaya.server.game.GameRuleOptions;
 import com.gogomaya.server.game.rule.GameRule;
 
 @Embeddable
@@ -14,6 +15,7 @@ public class GameTablePlayerNumberRule implements GameRule {
     private static final long serialVersionUID = -2230312436839159909L;
 
     final static public GameTablePlayerNumberRule DEFAULT = GameTablePlayerNumberRule.create(2, 2);
+    final static public GameRuleOptions<GameTablePlayerNumberRule> DEFAULT_OPTIONS = new GameRuleOptions<GameTablePlayerNumberRule>(DEFAULT);
 
     @Column(name = "TABLE_PLAYERS_MIN")
     private int minPlayers;

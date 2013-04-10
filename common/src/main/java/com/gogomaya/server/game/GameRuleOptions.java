@@ -1,25 +1,32 @@
 package com.gogomaya.server.game;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.game.rule.GameRule;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 public class GameRuleOptions<T extends GameRule> {
 
     @JsonProperty("default")
     final private T defaultOption;
 
-    @JsonProperty("all")
+    @JsonProperty("options")
     final private Collection<T> allOptions;
 
     @JsonCreator
-    public GameRuleOptions(@JsonProperty("default") T defaultOption, @JsonProperty("all") Collection<T> allOptions) {
+    public GameRuleOptions(@JsonProperty("default") T defaultOption, @JsonProperty("options") T ... otherOptions) {
         this.defaultOption = defaultOption;
-        this.allOptions = ImmutableList.<T> copyOf(allOptions);
+        if(otherOptions == null || otherOptions.length == 0) {
+            this.allOptions = ImmutableSet.<T>of(defaultOption);
+        } else {
+            otherOptions = Arrays.copyOf(otherOptions, otherOptions.length + 1);
+            otherOptions[otherOptions.length - 1] = defaultOption;
+            this.allOptions = ImmutableSet.<T>copyOf(otherOptions);
+        }
     }
 
     public T getDefault() {

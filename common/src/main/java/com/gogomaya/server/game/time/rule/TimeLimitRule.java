@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeInfo.As;
 import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 
+import com.gogomaya.server.game.GameRuleOptions;
 import com.gogomaya.server.game.rule.GameRule;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "timeLimitType")
@@ -21,6 +22,7 @@ abstract public class TimeLimitRule implements GameRule {
     private static final long serialVersionUID = -698053197734249764L;
 
     final public static TimeLimitRule DEFAULT = TimeLimitNoneRule.INSTANCE;
+    final public static GameRuleOptions<TimeLimitRule> DEFAULT_OPTIONS = new GameRuleOptions<TimeLimitRule>(DEFAULT);
 
     final private TimeBreachBehavior breachBehavior;
 
