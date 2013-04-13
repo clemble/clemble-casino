@@ -10,8 +10,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.tictactoe.TicTacToePlayerState;
-import com.gogomaya.server.game.action.tictactoe.TicTacToeState;
+import com.gogomaya.server.game.tictactoe.action.TicTacToePlayerState;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 
 public class GameStateSerializationTest {
 

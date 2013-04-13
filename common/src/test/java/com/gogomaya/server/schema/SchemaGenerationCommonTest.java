@@ -4,8 +4,9 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.junit.Test;
 
-import com.gogomaya.server.game.session.GameSession;
-import com.gogomaya.server.game.table.GameTable;
+import com.gogomaya.server.game.tictactoe.TicTacToeSession;
+import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
@@ -34,8 +35,9 @@ public class SchemaGenerationCommonTest extends AbstractCommonTest {
         org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
 
         configuration
-        .addAnnotatedClass(GameSession.class)
-        .addAnnotatedClass(GameTable.class)
+        .addAnnotatedClass(TicTacToeSpecification.class)
+        .addAnnotatedClass(TicTacToeSession.class)
+        .addAnnotatedClass(TicTacToeTable.class)
         .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
         .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 

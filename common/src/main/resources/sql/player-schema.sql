@@ -15,7 +15,7 @@
 
     create table PLAYER_CREDENTIALS (
         PLAYER_ID bigint not null,
-        EMAIL varchar(128) unique,
+        EMAIL varchar(128),
         PASSWORD varchar(255),
         primary key (PLAYER_ID)
     ) ENGINE=InnoDB;
@@ -48,6 +48,9 @@
         CURRENCY integer,
         AMOUNT integer
     ) ENGINE=InnoDB;
+
+    alter table PLAYER_CREDENTIALS 
+        add constraint uc_PLAYER_CREDENTIALS_1 unique (EMAIL);
 
     alter table PLAYER_WALLET_MONEY 
         add index FK927D05788C841CF1 (PLAYER_ID), 

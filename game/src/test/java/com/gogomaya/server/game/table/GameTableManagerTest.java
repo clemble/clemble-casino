@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.table;
 
+import javax.inject.Inject;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -10,14 +12,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gogomaya.server.game.GameSpecification;
-import com.gogomaya.server.game.bet.rule.BetFixedRule;
-import com.gogomaya.server.game.giveup.rule.GiveUpRule;
-import com.gogomaya.server.game.match.GameStateManager;
-import com.gogomaya.server.game.table.rule.GameTableMatchRule;
-import com.gogomaya.server.game.table.rule.GameTablePlayerNumberRule;
-import com.gogomaya.server.game.table.rule.GameTablePrivacyRule;
-import com.gogomaya.server.game.time.rule.TimeLimitNoneRule;
+import com.gogomaya.server.game.SpecificationName;
+import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
+import com.gogomaya.server.game.match.TicTacToeStateManager;
+import com.gogomaya.server.game.rule.bet.FixedBetRule;
+import com.gogomaya.server.game.rule.construction.MatchRule;
+import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
+import com.gogomaya.server.game.rule.construction.PrivacyRule;
+import com.gogomaya.server.game.rule.giveup.GiveUpRule;
+import com.gogomaya.server.game.rule.time.MoveTimeRule;
+import com.gogomaya.server.game.rule.time.TotalTimeRule;
+import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 
@@ -26,19 +32,27 @@ import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 @ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
 @Transactional
 public class GameTableManagerTest {
-    
-    @Autowired
-    private GameStateManager gameStateManager;
+
+    @Inject
+    TicTacToeStateManager gameStateManager;
+
+    @Inject
+    TicTacToeSpecificationRepository specificationRepository;
 
     @Test
-    public void testPlayersMapping(){
-        GameSpecification specification = GameSpecification.create(Currency.FakeMoney, BetFixedRule.create(50), GiveUpRule.DEFAULT, TimeLimitNoneRule.INSTANCE, GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2));
+    public void testPlayersMapping() {
+        TicTacToeSpecification specification = new TicTacToeSpecification().setName(SpecificationName.DEFAULT).setCurrency(Currency.FakeMoney)
+                .setBetRule(new FixedBetRule(50)).setGiveUpRule(GiveUpRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
+                .setMoveTimeRule(MoveTimeRule.DEFAULT).setMatchRule(MatchRule.automatic).setPrivacayRule(PrivacyRule.players)
+                .setNumberRule(PlayerNumberRule.TWO);
 
-        GameTable table = gameStateManager.reserve(1, specification);
-        
+        specificationRepository.saveAndFlush(specification);
+
+        TicTacToeTable table = gameStateManager.reserve(1, specification);
+
         Assert.assertEquals(table.getSpecification(), specification);
 
-        GameTable anotherTable = gameStateManager.reserve(2, specification);
+        TicTacToeTable anotherTable = gameStateManager.reserve(2, specification);
 
         Assert.assertEquals(table.getTableId(), anotherTable.getTableId());
     }

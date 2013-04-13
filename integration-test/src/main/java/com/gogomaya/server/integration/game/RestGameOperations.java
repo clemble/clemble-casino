@@ -28,8 +28,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.game.GameSpecification;
+import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
-import com.gogomaya.server.game.table.GameTable;
+import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.player.Player;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.DefaultWebSocketListener;
@@ -51,13 +53,13 @@ public class RestGameOperations implements GameOperations {
     }
 
     @Override
-    public GameTable create(Player player) {
-        return create(player, null);
+    public TicTacToeTable start(Player player) {
+        return start(player, TicTacToeSpecification.DEFAULT);
     }
 
     @Override
-    public GameTable create(Player player, GameSpecification gameSpecification) {
-        gameSpecification = gameSpecification == null ? GameSpecification.DEFAULT : gameSpecification;
+    public TicTacToeTable start(Player player, GameSpecification gameSpecification) {
+        gameSpecification = checkNotNull(gameSpecification);
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(player.getPlayerId()));
@@ -65,17 +67,17 @@ public class RestGameOperations implements GameOperations {
         // Step 2. Generating request
         HttpEntity<GameSpecification> requestEntity = new HttpEntity<GameSpecification>(gameSpecification, header);
         // Step 3. Rest template generation
-        return restTemplate.exchange(baseUrl + CREATE_URL, HttpMethod.POST, requestEntity, GameTable.class).getBody();
+        return restTemplate.exchange(baseUrl + CREATE_URL, HttpMethod.POST, requestEntity, TicTacToeTable.class).getBody();
     }
 
     @Override
-    public void addListener(final GameTable gameTable, final GameListener gameListener) {
+    public void listen(final GameTable<?> gameTable, final GameListener gameListener) {
         // Step 1. Creating Server connection
-        addListener(gameTable, gameListener, ListenerChannel.Rabbit);
+        listen(gameTable, gameListener, ListenerChannel.Rabbit);
     }
 
     @Override
-    public void addListener(final GameTable gameTable, final GameListener gameListener, ListenerChannel listenerChannel) {
+    public void listen(final GameTable<?> gameTable, final GameListener gameListener, ListenerChannel listenerChannel) {
         // Step 1. Setting default value
         listenerChannel = listenerChannel == null ? ListenerChannel.Rabbit : listenerChannel;
         // Step 2. Processing based on listener type
@@ -95,7 +97,7 @@ public class RestGameOperations implements GameOperations {
 
     }
 
-    private void addRabbitListener(final GameTable gameTable, final GameListener gameListener) {
+    private void addRabbitListener(final GameTable<?> gameTable, final GameListener gameListener) {
         // Step 1. Creating Server connection
         GameServerConnection serverConnection = gameTable.getServerResource();
         ConnectionFactory connectionFactory = new CachingConnectionFactory(serverConnection.getNotificationURL());
@@ -114,7 +116,7 @@ public class RestGameOperations implements GameOperations {
                 try {
                     System.out.println("Rabbit message received");
                     // Step 1. Parsing GameTable
-                    GameTable gameTable = objectMapper.readValue(new String(message.getBody()), GameTable.class);
+                    TicTacToeTable gameTable = objectMapper.readValue(new String(message.getBody()), TicTacToeTable.class);
                     // Step 2. Updating
                     gameListener.updated(gameTable);
                 } catch (Exception e) {
@@ -125,7 +127,7 @@ public class RestGameOperations implements GameOperations {
         listenerContainer.start();
     }
 
-    private void addStompListener(final GameTable gameTable, final GameListener gameListener) {
+    private void addStompListener(final GameTable<?> gameTable, final GameListener gameListener) {
         // Step 1. Creating a game table client
         Client c;
         try {
@@ -137,7 +139,7 @@ public class RestGameOperations implements GameOperations {
                     System.out.println("Stomp message received");
                     try {
                         // Step 1. Creating game table
-                        GameTable gameTable = objectMapper.readValue(arg1, GameTable.class);
+                        TicTacToeTable gameTable = objectMapper.readValue(arg1, TicTacToeTable.class);
                         // Step 2. Updating game table
                         gameListener.updated(gameTable);
                     } catch (Exception e) {
@@ -152,7 +154,7 @@ public class RestGameOperations implements GameOperations {
         }
     }
 
-    private void addSockJSListener(final GameTable gameTable, final GameListener gameListener) {
+    private void addSockJSListener(final GameTable<?> gameTable, final GameListener gameListener) {
         AsyncHttpClient asyncClient = new AsyncHttpClient();
         try {
             WebSocket webSocket = asyncClient.prepareGet("http://" + gameTable.getServerResource().getNotificationURL() + ":15674/stomp")
@@ -168,7 +170,7 @@ public class RestGameOperations implements GameOperations {
                         public void onMessage(String message) {
                             super.onMessage(message);
                             try {
-                                GameTable gameTable = objectMapper.readValue(message, GameTable.class);
+                                TicTacToeTable gameTable = objectMapper.readValue(message, TicTacToeTable.class);
                                 gameListener.updated(gameTable);
                             } catch (Exception e) {
                                 throw new RuntimeException(e);

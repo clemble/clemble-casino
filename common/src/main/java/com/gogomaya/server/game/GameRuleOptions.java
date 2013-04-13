@@ -18,14 +18,14 @@ public class GameRuleOptions<T extends GameRule> {
     final private Collection<T> allOptions;
 
     @JsonCreator
-    public GameRuleOptions(@JsonProperty("default") T defaultOption, @JsonProperty("options") T ... otherOptions) {
+    public GameRuleOptions(@JsonProperty("default") T defaultOption, @JsonProperty("options") T... otherOptions) {
         this.defaultOption = defaultOption;
-        if(otherOptions == null || otherOptions.length == 0) {
-            this.allOptions = ImmutableSet.<T>of(defaultOption);
+        if (otherOptions == null || otherOptions.length == 0) {
+            this.allOptions = ImmutableSet.<T> of(defaultOption);
         } else {
             otherOptions = Arrays.copyOf(otherOptions, otherOptions.length + 1);
             otherOptions[otherOptions.length - 1] = defaultOption;
-            this.allOptions = ImmutableSet.<T>copyOf(otherOptions);
+            this.allOptions = ImmutableSet.<T> copyOf(otherOptions);
         }
     }
 
@@ -35,6 +35,10 @@ public class GameRuleOptions<T extends GameRule> {
 
     public Collection<T> getOptions() {
         return allOptions;
+    }
+
+    public boolean contains(T option) {
+        return allOptions.contains(option);
     }
 
     @Override

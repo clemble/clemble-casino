@@ -7,7 +7,8 @@ import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonSubTypes.Type;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 
-import com.gogomaya.server.game.action.tictactoe.TicTacToeState;
+import com.gogomaya.server.game.action.move.GameMove;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = TicTacToeState.class, name = "ticTacToe") })

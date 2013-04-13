@@ -1,87 +1,107 @@
 
-    alter table GAME_SESSION 
+    alter table TIC_TAC_TOE_SESSION 
         drop 
-        foreign key FK8E8AE729955BF882;
+        foreign key FKD9704F47F894E9E;
 
-    alter table GAME_SESSION_PLAYERS 
+    alter table TIC_TAC_TOE_SESSION_PLAYERS 
         drop 
-        foreign key FK7D99A27C96971DCA;
+        foreign key FK409C0C9A25CB574A;
 
-    alter table GAME_TABLE 
+    alter table TIC_TAC_TOE_TABLE 
         drop 
-        foreign key FK8D61AD2196971DCA;
+        foreign key FK941E84BF25CB574A;
 
-    alter table GAME_TABLE_PLAYERS 
+    alter table TIC_TAC_TOE_TABLE 
         drop 
-        foreign key FK9226F074955BF882;
+        foreign key FK941E84BFEA570121;
 
-    drop table if exists GAME_SESSION;
+    alter table TIC_TAC_TOE_TABLE_PLAYERS 
+        drop 
+        foreign key FK18594A12F894E9E;
 
-    drop table if exists GAME_SESSION_PLAYERS;
+    drop table if exists TIC_TAC_TOE_SESSION;
 
-    drop table if exists GAME_TABLE;
+    drop table if exists TIC_TAC_TOE_SESSION_PLAYERS;
 
-    drop table if exists GAME_TABLE_PLAYERS;
+    drop table if exists TIC_TAC_TOE_SPECIFICATION;
 
-    create table GAME_SESSION (
+    drop table if exists TIC_TAC_TOE_TABLE;
+
+    drop table if exists TIC_TAC_TOE_TABLE_PLAYERS;
+
+    create table TIC_TAC_TOE_SESSION (
         SESSION_ID bigint not null auto_increment,
         SESSION_STATE integer,
         GAME_STATE varchar(4096),
         TABLE_ID bigint not null,
-        primary key (SESSION_ID),
-        unique (TABLE_ID)
+        primary key (SESSION_ID)
     ) ENGINE=InnoDB;
 
-    create table GAME_SESSION_PLAYERS (
+    create table TIC_TAC_TOE_SESSION_PLAYERS (
         SESSION_ID bigint not null,
         players bigint
     ) ENGINE=InnoDB;
 
-    create table GAME_TABLE (
+    create table TIC_TAC_TOE_SPECIFICATION (
+        SPECIFICATION_GROUP varchar(255) not null,
+        NAME varchar(255) not null,
+        PRICE integer,
+        CURRENCY varchar(255),
+        GIVE_UP varchar(255),
+        MATCH varchar(255),
+        MOVE_TIME_LIMIT integer,
+        MOVE_TIME_PUNISHMENT varchar(255),
+        NUMBER varchar(255),
+        PRIVACY varchar(255),
+        TOTAL_TIME_LIMIT integer,
+        TOTAL_TIME_PUNISHMENT varchar(255),
+        primary key (SPECIFICATION_GROUP, NAME)
+    ) ENGINE=InnoDB;
+
+    create table TIC_TAC_TOE_TABLE (
         TABLE_ID bigint not null auto_increment,
         NOTIFICATION_URL varchar(255),
         PUBLISH_URL varchar(255),
-        SPEC_CURRENCY varchar(255),
-        SPEC_BET_TYPE varchar(255),
-        SPEC_BET_MIN integer,
-        SPEC_BET_MAX integer,
-        SPEC_GIVE_UP varchar(255),
-        SPEC_TIME_TYPE varchar(255),
-        SPEC_TIME_LIMIT varchar(255),
-        SPEC_TIME_BREACH integer,
-        SPEC_MATCH varchar(255),
-        SPEC_PRIVACY varchar(255),
-        SPEC_PLAYERS_MIN integer,
-        SPEC_PLAYERS_MAX integer,
         SESSION_ID bigint,
+        SPECIFICATION_GROUP varchar(255),
+        NAME varchar(255),
         primary key (TABLE_ID)
     ) ENGINE=InnoDB;
 
-    create table GAME_TABLE_PLAYERS (
+    create table TIC_TAC_TOE_TABLE_PLAYERS (
         TABLE_ID bigint not null,
         players bigint
     ) ENGINE=InnoDB;
 
-    alter table GAME_SESSION 
-        add index FK8E8AE729955BF882 (TABLE_ID), 
-        add constraint FK8E8AE729955BF882 
+    alter table TIC_TAC_TOE_SESSION 
+        add constraint UK_D9704F47CAA0FB2C unique (TABLE_ID);
+
+    alter table TIC_TAC_TOE_SESSION 
+        add index FKD9704F47F894E9E (TABLE_ID), 
+        add constraint FKD9704F47F894E9E 
         foreign key (TABLE_ID) 
-        references GAME_TABLE (TABLE_ID);
+        references TIC_TAC_TOE_TABLE (TABLE_ID);
 
-    alter table GAME_SESSION_PLAYERS 
-        add index FK7D99A27C96971DCA (SESSION_ID), 
-        add constraint FK7D99A27C96971DCA 
+    alter table TIC_TAC_TOE_SESSION_PLAYERS 
+        add index FK409C0C9A25CB574A (SESSION_ID), 
+        add constraint FK409C0C9A25CB574A 
         foreign key (SESSION_ID) 
-        references GAME_SESSION (SESSION_ID);
+        references TIC_TAC_TOE_SESSION (SESSION_ID);
 
-    alter table GAME_TABLE 
-        add index FK8D61AD2196971DCA (SESSION_ID), 
-        add constraint FK8D61AD2196971DCA 
+    alter table TIC_TAC_TOE_TABLE 
+        add index FK941E84BF25CB574A (SESSION_ID), 
+        add constraint FK941E84BF25CB574A 
         foreign key (SESSION_ID) 
-        references GAME_SESSION (TABLE_ID);
+        references TIC_TAC_TOE_SESSION (TABLE_ID);
 
-    alter table GAME_TABLE_PLAYERS 
-        add index FK9226F074955BF882 (TABLE_ID), 
-        add constraint FK9226F074955BF882 
+    alter table TIC_TAC_TOE_TABLE 
+        add index FK941E84BFEA570121 (SPECIFICATION_GROUP, NAME), 
+        add constraint FK941E84BFEA570121 
+        foreign key (SPECIFICATION_GROUP, NAME) 
+        references TIC_TAC_TOE_SPECIFICATION (SPECIFICATION_GROUP, NAME);
+
+    alter table TIC_TAC_TOE_TABLE_PLAYERS 
+        add index FK18594A12F894E9E (TABLE_ID), 
+        add constraint FK18594A12F894E9E 
         foreign key (TABLE_ID) 
-        references GAME_TABLE (TABLE_ID);
+        references TIC_TAC_TOE_TABLE (TABLE_ID);

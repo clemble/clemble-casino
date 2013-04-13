@@ -12,8 +12,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaValidationService;
-import com.gogomaya.server.game.match.GameStateManager;
-import com.gogomaya.server.game.session.GameSessionRepository;
+import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
+import com.gogomaya.server.game.match.TicTacToeStateManager;
+import com.gogomaya.server.game.session.TicTacToeSessionRepository;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.SocialConnectionData;
@@ -26,7 +27,7 @@ import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.active.session.SessionController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
-import com.gogomaya.server.web.game.GameOptionsController;
+import com.gogomaya.server.web.game.options.GameOptionsController;
 import com.gogomaya.server.web.registration.RegistrationLoginController;
 import com.gogomaya.server.web.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.registration.RegistrationSocialConnectionController;
@@ -50,10 +51,13 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     GogomayaValidationService validationService;
 
     @Inject
-    GameStateManager stateManager;
+    TicTacToeStateManager stateManager;
 
     @Inject
-    GameSessionRepository sessionRepository;
+    TicTacToeSessionRepository sessionRepository;
+
+    @Inject
+    TicTacToeSpecificationRepository specificationRepository;
 
     @Inject
     ObjectMapper objectMapper;
@@ -104,9 +108,9 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     public SessionController sessionController() {
-        return new SessionController(stateManager, sessionRepository);
+        return new SessionController(stateManager, sessionRepository, specificationRepository);
     }
-    
+
     @Bean
     public GameOptionsController gameOptionsController() {
         return new GameOptionsController();

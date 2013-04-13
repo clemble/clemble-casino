@@ -12,32 +12,42 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.game.GameSpecification;
-import com.gogomaya.server.game.match.GameStateManager;
-import com.gogomaya.server.game.session.GameSession;
-import com.gogomaya.server.game.session.GameSessionRepository;
-import com.gogomaya.server.game.table.GameTable;
+import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
+import com.gogomaya.server.game.match.TicTacToeStateManager;
+import com.gogomaya.server.game.session.TicTacToeSessionRepository;
+import com.gogomaya.server.game.tictactoe.TicTacToeSession;
+import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 
 @Controller
 public class SessionController {
 
-    final private GameStateManager matchingService;
-    final private GameSessionRepository sessionRepository;
+    final private TicTacToeStateManager matchingService;
+    final private TicTacToeSessionRepository sessionRepository;
+    final private TicTacToeSpecificationRepository specificationRepository;
 
-    public SessionController(final GameStateManager matchingService, final GameSessionRepository sessionRepository) {
+    public SessionController(final TicTacToeStateManager matchingService,
+            final TicTacToeSessionRepository sessionRepository,
+            final TicTacToeSpecificationRepository specificationRepository) {
         this.matchingService = checkNotNull(matchingService);
         this.sessionRepository = checkNotNull(sessionRepository);
+        this.specificationRepository = checkNotNull(specificationRepository);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/session", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameTable create(@RequestHeader("playerId") final long playerId, @RequestBody final GameSpecification gameSpecification) {
+    public @ResponseBody
+    TicTacToeTable create(@RequestHeader("playerId") final long playerId, @RequestBody final TicTacToeSpecification gameSpecification) {
+        // Step 1. This is temporary, exception must be thrown in this case
+        if (specificationRepository.findOne(gameSpecification.getName()) == null)
+            specificationRepository.saveAndFlush(gameSpecification);
         return matchingService.reserve(playerId, gameSpecification);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/active/session/{sessionId}", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody GameSession get(@PathVariable("sessionId") final long sessionId) {
+    public @ResponseBody
+    TicTacToeSession get(@PathVariable("sessionId") final long sessionId) {
         return sessionRepository.findOne(sessionId);
     }
 }

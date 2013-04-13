@@ -13,14 +13,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.GameSpecification;
-import com.gogomaya.server.game.bet.rule.BetFixedRule;
-import com.gogomaya.server.game.giveup.rule.GiveUpRule;
-import com.gogomaya.server.game.session.GameSessionState;
-import com.gogomaya.server.game.table.GameTable;
-import com.gogomaya.server.game.table.rule.GameTableMatchRule;
-import com.gogomaya.server.game.table.rule.GameTablePlayerNumberRule;
-import com.gogomaya.server.game.table.rule.GameTablePrivacyRule;
-import com.gogomaya.server.game.time.rule.TimeLimitNoneRule;
+import com.gogomaya.server.game.SpecificationName;
+import com.gogomaya.server.game.action.GameSessionState;
+import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.rule.bet.FixedBetRule;
+import com.gogomaya.server.game.rule.construction.MatchRule;
+import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
+import com.gogomaya.server.game.rule.construction.PrivacyRule;
+import com.gogomaya.server.game.rule.giveup.GiveUpRule;
+import com.gogomaya.server.game.rule.time.MoveTimeRule;
+import com.gogomaya.server.game.rule.time.TotalTimeRule;
+import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.data.DataGenerator;
 import com.gogomaya.server.integration.game.GameListener;
 import com.gogomaya.server.integration.game.GameOperations;
@@ -47,7 +51,7 @@ public class GameOperationsTest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         // Step 2. Creating game table
-        GameTable gameTable = gameOperations.create(player);
+        GameTable gameTable = gameOperations.start(player);
         Assert.assertNotNull(gameTable);
     }
 
@@ -55,9 +59,9 @@ public class GameOperationsTest {
     public void createWithGameSpecification() {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification gameSpecification = GameSpecification.DEFAULT;
+        GameSpecification gameSpecification = TicTacToeSpecification.DEFAULT;
         // Step 2. Creating game table
-        GameTable gameTable = gameOperations.create(player, gameSpecification);
+        GameTable gameTable = gameOperations.start(player, gameSpecification);
         Assert.assertNotNull(gameTable);
     }
 
@@ -65,16 +69,19 @@ public class GameOperationsTest {
     public void createTicTacToeSpecification() {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification specification = GameSpecification.create(Currency.FakeMoney, BetFixedRule.create(50), GiveUpRule.DEFAULT, TimeLimitNoneRule.INSTANCE, GameTableMatchRule.automatic, GameTablePrivacyRule.all, GameTablePlayerNumberRule.create(2, 2));
+        GameSpecification specification = new TicTacToeSpecification().setCurrency(Currency.FakeMoney).setBetRule(new FixedBetRule(50))
+                .setGiveUpRule(GiveUpRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT).setMoveTimeRule(MoveTimeRule.DEFAULT)
+                .setMatchRule(MatchRule.automatic).setPrivacayRule(PrivacyRule.players).setNumberRule(PlayerNumberRule.TWO)
+                .setName(new SpecificationName("test", "test"));
         // Step 2. Creating game table
-        GameTable gameTable = gameOperations.create(player, specification);
+        TicTacToeTable gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
         // Step 3. Adding another player to the table
         Player anotherPlayer = playerOperations.createPlayer(DataGenerator.randomProfile());
         Assert.assertNotSame(anotherPlayer.getPlayerId(), player.getPlayerId());
-        gameTable = gameOperations.create(anotherPlayer, specification);
+        gameTable = gameOperations.start(anotherPlayer, specification);
         Assert.assertNotNull(gameTable);
-        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), GameSessionState.Active);
+        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), GameSessionState.ACTIVE);
         Assert.assertNotNull(gameTable.getCurrentSession().getGameState());
     }
 
@@ -92,12 +99,12 @@ public class GameOperationsTest {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification specification = GameSpecification.DEFAULT;
+        GameSpecification specification = TicTacToeSpecification.DEFAULT;
         // Step 2. Creating game table
-        GameTable gameTable = gameOperations.create(player, specification);
+        GameTable gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
         // Step 3. Adding listener
-        gameOperations.addListener(gameTable, new GameListener() {
+        gameOperations.listen(gameTable, new GameListener() {
             @Override
             public void updated(GameTable gameTable) {
                 System.out.println(gameTable);
@@ -106,7 +113,7 @@ public class GameOperationsTest {
         }, listenerChannel);
         // Step 4. Adding another player to the table
         player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        gameTable = gameOperations.create(player, specification);
+        gameTable = gameOperations.start(player, specification);
         // Step 5. Waiting for notification to happen
         try {
             countDownLatch.await(30, TimeUnit.SECONDS);

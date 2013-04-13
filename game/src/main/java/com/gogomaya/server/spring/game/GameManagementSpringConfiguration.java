@@ -13,16 +13,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.gogomaya.server.game.action.GameStateFactory;
-import com.gogomaya.server.game.action.tictactoe.TicTacToeStateFactory;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.connection.RabbitGameNotificationManager;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
-import com.gogomaya.server.game.match.GameStateManager;
-import com.gogomaya.server.game.session.GameSessionRepository;
-import com.gogomaya.server.game.table.GameTableManager;
-import com.gogomaya.server.game.table.GameTableRepository;
+import com.gogomaya.server.game.match.TicTacToeStateManager;
+import com.gogomaya.server.game.session.TicTacToeSessionRepository;
+import com.gogomaya.server.game.table.TicTacToeTableManager;
+import com.gogomaya.server.game.table.TicTacToeTableRepository;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @Configuration
@@ -34,13 +33,13 @@ import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 public class GameManagementSpringConfiguration {
 
     @Inject
-    public GameSessionRepository sessionRepository;
+    public TicTacToeSessionRepository sessionRepository;
 
     @Inject
     public RedisTemplate<byte[], Long> redisTemplate;
 
     @Inject
-    public GameTableRepository tableRepository;
+    public TicTacToeTableRepository tableRepository;
 
     @Inject
     public GameServerConnectionManager serverConnectionManager;
@@ -56,19 +55,19 @@ public class GameManagementSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameTableManager tableManager() {
-        return new GameTableManager(redisTemplate, tableRepository, serverConnectionManager);
+    public TicTacToeTableManager tableManager() {
+        return new TicTacToeTableManager(redisTemplate, tableRepository, serverConnectionManager);
     }
 
     @Bean
     @Singleton
-    public GameStateManager stateManager() {
-        return new GameStateManager(tableManager(), tableRepository, sessionRepository, gameNotificationManager(), gameStateFactory());
+    public TicTacToeStateManager stateManager() {
+        return new TicTacToeStateManager(tableManager(), tableRepository, sessionRepository, gameNotificationManager(), gameStateFactory());
     }
 
     @Bean
     @Singleton
-    public GameStateFactory gameStateFactory() {
+    public TicTacToeStateFactory gameStateFactory() {
         return new TicTacToeStateFactory();
     }
 

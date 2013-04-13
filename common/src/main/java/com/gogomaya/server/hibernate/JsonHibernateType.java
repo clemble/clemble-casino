@@ -11,8 +11,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.ParameterizedType;
+import org.hibernate.usertype.UserType;
 
-public class JsonHibernateType<T extends Serializable> extends ImmutableHibernateType<T> implements ParameterizedType {
+public class JsonHibernateType<T extends Serializable> implements ParameterizedType, UserType {
 
     final public static String CLASS_NAME_PARAMETER = "className";
 
@@ -65,6 +66,42 @@ public class JsonHibernateType<T extends Serializable> extends ImmutableHibernat
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    @Override
+    final public boolean equals(Object x, Object y) throws HibernateException {
+        return x != null ? x.equals(y) : y == null;
+    }
+
+    @Override
+    final public int hashCode(Object x) throws HibernateException {
+        return x != null ? x.hashCode() : 0;
+    }
+
+    @Override
+    final public Object deepCopy(Object value) throws HibernateException {
+        return value;
+    }
+
+    @Override
+    final public boolean isMutable() {
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    final public Serializable disassemble(Object value) throws HibernateException {
+        return (T) value;
+    }
+
+    @Override
+    final public Object assemble(Serializable cached, Object owner) throws HibernateException {
+        return cached;
+    }
+
+    @Override
+    public Object replace(Object original, Object target, Object owner) throws HibernateException {
+        return original;
     }
 
 }

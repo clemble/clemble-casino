@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -23,7 +22,6 @@ import com.gogomaya.server.player.PlayerCategory;
 import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.spring.integration.IntegrationTestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
