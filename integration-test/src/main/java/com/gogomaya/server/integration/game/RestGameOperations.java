@@ -29,8 +29,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.connection.GameServerConnection;
-import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.player.Player;
 import com.ning.http.client.AsyncHttpClient;
@@ -41,6 +41,7 @@ import com.ning.http.client.websocket.WebSocketUpgradeHandler;
 public class RestGameOperations implements GameOperations {
 
     final private static String CREATE_URL = "/spi/active/session";
+    final private static String OPTIONS_URL = "/spi/active/options";
 
     final private RestTemplate restTemplate;
     final private String baseUrl;
@@ -53,8 +54,16 @@ public class RestGameOperations implements GameOperations {
     }
 
     @Override
-    public TicTacToeTable start(Player player) {
-        return start(player, TicTacToeSpecification.DEFAULT);
+    public SelectSpecificationOptions getOptions(Player player) {
+        // Step 1. Initializing headers
+        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
+        header.add("playerId", String.valueOf(player.getPlayerId()));
+        header.add("Content-Type", "application/json");
+        // Step 2. Generating request
+        HttpEntity<GameSpecification> requestEntity = new HttpEntity<GameSpecification>(header);
+        // Step 3. Rest template generation
+        return restTemplate.exchange(baseUrl + OPTIONS_URL, HttpMethod.GET, requestEntity, SelectSpecificationOptions.class).getBody();
+
     }
 
     @Override
@@ -184,4 +193,5 @@ public class RestGameOperations implements GameOperations {
             throw new RuntimeException(e);
         }
     }
+
 }

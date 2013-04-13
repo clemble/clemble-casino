@@ -13,17 +13,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.GameSpecification;
-import com.gogomaya.server.game.SpecificationName;
 import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.rule.bet.FixedBetRule;
-import com.gogomaya.server.game.rule.construction.MatchRule;
-import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
-import com.gogomaya.server.game.rule.construction.PrivacyRule;
-import com.gogomaya.server.game.rule.giveup.GiveUpRule;
-import com.gogomaya.server.game.rule.time.MoveTimeRule;
-import com.gogomaya.server.game.rule.time.TotalTimeRule;
-import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
+import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.data.DataGenerator;
 import com.gogomaya.server.integration.game.GameListener;
@@ -31,7 +23,6 @@ import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.ListenerChannel;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
-import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.integration.IntegrationTestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
 
@@ -47,19 +38,11 @@ public class GameOperationsTest {
     GameOperations gameOperations;
 
     @Test
-    public void createWithoutGameSpecifiaction() {
-        // Step 1. Creating player
-        Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        // Step 2. Creating game table
-        GameTable gameTable = gameOperations.start(player);
-        Assert.assertNotNull(gameTable);
-    }
-
-    @Test
     public void createWithGameSpecification() {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification gameSpecification = TicTacToeSpecification.DEFAULT;
+        SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
+        GameSpecification gameSpecification = selectSpecificationOptions.specifications.get(0);
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.start(player, gameSpecification);
         Assert.assertNotNull(gameTable);
@@ -69,10 +52,8 @@ public class GameOperationsTest {
     public void createTicTacToeSpecification() {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification specification = new TicTacToeSpecification().setCurrency(Currency.FakeMoney).setBetRule(new FixedBetRule(50))
-                .setGiveUpRule(GiveUpRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT).setMoveTimeRule(MoveTimeRule.DEFAULT)
-                .setMatchRule(MatchRule.automatic).setPrivacayRule(PrivacyRule.players).setNumberRule(PlayerNumberRule.TWO)
-                .setName(new SpecificationName("test", "test"));
+        SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
+        GameSpecification specification = selectSpecificationOptions.specifications.get(1);
         // Step 2. Creating game table
         TicTacToeTable gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
@@ -99,7 +80,8 @@ public class GameOperationsTest {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification specification = TicTacToeSpecification.DEFAULT;
+        SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
+        GameSpecification specification = selectSpecificationOptions.specifications.get(2);
         // Step 2. Creating game table
         GameTable gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);

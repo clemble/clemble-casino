@@ -6,7 +6,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -41,10 +40,10 @@ public class GameTableManagerTest {
 
     @Test
     public void testPlayersMapping() {
-        TicTacToeSpecification specification = new TicTacToeSpecification().setName(SpecificationName.DEFAULT).setCurrency(Currency.FakeMoney)
+        TicTacToeSpecification specification = new TicTacToeSpecification().setName(new SpecificationName("", "")).setCurrency(Currency.FakeMoney)
                 .setBetRule(new FixedBetRule(50)).setGiveUpRule(GiveUpRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
                 .setMoveTimeRule(MoveTimeRule.DEFAULT).setMatchRule(MatchRule.automatic).setPrivacayRule(PrivacyRule.players)
-                .setNumberRule(PlayerNumberRule.TWO);
+                .setNumberRule(PlayerNumberRule.two);
 
         specificationRepository.saveAndFlush(specification);
 

@@ -13,10 +13,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.connection.RabbitGameNotificationManager;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
+import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
 import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
 import com.gogomaya.server.game.table.TicTacToeTableManager;
@@ -34,6 +36,9 @@ public class GameManagementSpringConfiguration {
 
     @Inject
     public TicTacToeSessionRepository sessionRepository;
+
+    @Inject
+    public TicTacToeSpecificationRepository specificationRepository;
 
     @Inject
     public RedisTemplate<byte[], Long> redisTemplate;
@@ -69,6 +74,12 @@ public class GameManagementSpringConfiguration {
     @Singleton
     public TicTacToeStateFactory gameStateFactory() {
         return new TicTacToeStateFactory();
+    }
+
+    @Bean
+    @Singleton
+    public TicTacToeConfigurationManager configurationManager() {
+        return new TicTacToeConfigurationManager(specificationRepository);
     }
 
     @Profile(value = { "default", "test" })

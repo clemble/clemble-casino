@@ -5,7 +5,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.gogomaya.server.game.GameRuleOptions;
+import com.gogomaya.server.game.configuration.GameRuleOptions;
 
 @Embeddable
 public class TotalTimeRule implements TimeRule {

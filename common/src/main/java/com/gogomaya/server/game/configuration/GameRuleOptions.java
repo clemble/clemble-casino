@@ -1,4 +1,4 @@
-package com.gogomaya.server.game;
+package com.gogomaya.server.game.configuration;
 
 import java.util.Arrays;
 import java.util.Collection;

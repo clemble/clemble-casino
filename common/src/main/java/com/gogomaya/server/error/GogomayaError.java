@@ -26,7 +26,7 @@ public enum GogomayaError {
     PasswordTooShort(Code.PASSWORD_TOO_SHORT_CODE, "Password too short"),
     PasswordTooWeak(Code.PASSWORD_TOO_WEAK_CODE, "Password too weak"),
     PasswordTooLong(Code.PASSWORD_TOO_LONG_CODE, "Password too long"),
-    EmailOrPasswordIncorrect(Code.EMAIL_OR_PASSWORD_INCORRECT_CODE, "Email & password is incorrect"),
+    EmailOrPasswordIncorrect(Code.EMAIL_OR_PASSWORD_INCORRECT_CODE, "Email or password is incorrect"),
 
     IdentityInvalid(Code.IDENTITY_INVALID_CODE, "Identity invalid"),
 
@@ -42,7 +42,9 @@ public enum GogomayaError {
     SocialConnectionInvalid(Code.SOCIAL_CONNECTION_INVALID_CODE, "Social connection is invalid"),
     
     ClientJsonInvalidError(Code.CLIENT_JSON_INVALID_ERROR_CODE, "Invalid Json"),
-    ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json")
+    ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json"),
+    
+    GameSpecificationInvalid(Code.GAME_SPECIFICATION_INVAID, "Provided game specification is invalid")
     ;
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
@@ -137,5 +139,7 @@ public enum GogomayaError {
         // Generic Client errors
         final public static String CLIENT_JSON_INVALID_ERROR_CODE = "0D0";
         final public static String CLIENT_JSON_FORMAT_ERROR_CODE = "0D1";
+        // Generic Game configuration errors
+        final public static String GAME_SPECIFICATION_INVAID = "0E0";
     }
 }

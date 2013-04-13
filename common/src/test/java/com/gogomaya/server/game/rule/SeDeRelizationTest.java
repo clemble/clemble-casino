@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.bet.LimitedBetRule;
@@ -84,6 +85,16 @@ public class SeDeRelizationTest {
 
         giveUpRule = objectMapper.readValue("\"lost\"", GiveUpRule.class);
         Assert.assertEquals(giveUpRule, GiveUpRule.lost);
+    }
+    
+    @Test
+    public void testReadSpecificationOptions() throws JsonParseException, JsonMappingException, IOException {
+        SelectSpecificationOptions selectSpecificationOptions = objectMapper.readValue(
+                "{ \"specifications\": [{\"specification\":\"tictactoe\", \"name\":{\"name\": \"low\",\"group\": \"basic\"}," +
+                "\"currency\": \"FakeMoney\",\"betRule\":{\"betType\": \"fixed\",\"price\": 50}," +
+                "\"giveUpRule\": \"all\",\"moveTimeRule\": { \"punishment\": \"loose\", \"limit\": 0 }," +
+                "\"totalTimeRule\": {\"punishment\": \"loose\",\"limit\": 0 }, \"matchRule\": \"automatic\"," +
+                "\"privacyRule\": \"everybody\", \"numberRule\": \"two\"}] }", SelectSpecificationOptions.class);
     }
 
 }

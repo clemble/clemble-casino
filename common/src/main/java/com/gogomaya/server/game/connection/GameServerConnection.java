@@ -38,4 +38,35 @@ public class GameServerConnection {
         this.publishURL = publishURL;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((notificationURL == null) ? 0 : notificationURL.hashCode());
+        result = prime * result + ((publishURL == null) ? 0 : publishURL.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GameServerConnection other = (GameServerConnection) obj;
+        if (notificationURL == null) {
+            if (other.notificationURL != null)
+                return false;
+        } else if (!notificationURL.equals(other.notificationURL))
+            return false;
+        if (publishURL == null) {
+            if (other.publishURL != null)
+                return false;
+        } else if (!publishURL.equals(other.publishURL))
+            return false;
+        return true;
+    }
+
 }

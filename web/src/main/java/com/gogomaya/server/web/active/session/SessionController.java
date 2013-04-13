@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
 import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
@@ -24,23 +27,23 @@ public class SessionController {
 
     final private TicTacToeStateManager matchingService;
     final private TicTacToeSessionRepository sessionRepository;
-    final private TicTacToeSpecificationRepository specificationRepository;
+    final private TicTacToeConfigurationManager configurationManager;
 
     public SessionController(final TicTacToeStateManager matchingService,
             final TicTacToeSessionRepository sessionRepository,
-            final TicTacToeSpecificationRepository specificationRepository) {
+            final TicTacToeConfigurationManager configurationManager) {
         this.matchingService = checkNotNull(matchingService);
         this.sessionRepository = checkNotNull(sessionRepository);
-        this.specificationRepository = checkNotNull(specificationRepository);
+        this.configurationManager = checkNotNull(configurationManager);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/session", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    TicTacToeTable create(@RequestHeader("playerId") final long playerId, @RequestBody final TicTacToeSpecification gameSpecification) {
-        // Step 1. This is temporary, exception must be thrown in this case
-        if (specificationRepository.findOne(gameSpecification.getName()) == null)
-            specificationRepository.saveAndFlush(gameSpecification);
+    public @ResponseBody TicTacToeTable create(@RequestHeader("playerId") final long playerId, @RequestBody final TicTacToeSpecification gameSpecification) {
+        // Step 1. Checking that provided specification was valid
+        if (!configurationManager.getSpecificationOptions().valid(gameSpecification))
+            throw GogomayaException.create(GogomayaError.GameSpecificationInvalid);
+        // Step 2. Invoking actual mathing service
         return matchingService.reserve(playerId, gameSpecification);
     }
 

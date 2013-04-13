@@ -1,10 +1,7 @@
-package com.gogomaya.server.game.tictactoe;
+package com.gogomaya.server.game.configuration;
 
-import com.gogomaya.server.game.GameRuleOptions;
 import com.gogomaya.server.game.GameSpecification;
-import com.gogomaya.server.game.SelectRuleOptions;
 import com.gogomaya.server.game.rule.bet.BetRule;
-import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
@@ -13,16 +10,12 @@ import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.money.Currency;
 
-public class TicTacToeOptions implements SelectRuleOptions {
+public class SelectRuleOptions implements GameSpecificationOptions {
 
     /**
      * Generated 10/04/13
      */
     private static final long serialVersionUID = -9099690454645343595L;
-
-    final public static TicTacToeOptions DEFAULT = new TicTacToeOptions(FixedBetRule.DEFAULT_OPTIONS, Currency.DEFAULT_OPTIONS, GiveUpRule.DEFAULT_OPTIONS,
-            MatchRule.DEFAULT_OPTIONS, PlayerNumberRule.DEFAULT_OPTIONS, PrivacyRule.DEFAULT_OPTIONS, MoveTimeRule.DEFAULT_OPTIONS,
-            TotalTimeRule.DEFAULT_OPTIONS);
 
     final private GameRuleOptions<Currency> currencyOptions;
 
@@ -40,7 +33,7 @@ public class TicTacToeOptions implements SelectRuleOptions {
 
     final private GameRuleOptions<TotalTimeRule> totalTimeOptions;
 
-    public TicTacToeOptions(final GameRuleOptions<BetRule> betOptions,
+    public SelectRuleOptions(final GameRuleOptions<BetRule> betOptions,
             final GameRuleOptions<Currency> currencyOptions,
             final GameRuleOptions<GiveUpRule> giveUpOptions,
             final GameRuleOptions<MatchRule> matchOptions,
@@ -58,42 +51,34 @@ public class TicTacToeOptions implements SelectRuleOptions {
         this.totalTimeOptions = totalTimeOptions;
     }
 
-    @Override
     public GameRuleOptions<Currency> getCurrencyOptions() {
         return currencyOptions;
     }
 
-    @Override
     public GameRuleOptions<BetRule> getBetOptions() {
         return betOptions;
     }
 
-    @Override
     public GameRuleOptions<GiveUpRule> getGiveUpOptions() {
         return giveUpOptions;
     }
 
-    @Override
     public GameRuleOptions<MoveTimeRule> getMoveTimeOptions() {
         return moveTimeOptions;
     }
 
-    @Override
     public GameRuleOptions<TotalTimeRule> getTotalTimeOptions() {
         return totalTimeOptions;
     }
 
-    @Override
     public GameRuleOptions<MatchRule> getMatchOptions() {
         return matchOptions;
     }
 
-    @Override
     public GameRuleOptions<PrivacyRule> getPrivacyOptions() {
         return privacyOptions;
     }
 
-    @Override
     public GameRuleOptions<PlayerNumberRule> getNumberOptions() {
         return numberOptions;
     }

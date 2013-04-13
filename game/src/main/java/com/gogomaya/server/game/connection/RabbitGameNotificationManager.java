@@ -37,7 +37,7 @@ public class RabbitGameNotificationManager implements GameNotificationManager {
     }
 
     @Override
-    public void notify(final GameTable table) {
+    public void notify(final GameTable<?> table) {
         // Step 1. Fetching new rabbit
         RabbitTemplate rabbitTemplate = null;
         try {

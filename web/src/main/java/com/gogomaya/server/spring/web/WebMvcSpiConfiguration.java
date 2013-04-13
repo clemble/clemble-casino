@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaValidationService;
+import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
 import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
@@ -27,7 +28,7 @@ import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.active.session.SessionController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
-import com.gogomaya.server.web.game.options.GameOptionsController;
+import com.gogomaya.server.web.game.configuration.GameConfiguartionManagerController;
 import com.gogomaya.server.web.registration.RegistrationLoginController;
 import com.gogomaya.server.web.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.registration.RegistrationSocialConnectionController;
@@ -49,6 +50,9 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
     GogomayaValidationService validationService;
+
+    @Inject
+    TicTacToeConfigurationManager configurationManager;
 
     @Inject
     TicTacToeStateManager stateManager;
@@ -108,12 +112,12 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     public SessionController sessionController() {
-        return new SessionController(stateManager, sessionRepository, specificationRepository);
+        return new SessionController(stateManager, sessionRepository, configurationManager);
     }
 
     @Bean
-    public GameOptionsController gameOptionsController() {
-        return new GameOptionsController();
+    public GameConfiguartionManagerController gameOptionsController() {
+        return new GameConfiguartionManagerController(configurationManager);
     }
 
 }

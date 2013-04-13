@@ -5,7 +5,7 @@ import javax.persistence.Embeddable;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.GameRuleOptions;
+import com.gogomaya.server.game.configuration.GameRuleOptions;
 
 @Embeddable
 public class FixedBetRule implements BetRule {

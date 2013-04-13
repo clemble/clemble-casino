@@ -1,6 +1,6 @@
 package com.gogomaya.server.money;
 
-import com.gogomaya.server.game.GameRuleOptions;
+import com.gogomaya.server.game.configuration.GameRuleOptions;
 import com.gogomaya.server.game.rule.GameRule;
 
 public enum Currency implements GameRule {

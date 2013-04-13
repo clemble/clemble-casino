@@ -1,6 +1,6 @@
 package com.gogomaya.server.game.rule.construction;
 
-import com.gogomaya.server.game.GameRuleOptions;
+import com.gogomaya.server.game.configuration.GameRuleOptions;
 import com.gogomaya.server.game.rule.GameRule;
 
 public enum PrivacyRule implements GameRule {

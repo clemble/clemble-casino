@@ -15,9 +15,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaDialect;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -132,6 +134,11 @@ public class JPASpringConfiguration {
             EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
             factory.setDatabaseName("gogomaya");
             factory.setDatabaseType(EmbeddedDatabaseType.H2);
+
+            ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
+            databasePopulator.addScript(new ClassPathResource("sql/tictactoe-init.sql"));
+            factory.setDatabasePopulator(databasePopulator);
+
             return factory.getDatabase();
         }
 
@@ -157,6 +164,11 @@ public class JPASpringConfiguration {
             EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
             factory.setDatabaseName("gogomaya");
             factory.setDatabaseType(EmbeddedDatabaseType.H2);
+
+            ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
+            databasePopulator.addScript(new ClassPathResource("sql/tictactoe-init.sql"));
+            factory.setDatabasePopulator(databasePopulator);
+
             return factory.getDatabase();
         }
 

@@ -2,12 +2,14 @@ package com.gogomaya.server.integration.game;
 
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.player.Player;
 
 public interface GameOperations {
 
-    public TicTacToeTable start(Player player);
+    // TODO make a more generic
+    public SelectSpecificationOptions getOptions(Player player);
 
     public TicTacToeTable start(Player player, GameSpecification gameSpecification);
 
