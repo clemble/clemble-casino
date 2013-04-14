@@ -23,8 +23,8 @@ public class GameConfiguartionManagerController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/active/options", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody GameSpecificationOptions create(@RequestHeader(value = "playerId", required = false) final long playerId) {
+    @ResponseStatus(value = HttpStatus.OK) // Can be null
+    public @ResponseBody GameSpecificationOptions create(@RequestHeader(value = "playerId", required = false) final Long playerId) {
         return configurationManager.getSpecificationOptions();
     }
 

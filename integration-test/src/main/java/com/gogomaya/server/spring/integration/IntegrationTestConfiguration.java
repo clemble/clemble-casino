@@ -6,12 +6,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.RestGameOperations;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.game.listener.GameListenerOperationsImpl;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.RestPlayerOperations;
+import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
+import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
 
 @Configuration
 public class IntegrationTestConfiguration {
@@ -40,8 +43,16 @@ public class IntegrationTestConfiguration {
 
     @Bean
     @Singleton
-    public GameListenerOperations<?> gameListenerOperations() {
+    @SuppressWarnings("rawtypes")
+    public GameListenerOperations<?> tableListenerOperations() {
         return new GameListenerOperationsImpl();
     }
 
+    @Bean
+    @Singleton
+    @SuppressWarnings("unchecked")
+    public TicTacToeOperations ticTacToeOperations() {
+        return new TicTacToeOperations(baseUrl, restTemplate(), playerOperations(), gameOperations(),
+                (GameListenerOperations<TicTacToeTable>) tableListenerOperations());
+    }
 }
