@@ -28,6 +28,6 @@ abstract public class AbstractGameEngine<S extends GameState<M, PS>, M extends G
         return safeProcess(oldState, move);
     }
 
-    abstract public S safeProcess(final S oldState, final M move);
+    abstract protected S safeProcess(final S oldState, final M move);
 
 }

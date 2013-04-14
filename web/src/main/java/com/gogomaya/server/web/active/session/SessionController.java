@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
-import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
 import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
 import com.gogomaya.server.game.tictactoe.TicTacToeSession;

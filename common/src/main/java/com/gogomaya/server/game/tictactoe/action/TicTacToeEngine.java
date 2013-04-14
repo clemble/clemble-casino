@@ -11,18 +11,18 @@ import com.google.common.collect.ImmutableList;
 public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacToeMove, TicTacToePlayerState> {
 
     @Override
-    final public TicTacToeState safeProcess(final TicTacToeState oldState, final TicTacToeMove move) {
+    final protected TicTacToeState safeProcess(final TicTacToeState oldState, final TicTacToeMove move) {
         // Step 1. Processing Select cell move
         if (move instanceof TicTacToeSelectCellMove) {
-            return process(oldState, (TicTacToeSelectCellMove) move);
+            return processSelectCellMove(oldState, (TicTacToeSelectCellMove) move);
         } else if (move instanceof TicTacToeBetOnCellMove) {
-            return process(oldState, (TicTacToeBetOnCellMove) move);
+            return processBetOnCellMove(oldState, (TicTacToeBetOnCellMove) move);
         }
         // Step 2. Returning default state
         return oldState;
     }
 
-    private TicTacToeState process(final TicTacToeState oldState, final TicTacToeBetOnCellMove betMove) {
+    private TicTacToeState processBetOnCellMove(final TicTacToeState oldState, final TicTacToeBetOnCellMove betMove) {
         oldState.getPlayerState(betMove.getPlayerId()).subMoneyLeft(betMove.getBet());
         oldState.addMadeMove(betMove);
 
@@ -49,7 +49,7 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
         return oldState;
     }
 
-    private TicTacToeState process(final TicTacToeState oldState, final TicTacToeSelectCellMove selectCellMove) {
+    private TicTacToeState processSelectCellMove(final TicTacToeState oldState, final TicTacToeSelectCellMove selectCellMove) {
         // Step 1. Sanity check
         if (oldState.isOwned(selectCellMove.getCell()))
             return oldState;

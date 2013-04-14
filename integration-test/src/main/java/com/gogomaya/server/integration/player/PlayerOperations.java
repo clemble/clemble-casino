@@ -6,6 +6,8 @@ import com.gogomaya.server.player.web.RegistrationRequest;
 
 public interface PlayerOperations {
 
+    public Player createPlayer();
+
     public Player createPlayer(PlayerProfile playerProfile);
 
     public Player createPlayer(RegistrationRequest registrationRequest);

@@ -35,6 +35,13 @@ public class PlayerOperationsTest {
     PlayerOperations playerOperations;
 
     @Test
+    public void createRandomPlayer() {
+        Player player = playerOperations.createPlayer();
+
+        assertNotNull(player);
+    }
+
+    @Test
     public void createPlayerUsingProfileTest() {
         PlayerProfile profile = new PlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
                 .setNickName("mavarazy");

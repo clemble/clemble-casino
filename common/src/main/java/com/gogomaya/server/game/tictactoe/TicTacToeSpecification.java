@@ -64,15 +64,15 @@ public class TicTacToeSpecification implements GameSpecification {
     @Columns(columns = { @Column(name = "TOTAL_TIME_BREACH"), @Column(name = "TOTAL_TIME_LIMIT"), })
     private TotalTimeRule totalTimeRule;
 
-    @Column(name = "MATCH")
+    @Column(name = "MATCH_RULE")
     @Enumerated(EnumType.STRING)
     private MatchRule matchRule;
 
-    @Column(name = "PRIVACY")
+    @Column(name = "PRIVACY_RULE")
     @Enumerated(EnumType.STRING)
     private PrivacyRule privacyRule;
 
-    @Column(name = "NUMBER")
+    @Column(name = "PLAYER_NUMBER")
     @Enumerated(EnumType.STRING)
     private PlayerNumberRule numberRule;
 

@@ -8,6 +8,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.RestGameOperations;
+import com.gogomaya.server.integration.game.listener.GameListenerOperations;
+import com.gogomaya.server.integration.game.listener.GameListenerOperationsImpl;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.RestPlayerOperations;
 
@@ -15,8 +17,9 @@ import com.gogomaya.server.integration.player.RestPlayerOperations;
 public class IntegrationTestConfiguration {
 
     String baseUrl = "http://localhost:8080/gogomaya-web";
-    //String baseUrl = "http://gogomaya.cloudfoundry.com/";
-    
+
+    // String baseUrl = "http://gogomaya.cloudfoundry.com/";
+
     @Bean
     @Singleton
     public RestTemplate restTemplate() {
@@ -33,6 +36,12 @@ public class IntegrationTestConfiguration {
     @Singleton
     public GameOperations gameOperations() {
         return new RestGameOperations(baseUrl, restTemplate());
+    }
+
+    @Bean
+    @Singleton
+    public GameListenerOperations<?> gameListenerOperations() {
+        return new GameListenerOperationsImpl();
     }
 
 }

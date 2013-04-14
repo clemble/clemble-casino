@@ -1,4 +1,4 @@
-package com.gogomaya.server.integration.game;
+package com.gogomaya.server.integration.game.listener;
 
 public enum ListenerChannel {
 

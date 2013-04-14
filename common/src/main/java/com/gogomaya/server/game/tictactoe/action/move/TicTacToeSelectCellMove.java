@@ -19,11 +19,6 @@ public class TicTacToeSelectCellMove extends TicTacToeMove {
 
     public TicTacToeSelectCellMove(final long playerId, final byte row, final byte column) {
         super(playerId, TicTacToeMoveType.SelectCell);
-        if (row < 0 || row > 2)
-            throw new IllegalArgumentException("Row out of 0 .. 2 range " + row);
-        if (column < 0 || column > 2)
-            throw new IllegalArgumentException("Column out of 0 .. 2 range " + row);
-
         this.cell = new ImmutablePair<Byte, Byte>(row, column);
     }
 

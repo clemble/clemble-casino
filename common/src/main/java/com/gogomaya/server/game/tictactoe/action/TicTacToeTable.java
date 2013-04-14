@@ -45,7 +45,7 @@ public class TicTacToeTable implements GameTable<TicTacToeSession> {
 
     @ManyToOne
     @JoinColumns(value = {
-            @JoinColumn(name = "NAME", referencedColumnName = "NAME"),
+            @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
             @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP")
     })
     private TicTacToeSpecification specification;

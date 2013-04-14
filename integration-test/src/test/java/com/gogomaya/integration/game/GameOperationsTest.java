@@ -18,9 +18,10 @@ import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.data.DataGenerator;
-import com.gogomaya.server.integration.game.GameListener;
 import com.gogomaya.server.integration.game.GameOperations;
-import com.gogomaya.server.integration.game.ListenerChannel;
+import com.gogomaya.server.integration.game.listener.GameListener;
+import com.gogomaya.server.integration.game.listener.GameListenerOperations;
+import com.gogomaya.server.integration.game.listener.ListenerChannel;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.IntegrationTestConfiguration;
@@ -37,6 +38,9 @@ public class GameOperationsTest {
     @Inject
     GameOperations gameOperations;
 
+    @Inject
+    GameListenerOperations<TicTacToeTable> gameListenerOperations;
+
     @Test
     public void createWithGameSpecification() {
         // Step 1. Creating player
@@ -44,7 +48,7 @@ public class GameOperationsTest {
         SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
         GameSpecification gameSpecification = selectSpecificationOptions.specifications.get(0);
         // Step 2. Creating game table
-        GameTable gameTable = gameOperations.start(player, gameSpecification);
+        TicTacToeTable gameTable = gameOperations.start(player, gameSpecification);
         Assert.assertNotNull(gameTable);
     }
 
@@ -62,7 +66,7 @@ public class GameOperationsTest {
         Assert.assertNotSame(anotherPlayer.getPlayerId(), player.getPlayerId());
         gameTable = gameOperations.start(anotherPlayer, specification);
         Assert.assertNotNull(gameTable);
-        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), GameSessionState.ACTIVE);
+        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), GameSessionState.active);
         Assert.assertNotNull(gameTable.getCurrentSession().getGameState());
     }
 
@@ -83,10 +87,10 @@ public class GameOperationsTest {
         SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
         GameSpecification specification = selectSpecificationOptions.specifications.get(2);
         // Step 2. Creating game table
-        GameTable gameTable = gameOperations.start(player, specification);
+        TicTacToeTable gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
         // Step 3. Adding listener
-        gameOperations.listen(gameTable, new GameListener() {
+        gameListenerOperations.listen(gameTable, new GameListener() {
             @Override
             public void updated(GameTable gameTable) {
                 System.out.println(gameTable);

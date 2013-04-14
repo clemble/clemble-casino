@@ -16,7 +16,7 @@ public class SpecificationName implements Serializable {
 
     final public static SpecificationName DEFAULT = new SpecificationName("", "");
 
-    @Column(name = "NAME")
+    @Column(name = "SPECIFICATION_NAME")
     private String name = "";
 
     @Column(name = "SPECIFICATION_GROUP")

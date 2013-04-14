@@ -16,19 +16,19 @@ public interface GameState<M extends GameMove, S extends GamePlayerState> extend
 
     public S getPlayerState(long playerId);
 
-    public void setPlayerState(S player);
+    public GameState<M, S> setPlayerState(S player);
 
     public M getNextMove(long playerId);
 
-    public void setNextMove(M move);
+    public GameState<M, S> setNextMove(M move);
 
-    public void setNextMoves(Collection<M> nextMoves);
+    public GameState<M, S> setNextMoves(Collection<M> nextMoves);
 
     public M getMadeMove(long playerId);
 
-    public void addMadeMove(M move);
+    public GameState<M, S> addMadeMove(M move);
 
-    public void cleanMadeMove();
+    public GameState<M, S> cleanMadeMove();
 
     public GamePlayerIterator getPlayerIterator();
 }

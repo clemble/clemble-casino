@@ -49,7 +49,7 @@ public class TicTacToeStateManager {
             // Step 3. Initializing start of the game session
             TicTacToeSession gameSession = new TicTacToeSession();
             gameSession.addPlayers(gameTable.getPlayers());
-            gameSession.setSessionState(GameSessionState.ACTIVE);
+            gameSession.setSessionState(GameSessionState.active);
             gameSession.setTable(gameTable);
 
             gameSession.setGameState(gameState);

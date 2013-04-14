@@ -13,7 +13,7 @@
 
     alter table TIC_TAC_TOE_TABLE 
         drop 
-        foreign key FK941E84BFEA570121;
+        foreign key FK941E84BFB406A2DD;
 
     alter table TIC_TAC_TOE_TABLE_PLAYERS 
         drop 
@@ -44,18 +44,18 @@
 
     create table TIC_TAC_TOE_SPECIFICATION (
         SPECIFICATION_GROUP varchar(255) not null,
-        NAME varchar(255) not null,
+        SPECIFICATION_NAME varchar(255) not null,
         PRICE integer,
         CURRENCY varchar(255),
         GIVE_UP varchar(255),
-        MATCH varchar(255),
+        MATCH_RULE varchar(255),
         MOVE_TIME_LIMIT integer,
         MOVE_TIME_PUNISHMENT varchar(255),
-        NUMBER varchar(255),
-        PRIVACY varchar(255),
+        PLAYER_NUMBER varchar(255),
+        PRIVACY_RULE varchar(255),
         TOTAL_TIME_LIMIT integer,
         TOTAL_TIME_PUNISHMENT varchar(255),
-        primary key (SPECIFICATION_GROUP, NAME)
+        primary key (SPECIFICATION_GROUP, SPECIFICATION_NAME)
     ) ENGINE=InnoDB;
 
     create table TIC_TAC_TOE_TABLE (
@@ -64,7 +64,7 @@
         PUBLISH_URL varchar(255),
         SESSION_ID bigint,
         SPECIFICATION_GROUP varchar(255),
-        NAME varchar(255),
+        SPECIFICATION_NAME varchar(255),
         primary key (TABLE_ID)
     ) ENGINE=InnoDB;
 
@@ -95,10 +95,10 @@
         references TIC_TAC_TOE_SESSION (TABLE_ID);
 
     alter table TIC_TAC_TOE_TABLE 
-        add index FK941E84BFEA570121 (SPECIFICATION_GROUP, NAME), 
-        add constraint FK941E84BFEA570121 
-        foreign key (SPECIFICATION_GROUP, NAME) 
-        references TIC_TAC_TOE_SPECIFICATION (SPECIFICATION_GROUP, NAME);
+        add index FK941E84BFB406A2DD (SPECIFICATION_GROUP, SPECIFICATION_NAME), 
+        add constraint FK941E84BFB406A2DD 
+        foreign key (SPECIFICATION_GROUP, SPECIFICATION_NAME) 
+        references TIC_TAC_TOE_SPECIFICATION (SPECIFICATION_GROUP, SPECIFICATION_NAME);
 
     alter table TIC_TAC_TOE_TABLE_PLAYERS 
         add index FK18594A12F894E9E (TABLE_ID), 

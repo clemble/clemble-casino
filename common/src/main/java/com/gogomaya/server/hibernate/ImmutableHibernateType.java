@@ -40,7 +40,7 @@ abstract public class ImmutableHibernateType<T extends Serializable> implements 
 
     @Override
     final public Object replace(Object original, Object target, Object owner) throws HibernateException {
-        return target;
+        return original;
     }
 
 }

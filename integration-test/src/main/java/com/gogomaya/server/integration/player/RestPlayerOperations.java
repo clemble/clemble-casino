@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.UUID;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.player.PlayerProfile;
@@ -22,6 +23,12 @@ public class RestPlayerOperations implements PlayerOperations {
     public RestPlayerOperations(final String baseUrl, final RestTemplate restTemplate) {
         this.baseUrl = baseUrl;
         this.restTemplate = restTemplate;
+    }
+
+    @Override
+    public Player createPlayer() {
+        return createPlayer(new PlayerProfile().setFirstName(RandomStringUtils.random(10)).setLastName(RandomStringUtils.random(10))
+                .setNickName(RandomStringUtils.random(10)));
     }
 
     @Override
@@ -55,7 +62,7 @@ public class RestPlayerOperations implements PlayerOperations {
         // Step 1. Performing actual player login
         PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + LOGIN_URL, credential, PlayerIdentity.class);
         checkNotNull(playerIdentity);
-        // Step 2. Generating Player from credentials 
+        // Step 2. Generating Player from credentials
         return new Player().setPlayerId(playerIdentity.getPlayerId()).setCredential(credential).setIdentity(playerIdentity);
     }
 

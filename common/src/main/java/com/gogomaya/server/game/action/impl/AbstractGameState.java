@@ -40,8 +40,9 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
     }
 
     @Override
-    final public void setPlayerState(S newPlayerState) {
+    final public GameState<M, S> setPlayerState(S newPlayerState) {
         playersState.put(newPlayerState.getPlayerId(), newPlayerState);
+        return this;
     }
 
     final protected void updatePlayerState(S playerState) {
@@ -54,16 +55,18 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
     }
 
     @Override
-    final public void setNextMove(M move) {
+    final public GameState<M, S> setNextMove(M move) {
         nextMoves.clear();
         nextMoves.put(move.getPlayerId(), move);
+        return this;
     }
 
     @Override
-    final public void setNextMoves(Collection<M> moves) {
+    final public GameState<M, S> setNextMoves(Collection<M> moves) {
         nextMoves.clear();
         for (M move : moves)
             nextMoves.put(move.getPlayerId(), move);
+        return this;
     }
 
     @Override
@@ -72,13 +75,15 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
     }
 
     @Override
-    final public void addMadeMove(M playerMove) {
+    final public GameState<M, S> addMadeMove(M playerMove) {
         madeMoves.put(playerMove.getPlayerId(), playerMove);
+        return this;
     }
 
     @Override
-    final public void cleanMadeMove() {
+    final public GameState<M, S> cleanMadeMove() {
         madeMoves.clear();
+        return this;
     }
 
     @Override
