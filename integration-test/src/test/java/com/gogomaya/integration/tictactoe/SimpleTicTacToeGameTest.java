@@ -1,6 +1,6 @@
 package com.gogomaya.integration.tictactoe;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -26,11 +26,23 @@ public class SimpleTicTacToeGameTest {
 
     @Test
     public void testGameStart() {
-        Collection<TicTacToePlayer> players = ticTacToeOperations.start();
+        List<TicTacToePlayer> players = ticTacToeOperations.start();
+        TicTacToePlayer playerA = players.get(0);
+        TicTacToePlayer playerB = players.get(1);
 
         Assert.assertNotNull(players);
+        Assert.assertEquals(playerA.getTable().getTableId(), playerB.getTable().getTableId());
         Assert.assertNotNull(players.iterator().next());
         Assert.assertEquals(players.size(), 2);
+
+        TicTacToePlayer toePlayer = players.iterator().next();
+        long activePlayer = toePlayer.getTable().getState().getActiveUsers().iterator().next();
+        
+        if(playerA.getPlayer().getPlayerId() == activePlayer) {
+            playerA.select(0, 0);
+        } else {
+            playerB.select(0, 0);
+        }
     }
 
 }

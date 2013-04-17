@@ -37,9 +37,15 @@ public class TicTacToeSpecification implements GameSpecification {
      */
     private static final long serialVersionUID = -7713576722470320974L;
 
-    final public static TicTacToeSpecification DEFAULT = new TicTacToeSpecification().setName(new SpecificationName("DEFAULT", ""))
-            .setBetRule(new FixedBetRule(50)).setCurrency(Currency.FakeMoney).setGiveUpRule(GiveUpRule.lost).setMatchRule(MatchRule.automatic)
-            .setMoveTimeRule(MoveTimeRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT).setNumberRule(PlayerNumberRule.two)
+    final public static TicTacToeSpecification DEFAULT = new TicTacToeSpecification()
+            .setName(new SpecificationName("DEFAULT", ""))
+            .setBetRule(new FixedBetRule(50))
+            .setCurrency(Currency.FakeMoney)
+            .setGiveUpRule(GiveUpRule.lost)
+            .setMatchRule(MatchRule.automatic)
+            .setMoveTimeRule(MoveTimeRule.DEFAULT)
+            .setTotalTimeRule(TotalTimeRule.DEFAULT)
+            .setNumberRule(PlayerNumberRule.two)
             .setPrivacayRule(PrivacyRule.everybody);
 
     @EmbeddedId

@@ -42,7 +42,7 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
             }
 
             oldState.setNextMove(new TicTacToeSelectCellMove(nextPlayer));
-            oldState.setActiveCell(null);
+            oldState.setActiveCell(TicTacToeCell.DEFAULT);
             oldState.cleanMadeMove();
         }
 

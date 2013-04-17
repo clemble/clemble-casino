@@ -1,6 +1,6 @@
 package com.gogomaya.server.integration.tictactoe;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.web.client.RestTemplate;
 
@@ -36,7 +36,7 @@ public class TicTacToeOperations {
         this.tableListenerOperations = tableListenerOperations;
     }
 
-    public Collection<TicTacToePlayer> start() {
+    public List<TicTacToePlayer> start() {
         // Step 1. Selecting specification for the game
         GameSpecification specification = selectSpecification();
         // Step 2. Creating user and trying to put them on the same table

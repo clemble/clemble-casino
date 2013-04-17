@@ -17,7 +17,7 @@ import com.gogomaya.server.integration.player.Player;
 
 public class TicTacToePlayer {
 
-    final private static String ACTION_URL = "active/action";
+    final private static String ACTION_URL = "/spi/active/action";
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
@@ -69,7 +69,7 @@ public class TicTacToePlayer {
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(getPlayer().getPlayerId()));
         header.add("tableId", String.valueOf(getTable().getTableId()));
-        header.add("sesssionId", String.valueOf(getTable().getCurrentSession().getSessionId()));
+        header.add("sessionId", String.valueOf(getTable().getCurrentSession().getSessionId()));
         header.add("Content-Type", "application/json");
         // Step 2. Generating request
         HttpEntity<TicTacToeMove> requestEntity = new HttpEntity<TicTacToeMove>(action, header);

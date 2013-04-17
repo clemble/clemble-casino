@@ -46,13 +46,12 @@ public class TicTacToeStateManager {
         PlayerNumberRule numberRule = gameSpecification.getNumberRule();
         if (gameTable.getPlayers().size() >= numberRule.getMinPlayers()) {
             TicTacToeState gameState = stateFactory.initialize(gameSpecification, gameTable.getPlayers());
+            gameTable.setState(gameState);
             // Step 3. Initializing start of the game session
             TicTacToeSession gameSession = new TicTacToeSession();
             gameSession.addPlayers(gameTable.getPlayers());
             gameSession.setSessionState(GameSessionState.active);
             gameSession.setTable(gameTable);
-
-            gameSession.setGameState(gameState);
 
             gameSession = sessionRepository.save(gameSession);
             gameTable.setCurrentSession(gameSession);

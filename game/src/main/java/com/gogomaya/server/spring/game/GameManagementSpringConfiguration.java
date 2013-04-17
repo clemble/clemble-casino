@@ -23,6 +23,7 @@ import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
 import com.gogomaya.server.game.table.TicTacToeTableManager;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
@@ -82,6 +83,12 @@ public class GameManagementSpringConfiguration {
         return new TicTacToeConfigurationManager(specificationRepository);
     }
 
+    @Bean
+    @Singleton
+    public TicTacToeEngine ticTacToeEngine() {
+        return new TicTacToeEngine();
+    }
+
     @Profile(value = { "default", "test" })
     public static class GameManagementTestConfiguration {
 
@@ -90,6 +97,7 @@ public class GameManagementSpringConfiguration {
         public GameServerConnectionManager serverConnectionManager() {
             return new SimpleGameServerConnectionManager("localhost", "localhost");
         }
+
     }
 
     @Profile(value = { "cloud" })

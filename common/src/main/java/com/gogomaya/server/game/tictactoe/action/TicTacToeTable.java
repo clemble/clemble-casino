@@ -19,14 +19,21 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.tictactoe.TicTacToeSession;
 import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
+import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "TIC_TAC_TOE_TABLE")
+@TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
+        name = JsonHibernateType.CLASS_NAME_PARAMETER,
+        value = "com.gogomaya.server.game.action.GameState") })
 public class TicTacToeTable implements GameTable<TicTacToeSession> {
 
     /**
@@ -44,10 +51,8 @@ public class TicTacToeTable implements GameTable<TicTacToeSession> {
     private GameServerConnection serverResource;
 
     @ManyToOne
-    @JoinColumns(value = {
-            @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
-            @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP")
-    })
+    @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
+            @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP") })
     private TicTacToeSpecification specification;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -57,6 +62,10 @@ public class TicTacToeTable implements GameTable<TicTacToeSession> {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "SESSION_ID", referencedColumnName = "TABLE_ID")
     private TicTacToeSession currentSession;
+
+    @Type(type = "gameState")
+    @Column(name = "GAME_STATE", length = 4096)
+    private TicTacToeState state;
 
     @Override
     public long getTableId() {
@@ -106,6 +115,16 @@ public class TicTacToeTable implements GameTable<TicTacToeSession> {
 
     public void setSpecification(TicTacToeSpecification specification) {
         this.specification = specification;
+    }
+
+    @Override
+    public TicTacToeState getState() {
+        return state;
+    }
+
+    public TicTacToeTable setState(TicTacToeState state) {
+        this.state = state;
+        return this;
     }
 
 }

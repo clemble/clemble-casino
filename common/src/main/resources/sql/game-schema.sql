@@ -3,6 +3,10 @@
         drop 
         foreign key FKD9704F47F894E9E;
 
+    alter table TIC_TAC_TOE_SESSION_MOVES 
+        drop 
+        foreign key FK641227AA25CB574A;
+
     alter table TIC_TAC_TOE_SESSION_PLAYERS 
         drop 
         foreign key FK409C0C9A25CB574A;
@@ -21,6 +25,8 @@
 
     drop table if exists TIC_TAC_TOE_SESSION;
 
+    drop table if exists TIC_TAC_TOE_SESSION_MOVES;
+
     drop table if exists TIC_TAC_TOE_SESSION_PLAYERS;
 
     drop table if exists TIC_TAC_TOE_SPECIFICATION;
@@ -32,9 +38,13 @@
     create table TIC_TAC_TOE_SESSION (
         SESSION_ID bigint not null auto_increment,
         SESSION_STATE integer,
-        GAME_STATE varchar(4096),
         TABLE_ID bigint not null,
         primary key (SESSION_ID)
+    ) ENGINE=InnoDB;
+
+    create table TIC_TAC_TOE_SESSION_MOVES (
+        SESSION_ID bigint not null,
+        madeMoves tinyblob
     ) ENGINE=InnoDB;
 
     create table TIC_TAC_TOE_SESSION_PLAYERS (
@@ -62,6 +72,7 @@
         TABLE_ID bigint not null auto_increment,
         NOTIFICATION_URL varchar(255),
         PUBLISH_URL varchar(255),
+        GAME_STATE varchar(4096),
         SESSION_ID bigint,
         SPECIFICATION_GROUP varchar(255),
         SPECIFICATION_NAME varchar(255),
@@ -81,6 +92,12 @@
         add constraint FKD9704F47F894E9E 
         foreign key (TABLE_ID) 
         references TIC_TAC_TOE_TABLE (TABLE_ID);
+
+    alter table TIC_TAC_TOE_SESSION_MOVES 
+        add index FK641227AA25CB574A (SESSION_ID), 
+        add constraint FK641227AA25CB574A 
+        foreign key (SESSION_ID) 
+        references TIC_TAC_TOE_SESSION (SESSION_ID);
 
     alter table TIC_TAC_TOE_SESSION_PLAYERS 
         add index FK409C0C9A25CB574A (SESSION_ID), 

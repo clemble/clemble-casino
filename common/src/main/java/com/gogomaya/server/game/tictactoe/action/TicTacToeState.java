@@ -2,7 +2,6 @@ package com.gogomaya.server.game.tictactoe.action;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map.Entry;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -17,12 +16,12 @@ public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePl
      * Generated 02/04/13
      */
     private static final long serialVersionUID = -3282042914639667829L;
-    
+
     private TicTacToePlayerState[] players;
 
     private TicTacToeCellState[][] board = new TicTacToeCellState[3][3];
 
-    private Entry<Byte, Byte> activeCell;
+    private TicTacToeCell activeCell;
 
     @JsonCreator()
     public TicTacToeState(@JsonProperty("players") final Collection<TicTacToePlayerState> playerState) {
@@ -37,25 +36,25 @@ public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePl
     public TicTacToeCellState[][] getBoard() {
         return board;
     }
-    
+
     public TicTacToeState setBoard(TicTacToeCellState[][] board) {
         this.board = board;
         return this;
     }
 
     public boolean complete() {
-        long owner = board[activeCell.getKey()][activeCell.getValue()].getOwner();
+        long owner = board[activeCell.getRow()][activeCell.getColumn()].getOwner();
         // Step 1. Check vertical
         boolean complete = true;
         for (int i = 0; i < board.length; i++) {
-            complete = complete && board[activeCell.getKey()][i].getOwner() == owner;
+            complete = complete && board[activeCell.getRow()][i].getOwner() == owner;
         }
         if (complete)
             return complete;
         // Step 2. Check horizontal
         complete = true;
         for (int i = 0; i < board.length; i++) {
-            complete = complete && board[i][activeCell.getValue()].getOwner() == owner;
+            complete = complete && board[i][activeCell.getColumn()].getOwner() == owner;
         }
         if (complete)
             return complete;
@@ -73,21 +72,21 @@ public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePl
         return complete;
     }
 
-    public boolean isOwned(Entry<Byte, Byte> activeCell) {
-        return board[activeCell.getKey()][activeCell.getValue()].owned();
+    public boolean isOwned(TicTacToeCell activeCell) {
+        return board[activeCell.getRow()][activeCell.getColumn()].owned();
     }
 
-    public Entry<Byte, Byte> getActiveCell() {
+    public TicTacToeCell getActiveCell() {
         return activeCell;
     }
 
-    public void setActiveCell(Entry<Byte, Byte> cell) {
+    public void setActiveCell(TicTacToeCell cell) {
         this.activeCell = cell;
     }
 
     public void setActiveCellState(TicTacToeCellState cellState) {
         TicTacToeCellState[][] newBoard = board.clone();
-        newBoard[activeCell.getKey()][activeCell.getValue()] = cellState;
+        newBoard[activeCell.getRow()][activeCell.getColumn()] = cellState;
     }
 
     public TicTacToePlayerState[] getPlayers() {

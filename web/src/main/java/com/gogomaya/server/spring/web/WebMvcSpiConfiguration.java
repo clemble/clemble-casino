@@ -13,9 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
+import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
 import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
+import com.gogomaya.server.game.table.TicTacToeTableRepository;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.SocialConnectionData;
@@ -26,6 +29,7 @@ import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
+import com.gogomaya.server.web.active.session.GameController;
 import com.gogomaya.server.web.active.session.SessionController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 import com.gogomaya.server.web.game.configuration.GameConfiguartionManagerController;
@@ -62,6 +66,15 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
     TicTacToeSpecificationRepository specificationRepository;
+
+    @Inject
+    TicTacToeTableRepository tableRepository;
+
+    @Inject
+    TicTacToeEngine engine;
+
+    @Inject
+    GameNotificationManager notificationManager;
 
     @Inject
     ObjectMapper objectMapper;
@@ -118,6 +131,11 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     @Bean
     public GameConfiguartionManagerController gameOptionsController() {
         return new GameConfiguartionManagerController(configurationManager);
+    }
+
+    @Bean
+    public GameController gameController() {
+        return new GameController(tableRepository, engine, notificationManager);
     }
 
 }

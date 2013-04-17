@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToePlayerState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
+import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 
 public class GameStateSerializationTest {
 
@@ -24,6 +25,7 @@ public class GameStateSerializationTest {
         players.add(new TicTacToePlayerState(2L, 50L));
 
         TicTacToeState tacToeState = new TicTacToeState(players);
+        tacToeState.setNextMove(new TicTacToeSelectCellMove(1L));
         
         String jsonPresentation = objectMapper.writeValueAsString(tacToeState);
         System.out.println(jsonPresentation);

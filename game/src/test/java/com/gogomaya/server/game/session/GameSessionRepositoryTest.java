@@ -42,7 +42,7 @@ public class GameSessionRepositoryTest {
 
     @Inject
     TicTacToeSpecificationRepository specificationRepository;
-    
+
     @Before
     public void setUp() {
         specificationRepository.saveAndFlush(TicTacToeSpecification.DEFAULT);
@@ -62,15 +62,15 @@ public class GameSessionRepositoryTest {
 
         gameTable = tableRepository.save(gameTable);
 
+        gameTable.setState(gameState);
+
         TicTacToeSession gameSession = new TicTacToeSession();
         gameSession.setPlayers(players);
         gameSession.setTable(gameTable);
 
-        gameSession.setGameState(gameState);
-
         gameSession = sessionRepository.save(gameSession);
 
         Assert.assertNotNull(gameSession);
-        Assert.assertNotNull(gameSession.getGameState());
+        Assert.assertNotNull(gameTable.getState());
     }
 }

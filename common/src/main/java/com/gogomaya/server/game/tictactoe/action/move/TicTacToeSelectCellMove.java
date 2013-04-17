@@ -1,8 +1,9 @@
 package com.gogomaya.server.game.tictactoe.action.move;
 
-import java.util.Map.Entry;
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeCell;
 
 public class TicTacToeSelectCellMove extends TicTacToeMove {
 
@@ -11,18 +12,30 @@ public class TicTacToeSelectCellMove extends TicTacToeMove {
      */
     private static final long serialVersionUID = -3938747678529156779L;
 
-    final private Entry<Byte, Byte> cell;
+    final private TicTacToeCell cell;
 
     public TicTacToeSelectCellMove(final long playerId) {
         this(playerId, Byte.MIN_VALUE, Byte.MIN_VALUE);
     }
 
-    public TicTacToeSelectCellMove(final long playerId, final byte row, final byte column) {
-        super(playerId, TicTacToeMoveType.SelectCell);
-        this.cell = new ImmutablePair<Byte, Byte>(row, column);
+    @JsonCreator
+    public TicTacToeSelectCellMove(
+            @JsonProperty("playerId") final long playerId,
+            @JsonProperty("row") final byte row,
+            @JsonProperty("column") final byte column) {
+        super(playerId);
+        this.cell = new TicTacToeCell(row, column);
     }
 
-    public Entry<Byte, Byte> getCell() {
+    public byte getRow() {
+        return cell.getRow();
+    }
+
+    public byte getColumn() {
+        return cell.getColumn();
+    }
+
+    public TicTacToeCell getCell() {
         return cell;
     }
 

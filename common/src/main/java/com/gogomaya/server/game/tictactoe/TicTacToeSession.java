@@ -1,7 +1,9 @@
 package com.gogomaya.server.game.tictactoe;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -19,13 +21,13 @@ import javax.persistence.Table;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
+import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
@@ -54,13 +56,13 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
     @Column(name = "SESSION_STATE")
     private GameSessionState sessionState;
 
-    @Type(type = "gameState")
-    @Column(name = "GAME_STATE", length = 4096)
-    private TicTacToeState state;
-
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "TIC_TAC_TOE_SESSION_PLAYERS", joinColumns = @JoinColumn(name = "SESSION_ID"))
     private Set<Long> players = new HashSet<Long>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "TIC_TAC_TOE_SESSION_MOVES", joinColumns = @JoinColumn(name = "SESSION_ID"))
+    private List<TicTacToeMove> madeMoves = new ArrayList<TicTacToeMove>();
 
     @Override
     public long getSessionId() {
@@ -87,15 +89,6 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
     }
 
     @Override
-    public TicTacToeState getGameState() {
-        return state;
-    }
-
-    public void setGameState(TicTacToeState gameState) {
-        this.state = gameState;
-    }
-
-    @Override
     public Set<Long> getPlayers() {
         return players;
     }
@@ -116,13 +109,28 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
     }
 
     @Override
+    public List<TicTacToeMove> getMadeMoves() {
+        return madeMoves;
+    }
+
+    public TicTacToeSession setMadeMoves(List<TicTacToeMove> madeMoves) {
+        this.madeMoves = madeMoves;
+        return this;
+    }
+
+    public TicTacToeSession addMadeMoves(TicTacToeMove madeMove) {
+        this.madeMoves.add(madeMove);
+        return this;
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((madeMoves == null) ? 0 : madeMoves.hashCode());
         result = prime * result + ((players == null) ? 0 : players.hashCode());
         result = prime * result + (int) (sessionId ^ (sessionId >>> 32));
         result = prime * result + ((sessionState == null) ? 0 : sessionState.hashCode());
-        result = prime * result + ((state == null) ? 0 : state.hashCode());
         result = prime * result + ((table == null) ? 0 : table.hashCode());
         return result;
     }
@@ -136,6 +144,11 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
         if (getClass() != obj.getClass())
             return false;
         TicTacToeSession other = (TicTacToeSession) obj;
+        if (madeMoves == null) {
+            if (other.madeMoves != null)
+                return false;
+        } else if (!madeMoves.equals(other.madeMoves))
+            return false;
         if (players == null) {
             if (other.players != null)
                 return false;
@@ -144,11 +157,6 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
         if (sessionId != other.sessionId)
             return false;
         if (sessionState != other.sessionState)
-            return false;
-        if (state == null) {
-            if (other.state != null)
-                return false;
-        } else if (!state.equals(other.state))
             return false;
         if (table == null) {
             if (other.table != null)

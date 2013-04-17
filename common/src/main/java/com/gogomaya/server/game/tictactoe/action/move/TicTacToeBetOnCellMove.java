@@ -1,5 +1,8 @@
 package com.gogomaya.server.game.tictactoe.action.move;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class TicTacToeBetOnCellMove extends TicTacToeMove {
 
     /**
@@ -13,8 +16,9 @@ public class TicTacToeBetOnCellMove extends TicTacToeMove {
         this(playerId, 0);
     }
 
-    public TicTacToeBetOnCellMove(final long playerId, final long bet) {
-        super(playerId, TicTacToeMoveType.BetOnCell);
+    @JsonCreator
+    public TicTacToeBetOnCellMove(@JsonProperty("playerId") final long playerId, @JsonProperty("bet") final long bet) {
+        super(playerId);
         if (bet < 0)
             throw new IllegalArgumentException("Bet can't be lesser than 0");
 

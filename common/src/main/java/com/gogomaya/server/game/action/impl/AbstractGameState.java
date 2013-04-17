@@ -5,8 +5,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.game.action.GamePlayerIterator;
 import com.gogomaya.server.game.action.GamePlayerState;
@@ -49,6 +51,17 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
         this.playersState.put(playerState.getPlayerId(), playerState);
     }
 
+    @JsonIgnore
+    final public Set<Long> getActiveUsers() {
+        return nextMoves.keySet();
+    }
+
+    @Override
+    @JsonProperty("nextMoves")
+    final public Collection<M> getNextMoves() {
+        return nextMoves.values();
+    }
+
     @Override
     final public M getNextMove(long playerId) {
         return nextMoves.get(playerId);
@@ -73,6 +86,12 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
     final public M getMadeMove(long playerId) {
         return madeMoves.get(playerId);
     }
+
+    @Override
+    final public Collection<M> getMadeMoves() {
+        return madeMoves.values();
+    }
+
 
     @Override
     final public GameState<M, S> addMadeMove(M playerMove) {

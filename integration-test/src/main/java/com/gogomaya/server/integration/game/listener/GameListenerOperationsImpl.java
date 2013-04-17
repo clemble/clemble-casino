@@ -74,6 +74,7 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
             @Override
             public void onMessage(Message message) {
                 try {
+                    System.out.println(new String(message.getBody()));
                     // Step 1. Parsing GameTable
                     T gameTable = (T) objectMapper.readValue(new String(message.getBody()), GameTable.class);
                     // Step 2. Updating
@@ -95,10 +96,11 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
             c.subscribe("/topic/" + Long.toString(gameTable.getTableId()), new Listener() {
 
                 @Override
-                public void message(Map arg0, String arg1) {
+                public void message(Map parameters, String message) {
                     try {
+                        System.out.println(message);
                         // Step 1. Reading game table
-                        T gameTable = (T) objectMapper.readValue(arg1, GameTable.class);
+                        T gameTable = (T) objectMapper.readValue(message, GameTable.class);
                         // Step 2. Updating game table
                         gameListener.updated(gameTable);
                     } catch (Throwable e) {
@@ -130,6 +132,7 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
                         public void onMessage(String message) {
                             super.onMessage(message);
                             try {
+                                System.out.println(message);
                                 // Step 1. Reading game table
                                 T gameTable = (T) objectMapper.readValue(message, GameTable.class);
                                 // Step 2. Updating game table

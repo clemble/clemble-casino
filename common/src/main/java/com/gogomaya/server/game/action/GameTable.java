@@ -20,11 +20,13 @@ public interface GameTable<S extends GameSession<?>> extends Serializable {
     public GameServerConnection getServerResource();
 
     public Set<Long> getPlayers();
-    
+
     public void addPlayer(long player);
 
     public S getCurrentSession();
 
     public GameSpecification getSpecification();
+
+    public GameState<?, ?> getState();
 
 }

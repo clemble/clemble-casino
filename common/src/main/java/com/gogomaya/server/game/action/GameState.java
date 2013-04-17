@@ -22,9 +22,13 @@ public interface GameState<M extends GameMove, S extends GamePlayerState> extend
 
     public GameState<M, S> setNextMove(M move);
 
+    public Collection<M> getNextMoves();
+
     public GameState<M, S> setNextMoves(Collection<M> nextMoves);
 
     public M getMadeMove(long playerId);
+
+    public Collection<M> getMadeMoves();
 
     public GameState<M, S> addMadeMove(M move);
 

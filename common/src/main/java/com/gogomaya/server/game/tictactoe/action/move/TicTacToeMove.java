@@ -1,9 +1,16 @@
 package com.gogomaya.server.game.tictactoe.action.move;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.codehaus.jackson.annotate.JsonSubTypes;
+import org.codehaus.jackson.annotate.JsonSubTypes.Type;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 import com.gogomaya.server.game.action.impl.AbstractGameMove;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+    @Type(value = TicTacToeSelectCellMove.class, name = "select"),
+    @Type(value = TicTacToeBetOnCellMove.class, name = "bet") 
+})
 public class TicTacToeMove extends AbstractGameMove {
 
     /**
@@ -11,15 +18,8 @@ public class TicTacToeMove extends AbstractGameMove {
      */
     private static final long serialVersionUID = -8775703673463350464L;
 
-    final private TicTacToeMoveType moveType;
-
-    public TicTacToeMove(final long playerId, final TicTacToeMoveType moveType) {
+    public TicTacToeMove(final long playerId) {
         super(playerId);
-        this.moveType = checkNotNull(moveType);
-    }
-
-    public TicTacToeMoveType getMoveType() {
-        return moveType;
     }
 
 }
