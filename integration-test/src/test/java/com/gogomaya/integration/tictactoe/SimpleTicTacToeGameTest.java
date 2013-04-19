@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
 import com.gogomaya.server.spring.integration.IntegrationTestConfiguration;
@@ -37,12 +38,15 @@ public class SimpleTicTacToeGameTest {
 
         TicTacToePlayer toePlayer = players.iterator().next();
         long activePlayer = toePlayer.getTable().getState().getActiveUsers().iterator().next();
-        
-        if(playerA.getPlayer().getPlayerId() == activePlayer) {
+
+        if (playerA.getPlayer().getPlayerId() == activePlayer) {
             playerA.select(0, 0);
         } else {
             playerB.select(0, 0);
         }
+        playerA.bet(5);
+        playerB.bet(2);
+        Assert.assertTrue(playerB.getTable().getState().getBoard()[0][0].owned());
     }
 
 }

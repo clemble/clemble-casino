@@ -12,6 +12,9 @@ import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
+import org.springframework.util.StringUtils;
+
+import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
 
 public class JsonHibernateType<T extends Serializable> implements ParameterizedType, UserType {
 
@@ -20,6 +23,10 @@ public class JsonHibernateType<T extends Serializable> implements ParameterizedT
     final private static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     final private static int[] TYPES = new int[] { Types.VARCHAR };
+
+    static {
+        OBJECT_MAPPER.setAnnotationIntrospector(new CustomJacksonAnnotationIntrospector());
+    }
 
     private Class<T> targetClass;
 
@@ -38,8 +45,11 @@ public class JsonHibernateType<T extends Serializable> implements ParameterizedT
         String jsonPresentation = rs.getString(names[0]);
         T result = null;
         try {
-            result = (T) OBJECT_MAPPER.readValue(jsonPresentation, returnedClass());
-        } catch (Exception ignore) {
+            if (StringUtils.hasText(jsonPresentation))
+                result = (T) OBJECT_MAPPER.readValue(jsonPresentation, returnedClass());
+        } catch (Throwable ignore) {
+            System.out.println(jsonPresentation);
+            ignore.printStackTrace();
         }
         return result;
     }
@@ -50,7 +60,8 @@ public class JsonHibernateType<T extends Serializable> implements ParameterizedT
         try {
             if (value != null)
                 jsonPresentation = OBJECT_MAPPER.writeValueAsString(value);
-        } catch (Exception ignore) {
+        } catch (Throwable ignore) {
+            ignore.printStackTrace();
         }
         st.setString(index, jsonPresentation);
     }
@@ -67,7 +78,7 @@ public class JsonHibernateType<T extends Serializable> implements ParameterizedT
             throw new RuntimeException(e);
         }
     }
-    
+
     @Override
     final public boolean equals(Object x, Object y) throws HibernateException {
         return x != null ? x.equals(y) : y == null;

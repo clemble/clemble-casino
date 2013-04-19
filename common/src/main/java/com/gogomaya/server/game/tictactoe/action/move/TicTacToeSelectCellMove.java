@@ -1,10 +1,13 @@
 package com.gogomaya.server.game.tictactoe.action.move;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.game.tictactoe.action.TicTacToeCell;
 
+@JsonIgnoreProperties(value = { "row", "column" })
 public class TicTacToeSelectCellMove extends TicTacToeMove {
 
     /**
@@ -18,19 +21,22 @@ public class TicTacToeSelectCellMove extends TicTacToeMove {
         this(playerId, Byte.MIN_VALUE, Byte.MIN_VALUE);
     }
 
-    @JsonCreator
-    public TicTacToeSelectCellMove(
-            @JsonProperty("playerId") final long playerId,
-            @JsonProperty("row") final byte row,
-            @JsonProperty("column") final byte column) {
-        super(playerId);
-        this.cell = new TicTacToeCell(row, column);
+    public TicTacToeSelectCellMove(final long playerId, final byte row, final byte column) {
+        this(playerId, TicTacToeCell.create(row, column));
     }
 
+    @JsonCreator
+    public TicTacToeSelectCellMove(@JsonProperty("playerId") final long playerId, @JsonProperty("cell") final TicTacToeCell cell) {
+        super(playerId);
+        this.cell = cell;
+    }
+
+    @JsonIgnore
     public byte getRow() {
         return cell.getRow();
     }
 
+    @JsonIgnore
     public byte getColumn() {
         return cell.getColumn();
     }

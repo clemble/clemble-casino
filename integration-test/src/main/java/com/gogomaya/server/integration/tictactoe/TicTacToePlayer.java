@@ -9,6 +9,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.server.game.tictactoe.action.TicTacToeCell;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
@@ -52,7 +53,7 @@ public class TicTacToePlayer {
 
     public void select(int row, int column) {
         // Step 1. Generating bet move
-        TicTacToeSelectCellMove move = new TicTacToeSelectCellMove(getPlayer().getPlayerId(), (byte) row, (byte) column);
+        TicTacToeSelectCellMove move = new TicTacToeSelectCellMove(getPlayer().getPlayerId(), TicTacToeCell.create(row, column));
         // Step 2. Performing actual TicTacToeMove
         perform(move);
     }

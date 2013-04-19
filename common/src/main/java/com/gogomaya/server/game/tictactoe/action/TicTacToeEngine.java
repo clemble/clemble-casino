@@ -26,10 +26,11 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
         oldState.getPlayerState(betMove.getPlayerId()).subMoneyLeft(betMove.getBet());
         oldState.addMadeMove(betMove);
 
-        long[] players = oldState.getPlayerIterator().getPlayers();
-        TicTacToeBetOnCellMove firstPlayerMove = (TicTacToeBetOnCellMove) oldState.getMadeMove(players[0]);
-        TicTacToeBetOnCellMove secondPlayerMove = (TicTacToeBetOnCellMove) oldState.getMadeMove(players[1]);
-        if (firstPlayerMove != null && secondPlayerMove != null) {
+        if (oldState.getNextMoves().isEmpty()) {
+            long[] players = oldState.getPlayerIterator().getPlayers();
+            TicTacToeBetOnCellMove firstPlayerMove = (TicTacToeBetOnCellMove) oldState.getMadeMove(players[0]);
+            TicTacToeBetOnCellMove secondPlayerMove = (TicTacToeBetOnCellMove) oldState.getMadeMove(players[1]);
+
             long firstPlayerBet = firstPlayerMove.getBet();
             long secondPlayerBet = secondPlayerMove.getBet();
 

@@ -50,7 +50,7 @@ public class GameController {
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         // Step 3. Updating current state
         table.setState(engine.process(table.getState(), move));
-        tableRepository.saveAndFlush(table);
+        table = tableRepository.saveAndFlush(table);
         // Step 4. Updating listeners
         notificationManager.notify(table);
         return table;

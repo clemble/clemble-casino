@@ -30,9 +30,13 @@ public interface GameState<M extends GameMove, S extends GamePlayerState> extend
 
     public Collection<M> getMadeMoves();
 
+    public GameState<M, S> setMadeMoves(Collection<M> moves);
+
     public GameState<M, S> addMadeMove(M move);
 
     public GameState<M, S> cleanMadeMove();
 
     public GamePlayerIterator getPlayerIterator();
+
+    public GameState<M, S> setPlayerIterator(GamePlayerIterator playerIterator);
 }

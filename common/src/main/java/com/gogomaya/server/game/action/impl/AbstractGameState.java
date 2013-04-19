@@ -1,13 +1,12 @@
 package com.gogomaya.server.game.action.impl;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.gogomaya.server.game.action.GamePlayerIterator;
@@ -16,6 +15,7 @@ import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.player.PlayerAwareUtils;
 
+@JsonIgnoreProperties(value = "activeUsers")
 abstract public class AbstractGameState<M extends GameMove, S extends GamePlayerState> implements GameState<M, S> {
 
     /**
@@ -23,17 +23,21 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
      */
     private static final long serialVersionUID = -6468020813755923981L;
 
-    final private Map<Long, S> playersState;
-
-    final private Map<Long, M> nextMoves = new HashMap<Long, M>();
+    private Map<Long, S> playersState;
     @JsonIgnore
-    final private GamePlayerIterator playerIterator;
-    @JsonIgnore
-    final private Map<Long, M> madeMoves = new HashMap<Long, M>();
+    private GamePlayerIterator playerIterator;
 
-    protected AbstractGameState(final Collection<S> playersStates, final GamePlayerIterator playerIterator) {
-        this.playersState = PlayerAwareUtils.toMap(playersStates);
-        this.playerIterator = checkNotNull(playerIterator);
+    private Map<Long, M> nextMoves = new HashMap<Long, M>();
+    @JsonIgnore
+    private Map<Long, M> madeMoves = new HashMap<Long, M>();
+
+    final public Collection<S> getPlayerStates() {
+        return playersState.values();
+    }
+
+    final public GameState<M, S> setPlayerStates(Collection<S> playersStates) {
+        playersState = PlayerAwareUtils.toMap(playersStates);
+        return this;
     }
 
     @Override
@@ -88,14 +92,24 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
     }
 
     @Override
+    @JsonIgnore
+    @JsonProperty("madeMoves")
     final public Collection<M> getMadeMoves() {
         return madeMoves.values();
     }
 
+    @Override
+    final public GameState<M, S> setMadeMoves(Collection<M> moves) {
+        cleanMadeMove();
+        for (M move : moves)
+            madeMoves.put(move.getPlayerId(), move);
+        return this;
+    }
 
     @Override
     final public GameState<M, S> addMadeMove(M playerMove) {
-        madeMoves.put(playerMove.getPlayerId(), playerMove);
+        if (nextMoves.remove(playerMove.getPlayerId()) != null)
+            madeMoves.put(playerMove.getPlayerId(), playerMove);
         return this;
     }
 
@@ -108,6 +122,12 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
     @Override
     final public GamePlayerIterator getPlayerIterator() {
         return playerIterator;
+    }
+
+    @Override
+    final public GameState<M, S> setPlayerIterator(GamePlayerIterator playerIterator) {
+        this.playerIterator = playerIterator;
+        return this;
     }
 
 }
