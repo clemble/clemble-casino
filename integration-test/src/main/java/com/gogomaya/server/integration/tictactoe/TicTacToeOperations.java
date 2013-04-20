@@ -1,5 +1,7 @@
 package com.gogomaya.server.integration.tictactoe;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.List;
 
 import org.springframework.web.client.RestTemplate;
@@ -44,15 +46,15 @@ public class TicTacToeOperations {
         TicTacToePlayer playerA = start(specification);
         TicTacToePlayer playerB = start(specification);
         while (playerA.getTable().getTableId() != playerB.getTable().getTableId()) {
+            playerA.getListenerControl().stopListener();
             playerA = start(specification);
             // waits added to be sure everyone on the same page
             if (playerA.getTable().getTableId() != playerB.getTable().getTableId()) {
+                playerB.getListenerControl().stopListener();
                 playerB = start(specification);
-                playerA.waitVersion(2);
-            } else {
-                playerB.waitVersion(2);
             }
         }
+        TicTacToePlayerUtils.syncVersions(playerA, playerB);
         // Step 3. Returning generated value who ever goes first is choosen as first
         TicTacToeState state = playerB.getTable().getState() != null ? playerB.getTable().getState() : playerA.getTable().getState();
         if (state.getNextMove(playerA.getPlayer().getPlayerId()) == null) {
@@ -64,19 +66,21 @@ public class TicTacToeOperations {
 
     public TicTacToePlayer start(GameSpecification specification) {
         // Step 1. Creating player
-        Player player = playerOperations.createPlayer();
+        Player player = checkNotNull(playerOperations.createPlayer());
         // Step 2. Requesting table
-        TicTacToeTable table = gameOperations.start(player, specification);
-        final TicTacToePlayer toePlayer = new TicTacToePlayer(restTemplate, baseUrl).setPlayer(player).setTable(table);
+        final TicTacToeTable table = (TicTacToeTable) checkNotNull(gameOperations.start(player, specification));
+        final TicTacToePlayer toePlayer = new TicTacToePlayer(restTemplate, baseUrl);
+        toePlayer.setPlayer(player);
+        toePlayer.setTable(table);
         // Step 3. Creating listener, that will update GameListener
-        tableListenerOperations.listen(table, new GameListener<TicTacToeTable>() {
+        toePlayer.setListenerControl(tableListenerOperations.listen(table, new GameListener<TicTacToeTable>() {
 
             @Override
             public void updated(TicTacToeTable gameTable) {
                 toePlayer.setTable(gameTable);
             }
 
-        });
+        }));
         // Step 3. Creating player configurations
         return toePlayer;
     }

@@ -15,7 +15,7 @@ import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.player.PlayerAwareUtils;
 
-@JsonIgnoreProperties(value = "activeUsers")
+@JsonIgnoreProperties(value = { "activeUsers" })
 abstract public class AbstractGameState<M extends GameMove, S extends GamePlayerState> implements GameState<M, S> {
 
     /**
@@ -30,6 +30,8 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
     private Map<Long, M> nextMoves = new HashMap<Long, M>();
     @JsonIgnore
     private Map<Long, M> madeMoves = new HashMap<Long, M>();
+
+    private int version;
 
     final public Collection<S> getPlayerStates() {
         return playersState.values();
@@ -127,6 +129,20 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
     @Override
     final public GameState<M, S> setPlayerIterator(GamePlayerIterator playerIterator) {
         this.playerIterator = playerIterator;
+        return this;
+    }
+
+    final public int getVersion() {
+        return version;
+    }
+
+    final public GameState<M, S> setVersion(int version) {
+        this.version = version;
+        return this;
+    }
+
+    final public GameState<M, S> incrementVersion() {
+        this.version++;
         return this;
     }
 

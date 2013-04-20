@@ -13,19 +13,22 @@ abstract public class AbstractGameEngine<S extends GameState<M, PS>, M extends G
         if (oldState == null)
             throw new IllegalArgumentException("old state can't be null");
         if (move == null)
-            return oldState;
+            throw new IllegalArgumentException("move can't be null");
         final long playerId = move.getPlayerId();
         // Step 1.1. Checking that move
         M associatedPlayerMove = oldState.getMadeMove(playerId);
         if (associatedPlayerMove != null)
-            return oldState;
+            throw new IllegalArgumentException("Associated player already made a move " + oldState.getMadeMove(playerId));
         M expectedMove = oldState.getNextMove(playerId);
         if (expectedMove == null)
-            return oldState;
+            throw new IllegalArgumentException("No move expected from the player " + move);
         if (expectedMove.getClass() != move.getClass())
-            return oldState;
+            throw new IllegalArgumentException("Move of the wrong class " + move.getClass() + " expected " + expectedMove.getClass());
         // Step 2. Processing Select cell move
-        return safeProcess(oldState, move);
+        S newState = safeProcess(oldState, move);
+        // increase a version
+        newState.incrementVersion();
+        return newState;
     }
 
     abstract protected S safeProcess(final S oldState, final M move);

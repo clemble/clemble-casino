@@ -5,7 +5,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class TicTacToeCellState {
 
-    final public static TicTacToeCellState DEFAULT_CELL_STATE = new TicTacToeCellState(0, 0, 0);
+    final public static long DEFAULT_OWNER = -1L;
+    final public static TicTacToeCellState DEFAULT_CELL_STATE = new TicTacToeCellState(DEFAULT_OWNER, -1, -1);
 
     @JsonProperty("owner")
     final private long owner;
@@ -28,7 +29,7 @@ public class TicTacToeCellState {
     }
 
     public boolean owned() {
-        return owner != 0;
+        return owner != DEFAULT_OWNER;
     }
 
     public long getFirstPlayerBet() {
@@ -37,5 +38,10 @@ public class TicTacToeCellState {
 
     public long getSecondPlayerBet() {
         return secondPlayerBet;
+    }
+
+    @Override
+    public String toString() {
+        return "CellState [owner=" + owner + ", first=" + firstPlayerBet + ", second=" + secondPlayerBet + "]";
     }
 }

@@ -27,37 +27,36 @@ import com.ning.http.client.websocket.DefaultWebSocketListener;
 import com.ning.http.client.websocket.WebSocket;
 import com.ning.http.client.websocket.WebSocketUpgradeHandler;
 
-public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameListenerOperations<T>{
-    
+public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameListenerOperations<T> {
+
     final private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void listen(final T gameTable, final GameListener<T> gameListener) {
+    public GameListenerControl listen(final T gameTable, final GameListener<T> gameListener) {
         // Step 1. Creating Server connection
         // If channel was not defined, choose it randomly
-        listen(gameTable, gameListener, ListenerChannel.values()[(int) (gameTable.getTableId() % ListenerChannel.values().length)]);
+        return listen(gameTable, gameListener, ListenerChannel.values()[(int) (gameTable.getTableId() % ListenerChannel.values().length)]);
     }
 
     @Override
-    public void listen(final T gameTable, final GameListener<T> gameListener, ListenerChannel listenerChannel) {
+    public GameListenerControl listen(final T gameTable, final GameListener<T> gameListener, ListenerChannel listenerChannel) {
         // Step 1. Setting default value
         listenerChannel = listenerChannel == null ? ListenerChannel.Rabbit : listenerChannel;
         // Step 2. Processing based on listener type
         switch (listenerChannel) {
         case Rabbit:
-            addRabbitListener(gameTable, gameListener);
-            break;
+            return addRabbitListener(gameTable, gameListener);
         case SockJS:
         case Stomp:
-            addStompListener(gameTable, gameListener);
-            break;
+            return addStompListener(gameTable, gameListener);
         default:
             break;
         }
 
+        throw new IllegalArgumentException("Was not able to construct listener");
     }
 
-    private void addRabbitListener(final T gameTable, final GameListener<T> gameListener) {
+    private GameListenerControl addRabbitListener(final T gameTable, final GameListener<T> gameListener) {
         // Step 1. Creating Server connection
         GameServerConnection serverConnection = gameTable.getServerResource();
         ConnectionFactory connectionFactory = new CachingConnectionFactory(serverConnection.getNotificationURL());
@@ -67,7 +66,7 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
         Binding tmpBinding = BindingBuilder.bind(tmpQueue).to(new TopicExchange("amq.topic")).with(String.valueOf(gameTable.getTableId()));
         admin.declareBinding(tmpBinding);
         // Step 3. Creating MessageListener
-        SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
+        final SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
         listenerContainer.setConnectionFactory(connectionFactory);
         listenerContainer.setQueues(tmpQueue);
         listenerContainer.setMessageListener(new MessageListener() {
@@ -86,14 +85,22 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
             }
         });
         listenerContainer.start();
+        // Step 4. Returning game listener with possibility to stop listener
+        return new GameListenerControl() {
+
+            @Override
+            public void stopListener() {
+                listenerContainer.stop();
+            }
+        };
     }
 
-    private void addStompListener(final T gameTable, final GameListener<T> gameListener) {
+    private GameListenerControl addStompListener(final T gameTable, final GameListener<T> gameListener) {
+        final String channel = "/topic/" + Long.toString(gameTable.getTableId());
         // Step 1. Creating a game table client
-        Client c;
         try {
-            c = new Client(gameTable.getServerResource().getNotificationURL(), 61613, "guest", "guest");
-            c.subscribe("/topic/" + Long.toString(gameTable.getTableId()), new Listener() {
+            final Client stompClient = new Client(gameTable.getServerResource().getNotificationURL(), 61613, "guest", "guest");
+            stompClient.subscribe("/topic/" + Long.toString(gameTable.getTableId()), new Listener() {
 
                 @Override
                 public void message(Map parameters, String message) {
@@ -109,6 +116,15 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
                     }
                 }
             });
+            // Step 4. Returning game listener with possibility to stop STOMP listener
+            return new GameListenerControl() {
+
+                @Override
+                public void stopListener() {
+                    stompClient.unsubscribe(channel);
+                    stompClient.disconnect();
+                }
+            };
         } catch (LoginException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -116,10 +132,10 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
         }
     }
 
-    private void addSockJSListener(final T gameTable, final GameListener<T> gameListener) {
-        AsyncHttpClient asyncClient = new AsyncHttpClient();
+    private GameListenerControl addSockJSListener(final T gameTable, final GameListener<T> gameListener) {
         try {
-            WebSocket webSocket = asyncClient.prepareGet("http://" + gameTable.getServerResource().getNotificationURL() + ":15674/stomp")
+            AsyncHttpClient asyncClient = new AsyncHttpClient();
+            final WebSocket webSocket = asyncClient.prepareGet("http://" + gameTable.getServerResource().getNotificationURL() + ":15674/stomp")
                     .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(new DefaultWebSocketListener() {
 
                         @Override
@@ -146,10 +162,17 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
                     }).build()).get();
 
             System.out.println(webSocket.isOpen());
+            // Step 4. Returning game listener with possibility to stop SOCKJS listener
+            return new GameListenerControl() {
+                
+                @Override
+                public void stopListener() {
+                    webSocket.close();
+                }
+            };
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
 
 }

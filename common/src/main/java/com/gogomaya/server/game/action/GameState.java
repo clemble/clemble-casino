@@ -39,4 +39,9 @@ public interface GameState<M extends GameMove, S extends GamePlayerState> extend
     public GamePlayerIterator getPlayerIterator();
 
     public GameState<M, S> setPlayerIterator(GamePlayerIterator playerIterator);
+
+    public int getVersion();
+
+    public GameState<M, S> incrementVersion();
+
 }

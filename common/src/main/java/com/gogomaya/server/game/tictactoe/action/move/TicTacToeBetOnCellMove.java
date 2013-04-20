@@ -29,4 +29,9 @@ public class TicTacToeBetOnCellMove extends TicTacToeMove {
         return bet;
     }
 
+    @Override
+    public String toString() {
+        return "BetOnCell [bet=" + bet + ", player = " + getPlayerId() + "]";
+    }
+
 }

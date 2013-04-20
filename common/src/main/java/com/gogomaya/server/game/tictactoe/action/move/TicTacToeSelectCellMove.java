@@ -45,4 +45,9 @@ public class TicTacToeSelectCellMove extends TicTacToeMove {
         return cell;
     }
 
+    @Override
+    public String toString() {
+        return "SelectCell [cell=" + cell + ", player = " + getPlayerId() + "]";
+    }
+
 }

@@ -61,22 +61,28 @@ public class SimpleTicTacToeGameTest {
         TicTacToePlayer playerA = players.get(0);
         TicTacToePlayer playerB = players.get(1);
 
-        playerA.select(0, 0);
+        try {
+            playerA.select(0, 0);
 
-        playerA.bet(2);
-        playerB.bet(1);
+            playerA.bet(2);
+            playerB.bet(1);
 
-        playerA.select(1, 1);
+            playerB.select(1, 1);
 
-        playerA.bet(2);
-        playerB.bet(1);
+            playerA.bet(2);
+            playerB.bet(1);
 
-        playerA.select(2, 2);
+            playerA.select(2, 2);
 
-        playerA.bet(2);
-        playerB.bet(1);
+            playerA.bet(2);
+            playerB.bet(1);
 
-        Assert.assertTrue(playerB.getTable().getState().complete());
+            Assert.assertTrue(playerB.getTable().getState().complete());
+            Assert.assertEquals(playerB.getTable().getState().getWinner(), playerA.getPlayer().getPlayerId());
+        } finally {
+            playerA.getListenerControl().stopListener();
+            playerB.getListenerControl().stopListener();
+        }
     }
 
 }

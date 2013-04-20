@@ -31,4 +31,9 @@ public class TicTacToeCell {
     public static TicTacToeCell create(int row, int column) {
         return create((byte) row, (byte) column);
     }
+
+    @Override
+    public String toString() {
+        return "{" + row + ", " + column + "}";
+    }
 }

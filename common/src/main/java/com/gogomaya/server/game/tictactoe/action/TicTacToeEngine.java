@@ -34,15 +34,13 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
             long firstPlayerBet = firstPlayerMove.getBet();
             long secondPlayerBet = secondPlayerMove.getBet();
 
-            long nextPlayer = oldState.getPlayerIterator().next();
-
             if (firstPlayerBet == secondPlayerBet) {
                 oldState.setActiveCellState(new TicTacToeCellState(0L, firstPlayerBet, secondPlayerBet));
             } else {
                 oldState.setActiveCellState(new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet));
             }
 
-            oldState.setNextMove(new TicTacToeSelectCellMove(nextPlayer));
+            oldState.setNextMove(new TicTacToeSelectCellMove(oldState.getPlayerIterator().next()));
             oldState.setActiveCell(TicTacToeCell.DEFAULT);
             oldState.cleanMadeMove();
         }
@@ -52,8 +50,9 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
 
     private TicTacToeState processSelectCellMove(final TicTacToeState oldState, final TicTacToeSelectCellMove selectCellMove) {
         // Step 1. Sanity check
-        if (oldState.isOwned(selectCellMove.getCell()))
-            return oldState;
+        if (oldState.isOwned(selectCellMove.getCell())) {
+            throw new IllegalArgumentException("Cell " + selectCellMove.getCell() + " owned by " + oldState.getCellState(selectCellMove.getCell()));
+        }
         // Step 2. Generating next moves
         Collection<TicTacToeMove> nextMoves = ImmutableList.<TicTacToeMove> of(new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[0]),
                 new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[1]));

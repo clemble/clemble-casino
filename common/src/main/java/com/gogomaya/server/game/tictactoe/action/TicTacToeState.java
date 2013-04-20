@@ -3,10 +3,12 @@ package com.gogomaya.server.game.tictactoe.action;
 import java.util.Arrays;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.gogomaya.server.game.action.impl.AbstractGameState;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 
+@JsonIgnoreProperties({"winner", "activeUsers"})
 public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePlayerState> {
 
     /**
@@ -29,6 +31,14 @@ public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePl
         return board;
     }
 
+    public TicTacToeCellState getCellState(int row, int column) {
+        return row >= 0 && row < board.length && column >= 0 && column < board.length ? board[row][column] : null;
+    }
+
+    public TicTacToeCellState getCellState(TicTacToeCell cell) {
+        return getCellState(cell.getRow(), cell.getColumn());
+    }
+
     public TicTacToeState setBoard(TicTacToeCellState[][] board) {
         this.board = board;
         return this;
@@ -36,26 +46,30 @@ public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePl
 
     public boolean complete() {
         // Step 1. Check vertical
-        boolean completnece[] = new boolean[11];
-        Arrays.fill(completnece, true);
+        return getWinner() != -1L;
+    }
+
+    public long getWinner() {
+        long completnece[] = new long[11];
+        Arrays.fill(completnece, -1L);
         for (int i = 1; i < board.length; i++) {
             // Checking rows
-            completnece[0] = completnece[0] && board[0][i].getOwner() == board[0][i - 1].getOwner();
-            completnece[1] = completnece[1] && board[1][i].getOwner() == board[1][i - 1].getOwner();
-            completnece[2] = completnece[2] && board[2][i].getOwner() == board[2][i - 1].getOwner();
+            completnece[0] = board[0][i].getOwner() == board[0][i - 1].getOwner() ? board[0][i - 1].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
+            completnece[1] = board[1][i].getOwner() == board[1][i - 1].getOwner() ? board[1][i - 1].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
+            completnece[2] = board[2][i].getOwner() == board[2][i - 1].getOwner() ? board[2][i].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
             // Checking columns
-            completnece[3] = completnece[3] && board[i][0].getOwner() == board[i - 1][0].getOwner();
-            completnece[4] = completnece[4] && board[i][1].getOwner() == board[i - 1][1].getOwner();
-            completnece[5] = completnece[5] && board[i][2].getOwner() == board[i - 1][2].getOwner();
+            completnece[3] = board[i][0].getOwner() == board[i - 1][0].getOwner() ? board[i][0].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
+            completnece[4] = board[i][1].getOwner() == board[i - 1][1].getOwner() ? board[i][1].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
+            completnece[5] = board[i][2].getOwner() == board[i - 1][2].getOwner() ? board[i][2].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
             // Checking diagonals
-            completnece[6] = completnece[6] && board[i - 1][i - 1].getOwner() == board[i][i].getOwner();
-            completnece[7] = completnece[7] && board[3 - i][3 - i].getOwner() == board[2 - i][2 - i].getOwner();
+            completnece[6] = board[i - 1][i - 1].getOwner() == board[i][i].getOwner() ? board[i - 1][i - 1].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
+            completnece[7] = board[3 - i][3 - i].getOwner() == board[2 - i][2 - i].getOwner() ? board[3 - i][3 - i].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
         }
         // Step 2. If at least one complete game is complete
-        for (boolean complete : completnece)
-            if (complete)
-                return true;
-        return false;
+        for (long complete : completnece)
+            if (complete != -1L)
+                return complete;
+        return -1L;
     }
 
     public boolean isOwned(TicTacToeCell activeCell) {

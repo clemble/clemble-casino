@@ -16,11 +16,12 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 
 @Controller
-public class GameController {
+public class GameEngineController {
 
     final private TicTacToeTableRepository tableRepository;
 
@@ -28,7 +29,9 @@ public class GameController {
 
     final private GameNotificationManager notificationManager;
 
-    public GameController(TicTacToeTableRepository tableRepository, TicTacToeEngine engine, GameNotificationManager notificationManager) {
+    public GameEngineController(TicTacToeTableRepository tableRepository,
+            TicTacToeEngine engine,
+            GameNotificationManager notificationManager) {
         this.tableRepository = checkNotNull(tableRepository);
         this.engine = checkNotNull(engine);
         this.notificationManager = checkNotNull(notificationManager);
@@ -49,7 +52,11 @@ public class GameController {
         if (table.getCurrentSession().getSessionId() != sessionId)
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         // Step 3. Updating current state
-        table.setState(engine.process(table.getState(), move));
+        TicTacToeState nextState = engine.process(table.getState(), move);
+        if (nextState.complete()) {
+            // PlayerWallet wallet = playerWalletRepository.findOne(nextState.getWinner());
+        }
+        table.setState(nextState);
         table = tableRepository.saveAndFlush(table);
         // Step 4. Updating listeners
         notificationManager.notify(table);
