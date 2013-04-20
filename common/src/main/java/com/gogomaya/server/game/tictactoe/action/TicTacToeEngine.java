@@ -34,7 +34,7 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
             long firstPlayerBet = firstPlayerMove.getBet();
             long secondPlayerBet = secondPlayerMove.getBet();
 
-            long nextPlayer = firstPlayerBet == secondPlayerBet ? oldState.getPlayerIterator().current() : oldState.getPlayerIterator().next();
+            long nextPlayer = oldState.getPlayerIterator().next();
 
             if (firstPlayerBet == secondPlayerBet) {
                 oldState.setActiveCellState(new TicTacToeCellState(0L, firstPlayerBet, secondPlayerBet));

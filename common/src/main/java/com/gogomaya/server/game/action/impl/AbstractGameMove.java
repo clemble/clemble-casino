@@ -20,4 +20,9 @@ public class AbstractGameMove implements GameMove {
         return playerId;
     }
 
+    @Override
+    public String toString() {
+        return "GameMove [playerId=" + playerId + "]";
+    }
+
 }

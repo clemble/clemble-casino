@@ -17,22 +17,25 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
+import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.TicTacToeSession;
 import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 
 @Controller
-public class SessionController {
+public class TableMatchController {
 
-    final private TicTacToeStateManager matchingService;
-    final private TicTacToeSessionRepository sessionRepository;
     final private TicTacToeConfigurationManager configurationManager;
 
-    public SessionController(final TicTacToeStateManager matchingService,
-            final TicTacToeSessionRepository sessionRepository,
+    final private TicTacToeStateManager matchingService;
+
+    final private TicTacToeTableRepository tableRepository;
+
+    public TableMatchController(final TicTacToeStateManager matchingService,
+            final TicTacToeTableRepository sessionRepository,
             final TicTacToeConfigurationManager configurationManager) {
         this.matchingService = checkNotNull(matchingService);
-        this.sessionRepository = checkNotNull(sessionRepository);
+        this.tableRepository = checkNotNull(sessionRepository);
         this.configurationManager = checkNotNull(configurationManager);
     }
 
@@ -42,14 +45,13 @@ public class SessionController {
         // Step 1. Checking that provided specification was valid
         if (!configurationManager.getSpecificationOptions().valid(gameSpecification))
             throw GogomayaException.create(GogomayaError.GameSpecificationInvalid);
-        // Step 2. Invoking actual mathing service
+        // Step 2. Invoking actual matching service
         return matchingService.reserve(playerId, gameSpecification);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/active/session/{sessionId}", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    TicTacToeSession get(@PathVariable("sessionId") final long sessionId) {
-        return sessionRepository.findOne(sessionId);
+    public @ResponseBody TicTacToeTable get(@PathVariable("tableId") final long tableId) {
+        return tableRepository.findOne(tableId);
     }
 }

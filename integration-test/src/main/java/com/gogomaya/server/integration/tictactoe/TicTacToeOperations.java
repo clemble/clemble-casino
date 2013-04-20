@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.listener.GameListener;
@@ -44,12 +45,21 @@ public class TicTacToeOperations {
         TicTacToePlayer playerB = start(specification);
         while (playerA.getTable().getTableId() != playerB.getTable().getTableId()) {
             playerA = start(specification);
-            if (playerA.getTable().getTableId() != playerB.getTable().getTableId())
+            // waits added to be sure everyone on the same page
+            if (playerA.getTable().getTableId() != playerB.getTable().getTableId()) {
                 playerB = start(specification);
+                playerA.waitVersion(2);
+            } else {
+                playerB.waitVersion(2);
+            }
         }
-        ;
-        // Step 3. Returning generated value
-        return ImmutableList.<TicTacToePlayer> of(playerA, playerB);
+        // Step 3. Returning generated value who ever goes first is choosen as first
+        TicTacToeState state = playerB.getTable().getState() != null ? playerB.getTable().getState() : playerA.getTable().getState();
+        if (state.getNextMove(playerA.getPlayer().getPlayerId()) == null) {
+            return ImmutableList.<TicTacToePlayer> of(playerB, playerA);
+        } else {
+            return ImmutableList.<TicTacToePlayer> of(playerA, playerB);
+        }
     }
 
     public TicTacToePlayer start(GameSpecification specification) {

@@ -1,5 +1,7 @@
 package com.gogomaya.server.integration.tictactoe;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -24,12 +26,14 @@ public class TicTacToePlayer {
     final private RestTemplate restTemplate;
 
     final private AtomicInteger version = new AtomicInteger();
+    final private Object versionLock = new Object();
+
     final private AtomicReference<TicTacToeTable> table = new AtomicReference<TicTacToeTable>();
     private Player player;
 
     public TicTacToePlayer(RestTemplate restTemplate, String baseUrl) {
-        this.restTemplate = restTemplate;
-        this.baseUrl = baseUrl;
+        this.restTemplate = checkNotNull(restTemplate);
+        this.baseUrl = checkNotNull(baseUrl);
     }
 
     public Player getPlayer() {
@@ -42,13 +46,33 @@ public class TicTacToePlayer {
     }
 
     public TicTacToeTable getTable() {
-        return table.get();
+        return checkNotNull(table.get());
     }
 
     public TicTacToePlayer setTable(TicTacToeTable table) {
         this.table.set(table);
-        this.version.incrementAndGet();
+
+        synchronized (versionLock) {
+            this.version.incrementAndGet();
+            versionLock.notifyAll();
+        }
+
         return this;
+    }
+
+    public void waitVersion(int expectedVersion) {
+        if (this.version.get() >= expectedVersion)
+            return;
+
+        synchronized (versionLock) {
+            while (this.version.get() < expectedVersion) {
+                try {
+                    versionLock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
     public void select(int row, int column) {

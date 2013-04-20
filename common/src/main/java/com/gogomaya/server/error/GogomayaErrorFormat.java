@@ -1,4 +1,4 @@
-package com.gogomaya.server.json;
+package com.gogomaya.server.error;
 
 import java.io.IOException;
 import java.util.Date;
@@ -8,7 +8,6 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
 
-import com.gogomaya.server.error.GogomayaError;
 
 public class GogomayaErrorFormat {
 
