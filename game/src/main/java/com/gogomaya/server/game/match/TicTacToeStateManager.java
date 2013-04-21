@@ -52,11 +52,10 @@ public class TicTacToeStateManager {
             gameSession.addPlayers(gameTable.getPlayers());
             gameSession.setSessionState(GameSessionState.active);
             gameSession.setTable(gameTable);
+            gameSession = sessionRepository.save(gameSession);
 
             gameTable.setCurrentSession(gameSession);
-
             gameTable = tableRepository.save(gameTable);
-            gameSession = sessionRepository.save(gameSession);
         } else {
             gameTable = tableRepository.save(gameTable);
             tableManager.setReservable(gameTable);

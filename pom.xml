@@ -12,7 +12,7 @@
         <module>user-social</module>
         <module>web</module>
         <module>web-client</module>
-        <!-- <module>integration-test</module> -->
+        <module>integration-test</module>
     </modules>
     <properties>
         <cloudfoundry.runtime.version>0.8.2</cloudfoundry.runtime.version>

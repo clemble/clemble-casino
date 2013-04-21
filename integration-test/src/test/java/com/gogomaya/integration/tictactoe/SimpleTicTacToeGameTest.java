@@ -8,10 +8,11 @@ import org.jbehave.core.annotations.UsingSteps;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
@@ -28,7 +29,7 @@ public class SimpleTicTacToeGameTest {
     TicTacToeOperations ticTacToeOperations;
 
     @Test
-    @Repeat(100)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void testSimpleStart() {
         List<TicTacToePlayer> players = ticTacToeOperations.start();
         TicTacToePlayer playerA = players.get(0);
@@ -57,7 +58,6 @@ public class SimpleTicTacToeGameTest {
     }
 
     @Test
-    @Repeat(100)
     public void testSimpleScenario() {
         List<TicTacToePlayer> players = ticTacToeOperations.start();
         TicTacToePlayer playerA = players.get(0);

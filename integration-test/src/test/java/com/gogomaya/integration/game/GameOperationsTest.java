@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameSessionState;
@@ -29,6 +30,7 @@ import com.gogomaya.tests.validation.PlayerCredentialsValidation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @UsingSteps(instances = PlayerCredentialsValidation.class)
+@WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
 public class GameOperationsTest {
 

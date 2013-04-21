@@ -33,8 +33,7 @@ public class RegistrationSocialConnectionController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/registration/social", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PlayerIdentity createUser(@RequestBody SocialConnectionData socialConnectionData) {
+    public @ResponseBody PlayerIdentity createUser(@RequestBody SocialConnectionData socialConnectionData) {
         validationService.validate(socialConnectionData);
         // Step 1. Registering player with SocialConnection
         Long playerId = socialConnectionDataAdapter.register(socialConnectionData);

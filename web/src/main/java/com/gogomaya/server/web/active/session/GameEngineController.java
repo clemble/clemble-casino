@@ -44,9 +44,7 @@ public class GameEngineController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/action", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    TicTacToeTable process(
-            @RequestHeader("playerId") long playerId,
+    public @ResponseBody TicTacToeTable process(@RequestHeader("playerId") long playerId,
             @RequestHeader("sessionId") long sessionId,
             @RequestHeader("tableId") long tableId,
             @RequestBody TicTacToeMove move) {
