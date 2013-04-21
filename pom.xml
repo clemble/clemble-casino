@@ -102,6 +102,11 @@
                 <artifactId>user-social</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Common dependencies -->
 

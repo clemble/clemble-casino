@@ -24,12 +24,12 @@ import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.game.listener.ListenerChannel;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
-import com.gogomaya.server.spring.integration.IntegrationTestConfiguration;
+import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @UsingSteps(instances = PlayerCredentialsValidation.class)
-@ContextConfiguration(classes = { IntegrationTestConfiguration.class })
+@ContextConfiguration(classes = { TestConfiguration.class })
 public class GameOperationsTest {
 
     @Inject

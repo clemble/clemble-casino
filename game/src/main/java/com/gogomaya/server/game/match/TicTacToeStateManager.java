@@ -8,7 +8,7 @@ import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
-import com.gogomaya.server.game.table.TicTacToeTableManager;
+import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.TicTacToeSession;
 import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
@@ -20,13 +20,13 @@ public class TicTacToeStateManager {
 
     final private GameNotificationManager notificationManager;
 
-    final private TicTacToeTableManager tableManager;
+    final private GameTableManager tableManager;
     final private TicTacToeTableRepository tableRepository;
     final private TicTacToeSessionRepository sessionRepository;
     final private TicTacToeStateFactory stateFactory;
 
     @Inject
-    public TicTacToeStateManager(final TicTacToeTableManager tableManager,
+    public TicTacToeStateManager(final GameTableManager tableManager,
             final TicTacToeTableRepository tableRepository,
             final TicTacToeSessionRepository sessionRepository,
             final GameNotificationManager notificationManager,
@@ -40,7 +40,7 @@ public class TicTacToeStateManager {
 
     public TicTacToeTable reserve(final long playerId, final TicTacToeSpecification gameSpecification) {
         // Step 1. Pooling
-        TicTacToeTable gameTable = tableManager.poll(gameSpecification);
+        TicTacToeTable gameTable = (TicTacToeTable) tableManager.poll(gameSpecification);
         gameTable.addPlayer(playerId);
 
         PlayerNumberRule numberRule = gameSpecification.getNumberRule();
@@ -53,10 +53,10 @@ public class TicTacToeStateManager {
             gameSession.setSessionState(GameSessionState.active);
             gameSession.setTable(gameTable);
 
-            gameSession = sessionRepository.save(gameSession);
             gameTable.setCurrentSession(gameSession);
 
-            tableRepository.save(gameTable);
+            gameTable = tableRepository.save(gameTable);
+            gameSession = sessionRepository.save(gameSession);
         } else {
             gameTable = tableRepository.save(gameTable);
             tableManager.setReservable(gameTable);

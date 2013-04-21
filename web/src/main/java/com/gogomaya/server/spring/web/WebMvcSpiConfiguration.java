@@ -17,6 +17,7 @@ import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
 import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
+import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.player.PlayerProfile;
@@ -30,9 +31,9 @@ import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.active.session.GameEngineController;
-import com.gogomaya.server.web.active.session.TableMatchController;
+import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
-import com.gogomaya.server.web.game.configuration.GameConfiguartionManagerController;
+import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 import com.gogomaya.server.web.registration.RegistrationLoginController;
 import com.gogomaya.server.web.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.registration.RegistrationSocialConnectionController;
@@ -79,6 +80,9 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     @Inject
     ObjectMapper objectMapper;
 
+    @Inject
+    GameTableManager tableManager;
+
     @Bean
     public MappingJacksonHttpMessageConverter jacksonHttpMessageConverter() {
         MappingJacksonHttpMessageConverter messageConverter = new MappingJacksonHttpMessageConverter();
@@ -124,18 +128,18 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public TableMatchController sessionController() {
-        return new TableMatchController(stateManager, tableRepository, configurationManager);
+    public GameTableMatchController sessionController() {
+        return new GameTableMatchController(stateManager, tableRepository, configurationManager);
     }
 
     @Bean
-    public GameConfiguartionManagerController gameOptionsController() {
-        return new GameConfiguartionManagerController(configurationManager);
+    public GameConfigurationManagerController gameOptionsController() {
+        return new GameConfigurationManagerController(configurationManager);
     }
 
     @Bean
     public GameEngineController gameController() {
-        return new GameEngineController(tableRepository, engine, notificationManager);
+        return new GameEngineController(tableRepository, engine, notificationManager, tableManager);
     }
 
 }

@@ -21,7 +21,7 @@ import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 
 @Controller
-public class TableMatchController {
+public class GameTableMatchController {
 
     final private TicTacToeConfigurationManager configurationManager;
 
@@ -29,7 +29,7 @@ public class TableMatchController {
 
     final private TicTacToeTableRepository tableRepository;
 
-    public TableMatchController(final TicTacToeStateManager matchingService,
+    public GameTableMatchController(final TicTacToeStateManager matchingService,
             final TicTacToeTableRepository sessionRepository,
             final TicTacToeConfigurationManager configurationManager) {
         this.matchingService = checkNotNull(matchingService);
@@ -39,7 +39,7 @@ public class TableMatchController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/session", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody TicTacToeTable create(@RequestHeader("playerId") final long playerId, @RequestBody final TicTacToeSpecification gameSpecification) {
+    public @ResponseBody TicTacToeTable match(@RequestHeader("playerId") final long playerId, @RequestBody final TicTacToeSpecification gameSpecification) {
         // Step 1. Checking that provided specification was valid
         if (!configurationManager.getSpecificationOptions().valid(gameSpecification))
             throw GogomayaException.create(GogomayaError.GameSpecificationInvalid);

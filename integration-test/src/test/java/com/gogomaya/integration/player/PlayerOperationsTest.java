@@ -23,12 +23,12 @@ import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.web.RegistrationRequest;
-import com.gogomaya.server.spring.integration.IntegrationTestConfiguration;
+import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @UsingSteps(instances = PlayerCredentialsValidation.class)
-@ContextConfiguration(classes = { IntegrationTestConfiguration.class })
+@ContextConfiguration(classes = { TestConfiguration.class })
 public class PlayerOperationsTest {
 
     @Inject

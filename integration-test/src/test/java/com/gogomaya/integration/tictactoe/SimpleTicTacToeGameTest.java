@@ -11,15 +11,17 @@ import org.junit.runner.RunWith;
 import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
-import com.gogomaya.server.spring.integration.IntegrationTestConfiguration;
+import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @UsingSteps(instances = PlayerCredentialsValidation.class)
-@ContextConfiguration(classes = { IntegrationTestConfiguration.class })
+@ContextConfiguration(classes = { TestConfiguration.class })
 public class SimpleTicTacToeGameTest {
 
     @Inject

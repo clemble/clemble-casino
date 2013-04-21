@@ -13,7 +13,7 @@ import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.integration.player.Player;
 
-public class RestGameOperations implements GameOperations {
+public class IntegrationGameOperations implements GameOperations {
 
     final private static String CREATE_URL = "/spi/active/session";
     final private static String OPTIONS_URL = "/spi/active/options";
@@ -21,7 +21,7 @@ public class RestGameOperations implements GameOperations {
     final private RestTemplate restTemplate;
     final private String baseUrl;
 
-    public RestGameOperations(final String baseUrl, final RestTemplate restTemplate) {
+    public IntegrationGameOperations(final String baseUrl, final RestTemplate restTemplate) {
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
     }

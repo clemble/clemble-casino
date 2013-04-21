@@ -12,6 +12,10 @@
             <groupId>com.gogomaya.server</groupId>
             <artifactId>common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gogomaya.server</groupId>
+            <artifactId>web</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.ning</groupId>

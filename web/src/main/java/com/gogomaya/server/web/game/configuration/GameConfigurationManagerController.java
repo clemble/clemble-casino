@@ -14,17 +14,17 @@ import com.gogomaya.server.game.configuration.GameConfigurationManager;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 
 @Controller
-public class GameConfiguartionManagerController {
+public class GameConfigurationManagerController {
 
     final GameConfigurationManager configurationManager;
     
-    public GameConfiguartionManagerController(GameConfigurationManager configurationManager) {
+    public GameConfigurationManagerController(GameConfigurationManager configurationManager) {
         this.configurationManager = checkNotNull(configurationManager);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/active/options", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK) // Can be null
-    public @ResponseBody GameSpecificationOptions create(@RequestHeader(value = "playerId", required = false) final Long playerId) {
+    public @ResponseBody GameSpecificationOptions get(@RequestHeader(value = "playerId", required = false) final Long playerId) {
         return configurationManager.getSpecificationOptions();
     }
 

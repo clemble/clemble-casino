@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.connection.GameNotificationManager;
+import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
@@ -23,23 +24,28 @@ import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 @Controller
 public class GameEngineController {
 
+    final private GameNotificationManager notificationManager;
+
+    final private GameTableManager tableManager;
+
     final private TicTacToeTableRepository tableRepository;
 
     final private TicTacToeEngine engine;
 
-    final private GameNotificationManager notificationManager;
-
-    public GameEngineController(TicTacToeTableRepository tableRepository,
-            TicTacToeEngine engine,
-            GameNotificationManager notificationManager) {
+    public GameEngineController(final TicTacToeTableRepository tableRepository,
+            final TicTacToeEngine engine,
+            final GameNotificationManager notificationManager,
+            final GameTableManager tableManager) {
+        this.notificationManager = checkNotNull(notificationManager);
+        this.tableManager = tableManager;
         this.tableRepository = checkNotNull(tableRepository);
         this.engine = checkNotNull(engine);
-        this.notificationManager = checkNotNull(notificationManager);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/action", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody TicTacToeTable process(
+    public @ResponseBody
+    TicTacToeTable process(
             @RequestHeader("playerId") long playerId,
             @RequestHeader("sessionId") long sessionId,
             @RequestHeader("tableId") long tableId,
@@ -53,11 +59,11 @@ public class GameEngineController {
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         // Step 3. Updating current state
         TicTacToeState nextState = engine.process(table.getState(), move);
-        if (nextState.complete()) {
-            // PlayerWallet wallet = playerWalletRepository.findOne(nextState.getWinner());
-        }
         table.setState(nextState);
         table = tableRepository.saveAndFlush(table);
+        if (nextState.complete()) {
+            tableManager.setReservable(table);
+        }
         // Step 4. Updating listeners
         notificationManager.notify(table);
         return table;

@@ -23,6 +23,7 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.tictactoe.TicTacToeSession;
@@ -81,8 +82,10 @@ public class TicTacToeTable implements GameTable<TicTacToeSession> {
         return serverResource;
     }
 
-    public void setServerResource(GameServerConnection serverResource) {
+    @Override
+    public TicTacToeTable setServerResource(GameServerConnection serverResource) {
         this.serverResource = serverResource;
+        return this;
     }
 
     @Override
@@ -113,8 +116,10 @@ public class TicTacToeTable implements GameTable<TicTacToeSession> {
         return specification;
     }
 
-    public void setSpecification(TicTacToeSpecification specification) {
-        this.specification = specification;
+    @Override
+    public TicTacToeTable setSpecification(GameSpecification specification) {
+        this.specification = (TicTacToeSpecification) specification;
+        return this;
     }
 
     @Override

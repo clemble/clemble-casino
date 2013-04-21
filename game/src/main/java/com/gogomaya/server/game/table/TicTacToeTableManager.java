@@ -7,12 +7,14 @@ import javax.inject.Inject;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.gogomaya.server.game.GameSpecification;
+import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 
-public class TicTacToeTableManager {
+public class TicTacToeTableManager implements GameTableManager {
 
     final private RedisTemplate<byte[], Long> redisTemplate;
 
@@ -29,7 +31,8 @@ public class TicTacToeTableManager {
         this.serverConnectionManager = checkNotNull(serverConnectionManager);
     }
 
-    public TicTacToeTable poll(final TicTacToeSpecification gameSpecification) {
+    @Override
+    public TicTacToeTable poll(final GameSpecification gameSpecification) {
         byte[] key = gameSpecification.getName().toByteArray();
         // Step 1. Fetching associated Set
         BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(key);
@@ -56,7 +59,8 @@ public class TicTacToeTableManager {
         return gameTable;
     }
 
-    public void setReservable(TicTacToeTable gameTable) {
+    @Override
+    public void setReservable(GameTable<?> gameTable) {
         if (gameTable == null)
             throw new IllegalArgumentException("Game table can't be null");
         if (gameTable.getSpecification() == null)
