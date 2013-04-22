@@ -104,6 +104,11 @@
             </dependency>
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
+                <artifactId>game-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
                 <artifactId>web</artifactId>
                 <version>${project.version}</version>
             </dependency>

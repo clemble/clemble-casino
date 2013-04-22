@@ -3,28 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.gogomaya.server</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>game</artifactId>
         <version>0.0.3-SNAPSHOT</version>
     </parent>
-    <artifactId>web</artifactId>
+    <artifactId>game-web</artifactId>
     <packaging>war</packaging>
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>user-management</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>user-social</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>game-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>game</artifactId>
+            <artifactId>game-tictactoe</artifactId>
         </dependency>
 
         <dependency>
@@ -38,10 +25,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-rest-webmvc</artifactId>
         </dependency>
 
         <dependency>

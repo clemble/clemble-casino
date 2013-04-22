@@ -6,10 +6,9 @@ import java.util.Collection;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.gogomaya.server.game.rule.GameRule;
 import com.google.common.collect.ImmutableSet;
 
-public class GameRuleOptions<T extends GameRule> {
+public class GameRuleOptions<T> {
 
     @JsonProperty("default")
     final private T defaultOption;

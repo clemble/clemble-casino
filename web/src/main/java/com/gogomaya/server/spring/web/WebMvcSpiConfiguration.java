@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.rest.webmvc.BaseUriMethodArgumentResolver;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -12,14 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaValidationService;
-import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
-import com.gogomaya.server.game.connection.GameNotificationManager;
-import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
-import com.gogomaya.server.game.match.TicTacToeStateManager;
-import com.gogomaya.server.game.session.TicTacToeSessionRepository;
-import com.gogomaya.server.game.table.GameTableManager;
-import com.gogomaya.server.game.table.TicTacToeTableRepository;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.SocialConnectionData;
@@ -30,15 +23,13 @@ import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
-import com.gogomaya.server.web.active.session.GameEngineController;
-import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
-import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 import com.gogomaya.server.web.registration.RegistrationLoginController;
 import com.gogomaya.server.web.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.registration.RegistrationSocialConnectionController;
 
 @Configuration
+@Import(WebGameConfiguration.class)
 public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
@@ -57,31 +48,7 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     GogomayaValidationService validationService;
 
     @Inject
-    TicTacToeConfigurationManager configurationManager;
-
-    @Inject
-    TicTacToeStateManager stateManager;
-
-    @Inject
-    TicTacToeSessionRepository sessionRepository;
-
-    @Inject
-    TicTacToeSpecificationRepository specificationRepository;
-
-    @Inject
-    TicTacToeTableRepository tableRepository;
-
-    @Inject
-    TicTacToeEngine engine;
-
-    @Inject
-    GameNotificationManager notificationManager;
-
-    @Inject
     ObjectMapper objectMapper;
-
-    @Inject
-    GameTableManager tableManager;
 
     @Bean
     public MappingJacksonHttpMessageConverter jacksonHttpMessageConverter() {
@@ -125,21 +92,6 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     @Bean
     public HandlerExceptionResolver handlerExceptionResolver() {
         return new GogomayaHandlerExceptionResolver(objectMapper);
-    }
-
-    @Bean
-    public GameTableMatchController sessionController() {
-        return new GameTableMatchController(stateManager, tableRepository, configurationManager);
-    }
-
-    @Bean
-    public GameConfigurationManagerController gameOptionsController() {
-        return new GameConfigurationManagerController(configurationManager);
-    }
-
-    @Bean
-    public GameEngineController gameController() {
-        return new GameEngineController(tableRepository, engine, notificationManager, tableManager);
     }
 
 }

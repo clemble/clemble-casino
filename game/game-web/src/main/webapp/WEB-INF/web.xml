@@ -27,31 +27,13 @@
     </context-param>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>com.gogomaya.server.spring.web.WebGenericConfiguration</param-value>
+        <param-value>com.gogomaya.server.spring.web.WebGameConfiguration</param-value>
     </context-param>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
     <servlet>
-        <servlet-name>api-rest-exporter</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>contextClass</param-name>
-            <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
-        </init-param>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>com.gogomaya.server.spring.web.WebMvcApiConfiguration</param-value>
-        </init-param>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>api-rest-exporter</servlet-name>
-        <url-pattern>/api/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>spi-rest-exporter</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
@@ -60,12 +42,12 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>com.gogomaya.server.spring.web.WebMvcSpiConfiguration</param-value>
+            <param-value>com.gogomaya.server.spring.web.WebGameConfiguration</param-value>
         </init-param>
         <load-on-startup>3</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>spi-rest-exporter</servlet-name>
-        <url-pattern>/spi/*</url-pattern>
+        <servlet-name>game-exporter</servlet-name>
+        <url-pattern>/game/*</url-pattern>
     </servlet-mapping>
 </web-app>

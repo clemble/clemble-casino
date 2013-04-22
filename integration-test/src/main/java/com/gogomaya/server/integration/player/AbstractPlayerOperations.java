@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.gogomaya.server.player.PlayerProfile;
@@ -15,9 +16,9 @@ abstract public class AbstractPlayerOperations implements PlayerOperations {
     @Override
     final public Player createPlayer() {
         return createPlayer(new PlayerProfile()
-            .setFirstName(RandomStringUtils.random(10))
-            .setLastName(RandomStringUtils.random(10))
-            .setNickName(RandomStringUtils.random(10)));
+            .setFirstName(RandomStringUtils.randomAlphabetic(10))
+            .setLastName(RandomStringUtils.randomAlphabetic(10))
+            .setNickName(RandomStringUtils.randomAlphabetic(10)));
     }
 
     @Override
@@ -25,7 +26,7 @@ abstract public class AbstractPlayerOperations implements PlayerOperations {
         // Step 0. Sanity check
         checkNotNull(playerProfile);
         // Step 1. Creating RegistrationRequest for processing
-        PlayerCredential playerCredential = new PlayerCredential().setEmail(UUID.randomUUID().toString() + "@gmail.com").setPassword(
+        PlayerCredential playerCredential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(20) + "@gmail.com").setPassword(
                 UUID.randomUUID().toString());
         RegistrationRequest registrationRequest = new RegistrationRequest().setPlayerProfile(playerProfile).setPlayerCredential(playerCredential);
         // Step 2. Forwarding to appropriate method for processing
