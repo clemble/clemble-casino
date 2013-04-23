@@ -12,14 +12,19 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
-import com.gogomaya.server.user.AbstractCommonTest;
+import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
-public class PlayerProfileTest extends AbstractCommonTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })
+public class PlayerProfileTest {
 
     final private String FIRST_NAME = "Michael";
     final private String LAST_NAME = "Limbo";

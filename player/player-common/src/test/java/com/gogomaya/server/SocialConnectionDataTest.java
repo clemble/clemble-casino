@@ -17,11 +17,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
-import com.gogomaya.server.user.AbstractCommonTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })
-public class SocialConnectionDataTest extends AbstractCommonTest{
+public class SocialConnectionDataTest {
 
     final private String PROVIDER_ID = "facebook";
     final private String PROVIDER_USER_ID = "1232424243";

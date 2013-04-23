@@ -3,14 +3,19 @@ package com.gogomaya.server.schema;
 import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.wallet.PlayerWallet;
-import com.gogomaya.server.user.AbstractCommonTest;
+import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
-public class SchemaGenerationCommonTest extends AbstractCommonTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })
+public class SchemaGenerationCommonTest {
 
     @Test
     public void generatePlayerSchema() {
