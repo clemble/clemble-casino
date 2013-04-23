@@ -3,13 +3,18 @@ package com.gogomaya.server.game.schema;
 import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.tictactoe.TicTacToeSession;
 import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
-import com.gogomaya.server.user.AbstractCommonTest;
+import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
-public class GameSchemaGeneration extends AbstractCommonTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })
+public class GameSchemaGeneration {
 
     @Test
     public void generateGameSchema(){

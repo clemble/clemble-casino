@@ -11,6 +11,10 @@
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
+            <artifactId>common-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gogomaya.server</groupId>
             <artifactId>game-tictactoe</artifactId>
         </dependency>
 

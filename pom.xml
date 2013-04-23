@@ -7,11 +7,14 @@
     <packaging>pom</packaging>
     <modules>
         <module>common</module>
+        <module>common-web</module>
+
+        <module>player</module>
         <module>game</module>
-        <module>user-management</module>
-        <module>user-social</module>
+
         <module>web</module>
         <module>web-client</module>
+
         <module>integration-test</module>
     </modules>
     <properties>
@@ -89,6 +92,11 @@
             </dependency>
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
+                <artifactId>common-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
                 <artifactId>game</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -105,6 +113,11 @@
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>game-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>player-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -3,25 +3,38 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.gogomaya.server</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>player</artifactId>
         <version>0.0.3-SNAPSHOT</version>
     </parent>
-    <artifactId>web</artifactId>
+    <artifactId>player-web</artifactId>
     <packaging>war</packaging>
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
             <artifactId>common-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>player-web</artifactId>
+            <artifactId>player-management</artifactId>
         </dependency>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>game-web</artifactId>
+            <artifactId>player-social</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-rest-webmvc</artifactId>
@@ -31,6 +44,11 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thetransactioncompany</groupId>
+            <artifactId>cors-filter</artifactId>
         </dependency>
 
     </dependencies>

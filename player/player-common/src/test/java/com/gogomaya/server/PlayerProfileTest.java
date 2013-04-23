@@ -1,4 +1,4 @@
-package com.gogomaya.server.user;
+package com.gogomaya.server;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.user.AbstractCommonTest;
 
 public class PlayerProfileTest extends AbstractCommonTest {
 

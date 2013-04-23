@@ -14,35 +14,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerProfile;
-import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.security.PlayerCredentialRepository;
 import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.player.web.RegistrationRequest;
-import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
-import com.gogomaya.server.web.registration.RegistrationLoginController;
-import com.gogomaya.server.web.registration.RegistrationSignInContoller;
-import com.gogomaya.server.web.registration.RegistrationSocialConnectionController;
 
 @Configuration
-@Import(WebGameConfiguration.class)
+@Import({WebGameConfiguration.class, WebPlayerConfiguration.class})
 public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
-
-    @Inject
-    SocialConnectionDataAdapter connectionDataAdapter;
-
-    @Inject
-    PlayerProfileRepository playerProfileRepository;
-
-    @Inject
-    PlayerCredentialRepository playerCredentialRepository;
-
-    @Inject
-    PlayerIdentityRepository playerIdentityRepository;
 
     @Inject
     GogomayaValidationService validationService;
@@ -55,21 +36,6 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
         MappingJacksonHttpMessageConverter messageConverter = new MappingJacksonHttpMessageConverter();
         messageConverter.setObjectMapper(objectMapper);
         return messageConverter;
-    }
-
-    @Bean
-    public RegistrationSocialConnectionController registrationSocialConnectionController() {
-        return new RegistrationSocialConnectionController(connectionDataAdapter, playerIdentityRepository, validationService);
-    }
-
-    @Bean
-    public RegistrationSignInContoller registrationSignInContoller() {
-        return new RegistrationSignInContoller(playerProfileRepository, playerCredentialRepository, playerIdentityRepository, validationService);
-    }
-
-    @Bean
-    public RegistrationLoginController registrationLoginController() {
-        return new RegistrationLoginController(playerCredentialRepository, playerIdentityRepository);
     }
 
     @Bean

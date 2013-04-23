@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.gogomaya.server</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>player</artifactId>
         <version>0.0.3-SNAPSHOT</version>
     </parent>
-    <artifactId>user-management</artifactId>
+    <artifactId>player-management</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>player-common</artifactId>
         </dependency>
 
         <dependency>

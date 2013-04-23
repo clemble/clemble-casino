@@ -1,4 +1,4 @@
-package com.gogomaya.server.user;
+package com.gogomaya.server;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.user.AbstractCommonTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })
