@@ -13,14 +13,14 @@ public class Money implements Serializable {
 
     private final Currency currency;
 
-    private final int amount;
+    private final long amount;
 
-    public Money(final Currency currency, final int amount) {
+    public Money(final Currency currency, final long amount) {
         this.currency = checkNotNull(currency);
         this.amount = amount;
     }
 
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 
@@ -32,9 +32,9 @@ public class Money implements Serializable {
         if (more == null || more.amount == 0)
             return this;
 
-        more.exchange(more, currency);
+        more = more.exchange(more, currency);
 
-        return new Money(currency, amount + more.amount);
+        return Money.create(currency, amount + more.amount);
     }
 
     public Money subtract(Money minus) {
@@ -43,14 +43,14 @@ public class Money implements Serializable {
 
         minus = exchange(minus, currency);
 
-        return new Money(currency, amount - minus.amount);
+        return Money.create(currency, amount - minus.amount);
     }
 
     public Money negate() {
         if (amount == 0)
             return this;
 
-        return new Money(currency, -amount);
+        return Money.create(currency, -amount);
     }
 
     public Money exchange(Money source, Currency targetCurrency) {
@@ -58,6 +58,10 @@ public class Money implements Serializable {
             return source;
 
         throw new IllegalArgumentException("We do not support money change yet");
+    }
+
+    public static Money create(final Currency currency, final long ammount) {
+        return new Money(currency, ammount);
     }
 
 }

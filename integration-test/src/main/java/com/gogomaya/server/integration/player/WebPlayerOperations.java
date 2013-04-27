@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.web.RegistrationRequest;
-import com.gogomaya.server.web.registration.RegistrationLoginController;
-import com.gogomaya.server.web.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.registration.RegistrationLoginController;
+import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 
 public class WebPlayerOperations extends AbstractPlayerOperations {
 

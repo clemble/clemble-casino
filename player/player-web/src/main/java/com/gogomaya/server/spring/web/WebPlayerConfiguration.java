@@ -18,9 +18,9 @@ import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
-import com.gogomaya.server.web.registration.RegistrationLoginController;
-import com.gogomaya.server.web.registration.RegistrationSignInContoller;
-import com.gogomaya.server.web.registration.RegistrationSocialConnectionController;
+import com.gogomaya.server.web.player.registration.RegistrationLoginController;
+import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.registration.RegistrationSocialConnectionController;
 
 @Configuration
 @Import(value = {SocialModuleSpringConfiguration.class})

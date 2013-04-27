@@ -12,7 +12,7 @@ import com.gogomaya.server.hibernate.ImmutableHibernateType;
 
 public class MoneyHibernate extends ImmutableHibernateType<Money> {
 
-    final int[] TYPES = new int[] { Types.INTEGER, Types.INTEGER };
+    final int[] TYPES = new int[] { Types.INTEGER, Types.BIGINT };
 
     @Override
     public int[] sqlTypes() {
@@ -28,7 +28,7 @@ public class MoneyHibernate extends ImmutableHibernateType<Money> {
     public Object nullSafeGet(final ResultSet rs, final String[] names, final SessionImplementor session, final Object owner) throws HibernateException,
             SQLException {
         Currency currency = Currency.class.getEnumConstants()[rs.getInt(names[0])];
-        return new Money(currency, rs.getInt(names[1]));
+        return Money.create(currency, rs.getLong(names[1]));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class MoneyHibernate extends ImmutableHibernateType<Money> {
         Money money = (Money) value;
 
         st.setInt(index++, money.getCurrency().ordinal());
-        st.setInt(index++, money.getAmount());
+        st.setLong(index++, money.getAmount());
     }
 
 }

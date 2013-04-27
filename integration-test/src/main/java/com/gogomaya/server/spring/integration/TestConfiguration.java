@@ -26,8 +26,8 @@ import com.gogomaya.server.spring.web.WebMvcSpiConfiguration;
 import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
-import com.gogomaya.server.web.registration.RegistrationLoginController;
-import com.gogomaya.server.web.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.registration.RegistrationLoginController;
+import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 
 @Configuration
 @Import(value = {TestConfiguration.LocalTestConfiguration.class,

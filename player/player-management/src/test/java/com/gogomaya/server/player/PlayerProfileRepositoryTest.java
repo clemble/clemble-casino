@@ -1,4 +1,4 @@
-package com.gogomaya.server.user;
+package com.gogomaya.server.player;
 
 import org.junit.Assert;
 import org.junit.Before;

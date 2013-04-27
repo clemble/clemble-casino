@@ -1,4 +1,4 @@
-package com.gogomaya.server.web.registration;
+package com.gogomaya.server.web.player.registration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
