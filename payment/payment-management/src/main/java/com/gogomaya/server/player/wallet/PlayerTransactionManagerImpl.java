@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gogomaya.server.money.Money;
 
 @Service("playerWalletManager")
-public class PlayerTransactionManagerImpl implements PlayerMoneyTransactionManager {
+public class PlayerTransactionManagerImpl implements PlayerTransactionManager {
 
     final private PlayerWalletRepository playerWalletRepository;
 

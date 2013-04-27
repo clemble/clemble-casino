@@ -10,6 +10,7 @@
         <module>common-web</module>
 
         <module>player</module>
+        <module>payment</module>
         <module>game</module>
 
         <module>web</module>
@@ -118,6 +119,11 @@
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>player-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>payment-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

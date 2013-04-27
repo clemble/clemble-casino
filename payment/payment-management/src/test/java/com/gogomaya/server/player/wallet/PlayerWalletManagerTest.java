@@ -14,18 +14,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
-import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
+import com.gogomaya.server.spring.player.wallet.PlayerWalletManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = PlayerManagementSpringConfiguration.class)
+@ContextConfiguration(classes = PlayerWalletManagementSpringConfiguration.class)
 public class PlayerWalletManagerTest {
 
     @Inject
     public PlayerWalletRepository walletRepository;
 
     @Inject
-    public PlayerMoneyTransactionManager walletManager;
+    public PlayerTransactionManager walletManager;
 
     private long playerFrom = RandomUtils.nextLong();
     private long playerTo = RandomUtils.nextLong();

@@ -1,4 +1,4 @@
-package com.gogomaya.server.spring.web;
+package com.gogomaya.server.spring.web.player;
 
 import javax.inject.Inject;
 

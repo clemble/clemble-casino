@@ -18,11 +18,13 @@ import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.web.RegistrationRequest;
+import com.gogomaya.server.spring.web.payment.WebPaymentConfiguration;
+import com.gogomaya.server.spring.web.player.WebPlayerConfiguration;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 
 @Configuration
-@Import({WebGameConfiguration.class, WebPlayerConfiguration.class})
+@Import({WebGameConfiguration.class, WebPlayerConfiguration.class, WebPaymentConfiguration.class})
 public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Inject

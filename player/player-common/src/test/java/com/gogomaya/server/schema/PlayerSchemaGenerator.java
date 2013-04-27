@@ -7,11 +7,9 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.money.PlayerMoneyTransaction;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -26,8 +24,6 @@ public class PlayerSchemaGenerator {
             .addAnnotatedClass(PlayerProfile.class)
             .addAnnotatedClass(PlayerCredential.class)
             .addAnnotatedClass(PlayerIdentity.class)
-            .addAnnotatedClass(PlayerWallet.class)
-            .addAnnotatedClass(PlayerMoneyTransaction.class)
             .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
             .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 

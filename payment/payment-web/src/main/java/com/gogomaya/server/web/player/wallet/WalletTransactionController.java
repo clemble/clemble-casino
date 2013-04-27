@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.money.PlayerMoneyTransaction;
-import com.gogomaya.server.player.wallet.PlayerMoneyTransactionManager;
+import com.gogomaya.server.player.wallet.PlayerTransactionManager;
 
 @Controller
 public class WalletTransactionController {
 
-    final PlayerMoneyTransactionManager playerMoneyWalletManager;
+    final PlayerTransactionManager playerMoneyWalletManager;
 
-    public WalletTransactionController(final PlayerMoneyTransactionManager playerWalletManager) {
+    public WalletTransactionController(final PlayerTransactionManager playerWalletManager) {
         this.playerMoneyWalletManager = checkNotNull(playerWalletManager);
     }
 

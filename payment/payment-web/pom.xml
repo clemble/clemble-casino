@@ -3,32 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.gogomaya.server</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>payment</artifactId>
         <version>0.0.3-SNAPSHOT</version>
     </parent>
-    <artifactId>web</artifactId>
+    <artifactId>payment-web</artifactId>
     <packaging>war</packaging>
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>common-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>player-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>game-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>payment-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-rest-webmvc</artifactId>
+            <artifactId>payment-management</artifactId>
         </dependency>
 
         <dependency>
@@ -36,7 +19,6 @@
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <build>
