@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.server.game.SpecificationName;
 import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
-import com.gogomaya.server.game.match.TicTacToeStateManager;
+import com.gogomaya.server.game.match.GameMatchingServiceImpl;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
@@ -22,6 +22,7 @@ import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
@@ -33,7 +34,7 @@ import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 public class GameTableManagerTest {
 
     @Inject
-    TicTacToeStateManager gameStateManager;
+    GameMatchingServiceImpl<TicTacToeState, TicTacToeSpecification> gameStateManager;
 
     @Inject
     TicTacToeSpecificationRepository specificationRepository;
@@ -47,11 +48,11 @@ public class GameTableManagerTest {
 
         specificationRepository.saveAndFlush(specification);
 
-        TicTacToeTable table = gameStateManager.reserve(1, specification);
+        TicTacToeTable table = (TicTacToeTable) gameStateManager.reserve(1, specification);
 
         Assert.assertEquals(table.getSpecification(), specification);
 
-        TicTacToeTable anotherTable = gameStateManager.reserve(2, specification);
+        TicTacToeTable anotherTable = (TicTacToeTable) gameStateManager.reserve(2, specification);
 
         Assert.assertEquals(table.getTableId(), anotherTable.getTableId());
     }

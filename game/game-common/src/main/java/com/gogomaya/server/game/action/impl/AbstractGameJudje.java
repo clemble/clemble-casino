@@ -8,17 +8,17 @@ import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.rule.GameRule;
 
-abstract public class AbstractGameJudje<S extends GameState<?, ?>, M extends GameMove> implements GameJudge<S, M> {
+abstract public class AbstractGameJudje<State extends GameState> implements GameJudge<State> {
 
-    final GameEngine<S, M> gameEngine;
+    final GameEngine<State> gameEngine;
     final GameRule gameRule;
 
-    protected AbstractGameJudje(final GameEngine<S, M> gameEngine, final GameRule gameRule) {
+    protected AbstractGameJudje(final GameEngine<State> gameEngine, final GameRule gameRule) {
         this.gameEngine = checkNotNull(gameEngine);
         this.gameRule = checkNotNull(gameRule);
     }
 
-    final protected S proceed(S oldState, M gameMove) {
+    final protected State proceed(State oldState, GameMove gameMove) {
         return gameEngine.process(oldState, gameMove);
     }
 

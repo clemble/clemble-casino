@@ -12,8 +12,8 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
+import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.tictactoe.action.TicTacToePlayerState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
@@ -34,9 +34,9 @@ public class GameStateSerializationTest {
     public void testSerialize() throws JsonGenerationException, JsonMappingException, IOException {
         TicTacToeState readState = null;
 
-        Collection<TicTacToePlayerState> players = new ArrayList<TicTacToePlayerState>();
-        players.add(new TicTacToePlayerState(1L, 50L));
-        players.add(new TicTacToePlayerState(2L, 50L));
+        Collection<GamePlayerState> players = new ArrayList<GamePlayerState>();
+        players.add(new GamePlayerState(1L, 50L));
+        players.add(new GamePlayerState(2L, 50L));
 
         TicTacToeState tacToeState = new TicTacToeState();
         tacToeState.setPlayerStates(players);

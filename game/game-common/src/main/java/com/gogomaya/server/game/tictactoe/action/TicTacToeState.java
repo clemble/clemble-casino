@@ -6,10 +6,9 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.gogomaya.server.game.action.impl.AbstractGameState;
-import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 
 @JsonIgnoreProperties({"winner", "activeUsers"})
-public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePlayerState> {
+public class TicTacToeState extends AbstractGameState {
 
     /**
      * Generated 02/04/13
@@ -44,6 +43,7 @@ public class TicTacToeState extends AbstractGameState<TicTacToeMove, TicTacToePl
         return this;
     }
 
+    @Override
     public boolean complete() {
         // Step 1. Check vertical
         return getWinner() != -1L;

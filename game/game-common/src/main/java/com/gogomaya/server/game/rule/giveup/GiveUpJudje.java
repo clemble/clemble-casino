@@ -9,11 +9,11 @@ import com.gogomaya.server.game.action.impl.AbstractGameJudje;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.GiveUpMove;
 
-public class GiveUpJudje<S extends GameState<?, ?>, M extends GameMove> extends AbstractGameJudje<S, M> {
+public class GiveUpJudje<State extends GameState> extends AbstractGameJudje<State> {
 
     final byte percent;
 
-    protected GiveUpJudje(final GameEngine<S, M> engine, final GiveUpRule giveUpRule) {
+    protected GiveUpJudje(final GameEngine<State> engine, final GiveUpRule giveUpRule) {
         super(engine, giveUpRule);
 
         switch (giveUpRule) {
@@ -42,7 +42,8 @@ public class GiveUpJudje<S extends GameState<?, ?>, M extends GameMove> extends 
     }
 
     @Override
-    public S process(S oldState, M gameMove) {
+    @SuppressWarnings("unused")
+    public State process(final State oldState, final GameMove gameMove) {
         if (gameMove instanceof GiveUpMove) {
             GamePlayerState playerState = oldState.getPlayerState(gameMove.getPlayerId());
             return oldState;
@@ -51,11 +52,11 @@ public class GiveUpJudje<S extends GameState<?, ?>, M extends GameMove> extends 
         }
     }
 
-    public static <S extends GameState<?, ?>, M extends GameMove> GameEngine<S, M> create(final GameEngine<S, M> engine, final GiveUpRule giveUpRule) {
+    public static <State extends GameState> GameEngine<State> create(final GameEngine<State> engine, final GiveUpRule giveUpRule) {
         checkNotNull(giveUpRule);
         checkNotNull(engine);
 
-        return new GiveUpJudje<S, M>(engine, giveUpRule);
+        return new GiveUpJudje<State>(engine, giveUpRule);
     }
 
 }

@@ -1,12 +1,13 @@
 package com.gogomaya.server.game.table;
 
 import com.gogomaya.server.game.GameSpecification;
+import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 
-public interface GameTableManager<T extends GameTable<?>> {
+public interface GameTableManager<State extends GameState> {
 
-    public T poll(GameSpecification specification);
+    public GameTable<State> poll(GameSpecification specification);
 
-    public void setReservable(T gameTable);
+    public void setReservable(GameTable<State> gameTable);
 
 }

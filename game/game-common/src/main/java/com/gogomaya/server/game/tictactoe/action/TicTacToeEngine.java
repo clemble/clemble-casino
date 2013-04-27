@@ -3,15 +3,15 @@ package com.gogomaya.server.game.tictactoe.action;
 import java.util.Collection;
 
 import com.gogomaya.server.game.action.impl.AbstractGameEngine;
+import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
-import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 import com.google.common.collect.ImmutableList;
 
-public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacToeMove, TicTacToePlayerState> {
+public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState> {
 
     @Override
-    final protected TicTacToeState safeProcess(final TicTacToeState oldState, final TicTacToeMove move) {
+    final protected TicTacToeState safeProcess(final TicTacToeState oldState, final GameMove move) {
         // Step 1. Processing Select cell move
         if (move instanceof TicTacToeSelectCellMove) {
             return processSelectCellMove(oldState, (TicTacToeSelectCellMove) move);
@@ -23,7 +23,8 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
     }
 
     private TicTacToeState processBetOnCellMove(final TicTacToeState oldState, final TicTacToeBetOnCellMove betMove) {
-        oldState.getPlayerState(betMove.getPlayerId()).subMoneyLeft(betMove.getBet());
+        oldState.getPlayerState(betMove.getPlayerId())
+            .subMoneyLeft(betMove.getBet());
         oldState.addMadeMove(betMove);
 
         if (oldState.getNextMoves().isEmpty()) {
@@ -54,7 +55,7 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState, TicTacTo
             throw new IllegalArgumentException("Cell " + selectCellMove.getCell() + " owned by " + oldState.getCellState(selectCellMove.getCell()));
         }
         // Step 2. Generating next moves
-        Collection<TicTacToeMove> nextMoves = ImmutableList.<TicTacToeMove> of(new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[0]),
+        Collection<GameMove> nextMoves = ImmutableList.<GameMove> of(new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[0]),
                 new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[1]));
         oldState.setNextMoves(nextMoves);
         oldState.setActiveCell(selectCellMove.getCell());

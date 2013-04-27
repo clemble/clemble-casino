@@ -13,29 +13,29 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.action.GameEngine;
+import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.table.GameTableManager;
-import com.gogomaya.server.game.table.TicTacToeTableRepository;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
-import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
+import com.gogomaya.server.game.table.GameTableRepository;
 
 @Controller
-public class GameEngineController {
+public class GameEngineController<State extends GameState> {
 
     final private GameNotificationManager notificationManager;
 
-    final private GameTableManager tableManager;
+    final private GameTableManager<State> tableManager;
 
-    final private TicTacToeTableRepository tableRepository;
+    final private GameTableRepository<GameTable<State>, State> tableRepository;
 
-    final private TicTacToeEngine engine;
+    final private GameEngine<State> engine;
 
-    public GameEngineController(final TicTacToeTableRepository tableRepository,
-            final TicTacToeEngine engine,
+    public GameEngineController(final GameTableRepository<GameTable<State>, State> tableRepository,
+            final GameEngine<State> engine,
             final GameNotificationManager notificationManager,
-            final GameTableManager tableManager) {
+            final GameTableManager<State> tableManager) {
         this.notificationManager = checkNotNull(notificationManager);
         this.tableManager = tableManager;
         this.tableRepository = checkNotNull(tableRepository);
@@ -44,19 +44,19 @@ public class GameEngineController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/action", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody TicTacToeTable process(@RequestHeader("playerId") long playerId,
+    public @ResponseBody GameTable<State> process(@RequestHeader("playerId") long playerId,
             @RequestHeader("sessionId") long sessionId,
             @RequestHeader("tableId") long tableId,
-            @RequestBody TicTacToeMove move) {
+            @RequestBody GameMove move) {
         // Step 1. Retrieving associated table
-        TicTacToeTable table = tableRepository.findOne(tableId);
+        GameTable<State> table = tableRepository.findOne(tableId);
         if (table == null)
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         // Step 2. Verifying associated Session identifier
         if (table.getCurrentSession().getSessionId() != sessionId)
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         // Step 3. Updating current state
-        TicTacToeState nextState = engine.process(table.getState(), move);
+        State nextState = engine.process(table.getState(), move);
         table.setState(nextState);
         table = tableRepository.saveAndFlush(table);
         if (nextState.complete()) {

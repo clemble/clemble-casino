@@ -12,36 +12,40 @@ import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = TicTacToeState.class, name = "ticTacToe") })
-public interface GameState<M extends GameMove, S extends GamePlayerState> extends Serializable {
+public interface GameState extends Serializable {
 
-    public S getPlayerState(long playerId);
+    public GamePlayerState getPlayerState(long playerId);
 
-    public GameState<M, S> setPlayerState(S player);
+    public GameState setPlayerState(GamePlayerState player);
 
-    public M getNextMove(long playerId);
+    public GameState setPlayerStates(Collection<GamePlayerState> playersStates);
 
-    public GameState<M, S> setNextMove(M move);
+    public GameMove getNextMove(long playerId);
 
-    public Collection<M> getNextMoves();
+    public GameState setNextMove(GameMove move);
 
-    public GameState<M, S> setNextMoves(Collection<M> nextMoves);
+    public Collection<GameMove> getNextMoves();
 
-    public M getMadeMove(long playerId);
+    public GameState setNextMoves(Collection<GameMove> nextMoves);
 
-    public Collection<M> getMadeMoves();
+    public GameMove getMadeMove(long playerId);
 
-    public GameState<M, S> setMadeMoves(Collection<M> moves);
+    public Collection<GameMove> getMadeMoves();
 
-    public GameState<M, S> addMadeMove(M move);
+    public GameState setMadeMoves(Collection<GameMove> moves);
 
-    public GameState<M, S> cleanMadeMove();
+    public GameState addMadeMove(GameMove move);
+
+    public GameState cleanMadeMove();
 
     public GamePlayerIterator getPlayerIterator();
 
-    public GameState<M, S> setPlayerIterator(GamePlayerIterator playerIterator);
+    public GameState setPlayerIterator(GamePlayerIterator playerIterator);
 
     public int getVersion();
 
-    public GameState<M, S> incrementVersion();
+    public GameState incrementVersion();
+
+    public boolean complete();
 
 }

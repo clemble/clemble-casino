@@ -24,6 +24,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.GameSpecification;
+import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.tictactoe.TicTacToeSession;
@@ -35,7 +36,7 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
         name = JsonHibernateType.CLASS_NAME_PARAMETER,
         value = "com.gogomaya.server.game.action.GameState") })
-public class TicTacToeTable implements GameTable<TicTacToeSession> {
+public class TicTacToeTable implements GameTable<TicTacToeState> {
 
     /**
      * Generated 27/03/13
@@ -107,8 +108,9 @@ public class TicTacToeTable implements GameTable<TicTacToeSession> {
         return currentSession;
     }
 
-    public void setCurrentSession(TicTacToeSession currentSession) {
-        this.currentSession = currentSession;
+    @Override
+    public void setCurrentSession(GameSession<TicTacToeState> currentSession) {
+        this.currentSession = (TicTacToeSession) currentSession;
     }
 
     @Override

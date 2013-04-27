@@ -8,25 +8,26 @@ import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.gogomaya.server.game.GameSpecification;
+import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 
-public class GameTableManagerImpl<T extends GameTable<?>> implements GameTableManager<T> {
+public class GameTableManagerImpl<State extends GameState> implements GameTableManager<State> {
 
-     Class<T> typeInformation;
+     final Class<GameTable<State>> typeInformation;
 
     final private RedisTemplate<byte[], Long> redisTemplate;
 
-    final private GameTableRepository<T> tableRepository;
+    final private GameTableRepository<GameTable<State>, State> tableRepository;
 
     final private GameServerConnectionManager serverConnectionManager;
 
     @Inject
     public GameTableManagerImpl(final RedisTemplate<byte[], Long> redisTemplate,
-            final GameTableRepository<T> tableRepository,
+            final GameTableRepository<GameTable<State>, State> tableRepository,
             final GameServerConnectionManager serverConnectionManager,
-            final Class<T> targetTable) {
+            final Class<GameTable<State>> targetTable) {
         this.redisTemplate = checkNotNull(redisTemplate);
         this.tableRepository = checkNotNull(tableRepository);
         this.serverConnectionManager = checkNotNull(serverConnectionManager);
@@ -34,13 +35,13 @@ public class GameTableManagerImpl<T extends GameTable<?>> implements GameTableMa
     }
 
     @Override
-    public T poll(final GameSpecification gameSpecification) {
+    public GameTable<State> poll(final GameSpecification gameSpecification) {
         byte[] key = gameSpecification.getName().toByteArray();
         // Step 1. Fetching associated Set
         BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(key);
         // Step 2. Fetching available table
         Long tableId = boundSetOperations.pop();
-        T gameTable = null;
+        GameTable<State> gameTable = null;
         if (tableId != null) {
             // Seat at the table
             gameTable = tableRepository.findOne(tableId);
@@ -51,7 +52,7 @@ public class GameTableManagerImpl<T extends GameTable<?>> implements GameTableMa
             GameServerConnection serverConnection = serverConnectionManager.reserve();
             // Step 2.2 Creating new table with provided specification
             try {
-                gameTable = (T) typeInformation.newInstance();
+                gameTable = (GameTable<State>) typeInformation.newInstance();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -66,7 +67,7 @@ public class GameTableManagerImpl<T extends GameTable<?>> implements GameTableMa
     }
 
     @Override
-    public void setReservable(T gameTable) {
+    public void setReservable(GameTable<State> gameTable) {
         if (gameTable == null)
             throw new IllegalArgumentException("Game table can't be null");
         if (gameTable.getSpecification() == null)

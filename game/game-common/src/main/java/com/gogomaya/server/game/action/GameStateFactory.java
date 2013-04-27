@@ -4,8 +4,8 @@ import java.util.Set;
 
 import com.gogomaya.server.game.GameSpecification;
 
-public interface GameStateFactory {
+public interface GameStateFactory<State extends GameState> {
 
-    public GameState<?, ?> initialize(final GameSpecification gameSpecification, final Set<Long> playerIds);
+    public State initialize(final GameSpecification gameSpecification, final Set<Long> playerIds);
 
 }

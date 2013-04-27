@@ -25,6 +25,8 @@ import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.action.GameSessionState;
+import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
@@ -32,7 +34,8 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "TIC_TAC_TOE_SESSION")
-@TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
+@TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, 
+parameters = { @Parameter(
         name = JsonHibernateType.CLASS_NAME_PARAMETER,
         value = "com.gogomaya.server.game.action.GameState") })
 public class TicTacToeSession implements GameSession<TicTacToeState> {
@@ -62,7 +65,7 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "TIC_TAC_TOE_SESSION_MOVES", joinColumns = @JoinColumn(name = "SESSION_ID"))
-    private List<TicTacToeMove> madeMoves = new ArrayList<TicTacToeMove>();
+    private List<GameMove> madeMoves = new ArrayList<GameMove>();
 
     @Override
     public long getSessionId() {
@@ -74,9 +77,9 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
         return this;
     }
 
-    public TicTacToeSession setTable(TicTacToeTable table) {
-        this.table = table;
-        return this;
+    @Override
+    public void setTable(GameTable<TicTacToeState> table) {
+        this.table = (TicTacToeTable) table;
     }
 
     @Override
@@ -84,6 +87,7 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
         return sessionState;
     }
 
+    @Override
     public void setSessionState(GameSessionState gameSessionState) {
         this.sessionState = gameSessionState;
     }
@@ -97,6 +101,7 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
         this.players = players;
     }
 
+    @Override
     public void addPlayers(Collection<Long> players) {
         if (this.players == null)
             this.players = new HashSet<Long>();
@@ -109,11 +114,11 @@ public class TicTacToeSession implements GameSession<TicTacToeState> {
     }
 
     @Override
-    public List<TicTacToeMove> getMadeMoves() {
+    public List<GameMove> getMadeMoves() {
         return madeMoves;
     }
 
-    public TicTacToeSession setMadeMoves(List<TicTacToeMove> madeMoves) {
+    public TicTacToeSession setMadeMoves(List<GameMove> madeMoves) {
         this.madeMoves = madeMoves;
         return this;
     }

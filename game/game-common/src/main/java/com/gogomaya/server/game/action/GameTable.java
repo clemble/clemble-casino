@@ -13,24 +13,28 @@ import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "game")
 @JsonSubTypes({ @Type(value = TicTacToeTable.class, name = "ticTacToe") })
-public interface GameTable<S extends GameSession<?>> extends Serializable {
+public interface GameTable<State extends GameState> extends Serializable {
 
     public long getTableId();
 
     public GameServerConnection getServerResource();
 
-    public GameTable<S> setServerResource(GameServerConnection serverConnection);
+    public GameTable<State> setServerResource(GameServerConnection serverConnection);
 
     public GameSpecification getSpecification();
 
-    public GameTable<S> setSpecification(GameSpecification specification);
+    public GameTable<State> setSpecification(GameSpecification specification);
 
     public Set<Long> getPlayers();
 
     public void addPlayer(long player);
 
-    public S getCurrentSession();
+    public GameSession<State> getCurrentSession();
 
-    public GameState<?, ?> getState();
+    public void setCurrentSession(GameSession<State> newSession);
+
+    public State getState();
+
+    public GameTable<State> setState(State state);
 
 }

@@ -9,7 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
 import com.gogomaya.server.spring.web.WebMvcSpiConfiguration;
 
@@ -21,13 +20,9 @@ public class InitializationTest {
     @Inject
     TicTacToeSessionRepository gameSessionRepository;
 
-    @Inject
-    TicTacToeStateManager gameMatchingService;
-
     @Test
     public void testInitialized() {
         Assert.assertNotNull(gameSessionRepository);
-        Assert.assertNotNull(gameMatchingService);
     }
 
 }

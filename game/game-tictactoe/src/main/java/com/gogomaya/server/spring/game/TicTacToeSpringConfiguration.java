@@ -18,13 +18,16 @@ import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.connection.RabbitGameNotificationManager;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
+import com.gogomaya.server.game.match.GameMatchingServiceImpl;
 import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
-import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableManagerImpl;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
+import com.gogomaya.server.game.tictactoe.TicTacToeSession;
+import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
@@ -63,14 +66,14 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameTableManager<TicTacToeTable> tableManager() {
-        return new GameTableManagerImpl<TicTacToeTable>(redisTemplate, tableRepository, serverConnectionManager, TicTacToeTable.class);
+    public GameTableManager<TicTacToeState> tableManager() {
+        return new GameTableManagerImpl(redisTemplate, tableRepository, serverConnectionManager, TicTacToeTable.class);
     }
 
     @Bean
     @Singleton
-    public TicTacToeStateManager stateManager() {
-        return new TicTacToeStateManager(tableManager(), tableRepository, sessionRepository, gameNotificationManager(), gameStateFactory());
+    public GameMatchingServiceImpl<TicTacToeState, TicTacToeSpecification> stateManager() {
+        return new GameMatchingServiceImpl(tableManager(), tableRepository, sessionRepository, gameNotificationManager(), gameStateFactory(), TicTacToeSession.class);
     }
 
     @Bean

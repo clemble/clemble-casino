@@ -16,44 +16,44 @@ import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.player.PlayerAwareUtils;
 
 @JsonIgnoreProperties(value = { "activeUsers" })
-abstract public class AbstractGameState<M extends GameMove, S extends GamePlayerState> implements GameState<M, S> {
+abstract public class AbstractGameState implements GameState {
 
     /**
      * Generated 02/04/13
      */
     private static final long serialVersionUID = -6468020813755923981L;
 
-    private Map<Long, S> playersState;
+    private Map<Long, GamePlayerState> playersState;
     @JsonIgnore
     private GamePlayerIterator playerIterator;
 
-    private Map<Long, M> nextMoves = new HashMap<Long, M>();
+    private Map<Long, GameMove> nextMoves = new HashMap<Long, GameMove>();
     @JsonIgnore
-    private Map<Long, M> madeMoves = new HashMap<Long, M>();
+    private Map<Long, GameMove> madeMoves = new HashMap<Long, GameMove>();
 
     private int version;
 
-    final public Collection<S> getPlayerStates() {
+    final public Collection<GamePlayerState> getPlayerStates() {
         return playersState.values();
     }
 
-    final public GameState<M, S> setPlayerStates(Collection<S> playersStates) {
+    final public GameState setPlayerStates(Collection<GamePlayerState> playersStates) {
         playersState = PlayerAwareUtils.toMap(playersStates);
         return this;
     }
 
     @Override
-    final public S getPlayerState(long playerId) {
+    final public GamePlayerState getPlayerState(long playerId) {
         return playersState.get(playerId);
     }
 
     @Override
-    final public GameState<M, S> setPlayerState(S newPlayerState) {
+    final public GameState setPlayerState(GamePlayerState newPlayerState) {
         playersState.put(newPlayerState.getPlayerId(), newPlayerState);
         return this;
     }
 
-    final protected void updatePlayerState(S playerState) {
+    final protected void updatePlayerState(GamePlayerState playerState) {
         this.playersState.put(playerState.getPlayerId(), playerState);
     }
 
@@ -64,59 +64,59 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
 
     @Override
     @JsonProperty("nextMoves")
-    final public Collection<M> getNextMoves() {
+    final public Collection<GameMove> getNextMoves() {
         return nextMoves.values();
     }
 
     @Override
-    final public M getNextMove(long playerId) {
+    final public GameMove getNextMove(long playerId) {
         return nextMoves.get(playerId);
     }
 
     @Override
-    final public GameState<M, S> setNextMove(M move) {
+    final public GameState setNextMove(GameMove move) {
         nextMoves.clear();
         nextMoves.put(move.getPlayerId(), move);
         return this;
     }
 
     @Override
-    final public GameState<M, S> setNextMoves(Collection<M> moves) {
+    final public GameState setNextMoves(Collection<GameMove> moves) {
         nextMoves.clear();
-        for (M move : moves)
+        for (GameMove move : moves)
             nextMoves.put(move.getPlayerId(), move);
         return this;
     }
 
     @Override
-    final public M getMadeMove(long playerId) {
+    final public GameMove getMadeMove(long playerId) {
         return madeMoves.get(playerId);
     }
 
     @Override
     @JsonIgnore
     @JsonProperty("madeMoves")
-    final public Collection<M> getMadeMoves() {
+    final public Collection<GameMove> getMadeMoves() {
         return madeMoves.values();
     }
 
     @Override
-    final public GameState<M, S> setMadeMoves(Collection<M> moves) {
+    final public GameState setMadeMoves(Collection<GameMove> moves) {
         cleanMadeMove();
-        for (M move : moves)
+        for (GameMove move : moves)
             madeMoves.put(move.getPlayerId(), move);
         return this;
     }
 
     @Override
-    final public GameState<M, S> addMadeMove(M playerMove) {
+    final public GameState addMadeMove(GameMove playerMove) {
         if (nextMoves.remove(playerMove.getPlayerId()) != null)
             madeMoves.put(playerMove.getPlayerId(), playerMove);
         return this;
     }
 
     @Override
-    final public GameState<M, S> cleanMadeMove() {
+    final public GameState cleanMadeMove() {
         madeMoves.clear();
         return this;
     }
@@ -127,7 +127,7 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
     }
 
     @Override
-    final public GameState<M, S> setPlayerIterator(GamePlayerIterator playerIterator) {
+    final public GameState setPlayerIterator(GamePlayerIterator playerIterator) {
         this.playerIterator = playerIterator;
         return this;
     }
@@ -136,12 +136,12 @@ abstract public class AbstractGameState<M extends GameMove, S extends GamePlayer
         return version;
     }
 
-    final public GameState<M, S> setVersion(int version) {
+    final public GameState setVersion(int version) {
         this.version = version;
         return this;
     }
 
-    final public GameState<M, S> incrementVersion() {
+    final public GameState incrementVersion() {
         this.version++;
         return this;
     }
