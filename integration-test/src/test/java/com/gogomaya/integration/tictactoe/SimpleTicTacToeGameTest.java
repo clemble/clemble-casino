@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import org.jbehave.core.annotations.UsingSteps;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,7 +29,6 @@ public class SimpleTicTacToeGameTest {
     TicTacToeOperations ticTacToeOperations;
 
     @Test
-    @Ignore
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void testSimpleStart() {
         List<TicTacToePlayer> players = ticTacToeOperations.start();
@@ -44,7 +42,6 @@ public class SimpleTicTacToeGameTest {
 
         Assert.assertNotNull(players);
         Assert.assertEquals(playerA.getTable().getTableId(), playerB.getTable().getTableId());
-        Assert.assertNotNull(players.iterator().next());
         Assert.assertEquals(players.size(), 2);
 
         playerA.select(0, 0);

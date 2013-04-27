@@ -32,7 +32,12 @@ public class GamePlayerState implements PlayerAware {
     }
 
     public void subMoneyLeft(long money) {
-        this.moneyLeft = money;
+        this.moneyLeft = moneyLeft - money;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerState [player=" + playerId + ", money=" + moneyLeft + "]";
     }
 
 }
