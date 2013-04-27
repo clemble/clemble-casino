@@ -1,8 +1,5 @@
 package com.gogomaya.server.integration.tictactoe;
 
-import java.util.List;
-
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 import com.gogomaya.server.integration.game.GameOperations;

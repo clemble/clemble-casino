@@ -21,19 +21,21 @@ import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
 import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
 import com.gogomaya.server.game.match.TicTacToeStateManager;
 import com.gogomaya.server.game.session.TicTacToeSessionRepository;
-import com.gogomaya.server.game.table.TicTacToeTableManager;
+import com.gogomaya.server.game.table.GameTableManager;
+import com.gogomaya.server.game.table.GameTableManagerImpl;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.game", entityManagerFactoryRef = "entityManagerFactory")
 @ComponentScan(basePackages = "com.gogomaya.server.game")
-@Import(value = { CommonModuleSpringConfiguration.class, GameManagementSpringConfiguration.GameManagementTestConfiguration.class,
-        GameManagementSpringConfiguration.GameManagementCloudConfiguration.class })
-public class GameManagementSpringConfiguration {
+@Import(value = { CommonModuleSpringConfiguration.class, TicTacToeSpringConfiguration.GameManagementTestConfiguration.class,
+        TicTacToeSpringConfiguration.GameManagementCloudConfiguration.class })
+public class TicTacToeSpringConfiguration {
 
     @Inject
     public TicTacToeSessionRepository sessionRepository;
@@ -61,8 +63,8 @@ public class GameManagementSpringConfiguration {
 
     @Bean
     @Singleton
-    public TicTacToeTableManager tableManager() {
-        return new TicTacToeTableManager(redisTemplate, tableRepository, serverConnectionManager);
+    public GameTableManager<TicTacToeTable> tableManager() {
+        return new GameTableManagerImpl<TicTacToeTable>(redisTemplate, tableRepository, serverConnectionManager, TicTacToeTable.class);
     }
 
     @Bean

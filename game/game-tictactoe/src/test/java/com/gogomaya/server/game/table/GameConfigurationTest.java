@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
-import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
+import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
+@ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
 @Transactional
 public class GameConfigurationTest {
 

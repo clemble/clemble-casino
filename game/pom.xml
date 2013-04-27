@@ -9,8 +9,9 @@
     <artifactId>game</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>game-tictactoe</module>
         <module>game-common</module>
+        <module>game-management</module>
+        <module>game-tictactoe</module>
         <module>game-web</module>
     </modules>
     <dependencyManagement>
@@ -18,6 +19,11 @@
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>game-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>game-management</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

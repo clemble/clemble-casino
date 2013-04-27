@@ -19,14 +19,14 @@ import com.gogomaya.server.game.session.TicTacToeSessionRepository;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
-import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
+import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 
 @Configuration
-@Import(value = { GameManagementSpringConfiguration.class })
+@Import(value = { TicTacToeSpringConfiguration.class })
 public class WebGameConfiguration extends WebMvcConfigurationSupport {
 
     @Inject

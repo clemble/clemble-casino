@@ -24,11 +24,11 @@ import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
+import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
+@ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
 @Transactional
 public class GameTableManagerTest {
 

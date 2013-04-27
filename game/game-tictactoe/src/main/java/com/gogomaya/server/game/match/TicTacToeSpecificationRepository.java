@@ -7,6 +7,6 @@ import com.gogomaya.server.game.SpecificationName;
 import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 
 @Repository
-public interface TicTacToeSpecificationRepository extends JpaRepository<TicTacToeSpecification, SpecificationName>{
+public interface TicTacToeSpecificationRepository extends JpaRepository<TicTacToeSpecification, SpecificationName> {
 
 }

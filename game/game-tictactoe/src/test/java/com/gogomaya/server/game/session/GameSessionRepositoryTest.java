@@ -14,18 +14,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
-import com.gogomaya.server.game.table.TicTacToeTableManager;
+import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.TicTacToeSession;
 import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
-import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
+import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
+@ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
 public class GameSessionRepositoryTest {
 
     @Inject
@@ -35,7 +35,7 @@ public class GameSessionRepositoryTest {
     TicTacToeTableRepository tableRepository;
 
     @Inject
-    TicTacToeTableManager tableManager;
+    GameTableManager<?> tableManager;
 
     @Inject
     TicTacToeStateFactory stateFactory;

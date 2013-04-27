@@ -20,13 +20,13 @@ public class TicTacToeStateManager {
 
     final private GameNotificationManager notificationManager;
 
-    final private GameTableManager tableManager;
+    final private GameTableManager<TicTacToeTable> tableManager;
     final private TicTacToeTableRepository tableRepository;
     final private TicTacToeSessionRepository sessionRepository;
     final private TicTacToeStateFactory stateFactory;
 
     @Inject
-    public TicTacToeStateManager(final GameTableManager tableManager,
+    public TicTacToeStateManager(final GameTableManager<TicTacToeTable> tableManager,
             final TicTacToeTableRepository tableRepository,
             final TicTacToeSessionRepository sessionRepository,
             final GameNotificationManager notificationManager,
