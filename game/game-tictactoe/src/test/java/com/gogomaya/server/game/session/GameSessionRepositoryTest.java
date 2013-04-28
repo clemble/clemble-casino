@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.SpecificationName;
 import com.gogomaya.server.game.action.GameSession;
-import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
@@ -24,6 +23,7 @@ import com.gogomaya.server.game.rule.construction.PrivacyRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
+import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
@@ -54,7 +54,7 @@ public class GameSessionRepositoryTest {
     TicTacToeStateFactory stateFactory;
 
     @Inject
-    TicTacToeSpecificationRepository specificationRepository;
+    GameSpecificationRepository specificationRepository;
 
     @Before
     public void setUp() {

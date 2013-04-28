@@ -22,13 +22,13 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
 
     final private GameTableManager<State> tableManager;
     final private GameTableRepository<GameTable<State>, State> tableRepository;
-    final private GameSessionRepository<GameSession<State>, State> sessionRepository;
+    final private GameSessionRepository<State> sessionRepository;
     final private GameStateFactory<State> stateFactory;
 
     @Inject
     public GameMatchingServiceImpl(final GameTableManager<State> tableManager,
             final GameTableRepository<GameTable<State>, State> tableRepository,
-            final GameSessionRepository<GameSession<State>, State> sessionRepository,
+            final GameSessionRepository<State> sessionRepository,
             final GameNotificationManager notificationManager,
             final GameStateFactory<State> stateFactory) {
         this.tableManager = checkNotNull(tableManager);

@@ -28,7 +28,7 @@ import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
-@Table(name = "TIC_TAC_TOE_SESSION")
+@Table(name = "GAME_SESSION")
 @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
         name = JsonHibernateType.CLASS_NAME_PARAMETER,
         value = "com.gogomaya.server.game.action.GameState") })

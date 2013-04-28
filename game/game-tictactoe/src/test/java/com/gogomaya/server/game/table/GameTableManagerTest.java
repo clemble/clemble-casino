@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.SpecificationName;
 import com.gogomaya.server.game.match.GameMatchingServiceImpl;
-import com.gogomaya.server.game.match.TicTacToeSpecificationRepository;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
@@ -22,6 +21,7 @@ import com.gogomaya.server.game.rule.construction.PrivacyRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
+import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.money.Currency;
@@ -37,7 +37,7 @@ public class GameTableManagerTest {
     GameMatchingServiceImpl<TicTacToeState> gameStateManager;
 
     @Inject
-    TicTacToeSpecificationRepository specificationRepository;
+    GameSpecificationRepository specificationRepository;
 
     @Test
     public void testPlayersMapping() {
