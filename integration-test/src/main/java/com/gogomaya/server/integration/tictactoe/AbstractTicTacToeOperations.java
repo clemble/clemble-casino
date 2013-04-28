@@ -4,12 +4,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
+import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeCell;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
@@ -24,9 +24,9 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
     
     final private PlayerOperations playerOperations;
     final private GameOperations gameOperations;
-    final private GameListenerOperations<TicTacToeTable> tableListenerOperations;
+    final private GameListenerOperations<GameTable<TicTacToeState>> tableListenerOperations;
 
-    public AbstractTicTacToeOperations(PlayerOperations playerOperations, final GameOperations gameOperations, final GameListenerOperations<TicTacToeTable> tableListenerOperations){
+    public AbstractTicTacToeOperations(PlayerOperations playerOperations, final GameOperations gameOperations, final GameListenerOperations<GameTable<TicTacToeState>> tableListenerOperations){
         this.playerOperations = checkNotNull(playerOperations);
         this.gameOperations = checkNotNull(gameOperations);
         this.tableListenerOperations = checkNotNull(tableListenerOperations);
@@ -71,15 +71,15 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
         // Step 1. Creating player
         Player player = checkNotNull(playerOperations.createPlayer());
         // Step 2. Requesting table
-        final TicTacToeTable table = (TicTacToeTable) checkNotNull(gameOperations.start(player, specification));
+        final GameTable<TicTacToeState> table = (GameTable<TicTacToeState>) checkNotNull(gameOperations.start(player, specification));
         final TicTacToePlayer toePlayer = new TicTacToePlayer(this);
         toePlayer.setPlayer(player);
         toePlayer.setTable(table);
         // Step 3. Creating listener, that will update GameListener
-        toePlayer.setListenerControl(tableListenerOperations.listen(table, new GameListener<TicTacToeTable>() {
+        toePlayer.setListenerControl(tableListenerOperations.listen(table, new GameListener<GameTable<TicTacToeState>>() {
 
             @Override
-            public void updated(TicTacToeTable gameTable) {
+            public void updated(GameTable<TicTacToeState> gameTable) {
                 toePlayer.setTable(gameTable);
             }
 

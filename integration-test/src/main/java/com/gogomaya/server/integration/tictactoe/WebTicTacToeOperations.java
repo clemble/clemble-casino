@@ -1,7 +1,7 @@
 package com.gogomaya.server.integration.tictactoe;
 
+import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
@@ -14,7 +14,7 @@ public class WebTicTacToeOperations extends AbstractTicTacToeOperations {
 
     public WebTicTacToeOperations(PlayerOperations playerOperations,
             GameOperations gameOperations,
-            GameListenerOperations<TicTacToeTable> tableListenerOperations,
+            GameListenerOperations<GameTable<TicTacToeState>> tableListenerOperations,
             GameEngineController<TicTacToeState> gameEngineController) {
         super(playerOperations, gameOperations, tableListenerOperations);
         this.gameEngineController = gameEngineController;
@@ -27,7 +27,7 @@ public class WebTicTacToeOperations extends AbstractTicTacToeOperations {
         long tableId = player.getTable().getTableId();
         long sessionId = player.getTable().getCurrentSession().getSessionId();
         // Step 1. Processing action by controller
-        TicTacToeTable updatedTable = (TicTacToeTable) gameEngineController.process(playerId,
+        GameTable<TicTacToeState> updatedTable = (GameTable<TicTacToeState>) gameEngineController.process(playerId,
                 sessionId,
                 tableId,
                 action);

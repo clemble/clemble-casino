@@ -17,7 +17,7 @@ import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.integration.data.DataGenerator;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.listener.GameListener;
@@ -41,7 +41,7 @@ public class GameOperationsTest {
     GameOperations gameOperations;
 
     @Inject
-    GameListenerOperations<TicTacToeTable> gameListenerOperations;
+    GameListenerOperations<GameTable<TicTacToeState>> gameListenerOperations;
 
     @Test
     public void createWithGameSpecification() {
@@ -50,7 +50,7 @@ public class GameOperationsTest {
         SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
         GameSpecification gameSpecification = selectSpecificationOptions.specifications.get(0);
         // Step 2. Creating game table
-        TicTacToeTable gameTable = gameOperations.start(player, gameSpecification);
+        GameTable<TicTacToeState> gameTable = gameOperations.start(player, gameSpecification);
         Assert.assertNotNull(gameTable);
     }
 
@@ -61,7 +61,7 @@ public class GameOperationsTest {
         SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
         GameSpecification specification = selectSpecificationOptions.specifications.get(1);
         // Step 2. Creating game table
-        TicTacToeTable gameTable = gameOperations.start(player, specification);
+        GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
         // Step 3. Adding another player to the table
         Player anotherPlayer = playerOperations.createPlayer(DataGenerator.randomProfile());
@@ -89,7 +89,7 @@ public class GameOperationsTest {
         SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
         GameSpecification specification = selectSpecificationOptions.specifications.get(2);
         // Step 2. Creating game table
-        TicTacToeTable gameTable = gameOperations.start(player, specification);
+        GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
         // Step 3. Adding listener
         gameListenerOperations.listen(gameTable, new GameListener() {

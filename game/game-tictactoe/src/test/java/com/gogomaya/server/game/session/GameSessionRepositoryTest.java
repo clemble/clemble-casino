@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.action.GameSession;
+import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
@@ -28,7 +29,6 @@ import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.TicTacToeTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 
@@ -69,7 +69,7 @@ public class GameSessionRepositoryTest {
 
         TicTacToeState gameState = stateFactory.initialize(DEFAULT_SPECIFICATION, players);
 
-        TicTacToeTable gameTable = new TicTacToeTable();
+        GameTable<TicTacToeState> gameTable = new GameTable<TicTacToeState>();
         gameTable.setSpecification(DEFAULT_SPECIFICATION);
         gameTable.setPlayers(players);
 

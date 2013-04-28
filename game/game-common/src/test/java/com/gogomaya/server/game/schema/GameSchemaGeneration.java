@@ -8,8 +8,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.action.GameSession;
+import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,7 +23,7 @@ public class GameSchemaGeneration {
         configuration
         .addAnnotatedClass(GameSpecification.class)
         .addAnnotatedClass(GameSession.class)
-        .addAnnotatedClass(TicTacToeTable.class)
+        .addAnnotatedClass(GameTable.class)
         .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
         .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 

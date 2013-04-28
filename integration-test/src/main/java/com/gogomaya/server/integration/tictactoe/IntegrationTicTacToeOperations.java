@@ -8,7 +8,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
+import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
@@ -25,7 +26,7 @@ public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations 
             RestTemplate restTemplate,
             PlayerOperations playerOperations,
             GameOperations gameOperations,
-            GameListenerOperations<TicTacToeTable> tableListenerOperations) {
+            GameListenerOperations<GameTable<TicTacToeState>> tableListenerOperations) {
         super(playerOperations, gameOperations, tableListenerOperations);
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
@@ -41,7 +42,7 @@ public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations 
         // Step 2. Generating request
         HttpEntity<TicTacToeMove> requestEntity = new HttpEntity<TicTacToeMove>(action, header);
         // Step 3. Rest template generation
-        TicTacToeTable updatedTable = restTemplate.exchange(baseUrl + ACTION_URL, HttpMethod.POST, requestEntity, TicTacToeTable.class).getBody();
+        GameTable<TicTacToeState> updatedTable = restTemplate.exchange(baseUrl + ACTION_URL, HttpMethod.POST, requestEntity, GameTable.class).getBody();
         // Step 4. Updating table state
         player.setTable(updatedTable);
     }

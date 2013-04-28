@@ -15,23 +15,17 @@ import com.gogomaya.server.game.specification.GameSpecification;
 
 public class GameTableManagerImpl<State extends GameState> implements GameTableManager<State> {
 
-     final Class<GameTable<State>> typeInformation;
-
     final private RedisTemplate<byte[], Long> redisTemplate;
-
     final private GameTableRepository<GameTable<State>, State> tableRepository;
-
     final private GameServerConnectionManager serverConnectionManager;
 
     @Inject
     public GameTableManagerImpl(final RedisTemplate<byte[], Long> redisTemplate,
             final GameTableRepository<GameTable<State>, State> tableRepository,
-            final GameServerConnectionManager serverConnectionManager,
-            final Class<GameTable<State>> targetTable) {
+            final GameServerConnectionManager serverConnectionManager) {
         this.redisTemplate = checkNotNull(redisTemplate);
         this.tableRepository = checkNotNull(tableRepository);
         this.serverConnectionManager = checkNotNull(serverConnectionManager);
-        this.typeInformation = checkNotNull(targetTable);
     }
 
     @Override
@@ -51,11 +45,7 @@ public class GameTableManagerImpl<State extends GameState> implements GameTableM
             // Step 2.1 Fetching connection resource
             GameServerConnection serverConnection = serverConnectionManager.reserve();
             // Step 2.2 Creating new table with provided specification
-            try {
-                gameTable = (GameTable<State>) typeInformation.newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            gameTable = new GameTable<State>();
             // Step 2.4 Specifying appropriate values
             gameTable.setSpecification(gameSpecification);
             gameTable.setServerResource(serverConnection);

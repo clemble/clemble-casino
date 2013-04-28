@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
+import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.IntegrationGameOperations;
 import com.gogomaya.server.integration.game.WebGameOperations;
@@ -78,7 +79,7 @@ public class TestConfiguration {
         @Singleton
         @SuppressWarnings("unchecked")
         public TicTacToeOperations ticTacToeOperations() {
-            return new WebTicTacToeOperations(playerOperations(), gameOperations(), (GameListenerOperations<TicTacToeTable>) tableListenerOperations(), engineController);
+            return new WebTicTacToeOperations(playerOperations(), gameOperations(), (GameListenerOperations<GameTable<TicTacToeState>>) tableListenerOperations(), engineController);
         }
     }
 
@@ -140,7 +141,7 @@ public class TestConfiguration {
         @SuppressWarnings("unchecked")
         public IntegrationTicTacToeOperations ticTacToeOperations() {
             return new IntegrationTicTacToeOperations(getBaseUrl(), restTemplate(), playerOperations(), gameOperations(),
-                    (GameListenerOperations<TicTacToeTable>) tableListenerOperations());
+                    (GameListenerOperations<GameTable<TicTacToeState>>) tableListenerOperations());
         }
     }
 }

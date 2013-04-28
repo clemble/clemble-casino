@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.match.GameMatchingServiceImpl;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.MatchRule;
@@ -23,7 +24,6 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 
@@ -48,11 +48,11 @@ public class GameTableManagerTest {
 
         specificationRepository.saveAndFlush(specification);
 
-        TicTacToeTable table = (TicTacToeTable) gameStateManager.reserve(1, specification);
+        GameTable<TicTacToeState> table = gameStateManager.reserve(1, specification);
 
         Assert.assertEquals(table.getSpecification(), specification);
 
-        TicTacToeTable anotherTable = (TicTacToeTable) gameStateManager.reserve(2, specification);
+        GameTable<TicTacToeState> anotherTable = gameStateManager.reserve(2, specification);
 
         Assert.assertEquals(table.getTableId(), anotherTable.getTableId());
     }

@@ -4,7 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
+import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.integration.game.listener.GameListenerControl;
 import com.gogomaya.server.integration.player.Player;
 
@@ -14,7 +15,7 @@ public class TicTacToePlayer {
 
     final private Object versionLock = new Object();
 
-    final private AtomicReference<TicTacToeTable> table = new AtomicReference<TicTacToeTable>();
+    final private AtomicReference<GameTable<TicTacToeState>> table = new AtomicReference<GameTable<TicTacToeState>>();
     private Player player;
     private GameListenerControl listenerControl;
 
@@ -31,11 +32,11 @@ public class TicTacToePlayer {
         return this;
     }
 
-    public TicTacToeTable getTable() {
+    public GameTable<TicTacToeState> getTable() {
         return checkNotNull(table.get());
     }
 
-    public TicTacToePlayer setTable(TicTacToeTable newTable) {
+    public TicTacToePlayer setTable(GameTable<TicTacToeState> newTable) {
         synchronized (versionLock) {
             if (this.table.get() == null
                     || (this.table.get().getState() != null ? this.table.get().getState().getVersion() : -1) < (newTable.getState() != null ? newTable
