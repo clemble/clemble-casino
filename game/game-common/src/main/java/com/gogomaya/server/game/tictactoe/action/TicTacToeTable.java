@@ -27,8 +27,6 @@ import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
-import com.gogomaya.server.game.tictactoe.TicTacToeSession;
-import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
@@ -53,17 +51,18 @@ public class TicTacToeTable implements GameTable<TicTacToeState> {
     private GameServerConnection serverResource;
 
     @ManyToOne
-    @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
+    @JoinColumns(value = { 
+            @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
             @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP") })
-    private TicTacToeSpecification specification;
+    private GameSpecification specification;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "TIC_TAC_TOE_TABLE_PLAYERS", joinColumns = @JoinColumn(name = "TABLE_ID"))
     private Set<Long> players = new HashSet<Long>();
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SESSION_ID", referencedColumnName = "TABLE_ID")
-    private TicTacToeSession currentSession;
+    @JoinColumn(name = "SESSION_ID")
+    private GameSession<TicTacToeState> currentSession;
 
     @Type(type = "gameState")
     @Column(name = "GAME_STATE", length = 4096)
@@ -104,23 +103,23 @@ public class TicTacToeTable implements GameTable<TicTacToeState> {
     }
 
     @Override
-    public TicTacToeSession getCurrentSession() {
+    public GameSession<TicTacToeState> getCurrentSession() {
         return currentSession;
     }
 
     @Override
     public void setCurrentSession(GameSession<TicTacToeState> currentSession) {
-        this.currentSession = (TicTacToeSession) currentSession;
+        this.currentSession = currentSession;
     }
 
     @Override
-    public TicTacToeSpecification getSpecification() {
+    public GameSpecification getSpecification() {
         return specification;
     }
 
     @Override
     public TicTacToeTable setSpecification(GameSpecification specification) {
-        this.specification = (TicTacToeSpecification) specification;
+        this.specification = specification;
         return this;
     }
 

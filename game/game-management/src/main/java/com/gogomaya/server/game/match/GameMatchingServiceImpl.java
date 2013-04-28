@@ -25,43 +25,34 @@ public class GameMatchingServiceImpl<State extends GameState, Spec extends GameS
     final private GameSessionRepository<GameSession<State>, State> sessionRepository;
     final private GameStateFactory<State> stateFactory;
 
-    final private Class<GameSession<State>> sessionClass;
-
     @Inject
     public GameMatchingServiceImpl(final GameTableManager<State> tableManager,
             final GameTableRepository<GameTable<State>, State> tableRepository,
             final GameSessionRepository<GameSession<State>, State> sessionRepository,
             final GameNotificationManager notificationManager,
-            final GameStateFactory<State> stateFactory,
-            final Class<GameSession<State>> sessionClass) {
+            final GameStateFactory<State> stateFactory) {
         this.tableManager = checkNotNull(tableManager);
         this.tableRepository = checkNotNull(tableRepository);
         this.sessionRepository = checkNotNull(sessionRepository);
         this.notificationManager = checkNotNull(notificationManager);
         this.stateFactory = checkNotNull(stateFactory);
-        this.sessionClass = sessionClass;
     }
 
     @Override
-    public GameTable<State> reserve(final long playerId, final Spec gameSpecification) {
+    public GameTable<State> reserve(final long playerId, final Spec specification) {
         // Step 1. Pooling
-        GameTable<State> gameTable = tableManager.poll(gameSpecification);
+        GameTable<State> gameTable = tableManager.poll(specification);
         gameTable.addPlayer(playerId);
 
-        PlayerNumberRule numberRule = gameSpecification.getNumberRule();
+        PlayerNumberRule numberRule = specification.getNumberRule();
         if (gameTable.getPlayers().size() >= numberRule.getMinPlayers()) {
-            State gameState = stateFactory.initialize(gameSpecification, gameTable.getPlayers());
+            State gameState = stateFactory.initialize(specification, gameTable.getPlayers());
             gameTable.setState(gameState);
             // Step 3. Initializing start of the game session
-            GameSession<State> gameSession = null;
-            try {
-                gameSession = sessionClass.newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            GameSession<State> gameSession = new GameSession<State>();
             gameSession.addPlayers(gameTable.getPlayers());
             gameSession.setSessionState(GameSessionState.active);
-            gameSession.setTable(gameTable);
+            gameSession.setSpecification(specification);
             gameSession = sessionRepository.save(gameSession);
 
             gameTable.setCurrentSession(gameSession);

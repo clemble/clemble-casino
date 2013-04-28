@@ -90,7 +90,7 @@ public class SeDeRelizationTest {
     @Test
     public void testReadSpecificationOptions() throws JsonParseException, JsonMappingException, IOException {
         SelectSpecificationOptions selectSpecificationOptions = objectMapper.readValue(
-                "{ \"specifications\": [{\"specification\":\"tictactoe\", \"name\":{\"name\": \"low\",\"group\": \"basic\"}," +
+                "{ \"specifications\": [{\"name\":{\"name\": \"low\",\"group\": \"basic\"}," +
                 "\"currency\": \"FakeMoney\",\"betRule\":{\"betType\": \"fixed\",\"price\": 50}," +
                 "\"giveUpRule\": \"all\",\"moveTimeRule\": { \"punishment\": \"loose\", \"limit\": 0 }," +
                 "\"totalTimeRule\": {\"punishment\": \"loose\",\"limit\": 0 }, \"matchRule\": \"automatic\"," +

@@ -5,7 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
-import com.gogomaya.server.game.tictactoe.TicTacToeSpecification;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
@@ -34,7 +33,7 @@ public class WebGameOperations implements GameOperations {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends GameTable<?>> T start(Player player, GameSpecification gameSpecification) {
-        return (T) matchController.match(player.getPlayerId(), (TicTacToeSpecification) gameSpecification);
+        return (T) matchController.match(player.getPlayerId(), gameSpecification);
     }
 
 }
