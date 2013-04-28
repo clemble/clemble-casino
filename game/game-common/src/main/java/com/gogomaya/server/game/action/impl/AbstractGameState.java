@@ -30,8 +30,8 @@ abstract public class AbstractGameState implements GameState {
     private Map<Long, GameMove> nextMoves = new HashMap<Long, GameMove>();
     @JsonIgnore
     private Map<Long, GameMove> madeMoves = new HashMap<Long, GameMove>();
-
-    private int version;
+    @JsonProperty("nextMoveId")
+    private int nextMoveId;
 
     final public Collection<GamePlayerState> getPlayerStates() {
         return playersState.values();
@@ -73,14 +73,12 @@ abstract public class AbstractGameState implements GameState {
         return nextMoves.get(playerId);
     }
 
-    @Override
     final public GameState setNextMove(GameMove move) {
         nextMoves.clear();
         nextMoves.put(move.getPlayerId(), move);
         return this;
     }
 
-    @Override
     final public GameState setNextMoves(Collection<GameMove> moves) {
         nextMoves.clear();
         for (GameMove move : moves)
@@ -88,7 +86,6 @@ abstract public class AbstractGameState implements GameState {
         return this;
     }
 
-    @Override
     final public GameMove getMadeMove(long playerId) {
         return madeMoves.get(playerId);
     }
@@ -100,7 +97,6 @@ abstract public class AbstractGameState implements GameState {
         return madeMoves.values();
     }
 
-    @Override
     final public GameState setMadeMoves(Collection<GameMove> moves) {
         cleanMadeMove();
         for (GameMove move : moves)
@@ -108,14 +104,12 @@ abstract public class AbstractGameState implements GameState {
         return this;
     }
 
-    @Override
     final public GameState addMadeMove(GameMove playerMove) {
         if (nextMoves.remove(playerMove.getPlayerId()) != null)
             madeMoves.put(playerMove.getPlayerId(), playerMove);
         return this;
     }
 
-    @Override
     final public GameState cleanMadeMove() {
         madeMoves.clear();
         return this;
@@ -132,18 +126,16 @@ abstract public class AbstractGameState implements GameState {
         return this;
     }
 
-    final public int getVersion() {
-        return version;
+    final public int nextMoveId() {
+        return nextMoveId++;
     }
 
-    final public GameState setVersion(int version) {
-        this.version = version;
-        return this;
+    public int getNextMoveId() {
+        return this.nextMoveId;
     }
 
-    final public GameState incrementVersion() {
-        this.version++;
-        return this;
+    public void setNextMoveId(int nextMove) {
+        this.nextMoveId = nextMove;
     }
 
 }

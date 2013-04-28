@@ -22,29 +22,15 @@ public interface GameState extends Serializable {
 
     public GameMove getNextMove(long playerId);
 
-    public GameState setNextMove(GameMove move);
-
     public Collection<GameMove> getNextMoves();
-
-    public GameState setNextMoves(Collection<GameMove> nextMoves);
 
     public GameMove getMadeMove(long playerId);
 
     public Collection<GameMove> getMadeMoves();
 
-    public GameState setMadeMoves(Collection<GameMove> moves);
-
-    public GameState addMadeMove(GameMove move);
-
-    public GameState cleanMadeMove();
-
     public GamePlayerIterator getPlayerIterator();
 
     public GameState setPlayerIterator(GamePlayerIterator playerIterator);
-
-    public int getVersion();
-
-    public GameState incrementVersion();
 
     public boolean complete();
 

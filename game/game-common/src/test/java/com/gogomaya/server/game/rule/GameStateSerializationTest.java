@@ -14,14 +14,13 @@ import org.junit.Test;
 
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
-import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
 
 public class GameStateSerializationTest {
 
-    private String presentation = "{\"type\":\"ticTacToe\",\"playerIterator\":{\"type\":\"sequential\",\"index\":0,\"players\":[1,2]},\"nextMoves\":[{\"type\":\"select\",\"playerId\":1,\"cell\":{\"row\":-128,\"column\":-128}}],\"madeMoves\":[],\"board\":[[{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0}],[{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0}],[{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0}]],\"activeCell\":null,\"playerStates\":[{\"playerId\":1,\"moneyLeft\":50},{\"playerId\":2,\"moneyLeft\":50}]}";
+    private String presentation = "{\"type\":\"ticTacToe\",\"playerIterator\":{\"type\":\"sequential\",\"index\":0,\"players\":[1,2]},\"nextMoves\":[{\"type\":\"select\",\"playerId\":1,\"moveId\":1, \"cell\":{\"row\":-128,\"column\":-128}}],\"madeMoves\":[],\"board\":[[{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0}],[{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0}],[{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0},{\"owner\":0,\"firstPlayerBet\":0,\"secondPlayerBet\":0}]],\"activeCell\":null,\"playerStates\":[{\"playerId\":1,\"moneyLeft\":50},{\"playerId\":2,\"moneyLeft\":50}]}";
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private ObjectMapper anotherObjectMapper = new ObjectMapper();
@@ -40,8 +39,8 @@ public class GameStateSerializationTest {
 
         TicTacToeState tacToeState = new TicTacToeState();
         tacToeState.setPlayerStates(players);
-        tacToeState.setNextMove(new TicTacToeSelectCellMove(1L));
-        tacToeState.addMadeMove(new TicTacToeBetOnCellMove(1L));
+        tacToeState.setPlayerIterator(new SequentialPlayerIterator(0, players));
+        tacToeState.setNextMoveSelect(1L);
 
         String jsonPresentation = objectMapper.writeValueAsString(tacToeState);
         System.out.println(jsonPresentation);
@@ -52,7 +51,7 @@ public class GameStateSerializationTest {
         System.out.println(jsonPresentation);
         readState = (TicTacToeState) anotherObjectMapper.readValue(jsonPresentation, GameState.class);
 
-        Assert.assertNotNull(readState.getMadeMove(1L));
+        Assert.assertNotNull(readState.getNextMove(1L));
 
     }
 

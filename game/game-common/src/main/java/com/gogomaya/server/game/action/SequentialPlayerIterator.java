@@ -52,4 +52,13 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
         return index;
     }
 
+    @Override
+    public boolean contains(long targetPlayerId) {
+        for (long playerId : players) {
+            if (playerId == targetPlayerId)
+                return true;
+        }
+        return false;
+    }
+
 }

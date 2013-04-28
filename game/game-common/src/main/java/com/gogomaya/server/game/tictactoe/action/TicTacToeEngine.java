@@ -1,12 +1,9 @@
 package com.gogomaya.server.game.tictactoe.action;
 
-import java.util.Collection;
-
 import com.gogomaya.server.game.action.impl.AbstractGameEngine;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
-import com.google.common.collect.ImmutableList;
 
 public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState> {
 
@@ -23,8 +20,7 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState> {
     }
 
     private TicTacToeState processBetOnCellMove(final TicTacToeState oldState, final TicTacToeBetOnCellMove betMove) {
-        oldState.getPlayerState(betMove.getPlayerId())
-            .subMoneyLeft(betMove.getBet());
+        oldState.getPlayerState(betMove.getPlayerId()).subMoneyLeft(betMove.getBet());
         oldState.addMadeMove(betMove);
 
         if (oldState.getNextMoves().isEmpty()) {
@@ -41,7 +37,7 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState> {
                 oldState.setActiveCellState(new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet));
             }
 
-            oldState.setNextMove(new TicTacToeSelectCellMove(oldState.getPlayerIterator().next()));
+            oldState.setNextMoveSelect(oldState.getPlayerIterator().next());
             oldState.setActiveCell(TicTacToeCell.DEFAULT);
             oldState.cleanMadeMove();
         }
@@ -55,9 +51,7 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState> {
             throw new IllegalArgumentException("Cell " + selectCellMove.getCell() + " owned by " + oldState.getCellState(selectCellMove.getCell()));
         }
         // Step 2. Generating next moves
-        Collection<GameMove> nextMoves = ImmutableList.<GameMove> of(new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[0]),
-                new TicTacToeBetOnCellMove(oldState.getPlayerIterator().getPlayers()[1]));
-        oldState.setNextMoves(nextMoves);
+        oldState.setNextMoveBet();
         oldState.setActiveCell(selectCellMove.getCell());
         oldState.cleanMadeMove();
         // Step 3. Returning modified old state

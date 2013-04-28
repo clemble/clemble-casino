@@ -9,7 +9,6 @@ import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 
 public class TicTacToeStateFactory implements GameStateFactory<TicTacToeState> {
 
@@ -32,11 +31,11 @@ public class TicTacToeStateFactory implements GameStateFactory<TicTacToeState> {
         }
         GamePlayerIterator playerIterator = new SequentialPlayerIterator(0, playerStates);
         // Step 3. Initializing next player
-        return (TicTacToeState) new TicTacToeState()
-            .setPlayerStates(playerStates)
-            .setPlayerIterator(playerIterator)
-            .setNextMove(new TicTacToeSelectCellMove(playerIterator.next()))
-            .incrementVersion();
+        TicTacToeState state = new TicTacToeState();
+        state.setPlayerStates(playerStates);
+        state.setPlayerIterator(playerIterator);
+        state.setNextMoveSelect(playerIterator.next());
+        return state;
     }
 
 }

@@ -26,7 +26,6 @@ abstract public class AbstractGameEngine<State extends GameState> implements Gam
         // Step 2. Processing Select cell move
         State newState = safeProcess(oldState, move);
         // increase a version
-        newState.incrementVersion();
         return newState;
     }
 

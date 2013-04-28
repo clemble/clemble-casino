@@ -39,8 +39,8 @@ public class TicTacToePlayer {
     public TicTacToePlayer setTable(GameTable<TicTacToeState> newTable) {
         synchronized (versionLock) {
             if (this.table.get() == null
-                    || (this.table.get().getState() != null ? this.table.get().getState().getVersion() : -1) < (newTable.getState() != null ? newTable
-                            .getState().getVersion() : -1)) {
+                    || (this.table.get().getState() != null ? TicTacToePlayerUtils.getVersion(this.table.get().getState()) : -1) < (newTable.getState() != null ? 
+                            TicTacToePlayerUtils.getVersion(newTable.getState()) : -1)) {
                 this.table.set(newTable);
                 versionLock.notifyAll();
             }
@@ -58,11 +58,11 @@ public class TicTacToePlayer {
     }
 
     public void waitVersion(int expectedVersion) {
-        if (this.getTable().getState() != null && this.getTable().getState().getVersion() >= expectedVersion)
+        if (this.getTable().getState() != null && TicTacToePlayerUtils.getVersion(this.getTable().getState()) >= expectedVersion)
             return;
 
         synchronized (versionLock) {
-            while (this.getTable().getState() != null && this.getTable().getState().getVersion() < expectedVersion) {
+            while (this.getTable().getState() != null && TicTacToePlayerUtils.getVersion(this.getTable().getState()) < expectedVersion) {
                 try {
                     versionLock.wait();
                 } catch (InterruptedException e) {
