@@ -34,7 +34,7 @@ import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 public class GameTableManagerTest {
 
     @Inject
-    GameMatchingServiceImpl<TicTacToeState, GameSpecification> gameStateManager;
+    GameMatchingServiceImpl<TicTacToeState> gameStateManager;
 
     @Inject
     TicTacToeSpecificationRepository specificationRepository;

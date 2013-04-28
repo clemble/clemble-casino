@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
@@ -71,7 +70,7 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameMatchingServiceImpl<TicTacToeState, GameSpecification> stateManager() {
+    public GameMatchingServiceImpl<TicTacToeState> stateManager() {
         return new GameMatchingServiceImpl(tableManager(), tableRepository, sessionRepository, gameNotificationManager(), gameStateFactory());
     }
 

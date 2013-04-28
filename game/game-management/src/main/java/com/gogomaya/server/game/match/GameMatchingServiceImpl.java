@@ -16,7 +16,7 @@ import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableRepository;
 
-public class GameMatchingServiceImpl<State extends GameState, Spec extends GameSpecification> implements GameMatchingService<State, Spec> {
+public class GameMatchingServiceImpl<State extends GameState> implements GameMatchingService<State> {
 
     final private GameNotificationManager notificationManager;
 
@@ -39,7 +39,7 @@ public class GameMatchingServiceImpl<State extends GameState, Spec extends GameS
     }
 
     @Override
-    public GameTable<State> reserve(final long playerId, final Spec specification) {
+    public GameTable<State> reserve(final long playerId, final GameSpecification specification) {
         // Step 1. Pooling
         GameTable<State> gameTable = tableManager.poll(specification);
         gameTable.addPlayer(playerId);

@@ -22,15 +22,15 @@ import com.gogomaya.server.game.match.GameMatchingService;
 import com.gogomaya.server.game.table.GameTableRepository;
 
 @Controller
-public class GameTableMatchController<State extends GameState, Spec extends GameSpecification> {
+public class GameTableMatchController<State extends GameState> {
 
     final private GameConfigurationManager configurationManager;
 
-    final private GameMatchingService<State, Spec> matchingService;
+    final private GameMatchingService<State> matchingService;
 
     final private GameTableRepository<GameTable<State>, State> tableRepository;
 
-    public GameTableMatchController(final GameMatchingService<State, Spec> matchingService,
+    public GameTableMatchController(final GameMatchingService<State> matchingService,
             final GameTableRepository<GameTable<State>, State> sessionRepository,
             final GameConfigurationManager configurationManager) {
         this.matchingService = checkNotNull(matchingService);
@@ -41,7 +41,7 @@ public class GameTableMatchController<State extends GameState, Spec extends Game
     @RequestMapping(method = RequestMethod.POST, value = "/active/session", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody GameTable<State> match(@RequestHeader("playerId") final long playerId, 
-            @RequestBody final Spec gameSpecification) {
+            @RequestBody final GameSpecification gameSpecification) {
         // Step 1. Checking that provided specification was valid
         if (!configurationManager.getSpecificationOptions().valid(gameSpecification))
             throw GogomayaException.create(GogomayaError.GameSpecificationInvalid);

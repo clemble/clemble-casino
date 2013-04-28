@@ -4,8 +4,8 @@ import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 
-public interface GameMatchingService<State extends GameState, Spec extends GameSpecification> {
+public interface GameMatchingService<State extends GameState> {
 
-    public GameTable<State> reserve(final long playerId, final Spec gameSpecification);
+    public GameTable<State> reserve(final long playerId, final GameSpecification gameSpecification);
 
 }

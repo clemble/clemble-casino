@@ -11,6 +11,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.gogomaya.server.error.GogomayaValidationService;
+import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.match.GameMatchingService;
@@ -72,7 +73,7 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public GameTableMatchController sessionController() {
+    public GameTableMatchController<GameState> sessionController() {
         return new GameTableMatchController(stateManager, tableRepository, configurationManager);
     }
 
