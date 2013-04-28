@@ -26,7 +26,7 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.game.table.GameTableManager;
-import com.gogomaya.server.game.table.TicTacToeTableRepository;
+import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
 import com.gogomaya.server.money.Currency;
@@ -45,7 +45,7 @@ public class GameSessionRepositoryTest {
     TicTacToeSessionRepository sessionRepository;
 
     @Inject
-    TicTacToeTableRepository tableRepository;
+    GameTableRepository<TicTacToeState> tableRepository;
 
     @Inject
     GameTableManager<?> tableManager;

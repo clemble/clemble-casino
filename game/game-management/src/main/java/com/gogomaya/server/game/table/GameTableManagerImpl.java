@@ -16,12 +16,12 @@ import com.gogomaya.server.game.specification.GameSpecification;
 public class GameTableManagerImpl<State extends GameState> implements GameTableManager<State> {
 
     final private RedisTemplate<byte[], Long> redisTemplate;
-    final private GameTableRepository<GameTable<State>, State> tableRepository;
+    final private GameTableRepository<State> tableRepository;
     final private GameServerConnectionManager serverConnectionManager;
 
     @Inject
     public GameTableManagerImpl(final RedisTemplate<byte[], Long> redisTemplate,
-            final GameTableRepository<GameTable<State>, State> tableRepository,
+            final GameTableRepository<State> tableRepository,
             final GameServerConnectionManager serverConnectionManager) {
         this.redisTemplate = checkNotNull(redisTemplate);
         this.tableRepository = checkNotNull(tableRepository);

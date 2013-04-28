@@ -28,10 +28,10 @@ public class GameTableMatchController<State extends GameState> {
 
     final private GameMatchingService<State> matchingService;
 
-    final private GameTableRepository<GameTable<State>, State> tableRepository;
+    final private GameTableRepository<State> tableRepository;
 
     public GameTableMatchController(final GameMatchingService<State> matchingService,
-            final GameTableRepository<GameTable<State>, State> sessionRepository,
+            final GameTableRepository<State> sessionRepository,
             final GameConfigurationManager configurationManager) {
         this.matchingService = checkNotNull(matchingService);
         this.tableRepository = checkNotNull(sessionRepository);

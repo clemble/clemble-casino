@@ -28,11 +28,11 @@ public class GameEngineController<State extends GameState> {
 
     final private GameTableManager<State> tableManager;
 
-    final private GameTableRepository<GameTable<State>, State> tableRepository;
+    final private GameTableRepository<State> tableRepository;
 
     final private GameEngine<State> engine;
 
-    public GameEngineController(final GameTableRepository<GameTable<State>, State> tableRepository,
+    public GameEngineController(final GameTableRepository<State> tableRepository,
             final GameEngine<State> engine,
             final GameNotificationManager notificationManager,
             final GameTableManager<State> tableManager) {

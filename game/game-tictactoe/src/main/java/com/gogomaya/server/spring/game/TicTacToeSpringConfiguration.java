@@ -23,7 +23,7 @@ import com.gogomaya.server.game.session.TicTacToeSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableManagerImpl;
-import com.gogomaya.server.game.table.TicTacToeTableRepository;
+import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
@@ -47,7 +47,7 @@ public class TicTacToeSpringConfiguration {
     public RedisTemplate<byte[], Long> redisTemplate;
 
     @Inject
-    public TicTacToeTableRepository tableRepository;
+    public GameTableRepository tableRepository;
 
     @Inject
     public GameServerConnectionManager serverConnectionManager;
