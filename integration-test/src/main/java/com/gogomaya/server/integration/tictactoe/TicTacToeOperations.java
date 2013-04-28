@@ -2,7 +2,7 @@ package com.gogomaya.server.integration.tictactoe;
 
 import java.util.List;
 
-import com.gogomaya.server.game.GameSpecification;
+import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 
 public interface TicTacToeOperations {

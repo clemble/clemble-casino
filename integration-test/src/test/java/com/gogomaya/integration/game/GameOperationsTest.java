@@ -13,10 +13,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
+import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeTable;
 import com.gogomaya.server.integration.data.DataGenerator;
 import com.gogomaya.server.integration.game.GameOperations;

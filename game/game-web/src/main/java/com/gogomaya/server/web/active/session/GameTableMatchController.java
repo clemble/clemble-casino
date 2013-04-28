@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.GameConfigurationManager;
 import com.gogomaya.server.game.match.GameMatchingService;
+import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.table.GameTableRepository;
 
 @Controller

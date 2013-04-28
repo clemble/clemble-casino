@@ -23,10 +23,10 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
+import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity

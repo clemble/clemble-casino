@@ -1,14 +1,13 @@
-package com.gogomaya.server.game.tictactoe;
+package com.gogomaya.server.game.action;
 
 import java.util.Collection;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.gogomaya.server.game.action.GamePlayerIterator;
 import com.gogomaya.server.player.PlayerAware;
 
-public class TicTacToePlayerIterator implements GamePlayerIterator {
+public class SequentialPlayerIterator implements GamePlayerIterator {
 
     /**
      * Generated 12/04/13
@@ -20,12 +19,12 @@ public class TicTacToePlayerIterator implements GamePlayerIterator {
     private int index;
 
     @JsonCreator
-    public TicTacToePlayerIterator(@JsonProperty("index") final int current, @JsonProperty("players") long[] players) {
+    public SequentialPlayerIterator(@JsonProperty("index") final int current, @JsonProperty("players") long[] players) {
         this.players = players;
         this.index = current;
     }
 
-    public TicTacToePlayerIterator(final int currentUser, Collection<? extends PlayerAware> playerAwares) {
+    public SequentialPlayerIterator(final int currentUser, Collection<? extends PlayerAware> playerAwares) {
         this.index = currentUser;
         this.players = new long[playerAwares.size()];
 

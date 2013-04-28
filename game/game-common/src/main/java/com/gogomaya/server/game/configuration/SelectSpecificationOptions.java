@@ -7,7 +7,7 @@ import java.util.List;
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonCreator;
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 
-import com.gogomaya.server.game.GameSpecification;
+import com.gogomaya.server.game.specification.GameSpecification;
 import com.google.common.collect.ImmutableList;
 
 public class SelectSpecificationOptions implements GameSpecificationOptions {

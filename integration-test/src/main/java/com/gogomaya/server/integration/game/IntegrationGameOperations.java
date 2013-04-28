@@ -8,9 +8,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
+import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
 
 public class IntegrationGameOperations implements GameOperations {

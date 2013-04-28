@@ -22,8 +22,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.TypeDef;
 
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.move.GameMove;
+import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 

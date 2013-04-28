@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Inject;
 
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameState;
@@ -13,6 +12,7 @@ import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.session.GameSessionRepository;
+import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableRepository;
 

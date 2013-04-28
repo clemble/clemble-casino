@@ -1,4 +1,4 @@
-package com.gogomaya.server.game;
+package com.gogomaya.server.game.specification;
 
 import java.io.Serializable;
 import java.util.Arrays;

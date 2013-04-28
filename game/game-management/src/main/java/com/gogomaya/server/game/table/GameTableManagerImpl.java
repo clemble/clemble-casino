@@ -7,11 +7,11 @@ import javax.inject.Inject;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.gogomaya.server.game.GameSpecification;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
+import com.gogomaya.server.game.specification.GameSpecification;
 
 public class GameTableManagerImpl<State extends GameState> implements GameTableManager<State> {
 
