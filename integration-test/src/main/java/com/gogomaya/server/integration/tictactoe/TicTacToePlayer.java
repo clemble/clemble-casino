@@ -16,20 +16,21 @@ public class TicTacToePlayer {
     final private Object versionLock = new Object();
 
     final private AtomicReference<GameTable<TicTacToeState>> table = new AtomicReference<GameTable<TicTacToeState>>();
-    private Player player;
+
+    final private Player player;
+
     private GameListenerControl listenerControl;
 
-    public TicTacToePlayer(TicTacToeOperations operations) {
-        this.ticTacToeOperations = operations;
+    public TicTacToePlayer(final Player player,
+            final GameTable<TicTacToeState> table,
+            final TicTacToeOperations operations) {
+        this.player = checkNotNull(player);
+        this.table.set(checkNotNull(table));
+        this.ticTacToeOperations = checkNotNull(operations);
     }
 
     public Player getPlayer() {
         return player;
-    }
-
-    public TicTacToePlayer setPlayer(Player player) {
-        this.player = player;
-        return this;
     }
 
     public GameTable<TicTacToeState> getTable() {
@@ -39,8 +40,8 @@ public class TicTacToePlayer {
     public TicTacToePlayer setTable(GameTable<TicTacToeState> newTable) {
         synchronized (versionLock) {
             if (this.table.get() == null
-                    || (this.table.get().getState() != null ? TicTacToePlayerUtils.getVersion(this.table.get().getState()) : -1) < (newTable.getState() != null ? 
-                            TicTacToePlayerUtils.getVersion(newTable.getState()) : -1)) {
+                    || (this.table.get().getState() != null ? TicTacToePlayerUtils.getVersion(this.table.get().getState()) : -1) < (newTable.getState() != null ? TicTacToePlayerUtils
+                            .getVersion(newTable.getState()) : -1)) {
                 this.table.set(newTable);
                 versionLock.notifyAll();
             }

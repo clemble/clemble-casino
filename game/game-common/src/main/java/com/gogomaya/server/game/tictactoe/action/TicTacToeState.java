@@ -94,13 +94,13 @@ public class TicTacToeState extends AbstractGameState {
 
     public TicTacToeState setNextMoveSelect(long playerId) {
         if (getPlayerIterator().contains(playerId))
-            setNextMove(new TicTacToeSelectCellMove(nextMoveId(), playerId));
+            setNextMove(new TicTacToeSelectCellMove(playerId));
         return this;
     }
 
     public void setNextMoveBet() {
         long[] players = getPlayerIterator().getPlayers();
-        setNextMoves(ImmutableList.<GameMove> of(new TicTacToeBetOnCellMove(nextMoveId(), players[0]), new TicTacToeBetOnCellMove(nextMoveId(), players[1])));
+        setNextMoves(ImmutableList.<GameMove> of(new TicTacToeBetOnCellMove(players[0]), new TicTacToeBetOnCellMove(players[1])));
     }
 
 }

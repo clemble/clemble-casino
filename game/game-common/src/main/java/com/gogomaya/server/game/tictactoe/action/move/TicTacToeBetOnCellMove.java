@@ -12,15 +12,14 @@ public class TicTacToeBetOnCellMove extends TicTacToeMove {
 
     final private long bet;
 
-    public TicTacToeBetOnCellMove(final int moveId, final long playerId) {
-        this(moveId, playerId, 0);
+    public TicTacToeBetOnCellMove(final long playerId) {
+        this(playerId, 0);
     }
 
     @JsonCreator
-    public TicTacToeBetOnCellMove(@JsonProperty("moveId") final int moveId,
-            @JsonProperty("playerId") final long playerId,
+    public TicTacToeBetOnCellMove(@JsonProperty("playerId") final long playerId,
             @JsonProperty("bet") final long bet) {
-        super(moveId, playerId);
+        super(playerId);
         if (bet < 0)
             throw new IllegalArgumentException("Bet can't be lesser than 0");
 

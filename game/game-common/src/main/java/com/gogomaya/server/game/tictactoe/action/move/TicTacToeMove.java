@@ -18,8 +18,8 @@ public class TicTacToeMove extends AbstractGameMove {
      */
     private static final long serialVersionUID = -8775703673463350464L;
 
-    public TicTacToeMove(final int moveId, final long playerId) {
-        super(moveId, playerId);
+    public TicTacToeMove(final long playerId) {
+        super(playerId);
     }
 
 }

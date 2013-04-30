@@ -17,17 +17,18 @@ public class TicTacToeSelectCellMove extends TicTacToeMove {
 
     final private TicTacToeCell cell;
 
-    public TicTacToeSelectCellMove(final int moveId, final long playerId) {
-        this(moveId, playerId, Byte.MIN_VALUE, Byte.MIN_VALUE);
+    public TicTacToeSelectCellMove(final long playerId) {
+        this(playerId, Byte.MIN_VALUE, Byte.MIN_VALUE);
     }
 
-    public TicTacToeSelectCellMove(final int moveId, final long playerId, final byte row, final byte column) {
-        this(moveId, playerId, TicTacToeCell.create(row, column));
+    public TicTacToeSelectCellMove(final long playerId, final byte row, final byte column) {
+        this(playerId, TicTacToeCell.create(row, column));
     }
 
     @JsonCreator
-    public TicTacToeSelectCellMove(@JsonProperty("moveId") final int moveId, @JsonProperty("playerId") final long playerId, @JsonProperty("cell") final TicTacToeCell cell) {
-        super(moveId, playerId);
+    public TicTacToeSelectCellMove(@JsonProperty("playerId") final long playerId,
+            @JsonProperty("cell") final TicTacToeCell cell) {
+        super(playerId);
         this.cell = cell;
     }
 

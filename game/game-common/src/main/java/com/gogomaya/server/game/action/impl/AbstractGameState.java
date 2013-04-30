@@ -30,8 +30,6 @@ abstract public class AbstractGameState implements GameState {
     private Map<Long, GameMove> nextMoves = new HashMap<Long, GameMove>();
     @JsonIgnore
     private Map<Long, GameMove> madeMoves = new HashMap<Long, GameMove>();
-    @JsonProperty("nextMoveId")
-    private int nextMoveId;
 
     final public Collection<GamePlayerState> getPlayerStates() {
         return playersState.values();
@@ -124,18 +122,6 @@ abstract public class AbstractGameState implements GameState {
     final public GameState setPlayerIterator(GamePlayerIterator playerIterator) {
         this.playerIterator = playerIterator;
         return this;
-    }
-
-    final public int nextMoveId() {
-        return nextMoveId++;
-    }
-
-    public int getNextMoveId() {
-        return this.nextMoveId;
-    }
-
-    public void setNextMoveId(int nextMove) {
-        this.nextMoveId = nextMove;
     }
 
 }

@@ -12,6 +12,4 @@ import com.gogomaya.server.player.PlayerAware;
 @JsonSubTypes({ @Type(value = TicTacToeSelectCellMove.class, name = "select"), @Type(value = TicTacToeBetOnCellMove.class, name = "bet") })
 public interface GameMove extends PlayerAware {
 
-    public int getMoveId();
-
 }
