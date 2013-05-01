@@ -50,7 +50,10 @@ public enum GogomayaError {
     GamePlayMoveUndefined(Code.GAMEPLAY_MOVE_UNDEFINED, "Move was not defined properly"),
     GamePlayMoveAlreadyMade(Code.GAMEPLAY_MOVE_ALREADY_MADE, "Player already made a move, this one will be ignored"),
     GamePlayNoMoveExpected(Code.GAMEPLAY_NO_MOVE_EXPECTED, "No move expected from the player"),
-    GamePlayWrongMoveType(Code.GAMEPLAY_WRONG_MOVE_TYPE, "Wrong move type")
+    GamePlayWrongMoveType(Code.GAMEPLAY_WRONG_MOVE_TYPE, "Wrong move type"),
+    GamePlayMoveNotSupported(Code.GAMEPLAY_MOVE_NOT_SUPPORTED, "Game does not support this move"),
+    
+    TicTacToeCellOwned(Code.TIC_TAC_TOE_CELL_OWNED, "Cell already Owned")
     ;
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
@@ -153,5 +156,8 @@ public enum GogomayaError {
         final public static String GAMEPLAY_WRONG_MOVE_TYPE = "0F2";
         final public static String GAMEPLAY_MOVE_UNDEFINED = "0F3";
         final public static String GAMEPLAY_STATE_UNDEFINED = "0F4";
+        final public static String GAMEPLAY_MOVE_NOT_SUPPORTED = "0F5";
+        // Errors specific for TicTacToe
+        final public static String TIC_TAC_TOE_CELL_OWNED = "0D0";
     }
 }

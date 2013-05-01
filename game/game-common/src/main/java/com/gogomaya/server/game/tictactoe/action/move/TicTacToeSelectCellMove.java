@@ -26,7 +26,8 @@ public class TicTacToeSelectCellMove extends TicTacToeMove {
     }
 
     @JsonCreator
-    public TicTacToeSelectCellMove(@JsonProperty("playerId") final long playerId,
+    public TicTacToeSelectCellMove(
+            @JsonProperty("playerId") final long playerId,
             @JsonProperty("cell") final TicTacToeCell cell) {
         super(playerId);
         this.cell = cell;

@@ -59,9 +59,9 @@ public class GameTable<State extends GameState> implements Serializable {
     @CollectionTable(name = "TIC_TAC_TOE_TABLE_PLAYERS", joinColumns = @JoinColumn(name = "TABLE_ID"))
     private Set<Long> players = new HashSet<Long>();
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity=GameSession.class)
+    @OneToOne(fetch = FetchType.EAGER, targetEntity = GameSession.class)
     @JoinColumn(name = "SESSION_ID")
-    private GameSession<State> currentSession;
+    private GameSession currentSession;
 
     @Type(type = "gameState")
     @Column(name = "GAME_STATE", length = 4096)
@@ -71,8 +71,9 @@ public class GameTable<State extends GameState> implements Serializable {
         return tableId;
     }
 
-    public void setTableId(long tableId) {
+    public GameTable<State> setTableId(long tableId) {
         this.tableId = tableId;
+        return this;
     }
 
     public GameServerConnection getServerResource() {
@@ -88,20 +89,23 @@ public class GameTable<State extends GameState> implements Serializable {
         return players;
     }
 
-    public void setPlayers(Set<Long> players) {
+    public GameTable<State> setPlayers(Set<Long> players) {
         this.players = players;
+        return this;
     }
 
-    public void addPlayer(long player) {
+    public GameTable<State> addPlayer(long player) {
         this.players.add(player);
+        return this;
     }
 
-    public GameSession<State> getCurrentSession() {
+    public GameSession getCurrentSession() {
         return currentSession;
     }
 
-    public void setCurrentSession(GameSession<State> currentSession) {
+    public GameTable<State> setCurrentSession(GameSession currentSession) {
         this.currentSession = currentSession;
+        return this;
     }
 
     public GameSpecification getSpecification() {

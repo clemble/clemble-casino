@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.tictactoe.action;
 
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.impl.AbstractGameEngine;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
@@ -16,7 +18,7 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState> {
             return processBetOnCellMove(oldState, (TicTacToeBetOnCellMove) move);
         }
         // Step 2. Returning default state
-        return oldState;
+        throw GogomayaException.create(GogomayaError.GamePlayMoveNotSupported);
     }
 
     private TicTacToeState processBetOnCellMove(final TicTacToeState oldState, final TicTacToeBetOnCellMove betMove) {
@@ -31,15 +33,12 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState> {
             long firstPlayerBet = firstPlayerMove.getBet();
             long secondPlayerBet = secondPlayerMove.getBet();
 
-            if (firstPlayerBet == secondPlayerBet) {
-                oldState.setActiveCellState(new TicTacToeCellState(0L, firstPlayerBet, secondPlayerBet));
-            } else {
-                oldState.setActiveCellState(new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet));
-            }
+            TicTacToeCellState activeCellState = (firstPlayerBet == secondPlayerBet) 
+                    ? new TicTacToeCellState(0L, firstPlayerBet, secondPlayerBet)
+                    : new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet);
+            oldState.setActiveCellState(activeCellState);
 
             oldState.setNextMoveSelect(oldState.getPlayerIterator().next());
-            oldState.setActiveCell(TicTacToeCell.DEFAULT);
-            oldState.cleanMadeMove();
         }
 
         return oldState;
@@ -48,12 +47,11 @@ public class TicTacToeEngine extends AbstractGameEngine<TicTacToeState> {
     private TicTacToeState processSelectCellMove(final TicTacToeState oldState, final TicTacToeSelectCellMove selectCellMove) {
         // Step 1. Sanity check
         if (oldState.isOwned(selectCellMove.getCell())) {
-            throw new IllegalArgumentException("Cell " + selectCellMove.getCell() + " owned by " + oldState.getCellState(selectCellMove.getCell()));
+            throw GogomayaException.create(GogomayaError.TicTacToeCellOwned);
         }
         // Step 2. Generating next moves
         oldState.setNextMoveBet();
         oldState.setActiveCell(selectCellMove.getCell());
-        oldState.cleanMadeMove();
         // Step 3. Returning modified old state
         return oldState;
     }

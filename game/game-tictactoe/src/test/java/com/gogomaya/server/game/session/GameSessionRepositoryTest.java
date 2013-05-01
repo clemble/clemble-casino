@@ -42,7 +42,7 @@ public class GameSessionRepositoryTest {
             .setTotalTimeRule(TotalTimeRule.DEFAULT).setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);;
 
     @Inject
-    TicTacToeSessionRepository sessionRepository;
+    GameSessionRepository sessionRepository;
 
     @Inject
     GameTableRepository<TicTacToeState> tableRepository;
@@ -77,7 +77,7 @@ public class GameSessionRepositoryTest {
 
         gameTable.setState(gameState);
 
-        GameSession<TicTacToeState> gameSession = new GameSession<TicTacToeState>();
+        GameSession gameSession = new GameSession();
         gameSession.setPlayers(players);
         gameSession.setSpecification(DEFAULT_SPECIFICATION);
 

@@ -23,6 +23,7 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.action.move.GameMove;
+import com.gogomaya.server.game.action.move.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.hibernate.JsonHibernateType;
@@ -32,7 +33,7 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
         name = JsonHibernateType.CLASS_NAME_PARAMETER,
         value = "com.gogomaya.server.game.action.GameState") })
-public class GameSession<State extends GameState> implements Serializable {
+public class GameSession implements Serializable {
 
     /**
      * Generated 16/02/13
@@ -46,7 +47,8 @@ public class GameSession<State extends GameState> implements Serializable {
     private long sessionId;
 
     @ManyToOne
-    @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
+    @JoinColumns(value = {
+            @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
             @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP") })
     private GameSpecification specification;
 
@@ -54,12 +56,15 @@ public class GameSession<State extends GameState> implements Serializable {
     private GameSessionState sessionState;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "TIC_TAC_TOE_SESSION_PLAYERS", joinColumns = @JoinColumn(name = "SESSION_ID"))
+    @CollectionTable(name = "GAME_SESSION_PLAYERS", joinColumns = @JoinColumn(name = "SESSION_ID"))
     private Set<Long> players = new HashSet<Long>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "TIC_TAC_TOE_SESSION_MOVES", joinColumns = @JoinColumn(name = "SESSION_ID"))
-    private Set<GameMove> madeMoves = new HashSet<GameMove>();
+    @CollectionTable(name = "GAME_SESSION_MOVES", joinColumns = @JoinColumn(name = "SESSION_ID"))
+    private Set<MadeMove> madeMoves = new HashSet<MadeMove>();
+
+    @Column(name = "NUM_MADE_MOVES")
+    private int numMadeMoves;
 
     public long getSessionId() {
         return sessionId;
@@ -99,16 +104,21 @@ public class GameSession<State extends GameState> implements Serializable {
         this.players.addAll(players);
     }
 
-    public Set<GameMove> getMadeMoves() {
+    public Set<MadeMove> getMadeMoves() {
         return madeMoves;
     }
 
     public void addMadeMove(GameMove madeMove) {
-        this.madeMoves.add(madeMove);
+        MadeMove move = new MadeMove().setMove(madeMove).setMoveId(numMadeMoves++).setProcessingTime(System.currentTimeMillis());
+        this.madeMoves.add(move);
     }
 
-    public void addMadeMoves(Collection<GameMove> madeMoves) {
-        this.madeMoves.addAll(madeMoves);
+    public int getNumMadeMoves() {
+        return numMadeMoves;
+    }
+
+    public void setNumMadeMoves(int numMadeMoves) {
+        this.numMadeMoves = numMadeMoves;
     }
 
     @Override
@@ -124,7 +134,6 @@ public class GameSession<State extends GameState> implements Serializable {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -132,7 +141,7 @@ public class GameSession<State extends GameState> implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GameSession<State> other = (GameSession<State>) obj;
+        GameSession other = (GameSession) obj;
         if (madeMoves == null) {
             if (other.madeMoves != null)
                 return false;

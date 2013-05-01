@@ -19,7 +19,7 @@ import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.connection.RabbitGameNotificationManager;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
 import com.gogomaya.server.game.match.GameMatchingServiceImpl;
-import com.gogomaya.server.game.session.TicTacToeSessionRepository;
+import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableManagerImpl;
@@ -38,7 +38,7 @@ import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 public class TicTacToeSpringConfiguration {
 
     @Inject
-    public TicTacToeSessionRepository sessionRepository;
+    public GameSessionRepository sessionRepository;
 
     @Inject
     public GameSpecificationRepository specificationRepository;

@@ -17,7 +17,8 @@ public class TicTacToeBetOnCellMove extends TicTacToeMove {
     }
 
     @JsonCreator
-    public TicTacToeBetOnCellMove(@JsonProperty("playerId") final long playerId,
+    public TicTacToeBetOnCellMove(
+            @JsonProperty("playerId") final long playerId,
             @JsonProperty("bet") final long bet) {
         super(playerId);
         if (bet < 0)

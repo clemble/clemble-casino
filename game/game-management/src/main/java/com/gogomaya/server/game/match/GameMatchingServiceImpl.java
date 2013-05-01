@@ -22,13 +22,13 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
 
     final private GameTableManager<State> tableManager;
     final private GameTableRepository<State> tableRepository;
-    final private GameSessionRepository<State> sessionRepository;
     final private GameStateFactory<State> stateFactory;
+    final private GameSessionRepository sessionRepository;
 
     @Inject
     public GameMatchingServiceImpl(final GameTableManager<State> tableManager,
             final GameTableRepository<State> tableRepository,
-            final GameSessionRepository<State> sessionRepository,
+            final GameSessionRepository sessionRepository,
             final GameNotificationManager notificationManager,
             final GameStateFactory<State> stateFactory) {
         this.tableManager = checkNotNull(tableManager);
@@ -49,7 +49,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
             State gameState = stateFactory.initialize(specification, gameTable.getPlayers());
             gameTable.setState(gameState);
             // Step 3. Initializing start of the game session
-            GameSession<State> gameSession = new GameSession<State>();
+            GameSession gameSession = new GameSession();
             gameSession.addPlayers(gameTable.getPlayers());
             gameSession.setSessionState(GameSessionState.active);
             gameSession.setSpecification(specification);

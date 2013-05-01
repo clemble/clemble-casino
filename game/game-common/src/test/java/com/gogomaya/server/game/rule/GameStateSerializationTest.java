@@ -16,6 +16,7 @@ import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
+import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
 
 public class GameStateSerializationTest {
@@ -40,7 +41,9 @@ public class GameStateSerializationTest {
         TicTacToeState tacToeState = new TicTacToeState();
         tacToeState.setPlayerStates(players);
         tacToeState.setPlayerIterator(new SequentialPlayerIterator(0, players));
-        tacToeState.setNextMoveSelect(1L);
+        tacToeState.setNextMoveBet();
+        tacToeState.addMadeMove(new TicTacToeBetOnCellMove(2L));
+        Assert.assertNotNull(tacToeState.getMadeMove(2L));
 
         String jsonPresentation = objectMapper.writeValueAsString(tacToeState);
         System.out.println(jsonPresentation);
@@ -52,6 +55,7 @@ public class GameStateSerializationTest {
         readState = (TicTacToeState) anotherObjectMapper.readValue(jsonPresentation, GameState.class);
 
         Assert.assertNotNull(readState.getNextMove(1L));
+        Assert.assertNotNull(readState.getMadeMove(2L));
 
     }
 

@@ -31,6 +31,9 @@ abstract public class AbstractGameState implements GameState {
     @JsonIgnore
     private Map<Long, GameMove> madeMoves = new HashMap<Long, GameMove>();
 
+    @JsonProperty("version")
+    private int version;
+
     final public Collection<GamePlayerState> getPlayerStates() {
         return playersState.values();
     }
@@ -88,18 +91,19 @@ abstract public class AbstractGameState implements GameState {
         return madeMoves.get(playerId);
     }
 
+    final public void setMadeMoves(Collection<GameMove> gameMoves) {
+        if (gameMoves != null) {
+            for (GameMove move : gameMoves) {
+                    madeMoves.put(move.getPlayerId(), move);
+            }
+        }
+    }
+
     @Override
     @JsonIgnore
     @JsonProperty("madeMoves")
     final public Collection<GameMove> getMadeMoves() {
         return madeMoves.values();
-    }
-
-    final public GameState setMadeMoves(Collection<GameMove> moves) {
-        cleanMadeMove();
-        for (GameMove move : moves)
-            madeMoves.put(move.getPlayerId(), move);
-        return this;
     }
 
     final public GameState addMadeMove(GameMove playerMove) {

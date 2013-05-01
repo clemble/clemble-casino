@@ -48,6 +48,7 @@ public class GameEngineController<State extends GameState> {
             @RequestHeader("sessionId") long sessionId,
             @RequestHeader("tableId") long tableId,
             @RequestBody GameMove move) {
+        long startTime = System.nanoTime();
         // Step 1. Retrieving associated table
         GameTable<State> table = tableRepository.findOne(tableId);
         if (table == null)
@@ -57,6 +58,9 @@ public class GameEngineController<State extends GameState> {
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         // Step 3. Updating current state
         State nextState = engine.process(table.getState(), move);
+        // Step 3.1 Updating made move
+        table.getCurrentSession().addMadeMove(move);
+        // Step 3.2
         table.setState(nextState);
         table = tableRepository.saveAndFlush(table);
         if (nextState.complete()) {
