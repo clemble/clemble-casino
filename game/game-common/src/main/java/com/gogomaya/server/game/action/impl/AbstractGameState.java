@@ -77,6 +77,7 @@ abstract public class AbstractGameState implements GameState {
     final public GameState setNextMove(GameMove move) {
         nextMoves.clear();
         nextMoves.put(move.getPlayerId(), move);
+        version++;
         return this;
     }
 
@@ -84,6 +85,7 @@ abstract public class AbstractGameState implements GameState {
         nextMoves.clear();
         for (GameMove move : moves)
             nextMoves.put(move.getPlayerId(), move);
+        version++;
         return this;
     }
 
@@ -92,11 +94,11 @@ abstract public class AbstractGameState implements GameState {
     }
 
     final public void setMadeMoves(Collection<GameMove> gameMoves) {
-        if (gameMoves != null) {
-            for (GameMove move : gameMoves) {
-                    madeMoves.put(move.getPlayerId(), move);
-            }
+        madeMoves.clear();
+        for (GameMove move : gameMoves) {
+            madeMoves.put(move.getPlayerId(), move);
         }
+        version++;
     }
 
     @Override
@@ -107,8 +109,10 @@ abstract public class AbstractGameState implements GameState {
     }
 
     final public GameState addMadeMove(GameMove playerMove) {
-        if (nextMoves.remove(playerMove.getPlayerId()) != null)
+        if (nextMoves.remove(playerMove.getPlayerId()) != null) {
             madeMoves.put(playerMove.getPlayerId(), playerMove);
+            version++;
+        }
         return this;
     }
 
@@ -126,6 +130,14 @@ abstract public class AbstractGameState implements GameState {
     final public GameState setPlayerIterator(GamePlayerIterator playerIterator) {
         this.playerIterator = playerIterator;
         return this;
+    }
+
+    final public int getVersion() {
+        return version;
+    }
+
+    final public void setVersion(int version) {
+        this.version = version;
     }
 
 }

@@ -48,7 +48,6 @@ public class GameEngineController<State extends GameState> {
             @RequestHeader("sessionId") long sessionId,
             @RequestHeader("tableId") long tableId,
             @RequestBody GameMove move) {
-        long startTime = System.nanoTime();
         // Step 1. Retrieving associated table
         GameTable<State> table = tableRepository.findOne(tableId);
         if (table == null)
