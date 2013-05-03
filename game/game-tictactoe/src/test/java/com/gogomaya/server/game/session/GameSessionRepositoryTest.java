@@ -67,7 +67,7 @@ public class GameSessionRepositoryTest {
         players.add(1L);
         players.add(2L);
 
-        TicTacToeState gameState = stateFactory.initialize(DEFAULT_SPECIFICATION, players);
+        TicTacToeState gameState = stateFactory.create(DEFAULT_SPECIFICATION, players);
 
         GameTable<TicTacToeState> gameTable = new GameTable<TicTacToeState>();
         gameTable.setSpecification(DEFAULT_SPECIFICATION);

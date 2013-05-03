@@ -46,7 +46,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
 
         PlayerNumberRule numberRule = specification.getNumberRule();
         if (gameTable.getPlayers().size() >= numberRule.getMinPlayers()) {
-            State gameState = stateFactory.initialize(specification, gameTable.getPlayers());
+            State gameState = stateFactory.create(specification, gameTable.getPlayers());
             gameTable.setState(gameState);
             // Step 3. Initializing start of the game session
             GameSession gameSession = new GameSession();

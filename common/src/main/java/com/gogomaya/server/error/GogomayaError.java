@@ -17,7 +17,7 @@ public enum GogomayaError {
 
     ServerError(Code.SERVER_ERROR_CODE, "Server error"),
     ServerCriticalError(Code.SERVER_CRITICAL_ERROR_CODE, "Server critical error"),
-    
+
     EmailInvalid(Code.EMAIL_INVALID_CODE, "Email invalid"),
     EmailNotConfirmed(Code.EMAIL_NOT_CONFIRMED_CODE, "Email not confirmed"),
     EmailNotRegistered(Code.EMAIL_NOT_REGISTERED_CODE, "Email not registered"),
@@ -40,20 +40,22 @@ public enum GogomayaError {
     SocialConnectionProviderUserNull(Code.SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE, "Social connection provider User can't be NULL"),
     SocialConnectionProviderIdNull(Code.SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE, "Social connection provider ID can't be NULL"),
     SocialConnectionInvalid(Code.SOCIAL_CONNECTION_INVALID_CODE, "Social connection is invalid"),
-    
+
     ClientJsonInvalidError(Code.CLIENT_JSON_INVALID_ERROR_CODE, "Invalid Json"),
     ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json"),
-    
+
     GameSpecificationInvalid(Code.GAME_SPECIFICATION_INVAID, "Provided game specification is invalid"),
-    
+
     GamePlayStayUndefined(Code.GAMEPLAY_STATE_UNDEFINED, "State is missing or illegal"),
     GamePlayMoveUndefined(Code.GAMEPLAY_MOVE_UNDEFINED, "Move was not defined properly"),
     GamePlayMoveAlreadyMade(Code.GAMEPLAY_MOVE_ALREADY_MADE, "Player already made a move, this one will be ignored"),
     GamePlayNoMoveExpected(Code.GAMEPLAY_NO_MOVE_EXPECTED, "No move expected from the player"),
     GamePlayWrongMoveType(Code.GAMEPLAY_WRONG_MOVE_TYPE, "Wrong move type"),
     GamePlayMoveNotSupported(Code.GAMEPLAY_MOVE_NOT_SUPPORTED, "Game does not support this move"),
-    
-    TicTacToeCellOwned(Code.TIC_TAC_TOE_CELL_OWNED, "Cell already Owned")
+
+    TicTacToeCellOwned(Code.TIC_TAC_TOE_CELL_OWNED, "Cell already Owned"),
+
+    GameStateReCreationFailure(Code.GAME_STATE_RECREATION_FAILURE, "Can't create state from provided session");
     ;
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
@@ -159,5 +161,7 @@ public enum GogomayaError {
         final public static String GAMEPLAY_MOVE_NOT_SUPPORTED = "0F5";
         // Errors specific for TicTacToe
         final public static String TIC_TAC_TOE_CELL_OWNED = "0D0";
+        // Session recreation failure
+        final public static String GAME_STATE_RECREATION_FAILURE = "0E0";
     }
 }

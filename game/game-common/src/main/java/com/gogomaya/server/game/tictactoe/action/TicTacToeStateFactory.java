@@ -4,14 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.gogomaya.server.game.action.GamePlayerState;
-import com.gogomaya.server.game.action.GameStateFactory;
+import com.gogomaya.server.game.action.impl.AbstractGameStateFactory;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 
-public class TicTacToeStateFactory implements GameStateFactory<TicTacToeState> {
+public class TicTacToeStateFactory extends AbstractGameStateFactory<TicTacToeState> {
 
     @Override
-    public TicTacToeState initialize(final GameSpecification gameSpecification, final Set<Long> playerIds) {
+    public TicTacToeState create(final GameSpecification gameSpecification, final Set<Long> playerIds) {
         // Step 0. Create initial state
         if (gameSpecification == null)
             throw new IllegalArgumentException("Game specification can't be null");

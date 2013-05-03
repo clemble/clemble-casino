@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.action.move;
 
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -76,6 +78,17 @@ public class MadeMove {
         if (processingTime != other.processingTime)
             return false;
         return true;
+    }
+
+    public static MadeMove[] sort(Collection<MadeMove> madeMoves) {
+        // Step 1. Creating sortedMove array
+        MadeMove[] sortedMoves = new MadeMove[madeMoves.size()];
+        // Step 2. Putting all made moves to the array
+        for (MadeMove madeMove : madeMoves) {
+            sortedMoves[madeMove.getMoveId()] = madeMove;
+        }
+        // Step 3. Returning sorted array
+        return sortedMoves;
     }
 
 }
