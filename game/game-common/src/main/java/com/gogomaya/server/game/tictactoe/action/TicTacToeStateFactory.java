@@ -3,10 +3,8 @@ package com.gogomaya.server.game.tictactoe.action;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.gogomaya.server.game.action.GamePlayerIterator;
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameStateFactory;
-import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 
@@ -29,13 +27,8 @@ public class TicTacToeStateFactory implements GameStateFactory<TicTacToeState> {
         for (Long playerId : playerIds) {
             playerStates.add(new GamePlayerState(playerId, price));
         }
-        GamePlayerIterator playerIterator = new SequentialPlayerIterator(0, playerStates);
         // Step 3. Initializing next player
-        TicTacToeState state = new TicTacToeState();
-        state.setPlayerStates(playerStates);
-        state.setPlayerIterator(playerIterator);
-        state.setNextMoveSelect(playerIterator.next());
-        return state;
+        return  new TicTacToeState(playerStates);
     }
 
 }

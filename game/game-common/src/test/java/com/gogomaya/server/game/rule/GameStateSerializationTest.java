@@ -14,9 +14,9 @@ import org.junit.Test;
 
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
+import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
 
 public class GameStateSerializationTest {
@@ -38,10 +38,8 @@ public class GameStateSerializationTest {
         players.add(new GamePlayerState(1L, 50L));
         players.add(new GamePlayerState(2L, 50L));
 
-        TicTacToeState tacToeState = new TicTacToeState();
-        tacToeState.setPlayerStates(players);
-        tacToeState.setPlayerIterator(new SequentialPlayerIterator(0, players));
-        tacToeState.setNextMoveBet();
+        TicTacToeState tacToeState = new TicTacToeState(players);
+        tacToeState.process(new TicTacToeSelectCellMove(1L, (byte) 0, (byte) 0));
         tacToeState.addMadeMove(new TicTacToeBetOnCellMove(2L));
         Assert.assertNotNull(tacToeState.getMadeMove(2L));
 

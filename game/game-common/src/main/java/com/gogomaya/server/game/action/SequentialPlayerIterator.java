@@ -18,6 +18,15 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
 
     private int index;
 
+    public SequentialPlayerIterator(Collection<? extends PlayerAware> playerAwares) {
+        this.index = 0;
+        this.players = new long[playerAwares.size()];
+        // Parsing player aware values
+        for (PlayerAware playerAware : playerAwares) {
+            players[index++] = playerAware.getPlayerId();
+        }
+    }
+
     @JsonCreator
     public SequentialPlayerIterator(@JsonProperty("index") final int current, @JsonProperty("players") long[] players) {
         this.players = players;

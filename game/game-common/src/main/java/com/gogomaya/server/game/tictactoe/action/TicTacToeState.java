@@ -1,11 +1,14 @@
 package com.gogomaya.server.game.tictactoe.action;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.action.GamePlayerState;
+import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.action.impl.AbstractGameState;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
@@ -28,6 +31,21 @@ public class TicTacToeState extends AbstractGameState {
         for (TicTacToeCellState[] row : board) {
             Arrays.fill(row, TicTacToeCellState.DEFAULT_CELL_STATE);
         }
+    }
+
+    public TicTacToeState(Collection<GamePlayerState> playersStates) {
+        this();
+        setPlayerStates(playersStates);
+        setPlayerIterator(new SequentialPlayerIterator(playersStates));
+        setNextMove(new TicTacToeSelectCellMove(getPlayerIterator().current()));
+    }
+
+    public TicTacToeCell getActiveCell() {
+        return activeCell;
+    }
+
+    public void setActiveCell(TicTacToeCell cell) {
+        this.activeCell = cell;
     }
 
     public TicTacToeCellState[][] getBoard() {
@@ -67,45 +85,14 @@ public class TicTacToeState extends AbstractGameState {
             completnece[5] = board[i][2].getOwner() == board[i - 1][2].getOwner() ? board[i][2].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
             // Checking diagonals
             completnece[6] = board[i - 1][i - 1].getOwner() == board[i][i].getOwner() ? board[i - 1][i - 1].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
-            completnece[7] = board[3 - i][3 - i].getOwner() == board[2 - i][2 - i].getOwner() ? board[3 - i][3 - i].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
+            completnece[7] = board[3 - i][3 - i].getOwner() == board[2 - i][2 - i].getOwner() ? board[3 - i][3 - i].getOwner()
+                    : TicTacToeCellState.DEFAULT_OWNER;
         }
         // Step 2. If at least one complete game is complete
         for (long complete : completnece)
             if (complete != -1L)
                 return complete;
         return -1L;
-    }
-
-    public boolean isOwned(TicTacToeCell activeCell) {
-        return board[activeCell.getRow()][activeCell.getColumn()].owned();
-    }
-
-    public TicTacToeCell getActiveCell() {
-        return activeCell;
-    }
-
-    public void setActiveCell(TicTacToeCell cell) {
-        this.activeCell = cell;
-    }
-
-    public void setActiveCellState(TicTacToeCellState cellState) {
-        TicTacToeCellState[][] newBoard = board.clone();
-        newBoard[activeCell.getRow()][activeCell.getColumn()] = cellState;
-    }
-
-    public TicTacToeState setNextMoveSelect(long playerId) {
-        if (getPlayerIterator().contains(playerId)) {
-            setNextMove(new TicTacToeSelectCellMove(playerId));
-            setActiveCell(TicTacToeCell.DEFAULT);
-            cleanMadeMove();
-        }
-        return this;
-    }
-
-    public void setNextMoveBet() {
-        long[] players = getPlayerIterator().getPlayers();
-        setNextMoves(ImmutableList.<GameMove> of(new TicTacToeBetOnCellMove(players[0]), new TicTacToeBetOnCellMove(players[1])));
-        cleanMadeMove();
     }
 
     @Override
@@ -126,17 +113,13 @@ public class TicTacToeState extends AbstractGameState {
 
         if (getNextMoves().isEmpty()) {
             long[] players = getPlayerIterator().getPlayers();
-            TicTacToeBetOnCellMove firstPlayerMove = (TicTacToeBetOnCellMove) getMadeMove(players[0]);
-            TicTacToeBetOnCellMove secondPlayerMove = (TicTacToeBetOnCellMove) getMadeMove(players[1]);
 
-            long firstPlayerBet = firstPlayerMove.getBet();
-            long secondPlayerBet = secondPlayerMove.getBet();
+            long firstPlayerBet = ((TicTacToeBetOnCellMove) getMadeMove(players[0])).getBet();
+            long secondPlayerBet = ((TicTacToeBetOnCellMove) getMadeMove(players[1])).getBet();
 
-            TicTacToeCellState activeCellState = (firstPlayerBet == secondPlayerBet) 
-                    ? new TicTacToeCellState(0L, firstPlayerBet, secondPlayerBet)
-                    : new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet);
-            setActiveCellState(activeCellState);
-            setActiveCell(TicTacToeCell.DEFAULT);
+            board[activeCell.getRow()][activeCell.getColumn()] = (firstPlayerBet == secondPlayerBet) ? new TicTacToeCellState(0L, firstPlayerBet,
+                    secondPlayerBet) : new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet);
+            activeCell = TicTacToeCell.DEFAULT;
 
             setNextMove(new TicTacToeSelectCellMove(getPlayerIterator().next()));
             cleanMadeMove();
@@ -146,20 +129,18 @@ public class TicTacToeState extends AbstractGameState {
     }
 
     private TicTacToeState processSelectCellMove(final TicTacToeSelectCellMove selectCellMove) {
+        TicTacToeCell cellToSelect = selectCellMove.getCell();
         // Step 1. Sanity check
-        if (isOwned(selectCellMove.getCell())) {
+        if (board[cellToSelect.getRow()][cellToSelect.getColumn()].owned()) {
             throw GogomayaException.create(GogomayaError.TicTacToeCellOwned);
         }
         // Step 2. Generating next moves
-        setActiveCell(selectCellMove.getCell());
+        activeCell = cellToSelect;
         long[] players = getPlayerIterator().getPlayers();
-        setNextMoves(ImmutableList.<GameMove> of(
-                new TicTacToeBetOnCellMove(players[0]),
-                new TicTacToeBetOnCellMove(players[1])));
+        setNextMoves(ImmutableList.<GameMove> of(new TicTacToeBetOnCellMove(players[0]), new TicTacToeBetOnCellMove(players[1])));
         cleanMadeMove();
         // Step 3. Returning result
         return this;
     }
-
 
 }
