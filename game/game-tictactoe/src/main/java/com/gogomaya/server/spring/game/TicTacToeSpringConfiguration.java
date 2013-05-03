@@ -24,7 +24,6 @@ import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableManagerImpl;
 import com.gogomaya.server.game.table.GameTableRepository;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
@@ -83,12 +82,6 @@ public class TicTacToeSpringConfiguration {
     @Singleton
     public TicTacToeConfigurationManager configurationManager() {
         return new TicTacToeConfigurationManager(specificationRepository);
-    }
-
-    @Bean
-    @Singleton
-    public TicTacToeEngine ticTacToeEngine() {
-        return new TicTacToeEngine();
     }
 
     @Profile(value = { "default", "test" })

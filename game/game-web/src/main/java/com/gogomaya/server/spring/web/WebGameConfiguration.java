@@ -19,7 +19,6 @@ import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableRepository;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.active.session.GameTableMatchController;
@@ -47,9 +46,6 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
     GameTableRepository tableRepository;
-
-    @Inject
-    TicTacToeEngine engine;
 
     @Inject
     GameNotificationManager notificationManager;
@@ -84,7 +80,7 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     public GameEngineController gameController() {
-        return new GameEngineController(tableRepository, engine, notificationManager, tableManager);
+        return new GameEngineController(tableRepository, notificationManager, tableManager);
     }
 
 }

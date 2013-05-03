@@ -9,6 +9,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.GamePlayerIterator;
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameState;
@@ -130,6 +132,25 @@ abstract public class AbstractGameState implements GameState {
     final public GameState setPlayerIterator(GamePlayerIterator playerIterator) {
         this.playerIterator = playerIterator;
         return this;
+    }
+    
+
+    public GameState process(final GameMove move) {
+        // Step 0. Sanity check
+        if (move == null)
+            throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
+        final long playerId = move.getPlayerId();
+        // Step 1.1. Checking that move
+        GameMove associatedPlayerMove = madeMoves.get(playerId);
+        if (associatedPlayerMove != null)
+            throw GogomayaException.create(GogomayaError.GamePlayMoveAlreadyMade);
+        GameMove expectedMove = nextMoves.get(playerId);
+        if (expectedMove == null)
+            throw GogomayaException.create(GogomayaError.GamePlayNoMoveExpected);
+        if (expectedMove.getClass() != move.getClass())
+            throw GogomayaException.create(GogomayaError.GamePlayWrongMoveType);
+        // Step 2. Processing Select cell move
+        return apply(move);
     }
 
     final public int getVersion() {

@@ -8,6 +8,6 @@ public interface GameTableManager<State extends GameState> {
 
     public GameTable<State> poll(GameSpecification specification);
 
-    public void setReservable(GameTable<State> gameTable);
+    public void release(GameTable<State> gameTable);
 
 }

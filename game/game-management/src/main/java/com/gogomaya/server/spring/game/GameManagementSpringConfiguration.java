@@ -17,7 +17,6 @@ import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.connection.RabbitGameNotificationManager;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeEngine;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @Configuration
@@ -41,12 +40,6 @@ public class GameManagementSpringConfiguration {
     @Singleton
     public GameNotificationManager gameNotificationManager() {
         return new RabbitGameNotificationManager(jsonMessageConverter);
-    }
-
-    @Bean
-    @Singleton
-    public TicTacToeEngine ticTacToeEngine() {
-        return new TicTacToeEngine();
     }
 
     @Profile(value = { "default", "test" })

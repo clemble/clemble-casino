@@ -57,7 +57,7 @@ public class GameTableManagerImpl<State extends GameState> implements GameTableM
     }
 
     @Override
-    public void setReservable(GameTable<State> gameTable) {
+    public void release(GameTable<State> gameTable) {
         if (gameTable == null)
             throw new IllegalArgumentException("Game table can't be null");
         if (gameTable.getSpecification() == null)

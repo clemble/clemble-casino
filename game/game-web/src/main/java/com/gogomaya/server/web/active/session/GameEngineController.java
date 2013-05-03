@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.action.GameEngine;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.action.move.GameMove;
@@ -30,18 +29,15 @@ public class GameEngineController<State extends GameState> {
 
     final private GameTableRepository<State> tableRepository;
 
-    final private GameEngine<State> engine;
-
     public GameEngineController(final GameTableRepository<State> tableRepository,
-            final GameEngine<State> engine,
             final GameNotificationManager notificationManager,
             final GameTableManager<State> tableManager) {
         this.notificationManager = checkNotNull(notificationManager);
         this.tableManager = tableManager;
         this.tableRepository = checkNotNull(tableRepository);
-        this.engine = checkNotNull(engine);
     }
 
+    @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.POST, value = "/active/action", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody GameTable<State> process(@RequestHeader("playerId") long playerId,
@@ -56,14 +52,12 @@ public class GameEngineController<State extends GameState> {
         if (table.getCurrentSession().getSessionId() != sessionId)
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         // Step 3. Updating current state
-        State nextState = engine.process(table.getState(), move);
+        State nextState = (State) table.getState().apply(move);
         // Step 3.1 Updating made move
-        table.getCurrentSession().addMadeMove(move);
-        // Step 3.2
         table.setState(nextState);
         table = tableRepository.saveAndFlush(table);
         if (nextState.complete()) {
-            tableManager.setReservable(table);
+            tableManager.release(table);
         }
         // Step 4. Updating listeners
         notificationManager.notify(table);

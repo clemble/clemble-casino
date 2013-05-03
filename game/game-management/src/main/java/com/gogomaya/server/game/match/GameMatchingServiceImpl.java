@@ -59,7 +59,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
             gameTable = tableRepository.save(gameTable);
         } else {
             gameTable = tableRepository.save(gameTable);
-            tableManager.setReservable(gameTable);
+            tableManager.release(gameTable);
         }
 
         notificationManager.notify(gameTable);
