@@ -34,18 +34,9 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
         this.tableListenerOperations = checkNotNull(tableListenerOperations);
     }
 
-    final protected GameSpecification selectSpecification() {
-        GameSpecificationOptions specificationOptions = gameOperations.getOptions();
-        if (specificationOptions instanceof SelectSpecificationOptions) {
-            return ((SelectSpecificationOptions) specificationOptions).getSpecifications().get(0);
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
-
     final public List<TicTacToePlayer> start() {
         // Step 1. Selecting specification for the game
-        GameSpecification specification = selectSpecification();
+        GameSpecification specification = gameOperations.selectSpecification();
         // Step 2. Creating user and trying to put them on the same table
         TicTacToePlayer playerA = start(specification);
         TicTacToePlayer playerB = start(specification);

@@ -29,8 +29,11 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + CREATE_URL, registrationRequest, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
-        return new Player().setPlayerId(playerIdentity.getPlayerId()).setIdentity(playerIdentity).setProfile(registrationRequest.getPlayerProfile())
-                .setCredential(registrationRequest.getPlayerCredential());
+        return new Player()
+            .setPlayerId(playerIdentity.getPlayerId())
+            .setIdentity(playerIdentity)
+            .setProfile(registrationRequest.getPlayerProfile())
+            .setCredential(registrationRequest.getPlayerCredential());
     }
 
     @Override

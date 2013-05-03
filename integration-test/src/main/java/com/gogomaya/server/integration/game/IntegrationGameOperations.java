@@ -14,7 +14,7 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.integration.player.Player;
 
-public class IntegrationGameOperations implements GameOperations {
+public class IntegrationGameOperations extends AbstractGameOperation {
 
     final private static String CREATE_URL = "/spi/active/session";
     final private static String OPTIONS_URL = "/spi/active/options";

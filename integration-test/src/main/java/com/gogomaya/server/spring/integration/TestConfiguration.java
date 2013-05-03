@@ -29,11 +29,13 @@ import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
+import com.stresstest.jbehave.context.configuration.EnableStoryContext;
 
 @Configuration
 @Import(value = {TestConfiguration.LocalTestConfiguration.class,
         TestConfiguration.LocalIntegrationTestConfiguration.class,
         TestConfiguration.RemoteIntegrationTestConfiguration.class})
+@EnableStoryContext
 public class TestConfiguration {
 
     @Configuration

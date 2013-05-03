@@ -9,7 +9,7 @@ import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 
-public class WebGameOperations implements GameOperations {
+public class WebGameOperations extends AbstractGameOperation {
 
     final private GameConfigurationManagerController configuartionManagerController;
 
