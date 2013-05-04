@@ -28,7 +28,7 @@ body {
 </head>
 <body lang="en">
 	<h1>
-		<a href="index.html">RabbitMQ Web STOMP Examples</a> > Bunny Drawing
+		<a href="index.html">RabbitMQ Web STOMP Examples</a> Bunny Drawing
 	</h1>
 	<canvas id="cnvs"></canvas>
 	<script>

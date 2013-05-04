@@ -95,6 +95,7 @@ public class SeDeRelizationTest {
                 "\"giveUpRule\": \"all\",\"moveTimeRule\": { \"punishment\": \"loose\", \"limit\": 0 }," +
                 "\"totalTimeRule\": {\"punishment\": \"loose\",\"limit\": 0 }, \"matchRule\": \"automatic\"," +
                 "\"privacyRule\": \"everybody\", \"numberRule\": \"two\"}] }", SelectSpecificationOptions.class);
+        Assert.assertNotNull(selectSpecificationOptions);
     }
 
 }

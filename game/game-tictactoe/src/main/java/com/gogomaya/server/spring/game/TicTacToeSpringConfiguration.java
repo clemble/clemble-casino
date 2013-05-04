@@ -46,7 +46,7 @@ public class TicTacToeSpringConfiguration {
     public RedisTemplate<byte[], Long> redisTemplate;
 
     @Inject
-    public GameTableRepository tableRepository;
+    public GameTableRepository<TicTacToeState> tableRepository;
 
     @Inject
     public GameServerConnectionManager serverConnectionManager;
@@ -63,13 +63,13 @@ public class TicTacToeSpringConfiguration {
     @Bean
     @Singleton
     public GameTableManager<TicTacToeState> tableManager() {
-        return new GameTableManagerImpl(redisTemplate, tableRepository, serverConnectionManager);
+        return new GameTableManagerImpl<TicTacToeState>(redisTemplate, tableRepository, serverConnectionManager);
     }
 
     @Bean
     @Singleton
     public GameMatchingServiceImpl<TicTacToeState> stateManager() {
-        return new GameMatchingServiceImpl(tableManager(), tableRepository, sessionRepository, gameNotificationManager(), gameStateFactory());
+        return new GameMatchingServiceImpl<TicTacToeState>(tableManager(), tableRepository, sessionRepository, gameNotificationManager(), gameStateFactory());
     }
 
     @Bean

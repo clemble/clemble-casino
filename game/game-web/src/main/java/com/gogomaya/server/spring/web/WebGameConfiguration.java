@@ -11,7 +11,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.gogomaya.server.error.GogomayaValidationService;
-import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.connection.GameNotificationManager;
@@ -21,6 +20,7 @@ import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableRepository;
+import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.active.session.GameTableMatchController;
@@ -38,7 +38,7 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     TicTacToeConfigurationManager configurationManager;
 
     @Inject
-    GameMatchingService stateManager;
+    GameMatchingService<TicTacToeState> stateManager;
 
     @Inject
     GameSessionRepository sessionRepository;
@@ -47,7 +47,7 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     GameSpecificationRepository specificationRepository;
 
     @Inject
-    GameTableRepository tableRepository;
+    GameTableRepository<TicTacToeState> tableRepository;
 
     @Inject
     GameNotificationManager notificationManager;
@@ -56,13 +56,13 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     ObjectMapper objectMapper;
 
     @Inject
-    GameTableManager tableManager;
+    GameTableManager<TicTacToeState> tableManager;
 
     @Inject
     GameServerConnectionManager serverConnectionManager;
 
     @Inject
-    GameStateFactory<?> stateFactory;
+    GameStateFactory<TicTacToeState> stateFactory;
 
     @Bean
     public MappingJacksonHttpMessageConverter jacksonHttpMessageConverter() {
@@ -77,8 +77,8 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public GameTableMatchController<GameState> sessionController() {
-        return new GameTableMatchController(stateManager, tableRepository, configurationManager, serverConnectionManager, stateFactory);
+    public GameTableMatchController<TicTacToeState> sessionController() {
+        return new GameTableMatchController<TicTacToeState>(stateManager, tableRepository, configurationManager, serverConnectionManager, stateFactory);
     }
 
     @Bean
@@ -87,8 +87,8 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public GameEngineController gameController() {
-        return new GameEngineController(tableRepository, notificationManager, tableManager);
+    public GameEngineController<TicTacToeState> gameController() {
+        return new GameEngineController<TicTacToeState>(tableRepository, notificationManager, tableManager);
     }
 
 }

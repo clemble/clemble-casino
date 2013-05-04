@@ -17,6 +17,7 @@ public class GameRuleOptions<T> {
     final private Collection<T> allOptions;
 
     @JsonCreator
+    @SuppressWarnings("unchecked")
     public GameRuleOptions(@JsonProperty("default") T defaultOption, @JsonProperty("options") T... otherOptions) {
         this.defaultOption = defaultOption;
         if (otherOptions == null || otherOptions.length == 0) {
