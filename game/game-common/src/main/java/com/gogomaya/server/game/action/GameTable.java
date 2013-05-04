@@ -56,7 +56,7 @@ public class GameTable<State extends GameState> implements Serializable {
     private GameSpecification specification;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "TIC_TAC_TOE_TABLE_PLAYERS", joinColumns = @JoinColumn(name = "TABLE_ID"))
+    @CollectionTable(name = "GAME_TABLE_PLAYERS", joinColumns = @JoinColumn(name = "TABLE_ID"))
     private Set<Long> players = new HashSet<Long>();
 
     @OneToOne(fetch = FetchType.EAGER, targetEntity = GameSession.class)

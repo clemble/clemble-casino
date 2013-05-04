@@ -2,6 +2,7 @@ package com.gogomaya.server.integration.player;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.When;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
@@ -11,6 +12,7 @@ public interface PlayerOperations {
 
     @Given("$A player")
     @When("Player created")
+    @Transactional
     public Player createPlayer();
 
     @Given("$A player with $profile")
