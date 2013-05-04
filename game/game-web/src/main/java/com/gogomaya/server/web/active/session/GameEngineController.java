@@ -52,9 +52,10 @@ public class GameEngineController<State extends GameState> {
         if (table.getCurrentSession().getSessionId() != sessionId)
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         // Step 3. Updating current state
-        State nextState = (State) table.getState().apply(move);
+        State nextState = (State) table.getState().process(move);
         // Step 3.1 Updating made move
         table.setState(nextState);
+        table.getCurrentSession().addMadeMove(move);
         table = tableRepository.saveAndFlush(table);
         if (nextState.complete()) {
             tableManager.release(table);

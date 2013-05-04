@@ -66,7 +66,6 @@ public class GameTableManagerImpl<State extends GameState> implements GameTableM
         // Step 1. Fetching associated Set
         BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(key);
         boundSetOperations.add(gameTable.getTableId());
-
     }
 
 }

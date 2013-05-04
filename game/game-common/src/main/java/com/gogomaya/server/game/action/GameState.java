@@ -32,9 +32,9 @@ public interface GameState extends Serializable {
 
     public GameState setPlayerIterator(GamePlayerIterator playerIterator);
 
-    public boolean complete();
+    public GameState process(GameMove gameMove);
 
-    public GameState apply(GameMove gameMove);
+    public boolean complete();
 
     public int getVersion();
 

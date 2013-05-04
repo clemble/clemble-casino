@@ -133,8 +133,8 @@ abstract public class AbstractGameState implements GameState {
         this.playerIterator = playerIterator;
         return this;
     }
-    
 
+    @Override
     public GameState process(final GameMove move) {
         // Step 0. Sanity check
         if (move == null)
@@ -152,6 +152,8 @@ abstract public class AbstractGameState implements GameState {
         // Step 2. Processing Select cell move
         return apply(move);
     }
+
+    abstract protected GameState apply(GameMove move);
 
     final public int getVersion() {
         return version;

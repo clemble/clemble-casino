@@ -96,7 +96,7 @@ public class TicTacToeState extends AbstractGameState {
     }
 
     @Override
-    final public TicTacToeState apply(final GameMove move) {
+    final protected TicTacToeState apply(final GameMove move) {
         // Step 1. Processing Select cell move
         if (move instanceof TicTacToeSelectCellMove) {
             return processSelectCellMove((TicTacToeSelectCellMove) move);
