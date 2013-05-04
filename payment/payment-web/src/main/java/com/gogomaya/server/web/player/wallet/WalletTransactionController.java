@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.money.PlayerMoneyTransaction;
+import com.gogomaya.server.player.wallet.WalletOperation;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
 @Controller
@@ -24,7 +24,7 @@ public class WalletTransactionController {
     @RequestMapping(method = RequestMethod.POST, value = "/player/wallet/transaction", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
-    PlayerMoneyTransaction debit(PlayerMoneyTransaction transaction) {
+    WalletOperation debit(WalletOperation transaction) {
         return null;
     }
 

@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.gogomaya.server.player.wallet.PlayerWalletRepository;
 import com.gogomaya.server.player.wallet.WalletRegistrationService;
 import com.gogomaya.server.player.wallet.WalletRegistrationServiceImpl;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 import com.gogomaya.server.player.wallet.WalletTransactionManagerImpl;
-import com.gogomaya.server.player.wallet.PlayerWalletRepository;
+import com.gogomaya.server.player.wallet.WalletTransactionRepository;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @Configuration
@@ -23,10 +24,13 @@ public class PlayerWalletManagementSpringConfiguration {
     @Inject
     public PlayerWalletRepository walletRepository;
 
+    @Inject
+    public WalletTransactionRepository walletTransactionRepository;
+
     @Bean
     @Singleton
     public WalletTransactionManager walletTransactionManager() {
-        return new WalletTransactionManagerImpl(walletRepository);
+        return new WalletTransactionManagerImpl(walletRepository, walletTransactionRepository);
     }
 
     @Bean

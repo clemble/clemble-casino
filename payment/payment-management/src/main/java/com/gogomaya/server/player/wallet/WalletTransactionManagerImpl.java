@@ -7,29 +7,42 @@ import javax.inject.Inject;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gogomaya.server.money.Money;
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.money.Operation;
 
 public class WalletTransactionManagerImpl implements WalletTransactionManager {
 
     final private PlayerWalletRepository playerWalletRepository;
 
+    final private WalletTransactionRepository walletTransactionRepository;
+
     @Inject
-    public WalletTransactionManagerImpl(PlayerWalletRepository playerWalletRepository) {
+    public WalletTransactionManagerImpl(final PlayerWalletRepository playerWalletRepository,
+            final WalletTransactionRepository walletTransactionRepository) {
         this.playerWalletRepository = checkNotNull(playerWalletRepository);
+        this.walletTransactionRepository = checkNotNull(walletTransactionRepository);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void debit(long playerFrom, long playerTo, Money ammount) {
-        // Step 1. Looking and locking accounts
-        PlayerWallet walletFrom = playerWalletRepository.findOne(playerFrom);
-        PlayerWallet walletTo = playerWalletRepository.findOne(playerTo);
-        // Step 2. Performing necessary changes
-        walletFrom.add(ammount.negate());
-        walletTo.add(ammount);
-        // Step 3. Saving updated data
-        playerWalletRepository.saveAndFlush(walletTo);
-        playerWalletRepository.saveAndFlush(walletFrom);
+    public void process(WalletTransaction walletTransaction) {
+        // Step 1. Sanity check
+        if (walletTransaction == null)
+            throw GogomayaException.create(GogomayaError.PaymentTransactionEmpty);
+        if (!walletTransaction.valid())
+            throw GogomayaException.create(GogomayaError.PaymentTransactionInvalid);
+        // Step 2. Processing wallet transactions
+        for (WalletOperation walletOperation : walletTransaction.getWalletOperations()) {
+            PlayerWallet associatedWallet = playerWalletRepository.findOne(walletOperation.getPlayerId());
+            if (walletOperation.getOperation() == Operation.Credit) {
+                associatedWallet.subtract(walletOperation.getAmmount());
+            } else {
+                associatedWallet.add(walletOperation.getAmmount());
+            }
+            playerWalletRepository.save(associatedWallet);
+        }
+        walletTransactionRepository.save(walletTransaction);
     }
 
 }

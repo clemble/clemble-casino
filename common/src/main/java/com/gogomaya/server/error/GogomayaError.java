@@ -55,8 +55,10 @@ public enum GogomayaError {
 
     TicTacToeCellOwned(Code.TIC_TAC_TOE_CELL_OWNED_CODE, "Cell already Owned"),
 
-    GameStateReCreationFailure(Code.GAME_STATE_RECREATION_FAILURE_CODE, "Can't create state from provided session");
-    ;
+    GameStateReCreationFailure(Code.GAME_STATE_RECREATION_FAILURE_CODE, "Can't create state from provided session"),
+
+    PaymentTransactionInvalid(Code.PAYMENT_TRANSACTION_INVALID_CODE, "Payment transaction invalid"),
+    PaymentTransactionEmpty(Code.PAYMENT_TRANSACTION_EMPTY_CODE, "Payment transaction empty");
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
 
@@ -163,5 +165,8 @@ public enum GogomayaError {
         final public static String TIC_TAC_TOE_CELL_OWNED_CODE = "0G0";
         // Session recreation failure
         final public static String GAME_STATE_RECREATION_FAILURE_CODE = "0H0";
+        // Wallet transaction related errors
+        final public static String PAYMENT_TRANSACTION_EMPTY_CODE = "0I0";
+        final public static String PAYMENT_TRANSACTION_INVALID_CODE = "0I1";
     }
 }

@@ -64,4 +64,9 @@ public class Money implements Serializable {
         return new Money(currency, ammount);
     }
 
+    @Override
+    public String toString() {
+        return "Money [currency=" + currency + ", amount=" + amount + "]";
+    }
+
 }

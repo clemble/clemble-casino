@@ -27,7 +27,7 @@ import com.gogomaya.server.game.table.GameTableManagerImpl;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
-import com.gogomaya.server.money.Money;
+import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
@@ -121,7 +121,7 @@ public class TicTacToeSpringConfiguration {
         public WalletTransactionManager walletTransactionManager() {
             return new WalletTransactionManager() {
                 @Override
-                public void debit(long playerFrom, long playerTo, Money ammount) {
+                public void process(WalletTransaction walletTransaction) {
                 }
             };
         }

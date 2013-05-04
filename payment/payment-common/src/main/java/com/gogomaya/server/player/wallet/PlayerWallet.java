@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Columns;
@@ -20,7 +19,6 @@ import org.hibernate.annotations.TypeDef;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneyHibernate;
-import com.gogomaya.server.money.PlayerMoneyTransaction;
 import com.gogomaya.server.player.PlayerAware;
 
 @Entity
@@ -42,10 +40,6 @@ public class PlayerWallet implements PlayerAware {
     @Type(type = "money")
     @Columns(columns = { @Column(name = "CURRENCY"), @Column(name = "AMOUNT") })
     private Set<Money> playerMoney = new HashSet<Money>();
-
-    @OneToMany(targetEntity = PlayerMoneyTransaction.class)
-    @JoinColumn(name = "PLAYER_ID", referencedColumnName = "PLAYER_ID")
-    private Set<PlayerMoneyTransaction> moneyTransactions = new HashSet<PlayerMoneyTransaction>();
 
     @Override
     public long getPlayerId() {
@@ -88,23 +82,14 @@ public class PlayerWallet implements PlayerAware {
     }
 
     public PlayerWallet subtract(final Money money) {
-        if (money != null && money.getAmount() == 0)
+        if (money != null && money.getAmount() > 0)
             add(money.negate());
         return this;
     }
 
-    public Set<PlayerMoneyTransaction> getMoneyTransactions() {
-        return moneyTransactions;
-    }
-
-    public PlayerWallet setMoneyTransactions(Set<PlayerMoneyTransaction> moneyTransactions) {
-        this.moneyTransactions = moneyTransactions;
-        return this;
-    }
-
-    public PlayerWallet addMoneyTransaction(PlayerMoneyTransaction moneyTransaction) {
-        this.moneyTransactions.add(moneyTransaction);
-        return this;
+    @Override
+    public String toString() {
+        return "PlayerWallet [playerId=" + playerId + ", playerMoney=" + playerMoney + "]";
     }
 
 }

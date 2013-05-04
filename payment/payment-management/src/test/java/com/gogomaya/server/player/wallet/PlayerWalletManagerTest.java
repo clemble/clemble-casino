@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
+import com.gogomaya.server.money.MoneySource;
+import com.gogomaya.server.money.Operation;
 import com.gogomaya.server.spring.player.wallet.PlayerWalletManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,12 +44,18 @@ public class PlayerWalletManagerTest {
 
     @Test
     public void testWalletUpdate() {
-        int ammount = RandomUtils.nextInt(100);
-        
-        walletManager.debit(playerFrom, playerTo, Money.create(Currency.FakeMoney, ammount));
+        Money ammount = Money.create(Currency.FakeMoney, RandomUtils.nextInt(100));
 
-        Assert.assertEquals(walletRepository.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - ammount);
-        Assert.assertEquals(walletRepository.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + ammount);
+        WalletTransactionId transactionId = new WalletTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(1L);
+
+        WalletTransaction walletTransaction = new WalletTransaction().setTransactionId(transactionId)
+                .addWalletOperation(new WalletOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmmount(ammount))
+                .addWalletOperation(new WalletOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmmount(ammount));
+
+        walletManager.process(walletTransaction);
+
+        Assert.assertEquals(walletRepository.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + ammount.getAmount());
+        Assert.assertEquals(walletRepository.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - ammount.getAmount());
     }
 
 }
