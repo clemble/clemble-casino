@@ -25,7 +25,7 @@ public class PlayerWalletManagerTest {
     public PlayerWalletRepository walletRepository;
 
     @Inject
-    public PlayerTransactionManager walletManager;
+    public WalletTransactionManager walletManager;
 
     private long playerFrom = RandomUtils.nextLong();
     private long playerTo = RandomUtils.nextLong();

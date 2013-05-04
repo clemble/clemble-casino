@@ -12,11 +12,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gogomaya.server.player.PlayerCategory;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.PlayerProfileRepository;
-import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
+import com.gogomaya.server.spring.player.PlayerManagementConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = PlayerManagementSpringConfiguration.class)
+@ContextConfiguration(classes = PlayerManagementConfiguration.class)
 public class PlayerProfileRepositoryTest {
 
     @Autowired

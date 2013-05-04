@@ -19,6 +19,7 @@ import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.connection.RabbitGameNotificationManager;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
 import com.gogomaya.server.game.match.GameMatchingServiceImpl;
+import com.gogomaya.server.game.outcome.TicTacToeOutcomeService;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableManager;
@@ -26,13 +27,15 @@ import com.gogomaya.server.game.table.GameTableManagerImpl;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
+import com.gogomaya.server.money.Money;
+import com.gogomaya.server.player.wallet.WalletTransactionManager;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.game", entityManagerFactoryRef = "entityManagerFactory")
 @ComponentScan(basePackages = "com.gogomaya.server.game")
-@Import(value = { CommonModuleSpringConfiguration.class, TicTacToeSpringConfiguration.GameManagementTestConfiguration.class,
+@Import(value = { CommonModuleSpringConfiguration.class, TicTacToeSpringConfiguration.GameManagementDefaultConfiguration.class,
         TicTacToeSpringConfiguration.GameManagementCloudConfiguration.class })
 public class TicTacToeSpringConfiguration {
 
@@ -53,6 +56,9 @@ public class TicTacToeSpringConfiguration {
 
     @Inject
     public JsonMessageConverter jsonMessageConverter;
+
+    @Inject
+    public WalletTransactionManager walletTransactionManager;
 
     @Bean
     @Singleton
@@ -84,13 +90,40 @@ public class TicTacToeSpringConfiguration {
         return new TicTacToeConfigurationManager(specificationRepository);
     }
 
-    @Profile(value = { "default", "test" })
+    @Bean
+    @Singleton
+    public TicTacToeOutcomeService outcomeService() {
+        return new TicTacToeOutcomeService(walletTransactionManager);
+    }
+
+    @Profile(value = { "default" })
+    public static class GameManagementDefaultConfiguration {
+
+        @Bean
+        @Singleton
+        public GameServerConnectionManager serverConnectionManager() {
+            return new SimpleGameServerConnectionManager("localhost", "localhost");
+        }
+
+    }
+
+    @Profile(value = "test")
     public static class GameManagementTestConfiguration {
 
         @Bean
         @Singleton
         public GameServerConnectionManager serverConnectionManager() {
             return new SimpleGameServerConnectionManager("localhost", "localhost");
+        }
+
+        @Bean
+        @Singleton
+        public WalletTransactionManager walletTransactionManager() {
+            return new WalletTransactionManager() {
+                @Override
+                public void debit(long playerFrom, long playerTo, Money ammount) {
+                }
+            };
         }
 
     }

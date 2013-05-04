@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import com.gogomaya.server.player.wallet.PlayerTransactionManager;
+import com.gogomaya.server.player.wallet.WalletTransactionManager;
 import com.gogomaya.server.spring.player.wallet.PlayerWalletManagementSpringConfiguration;
 import com.gogomaya.server.web.player.wallet.WalletTransactionController;
 
@@ -17,7 +17,7 @@ import com.gogomaya.server.web.player.wallet.WalletTransactionController;
 public class WebPaymentConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
-    public PlayerTransactionManager playerTransactionManager;
+    public WalletTransactionManager playerTransactionManager;
 
     @Bean
     @Singleton

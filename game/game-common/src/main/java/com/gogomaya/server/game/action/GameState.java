@@ -34,6 +34,8 @@ public interface GameState extends Serializable {
 
     public GameState process(GameMove gameMove);
 
+    public long getWinner();
+
     public boolean complete();
 
     public int getVersion();

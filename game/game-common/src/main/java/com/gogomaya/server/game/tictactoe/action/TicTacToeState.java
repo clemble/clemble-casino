@@ -71,6 +71,7 @@ public class TicTacToeState extends AbstractGameState {
         return getWinner() != -1L;
     }
 
+    @Override
     public long getWinner() {
         long completnece[] = new long[11];
         Arrays.fill(completnece, -1L);

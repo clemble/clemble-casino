@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerProfileRepository;
+import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.player.security.PlayerCredentialRepository;
 import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
@@ -37,6 +38,9 @@ public class WebPlayerConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
     PlayerIdentityRepository playerIdentityRepository;
+    
+    @Inject
+    PlayerRegistrationService playerRegistrationService;
 
     @Inject
     GogomayaValidationService validationService;
@@ -58,7 +62,7 @@ public class WebPlayerConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     public RegistrationSignInContoller registrationSignInContoller() {
-        return new RegistrationSignInContoller(playerProfileRepository, playerCredentialRepository, playerIdentityRepository, validationService);
+        return new RegistrationSignInContoller(playerRegistrationService, validationService);
     }
 
     @Bean

@@ -15,15 +15,16 @@ import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 
 import com.gogomaya.server.player.PlayerProfileRepository;
+import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionAdapterRegistry;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.social.SocialPlayerProfileCreator;
 import com.gogomaya.server.social.adapter.FacebookSocialAdapter;
-import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
+import com.gogomaya.server.spring.player.PlayerManagementConfiguration;
 
 @Configuration
-@Import(value = { PlayerManagementSpringConfiguration.class })
+@Import(value = { PlayerManagementConfiguration.class })
 public class SocialModuleSpringConfiguration {
 
     @Inject
@@ -34,6 +35,9 @@ public class SocialModuleSpringConfiguration {
 
     @Inject
     PlayerIdentityRepository playerIdentityRepository;
+
+    @Inject
+    PlayerRegistrationService playerRegistrationService;
 
     @Bean
     @Singleton
@@ -67,7 +71,7 @@ public class SocialModuleSpringConfiguration {
     @Bean
     @Singleton
     public ConnectionSignUp connectionSignUp() {
-        return new SocialPlayerProfileCreator(gamerProfileRepository, playerIdentityRepository, socialAdapterRegistry());
+        return new SocialPlayerProfileCreator(playerRegistrationService, socialAdapterRegistry());
     }
 
     @Bean

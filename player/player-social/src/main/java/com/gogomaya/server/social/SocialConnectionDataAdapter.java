@@ -12,6 +12,7 @@ import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 
+import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaError.Code;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.player.SocialConnectionData;
@@ -53,7 +54,7 @@ public class SocialConnectionDataAdapter {
                 ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(gamerId);
                 connectionRepository.updateConnection(connection);
             } else {
-                throw GogomayaException.create(Code.SOCIAL_CONNECTION_INVALID_CODE);
+                throw GogomayaException.create(GogomayaError.SocialConnectionInvalid);
             }
         } else if (existingUsers.size() == 0) {
             // Step 2. Converting SocialConnectionData to ConnectionData in accordance with the provider
@@ -66,7 +67,7 @@ public class SocialConnectionDataAdapter {
             // Check that this logic remains intact
             gamerId = usersConnectionRepository.findUserIdsWithConnection(connection).iterator().next();
         } else {
-            throw GogomayaException.create(Code.SERVER_CRITICAL_ERROR_CODE);
+            throw GogomayaException.create(GogomayaError.ServerCriticalError);
         }
         return Long.valueOf(gamerId);
     }

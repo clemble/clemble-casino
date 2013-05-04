@@ -7,26 +7,27 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionSignUp;
 
-import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.registration.PlayerRegistrationService;
+import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.security.PlayerIdentityRepository;
+import com.gogomaya.server.player.web.RegistrationRequest;
 
 public class SocialPlayerProfileCreator implements ConnectionSignUp {
 
-    final private PlayerProfileRepository playerProfileRepository;
-    
-    final private PlayerIdentityRepository playerIdentityRepository;
+    final private PlayerRegistrationService playerRegistrationService;
 
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
 
     @Inject
-    public SocialPlayerProfileCreator(final PlayerProfileRepository playerProfileRepository, final PlayerIdentityRepository playerIdentityRepository, final SocialConnectionAdapterRegistry socialAdapterRegistry) {
-        this.playerProfileRepository = checkNotNull(playerProfileRepository);
+    public SocialPlayerProfileCreator(
+            final PlayerRegistrationService playerRegistrationService,
+            final SocialConnectionAdapterRegistry socialAdapterRegistry) {
+        this.playerRegistrationService = checkNotNull(playerRegistrationService);
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
-        this.playerIdentityRepository = checkNotNull(playerIdentityRepository);
     }
 
     @Override
@@ -36,17 +37,22 @@ public class SocialPlayerProfileCreator implements ConnectionSignUp {
         if (connection == null)
             throw new IllegalArgumentException("No Connection defined.");
         // Step 2. Retrieving SocialAdapter for the Connection
-        SocialConnectionAdapter socialAdapter = socialAdapterRegistry.getSocialAdapter(connection.getKey().getProviderId());
+        ConnectionKey connectionKey = connection.getKey();
+        SocialConnectionAdapter socialAdapter = socialAdapterRegistry.getSocialAdapter(connectionKey.getProviderId());
         if (socialAdapter == null)
             throw new IllegalArgumentException("No SocialAdapter exists for Connection");
         // Step 3. Generating gamer profile based on SocialConnection
         PlayerProfile playerProfile = socialAdapter.fetchGamerProfile(connection.getApi());
-        playerProfile = playerProfileRepository.saveAndFlush(playerProfile);
-        // Step 4. Creating player identity
-        PlayerIdentity playerIdentity = new PlayerIdentity().setPlayerId(playerProfile.getPlayerId()).setSecret(UUID.randomUUID().toString());
-        playerIdentityRepository.saveAndFlush(playerIdentity);
-        // Step 5. Returning String long presentation
-        return String.valueOf(playerProfile.getPlayerId());
+        PlayerCredential playerCredential = new PlayerCredential()
+            .setEmail(connectionKey.getProviderUserId() + "@" + connectionKey.getProviderId())
+            .setPassword(UUID.randomUUID().toString());
+        RegistrationRequest playerRegistration = new RegistrationRequest()
+            .setPlayerProfile(playerProfile)
+            .setPlayerCredential(playerCredential);
+        // Step 4. Performing actual registration
+        PlayerIdentity playerIdentity = playerRegistrationService.register(playerRegistration);
+        // Step 5. Returning playerIdentity as a result
+        return String.valueOf(playerIdentity.getPlayerId());
     }
 
 }

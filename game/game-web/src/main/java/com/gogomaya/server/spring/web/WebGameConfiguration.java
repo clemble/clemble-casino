@@ -16,6 +16,7 @@ import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.connection.GameNotificationManager;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.match.GameMatchingService;
+import com.gogomaya.server.game.outcome.GameOutcomeService;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableManager;
@@ -64,6 +65,9 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     @Inject
     GameStateFactory<TicTacToeState> stateFactory;
 
+    @Inject
+    GameOutcomeService<TicTacToeState> outcomeService;
+
     @Bean
     public MappingJacksonHttpMessageConverter jacksonHttpMessageConverter() {
         MappingJacksonHttpMessageConverter messageConverter = new MappingJacksonHttpMessageConverter();
@@ -88,7 +92,7 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     public GameEngineController<TicTacToeState> gameController() {
-        return new GameEngineController<TicTacToeState>(tableRepository, notificationManager, tableManager);
+        return new GameEngineController<TicTacToeState>(tableRepository, notificationManager, tableManager, outcomeService);
     }
 
 }

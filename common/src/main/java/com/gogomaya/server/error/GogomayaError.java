@@ -44,18 +44,18 @@ public enum GogomayaError {
     ClientJsonInvalidError(Code.CLIENT_JSON_INVALID_ERROR_CODE, "Invalid Json"),
     ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json"),
 
-    GameSpecificationInvalid(Code.GAME_SPECIFICATION_INVAID, "Provided game specification is invalid"),
+    GameSpecificationInvalid(Code.GAME_SPECIFICATION_INVAID_CODE, "Provided game specification is invalid"),
 
-    GamePlayStayUndefined(Code.GAMEPLAY_STATE_UNDEFINED, "State is missing or illegal"),
-    GamePlayMoveUndefined(Code.GAMEPLAY_MOVE_UNDEFINED, "Move was not defined properly"),
-    GamePlayMoveAlreadyMade(Code.GAMEPLAY_MOVE_ALREADY_MADE, "Player already made a move, this one will be ignored"),
-    GamePlayNoMoveExpected(Code.GAMEPLAY_NO_MOVE_EXPECTED, "No move expected from the player"),
-    GamePlayWrongMoveType(Code.GAMEPLAY_WRONG_MOVE_TYPE, "Wrong move type"),
-    GamePlayMoveNotSupported(Code.GAMEPLAY_MOVE_NOT_SUPPORTED, "Game does not support this move"),
+    GamePlayStayUndefined(Code.GAMEPLAY_STATE_UNDEFINED_CODE, "State is missing or illegal"),
+    GamePlayMoveUndefined(Code.GAMEPLAY_MOVE_UNDEFINED_CODE, "Move was not defined properly"),
+    GamePlayMoveAlreadyMade(Code.GAMEPLAY_MOVE_ALREADY_MADE_CODE, "Player already made a move, this one will be ignored"),
+    GamePlayNoMoveExpected(Code.GAMEPLAY_NO_MOVE_EXPECTED_CODE, "No move expected from the player"),
+    GamePlayWrongMoveType(Code.GAMEPLAY_WRONG_MOVE_TYPE_CODE, "Wrong move type"),
+    GamePlayMoveNotSupported(Code.GAMEPLAY_MOVE_NOT_SUPPORTED_CODE, "Game does not support this move"),
 
-    TicTacToeCellOwned(Code.TIC_TAC_TOE_CELL_OWNED, "Cell already Owned"),
+    TicTacToeCellOwned(Code.TIC_TAC_TOE_CELL_OWNED_CODE, "Cell already Owned"),
 
-    GameStateReCreationFailure(Code.GAME_STATE_RECREATION_FAILURE, "Can't create state from provided session");
+    GameStateReCreationFailure(Code.GAME_STATE_RECREATION_FAILURE_CODE, "Can't create state from provided session");
     ;
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
@@ -151,17 +151,17 @@ public enum GogomayaError {
         final public static String CLIENT_JSON_INVALID_ERROR_CODE = "0D0";
         final public static String CLIENT_JSON_FORMAT_ERROR_CODE = "0D1";
         // Generic Game configuration errors
-        final public static String GAME_SPECIFICATION_INVAID = "0E0";
+        final public static String GAME_SPECIFICATION_INVAID_CODE = "0E0";
         // Generic Game play errors
-        final public static String GAMEPLAY_MOVE_ALREADY_MADE = "0F0";
-        final public static String GAMEPLAY_NO_MOVE_EXPECTED = "0F1";
-        final public static String GAMEPLAY_WRONG_MOVE_TYPE = "0F2";
-        final public static String GAMEPLAY_MOVE_UNDEFINED = "0F3";
-        final public static String GAMEPLAY_STATE_UNDEFINED = "0F4";
-        final public static String GAMEPLAY_MOVE_NOT_SUPPORTED = "0F5";
+        final public static String GAMEPLAY_MOVE_ALREADY_MADE_CODE = "0F0";
+        final public static String GAMEPLAY_NO_MOVE_EXPECTED_CODE = "0F1";
+        final public static String GAMEPLAY_WRONG_MOVE_TYPE_CODE = "0F2";
+        final public static String GAMEPLAY_MOVE_UNDEFINED_CODE = "0F3";
+        final public static String GAMEPLAY_STATE_UNDEFINED_CODE = "0F4";
+        final public static String GAMEPLAY_MOVE_NOT_SUPPORTED_CODE = "0F5";
         // Errors specific for TicTacToe
-        final public static String TIC_TAC_TOE_CELL_OWNED = "0D0";
+        final public static String TIC_TAC_TOE_CELL_OWNED_CODE = "0G0";
         // Session recreation failure
-        final public static String GAME_STATE_RECREATION_FAILURE = "0E0";
+        final public static String GAME_STATE_RECREATION_FAILURE_CODE = "0H0";
     }
 }

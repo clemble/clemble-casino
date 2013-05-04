@@ -17,6 +17,7 @@ import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.connection.GameNotificationManager;
+import com.gogomaya.server.game.outcome.GameOutcomeService;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableRepository;
 
@@ -28,13 +29,17 @@ public class GameEngineController<State extends GameState> {
     final private GameTableManager<State> tableManager;
 
     final private GameTableRepository<State> tableRepository;
+    
+    final private GameOutcomeService<State> outcomeService;
 
     public GameEngineController(final GameTableRepository<State> tableRepository,
             final GameNotificationManager notificationManager,
-            final GameTableManager<State> tableManager) {
+            final GameTableManager<State> tableManager,
+            final GameOutcomeService<State> outcomeService) {
         this.notificationManager = checkNotNull(notificationManager);
         this.tableManager = tableManager;
         this.tableRepository = checkNotNull(tableRepository);
+        this.outcomeService = checkNotNull(outcomeService);
     }
 
     @SuppressWarnings("unchecked")
@@ -58,6 +63,7 @@ public class GameEngineController<State extends GameState> {
         table.getCurrentSession().addMadeMove(move);
         table = tableRepository.saveAndFlush(table);
         if (nextState.complete()) {
+            outcomeService.finished(table);
             tableManager.release(table);
         }
         // Step 4. Updating listeners
