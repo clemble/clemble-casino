@@ -73,27 +73,29 @@ public class TicTacToeState extends AbstractGameState {
 
     @Override
     public long getWinner() {
-        long completnece[] = new long[11];
+        long completnece[] = new long[8];
         Arrays.fill(completnece, -1L);
-        for (int i = 1; i < board.length; i++) {
-            // Checking rows
-            completnece[0] = board[0][i].getOwner() == board[0][i - 1].getOwner() ? board[0][i - 1].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
-            completnece[1] = board[1][i].getOwner() == board[1][i - 1].getOwner() ? board[1][i - 1].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
-            completnece[2] = board[2][i].getOwner() == board[2][i - 1].getOwner() ? board[2][i].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
-            // Checking columns
-            completnece[3] = board[i][0].getOwner() == board[i - 1][0].getOwner() ? board[i][0].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
-            completnece[4] = board[i][1].getOwner() == board[i - 1][1].getOwner() ? board[i][1].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
-            completnece[5] = board[i][2].getOwner() == board[i - 1][2].getOwner() ? board[i][2].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
-            // Checking diagonals
-            completnece[6] = board[i - 1][i - 1].getOwner() == board[i][i].getOwner() ? board[i - 1][i - 1].getOwner() : TicTacToeCellState.DEFAULT_OWNER;
-            completnece[7] = board[3 - i][3 - i].getOwner() == board[2 - i][2 - i].getOwner() ? board[3 - i][3 - i].getOwner()
-                    : TicTacToeCellState.DEFAULT_OWNER;
-        }
+        // Checking rows
+        completnece[0] = owner(board[0][0], board[0][1], board[0][2]);
+        completnece[1] = owner(board[1][0], board[1][1], board[1][2]);
+        completnece[2] = owner(board[2][0], board[2][1], board[2][2]);
+        // Checking columns
+        completnece[3] = owner(board[0][0], board[1][0], board[2][0]);
+        completnece[4] = owner(board[0][1], board[1][1], board[2][1]);
+        completnece[5] = owner(board[0][2], board[1][2], board[2][2]);
+        // Checking diagonals
+        completnece[6] = owner(board[0][0], board[1][1], board[2][2]);
+        completnece[7] = owner(board[0][2], board[1][1], board[2][0]);
         // Step 2. If at least one complete game is complete
         for (long complete : completnece)
             if (complete != -1L)
                 return complete;
         return -1L;
+    }
+
+    private long owner(TicTacToeCellState firstCell, TicTacToeCellState secondCell, TicTacToeCellState therdCell) {
+        return (firstCell.getOwner() == secondCell.getOwner() && secondCell.getOwner() == therdCell.getOwner()) ? firstCell.getOwner()
+                : TicTacToeCellState.DEFAULT_OWNER;
     }
 
     @Override

@@ -126,4 +126,10 @@ public class GameTable<State extends GameState> implements Serializable {
         return this;
     }
 
+    public void clear() {
+        this.currentSession = null;
+        this.state = null;
+        this.players.clear();
+    }
+
 }

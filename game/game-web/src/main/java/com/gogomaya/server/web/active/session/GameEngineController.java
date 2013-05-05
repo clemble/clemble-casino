@@ -29,7 +29,7 @@ public class GameEngineController<State extends GameState> {
     final private GameTableManager<State> tableManager;
 
     final private GameTableRepository<State> tableRepository;
-    
+
     final private GameOutcomeService<State> outcomeService;
 
     public GameEngineController(final GameTableRepository<State> tableRepository,
@@ -45,7 +45,9 @@ public class GameEngineController<State extends GameState> {
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.POST, value = "/active/action", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody GameTable<State> process(@RequestHeader("playerId") long playerId,
+    public @ResponseBody
+    GameTable<State> process(
+            @RequestHeader("playerId") long playerId,
             @RequestHeader("sessionId") long sessionId,
             @RequestHeader("tableId") long tableId,
             @RequestBody GameMove move) {
@@ -61,11 +63,15 @@ public class GameEngineController<State extends GameState> {
         // Step 3.1 Updating made move
         table.setState(nextState);
         table.getCurrentSession().addMadeMove(move);
-        table = tableRepository.saveAndFlush(table);
         if (nextState.complete()) {
             outcomeService.finished(table);
+            tableRepository.saveAndFlush(table);
+
+            table.clear();
+            tableRepository.saveAndFlush(table);
             tableManager.release(table);
         }
+        table = tableRepository.saveAndFlush(table);
         // Step 4. Updating listeners
         notificationManager.notify(table);
         return table;
