@@ -1,9 +1,9 @@
 package com.gogomaya.server.game.action;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -56,12 +57,13 @@ public class GameSession implements Serializable {
     private GameSessionState sessionState;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @OrderColumn(name = "PLAYERS_ORDER")
     @CollectionTable(name = "GAME_SESSION_PLAYERS", joinColumns = @JoinColumn(name = "SESSION_ID"))
-    private Set<Long> players = new HashSet<Long>();
+    private List<Long> players = new ArrayList<Long>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "GAME_SESSION_MOVES", joinColumns = @JoinColumn(name = "SESSION_ID"))
-    private Set<MadeMove> madeMoves = new HashSet<MadeMove>();
+    private List<MadeMove> madeMoves = new ArrayList<MadeMove>();
 
     @Column(name = "NUM_MADE_MOVES")
     private int numMadeMoves;
@@ -90,21 +92,21 @@ public class GameSession implements Serializable {
         this.sessionState = gameSessionState;
     }
 
-    public Set<Long> getPlayers() {
+    public List<Long> getPlayers() {
         return players;
     }
 
-    public void setPlayers(Set<Long> players) {
+    public void setPlayers(List<Long> players) {
         this.players = players;
     }
 
     public void addPlayers(Collection<Long> players) {
         if (this.players == null)
-            this.players = new HashSet<Long>();
+            this.players = new ArrayList<Long>();
         this.players.addAll(players);
     }
 
-    public Set<MadeMove> getMadeMoves() {
+    public List<MadeMove> getMadeMoves() {
         return madeMoves;
     }
 

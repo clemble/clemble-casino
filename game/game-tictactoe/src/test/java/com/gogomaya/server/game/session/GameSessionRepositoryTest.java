@@ -1,7 +1,7 @@
 package com.gogomaya.server.game.session;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -63,7 +63,7 @@ public class GameSessionRepositoryTest {
 
     @Test
     public void testSaveSessionWithState() {
-        Set<Long> players = new HashSet<Long>();
+        List<Long> players = new ArrayList<Long>();
         players.add(1L);
         players.add(2L);
 

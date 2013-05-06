@@ -29,7 +29,7 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
 
     @Override
     public State create(final GameSpecification gameSpecification, final long playerId) {
-        return create(gameSpecification, Collections.singleton(playerId));
+        return create(gameSpecification, Collections.singletonList(playerId));
     }
 
 }

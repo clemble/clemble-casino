@@ -17,6 +17,7 @@ public enum GogomayaError {
 
     ServerError(Code.SERVER_ERROR_CODE, "Server error"),
     ServerCriticalError(Code.SERVER_CRITICAL_ERROR_CODE, "Server critical error"),
+    ServerSessionProcessingError(Code.SERVER_SESSION_PROCESSING_CRITICAL_CODE, "Server session processing error"),
 
     EmailInvalid(Code.EMAIL_INVALID_CODE, "Email invalid"),
     EmailNotConfirmed(Code.EMAIL_NOT_CONFIRMED_CODE, "Email not confirmed"),
@@ -116,6 +117,7 @@ public enum GogomayaError {
     public static class Code {
         final public static String SERVER_ERROR_CODE = "0C0";
         final public static String SERVER_CRITICAL_ERROR_CODE = "0C1";
+        final public static String SERVER_SESSION_PROCESSING_CRITICAL_CODE = "0C2";
         // Credentials errors
         // Creation problems
         // Email

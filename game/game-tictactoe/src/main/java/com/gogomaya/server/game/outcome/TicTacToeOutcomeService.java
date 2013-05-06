@@ -1,6 +1,6 @@
 package com.gogomaya.server.game.outcome;
 
-import java.util.Set;
+import java.util.List;
 
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
@@ -25,7 +25,7 @@ public class TicTacToeOutcomeService implements GameOutcomeService<TicTacToeStat
     @Override
     public void finished(GameTable<TicTacToeState> gameTable) {
         long winnerId = gameTable.getState().getWinner();
-        Set<Long> players = gameTable.getCurrentSession().getPlayers();
+        List<Long> players = gameTable.getCurrentSession().getPlayers();
         players.remove(winnerId);
         long looserId = players.iterator().next();
 

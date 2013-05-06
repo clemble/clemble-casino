@@ -44,8 +44,9 @@ public class TicTacToeState extends AbstractGameState {
         return activeCell;
     }
 
-    public void setActiveCell(TicTacToeCell cell) {
+    public TicTacToeState setActiveCell(TicTacToeCell cell) {
         this.activeCell = cell;
+        return this;
     }
 
     public TicTacToeCellState[][] getBoard() {

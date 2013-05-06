@@ -1,7 +1,7 @@
 package com.gogomaya.server.game.tictactoe.action;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.impl.AbstractGameStateFactory;
@@ -11,7 +11,7 @@ import com.gogomaya.server.game.specification.GameSpecification;
 public class TicTacToeStateFactory extends AbstractGameStateFactory<TicTacToeState> {
 
     @Override
-    public TicTacToeState create(final GameSpecification gameSpecification, final Set<Long> playerIds) {
+    public TicTacToeState create(final GameSpecification gameSpecification, final List<Long> playerIds) {
         // Step 0. Create initial state
         if (gameSpecification == null)
             throw new IllegalArgumentException("Game specification can't be null");
@@ -23,7 +23,7 @@ public class TicTacToeStateFactory extends AbstractGameStateFactory<TicTacToeSta
         // Step 2. Create fixed bet rule
         FixedBetRule fixedBetRule = (FixedBetRule) gameSpecification.getBetRule();
         long price = fixedBetRule.getPrice();
-        Set<GamePlayerState> playerStates = new HashSet<GamePlayerState>();
+        List<GamePlayerState> playerStates = new ArrayList<GamePlayerState>();
         for (Long playerId : playerIds) {
             playerStates.add(new GamePlayerState(playerId, price));
         }

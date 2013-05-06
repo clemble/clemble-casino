@@ -1,8 +1,8 @@
 package com.gogomaya.server.game.action;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -56,8 +57,9 @@ public class GameTable<State extends GameState> implements Serializable {
     private GameSpecification specification;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @OrderColumn(name = "PLAYERS_ORDER")
     @CollectionTable(name = "GAME_TABLE_PLAYERS", joinColumns = @JoinColumn(name = "TABLE_ID"))
-    private Set<Long> players = new HashSet<Long>();
+    private List<Long> players = new ArrayList<Long>();
 
     @OneToOne(fetch = FetchType.EAGER, targetEntity = GameSession.class)
     @JoinColumn(name = "SESSION_ID")
@@ -85,11 +87,11 @@ public class GameTable<State extends GameState> implements Serializable {
         return this;
     }
 
-    public Set<Long> getPlayers() {
+    public List<Long> getPlayers() {
         return players;
     }
 
-    public GameTable<State> setPlayers(Set<Long> players) {
+    public GameTable<State> setPlayers(List<Long> players) {
         this.players = players;
         return this;
     }
