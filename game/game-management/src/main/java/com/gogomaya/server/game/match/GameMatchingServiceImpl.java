@@ -9,7 +9,7 @@ import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.connection.GameNotificationManager;
+import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecification;
@@ -18,7 +18,7 @@ import com.gogomaya.server.game.table.GameTableRepository;
 
 public class GameMatchingServiceImpl<State extends GameState> implements GameMatchingService<State> {
 
-    final private GameNotificationManager notificationManager;
+    final private GameNotificationService notificationManager;
 
     final private GameTableManager<State> tableManager;
     final private GameTableRepository<State> tableRepository;
@@ -29,7 +29,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
     public GameMatchingServiceImpl(final GameTableManager<State> tableManager,
             final GameTableRepository<State> tableRepository,
             final GameSessionRepository sessionRepository,
-            final GameNotificationManager notificationManager,
+            final GameNotificationService notificationManager,
             final GameStateFactory<State> stateFactory) {
         this.tableManager = checkNotNull(tableManager);
         this.tableRepository = checkNotNull(tableRepository);
@@ -41,7 +41,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
     @Override
     public GameTable<State> reserve(final long playerId, final GameSpecification specification) {
         // Step 1. Pooling
-        GameTable<State> gameTable = tableManager.poll(specification);
+        GameTable<State> gameTable = tableManager.reserve(specification);
         gameTable.addPlayer(playerId);
 
         PlayerNumberRule numberRule = specification.getNumberRule();
@@ -59,7 +59,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
             gameTable = tableRepository.save(gameTable);
         } else {
             gameTable = tableRepository.save(gameTable);
-            tableManager.release(gameTable);
+            tableManager.addReservable(gameTable);
         }
 
         notificationManager.notify(gameTable);

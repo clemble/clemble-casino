@@ -16,7 +16,7 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.action.move.GameMove;
-import com.gogomaya.server.game.connection.GameNotificationManager;
+import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.outcome.GameOutcomeService;
 import com.gogomaya.server.game.table.GameTableManager;
 import com.gogomaya.server.game.table.GameTableRepository;
@@ -24,7 +24,7 @@ import com.gogomaya.server.game.table.GameTableRepository;
 @Controller
 public class GameEngineController<State extends GameState> {
 
-    final private GameNotificationManager notificationManager;
+    final private GameNotificationService notificationManager;
 
     final private GameTableManager<State> tableManager;
 
@@ -33,7 +33,7 @@ public class GameEngineController<State extends GameState> {
     final private GameOutcomeService<State> outcomeService;
 
     public GameEngineController(final GameTableRepository<State> tableRepository,
-            final GameNotificationManager notificationManager,
+            final GameNotificationService notificationManager,
             final GameTableManager<State> tableManager,
             final GameOutcomeService<State> outcomeService) {
         this.notificationManager = checkNotNull(notificationManager);
@@ -69,7 +69,7 @@ public class GameEngineController<State extends GameState> {
 
             table.clear();
             tableRepository.saveAndFlush(table);
-            tableManager.release(table);
+            tableManager.addReservable(table);
         }
         table = tableRepository.saveAndFlush(table);
         // Step 4. Updating listeners

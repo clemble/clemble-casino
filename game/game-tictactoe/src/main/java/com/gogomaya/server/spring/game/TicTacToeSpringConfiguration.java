@@ -14,9 +14,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
-import com.gogomaya.server.game.connection.GameNotificationManager;
+import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
-import com.gogomaya.server.game.connection.RabbitGameNotificationManager;
+import com.gogomaya.server.game.connection.RabbitGameNotificationService;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
 import com.gogomaya.server.game.match.GameMatchingServiceImpl;
 import com.gogomaya.server.game.outcome.TicTacToeOutcomeService;
@@ -62,8 +62,8 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameNotificationManager gameNotificationManager() {
-        return new RabbitGameNotificationManager(jsonMessageConverter);
+    public GameNotificationService gameNotificationManager() {
+        return new RabbitGameNotificationService(jsonMessageConverter);
     }
 
     @Bean

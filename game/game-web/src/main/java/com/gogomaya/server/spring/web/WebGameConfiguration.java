@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
-import com.gogomaya.server.game.connection.GameNotificationManager;
+import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.match.GameMatchingService;
 import com.gogomaya.server.game.outcome.GameOutcomeService;
@@ -51,7 +51,7 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     GameTableRepository<TicTacToeState> tableRepository;
 
     @Inject
-    GameNotificationManager notificationManager;
+    GameNotificationService notificationManager;
 
     @Inject
     ObjectMapper objectMapper;
@@ -82,7 +82,7 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     public GameTableMatchController<TicTacToeState> sessionController() {
-        return new GameTableMatchController<TicTacToeState>(stateManager, tableRepository, configurationManager, serverConnectionManager, stateFactory);
+        return new GameTableMatchController<TicTacToeState>(stateManager, tableRepository, configurationManager);
     }
 
     @Bean

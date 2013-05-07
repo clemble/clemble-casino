@@ -13,9 +13,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.gogomaya.server.game.connection.GameNotificationManager;
+import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
-import com.gogomaya.server.game.connection.RabbitGameNotificationManager;
+import com.gogomaya.server.game.connection.RabbitGameNotificationService;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
@@ -38,8 +38,8 @@ public class GameManagementSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameNotificationManager gameNotificationManager() {
-        return new RabbitGameNotificationManager(jsonMessageConverter);
+    public GameNotificationService gameNotificationManager() {
+        return new RabbitGameNotificationService(jsonMessageConverter);
     }
 
     @Profile(value = { "default", "test" })

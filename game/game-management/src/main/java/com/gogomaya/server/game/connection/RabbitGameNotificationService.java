@@ -10,11 +10,12 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.JsonMessageConverter;
 
 import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.event.GameEvent;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class RabbitGameNotificationManager implements GameNotificationManager {
+public class RabbitGameNotificationService implements GameNotificationService {
 
     final private JsonMessageConverter jsonMessageConverter;
 
@@ -32,7 +33,7 @@ public class RabbitGameNotificationManager implements GameNotificationManager {
     });
 
     @Inject
-    public RabbitGameNotificationManager(JsonMessageConverter jsonMessageConverter) {
+    public RabbitGameNotificationService(JsonMessageConverter jsonMessageConverter) {
         this.jsonMessageConverter = jsonMessageConverter;
     }
 
@@ -47,6 +48,19 @@ public class RabbitGameNotificationManager implements GameNotificationManager {
         }
         // Step 2. Sending session update
         rabbitTemplate.convertAndSend(String.valueOf(table.getTableId()), table);
+    }
+
+    @Override
+    public void notify(final GameConnection connection, final GameEvent<?> event) {
+        // Step 1. Fetching new rabbit
+        RabbitTemplate rabbitTemplate = null;
+        try {
+            rabbitTemplate = RABBIT_CACHE.get(connection.getServerConnection().getNotificationURL());
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        // Step 2. Sending session update
+        rabbitTemplate.convertAndSend(String.valueOf(connection.getRoutingKey()), event);
     }
 
 }

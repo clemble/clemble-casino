@@ -29,7 +29,7 @@ public class GameTableManagerImpl<State extends GameState> implements GameTableM
     }
 
     @Override
-    public GameTable<State> poll(final GameSpecification gameSpecification) {
+    public GameTable<State> reserve(final GameSpecification gameSpecification) {
         byte[] key = gameSpecification.getName().toByteArray();
         // Step 1. Fetching associated Set
         BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(key);
@@ -40,24 +40,24 @@ public class GameTableManagerImpl<State extends GameState> implements GameTableM
             // Seat at the table
             gameTable = tableRepository.findOne(tableId);
         }
-
+        // Step 3. If there is no table available, create one
         if (gameTable == null) {
-            // Step 2.1 Fetching connection resource
-            GameServerConnection serverConnection = serverConnectionManager.reserve();
-            // Step 2.2 Creating new table with provided specification
+            // Step 2.1 Creating new table with provided specification
             gameTable = new GameTable<State>();
-            // Step 2.4 Specifying appropriate values
             gameTable.setSpecification(gameSpecification);
+            // Step 2.2 Persisting to DB
+            gameTable = tableRepository.save(gameTable);
+            // Step 2.3 Asking for a new ServerConnectin resource
+            GameServerConnection serverConnection = serverConnectionManager.reserve(gameTable);
+            // Step 2.4 Saving server connection
             gameTable.setServerResource(serverConnection);
-            // Step 2.3 Creating new table with provided specification
             gameTable = tableRepository.save(gameTable);
         }
-        // Step 3. Adding a new user and checking if we can state the session
         return gameTable;
     }
 
     @Override
-    public void release(GameTable<State> gameTable) {
+    public void addReservable(GameTable<State> gameTable) {
         if (gameTable == null)
             throw new IllegalArgumentException("Game table can't be null");
         if (gameTable.getSpecification() == null)

@@ -1,5 +1,8 @@
 package com.gogomaya.server.game.connection;
 
+import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.action.GameTable;
+
 public class SimpleGameServerConnectionManager implements GameServerConnectionManager {
 
     final String notificationUrl;
@@ -11,7 +14,7 @@ public class SimpleGameServerConnectionManager implements GameServerConnectionMa
     }
 
     @Override
-    public GameServerConnection reserve() {
+    public GameServerConnection reserve(GameTable<? extends GameState> table) {
         return new GameServerConnection(notificationUrl, publishUrl);
     }
 
