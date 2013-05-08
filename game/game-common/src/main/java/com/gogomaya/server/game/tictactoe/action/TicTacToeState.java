@@ -28,13 +28,14 @@ public class TicTacToeState extends AbstractGameState {
     private TicTacToeCell activeCell;
 
     public TicTacToeState() {
+    }
+
+    public TicTacToeState(final Collection<GamePlayerState> playersStates) {
+        // Step 0. Filling the board with empty cell value
         for (TicTacToeCellState[] row : board) {
             Arrays.fill(row, TicTacToeCellState.DEFAULT_CELL_STATE);
         }
-    }
 
-    public TicTacToeState(Collection<GamePlayerState> playersStates) {
-        this();
         setPlayerStates(playersStates);
         setPlayerIterator(new SequentialPlayerIterator(playersStates));
         setNextMove(new TicTacToeSelectCellMove(getPlayerIterator().current()));
