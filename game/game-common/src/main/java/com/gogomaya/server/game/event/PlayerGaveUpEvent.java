@@ -10,11 +10,16 @@ public class PlayerGaveUpEvent<State extends GameState> extends GameEvent<State>
      */
     private static final long serialVersionUID = 8613548852525073195L;
 
-    private int playerId;
+    private long playerId;
 
     @Override
     public long getPlayerId() {
         return playerId;
+    }
+
+    public PlayerGaveUpEvent<State> setPlayerId(long newPlayerId) {
+        this.playerId = newPlayerId;
+        return this;
     }
 
 }

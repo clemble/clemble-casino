@@ -11,9 +11,19 @@ public class GameEvent<State> implements GogomayaEvent {
      */
     private static final long serialVersionUID = -4837244615682915463L;
 
+    private long session;
+
     private State state;
 
     private Date publishDate = new Date();
+
+    public long getSession() {
+        return session;
+    }
+
+    public void setSession(long session) {
+        this.session = session;
+    }
 
     public State getState() {
         return state;

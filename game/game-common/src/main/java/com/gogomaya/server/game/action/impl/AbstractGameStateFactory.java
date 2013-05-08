@@ -1,6 +1,7 @@
 package com.gogomaya.server.game.action.impl;
 
 import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
@@ -9,8 +10,20 @@ import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.action.move.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 abstract public class AbstractGameStateFactory<State extends GameState> implements GameStateFactory<State> {
+
+    public LoadingCache<Long, State> stateCache = CacheBuilder.newBuilder().build(new CacheLoader<Long, State>() {
+
+        @Override
+        public State load(Long key) throws Exception {
+            return null;
+        }
+
+    });
 
     @Override
     public State create(GameSession gameSession) {

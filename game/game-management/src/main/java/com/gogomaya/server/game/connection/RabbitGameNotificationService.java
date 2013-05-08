@@ -17,8 +17,6 @@ import com.google.common.cache.LoadingCache;
 
 public class RabbitGameNotificationService implements GameNotificationService {
 
-    final private JsonMessageConverter jsonMessageConverter;
-
     final private LoadingCache<String, RabbitTemplate> RABBIT_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<String, RabbitTemplate>() {
 
         @Override
@@ -31,6 +29,17 @@ public class RabbitGameNotificationService implements GameNotificationService {
         }
 
     });
+
+    final private LoadingCache<Long, GameConnection> GAME_CONNECTION = CacheBuilder.newBuilder().build(new CacheLoader<Long, GameConnection>() {
+
+        @Override
+        public GameConnection load(Long key) throws Exception {
+            return null;
+        }
+
+    });
+
+    final private JsonMessageConverter jsonMessageConverter;
 
     @Inject
     public RabbitGameNotificationService(JsonMessageConverter jsonMessageConverter) {
