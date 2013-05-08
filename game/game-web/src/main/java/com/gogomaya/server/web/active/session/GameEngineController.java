@@ -67,13 +67,16 @@ public class GameEngineController<State extends GameState> {
             outcomeService.finished(table);
             tableRepository.saveAndFlush(table);
 
+            notificationManager.notify(table);
+
             table.clear();
             tableRepository.saveAndFlush(table);
             tableManager.addReservable(table);
+        } else {
+            table = tableRepository.saveAndFlush(table);
+            // Step 4. Updating listeners
+            notificationManager.notify(table);
         }
-        table = tableRepository.saveAndFlush(table);
-        // Step 4. Updating listeners
-        notificationManager.notify(table);
         return table;
     }
 

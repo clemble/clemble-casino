@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayerUtils;
+import com.gogomaya.server.money.Currency;
+import com.gogomaya.server.money.Money;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
 
@@ -63,7 +65,11 @@ public class SimpleTicTacToeGameTest {
         TicTacToePlayer playerA = players.get(0);
         TicTacToePlayer playerB = players.get(1);
 
+        Money gamePrice = Money.create(playerA.getTable().getSpecification().getCurrency(), playerA.getTable().getSpecification().getBetRule().getPrice());
+        Money originalAmount = playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency());
+
         try {
+            TicTacToePlayerUtils.syncVersions(playerA, playerB);
             playerA.select(0, 0);
 
             playerA.bet(2);
@@ -82,12 +88,14 @@ public class SimpleTicTacToeGameTest {
             TicTacToePlayerUtils.syncVersions(playerA, playerB);
             playerB.bet(1);
 
-//            Assert.assertTrue(playerB.getTable().getState().complete());
-//            Assert.assertEquals(playerB.getTable().getState().getWinner(), playerA.getPlayer().getPlayerId());
+            Assert.assertTrue(playerB.getTable().getState().complete());
+            Assert.assertEquals(playerB.getTable().getState().getWinner(), playerA.getPlayer().getPlayerId());
+
+            Assert.assertEquals(playerB.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.subtract(gamePrice));
+            Assert.assertEquals(playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.add(gamePrice));
         } finally {
             playerA.getListenerControl().stopListener();
             playerB.getListenerControl().stopListener();
         }
     }
-
 }

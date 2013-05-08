@@ -1,5 +1,7 @@
 package com.gogomaya.server.integration.player;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.gogomaya.server.player.PlayerAware;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
@@ -15,13 +17,17 @@ public class Player implements PlayerAware {
 
     private long playerId;
 
-    private PlayerProfile profile;
+    private PlayerOperations playerOperations;
 
-    private PlayerWallet wallet;
+    private PlayerProfile profile;
 
     private PlayerIdentity identity;
 
     private PlayerCredential credential;
+
+    public Player(PlayerOperations playerOperations) {
+        this.playerOperations = checkNotNull(playerOperations);
+    }
 
     @Override
     public long getPlayerId() {
@@ -44,12 +50,7 @@ public class Player implements PlayerAware {
     }
 
     public PlayerWallet getWallet() {
-        return wallet;
-    }
-
-    public Player setWallet(PlayerWallet wallet) {
-        this.wallet = wallet;
-        return this;
+        return playerOperations.wallet(this, playerId);
     }
 
     public PlayerIdentity getIdentity() {

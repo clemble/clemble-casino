@@ -6,9 +6,11 @@ import javax.inject.Inject;
 
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
+import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.wallet.WalletController;
 
 public class WebPlayerOperations extends AbstractPlayerOperations {
 
@@ -16,10 +18,13 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
 
     final private RegistrationLoginController loginController;
 
+    final private WalletController walletController;
+
     @Inject
-    public WebPlayerOperations(RegistrationSignInContoller signInContoller, RegistrationLoginController loginController) {
+    public WebPlayerOperations(RegistrationSignInContoller signInContoller, RegistrationLoginController loginController, WalletController walletController) {
         this.signInContoller = checkNotNull(signInContoller);
         this.loginController = checkNotNull(loginController);
+        this.walletController = checkNotNull(walletController);
     }
 
     @Override
@@ -30,7 +35,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = signInContoller.createUser(registrationRequest);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
-        return new Player().setPlayerId(playerIdentity.getPlayerId()).setIdentity(playerIdentity).setProfile(registrationRequest.getPlayerProfile())
+        return new Player(this).setPlayerId(playerIdentity.getPlayerId()).setIdentity(playerIdentity).setProfile(registrationRequest.getPlayerProfile())
                 .setCredential(registrationRequest.getPlayerCredential());
 
     }
@@ -43,7 +48,12 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = loginController.createUser(credential);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
-        return new Player().setPlayerId(playerIdentity.getPlayerId()).setCredential(credential).setIdentity(playerIdentity);
+        return new Player(this).setPlayerId(playerIdentity.getPlayerId()).setCredential(credential).setIdentity(playerIdentity);
+    }
+
+    @Override
+    public PlayerWallet wallet(Player player, long playerWalletId) {
+        return walletController.get(player.getPlayerId(), playerWalletId);
     }
 
 }

@@ -29,18 +29,18 @@ import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.wallet.WalletController;
 import com.stresstest.jbehave.context.configuration.EnableStoryContext;
 
 @Configuration
-@Import(value = {TestConfiguration.LocalTestConfiguration.class,
-        TestConfiguration.LocalIntegrationTestConfiguration.class,
-        TestConfiguration.RemoteIntegrationTestConfiguration.class})
+@Import(value = { TestConfiguration.LocalTestConfiguration.class, TestConfiguration.LocalIntegrationTestConfiguration.class,
+        TestConfiguration.RemoteIntegrationTestConfiguration.class })
 @EnableStoryContext
 public class TestConfiguration {
 
     @Configuration
     @Profile("default")
-    @Import(value = {WebGenericConfiguration.class, WebMvcSpiConfiguration.class})
+    @Import(value = { WebGenericConfiguration.class, WebMvcSpiConfiguration.class })
     public static class LocalTestConfiguration {
 
         @Inject
@@ -50,14 +50,17 @@ public class TestConfiguration {
         RegistrationLoginController loginController;
 
         @Inject
+        WalletController walletController;
+
+        @Inject
         GameConfigurationManagerController configuartionManagerController;
 
         @Inject
         GameTableMatchController matchController;
-        
+
         @Inject
         GameEngineController engineController;
-        
+
         @Bean
         @Singleton
         @SuppressWarnings("rawtypes")
@@ -68,7 +71,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(signInContoller, loginController);
+            return new WebPlayerOperations(signInContoller, loginController, walletController);
         }
 
         @Bean
@@ -81,7 +84,8 @@ public class TestConfiguration {
         @Singleton
         @SuppressWarnings("unchecked")
         public TicTacToeOperations ticTacToeOperations() {
-            return new WebTicTacToeOperations(playerOperations(), gameOperations(), (GameListenerOperations<GameTable<TicTacToeState>>) tableListenerOperations(), engineController);
+            return new WebTicTacToeOperations(playerOperations(), gameOperations(),
+                    (GameListenerOperations<GameTable<TicTacToeState>>) tableListenerOperations(), engineController);
         }
     }
 

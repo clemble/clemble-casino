@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
+import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.player.web.RegistrationRequest;
 
 public interface PlayerOperations {
@@ -26,5 +27,7 @@ public interface PlayerOperations {
     @Given("$A logins")
     @When("$A logins")
     public Player login(PlayerCredential credential);
+
+    public PlayerWallet wallet(Player playerId, long playerWalletId);
 
 }
