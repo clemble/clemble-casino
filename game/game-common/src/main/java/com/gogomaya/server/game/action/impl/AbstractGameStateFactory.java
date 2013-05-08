@@ -1,7 +1,6 @@
 package com.gogomaya.server.game.action.impl;
 
 import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;

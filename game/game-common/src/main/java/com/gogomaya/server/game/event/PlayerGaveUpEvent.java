@@ -1,9 +1,9 @@
 package com.gogomaya.server.game.event;
 
+import com.gogomaya.server.event.PlayerAwareEvent;
 import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.player.PlayerAware;
 
-public class PlayerGaveUpEvent<State extends GameState> extends GameEvent<State> implements PlayerAware {
+public class PlayerGaveUpEvent<State extends GameState> extends GameEvent<State> implements PlayerAwareEvent {
 
     /**
      * Generated 07/05/13

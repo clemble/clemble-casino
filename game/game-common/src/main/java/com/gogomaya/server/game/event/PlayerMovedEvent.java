@@ -2,10 +2,11 @@ package com.gogomaya.server.game.event;
 
 import java.util.Collection;
 
+import com.gogomaya.server.event.PlayerAwareEvent;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.move.GameMove;
 
-public class PlayerMovedEvent<State extends GameState> extends GameEvent<State> {
+public class PlayerMovedEvent<State extends GameState> extends GameEvent<State> implements PlayerAwareEvent {
 
     /**
      * Generated 07/05/2013
@@ -32,6 +33,11 @@ public class PlayerMovedEvent<State extends GameState> extends GameEvent<State> 
     public PlayerMovedEvent<State> setNextMoves(Collection<GameMove> nextMoves) {
         this.nextMoves = nextMoves;
         return this;
+    }
+
+    @Override
+    public long getPlayerId() {
+        return madeMove.getPlayerId();
     }
 
 }
