@@ -30,12 +30,10 @@ import com.gogomaya.server.web.game.configuration.GameConfigurationManagerContro
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.player.wallet.WalletController;
-import com.stresstest.jbehave.context.configuration.EnableStoryContext;
 
 @Configuration
 @Import(value = { TestConfiguration.LocalTestConfiguration.class, TestConfiguration.LocalIntegrationTestConfiguration.class,
         TestConfiguration.RemoteIntegrationTestConfiguration.class })
-@EnableStoryContext
 public class TestConfiguration {
 
     @Configuration
