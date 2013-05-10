@@ -24,6 +24,8 @@ import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TimeBreachPunishment;
 import com.gogomaya.server.game.rule.time.TimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
+import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
+import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -86,16 +88,40 @@ public class SeDeRelizationTest {
         giveUpRule = objectMapper.readValue("\"lost\"", GiveUpRule.class);
         Assert.assertEquals(giveUpRule, GiveUpRule.lost);
     }
-    
+
     @Test
     public void testReadSpecificationOptions() throws JsonParseException, JsonMappingException, IOException {
         SelectSpecificationOptions selectSpecificationOptions = objectMapper.readValue(
-                "{ \"specifications\": [{\"name\":{\"name\": \"low\",\"group\": \"basic\"}," +
-                "\"currency\": \"FakeMoney\",\"betRule\":{\"betType\": \"fixed\",\"price\": 50}," +
-                "\"giveUpRule\": \"all\",\"moveTimeRule\": { \"punishment\": \"loose\", \"limit\": 0 }," +
-                "\"totalTimeRule\": {\"punishment\": \"loose\",\"limit\": 0 }, \"matchRule\": \"automatic\"," +
-                "\"privacyRule\": \"everybody\", \"numberRule\": \"two\"}] }", SelectSpecificationOptions.class);
+                "{ \"specifications\": [{\"name\":{\"name\": \"low\",\"group\": \"basic\"},"
+                        + "\"currency\": \"FakeMoney\",\"betRule\":{\"betType\": \"fixed\",\"price\": 50},"
+                        + "\"giveUpRule\": \"all\",\"moveTimeRule\": { \"punishment\": \"loose\", \"limit\": 0 },"
+                        + "\"totalTimeRule\": {\"punishment\": \"loose\",\"limit\": 0 }, \"matchRule\": \"automatic\","
+                        + "\"privacyRule\": \"everybody\", \"numberRule\": \"two\"}] }", SelectSpecificationOptions.class);
         Assert.assertNotNull(selectSpecificationOptions);
+    }
+
+    @Test
+    public void testSelectCell() throws JsonGenerationException, JsonMappingException, IOException {
+        TicTacToeSelectCellMove selectCellMove = new TicTacToeSelectCellMove(1, (byte) 0, (byte) 0);
+
+        String value = objectMapper.writeValueAsString(selectCellMove);
+
+        TicTacToeSelectCellMove parsedSelectCellMove = objectMapper.readValue(value, TicTacToeSelectCellMove.class);
+        Assert.assertEquals(selectCellMove, parsedSelectCellMove);
+
+        System.out.println(value);
+    }
+
+    @Test
+    public void testBetOnCell() throws JsonGenerationException, JsonMappingException, IOException {
+        TicTacToeBetOnCellMove betOnCellMove = new TicTacToeBetOnCellMove(1, 60);
+
+        String value = objectMapper.writeValueAsString(betOnCellMove);
+
+        TicTacToeBetOnCellMove parsedBetOnCellMove = objectMapper.readValue(value, TicTacToeBetOnCellMove.class);
+        Assert.assertEquals(betOnCellMove, parsedBetOnCellMove);
+
+        System.out.println(value);
     }
 
 }
