@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+</script>
+<script>
+$(document).ready(function(){
+  $("#loginButton").click(function(){
+	localStorage.setItem('email', $("#email").val());
+	$.ajax({
+	    headers: {
+	    	"Content-Type" : "application/json",
+	    	"Accept" : "application/json"
+	    },
+	  type: "POST",
+	  url: "http://gogomaya.cloudfoundry.com/spi/registration/login",
+//	  url: "http://10.0.0.13:8080/gogomaya-web/spi/registration/login",
+ 	  data: JSON.stringify({
+  	      	email : $("#email").val(),
+  	      	password : $("#password").val()
+  	  }, null, 2),
+	  success: function(data, textStatus, jqXHR ) {
+		  localStorage.setItem('playerId', data.playerId);
+		  //alert("Log In Successful. playerId = "+ data.playerId);
+		  window.location.href="./specifications.html";
+	  },
+	  error: function(data) {
+	  	  alert("Errrrror " + JSON.stringify(data, null, 2));
+	  }
+	});
+  });
+});
+</script>
+</head>
+<title>Go-Go Login</title>
+
+<body>
+	<h1>Log In</h1>
+		E-Mail: <input type="text" id="email"><br>
+		Password: <input type="password" id="password"><br>
+		<button id="loginButton">Send</button>
+		<p>
+		<a href="gogo-sign-up.jsp">Sign Up</a>
+</body>
+</html>
+	
