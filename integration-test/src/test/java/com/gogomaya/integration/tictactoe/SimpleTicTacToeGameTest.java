@@ -11,13 +11,10 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayerUtils;
-import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
@@ -32,7 +29,6 @@ public class SimpleTicTacToeGameTest {
     TicTacToeOperations ticTacToeOperations;
 
     @Test
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void testSimpleStart() {
         List<TicTacToePlayer> players = ticTacToeOperations.start();
         TicTacToePlayer playerA = players.get(0);
@@ -88,11 +84,11 @@ public class SimpleTicTacToeGameTest {
             TicTacToePlayerUtils.syncVersions(playerA, playerB);
             playerB.bet(1);
 
-            Assert.assertTrue(playerB.getTable().getState().complete());
-            Assert.assertEquals(playerB.getTable().getState().getWinner(), playerA.getPlayer().getPlayerId());
-
             Assert.assertEquals(playerB.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.subtract(gamePrice));
             Assert.assertEquals(playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.add(gamePrice));
+
+            Assert.assertEquals(playerB.getTable().getState().getWinner(), playerA.getPlayer().getPlayerId());
+            Assert.assertTrue(playerB.getTable().getState().complete());
         } finally {
             playerA.getListenerControl().stopListener();
             playerB.getListenerControl().stopListener();

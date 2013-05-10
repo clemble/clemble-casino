@@ -3,7 +3,6 @@
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
 <script src="stomp.js"></script>
-
 <style>
 #cnvs {
 	border: none;

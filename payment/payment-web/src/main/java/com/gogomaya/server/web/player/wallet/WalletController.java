@@ -21,7 +21,7 @@ public class WalletController {
         this.walletRepository = walletRepository;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/wallet/${playerId}", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = "/wallet/{playerId}", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerWallet get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
         return walletRepository.findOne(playerWalletId);

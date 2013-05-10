@@ -6,6 +6,9 @@ import java.util.Arrays;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.cloudfoundry.org.codehaus.jackson.annotate.JsonCreator;
+import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
+
 @Embeddable
 public class SpecificationName implements Serializable {
 
@@ -25,7 +28,8 @@ public class SpecificationName implements Serializable {
     public SpecificationName() {
     }
 
-    public SpecificationName(String name, String group) {
+    @JsonCreator
+    public SpecificationName(@JsonProperty("name") String name, @JsonProperty("group") String group) {
         this.setName(name);
         this.setGroup(group);
     }

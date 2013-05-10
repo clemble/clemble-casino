@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.integration.player.Player;
 
 public class IntegrationGameOperations extends AbstractGameOperation {
@@ -54,7 +53,7 @@ public class IntegrationGameOperations extends AbstractGameOperation {
         header.add("playerId", String.valueOf(player.getPlayerId()));
         header.add("Content-Type", "application/json");
         // Step 2. Generating request
-        HttpEntity<SpecificationName> requestEntity = new HttpEntity<SpecificationName>(gameSpecification.getName(), header);
+        HttpEntity<GameSpecification> requestEntity = new HttpEntity<GameSpecification>(gameSpecification, header);
         // Step 3. Rest template generation
         return (T) restTemplate.exchange(baseUrl + CREATE_URL, HttpMethod.POST, requestEntity, GameTable.class).getBody();
     }

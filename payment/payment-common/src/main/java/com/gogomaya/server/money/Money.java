@@ -4,6 +4,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class Money implements Serializable {
 
     /**
@@ -15,7 +18,8 @@ public class Money implements Serializable {
 
     private final long amount;
 
-    public Money(final Currency currency, final long amount) {
+    @JsonCreator
+    public Money(@JsonProperty("currency") final Currency currency, @JsonProperty("ammount") final long amount) {
         this.currency = checkNotNull(currency);
         this.amount = amount;
     }
