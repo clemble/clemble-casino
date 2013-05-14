@@ -20,6 +20,8 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 
+import com.gogomaya.server.event.GogomayaEvent;
+import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.connection.GameServerConnection;
 import com.ning.http.client.AsyncHttpClient;
@@ -27,19 +29,19 @@ import com.ning.http.client.websocket.DefaultWebSocketListener;
 import com.ning.http.client.websocket.WebSocket;
 import com.ning.http.client.websocket.WebSocketUpgradeHandler;
 
-public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameListenerOperations<T> {
+public class GameListenerOperationsImpl<State extends GameState> implements GameListenerOperations<State> {
 
     final private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public GameListenerControl listen(final T gameTable, final GameListener<T> gameListener) {
+    public GameListenerControl listen(final GameTable<State> gameTable, final GameListener gameListener) {
         // Step 1. Creating Server connection
         // If channel was not defined, choose it randomly
         return listen(gameTable, gameListener, ListenerChannel.values()[(int) (gameTable.getTableId() % ListenerChannel.values().length)]);
     }
 
     @Override
-    public GameListenerControl listen(final T gameTable, final GameListener<T> gameListener, ListenerChannel listenerChannel) {
+    public GameListenerControl listen(final GameTable<State> gameTable, final GameListener gameListener, ListenerChannel listenerChannel) {
         // Step 1. Setting default value
         listenerChannel = listenerChannel == null ? ListenerChannel.Rabbit : listenerChannel;
         // Step 2. Processing based on listener type
@@ -56,7 +58,7 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
         throw new IllegalArgumentException("Was not able to construct listener");
     }
 
-    private GameListenerControl addRabbitListener(final T gameTable, final GameListener<T> gameListener) {
+    private GameListenerControl addRabbitListener(final GameTable<State> gameTable, final GameListener gameListener) {
         // Step 1. Creating Server connection
         GameServerConnection serverConnection = gameTable.getServerResource();
         ConnectionFactory connectionFactory = new CachingConnectionFactory(serverConnection.getNotificationURL());
@@ -75,7 +77,7 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
                 try {
                     System.out.println(new String(message.getBody()));
                     // Step 1. Parsing GameTable
-                    T gameTable = (T) objectMapper.readValue(new String(message.getBody()), GameTable.class);
+                    GogomayaEvent gameTable = objectMapper.readValue(new String(message.getBody()), GogomayaEvent.class);
                     // Step 2. Updating
                     gameListener.updated(gameTable);
                 } catch (Throwable e) {
@@ -95,7 +97,7 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
         };
     }
 
-    private GameListenerControl addStompListener(final T gameTable, final GameListener<T> gameListener) {
+    private GameListenerControl addStompListener(final GameTable<State> gameTable, final GameListener gameListener) {
         final String channel = "/topic/" + Long.toString(gameTable.getTableId());
         // Step 1. Creating a game table client
         try {
@@ -107,7 +109,7 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
                     try {
                         System.out.println(message);
                         // Step 1. Reading game table
-                        T gameTable = (T) objectMapper.readValue(message, GameTable.class);
+                        GogomayaEvent gameTable = objectMapper.readValue(message, GogomayaEvent.class);
                         // Step 2. Updating game table
                         gameListener.updated(gameTable);
                     } catch (Throwable e) {
@@ -132,7 +134,7 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
         }
     }
 
-    private GameListenerControl addSockJSListener(final T gameTable, final GameListener<T> gameListener) {
+    private GameListenerControl addSockJSListener(final GameTable<State> gameTable, final GameListener gameListener) {
         try {
             AsyncHttpClient asyncClient = new AsyncHttpClient();
             final WebSocket webSocket = asyncClient.prepareGet("http://" + gameTable.getServerResource().getNotificationURL() + ":15674/stomp")
@@ -150,7 +152,7 @@ public class GameListenerOperationsImpl<T extends GameTable<?>> implements GameL
                             try {
                                 System.out.println(message);
                                 // Step 1. Reading game table
-                                T gameTable = (T) objectMapper.readValue(message, GameTable.class);
+                                GogomayaEvent gameTable = objectMapper.readValue(message, GogomayaEvent.class);
                                 // Step 2. Updating game table
                                 gameListener.updated(gameTable);
                             } catch (Throwable e) {

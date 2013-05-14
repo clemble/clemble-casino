@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.gogomaya.server.event.GogomayaEvent;
 import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
@@ -41,7 +42,7 @@ public class GameOperationsTest {
     GameOperations gameOperations;
 
     @Inject
-    GameListenerOperations<GameTable<TicTacToeState>> gameListenerOperations;
+    GameListenerOperations<TicTacToeState> gameListenerOperations;
 
     @Test
     public void createWithGameSpecification() {
@@ -94,8 +95,8 @@ public class GameOperationsTest {
         // Step 3. Adding listener
         gameListenerOperations.listen(gameTable, new GameListener() {
             @Override
-            public void updated(GameTable gameTable) {
-                System.out.println(gameTable);
+            public void updated(GogomayaEvent event) {
+                System.out.println(event);
                 countDownLatch.countDown();
             }
         }, listenerChannel);

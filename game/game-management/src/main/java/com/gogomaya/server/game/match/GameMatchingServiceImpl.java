@@ -9,7 +9,9 @@ import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.connection.GameConnection;
 import com.gogomaya.server.game.connection.GameNotificationService;
+import com.gogomaya.server.game.event.PlayerAddedEvent;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecification;
@@ -40,31 +42,37 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
     @Override
     public GameTable<State> reserve(final long playerId, final GameSpecification specification) {
         // Step 1. Pooling
-        GameTable<State> gameTable = tableManager.reserve(specification);
-        gameTable.addPlayer(playerId);
+        GameTable<State> table = tableManager.reserve(specification);
+        table.addPlayer(playerId);
 
         PlayerNumberRule numberRule = specification.getNumberRule();
-        if (gameTable.getPlayers().size() >= numberRule.getMinPlayers()) {
-            State gameState = stateFactory.create(specification, gameTable.getPlayers());
-            gameTable.getCurrentSession().setState(gameState);
+        if (table.getPlayers().size() >= numberRule.getMinPlayers()) {
+            State gameState = stateFactory.create(specification, table.getPlayers());
+            table.getCurrentSession().setState(gameState);
             // Step 3. Initializing start of the game session
-            GameSession<State> gameSession = new GameSession<State>();
-            gameSession.addPlayers(gameTable.getPlayers());
-            gameSession.setSessionState(GameSessionState.active);
-            gameSession.setSpecification(specification);
-            gameSession = sessionRepository.save(gameSession);
+            GameSession<State> session = new GameSession<State>();
+            session.addPlayers(table.getPlayers());
+            session.setSessionState(GameSessionState.active);
+            session.setSpecification(specification);
+            session = sessionRepository.save(session);
 
-            gameTable.setCurrentSession(gameSession);
-            gameTable = tableRepository.save(gameTable);
+            table.setCurrentSession(session);
+            table = tableRepository.save(table);
         } else {
-            gameTable.setCurrentSession(new GameSession<State>());
-            gameTable = tableRepository.save(gameTable);
-            tableManager.addReservable(gameTable);
+            table.setCurrentSession(new GameSession<State>());
+            table = tableRepository.save(table);
+            tableManager.addReservable(table);
         }
 
-        notificationManager.notify(gameTable);
+        notificationManager.notify(
+            new GameConnection()
+                .setRoutingKey(table.getTableId())
+                .setServerConnection(table.getServerResource()),
+            new PlayerAddedEvent()
+                .setSession(table.getTableId())
+                .setPlayerId(playerId));
 
-        return gameTable;
+        return table;
     }
 
 }

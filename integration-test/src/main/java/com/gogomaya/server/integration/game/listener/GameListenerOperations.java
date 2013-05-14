@@ -1,11 +1,12 @@
 package com.gogomaya.server.integration.game.listener;
 
+import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 
-public interface GameListenerOperations<T extends GameTable<?>> {
+public interface GameListenerOperations<State extends GameState> {
 
-    public GameListenerControl listen(T gameTable, GameListener<T> gameListener);
+    public GameListenerControl listen(GameTable<State> table, GameListener listener);
 
-    public GameListenerControl listen(T gameTable, GameListener<T> gameListener, ListenerChannel listenerChannel);
+    public GameListenerControl listen(GameTable<State> table, GameListener listener, ListenerChannel channel);
 
 }

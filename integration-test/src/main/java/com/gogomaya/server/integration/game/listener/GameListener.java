@@ -1,9 +1,9 @@
 package com.gogomaya.server.integration.game.listener;
 
-import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.event.GogomayaEvent;
 
-public interface GameListener <T extends GameTable<?>> {
+public interface GameListener {
 
-    public void updated(T gameTable);
+    public void updated(GogomayaEvent gameTable);
 
 }

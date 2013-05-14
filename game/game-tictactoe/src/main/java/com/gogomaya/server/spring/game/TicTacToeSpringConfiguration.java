@@ -13,6 +13,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.gogomaya.server.game.action.GameProcessorFactory;
+import com.gogomaya.server.game.action.GameStateFactory;
+import com.gogomaya.server.game.action.impl.GameSessionProcessor;
+import com.gogomaya.server.game.action.impl.TicTacToeProcessor;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
@@ -62,8 +66,8 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameNotificationService gameNotificationManager() {
-        return new RabbitGameNotificationService(jsonMessageConverter);
+    public GameNotificationService<TicTacToeState> gameNotificationManager() {
+        return new RabbitGameNotificationService<TicTacToeState>(jsonMessageConverter);
     }
 
     @Bean
@@ -96,6 +100,22 @@ public class TicTacToeSpringConfiguration {
         return new TicTacToeOutcomeService(walletTransactionManager);
     }
 
+    @Bean
+    @Singleton
+    public GameProcessorFactory<TicTacToeState> ticTacToeProcessorFactory(){
+        return new GameProcessorFactory<TicTacToeState>(new TicTacToeProcessor());
+    }
+    
+    @Bean
+    @Singleton
+    public GameSessionProcessor<TicTacToeState> sessionProcessor() {
+        return new GameSessionProcessor<TicTacToeState>(ticTacToeProcessorFactory(),
+                gameStateFactory(),
+                sessionRepository,
+                tableRepository,
+                gameNotificationManager());
+    }
+    
     @Profile(value = { "default" })
     public static class GameManagementDefaultConfiguration {
 

@@ -18,7 +18,7 @@ import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 import com.google.common.collect.ImmutableList;
 
-public class TicTacToeStateProcessor implements GameProcessor<TicTacToeState>{
+public class TicTacToeProcessor implements GameProcessor<TicTacToeState>{
 
     @Override
     public Collection<GameEvent<TicTacToeState>> process(TicTacToeState state, GameMove move) {

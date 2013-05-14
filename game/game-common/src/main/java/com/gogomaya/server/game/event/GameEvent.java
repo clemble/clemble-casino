@@ -1,10 +1,9 @@
 package com.gogomaya.server.game.event;
 
-import java.util.Date;
+import com.gogomaya.server.event.SessionAwareEvent;
+import com.gogomaya.server.event.impl.AbstractGogomayaEvent;
 
-import com.gogomaya.server.event.GogomayaEvent;
-
-public class GameEvent<State> implements GogomayaEvent {
+public class GameEvent<State> extends AbstractGogomayaEvent implements SessionAwareEvent {
 
     /**
      * Generated 07/05/13
@@ -15,8 +14,7 @@ public class GameEvent<State> implements GogomayaEvent {
 
     private State state;
 
-    private Date publishDate = new Date();
-
+    @Override
     public long getSession() {
         return session;
     }
@@ -31,16 +29,6 @@ public class GameEvent<State> implements GogomayaEvent {
 
     public GameEvent<State> setState(State state) {
         this.state = state;
-        return this;
-    }
-
-    @Override
-    public Date getPublishDate() {
-        return publishDate;
-    }
-
-    public GameEvent<State> setPublishDate(Date date) {
-        this.publishDate = date;
         return this;
     }
 

@@ -35,13 +35,13 @@ public class SimpleTicTacToeGameTest {
         TicTacToePlayer playerA = players.get(0);
         TicTacToePlayer playerB = players.get(1);
 
-        int gamePrice = playerA.getTable().getSpecification().getBetRule().getPrice();
+        int gamePrice = playerA.getSpecification().getBetRule().getPrice();
 
         long playerAidentifier = playerA.getPlayer().getPlayerId();
         long playerBidentifier = playerB.getPlayer().getPlayerId();
 
         Assert.assertNotNull(players);
-        Assert.assertEquals(playerA.getTable().getTableId(), playerB.getTable().getTableId());
+        Assert.assertEquals(playerA.getTableId(), playerB.getTableId());
         Assert.assertEquals(players.size(), 2);
 
         playerA.select(0, 0);
@@ -49,11 +49,11 @@ public class SimpleTicTacToeGameTest {
         playerA.bet(5);
         playerB.bet(2);
 
-        Assert.assertTrue(playerB.getTable().getCurrentSession().getState().getBoard()[0][0].owned());
-        Assert.assertEquals(playerB.getTable().getCurrentSession().getState().getNextMoves().size(), 1);
-        Assert.assertEquals(playerB.getTable().getCurrentSession().getState().getPlayerState(playerAidentifier).getMoneyLeft(), gamePrice - 5);
-        Assert.assertEquals(playerB.getTable().getCurrentSession().getState().getPlayerState(playerBidentifier).getMoneyLeft(), gamePrice - 2);
-        Assert.assertNotNull(playerB.getTable().getCurrentSession().getState().getNextMove(playerBidentifier));
+        Assert.assertTrue(playerB.getState().getBoard()[0][0].owned());
+        Assert.assertEquals(playerB.getState().getNextMoves().size(), 1);
+        Assert.assertEquals(playerB.getState().getPlayerState(playerAidentifier).getMoneyLeft(), gamePrice - 5);
+        Assert.assertEquals(playerB.getState().getPlayerState(playerBidentifier).getMoneyLeft(), gamePrice - 2);
+        Assert.assertNotNull(playerB.getState().getNextMove(playerBidentifier));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class SimpleTicTacToeGameTest {
         TicTacToePlayer playerA = players.get(0);
         TicTacToePlayer playerB = players.get(1);
 
-        Money gamePrice = Money.create(playerA.getTable().getSpecification().getCurrency(), playerA.getTable().getSpecification().getBetRule().getPrice());
+        Money gamePrice = Money.create(playerA.getSpecification().getCurrency(), playerA.getSpecification().getBetRule().getPrice());
         Money originalAmount = playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency());
 
         try {
@@ -73,8 +73,8 @@ public class SimpleTicTacToeGameTest {
             playerA.bet(2);
             TicTacToePlayerUtils.syncVersions(playerA, playerB);
 
-            Assert.assertEquals(playerA.getTable().getCurrentSession().getState().getPlayerState(playerA.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
-            Assert.assertEquals(playerA.getTable().getCurrentSession().getState().getPlayerState(playerB.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
+            Assert.assertEquals(playerA.getState().getPlayerState(playerA.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
+            Assert.assertEquals(playerA.getState().getPlayerState(playerB.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
 
             playerB.bet(1);
 
@@ -95,8 +95,8 @@ public class SimpleTicTacToeGameTest {
 
             TicTacToePlayerUtils.syncVersions(playerA, playerB);
 
-            Assert.assertTrue(playerB.getTable().getCurrentSession().getState().complete());
-            Assert.assertEquals(playerB.getTable().getCurrentSession().getState().getWinner(), playerA.getPlayer().getPlayerId());
+            Assert.assertTrue(playerB.getState().complete());
+            Assert.assertEquals(playerB.getState().getWinner(), playerA.getPlayer().getPlayerId());
         } finally {
             playerA.getListenerControl().stopListener();
             playerB.getListenerControl().stopListener();

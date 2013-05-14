@@ -25,7 +25,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-abstract public class GameSessionProcessor<State extends GameState> {
+public class GameSessionProcessor<State extends GameState> {
 
     final private LoadingCache<Long, ReentrantLock> sessionLocks = CacheBuilder.newBuilder().build(new CacheLoader<Long, ReentrantLock>() {
         @Override
@@ -85,7 +85,7 @@ abstract public class GameSessionProcessor<State extends GameState> {
     
     final private GameSessionRepository sessionRepository;
 
-    protected GameSessionProcessor(final GameProcessorFactory<State> processorFactory,
+    public GameSessionProcessor(final GameProcessorFactory<State> processorFactory,
             final GameStateFactory<State> stateFactory,
             final GameSessionRepository sessionRepository,
             final GameTableRepository<State> tableRepository,
@@ -125,7 +125,5 @@ abstract public class GameSessionProcessor<State extends GameState> {
             reentrantLock.unlock();
         }
     }
-
-    abstract protected Collection<GameEvent<State>> apply(State gameState, GameMove move);
 
 }

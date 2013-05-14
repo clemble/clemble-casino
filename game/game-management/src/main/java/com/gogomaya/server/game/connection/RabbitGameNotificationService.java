@@ -10,9 +10,8 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.JsonMessageConverter;
 
+import com.gogomaya.server.event.GogomayaEvent;
 import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.event.GameEvent;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -40,20 +39,7 @@ public class RabbitGameNotificationService<State extends GameState> implements G
     }
 
     @Override
-    public void notify(final GameTable<State> table) {
-        // Step 1. Fetching new rabbit
-        RabbitTemplate rabbitTemplate = null;
-        try {
-            rabbitTemplate = RABBIT_CACHE.get(table.getServerResource().getNotificationURL());
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-        // Step 2. Sending session update
-        rabbitTemplate.convertAndSend(String.valueOf(table.getTableId()), table);
-    }
-
-    @Override
-    public void notify(final GameConnection connection, final GameEvent<State> event) {
+    public void notify(final GameConnection connection, final GogomayaEvent event) {
         // Step 1. Fetching new rabbit
         RabbitTemplate rabbitTemplate = null;
         try {
@@ -66,9 +52,9 @@ public class RabbitGameNotificationService<State extends GameState> implements G
     }
 
     @Override
-    public void notify(GameConnection connection, Collection<GameEvent<State>> events) {
+    public void notify(GameConnection connection, Collection<? extends GogomayaEvent> events) {
         // Step 1. Notifying each event one after another
-        for (GameEvent<State> event : events)
+        for (GogomayaEvent event : events)
             notify(connection, event);
     }
 
