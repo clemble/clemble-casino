@@ -25,7 +25,7 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
     });
 
     @Override
-    public State create(GameSession gameSession) {
+    public State create(GameSession<State> gameSession) {
         // Step 1. Sanity check
         if (gameSession == null || gameSession.getSpecification() == null) {
             throw GogomayaException.create(GogomayaError.GameStateReCreationFailure);

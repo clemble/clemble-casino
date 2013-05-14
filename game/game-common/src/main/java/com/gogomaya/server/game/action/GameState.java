@@ -40,4 +40,6 @@ public interface GameState extends Serializable {
 
     public int getVersion();
 
+    public int increaseVersion();
+
 }

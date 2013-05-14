@@ -32,7 +32,7 @@ public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations 
         this.baseUrl = checkNotNull(baseUrl);
     }
 
-    public void perform(TicTacToePlayer player, TicTacToeMove action) {
+    public TicTacToeState perform(TicTacToePlayer player, TicTacToeMove action) {
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(player.getPlayer().getPlayerId()));
@@ -45,6 +45,8 @@ public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations 
         GameTable<TicTacToeState> updatedTable = restTemplate.exchange(baseUrl + ACTION_URL, HttpMethod.POST, requestEntity, GameTable.class).getBody();
         // Step 4. Updating table state
         player.setTable(updatedTable);
+        // Step 5. Returning updated state
+        return updatedTable.getCurrentSession().getState();
     }
 
 }

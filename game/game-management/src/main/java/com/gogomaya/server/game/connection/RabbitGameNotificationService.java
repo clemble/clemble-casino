@@ -1,5 +1,6 @@
 package com.gogomaya.server.game.connection;
 
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
@@ -9,13 +10,14 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.JsonMessageConverter;
 
+import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.event.GameEvent;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class RabbitGameNotificationService implements GameNotificationService {
+public class RabbitGameNotificationService<State extends GameState> implements GameNotificationService<State> {
 
     final private LoadingCache<String, RabbitTemplate> RABBIT_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<String, RabbitTemplate>() {
 
@@ -30,15 +32,6 @@ public class RabbitGameNotificationService implements GameNotificationService {
 
     });
 
-    final private LoadingCache<Long, GameConnection> GAME_CONNECTION = CacheBuilder.newBuilder().build(new CacheLoader<Long, GameConnection>() {
-
-        @Override
-        public GameConnection load(Long key) throws Exception {
-            return null;
-        }
-
-    });
-
     final private JsonMessageConverter jsonMessageConverter;
 
     @Inject
@@ -47,7 +40,7 @@ public class RabbitGameNotificationService implements GameNotificationService {
     }
 
     @Override
-    public void notify(final GameTable<?> table) {
+    public void notify(final GameTable<State> table) {
         // Step 1. Fetching new rabbit
         RabbitTemplate rabbitTemplate = null;
         try {
@@ -60,7 +53,7 @@ public class RabbitGameNotificationService implements GameNotificationService {
     }
 
     @Override
-    public void notify(final GameConnection connection, final GameEvent<?> event) {
+    public void notify(final GameConnection connection, final GameEvent<State> event) {
         // Step 1. Fetching new rabbit
         RabbitTemplate rabbitTemplate = null;
         try {
@@ -70,6 +63,13 @@ public class RabbitGameNotificationService implements GameNotificationService {
         }
         // Step 2. Sending session update
         rabbitTemplate.convertAndSend(String.valueOf(connection.getRoutingKey()), event);
+    }
+
+    @Override
+    public void notify(GameConnection connection, Collection<GameEvent<State>> events) {
+        // Step 1. Notifying each event one after another
+        for (GameEvent<State> event : events)
+            notify(connection, event);
     }
 
 }

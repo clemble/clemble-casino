@@ -4,9 +4,10 @@ import java.util.Collection;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.action.GameStateCache;
+import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.GiveUpMove;
+import com.gogomaya.server.game.event.GameEndedEvent;
 import com.gogomaya.server.game.event.GameEvent;
 import com.gogomaya.server.game.event.PlayerGaveUpEvent;
 import com.gogomaya.server.game.event.PlayerMovedEvent;
@@ -17,33 +18,29 @@ import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 import com.google.common.collect.ImmutableList;
 
-public class TicTacToeStateProcessor extends AbstractGameStateProcessor<TicTacToeState> {
-
-    protected TicTacToeStateProcessor(GameStateCache<TicTacToeState> stateCache) {
-        super(stateCache);
-    }
+public class TicTacToeStateProcessor implements GameProcessor<TicTacToeState>{
 
     @Override
-    final protected GameEvent<TicTacToeState> apply(final TicTacToeState state, final GameMove move) {
+    public Collection<GameEvent<TicTacToeState>> process(TicTacToeState state, GameMove move) {
         // Step 1. Processing Select cell move
         if (move instanceof TicTacToeSelectCellMove) {
-            return processSelectCellMove(state, (TicTacToeSelectCellMove) move);
+            return ImmutableList.<GameEvent<TicTacToeState>>of(processSelectCellMove(state, (TicTacToeSelectCellMove) move));
         } else if (move instanceof TicTacToeBetOnCellMove) {
-            return processBetOnCellMove(state, (TicTacToeBetOnCellMove) move);
+            return ImmutableList.<GameEvent<TicTacToeState>>of(processBetOnCellMove(state, (TicTacToeBetOnCellMove) move));
         } else if (move instanceof GiveUpMove) {
             return processGiveUpMove(state, (GiveUpMove) move);
         }
         // Step 2. Returning default state
         throw GogomayaException.create(GogomayaError.GamePlayMoveNotSupported);
     }
-    
-    private GameEvent<TicTacToeState> processGiveUpMove(final TicTacToeState state, final GiveUpMove giveUpMove) {
+
+    private Collection<GameEvent<TicTacToeState>> processGiveUpMove(final TicTacToeState state, final GiveUpMove giveUpMove) {
         // Step 1. Fetching player identifier
         long playerId = giveUpMove.getPlayerId();
-        // Step 2. Player gave up
-        return new PlayerGaveUpEvent<TicTacToeState>()
-                .setPlayerId(playerId)
-                .setState(state);
+        // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
+        return ImmutableList.<GameEvent<TicTacToeState>> of(
+                new PlayerGaveUpEvent<TicTacToeState>().setPlayerId(playerId).setState(state),
+                new GameEndedEvent<TicTacToeState>().setPlayerId(playerId).setState(state));
     }
 
     private GameEvent<TicTacToeState> processBetOnCellMove(final TicTacToeState state, final TicTacToeBetOnCellMove betMove) {

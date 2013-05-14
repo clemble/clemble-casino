@@ -73,17 +73,20 @@ public class GameSessionRepositoryTest {
         gameTable.setSpecification(DEFAULT_SPECIFICATION);
         gameTable.setPlayers(players);
 
+        gameTable.setCurrentSession(new GameSession<TicTacToeState>());
+        
         gameTable = tableRepository.save(gameTable);
 
-        gameTable.setState(gameState);
+        Assert.assertNotNull(gameTable.getCurrentSession());
+        gameTable.getCurrentSession().setState(gameState);
 
-        GameSession gameSession = new GameSession();
+        GameSession<TicTacToeState> gameSession = new GameSession<TicTacToeState>();
         gameSession.setPlayers(players);
         gameSession.setSpecification(DEFAULT_SPECIFICATION);
 
         gameSession = sessionRepository.save(gameSession);
 
         Assert.assertNotNull(gameSession);
-        Assert.assertNotNull(gameTable.getState());
+        Assert.assertNotNull(gameTable.getCurrentSession().getState());
     }
 }

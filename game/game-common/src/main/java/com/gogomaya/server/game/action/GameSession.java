@@ -21,7 +21,9 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.MadeMove;
@@ -31,10 +33,18 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_SESSION")
-@TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
-        name = JsonHibernateType.CLASS_NAME_PARAMETER,
-        value = "com.gogomaya.server.game.action.GameState") })
-public class GameSession implements Serializable {
+@TypeDefs(
+    value = {
+            @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
+                    name = JsonHibernateType.CLASS_NAME_PARAMETER,
+                    value = "com.gogomaya.server.game.action.GameState") }),
+            @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
+                    name = JsonHibernateType.CLASS_NAME_PARAMETER,
+                    value = "com.gogomaya.server.game.action.GameState") })
+
+    }
+)
+public class GameSession<State extends GameState> implements Serializable {
 
     /**
      * Generated 16/02/13
@@ -48,8 +58,7 @@ public class GameSession implements Serializable {
     private long sessionId;
 
     @ManyToOne
-    @JoinColumns(value = {
-            @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
+    @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
             @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP") })
     private GameSpecification specification;
 
@@ -64,6 +73,10 @@ public class GameSession implements Serializable {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "GAME_SESSION_MOVES", joinColumns = @JoinColumn(name = "SESSION_ID"))
     private List<MadeMove> madeMoves = new ArrayList<MadeMove>();
+
+    @Type(type = "gameState")
+    @Column(name = "GAME_STATE", length = 4096)
+    private State state;
 
     @Column(name = "NUM_MADE_MOVES")
     private int numMadeMoves;
@@ -123,6 +136,14 @@ public class GameSession implements Serializable {
         this.numMadeMoves = numMadeMoves;
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -136,6 +157,7 @@ public class GameSession implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -143,7 +165,7 @@ public class GameSession implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GameSession other = (GameSession) obj;
+        GameSession<State> other = (GameSession<State>) obj;
         if (madeMoves == null) {
             if (other.madeMoves != null)
                 return false;

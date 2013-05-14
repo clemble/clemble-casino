@@ -10,16 +10,18 @@ public class GameConnection {
         return routingKey;
     }
 
-    public void setRoutingKey(long routingKey) {
+    public GameConnection setRoutingKey(long routingKey) {
         this.routingKey = routingKey;
+        return this;
     }
 
     public GameServerConnection getServerConnection() {
         return serverConnection;
     }
 
-    public void setServerConnection(GameServerConnection serverConnection) {
+    public GameConnection setServerConnection(GameServerConnection serverConnection) {
         this.serverConnection = serverConnection;
+        return this;
     }
 
 }

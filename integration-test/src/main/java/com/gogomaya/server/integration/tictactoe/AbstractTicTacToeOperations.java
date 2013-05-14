@@ -49,7 +49,7 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
         }
         TicTacToePlayerUtils.syncVersions(playerA, playerB);
         // Step 3. Returning generated value who ever goes first is choosen as first
-        TicTacToeState state = playerB.getTable().getState() != null ? playerB.getTable().getState() : playerA.getTable().getState();
+        TicTacToeState state = playerB.getTable().getCurrentSession().getState() != null ? playerB.getTable().getCurrentSession().getState() : playerA.getTable().getCurrentSession().getState();
         if (state.getNextMove(playerA.getPlayer().getPlayerId()) == null) {
             return ImmutableList.<TicTacToePlayer> of(playerB, playerA);
         } else {
@@ -76,18 +76,18 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
         return toePlayer;
     }
 
-    final public void select(TicTacToePlayer player, int row, int column) {
+    final public TicTacToeState select(TicTacToePlayer player, int row, int column) {
         // Step 1. Generating bet move
         TicTacToeSelectCellMove move = new TicTacToeSelectCellMove(player.getPlayer().getPlayerId(), TicTacToeCell.create(row, column));
         // Step 2. Performing actual TicTacToeMove
-        perform(player, move);
+        return perform(player, move);
     }
 
-    final public void bet(TicTacToePlayer player, int ammount) {
+    final public TicTacToeState bet(TicTacToePlayer player, int ammount) {
         // Step 1. Generating bet move
         TicTacToeMove move = new TicTacToeBetOnCellMove(player.getPlayer().getPlayerId(), ammount);
         // Step 2. Performing actual TicTacToeMove
-        perform(player, move);
+        return perform(player, move);
     }
 
 }

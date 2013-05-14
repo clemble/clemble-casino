@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.Assert;
+
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.integration.game.listener.GameListenerControl;
@@ -21,9 +23,7 @@ public class TicTacToePlayer {
 
     private GameListenerControl listenerControl;
 
-    public TicTacToePlayer(final Player player,
-            final GameTable<TicTacToeState> table,
-            final TicTacToeOperations operations) {
+    public TicTacToePlayer(final Player player, final GameTable<TicTacToeState> table, final TicTacToeOperations operations) {
         this.player = checkNotNull(player);
         this.table.set(checkNotNull(table));
         this.ticTacToeOperations = checkNotNull(operations);
@@ -40,8 +40,8 @@ public class TicTacToePlayer {
     public TicTacToePlayer setTable(GameTable<TicTacToeState> newTable) {
         synchronized (versionLock) {
             if (this.table.get() == null
-                    || (this.table.get().getState() != null ? TicTacToePlayerUtils.getVersion(this.table.get().getState()) : -1) < (newTable.getState() != null ? TicTacToePlayerUtils
-                            .getVersion(newTable.getState()) : -1)) {
+                    || (this.table.get().getCurrentSession().getState() != null ? TicTacToePlayerUtils.getVersion(this.table.get().getCurrentSession().getState()) : -1) < (newTable.getCurrentSession().getState() != null ? TicTacToePlayerUtils
+                            .getVersion(newTable.getCurrentSession().getState()) : -1)) {
                 this.table.set(newTable);
                 versionLock.notifyAll();
             }
@@ -59,11 +59,11 @@ public class TicTacToePlayer {
     }
 
     public void waitVersion(int expectedVersion) {
-        if (this.getTable().getState() != null && TicTacToePlayerUtils.getVersion(this.getTable().getState()) >= expectedVersion)
+        if (this.getTable().getCurrentSession().getState() != null && TicTacToePlayerUtils.getVersion(this.getTable().getCurrentSession().getState()) >= expectedVersion)
             return;
 
         synchronized (versionLock) {
-            while (this.getTable().getState() != null && TicTacToePlayerUtils.getVersion(this.getTable().getState()) < expectedVersion) {
+            while (this.getTable().getCurrentSession().getState() != null && TicTacToePlayerUtils.getVersion(this.getTable().getCurrentSession().getState()) < expectedVersion) {
                 try {
                     versionLock.wait();
                 } catch (InterruptedException e) {
@@ -74,10 +74,14 @@ public class TicTacToePlayer {
     }
 
     public void select(int row, int column) {
+        int beforeSelecting = this.getTable().getCurrentSession().getState().getVersion();
         ticTacToeOperations.select(this, row, column);
+        Assert.assertNotSame(beforeSelecting, this.getTable().getCurrentSession().getState().getVersion());
     }
 
     public void bet(int ammount) {
+        int beforeBetting = this.getTable().getCurrentSession().getState().getVersion();
         ticTacToeOperations.bet(this, ammount);
+        Assert.assertNotSame(beforeBetting + " remained " + this.getTable().getCurrentSession().getState().getVersion(), beforeBetting, this.getTable().getCurrentSession().getState().getVersion());
     }
 }

@@ -8,7 +8,7 @@ import com.gogomaya.server.player.PlayerAware;
 public class GamePlayerState implements PlayerAware {
 
     /**
-     * Generated 
+     * Generated
      */
     private static final long serialVersionUID = -1635859321208535243L;
 
@@ -17,7 +17,9 @@ public class GamePlayerState implements PlayerAware {
     private long moneyLeft;
 
     @JsonCreator
-    public GamePlayerState(@JsonProperty("playerId") final long playerId, @JsonProperty("moneyLeft") final long moneyLeft) {
+    public GamePlayerState(
+            @JsonProperty("playerId") final long playerId,
+            @JsonProperty("moneyLeft") final long moneyLeft) {
         this.playerId = playerId;
         this.moneyLeft = moneyLeft;
     }

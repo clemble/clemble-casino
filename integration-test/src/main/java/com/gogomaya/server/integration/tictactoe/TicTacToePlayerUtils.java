@@ -8,7 +8,7 @@ public class TicTacToePlayerUtils {
         // Step 1. Fetching max available version
         int maxVersion = 0;
         for (TicTacToePlayer player : players) {
-            int version = player.getTable() != null && player.getTable().getState() != null ? getVersion(player.getTable().getState()) : 0;
+            int version = player.getTable() != null && player.getTable().getCurrentSession().getState() != null ? getVersion(player.getTable().getCurrentSession().getState()) : 0;
             maxVersion = maxVersion < version ? version : maxVersion;
         }
         // Step 2. Waiting for every player to be in sync with max version

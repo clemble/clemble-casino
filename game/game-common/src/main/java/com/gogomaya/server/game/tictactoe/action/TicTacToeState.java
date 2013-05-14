@@ -113,14 +113,16 @@ public class TicTacToeState extends AbstractGameState {
     }
 
     private TicTacToeState processBetOnCellMove(final TicTacToeBetOnCellMove betMove) {
-        getPlayerState(betMove.getPlayerId()).subMoneyLeft(betMove.getBet());
         addMadeMove(betMove);
 
         if (getNextMoves().isEmpty()) {
             long[] players = getPlayerIterator().getPlayers();
 
             long firstPlayerBet = ((TicTacToeBetOnCellMove) getMadeMove(players[0])).getBet();
+            getPlayerState(players[0]).subMoneyLeft(firstPlayerBet);
+
             long secondPlayerBet = ((TicTacToeBetOnCellMove) getMadeMove(players[1])).getBet();
+            getPlayerState(players[1]).subMoneyLeft(secondPlayerBet);
 
             board[activeCell.getRow()][activeCell.getColumn()] = (firstPlayerBet == secondPlayerBet) ? new TicTacToeCellState(0L, firstPlayerBet,
                     secondPlayerBet) : new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet);

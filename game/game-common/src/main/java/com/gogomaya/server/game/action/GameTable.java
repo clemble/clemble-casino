@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -22,7 +23,6 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.connection.GameServerConnection;
@@ -61,13 +61,9 @@ public class GameTable<State extends GameState> implements Serializable {
     @CollectionTable(name = "GAME_TABLE_PLAYERS", joinColumns = @JoinColumn(name = "TABLE_ID"))
     private List<Long> players = new ArrayList<Long>();
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = GameSession.class)
+    @OneToOne(fetch = FetchType.EAGER, targetEntity = GameSession.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "SESSION_ID")
-    private GameSession currentSession;
-
-    @Type(type = "gameState")
-    @Column(name = "GAME_STATE", length = 4096)
-    private State state;
+    private GameSession<State> currentSession;
 
     public long getTableId() {
         return tableId;
@@ -101,11 +97,11 @@ public class GameTable<State extends GameState> implements Serializable {
         return this;
     }
 
-    public GameSession getCurrentSession() {
+    public GameSession<State> getCurrentSession() {
         return currentSession;
     }
 
-    public GameTable<State> setCurrentSession(GameSession currentSession) {
+    public GameTable<State> setCurrentSession(GameSession<State> currentSession) {
         this.currentSession = currentSession;
         return this;
     }
@@ -119,18 +115,8 @@ public class GameTable<State extends GameState> implements Serializable {
         return this;
     }
 
-    public State getState() {
-        return state;
-    }
-
-    public GameTable<State> setState(State state) {
-        this.state = state;
-        return this;
-    }
-
     public void clear() {
         this.currentSession = null;
-        this.state = null;
         this.players.clear();
     }
 

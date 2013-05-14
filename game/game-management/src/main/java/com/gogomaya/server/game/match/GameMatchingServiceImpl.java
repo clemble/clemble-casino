@@ -18,8 +18,7 @@ import com.gogomaya.server.game.table.GameTableRepository;
 
 public class GameMatchingServiceImpl<State extends GameState> implements GameMatchingService<State> {
 
-    final private GameNotificationService notificationManager;
-
+    final private GameNotificationService<State> notificationManager;
     final private GameTableManager<State> tableManager;
     final private GameTableRepository<State> tableRepository;
     final private GameStateFactory<State> stateFactory;
@@ -29,7 +28,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
     public GameMatchingServiceImpl(final GameTableManager<State> tableManager,
             final GameTableRepository<State> tableRepository,
             final GameSessionRepository sessionRepository,
-            final GameNotificationService notificationManager,
+            final GameNotificationService<State> notificationManager,
             final GameStateFactory<State> stateFactory) {
         this.tableManager = checkNotNull(tableManager);
         this.tableRepository = checkNotNull(tableRepository);
@@ -47,9 +46,9 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
         PlayerNumberRule numberRule = specification.getNumberRule();
         if (gameTable.getPlayers().size() >= numberRule.getMinPlayers()) {
             State gameState = stateFactory.create(specification, gameTable.getPlayers());
-            gameTable.setState(gameState);
+            gameTable.getCurrentSession().setState(gameState);
             // Step 3. Initializing start of the game session
-            GameSession gameSession = new GameSession();
+            GameSession<State> gameSession = new GameSession<State>();
             gameSession.addPlayers(gameTable.getPlayers());
             gameSession.setSessionState(GameSessionState.active);
             gameSession.setSpecification(specification);
@@ -58,6 +57,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
             gameTable.setCurrentSession(gameSession);
             gameTable = tableRepository.save(gameTable);
         } else {
+            gameTable.setCurrentSession(new GameSession<State>());
             gameTable = tableRepository.save(gameTable);
             tableManager.addReservable(gameTable);
         }

@@ -155,7 +155,14 @@ abstract public class AbstractGameState implements GameState {
 
     abstract protected GameState apply(GameMove move);
 
+    @Override
     final public int getVersion() {
+        return version;
+    }
+
+    @Override
+    final public int increaseVersion() {
+        this.version++;
         return version;
     }
 

@@ -21,7 +21,7 @@ public class WebTicTacToeOperations extends AbstractTicTacToeOperations {
     }
 
     @Override
-    public void perform(TicTacToePlayer player, TicTacToeMove action) {
+    public TicTacToeState perform(TicTacToePlayer player, TicTacToeMove action) {
         // Step 0. Parsing player, session and table identifiers
         long playerId = player.getPlayer().getPlayerId();
         long tableId = player.getTable().getTableId();
@@ -33,6 +33,8 @@ public class WebTicTacToeOperations extends AbstractTicTacToeOperations {
                 action);
         // Step 2. Updating table for player
         player.setTable(updatedTable);
+        // Step 3. Returning updated state
+        return updatedTable.getCurrentSession().getState();
     }
 
 

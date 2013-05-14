@@ -24,7 +24,7 @@ public class TicTacToeOutcomeService implements GameOutcomeService<TicTacToeStat
 
     @Override
     public void finished(GameTable<TicTacToeState> gameTable) {
-        long winnerId = gameTable.getState().getWinner();
+        long winnerId = gameTable.getCurrentSession().getState().getWinner();
         List<Long> players = gameTable.getCurrentSession().getPlayers();
         players.remove(winnerId);
         long looserId = players.iterator().next();

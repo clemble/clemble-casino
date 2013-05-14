@@ -51,6 +51,7 @@ public enum GogomayaError {
     GamePlayMoveUndefined(Code.GAMEPLAY_MOVE_UNDEFINED_CODE, "Move was not defined properly"),
     GamePlayMoveAlreadyMade(Code.GAMEPLAY_MOVE_ALREADY_MADE_CODE, "Player already made a move, this one will be ignored"),
     GamePlayNoMoveExpected(Code.GAMEPLAY_NO_MOVE_EXPECTED_CODE, "No move expected from the player"),
+    GamePlayPlayerNotParticipate(Code.GAMEPLAY_PLAYER_NOT_PARTICIPATING, "Player is not part of the current game"),
     GamePlayWrongMoveType(Code.GAMEPLAY_WRONG_MOVE_TYPE_CODE, "Wrong move type"),
     GamePlayMoveNotSupported(Code.GAMEPLAY_MOVE_NOT_SUPPORTED_CODE, "Game does not support this move"),
 
@@ -163,6 +164,7 @@ public enum GogomayaError {
         final public static String GAMEPLAY_MOVE_UNDEFINED_CODE = "0F3";
         final public static String GAMEPLAY_STATE_UNDEFINED_CODE = "0F4";
         final public static String GAMEPLAY_MOVE_NOT_SUPPORTED_CODE = "0F5";
+        final public static String GAMEPLAY_PLAYER_NOT_PARTICIPATING = "0F6";
         // Errors specific for TicTacToe
         final public static String TIC_TAC_TOE_CELL_OWNED_CODE = "0G0";
         // Session recreation failure

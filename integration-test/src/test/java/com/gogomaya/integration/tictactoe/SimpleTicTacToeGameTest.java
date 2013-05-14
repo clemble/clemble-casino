@@ -8,7 +8,7 @@ import org.jbehave.core.annotations.UsingSteps;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -49,14 +49,15 @@ public class SimpleTicTacToeGameTest {
         playerA.bet(5);
         playerB.bet(2);
 
-        Assert.assertTrue(playerB.getTable().getState().getBoard()[0][0].owned());
-        Assert.assertEquals(playerB.getTable().getState().getNextMoves().size(), 1);
-        Assert.assertEquals(playerB.getTable().getState().getPlayerState(playerAidentifier).getMoneyLeft(), gamePrice - 5);
-        Assert.assertEquals(playerB.getTable().getState().getPlayerState(playerBidentifier).getMoneyLeft(), gamePrice - 2);
-        Assert.assertNotNull(playerB.getTable().getState().getNextMove(playerBidentifier));
+        Assert.assertTrue(playerB.getTable().getCurrentSession().getState().getBoard()[0][0].owned());
+        Assert.assertEquals(playerB.getTable().getCurrentSession().getState().getNextMoves().size(), 1);
+        Assert.assertEquals(playerB.getTable().getCurrentSession().getState().getPlayerState(playerAidentifier).getMoneyLeft(), gamePrice - 5);
+        Assert.assertEquals(playerB.getTable().getCurrentSession().getState().getPlayerState(playerBidentifier).getMoneyLeft(), gamePrice - 2);
+        Assert.assertNotNull(playerB.getTable().getCurrentSession().getState().getNextMove(playerBidentifier));
     }
 
     @Test
+    @Repeat(100)
     public void testSimpleScenario() {
         List<TicTacToePlayer> players = ticTacToeOperations.start();
         TicTacToePlayer playerA = players.get(0);
@@ -71,6 +72,10 @@ public class SimpleTicTacToeGameTest {
 
             playerA.bet(2);
             TicTacToePlayerUtils.syncVersions(playerA, playerB);
+
+            Assert.assertEquals(playerA.getTable().getCurrentSession().getState().getPlayerState(playerA.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
+            Assert.assertEquals(playerA.getTable().getCurrentSession().getState().getPlayerState(playerB.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
+
             playerB.bet(1);
 
             playerB.select(1, 1);
@@ -88,8 +93,10 @@ public class SimpleTicTacToeGameTest {
             Assert.assertEquals(playerB.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.subtract(gamePrice));
             Assert.assertEquals(playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.add(gamePrice));
 
-            Assert.assertEquals(playerB.getTable().getState().getWinner(), playerA.getPlayer().getPlayerId());
-            Assert.assertTrue(playerB.getTable().getState().complete());
+            TicTacToePlayerUtils.syncVersions(playerA, playerB);
+
+            Assert.assertTrue(playerB.getTable().getCurrentSession().getState().complete());
+            Assert.assertEquals(playerB.getTable().getCurrentSession().getState().getWinner(), playerA.getPlayer().getPlayerId());
         } finally {
             playerA.getListenerControl().stopListener();
             playerB.getListenerControl().stopListener();
