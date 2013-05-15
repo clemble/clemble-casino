@@ -10,18 +10,23 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.event.GameEvent;
+import com.gogomaya.server.game.outcome.GameOutcomeService;
 
 public class GameSessionProcessor<State extends GameState> {
 
     final private GameCacheService<State> cacheService;
 
     final private GameNotificationService<State> notificationService;
+    
+    final private GameOutcomeService<State> outcomeService;
 
     public GameSessionProcessor(
+            final GameOutcomeService<State> outcomeService,
             final GameCacheService<State> cacheService,
             final GameNotificationService<State> notificationService) {
         this.notificationService = checkNotNull(notificationService);
         this.cacheService = checkNotNull(cacheService);
+        this.outcomeService = checkNotNull(outcomeService);
     }
 
     public State process(long sessionId, GameMove move) {
@@ -42,6 +47,8 @@ public class GameSessionProcessor<State extends GameState> {
             Collection<GameEvent<State>> events = processor.process(state, move);
             for (GameEvent<State> event : events)
                 event.setSession(sessionId);
+            if(state.complete())
+                outcomeService.finished(cache.getSession());
             // Step 7. Invoking appropriate notification
             notificationService.notify(cache.getConnection(), events);
             // Step 8. Returning state of the game

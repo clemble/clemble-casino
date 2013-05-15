@@ -20,6 +20,7 @@ public class GameCacheService<State extends GameState> {
             GameSession<State> session = sessionRepository.findOne(sessionId);
             // Step 2. Creating new StateFactory based on retrieved session
             State state = stateFactory.create(session);
+            session.setState(state);
             // Step 3. Creating new StateFactory based on retrieved session
             GameProcessor<State> processor = processorFactory.create(session.getSpecification());
             // Step 4. Retrieving associated table

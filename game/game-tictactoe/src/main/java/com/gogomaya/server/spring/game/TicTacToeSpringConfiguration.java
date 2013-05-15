@@ -122,7 +122,7 @@ public class TicTacToeSpringConfiguration {
     @Bean
     @Singleton
     public GameSessionProcessor<TicTacToeState> sessionProcessor() {
-        return new GameSessionProcessor<TicTacToeState>(cacheService(), gameNotificationManager());
+        return new GameSessionProcessor<TicTacToeState>(outcomeService(), cacheService(), gameNotificationManager());
     }
 
     @Profile(value = { "default" })
