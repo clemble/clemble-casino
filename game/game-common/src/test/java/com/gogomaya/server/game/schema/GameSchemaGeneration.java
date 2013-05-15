@@ -27,7 +27,7 @@ public class GameSchemaGeneration {
         .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
         .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 
-        new SchemaExport(configuration).setDelimiter(";").setFormat(true).setOutputFile("src/main/resources/sql/game-schema.sql").create(true, false);
+        new SchemaExport(configuration).setDelimiter(";").setFormat(true).setOutputFile("../../sql/game-schema.sql").create(true, false);
     }
 
 }

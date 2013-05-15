@@ -39,6 +39,7 @@
         SESSION_ID bigint not null auto_increment,
         NUM_MADE_MOVES integer,
         SESSION_STATE integer,
+        GAME_STATE varchar(4096),
         SPECIFICATION_GROUP varchar(255),
         SPECIFICATION_NAME varchar(255),
         primary key (SESSION_ID)
@@ -62,7 +63,6 @@
         TABLE_ID bigint not null auto_increment,
         NOTIFICATION_URL varchar(255),
         PUBLISH_URL varchar(255),
-        GAME_STATE varchar(4096),
         SESSION_ID bigint,
         SPECIFICATION_GROUP varchar(255),
         SPECIFICATION_NAME varchar(255),

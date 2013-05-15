@@ -58,12 +58,7 @@
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>spring.profiles.active</name>
-                            <value>localIntegration</value>
-                        </systemProperty>
-                    </systemProperties>
+                    <argLine>-Dspring.profiles.active=localIntegration</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -102,7 +97,7 @@
                             <goal>run-war</goal>
                         </goals>
                         <configuration>
-                            <contextPath>sample-web</contextPath>
+                            <contextPath>/gogomaya-web</contextPath>
                             <daemon>true</daemon>
                             <war>
                                 ${project.build.directory}/wars-to-be-tested/web.war
