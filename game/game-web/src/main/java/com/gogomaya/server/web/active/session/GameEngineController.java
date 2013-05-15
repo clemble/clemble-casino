@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.action.impl.GameSessionProcessor;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.table.GameTableRepository;
 

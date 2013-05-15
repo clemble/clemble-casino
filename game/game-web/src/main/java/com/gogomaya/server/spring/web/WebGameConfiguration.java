@@ -11,8 +11,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.gogomaya.server.error.GogomayaValidationService;
+import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.game.action.GameStateFactory;
-import com.gogomaya.server.game.action.impl.GameSessionProcessor;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;

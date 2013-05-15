@@ -13,9 +13,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.gogomaya.server.game.action.GameCacheService;
 import com.gogomaya.server.game.action.GameProcessorFactory;
+import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.game.action.GameTableFactory;
-import com.gogomaya.server.game.action.impl.GameSessionProcessor;
 import com.gogomaya.server.game.action.impl.TicTacToeProcessor;
 import com.gogomaya.server.game.action.impl.TicTacToeStateFactory;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
@@ -28,8 +29,8 @@ import com.gogomaya.server.game.outcome.TicTacToeOutcomeService;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableQueue;
-import com.gogomaya.server.game.table.RedisGameTableQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
+import com.gogomaya.server.game.table.RedisGameTableQueue;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
@@ -114,9 +115,14 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
+    public GameCacheService<TicTacToeState> cacheService() {
+        return new GameCacheService<TicTacToeState>(sessionRepository, tableRepository, ticTacToeProcessorFactory(), gameStateFactory());
+    }
+
+    @Bean
+    @Singleton
     public GameSessionProcessor<TicTacToeState> sessionProcessor() {
-        return new GameSessionProcessor<TicTacToeState>(ticTacToeProcessorFactory(), gameStateFactory(), sessionRepository, tableRepository,
-                gameNotificationManager());
+        return new GameSessionProcessor<TicTacToeState>(cacheService(), gameNotificationManager());
     }
 
     @Profile(value = { "default" })
