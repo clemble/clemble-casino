@@ -3,10 +3,9 @@ package com.gogomaya.server.event;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.codehaus.jackson.annotate.JsonSubTypes.Type;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.game.event.GameEndedEvent;
 import com.gogomaya.server.game.event.GameStartedEvent;
 import com.gogomaya.server.game.event.PlayerAddedEvent;

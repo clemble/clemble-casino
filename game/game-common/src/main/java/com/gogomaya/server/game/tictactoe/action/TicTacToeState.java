@@ -3,8 +3,7 @@ package com.gogomaya.server.game.tictactoe.action;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.action.impl.AbstractGameState;
@@ -23,13 +22,14 @@ public class TicTacToeState extends AbstractGameState {
     private TicTacToeCell activeCell;
 
     public TicTacToeState() {
-    }
-
-    public TicTacToeState(final Collection<GamePlayerState> playersStates) {
         // Step 0. Filling the board with empty cell value
         for (TicTacToeCellState[] row : board) {
             Arrays.fill(row, TicTacToeCellState.DEFAULT_CELL_STATE);
         }
+    }
+
+    public TicTacToeState(final Collection<GamePlayerState> playersStates) {
+        this();
 
         setPlayerStates(playersStates);
         setPlayerIterator(new SequentialPlayerIterator(playersStates));

@@ -19,12 +19,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
@@ -54,7 +55,6 @@ public class GameSession<State extends GameState> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SESSION_ID")
-    @JsonProperty("sessionId")
     private long sessionId;
 
     @ManyToOne
@@ -138,6 +138,8 @@ public class GameSession<State extends GameState> implements Serializable {
         this.numMadeMoves = numMadeMoves;
     }
 
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+    @JsonSubTypes({ @com.fasterxml.jackson.annotation.JsonSubTypes.Type(value = TicTacToeState.class, name = "ticTacToe") })
     public State getState() {
         return state;
     }

@@ -1,9 +1,8 @@
 package com.gogomaya.server.game.action.move;
 
-import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.codehaus.jackson.annotate.JsonSubTypes.Type;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 import com.gogomaya.server.player.PlayerAware;

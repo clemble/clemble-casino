@@ -3,14 +3,12 @@ package com.gogomaya.server.game.action;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.codehaus.jackson.annotate.JsonSubTypes.Type;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.game.action.move.GameMove;
-import com.gogomaya.server.game.event.GameEvent;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
-
+// !!! NEED TO MAKE A COPY OF THIS ON EVERY OBJECT WITH GET METHOD CALL
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = TicTacToeState.class, name = "ticTacToe") })
 public interface GameState extends Serializable {

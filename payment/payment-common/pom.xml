@@ -72,15 +72,5 @@
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
 
-        <!-- JSON dependencies -->
-
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-        </dependency>
     </dependencies>
 </project>

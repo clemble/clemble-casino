@@ -1,11 +1,10 @@
 package com.gogomaya.server.game.rule.bet;
 
-import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.codehaus.jackson.annotate.JsonSubTypes.Type;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
-
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.gogomaya.server.game.rule.GameRule;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "betType")

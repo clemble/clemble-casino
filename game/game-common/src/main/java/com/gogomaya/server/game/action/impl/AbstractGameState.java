@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.server.game.action.GamePlayerIterator;
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameState;

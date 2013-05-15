@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.table;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import junit.framework.Assert;
@@ -11,6 +13,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.match.GameMatchingServiceImpl;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
@@ -39,8 +44,11 @@ public class GameTableManagerTest {
     @Inject
     GameSpecificationRepository specificationRepository;
 
+    @Inject
+    ObjectMapper objectMapper;
+
     @Test
-    public void testPlayersMapping() {
+    public void testPlayersMapping() throws JsonGenerationException, JsonMappingException, IOException {
         GameSpecification specification = new GameSpecification().setName(new SpecificationName("", "")).setCurrency(Currency.FakeMoney)
                 .setBetRule(new FixedBetRule(50)).setGiveUpRule(GiveUpRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
                 .setMoveTimeRule(MoveTimeRule.DEFAULT).setMatchRule(MatchRule.automatic).setPrivacayRule(PrivacyRule.players)
@@ -49,6 +57,9 @@ public class GameTableManagerTest {
         specificationRepository.saveAndFlush(specification);
 
         GameTable<TicTacToeState> table = gameStateManager.reserve(1, specification);
+
+        String serialized = objectMapper.writeValueAsString(table);
+        objectMapper.readValue(serialized, GameTable.class);
 
         Assert.assertEquals(table.getSpecification(), specification);
 

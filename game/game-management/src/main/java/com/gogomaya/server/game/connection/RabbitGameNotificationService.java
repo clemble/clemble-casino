@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.connection;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
@@ -8,7 +10,7 @@ import javax.inject.Inject;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 
 import com.gogomaya.server.event.GogomayaEvent;
 import com.gogomaya.server.game.action.GameState;
@@ -24,18 +26,18 @@ public class RabbitGameNotificationService<State extends GameState> implements G
         public RabbitTemplate load(String server) throws Exception {
             ConnectionFactory connectionFactory = new CachingConnectionFactory(server);
             RabbitTemplate rabbitTemplagte = new RabbitTemplate(connectionFactory);
-            rabbitTemplagte.setMessageConverter(jsonMessageConverter);
+            rabbitTemplagte.setMessageConverter(messageConverter);
             rabbitTemplagte.setExchange("amq.topic");
             return rabbitTemplagte;
         }
 
     });
 
-    final private JsonMessageConverter jsonMessageConverter;
+    final private MessageConverter messageConverter;
 
     @Inject
-    public RabbitGameNotificationService(JsonMessageConverter jsonMessageConverter) {
-        this.jsonMessageConverter = jsonMessageConverter;
+    public RabbitGameNotificationService(final MessageConverter messageConverter) {
+        this.messageConverter = checkNotNull(messageConverter);
     }
 
     @Override

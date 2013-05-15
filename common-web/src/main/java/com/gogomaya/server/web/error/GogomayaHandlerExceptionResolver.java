@@ -5,12 +5,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.error.GogomayaFailure;
 

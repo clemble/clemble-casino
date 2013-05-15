@@ -3,9 +3,8 @@ package com.gogomaya.server.game.configuration;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableSet;
 
 public class GameRuleOptions<T> {

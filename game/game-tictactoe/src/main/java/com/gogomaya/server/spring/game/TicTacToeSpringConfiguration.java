@@ -3,7 +3,7 @@ package com.gogomaya.server.spring.game;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.springframework.amqp.support.converter.JsonMessageConverter;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -60,7 +60,7 @@ public class TicTacToeSpringConfiguration {
     public GameServerConnectionManager serverConnectionManager;
 
     @Inject
-    public JsonMessageConverter jsonMessageConverter;
+    public Jackson2JsonMessageConverter jsonMessageConverter;
 
     @Inject
     public WalletTransactionManager walletTransactionManager;
@@ -86,7 +86,7 @@ public class TicTacToeSpringConfiguration {
     @Bean
     @Singleton
     public GameTableFactory<TicTacToeState> tableFactory() {
-        return new GameTableFactory<>(gameStateFactory(), serverConnectionManager, tableRepository, sessionRepository);
+        return new GameTableFactory<TicTacToeState>(gameStateFactory(), serverConnectionManager, tableRepository, sessionRepository);
     }
 
     @Bean

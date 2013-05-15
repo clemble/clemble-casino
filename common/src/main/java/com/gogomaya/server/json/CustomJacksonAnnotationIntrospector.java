@@ -1,7 +1,8 @@
 package com.gogomaya.server.json;
 
-import org.codehaus.jackson.map.introspect.Annotated;
-import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.introspect.Annotated;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+
 
 
 /**
@@ -11,6 +12,11 @@ import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
  *
  */
 public class CustomJacksonAnnotationIntrospector extends JacksonAnnotationIntrospector {
+
+    /**
+     * Generated 15
+     */
+    private static final long serialVersionUID = -7081978483743119569L;
 
     @Override
     protected boolean _isIgnorable(Annotated a) {

@@ -2,8 +2,7 @@ package com.gogomaya.server.game.event;
 
 import java.util.Collection;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gogomaya.server.event.PlayerAwareEvent;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.move.GameMove;

@@ -8,7 +8,6 @@ import javax.security.auth.login.LoginException;
 import net.ser1.stomp.Client;
 import net.ser1.stomp.Listener;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Message;
@@ -20,6 +19,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.event.GogomayaEvent;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;

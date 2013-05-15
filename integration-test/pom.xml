@@ -140,7 +140,7 @@
                     <systemProperties>
                         <systemProperty>
                             <name>spring.profiles.active</name>
-                            <value>remoteIntegration</value>
+                            <value>localIntegration</value>
                         </systemProperty>
                     </systemProperties>
                 </configuration>

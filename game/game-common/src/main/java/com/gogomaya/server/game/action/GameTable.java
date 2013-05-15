@@ -21,7 +21,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.TypeDef;
 
@@ -45,7 +44,6 @@ public class GameTable<State extends GameState> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TABLE_ID")
-    @JsonProperty("tableId")
     private long tableId;
 
     @Embedded
