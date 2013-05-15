@@ -113,9 +113,11 @@ public class GameSession<State extends GameState> implements Serializable {
         this.players = players;
     }
 
+    public void addPlayer(Long player) {
+        this.players.add(player);
+    }
+
     public void addPlayers(Collection<Long> players) {
-        if (this.players == null)
-            this.players = new ArrayList<Long>();
         this.players.addAll(players);
     }
 

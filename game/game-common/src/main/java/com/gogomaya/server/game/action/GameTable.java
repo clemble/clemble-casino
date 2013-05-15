@@ -61,7 +61,7 @@ public class GameTable<State extends GameState> implements Serializable {
     @CollectionTable(name = "GAME_TABLE_PLAYERS", joinColumns = @JoinColumn(name = "TABLE_ID"))
     private List<Long> players = new ArrayList<Long>();
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = GameSession.class, cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.EAGER, targetEntity = GameSession.class, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "SESSION_ID")
     private GameSession<State> currentSession;
 
@@ -94,6 +94,8 @@ public class GameTable<State extends GameState> implements Serializable {
 
     public GameTable<State> addPlayer(long player) {
         this.players.add(player);
+        if (currentSession != null)
+            currentSession.addPlayer(player);
         return this;
     }
 
@@ -103,6 +105,10 @@ public class GameTable<State extends GameState> implements Serializable {
 
     public GameTable<State> setCurrentSession(GameSession<State> currentSession) {
         this.currentSession = currentSession;
+        if (currentSession != null) {
+            this.currentSession.setSpecification(getSpecification());
+            this.currentSession.setPlayers(getPlayers());
+        }
         return this;
     }
 
@@ -112,6 +118,8 @@ public class GameTable<State extends GameState> implements Serializable {
 
     public GameTable<State> setSpecification(GameSpecification specification) {
         this.specification = specification;
+        if (this.currentSession != null)
+            this.currentSession.setSpecification(specification);
         return this;
     }
 

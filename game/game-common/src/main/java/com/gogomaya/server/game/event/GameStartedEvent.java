@@ -18,7 +18,8 @@ public class GameStartedEvent<State extends GameState> extends GameEvent<State> 
         return nextMoves;
     }
 
-    public void setNextMoves(Collection<GameMove> nextMoves) {
+    public GameStartedEvent<State> setNextMoves(Collection<GameMove> nextMoves) {
         this.nextMoves = nextMoves;
+        return this;
     }
 }

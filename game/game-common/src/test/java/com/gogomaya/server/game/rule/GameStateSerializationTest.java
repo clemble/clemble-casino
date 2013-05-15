@@ -15,7 +15,6 @@ import org.junit.Test;
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
 
@@ -39,9 +38,8 @@ public class GameStateSerializationTest {
         players.add(new GamePlayerState(2L, 50L));
 
         TicTacToeState tacToeState = new TicTacToeState(players);
-        tacToeState.process(new TicTacToeSelectCellMove(1L, (byte) 0, (byte) 0));
-        tacToeState.addMadeMove(new TicTacToeBetOnCellMove(2L));
-        Assert.assertNotNull(tacToeState.getMadeMove(2L));
+        tacToeState.addMadeMove(new TicTacToeSelectCellMove(1L));
+        Assert.assertNotNull(tacToeState.getMadeMove(1L));
 
         String jsonPresentation = objectMapper.writeValueAsString(tacToeState);
         System.out.println(jsonPresentation);
@@ -52,8 +50,7 @@ public class GameStateSerializationTest {
         System.out.println(jsonPresentation);
         readState = (TicTacToeState) anotherObjectMapper.readValue(jsonPresentation, GameState.class);
 
-        Assert.assertNotNull(readState.getNextMove(1L));
-        Assert.assertNotNull(readState.getMadeMove(2L));
+        Assert.assertNotNull(readState.getMadeMove(1L));
 
     }
 

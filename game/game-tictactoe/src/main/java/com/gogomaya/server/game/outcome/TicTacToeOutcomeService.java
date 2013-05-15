@@ -2,7 +2,7 @@ package com.gogomaya.server.game.outcome;
 
 import java.util.List;
 
-import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
@@ -23,19 +23,18 @@ public class TicTacToeOutcomeService implements GameOutcomeService<TicTacToeStat
     }
 
     @Override
-    public void finished(GameTable<TicTacToeState> gameTable) {
-        long winnerId = gameTable.getCurrentSession().getState().getWinner();
-        List<Long> players = gameTable.getCurrentSession().getPlayers();
+    public void finished(GameSession<TicTacToeState> session) {
+        long winnerId = session.getState().getWinner();
+        List<Long> players = session.getPlayers();
         players.remove(winnerId);
         long looserId = players.iterator().next();
 
-        GameSpecification specification = gameTable.getSpecification();
+        GameSpecification specification = session.getSpecification();
         FixedBetRule fixedBetRule = specification.getBetRule();
 
         Money betSize = Money.create(specification.getCurrency(), fixedBetRule.getPrice());
 
-        WalletTransactionId transactionId = new WalletTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(
-                gameTable.getCurrentSession().getSessionId());
+        WalletTransactionId transactionId = new WalletTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(session.getSessionId());
         WalletTransaction walletTransaction = new WalletTransaction().setTransactionId(transactionId)
                 .addWalletOperation(new WalletOperation().setAmmount(betSize).setOperation(Operation.Credit).setPlayerId(looserId))
                 .addWalletOperation(new WalletOperation().setAmmount(betSize).setOperation(Operation.Debit).setPlayerId(winnerId));

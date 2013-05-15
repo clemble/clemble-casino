@@ -40,7 +40,7 @@ public class GameSessionProcessor<State extends GameState> {
                 @Override
                 public State load(Long sessionId) throws Exception {
                     // Step 1. Searching for appropriate session in repository
-                    GameSession<State> session = sessionRepository.<State> findOne(sessionId);
+                    GameSession<State> session = sessionRepository.findOne(sessionId);
                     // Step 2. Creating new StateFactory based on retrieved session
                     return stateFactory.create(session);
                 }
@@ -53,7 +53,7 @@ public class GameSessionProcessor<State extends GameState> {
                 @Override
                 public GameProcessor<State> load(Long sessionId) throws Exception {
                     // Step 1. Searching for appropriate session in repository
-                    GameSession<State> session = sessionRepository.<State> findOne(sessionId);
+                    GameSession<State> session = sessionRepository.findOne(sessionId);
                     // Step 2. Creating new StateFactory based on retrieved session
                     return processorFactory.create(session.getSpecification());
                 }
@@ -76,18 +76,14 @@ public class GameSessionProcessor<State extends GameState> {
             });
 
     final private GameStateFactory<State> stateFactory;
-
     final private GameProcessorFactory<State> processorFactory;
-
     final private GameNotificationService<State> notificationService;
-
     final private GameTableRepository<State> tableRepository;
-    
-    final private GameSessionRepository sessionRepository;
+    final private GameSessionRepository<State> sessionRepository;
 
     public GameSessionProcessor(final GameProcessorFactory<State> processorFactory,
             final GameStateFactory<State> stateFactory,
-            final GameSessionRepository sessionRepository,
+            final GameSessionRepository<State> sessionRepository,
             final GameTableRepository<State> tableRepository,
             final GameNotificationService<State> notificationService) {
         this.stateFactory = checkNotNull(stateFactory);

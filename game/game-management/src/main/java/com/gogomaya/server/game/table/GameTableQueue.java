@@ -4,10 +4,10 @@ import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.specification.GameSpecification;
 
-public interface GameTableManager<State extends GameState> {
+public interface GameTableQueue<State extends GameState> {
 
-    public GameTable<State> reserve(GameSpecification specification);
+    public Long poll(GameSpecification specification);
 
-    public void addReservable(GameTable<State> gameTable);
+    public void add(GameTable<State> gameTable);
 
 }

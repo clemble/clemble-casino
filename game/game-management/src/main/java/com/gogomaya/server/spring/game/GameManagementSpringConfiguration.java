@@ -36,12 +36,6 @@ public class GameManagementSpringConfiguration {
     @Inject
     public JsonMessageConverter jsonMessageConverter;
 
-    @Bean
-    @Singleton
-    public GameNotificationService gameNotificationManager() {
-        return new RabbitGameNotificationService(jsonMessageConverter);
-    }
-
     @Profile(value = { "default", "test" })
     public static class GameManagementTestConfiguration {
 

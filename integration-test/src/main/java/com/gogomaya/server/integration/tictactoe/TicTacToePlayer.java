@@ -45,7 +45,7 @@ public class TicTacToePlayer {
     }
 
     public TicTacToeState getState() {
-        return checkNotNull(state.get());
+        return state.get();
     }
 
     public TicTacToePlayer setState(TicTacToeState newTable) {
@@ -85,7 +85,7 @@ public class TicTacToePlayer {
     public void select(int row, int column) {
         int beforeSelecting = this.state.get().getVersion();
         ticTacToeOperations.select(this, row, column);
-        Assert.assertNotSame(beforeSelecting, this.state.get().getVersion());
+        Assert.assertNotSame(beforeSelecting + " remained " + this.state.get().getVersion(), this.state.get().getVersion());
     }
 
     public void bet(int ammount) {

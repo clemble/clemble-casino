@@ -4,73 +4,60 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Inject;
 
-import com.gogomaya.server.game.action.GameSession;
-import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.action.GameTableFactory;
 import com.gogomaya.server.game.connection.GameConnection;
 import com.gogomaya.server.game.connection.GameNotificationService;
+import com.gogomaya.server.game.event.GameStartedEvent;
 import com.gogomaya.server.game.event.PlayerAddedEvent;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
-import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.table.GameTableManager;
+import com.gogomaya.server.game.table.GameTableQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
 
 public class GameMatchingServiceImpl<State extends GameState> implements GameMatchingService<State> {
 
-    final private GameNotificationService<State> notificationManager;
-    final private GameTableManager<State> tableManager;
+    final private GameTableQueue<State> tableManager;
     final private GameTableRepository<State> tableRepository;
-    final private GameStateFactory<State> stateFactory;
-    final private GameSessionRepository sessionRepository;
+    final private GameTableFactory<State> tableFactory;
+    final private GameNotificationService<State> notificationManager;
 
     @Inject
-    public GameMatchingServiceImpl(final GameTableManager<State> tableManager,
+    public GameMatchingServiceImpl(final GameTableQueue<State> tableManager,
             final GameTableRepository<State> tableRepository,
-            final GameSessionRepository sessionRepository,
             final GameNotificationService<State> notificationManager,
-            final GameStateFactory<State> stateFactory) {
+            final GameTableFactory<State> tableFactory) {
         this.tableManager = checkNotNull(tableManager);
         this.tableRepository = checkNotNull(tableRepository);
-        this.sessionRepository = checkNotNull(sessionRepository);
         this.notificationManager = checkNotNull(notificationManager);
-        this.stateFactory = checkNotNull(stateFactory);
+        this.tableFactory = checkNotNull(tableFactory);
     }
 
     @Override
     public GameTable<State> reserve(final long playerId, final GameSpecification specification) {
         // Step 1. Pooling
-        GameTable<State> table = tableManager.reserve(specification);
+        Long tableId = tableManager.poll(specification);
+        GameTable<State> table = tableFactory.findTable(tableId, specification);
+
         table.addPlayer(playerId);
+        table = tableRepository.save(table);
+
+        notificationManager.notify(new GameConnection().setRoutingKey(table.getTableId()).setServerConnection(table.getServerResource()),
+                new PlayerAddedEvent().setSession(table.getTableId()).setPlayerId(playerId));
 
         PlayerNumberRule numberRule = specification.getNumberRule();
         if (table.getPlayers().size() >= numberRule.getMinPlayers()) {
-            State gameState = stateFactory.create(specification, table.getPlayers());
-            table.getCurrentSession().setState(gameState);
+            tableFactory.startGame(table);
+            tableRepository.saveAndFlush(table);
             // Step 3. Initializing start of the game session
-            GameSession<State> session = new GameSession<State>();
-            session.addPlayers(table.getPlayers());
-            session.setSessionState(GameSessionState.active);
-            session.setSpecification(specification);
-            session = sessionRepository.save(session);
+            State state = table.getCurrentSession().getState();
 
-            table.setCurrentSession(session);
-            table = tableRepository.save(table);
+            notificationManager.notify(new GameConnection().setRoutingKey(table.getTableId()).setServerConnection(table.getServerResource()),
+                    new GameStartedEvent<State>().setNextMoves(state.getNextMoves()).setState(state).setSession(table.getTableId()));
         } else {
-            table.setCurrentSession(new GameSession<State>());
-            table = tableRepository.save(table);
-            tableManager.addReservable(table);
+            tableManager.add(table);
         }
-
-        notificationManager.notify(
-            new GameConnection()
-                .setRoutingKey(table.getTableId())
-                .setServerConnection(table.getServerResource()),
-            new PlayerAddedEvent()
-                .setSession(table.getTableId())
-                .setPlayerId(playerId));
 
         return table;
     }

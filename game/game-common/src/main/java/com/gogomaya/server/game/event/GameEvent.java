@@ -19,8 +19,9 @@ public class GameEvent<State> extends AbstractGogomayaEvent implements SessionAw
         return session;
     }
 
-    public void setSession(long session) {
+    public GameEvent<State> setSession(long session) {
         this.session = session;
+        return this;
     }
 
     public State getState() {

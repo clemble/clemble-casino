@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonSubTypes.Type;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 import com.gogomaya.server.game.action.move.GameMove;
+import com.gogomaya.server.game.event.GameEvent;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
@@ -31,8 +32,6 @@ public interface GameState extends Serializable {
     public GamePlayerIterator getPlayerIterator();
 
     public GameState setPlayerIterator(GamePlayerIterator playerIterator);
-
-    public GameState process(GameMove gameMove);
 
     public long getWinner();
 

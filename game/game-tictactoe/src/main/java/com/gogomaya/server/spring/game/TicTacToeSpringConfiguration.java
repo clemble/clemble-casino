@@ -14,9 +14,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.gogomaya.server.game.action.GameProcessorFactory;
-import com.gogomaya.server.game.action.GameStateFactory;
+import com.gogomaya.server.game.action.GameTableFactory;
 import com.gogomaya.server.game.action.impl.GameSessionProcessor;
 import com.gogomaya.server.game.action.impl.TicTacToeProcessor;
+import com.gogomaya.server.game.action.impl.TicTacToeStateFactory;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
@@ -26,11 +27,10 @@ import com.gogomaya.server.game.match.GameMatchingServiceImpl;
 import com.gogomaya.server.game.outcome.TicTacToeOutcomeService;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
-import com.gogomaya.server.game.table.GameTableManager;
-import com.gogomaya.server.game.table.GameTableManagerImpl;
+import com.gogomaya.server.game.table.GameTableQueue;
+import com.gogomaya.server.game.table.RedisGameTableQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeStateFactory;
 import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
@@ -44,7 +44,7 @@ import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 public class TicTacToeSpringConfiguration {
 
     @Inject
-    public GameSessionRepository sessionRepository;
+    public GameSessionRepository<TicTacToeState> sessionRepository;
 
     @Inject
     public GameSpecificationRepository specificationRepository;
@@ -72,20 +72,26 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameTableManager<TicTacToeState> tableManager() {
-        return new GameTableManagerImpl<TicTacToeState>(redisTemplate, tableRepository, serverConnectionManager);
+    public GameTableQueue<TicTacToeState> tableManager() {
+        return new RedisGameTableQueue<TicTacToeState>(redisTemplate);
     }
 
     @Bean
     @Singleton
     public GameMatchingServiceImpl<TicTacToeState> stateManager() {
-        return new GameMatchingServiceImpl<TicTacToeState>(tableManager(), tableRepository, sessionRepository, gameNotificationManager(), gameStateFactory());
+        return new GameMatchingServiceImpl<TicTacToeState>(tableManager(), tableRepository, gameNotificationManager(), tableFactory());
+    }
+
+    @Bean
+    @Singleton
+    public GameTableFactory<TicTacToeState> tableFactory() {
+        return new GameTableFactory<>(gameStateFactory(), serverConnectionManager, tableRepository, sessionRepository);
     }
 
     @Bean
     @Singleton
     public TicTacToeStateFactory gameStateFactory() {
-        return new TicTacToeStateFactory();
+        return new TicTacToeStateFactory(ticTacToeProcessorFactory());
     }
 
     @Bean
@@ -102,20 +108,17 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameProcessorFactory<TicTacToeState> ticTacToeProcessorFactory(){
+    public GameProcessorFactory<TicTacToeState> ticTacToeProcessorFactory() {
         return new GameProcessorFactory<TicTacToeState>(new TicTacToeProcessor());
     }
-    
+
     @Bean
     @Singleton
     public GameSessionProcessor<TicTacToeState> sessionProcessor() {
-        return new GameSessionProcessor<TicTacToeState>(ticTacToeProcessorFactory(),
-                gameStateFactory(),
-                sessionRepository,
-                tableRepository,
+        return new GameSessionProcessor<TicTacToeState>(ticTacToeProcessorFactory(), gameStateFactory(), sessionRepository, tableRepository,
                 gameNotificationManager());
     }
-    
+
     @Profile(value = { "default" })
     public static class GameManagementDefaultConfiguration {
 
