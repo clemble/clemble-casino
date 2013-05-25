@@ -85,6 +85,7 @@ public class SimpleTicTacToeGameTest {
             playerA.bet(2);
             TicTacToePlayerUtils.syncVersions(playerA, playerB);
             playerB.bet(1);
+            TicTacToePlayerUtils.syncVersions(playerA, playerB);
 
             Assert.assertEquals(playerB.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.subtract(gamePrice));
             Assert.assertEquals(playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.add(gamePrice));

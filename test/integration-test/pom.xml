@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.gogomaya.server</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>test</artifactId>
         <version>0.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>integration-test</artifactId>

@@ -48,6 +48,22 @@ public class TicTacToePlayer {
         return state.get();
     }
 
+    public boolean isToMove() {
+        return state.get().getNextMove(player.getPlayerId()) != null;
+    }
+
+    public void waitForUpdate() {
+        int nextVersion = this.state.get().getVersion() + 1;
+        synchronized (versionLock) {
+            while (this.state.get().getVersion() < nextVersion) {
+                try {
+                    versionLock.wait();
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+    }
+
     public TicTacToePlayer setState(TicTacToeState newTable) {
         synchronized (versionLock) {
             if (this.state.get() == null || this.state.get().getVersion() < newTable.getVersion()) {

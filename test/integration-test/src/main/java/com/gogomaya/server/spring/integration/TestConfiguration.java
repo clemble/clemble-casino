@@ -108,6 +108,12 @@ public class TestConfiguration {
 
     }
 
+    @Configuration
+    @Profile("localServerIntegration")
+    public static class LocalServerIntegrationTestConfiguration extends IntegrationTestConfiguration {
+
+    }
+
     public static class IntegrationTestConfiguration {
 
         public String getBaseUrl() {
