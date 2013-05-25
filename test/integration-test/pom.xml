@@ -113,6 +113,13 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <systemProperties>
+                        <force>true</force>
+                        <systemProperty>
+                            <name>jetty.port</name>
+                            <value>9999</value>
+                        </systemProperty>
+                    </systemProperties>
                     <stopPort>9991</stopPort>
                     <stopKey>test</stopKey>
                 </configuration>
