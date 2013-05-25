@@ -24,7 +24,7 @@ public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations 
     public IntegrationTicTacToeOperations(String baseUrl,
             RestTemplate restTemplate,
             PlayerOperations playerOperations,
-            GameOperations gameOperations,
+            GameOperations<TicTacToeState> gameOperations,
             GameListenerOperations<TicTacToeState> tableListenerOperations) {
         super(playerOperations, gameOperations, tableListenerOperations);
         this.restTemplate = checkNotNull(restTemplate);

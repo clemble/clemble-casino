@@ -8,12 +8,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
+import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
 
-public class IntegrationGameOperations extends AbstractGameOperation {
+public class IntegrationGameOperations<State extends GameState> extends AbstractGameOperation<State> {
 
     final private static String CREATE_URL = "/spi/active/session";
     final private static String OPTIONS_URL = "/spi/active/options";
@@ -27,12 +28,12 @@ public class IntegrationGameOperations extends AbstractGameOperation {
     }
 
     @Override
-    public SelectSpecificationOptions getOptions() {
+    public GameSpecificationOptions getOptions() {
         return getOptions(null);
     }
 
     @Override
-    public SelectSpecificationOptions getOptions(Player player) {
+    public GameSpecificationOptions getOptions(Player player) {
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         if (player != null)
@@ -41,12 +42,12 @@ public class IntegrationGameOperations extends AbstractGameOperation {
         // Step 2. Generating request
         HttpEntity<GameSpecification> requestEntity = new HttpEntity<GameSpecification>(header);
         // Step 3. Rest template generation
-        return restTemplate.exchange(baseUrl + OPTIONS_URL, HttpMethod.GET, requestEntity, SelectSpecificationOptions.class).getBody();
+        return restTemplate.exchange(baseUrl + OPTIONS_URL, HttpMethod.GET, requestEntity, GameSpecificationOptions.class).getBody();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends GameTable<?>> T start(Player player, GameSpecification gameSpecification) {
+    public GameTable<State> start(Player player, GameSpecification gameSpecification) {
         gameSpecification = checkNotNull(gameSpecification);
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
@@ -55,7 +56,7 @@ public class IntegrationGameOperations extends AbstractGameOperation {
         // Step 2. Generating request
         HttpEntity<GameSpecification> requestEntity = new HttpEntity<GameSpecification>(gameSpecification, header);
         // Step 3. Rest template generation
-        return (T) restTemplate.exchange(baseUrl + CREATE_URL, HttpMethod.POST, requestEntity, GameTable.class).getBody();
+        return (GameTable<State>) restTemplate.exchange(baseUrl + CREATE_URL, HttpMethod.POST, requestEntity, GameTable.class).getBody();
     }
 
 }

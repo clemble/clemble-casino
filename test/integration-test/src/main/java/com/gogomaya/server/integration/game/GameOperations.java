@@ -3,12 +3,13 @@ package com.gogomaya.server.integration.game;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.When;
 
+import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
+import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
 
-public interface GameOperations {
+public interface GameOperations<State extends GameState> {
 
     @Given("selects specification")
     @When("selects specification")
@@ -20,14 +21,14 @@ public interface GameOperations {
 
     @Given("options")
     @When("options")
-    public SelectSpecificationOptions getOptions();
+    public GameSpecificationOptions getOptions();
 
     @Given("$Player options")
     @When("$Player options")
-    public SelectSpecificationOptions getOptions(Player player);
+    public GameSpecificationOptions getOptions(Player player);
 
     @Given("$Player plays $Specification")
     @When("$Player plays $Specification")
-    public <T extends GameTable<?>> T start(Player player, GameSpecification gameSpecification);
+    public GameTable<State> start(Player player, GameSpecification gameSpecification);
 
 }

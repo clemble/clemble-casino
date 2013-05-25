@@ -16,6 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.gogomaya.server.event.GogomayaEvent;
 import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
@@ -39,7 +40,7 @@ public class GameOperationsTest {
     PlayerOperations playerOperations;
 
     @Inject
-    GameOperations gameOperations;
+    GameOperations<TicTacToeState> gameOperations;
 
     @Inject
     GameListenerOperations<TicTacToeState> gameListenerOperations;
@@ -48,10 +49,9 @@ public class GameOperationsTest {
     public void createWithGameSpecification() {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
-        GameSpecification gameSpecification = selectSpecificationOptions.specifications.get(0);
+        GameSpecification specification = selectSpecification(player, 0);
         // Step 2. Creating game table
-        GameTable<TicTacToeState> gameTable = gameOperations.start(player, gameSpecification);
+        GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
     }
 
@@ -59,8 +59,7 @@ public class GameOperationsTest {
     public void createTicTacToeSpecification() {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
-        GameSpecification specification = selectSpecificationOptions.specifications.get(1);
+        GameSpecification specification = selectSpecification(player, 1);
         // Step 2. Creating game table
         GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
@@ -87,8 +86,7 @@ public class GameOperationsTest {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        SelectSpecificationOptions selectSpecificationOptions = gameOperations.getOptions(player);
-        GameSpecification specification = selectSpecificationOptions.specifications.get(2);
+        GameSpecification specification = selectSpecification(player, 2);
         // Step 2. Creating game table
         GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
@@ -109,6 +107,18 @@ public class GameOperationsTest {
         } catch (InterruptedException e) {
         }
         Assert.assertEquals(countDownLatch.getCount(), 0);
+    }
+
+    private GameSpecification selectSpecification(Player player, int id) {
+        // Step 1. Game specification
+        GameSpecification gameSpecification = null;
+        GameSpecificationOptions specificationOptions = gameOperations.getOptions(player);
+        if (specificationOptions instanceof SelectSpecificationOptions) {
+            gameSpecification = ((SelectSpecificationOptions) specificationOptions).specifications.get(id);
+        } else {
+            throw new UnsupportedOperationException("Do not support this kind of specification options");
+        }
+        return gameSpecification;
     }
 
 }

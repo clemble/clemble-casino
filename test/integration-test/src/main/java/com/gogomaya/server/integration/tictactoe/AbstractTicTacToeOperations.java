@@ -23,11 +23,11 @@ import com.google.common.collect.ImmutableList;
 abstract public class AbstractTicTacToeOperations implements TicTacToeOperations {
 
     final private PlayerOperations playerOperations;
-    final private GameOperations gameOperations;
+    final private GameOperations<TicTacToeState> gameOperations;
     final private GameListenerOperations<TicTacToeState> tableListenerOperations;
 
     public AbstractTicTacToeOperations(PlayerOperations playerOperations,
-            final GameOperations gameOperations,
+            final GameOperations<TicTacToeState> gameOperations,
             final GameListenerOperations<TicTacToeState> tableListenerOperations) {
         this.playerOperations = checkNotNull(playerOperations);
         this.gameOperations = checkNotNull(gameOperations);

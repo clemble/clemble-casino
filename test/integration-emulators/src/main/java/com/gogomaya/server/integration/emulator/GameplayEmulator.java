@@ -1,0 +1,83 @@
+package com.gogomaya.server.integration.emulator;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.configuration.GameSpecificationOptions;
+import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
+import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.integration.game.GameOperations;
+import com.gogomaya.server.integration.player.PlayerOperations;
+
+public class GameplayEmulator<State extends GameState> {
+
+    final private GameOperations<State> gameOperations;
+
+    final private PlayerOperations playerOperations;
+
+    final private List<PlayerEmulator<State>> playerEmulators = new ArrayList<PlayerEmulator<State>>();
+
+    private ScheduledExecutorService executorService;
+
+    public GameplayEmulator(final GameOperations<State> gameOperations, final PlayerOperations playerOperations) {
+        this.gameOperations = checkNotNull(gameOperations);
+        this.playerOperations = checkNotNull(playerOperations);
+    }
+
+    public void emulate() {
+        List<GameSpecification> specifications = new ArrayList<GameSpecification>();
+        // Step 1. Fetching specification options for the game
+        GameSpecificationOptions specificatinOptions = gameOperations.getOptions();
+        if (specificatinOptions instanceof SelectSpecificationOptions) {
+            SelectSpecificationOptions selectSpecificationOptions = (SelectSpecificationOptions) specificatinOptions;
+            // Step 1.1 Adding all possible specifications to the list of GameSpecifications
+            specifications.addAll(selectSpecificationOptions.getSpecifications());
+        } else {
+            throw new UnsupportedOperationException("This kind of specification not supported");
+        }
+        // Step 2. Creating Players to emulate gaming
+        if (specifications.size() == 0)
+            throw new RuntimeException("Specification list is empty check your configurations");
+        // Step 3. For each specification creating player emulator
+        executorService = Executors.newScheduledThreadPool(specifications.size() + 1);
+        for (GameSpecification specification : specifications) {
+            createEmulator(specification);
+        }
+        // Step 4. Creating executor to run all emulators separately
+        executorService.scheduleAtFixedRate(new PlayerEmulatorManager(), 1, 1, TimeUnit.MINUTES);
+    }
+
+    private void createEmulator(GameSpecification specification) {
+        PlayerEmulator<State> playerEmulator = new PlayerEmulator<>(playerOperations, gameOperations, specification);
+        playerEmulators.add(playerEmulator);
+        executorService.submit(playerEmulator);
+    }
+
+    private class PlayerEmulatorManager implements Runnable {
+
+        @Override
+        public void run() {
+            List<PlayerEmulator<State>> damagedEmulators = new ArrayList<PlayerEmulator<State>>();
+            // Step 1. Checking all emulators from existing player emulators
+            for (PlayerEmulator<State> emulator : playerEmulators) {
+                if (!emulator.isAlive()) {
+                    emulator.stop();
+                    damagedEmulators.add(emulator);
+                }
+            }
+            // Step 2. Removing all playerEmulators from the list
+            playerEmulators.removeAll(damagedEmulators);
+            // Step 3. Creating new PlayerEmulators for the damaged specification
+            for (PlayerEmulator<State> emulator : damagedEmulators) {
+                createEmulator(emulator.getSpecification());
+            }
+        }
+
+    }
+}

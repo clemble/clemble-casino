@@ -12,7 +12,7 @@ public class WebTicTacToeOperations extends AbstractTicTacToeOperations {
     final private GameEngineController<TicTacToeState> gameEngineController;
 
     public WebTicTacToeOperations(PlayerOperations playerOperations,
-            GameOperations gameOperations,
+            GameOperations<TicTacToeState> gameOperations,
             GameListenerOperations<TicTacToeState> tableListenerOperations,
             GameEngineController<TicTacToeState> gameEngineController) {
         super(playerOperations, gameOperations, tableListenerOperations);
