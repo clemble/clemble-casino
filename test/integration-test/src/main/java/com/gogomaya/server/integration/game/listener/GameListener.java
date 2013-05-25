@@ -4,6 +4,6 @@ import com.gogomaya.server.event.GogomayaEvent;
 
 public interface GameListener {
 
-    public void updated(GogomayaEvent gameTable);
+    public void updated(GogomayaEvent event);
 
 }

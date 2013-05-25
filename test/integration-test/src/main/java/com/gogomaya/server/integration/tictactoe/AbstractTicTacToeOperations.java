@@ -4,9 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import com.gogomaya.server.event.GogomayaEvent;
 import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.event.GameEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeCell;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
@@ -14,7 +12,6 @@ import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
 import com.gogomaya.server.integration.game.GameOperations;
-import com.gogomaya.server.integration.game.listener.GameListener;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
@@ -24,14 +21,14 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
 
     final private PlayerOperations playerOperations;
     final private GameOperations<TicTacToeState> gameOperations;
-    final private GameListenerOperations<TicTacToeState> tableListenerOperations;
+    final private GameListenerOperations<TicTacToeState> listenerOperations;
 
     public AbstractTicTacToeOperations(PlayerOperations playerOperations,
             final GameOperations<TicTacToeState> gameOperations,
             final GameListenerOperations<TicTacToeState> tableListenerOperations) {
         this.playerOperations = checkNotNull(playerOperations);
         this.gameOperations = checkNotNull(gameOperations);
-        this.tableListenerOperations = checkNotNull(tableListenerOperations);
+        this.listenerOperations = checkNotNull(tableListenerOperations);
     }
 
     final public List<TicTacToePlayer> start() {
@@ -41,15 +38,15 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
         TicTacToePlayer playerA = start(specification);
         TicTacToePlayer playerB = start(specification);
         while (playerA.getTableId() != playerB.getTableId()) {
-            playerA.getListenerControl().stopListener();
+            playerA.destroy();
             playerA = start(specification);
             // waits added to be sure everyone on the same page
             if (playerA.getTableId() != playerB.getTableId()) {
-                playerB.getListenerControl().stopListener();
+                playerB.destroy();
                 playerB = start(specification);
             }
         }
-        TicTacToePlayerUtils.syncVersions(playerA, playerB);
+        playerA.syncWith(playerB);
         // Step 3. Returning generated value who ever goes first is choosen as first
         TicTacToeState state = playerB.getState() != null ? playerB.getState() : playerA.getState();
         if (state.getNextMove(playerA.getPlayer().getPlayerId()) == null) {
@@ -64,17 +61,8 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
         Player player = checkNotNull(playerOperations.createPlayer());
         // Step 2. Requesting table
         final GameTable<TicTacToeState> table = (GameTable<TicTacToeState>) checkNotNull(gameOperations.start(player, specification));
-        final TicTacToePlayer toePlayer = new TicTacToePlayer(player, table, this);
+        final TicTacToePlayer toePlayer = new TicTacToePlayer(player, table, this, listenerOperations);
         // Step 3. Creating listener, that will update GameListener
-        toePlayer.setListenerControl(tableListenerOperations.listen(table, new GameListener() {
-
-            @Override
-            public void updated(GogomayaEvent event) {
-                if(event instanceof GameEvent)
-                    toePlayer.setState(((GameEvent<TicTacToeState>) event).getState());
-            }
-
-        }));
         // Step 3. Creating player configurations
         return toePlayer;
     }

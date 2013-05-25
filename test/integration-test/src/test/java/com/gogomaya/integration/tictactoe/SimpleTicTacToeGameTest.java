@@ -14,7 +14,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
-import com.gogomaya.server.integration.tictactoe.TicTacToePlayerUtils;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.tests.validation.PlayerCredentialsValidation;
@@ -65,38 +64,38 @@ public class SimpleTicTacToeGameTest {
         Money originalAmount = playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency());
 
         try {
-            TicTacToePlayerUtils.syncVersions(playerA, playerB);
+            playerA.syncWith(playerB);
             playerA.select(0, 0);
 
             playerA.bet(2);
             Assert.assertEquals(playerA.getState().getPlayerState(playerA.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
             Assert.assertEquals(playerA.getState().getPlayerState(playerB.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
             playerB.bet(1);
-            TicTacToePlayerUtils.syncVersions(playerA, playerB);
+            playerB.syncWith(playerA);
 
             playerB.select(1, 1);
 
             playerB.bet(1);
-            TicTacToePlayerUtils.syncVersions(playerA, playerB);
+            playerB.syncWith(playerA);
             playerA.bet(2);
 
             playerA.select(2, 2);
 
             playerA.bet(2);
-            TicTacToePlayerUtils.syncVersions(playerA, playerB);
+            playerA.syncWith(playerB);
             playerB.bet(1);
-            TicTacToePlayerUtils.syncVersions(playerA, playerB);
+            playerB.syncWith(playerA);
 
             Assert.assertEquals(playerB.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.subtract(gamePrice));
             Assert.assertEquals(playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.add(gamePrice));
 
-            TicTacToePlayerUtils.syncVersions(playerA, playerB);
+            playerA.syncWith(playerB);
 
             Assert.assertTrue(playerB.getState().complete());
             Assert.assertEquals(playerB.getState().getWinner(), playerA.getPlayer().getPlayerId());
         } finally {
-            playerA.getListenerControl().stopListener();
-            playerB.getListenerControl().stopListener();
+            playerA.destroy();
+            playerB.destroy();
         }
     }
 }
