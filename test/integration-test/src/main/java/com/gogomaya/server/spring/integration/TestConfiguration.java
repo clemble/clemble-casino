@@ -60,9 +60,8 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        @SuppressWarnings("rawtypes")
-        public GameListenerOperations<?> tableListenerOperations() {
-            return new GameListenerOperationsImpl();
+        public GameListenerOperations<TicTacToeState> tableListenerOperations() {
+            return new GameListenerOperationsImpl<TicTacToeState>();
         }
 
         @Bean
@@ -73,16 +72,14 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameOperations gameOperations() {
-            return new WebGameOperations(configuartionManagerController, matchController);
+        public GameOperations<TicTacToeState> gameOperations() {
+            return new WebGameOperations<TicTacToeState>(configuartionManagerController, matchController, ticTacToeOperations(), playerOperations());
         }
 
         @Bean
         @Singleton
-        @SuppressWarnings("unchecked")
         public TicTacToeOperations ticTacToeOperations() {
-            return new WebTicTacToeOperations(playerOperations(), gameOperations(),
-                    (GameListenerOperations<TicTacToeState>) tableListenerOperations(), engineController);
+            return new WebTicTacToeOperations(tableListenerOperations(), engineController);
         }
     }
 
@@ -122,9 +119,8 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        @SuppressWarnings("rawtypes")
-        public GameListenerOperations<?> tableListenerOperations() {
-            return new GameListenerOperationsImpl();
+        public GameListenerOperations<TicTacToeState> tableListenerOperations() {
+            return new GameListenerOperationsImpl<TicTacToeState>();
         }
 
         @Bean
@@ -141,16 +137,14 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameOperations gameOperations() {
-            return new IntegrationGameOperations(getBaseUrl(), restTemplate());
+        public GameOperations<TicTacToeState> gameOperations() {
+            return new IntegrationGameOperations<TicTacToeState>(getBaseUrl(), restTemplate(), ticTacToeOperations(), playerOperations());
         }
 
         @Bean
         @Singleton
-        @SuppressWarnings("unchecked")
         public IntegrationTicTacToeOperations ticTacToeOperations() {
-            return new IntegrationTicTacToeOperations(getBaseUrl(), restTemplate(), playerOperations(), gameOperations(),
-                    (GameListenerOperations<TicTacToeState>) tableListenerOperations());
+            return new IntegrationTicTacToeOperations(getBaseUrl(), restTemplate(), tableListenerOperations());
         }
     }
 }

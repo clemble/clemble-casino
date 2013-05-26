@@ -8,6 +8,7 @@ import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.integration.player.Player;
+import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 
@@ -16,8 +17,12 @@ public class WebGameOperations<State extends GameState> extends AbstractGameOper
     final private GameConfigurationManagerController configuartionManagerController;
 
     final private GameTableMatchController<TicTacToeState> matchController;
-    
-    public WebGameOperations(GameConfigurationManagerController configurationManagerController, GameTableMatchController<TicTacToeState> matchController) {
+
+    public WebGameOperations(final GameConfigurationManagerController configurationManagerController,
+            final GameTableMatchController<TicTacToeState> matchController,
+            final GamePlayerFactory<State> playerFactory,
+            final PlayerOperations playerOperations) {
+        super(playerOperations, playerFactory);
         this.configuartionManagerController = checkNotNull(configurationManagerController);
         this.matchController = checkNotNull(matchController);
     }

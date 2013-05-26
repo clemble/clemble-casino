@@ -10,9 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
-import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
-import com.gogomaya.server.integration.player.PlayerOperations;
 
 public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations {
 
@@ -21,12 +19,10 @@ public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations 
     final private RestTemplate restTemplate;
     final private String baseUrl;
 
-    public IntegrationTicTacToeOperations(String baseUrl,
-            RestTemplate restTemplate,
-            PlayerOperations playerOperations,
-            GameOperations<TicTacToeState> gameOperations,
-            GameListenerOperations<TicTacToeState> tableListenerOperations) {
-        super(playerOperations, gameOperations, tableListenerOperations);
+    public IntegrationTicTacToeOperations(final String baseUrl,
+            final RestTemplate restTemplate,
+            final GameListenerOperations<TicTacToeState> tableListenerOperations) {
+        super(tableListenerOperations);
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
     }

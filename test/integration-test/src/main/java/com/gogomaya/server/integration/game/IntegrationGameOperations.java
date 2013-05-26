@@ -13,6 +13,7 @@ import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
+import com.gogomaya.server.integration.player.PlayerOperations;
 
 public class IntegrationGameOperations<State extends GameState> extends AbstractGameOperation<State> {
 
@@ -22,7 +23,8 @@ public class IntegrationGameOperations<State extends GameState> extends Abstract
     final private RestTemplate restTemplate;
     final private String baseUrl;
 
-    public IntegrationGameOperations(final String baseUrl, final RestTemplate restTemplate) {
+    public IntegrationGameOperations(final String baseUrl, final RestTemplate restTemplate, final GamePlayerFactory<State> playerFactory, final PlayerOperations playerOperations) {
+        super(playerOperations, playerFactory);
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
     }

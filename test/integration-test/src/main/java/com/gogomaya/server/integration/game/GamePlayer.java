@@ -41,7 +41,7 @@ public class GamePlayer<State extends GameState> {
         // Step 3. Registering listener
         checkNotNull(listenerOperations);
         this.listenerControl = listenerOperations.listen(table, new GameListener() {
-            @Override
+            @Override @SuppressWarnings("unchecked")
             public void updated(GogomayaEvent event) {
                 if (event instanceof GameEvent) {
                     setState(((GameEvent<State>) event).getState());
@@ -125,7 +125,7 @@ public class GamePlayer<State extends GameState> {
         return table.getTableId();
     }
 
-    public void destroy() {
+    public void clear() {
         listenerControl.stopListener();
     }
 

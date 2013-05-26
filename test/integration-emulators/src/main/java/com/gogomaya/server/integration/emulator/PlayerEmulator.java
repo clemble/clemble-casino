@@ -37,7 +37,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
             // Step 1. Creating new player
             Player player = playerOperations.createPlayer();
             // Step 2. Starting a game
-            GameTable<State> table = gameOperations.start(player, specification);
+            
         }
     }
 

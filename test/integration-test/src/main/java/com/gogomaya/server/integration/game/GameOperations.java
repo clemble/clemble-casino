@@ -1,5 +1,7 @@
 package com.gogomaya.server.integration.game;
 
+import java.util.List;
+
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.When;
 
@@ -27,8 +29,16 @@ public interface GameOperations<State extends GameState> {
     @When("$Player options")
     public GameSpecificationOptions getOptions(Player player);
 
+    public GamePlayer<State> start(GameSpecification gameSpecification);
+
     @Given("$Player plays $Specification")
     @When("$Player plays $Specification")
     public GameTable<State> start(Player player, GameSpecification gameSpecification);
+
+    public GamePlayer<State> initialize(Player player, GameSpecification gameSpecification);
+
+    public List<GamePlayer<State>> construct();
+
+    public List<GamePlayer<State>> construct(GameSpecification specification);
 
 }

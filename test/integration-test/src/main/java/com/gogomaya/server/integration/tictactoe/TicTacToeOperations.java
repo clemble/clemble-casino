@@ -1,19 +1,12 @@
 package com.gogomaya.server.integration.tictactoe;
 
-import java.util.List;
-
 import org.jbehave.core.annotations.When;
 
-import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
+import com.gogomaya.server.integration.game.GamePlayerFactory;
 
-public interface TicTacToeOperations {
-
-    public List<TicTacToePlayer> start();
-
-    @When("$A plays $specification")
-    public TicTacToePlayer start(GameSpecification specification);
+public interface TicTacToeOperations extends GamePlayerFactory<TicTacToeState>{
 
     @When("$A select $row $ column")
     public TicTacToeState select(TicTacToePlayer player, int row, int column);

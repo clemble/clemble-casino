@@ -2,69 +2,27 @@ package com.gogomaya.server.integration.tictactoe;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.List;
-
 import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeCell;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
-import com.gogomaya.server.integration.game.GameOperations;
+import com.gogomaya.server.integration.game.GamePlayer;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.integration.player.PlayerOperations;
-import com.google.common.collect.ImmutableList;
 
 abstract public class AbstractTicTacToeOperations implements TicTacToeOperations {
 
-    final private PlayerOperations playerOperations;
-    final private GameOperations<TicTacToeState> gameOperations;
     final private GameListenerOperations<TicTacToeState> listenerOperations;
 
-    public AbstractTicTacToeOperations(PlayerOperations playerOperations,
-            final GameOperations<TicTacToeState> gameOperations,
-            final GameListenerOperations<TicTacToeState> tableListenerOperations) {
-        this.playerOperations = checkNotNull(playerOperations);
-        this.gameOperations = checkNotNull(gameOperations);
+    public AbstractTicTacToeOperations(final GameListenerOperations<TicTacToeState> tableListenerOperations) {
         this.listenerOperations = checkNotNull(tableListenerOperations);
     }
 
-    final public List<TicTacToePlayer> start() {
-        // Step 1. Selecting specification for the game
-        GameSpecification specification = gameOperations.selectSpecification();
-        // Step 2. Creating user and trying to put them on the same table
-        TicTacToePlayer playerA = start(specification);
-        TicTacToePlayer playerB = start(specification);
-        while (playerA.getTableId() != playerB.getTableId()) {
-            playerA.destroy();
-            playerA = start(specification);
-            // waits added to be sure everyone on the same page
-            if (playerA.getTableId() != playerB.getTableId()) {
-                playerB.destroy();
-                playerB = start(specification);
-            }
-        }
-        playerA.syncWith(playerB);
-        // Step 3. Returning generated value who ever goes first is choosen as first
-        TicTacToeState state = playerB.getState() != null ? playerB.getState() : playerA.getState();
-        if (state.getNextMove(playerA.getPlayer().getPlayerId()) == null) {
-            return ImmutableList.<TicTacToePlayer> of(playerB, playerA);
-        } else {
-            return ImmutableList.<TicTacToePlayer> of(playerA, playerB);
-        }
-    }
-
-    final public TicTacToePlayer start(GameSpecification specification) {
-        // Step 1. Creating player
-        Player player = checkNotNull(playerOperations.createPlayer());
-        // Step 2. Requesting table
-        final GameTable<TicTacToeState> table = (GameTable<TicTacToeState>) checkNotNull(gameOperations.start(player, specification));
-        final TicTacToePlayer toePlayer = new TicTacToePlayer(player, table, this, listenerOperations);
-        // Step 3. Creating listener, that will update GameListener
-        // Step 3. Creating player configurations
-        return toePlayer;
+    @Override
+    final public GamePlayer<TicTacToeState> construct(Player player, GameTable<TicTacToeState> table) {
+        return new TicTacToePlayer(player, table, this, listenerOperations);
     }
 
     final public TicTacToeState select(TicTacToePlayer player, int row, int column) {
