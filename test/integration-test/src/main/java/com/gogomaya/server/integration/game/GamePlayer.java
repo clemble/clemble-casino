@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.gogomaya.server.event.GogomayaEvent;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.event.GameEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.listener.GameListener;
@@ -41,7 +42,8 @@ public class GamePlayer<State extends GameState> {
         // Step 3. Registering listener
         checkNotNull(listenerOperations);
         this.listenerControl = listenerOperations.listen(table, new GameListener() {
-            @Override @SuppressWarnings("unchecked")
+            @Override
+            @SuppressWarnings("unchecked")
             public void updated(GogomayaEvent event) {
                 if (event instanceof GameEvent) {
                     setState(((GameEvent<State>) event).getState());
@@ -90,8 +92,13 @@ public class GamePlayer<State extends GameState> {
         }
     }
 
-    final public void waitForUpdate() {
-        waitVersion(getState().getVersion() + 1);
+    final public GameMove getNextMove() {
+        return getState().getNextMove(player.getPlayerId());
+    }
+
+    final public void waitForTurn() {
+        while (!isToMove())
+            waitVersion(getState().getVersion() + 1);
     }
 
     final public boolean isToMove() {

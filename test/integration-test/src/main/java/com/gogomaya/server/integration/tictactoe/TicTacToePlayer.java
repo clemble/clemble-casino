@@ -2,6 +2,8 @@ package com.gogomaya.server.integration.tictactoe;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.junit.Assert;
 
 import com.gogomaya.server.game.action.GameTable;
@@ -14,10 +16,15 @@ public class TicTacToePlayer extends GamePlayer<TicTacToeState> {
 
     final private TicTacToeOperations ticTacToeOperations;
 
-    public TicTacToePlayer(final Player player, final GameTable<TicTacToeState> table, final TicTacToeOperations operations, final GameListenerOperations<TicTacToeState> listenerOperations) {
+    final private AtomicInteger moneyLeft = new AtomicInteger();
+
+    public TicTacToePlayer(final Player player,
+            final GameTable<TicTacToeState> table,
+            final TicTacToeOperations operations,
+            final GameListenerOperations<TicTacToeState> listenerOperations) {
         super(player, table, listenerOperations);
-        checkNotNull(table);
         this.ticTacToeOperations = checkNotNull(operations);
+        this.moneyLeft.set(table.getSpecification().getBetRule().getPrice());
     }
 
     public void select(int row, int column) {
@@ -30,6 +37,11 @@ public class TicTacToePlayer extends GamePlayer<TicTacToeState> {
         int beforeBetting = this.getState().getVersion();
         ticTacToeOperations.bet(this, ammount);
         Assert.assertNotSame(beforeBetting + " remained " + this.getState().getVersion(), beforeBetting, this.getState().getVersion());
+        moneyLeft.getAndAdd(-ammount);
+    }
+
+    public int getMoneyLeft() {
+        return moneyLeft.get();
     }
 
 }

@@ -53,7 +53,7 @@ abstract public class AbstractGameOperation<State extends GameState> implements 
     }
 
     @Override
-    public List<GamePlayer<State>> construct() {
+    public List<GamePlayer<State>> start() {
         // Step 1. Selecting specification for the game
         return construct(selectSpecification());
     }

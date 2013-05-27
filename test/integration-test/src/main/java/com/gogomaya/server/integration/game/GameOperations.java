@@ -29,16 +29,16 @@ public interface GameOperations<State extends GameState> {
     @When("$Player options")
     public GameSpecificationOptions getOptions(Player player);
 
-    public GamePlayer<State> start(GameSpecification gameSpecification);
-
     @Given("$Player plays $Specification")
     @When("$Player plays $Specification")
     public GameTable<State> start(Player player, GameSpecification gameSpecification);
 
-    public GamePlayer<State> initialize(Player player, GameSpecification gameSpecification);
+    public List<GamePlayer<State>> start();
 
-    public List<GamePlayer<State>> construct();
+    public GamePlayer<State> start(GameSpecification gameSpecification);
 
     public List<GamePlayer<State>> construct(GameSpecification specification);
+
+    public GamePlayer<State> initialize(Player player, GameSpecification gameSpecification);
 
 }
