@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.gogomaya.server.game.action.PlayerWonOutcome;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.GamePlayer;
@@ -98,7 +99,7 @@ public class SimpleTicTacToeGameTest {
             playerA.syncWith(playerB);
 
             Assert.assertTrue(playerB.getState().complete());
-            Assert.assertEquals(playerB.getState().getWinner(), playerA.getPlayer().getPlayerId());
+            Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
         } finally {
             playerA.clear();
             playerB.clear();

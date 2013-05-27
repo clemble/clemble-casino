@@ -49,25 +49,6 @@ public class GameEngineController<State extends GameState> {
             throw GogomayaException.create(GogomayaError.ServerCriticalError);
         // Step 3. Updating current state
         State resultState = sessionProcessor.process(sessionId, move);
-//        // Step 3.1 Updating made move
-//        State nextState = (State) table.getCurrentSession().getState().process(move);
-//        table.getCurrentSession().setState(nextState);
-//        table.getCurrentSession().addMadeMove(move);
-//        if (nextState.complete()) {
-//            nextState.increaseVersion();
-//            outcomeService.finished(table);
-//            tableRepository.saveAndFlush(table);
-//
-//            notificationManager.notify(table);
-//
-//            table.clear();
-//            tableRepository.saveAndFlush(table);
-//            tableManager.addReservable(table);
-//        } else {
-//            table = tableRepository.saveAndFlush(table);
-//            // Step 4. Updating listeners
-//            notificationManager.notify(table);
-//        }
         return resultState;
     }
 

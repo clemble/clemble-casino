@@ -1,25 +1,23 @@
 package com.gogomaya.server.game.event;
 
-import com.gogomaya.server.event.PlayerAwareEvent;
+import com.gogomaya.server.game.action.GameOutcome;
 import com.gogomaya.server.game.action.GameState;
 
-public class GameEndedEvent<State extends GameState> extends GameEvent<State> implements PlayerAwareEvent {
+public class GameEndedEvent<State extends GameState> extends GameEvent<State> {
 
     /**
      * Generated 07/05/13
      */
     private static final long serialVersionUID = 820200145932972096L;
 
-    private long playerId;
+    private GameOutcome outcome;
 
-    @Override
-    public long getPlayerId() {
-        return playerId;
+    public GameOutcome getOutcome() {
+        return outcome;
     }
 
-    public GameEndedEvent<State> setPlayerId(long playerId) {
-        this.playerId = playerId;
+    public GameEndedEvent<State> setOutcome(GameOutcome outcome) {
+        this.outcome = outcome;
         return this;
     }
-
 }

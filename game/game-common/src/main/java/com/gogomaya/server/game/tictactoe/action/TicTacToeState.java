@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.gogomaya.server.game.action.DrawOutcome;
+import com.gogomaya.server.game.action.GameOutcome;
 import com.gogomaya.server.game.action.GamePlayerState;
+import com.gogomaya.server.game.action.PlayerWonOutcome;
 import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.action.impl.AbstractGameState;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
@@ -20,6 +23,8 @@ public class TicTacToeState extends AbstractGameState {
     private TicTacToeCellState[][] board = new TicTacToeCellState[3][3];
 
     private TicTacToeCell activeCell;
+
+    private GameOutcome outcome;
 
     public TicTacToeState() {
         // Step 0. Filling the board with empty cell value
@@ -65,11 +70,28 @@ public class TicTacToeState extends AbstractGameState {
     @Override
     public boolean complete() {
         // Step 1. Check vertical
-        return getWinner() != -1L;
+        return getOutcome() != null;
     }
 
     @Override
-    public long getWinner() {
+    public GameOutcome getOutcome() {
+        // Step 1. If we already calculated outcome return it
+        if (outcome != null)
+            return outcome;
+        // Step 2. Checking if there is a single winner
+        long winner = getWinner();
+        if (winner != TicTacToeCellState.DEFAULT_OWNER) {
+            outcome = new PlayerWonOutcome(winner);
+        }
+        // Step 3. Checking if game ended in draw
+        if (!canHaveWinner()) {
+            outcome = new DrawOutcome();
+        }
+        // Step 4.
+        return outcome;
+    }
+
+    private long getWinner() {
         long completnece[] = new long[8];
         Arrays.fill(completnece, -1L);
         // Checking rows
@@ -85,14 +107,30 @@ public class TicTacToeState extends AbstractGameState {
         completnece[7] = owner(board[0][2], board[1][1], board[2][0]);
         // Step 2. If at least one complete game is complete
         for (long complete : completnece)
-            if (complete != -1L)
+            if (complete != TicTacToeCellState.DEFAULT_OWNER)
                 return complete;
-        return -1L;
+        return TicTacToeCellState.DEFAULT_OWNER;
     }
 
     private long owner(TicTacToeCellState firstCell, TicTacToeCellState secondCell, TicTacToeCellState therdCell) {
         return (firstCell.getOwner() == secondCell.getOwner() && secondCell.getOwner() == therdCell.getOwner()) ? firstCell.getOwner()
                 : TicTacToeCellState.DEFAULT_OWNER;
+    }
+
+    private boolean canHaveWinner() {
+        return canHaveSingleOwner(board[0][0], board[0][1], board[0][2]) || canHaveSingleOwner(board[1][0], board[1][1], board[1][2])
+                || canHaveSingleOwner(board[2][0], board[2][1], board[2][2])
+                // Checking columns
+                || canHaveSingleOwner(board[0][0], board[1][0], board[2][0]) || canHaveSingleOwner(board[0][1], board[1][1], board[2][1])
+                || canHaveSingleOwner(board[0][2], board[1][2], board[2][2])
+                // Checking diagonals
+                || canHaveSingleOwner(board[0][0], board[1][1], board[2][2]) || canHaveSingleOwner(board[0][2], board[1][1], board[2][0]);
+    }
+
+    private boolean canHaveSingleOwner(TicTacToeCellState firstCell, TicTacToeCellState secondCell, TicTacToeCellState therdCell) {
+        return (firstCell.getOwner() == secondCell.getOwner() && (firstCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER || therdCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER))
+                || (secondCell.getOwner() == therdCell.getOwner() && (secondCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER || firstCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER))
+                || (therdCell.getOwner() == firstCell.getOwner() && (therdCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER || secondCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER));
     }
 
 }

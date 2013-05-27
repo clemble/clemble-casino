@@ -3,6 +3,7 @@ package com.gogomaya.server.integration.tictactoe;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.action.move.GiveUpMove;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeCell;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
@@ -30,6 +31,11 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
         TicTacToeSelectCellMove move = new TicTacToeSelectCellMove(player.getPlayer().getPlayerId(), TicTacToeCell.create(row, column));
         // Step 2. Performing actual TicTacToeMove
         return perform(player, move);
+    }
+    
+    @Override
+    final public TicTacToeState giveUp(TicTacToePlayer player) {
+        return perform(player, new GiveUpMove(player.getPlayer().getPlayerId()));
     }
 
     final public TicTacToeState bet(TicTacToePlayer player, int ammount) {

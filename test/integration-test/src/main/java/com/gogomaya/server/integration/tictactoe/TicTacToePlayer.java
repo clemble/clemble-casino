@@ -40,6 +40,13 @@ public class TicTacToePlayer extends GamePlayer<TicTacToeState> {
         moneyLeft.getAndAdd(-ammount);
     }
 
+    @Override
+    public void giveUp() {
+        // int beforeBetting = this.getState().getVersion();
+        ticTacToeOperations.giveUp(this);
+        // Assert.assertNotSame(beforeBetting + " remained " + this.getState().getVersion(), beforeBetting, this.getState().getVersion());
+    }
+
     public int getMoneyLeft() {
         return moneyLeft.get();
     }

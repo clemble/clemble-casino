@@ -2,6 +2,7 @@ package com.gogomaya.server.game.action.impl;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,6 +61,15 @@ abstract public class AbstractGameState implements GameState {
     @JsonIgnore
     final public Set<Long> getActiveUsers() {
         return nextMoves.keySet();
+    }
+    
+    final public Set<Long> getOpponents(long playerId){
+        // Step 1. Calculating opponents from the original list
+        Set<Long> opponents = new HashSet<Long>(getActiveUsers());
+        // Step 2. Removing player from the player list
+        opponents.remove(playerId);
+        // Step 3. Returning list of opponents
+        return opponents;
     }
 
     @Override

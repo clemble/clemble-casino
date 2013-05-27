@@ -31,7 +31,7 @@ public interface GameState extends Serializable {
 
     public GameState setPlayerIterator(GamePlayerIterator playerIterator);
 
-    public long getWinner();
+    public GameOutcome getOutcome();
 
     public boolean complete();
 

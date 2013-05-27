@@ -3,6 +3,7 @@ package com.gogomaya.server.integration.emulator;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.gogomaya.server.game.action.GameState;
@@ -19,6 +20,8 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     final private GameActor<State> actor;
 
     final private AtomicBoolean continueEmulation = new AtomicBoolean(true);
+
+    final private AtomicLong lastMoved = new AtomicLong();
 
     final private AtomicReference<GamePlayer<State>> currentPlayer = new AtomicReference<GamePlayer<State>>();
 
@@ -38,6 +41,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
             // Step 1. Start player emulator
             GamePlayer<State> playerState = gameOperations.start(specification);
             currentPlayer.set(playerState);
+            lastMoved.set(System.currentTimeMillis());
             while (!playerState.getState().complete()) {
                 // Step 2. Waiting for player turn
                 playerState.waitForTurn();
@@ -56,6 +60,11 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     }
 
     public void stop() {
-        continueEmulation.set(false);
+        this.continueEmulation.set(false);
+        this.currentPlayer.get().clear();
+    }
+
+    public long getLastMoved() {
+        return lastMoved.get();
     }
 }

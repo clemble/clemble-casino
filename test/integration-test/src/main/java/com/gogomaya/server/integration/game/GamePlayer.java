@@ -2,6 +2,7 @@ package com.gogomaya.server.integration.game;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.gogomaya.server.event.GogomayaEvent;
@@ -15,7 +16,7 @@ import com.gogomaya.server.integration.game.listener.GameListenerControl;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.player.Player;
 
-public class GamePlayer<State extends GameState> {
+abstract public class GamePlayer<State extends GameState> {
 
     final private Player player;
 
@@ -26,6 +27,8 @@ public class GamePlayer<State extends GameState> {
     final private long sessionId;
 
     final private Object versionLock = new Object();
+
+    final private AtomicBoolean keepAlive = new AtomicBoolean(true);
 
     final private AtomicReference<State> currentState = new AtomicReference<State>();
 
@@ -97,7 +100,7 @@ public class GamePlayer<State extends GameState> {
     }
 
     final public void waitForTurn() {
-        while (!isToMove())
+        while (keepAlive.get() && !isToMove())
             waitVersion(getState().getVersion() + 1);
     }
 
@@ -110,7 +113,7 @@ public class GamePlayer<State extends GameState> {
         int thisPlayerVersion = player.getState().getVersion();
         int otherPlayerVersion = player.getState().getVersion();
         // Step 2. While versions do not match iterate
-        while (thisPlayerVersion != otherPlayerVersion) {
+        while (keepAlive.get() && thisPlayerVersion != otherPlayerVersion) {
             // Step 2.1 Checking who we need to update
             if (thisPlayerVersion > otherPlayerVersion) {
                 player.waitVersion(thisPlayerVersion);
@@ -134,6 +137,13 @@ public class GamePlayer<State extends GameState> {
 
     public void clear() {
         listenerControl.stopListener();
+        keepAlive.set(false);
+        giveUp();
+        synchronized (versionLock) {
+            versionLock.notifyAll();
+        }
     }
+
+    abstract public void giveUp();
 
 }
