@@ -7,11 +7,9 @@ import javax.inject.Inject;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.specification.GameSpecification;
 
-public class RedisGameTableQueue<State extends GameState> implements GameTableQueue<State> {
+public class RedisGameTableQueue implements GameTableQueue {
 
     final private RedisTemplate<byte[], Long> redisTemplate;
 
@@ -21,8 +19,8 @@ public class RedisGameTableQueue<State extends GameState> implements GameTableQu
     }
 
     @Override
-    public Long poll(final GameSpecification gameSpecification) {
-        byte[] key = gameSpecification.getName().toByteArray();
+    public Long poll(final GameSpecification specification) {
+        byte[] key = specification.getName().toByteArray();
         // Step 1. Fetching associated Set
         BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(key);
         // Step 2. Fetching available table
@@ -30,15 +28,13 @@ public class RedisGameTableQueue<State extends GameState> implements GameTableQu
     }
 
     @Override
-    public void add(GameTable<State> gameTable) {
-        if (gameTable == null)
+    public void add(long tableId, GameSpecification specification) {
+        if (specification == null)
             throw new IllegalArgumentException("Game table can't be null");
-        if (gameTable.getSpecification() == null)
-            throw new IllegalArgumentException("Game specification can't be null");
         // Step 1. Adding table id as available to specification
-        byte[] key = gameTable.getSpecification().getName().toByteArray();
+        byte[] key = specification.getName().toByteArray();
         BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(key);
-        boundSetOperations.add(gameTable.getTableId());
+        boundSetOperations.add(tableId);
     }
 
 }

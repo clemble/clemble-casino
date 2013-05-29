@@ -18,13 +18,13 @@ import com.gogomaya.server.game.table.GameTableRepository;
 
 public class GameMatchingServiceImpl<State extends GameState> implements GameMatchingService<State> {
 
-    final private GameTableQueue<State> tableManager;
+    final private GameTableQueue tableManager;
     final private GameTableRepository<State> tableRepository;
     final private GameTableFactory<State> tableFactory;
     final private GameNotificationService<State> notificationManager;
 
     @Inject
-    public GameMatchingServiceImpl(final GameTableQueue<State> tableManager,
+    public GameMatchingServiceImpl(final GameTableQueue tableManager,
             final GameTableRepository<State> tableRepository,
             final GameNotificationService<State> notificationManager,
             final GameTableFactory<State> tableFactory) {
@@ -56,7 +56,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
             notificationManager.notify(new GameConnection().setRoutingKey(table.getTableId()).setServerConnection(table.getServerResource()),
                     new GameStartedEvent<State>().setNextMoves(state.getNextMoves()).setState(state).setSession(table.getTableId()));
         } else {
-            tableManager.add(table);
+            tableManager.add(table.getTableId(), table.getSpecification());
         }
 
         return table;

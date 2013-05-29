@@ -30,19 +30,20 @@ import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
-import com.gogomaya.server.game.table.RedisGameTableQueue;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
-import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.game", entityManagerFactoryRef = "entityManagerFactory")
 @ComponentScan(basePackages = "com.gogomaya.server.game")
-@Import(value = { CommonModuleSpringConfiguration.class, TicTacToeSpringConfiguration.GameManagementDefaultConfiguration.class,
+@Import(value = { GameManagementSpringConfiguration.class, TicTacToeSpringConfiguration.GameManagementDefaultConfiguration.class,
         TicTacToeSpringConfiguration.GameManagementCloudConfiguration.class })
 public class TicTacToeSpringConfiguration {
+
+    @Inject
+    public GameTableQueue tableQueue;
 
     @Inject
     public GameSessionRepository<TicTacToeState> sessionRepository;
@@ -73,14 +74,8 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameTableQueue<TicTacToeState> tableManager() {
-        return new RedisGameTableQueue<TicTacToeState>(redisTemplate);
-    }
-
-    @Bean
-    @Singleton
     public GameMatchingServiceImpl<TicTacToeState> stateManager() {
-        return new GameMatchingServiceImpl<TicTacToeState>(tableManager(), tableRepository, gameNotificationManager(), tableFactory());
+        return new GameMatchingServiceImpl<TicTacToeState>(tableQueue, tableRepository, gameNotificationManager(), tableFactory());
     }
 
     @Bean

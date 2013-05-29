@@ -35,6 +35,10 @@ public class GameSessionProcessor<State extends GameState> {
             throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
         // Step 2. Acquiring lock for session event processing
         GameCache<State> cache = cacheService.get(sessionId);
+        if(cache.getSession().getSessionState() == GameSessionState.inactive)
+            throw GogomayaException.create(GogomayaError.GamePlayGameNotStarted);
+        if(cache.getSession().getSessionState() == GameSessionState.ended)
+            throw GogomayaException.create(GogomayaError.GamePlayGameEnded);
         ReentrantLock reentrantLock = cache.getSessionLock();
         // Step 3. Acquiring lock for the session, to exclude parallel processing
         reentrantLock.lock();

@@ -46,6 +46,9 @@ public enum GogomayaError {
     ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json"),
 
     GameSpecificationInvalid(Code.GAME_SPECIFICATION_INVAID_CODE, "Provided game specification is invalid"),
+    
+    GamePlayGameEnded(Code.GAMEPLAY_GAME_ENDED_CODE, "Game already ended"),
+    GamePlayGameNotStarted(Code.GAMEPLAY_GAME_NOT_STARTED_CODE, "Game has not started yet"),
 
     GamePlayStayUndefined(Code.GAMEPLAY_STATE_UNDEFINED_CODE, "State is missing or illegal"),
     GamePlayMoveUndefined(Code.GAMEPLAY_MOVE_UNDEFINED_CODE, "Move was not defined properly"),
@@ -165,6 +168,8 @@ public enum GogomayaError {
         final public static String GAMEPLAY_STATE_UNDEFINED_CODE = "0F4";
         final public static String GAMEPLAY_MOVE_NOT_SUPPORTED_CODE = "0F5";
         final public static String GAMEPLAY_PLAYER_NOT_PARTICIPATING = "0F6";
+        final public static String GAMEPLAY_GAME_NOT_STARTED_CODE = "0F7";
+        final public static String GAMEPLAY_GAME_ENDED_CODE = "0F8";
         // Errors specific for TicTacToe
         final public static String TIC_TAC_TOE_CELL_OWNED_CODE = "0G0";
         // Session recreation failure

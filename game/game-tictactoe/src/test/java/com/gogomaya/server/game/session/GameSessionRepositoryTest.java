@@ -48,7 +48,7 @@ public class GameSessionRepositoryTest {
     GameTableRepository<TicTacToeState> tableRepository;
 
     @Inject
-    GameTableQueue<?> tableManager;
+    GameTableQueue tableQueue;
 
     @Inject
     TicTacToeStateFactory stateFactory;

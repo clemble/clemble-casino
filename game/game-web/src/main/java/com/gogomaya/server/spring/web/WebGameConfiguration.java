@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -62,7 +61,7 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     ObjectMapper objectMapper;
 
     @Inject
-    GameTableQueue<TicTacToeState> tableManager;
+    GameTableQueue tableQueue;
 
     @Inject
     GameServerConnectionManager serverConnectionManager;

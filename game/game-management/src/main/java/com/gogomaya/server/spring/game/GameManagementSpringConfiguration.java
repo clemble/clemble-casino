@@ -3,7 +3,6 @@ package com.gogomaya.server.spring.game;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.springframework.amqp.support.converter.JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +12,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
-import com.gogomaya.server.game.connection.RabbitGameNotificationService;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
+import com.gogomaya.server.game.table.GameTableQueue;
+import com.gogomaya.server.game.table.JavaTableQueue;
+import com.gogomaya.server.game.table.RedisGameTableQueue;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
 @Configuration
@@ -33,9 +33,6 @@ public class GameManagementSpringConfiguration {
     @Inject
     public GameServerConnectionManager serverConnectionManager;
 
-    @Inject
-    public JsonMessageConverter jsonMessageConverter;
-
     @Profile(value = { "default", "test" })
     public static class GameManagementTestConfiguration {
 
@@ -45,15 +42,30 @@ public class GameManagementSpringConfiguration {
             return new SimpleGameServerConnectionManager("localhost", "localhost");
         }
 
+        @Bean
+        @Singleton
+        public GameTableQueue gameTableQueue() {
+            return new JavaTableQueue();
+        }
+
     }
 
     @Profile(value = { "cloud" })
     public static class GameManagementCloudConfiguration {
+        
+        @Inject
+        public RedisTemplate<byte[], Long> redisTemplate;
 
         @Bean
         @Singleton
         public GameServerConnectionManager serverConnectionManager() {
             return new SimpleGameServerConnectionManager("ec2-50-16-93-157.compute-1.amazonaws.com", "gogomaya.cloudfoundry.com");
+        }
+
+        @Bean
+        @Singleton
+        public GameTableQueue gameTableQueue() {
+            return new RedisGameTableQueue(redisTemplate);
         }
 
     }
