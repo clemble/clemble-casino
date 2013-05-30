@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.GameProcessor;
+import com.gogomaya.server.game.action.NoOutcome;
 import com.gogomaya.server.game.action.PlayerWonOutcome;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.GiveUpMove;
@@ -40,10 +41,20 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
     private Collection<GameEvent<TicTacToeState>> processGiveUpMove(final TicTacToeState state, final GiveUpMove giveUpMove) {
         // Step 1. Fetching player identifier
         long looser = giveUpMove.getPlayerId();
-        long winner = state.getOpponents(looser).iterator().next();
-        // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
-        return ImmutableList.<GameEvent<TicTacToeState>> of(new PlayerGaveUpEvent<TicTacToeState>().setPlayerId(looser).setState(state),
-                new GameEndedEvent<TicTacToeState>().setOutcome(new PlayerWonOutcome(winner)).setState(state));
+        Collection<Long> opponents = state.getOpponents(looser);
+        if (opponents.size() == 0) {
+            // Step 2. No game started just live the table
+            state
+                .setNoOutcome()
+                .increaseVersion();
+            return ImmutableList.<GameEvent<TicTacToeState>> of(new PlayerGaveUpEvent<TicTacToeState>().setPlayerId(looser).setState(state),
+                    new GameEndedEvent<TicTacToeState>().setOutcome(new NoOutcome()).setState(state));
+        } else {
+            long winner = opponents.iterator().next();
+            // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
+            return ImmutableList.<GameEvent<TicTacToeState>> of(new PlayerGaveUpEvent<TicTacToeState>().setPlayerId(looser).setState(state),
+                    new GameEndedEvent<TicTacToeState>().setOutcome(new PlayerWonOutcome(winner)).setState(state));
+        }
     }
 
     private GameEvent<TicTacToeState> processBetOnCellMove(final TicTacToeState state, final TicTacToeBetOnCellMove betMove) {

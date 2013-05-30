@@ -13,8 +13,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.server.game.action.move.GiveUpMove;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
@@ -120,6 +122,17 @@ public class SeDeRelizationTest {
 
         TicTacToeBetOnCellMove parsedBetOnCellMove = objectMapper.readValue(value, TicTacToeBetOnCellMove.class);
         Assert.assertEquals(betOnCellMove, parsedBetOnCellMove);
+
+        System.out.println(value);
+    }
+
+    @Test
+    public void testGiveUp() throws IOException {
+        GiveUpMove giveUpMove = new GiveUpMove(10);
+
+        String value = objectMapper.writeValueAsString(giveUpMove);
+        GiveUpMove parsedBetOnCellMove = objectMapper.readValue(value, GiveUpMove.class);
+        Assert.assertEquals(giveUpMove, parsedBetOnCellMove);
 
         System.out.println(value);
     }

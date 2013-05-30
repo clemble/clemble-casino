@@ -18,6 +18,10 @@ public enum GogomayaError {
     ServerError(Code.SERVER_ERROR_CODE, "Server error"),
     ServerCriticalError(Code.SERVER_CRITICAL_ERROR_CODE, "Server critical error"),
     ServerSessionProcessingError(Code.SERVER_SESSION_PROCESSING_CRITICAL_CODE, "Server session processing error"),
+    
+    BadRequestPlayerIdHeaderMissing(Code.BAD_REQUEST_PLAYER_ID_HEADER_MISSING, "Player ID missing from the Header"),
+    BadRequestSessionIdHeaderMissing(Code.BAD_REQUEST_SESSION_ID_HEADER_MISSING, "Session ID missing from the Header"),
+    BadRequestTableIdHeaderMissing(Code.BAD_REQUEST_TABLE_ID_HEADER_MISSING, "Table ID missing from the Header"),
 
     EmailInvalid(Code.EMAIL_INVALID_CODE, "Email invalid"),
     EmailNotConfirmed(Code.EMAIL_NOT_CONFIRMED_CODE, "Email not confirmed"),
@@ -177,5 +181,9 @@ public enum GogomayaError {
         // Wallet transaction related errors
         final public static String PAYMENT_TRANSACTION_EMPTY_CODE = "0I0";
         final public static String PAYMENT_TRANSACTION_INVALID_CODE = "0I1";
+        // Player id description
+        final public static String BAD_REQUEST_PLAYER_ID_HEADER_MISSING = "0J0";
+        final public static String BAD_REQUEST_SESSION_ID_HEADER_MISSING = "0J1";
+        final public static String BAD_REQUEST_TABLE_ID_HEADER_MISSING = "0J2";
     }
 }

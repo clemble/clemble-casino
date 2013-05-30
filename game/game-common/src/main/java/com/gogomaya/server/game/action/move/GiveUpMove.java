@@ -23,4 +23,23 @@ public class GiveUpMove implements PlayerAware, GameMove {
         return playerId;
     }
 
+    @Override
+    public int hashCode() {
+        return (int) (playerId ^ (playerId >>> 32));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GiveUpMove other = (GiveUpMove) obj;
+        if (playerId != other.playerId)
+            return false;
+        return true;
+    }
+
 }

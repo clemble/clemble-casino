@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.move.GameMove;
+import com.gogomaya.server.game.action.move.GiveUpMove;
 import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.event.GameEvent;
 import com.gogomaya.server.game.outcome.GameOutcomeService;
@@ -35,8 +36,11 @@ public class GameSessionProcessor<State extends GameState> {
             throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
         // Step 2. Acquiring lock for session event processing
         GameCache<State> cache = cacheService.get(sessionId);
-        if(cache.getSession().getSessionState() == GameSessionState.inactive)
-            throw GogomayaException.create(GogomayaError.GamePlayGameNotStarted);
+        if(cache.getSession().getSessionState() == GameSessionState.inactive) {
+            if (!(move instanceof GiveUpMove)) {
+                throw GogomayaException.create(GogomayaError.GamePlayGameNotStarted);
+            }
+        }
         if(cache.getSession().getSessionState() == GameSessionState.ended)
             throw GogomayaException.create(GogomayaError.GamePlayGameEnded);
         ReentrantLock reentrantLock = cache.getSessionLock();

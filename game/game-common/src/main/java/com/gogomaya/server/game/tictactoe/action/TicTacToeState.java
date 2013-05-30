@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gogomaya.server.game.action.DrawOutcome;
 import com.gogomaya.server.game.action.GameOutcome;
 import com.gogomaya.server.game.action.GamePlayerState;
+import com.gogomaya.server.game.action.NoOutcome;
 import com.gogomaya.server.game.action.PlayerWonOutcome;
 import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.action.impl.AbstractGameState;
@@ -89,6 +90,11 @@ public class TicTacToeState extends AbstractGameState {
         }
         // Step 4.
         return outcome;
+    }
+
+    public TicTacToeState setNoOutcome() {
+        this.outcome = new NoOutcome();
+        return this;
     }
 
     private long getWinner() {

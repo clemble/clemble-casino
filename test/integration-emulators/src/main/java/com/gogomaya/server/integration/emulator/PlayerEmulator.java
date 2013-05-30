@@ -6,12 +6,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.GamePlayer;
 
 public class PlayerEmulator<State extends GameState> implements Runnable {
+
+    final private Logger logger = LoggerFactory.getLogger(PlayerEmulator.class);
 
     final private GameSpecification specification;
 
@@ -40,6 +45,8 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
         while (continueEmulation.get()) {
             // Step 1. Start player emulator
             GamePlayer<State> playerState = gameOperations.start(specification);
+            logger.info("Registered {} on {} with session {}", new Object[] { playerState.getPlayer().getPlayerId(), playerState.getTable().getTableId(),
+                    playerState.getSessionId() });
             currentPlayer.set(playerState);
             lastMoved.set(System.currentTimeMillis());
             while (!playerState.getState().complete()) {

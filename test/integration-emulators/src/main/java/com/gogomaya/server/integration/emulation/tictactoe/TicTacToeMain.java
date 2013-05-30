@@ -22,6 +22,7 @@ public class TicTacToeMain {
         applicationContext.register(MainConfiguration.class);
         applicationContext.refresh();
         applicationContext.start();
+
         // Step 2. Starting game emulator
         GameplayEmulator<TicTacToeState> emulator = applicationContext.getBean(GameplayEmulator.class);
         emulator.emulate();
