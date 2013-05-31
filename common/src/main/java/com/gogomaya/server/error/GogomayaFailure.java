@@ -56,4 +56,9 @@ public class GogomayaFailure {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "GogomayaFailure [errors=" + errors + "]";
+    }
+
 }

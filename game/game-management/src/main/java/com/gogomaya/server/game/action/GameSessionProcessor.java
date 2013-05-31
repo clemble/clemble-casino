@@ -18,11 +18,10 @@ public class GameSessionProcessor<State extends GameState> {
     final private GameCacheService<State> cacheService;
 
     final private GameNotificationService<State> notificationService;
-    
+
     final private GameOutcomeService<State> outcomeService;
 
-    public GameSessionProcessor(
-            final GameOutcomeService<State> outcomeService,
+    public GameSessionProcessor(final GameOutcomeService<State> outcomeService,
             final GameCacheService<State> cacheService,
             final GameNotificationService<State> notificationService) {
         this.notificationService = checkNotNull(notificationService);
@@ -36,12 +35,12 @@ public class GameSessionProcessor<State extends GameState> {
             throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
         // Step 2. Acquiring lock for session event processing
         GameCache<State> cache = cacheService.get(sessionId);
-        if(cache.getSession().getSessionState() == GameSessionState.inactive) {
+        if (cache.getSession().getSessionState() == GameSessionState.inactive) {
             if (!(move instanceof GiveUpMove)) {
                 throw GogomayaException.create(GogomayaError.GamePlayGameNotStarted);
             }
         }
-        if(cache.getSession().getSessionState() == GameSessionState.ended)
+        if (cache.getSession().getSessionState() == GameSessionState.ended)
             throw GogomayaException.create(GogomayaError.GamePlayGameEnded);
         ReentrantLock reentrantLock = cache.getSessionLock();
         // Step 3. Acquiring lock for the session, to exclude parallel processing
@@ -55,8 +54,9 @@ public class GameSessionProcessor<State extends GameState> {
             Collection<GameEvent<State>> events = processor.process(state, move);
             for (GameEvent<State> event : events)
                 event.setSession(sessionId);
-            if(state.complete())
+            if (state.getOutcome() instanceof PlayerWonOutcome) {
                 outcomeService.finished(cache.getSession());
+            }
             // Step 7. Invoking appropriate notification
             notificationService.notify(cache.getConnection(), events);
             // Step 8. Returning state of the game

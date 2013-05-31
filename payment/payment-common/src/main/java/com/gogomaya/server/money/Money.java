@@ -5,8 +5,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(value = { "positive", "negative" })
 public class Money implements Serializable {
 
     /**
@@ -22,6 +24,14 @@ public class Money implements Serializable {
     public Money(@JsonProperty("currency") final Currency currency, @JsonProperty("ammount") final long amount) {
         this.currency = checkNotNull(currency);
         this.amount = amount;
+    }
+
+    public boolean isPositive() {
+        return amount > 0;
+    }
+
+    public boolean isNegative() {
+        return amount < 0;
     }
 
     public long getAmount() {

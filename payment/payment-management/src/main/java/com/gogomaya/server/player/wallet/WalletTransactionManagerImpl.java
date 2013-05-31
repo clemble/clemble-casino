@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.Operation;
 
 public class WalletTransactionManagerImpl implements WalletTransactionManager {
@@ -18,10 +19,25 @@ public class WalletTransactionManagerImpl implements WalletTransactionManager {
     final private WalletTransactionRepository walletTransactionRepository;
 
     @Inject
-    public WalletTransactionManagerImpl(final PlayerWalletRepository playerWalletRepository,
-            final WalletTransactionRepository walletTransactionRepository) {
+    public WalletTransactionManagerImpl(final PlayerWalletRepository playerWalletRepository, final WalletTransactionRepository walletTransactionRepository) {
         this.playerWalletRepository = checkNotNull(playerWalletRepository);
         this.walletTransactionRepository = checkNotNull(walletTransactionRepository);
+    }
+
+    @Override
+    public boolean canAfford(WalletOperation walletOperation) {
+        // Step 1. Checking positive operation
+        if (walletOperation == null)
+            return true;
+        if (walletOperation.getOperation() == Operation.Debit && walletOperation.getAmmount().isPositive())
+            return true;
+        if (walletOperation.getOperation() == Operation.Credit && walletOperation.getAmmount().isNegative())
+            return true;
+        // Step 2. Checking player wallet value
+        PlayerWallet wallet = playerWalletRepository.findOne(walletOperation.getPlayerId());
+        Money existingAmmount = wallet.getMoney(walletOperation.getAmmount().getCurrency());
+        // Step 2.1 If exising ammount is not enough player can't afford it
+        return existingAmmount.getAmount() > walletOperation.getAmmount().getAmount();
     }
 
     @Override

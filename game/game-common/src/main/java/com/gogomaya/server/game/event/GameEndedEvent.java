@@ -12,6 +12,14 @@ public class GameEndedEvent<State extends GameState> extends GameEvent<State> {
 
     private GameOutcome outcome;
 
+    public GameEndedEvent() {
+    }
+
+    public GameEndedEvent(State state) {
+        this.setState(state);
+        this.outcome = state.getOutcome();
+    }
+
     public GameOutcome getOutcome() {
         return outcome;
     }

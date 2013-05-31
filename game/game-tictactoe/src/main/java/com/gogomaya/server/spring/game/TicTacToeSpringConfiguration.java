@@ -31,6 +31,7 @@ import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
+import com.gogomaya.server.player.wallet.WalletOperation;
 import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
@@ -75,7 +76,7 @@ public class TicTacToeSpringConfiguration {
     @Bean
     @Singleton
     public GameMatchingServiceImpl<TicTacToeState> stateManager() {
-        return new GameMatchingServiceImpl<TicTacToeState>(tableQueue, tableRepository, gameNotificationManager(), tableFactory());
+        return new GameMatchingServiceImpl<TicTacToeState>(tableQueue, tableRepository, gameNotificationManager(), tableFactory(), walletTransactionManager);
     }
 
     @Bean
@@ -146,6 +147,11 @@ public class TicTacToeSpringConfiguration {
             return new WalletTransactionManager() {
                 @Override
                 public void process(WalletTransaction walletTransaction) {
+                }
+
+                @Override
+                public boolean canAfford(WalletOperation walletOperation) {
+                    return true;
                 }
             };
         }

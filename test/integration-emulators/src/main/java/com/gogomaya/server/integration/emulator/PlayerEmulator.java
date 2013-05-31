@@ -46,7 +46,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     public void run() {
         while (continueEmulation.get()) {
             // Step 1. Start player emulator
-            GamePlayer<State> playerState = gameOperations.start(specification);
+            GamePlayer<State> playerState = gameOperations.construct(specification);
             logger.info("Registered {} on {} with session {}", new Object[] { playerState.getPlayer().getPlayerId(), playerState.getTable().getTableId(),
                     playerState.getSessionId() });
             currentPlayer.set(playerState);

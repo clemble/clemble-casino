@@ -36,7 +36,7 @@ public class SimpleTicTacToeGameTest {
 
     @Test
     public void testSimpleStart() {
-        List<GamePlayer<TicTacToeState>> players = gameOperations.start();
+        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
         TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
         TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
 
@@ -63,7 +63,7 @@ public class SimpleTicTacToeGameTest {
 
     @Test
     public void testSimpleScenario() {
-        List<GamePlayer<TicTacToeState>> players = gameOperations.start();
+        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
         TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
         TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
 

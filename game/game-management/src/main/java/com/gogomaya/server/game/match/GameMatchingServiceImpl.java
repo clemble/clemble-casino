@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Inject;
 
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.action.GameTableFactory;
@@ -15,6 +17,10 @@ import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.table.GameTableQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
+import com.gogomaya.server.money.Money;
+import com.gogomaya.server.money.Operation;
+import com.gogomaya.server.player.wallet.WalletOperation;
+import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
 public class GameMatchingServiceImpl<State extends GameState> implements GameMatchingService<State> {
 
@@ -23,19 +29,28 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
     final private GameTableFactory<State> tableFactory;
     final private GameNotificationService<State> notificationManager;
 
+    final private WalletTransactionManager walletTransactionManager;
+
     @Inject
     public GameMatchingServiceImpl(final GameTableQueue tableManager,
             final GameTableRepository<State> tableRepository,
             final GameNotificationService<State> notificationManager,
-            final GameTableFactory<State> tableFactory) {
+            final GameTableFactory<State> tableFactory,
+            final WalletTransactionManager walletTransactionManager) {
         this.tableManager = checkNotNull(tableManager);
         this.tableRepository = checkNotNull(tableRepository);
         this.notificationManager = checkNotNull(notificationManager);
         this.tableFactory = checkNotNull(tableFactory);
+        this.walletTransactionManager = checkNotNull(walletTransactionManager);
     }
 
     @Override
     public GameTable<State> reserve(final long playerId, final GameSpecification specification) {
+        // Step 0. Checking player can afford to play this game
+        WalletOperation operation = new WalletOperation().setPlayerId(playerId)
+                .setAmmount(new Money(specification.getCurrency(), specification.getBetRule().getPrice())).setOperation(Operation.Credit);
+        if (!walletTransactionManager.canAfford(operation))
+            throw GogomayaException.create(GogomayaError.GameSpecificationInsufficientMoney);
         // Step 1. Pooling
         Long tableId = tableManager.poll(specification);
         GameTable<State> table = tableFactory.findTable(tableId, specification);
@@ -61,5 +76,4 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
 
         return table;
     }
-
 }

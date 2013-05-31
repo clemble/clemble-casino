@@ -17,6 +17,7 @@ public class GogomayaException extends RuntimeException {
     final private GogomayaFailure failure;
 
     private GogomayaException(GogomayaFailure gogomayaFailure) {
+        super(gogomayaFailure.toString());
         this.failure = gogomayaFailure;
     }
 

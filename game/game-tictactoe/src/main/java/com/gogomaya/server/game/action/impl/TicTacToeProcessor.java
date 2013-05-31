@@ -44,14 +44,15 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
         Collection<Long> opponents = state.getOpponents(looser);
         if (opponents.size() == 0) {
             // Step 2. No game started just live the table
-            state.setNoOutcome().increaseVersion();
+            state.setOutcome(new NoOutcome());
             return ImmutableList.<GameEvent<TicTacToeState>> of(new PlayerGaveUpEvent<TicTacToeState>().setPlayerId(looser).setState(state),
                     new GameEndedEvent<TicTacToeState>().setOutcome(new NoOutcome()).setState(state));
         } else {
             long winner = opponents.iterator().next();
+            state.setOutcome(new PlayerWonOutcome(winner));
             // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
             return ImmutableList.<GameEvent<TicTacToeState>> of(new PlayerGaveUpEvent<TicTacToeState>().setPlayerId(looser).setState(state),
-                    new GameEndedEvent<TicTacToeState>().setOutcome(new PlayerWonOutcome(winner)).setState(state));
+                    new GameEndedEvent<TicTacToeState>(state));
         }
     }
 

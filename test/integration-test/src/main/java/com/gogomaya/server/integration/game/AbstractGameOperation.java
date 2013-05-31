@@ -45,31 +45,36 @@ abstract public class AbstractGameOperation<State extends GameState> implements 
     }
 
     @Override
-    final public GamePlayer<State> start(GameSpecification specification) {
+    final public GamePlayer<State> construct(GameSpecification specification) {
         // Step 1. Creating player
         Player player = checkNotNull(playerOperations.createPlayer());
         // Step 2. Creating appropriate GamePlayer
-        return initialize(player, specification);
+        return construct(player, specification);
     }
 
     @Override
-    public List<GamePlayer<State>> start() {
+    public List<GamePlayer<State>> constructGame() {
         // Step 1. Selecting specification for the game
-        return construct(selectSpecification());
+        return constructGame(selectSpecification());
     }
 
     @Override
-    public List<GamePlayer<State>> construct(GameSpecification specification) {
+    final public GameTable<State> start(Player player) {
+        return start(player, selectSpecification());
+    }
+
+    @Override
+    public List<GamePlayer<State>> constructGame(GameSpecification specification) {
         // Step 1. Creating user and trying to put them on the same table
-        GamePlayer<State> playerA = start(specification);
-        GamePlayer<State> playerB = start(specification);
+        GamePlayer<State> playerA = construct(specification);
+        GamePlayer<State> playerB = construct(specification);
         while (playerA.getTableId() != playerB.getTableId()) {
             playerA.clear();
-            playerA = start(specification);
+            playerA = construct(specification);
             // waits added to be sure everyone on the same page
             if (playerA.getTableId() != playerB.getTableId()) {
                 playerB.clear();
-                playerB = start(specification);
+                playerB = construct(specification);
             }
         }
         playerA.syncWith(playerB);
@@ -83,7 +88,12 @@ abstract public class AbstractGameOperation<State extends GameState> implements 
     }
 
     @Override
-    final public GamePlayer<State> initialize(Player player, GameSpecification specification) {
+    final public GamePlayer<State> construct(Player player) {
+        return construct(player, selectSpecification());
+    }
+
+    @Override
+    final public GamePlayer<State> construct(Player player, GameSpecification specification) {
         // Step 1. Connecting to the table
         GameTable<State> table = start(player, specification);
         // Step 2. Creating appropriate player

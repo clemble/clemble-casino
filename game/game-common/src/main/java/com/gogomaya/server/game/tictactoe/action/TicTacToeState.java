@@ -4,10 +4,11 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.DrawOutcome;
 import com.gogomaya.server.game.action.GameOutcome;
 import com.gogomaya.server.game.action.GamePlayerState;
-import com.gogomaya.server.game.action.NoOutcome;
 import com.gogomaya.server.game.action.PlayerWonOutcome;
 import com.gogomaya.server.game.action.SequentialPlayerIterator;
 import com.gogomaya.server.game.action.impl.AbstractGameState;
@@ -92,8 +93,11 @@ public class TicTacToeState extends AbstractGameState {
         return outcome;
     }
 
-    public TicTacToeState setNoOutcome() {
-        this.outcome = new NoOutcome();
+    public TicTacToeState setOutcome(GameOutcome outcome) {
+        if (this.outcome != null)
+            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+        this.outcome = outcome;
+        this.increaseVersion();
         return this;
     }
 
