@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.util.Date;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
@@ -32,6 +36,25 @@ public class GogomayaErrorFormat {
             jsonGenerator.writeEndObject();
         }
 
+    }
+
+    public static class GogomayaErrorDeserializer extends JsonDeserializer<GogomayaError> {
+
+        @Override
+        public GogomayaError deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            String code = null;
+            JsonToken token = null;
+            do {
+                if (jp.getCurrentName() == "code") {
+                    code = jp.getValueAsString();
+                } else if (jp.getCurrentName() == "description") {
+                    jp.getValueAsString();
+                }
+                token = jp.nextToken();
+            } while (token != null && token != JsonToken.END_OBJECT);
+
+            return GogomayaError.forCode(code);
+        }
     }
 
 }

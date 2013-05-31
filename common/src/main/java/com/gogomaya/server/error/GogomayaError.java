@@ -9,16 +9,19 @@ import java.util.Set;
 
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gogomaya.server.error.GogomayaErrorFormat.GogomayaErrorDeserializer;
 import com.gogomaya.server.error.GogomayaErrorFormat.GogomayaErrorSerializer;
 
 @JsonSerialize(using = GogomayaErrorSerializer.class)
+@JsonDeserialize(using = GogomayaErrorDeserializer.class)
 public enum GogomayaError {
 
     ServerError(Code.SERVER_ERROR_CODE, "Server error"),
     ServerCriticalError(Code.SERVER_CRITICAL_ERROR_CODE, "Server critical error"),
     ServerSessionProcessingError(Code.SERVER_SESSION_PROCESSING_CRITICAL_CODE, "Server session processing error"),
-    
+
     BadRequestPlayerIdHeaderMissing(Code.BAD_REQUEST_PLAYER_ID_HEADER_MISSING, "Player ID missing from the Header"),
     BadRequestSessionIdHeaderMissing(Code.BAD_REQUEST_SESSION_ID_HEADER_MISSING, "Session ID missing from the Header"),
     BadRequestTableIdHeaderMissing(Code.BAD_REQUEST_TABLE_ID_HEADER_MISSING, "Table ID missing from the Header"),
@@ -50,7 +53,7 @@ public enum GogomayaError {
     ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json"),
 
     GameSpecificationInvalid(Code.GAME_SPECIFICATION_INVAID_CODE, "Provided game specification is invalid"),
-    
+
     GamePlayGameEnded(Code.GAMEPLAY_GAME_ENDED_CODE, "Game already ended"),
     GamePlayGameNotStarted(Code.GAMEPLAY_GAME_NOT_STARTED_CODE, "Game has not started yet"),
 

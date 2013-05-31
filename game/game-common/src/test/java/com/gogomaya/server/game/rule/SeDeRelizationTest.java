@@ -13,9 +13,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaFailure;
 import com.gogomaya.server.game.action.move.GiveUpMove;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.rule.bet.BetRule;
@@ -135,6 +136,16 @@ public class SeDeRelizationTest {
         Assert.assertEquals(giveUpMove, parsedBetOnCellMove);
 
         System.out.println(value);
+    }
+
+    @Test
+    public void testErrorSeDeRealization() throws Throwable {
+        GogomayaFailure failure = new GogomayaFailure(GogomayaError.BadRequestPlayerIdHeaderMissing);
+
+        String value = objectMapper.writeValueAsString(failure);
+        System.out.println(value);
+        GogomayaFailure deserializedFailure = objectMapper.readValue(value, GogomayaFailure.class);
+        Assert.assertEquals(failure, deserializedFailure);
     }
 
 }

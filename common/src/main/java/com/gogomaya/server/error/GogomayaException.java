@@ -32,6 +32,10 @@ public class GogomayaException extends RuntimeException {
         return new GogomayaException(new GogomayaFailure(Collections.singleton(gogomayaError)));
     }
 
+    public static GogomayaException create(GogomayaFailure gogomayaFailure) {
+        return new GogomayaException(gogomayaFailure);
+    }
+
     public static GogomayaException create(Collection<String> errorCodes) {
         errorCodes = errorCodes == null || errorCodes.size() == 0 ? Collections.singleton(Code.SERVER_ERROR_CODE) : errorCodes;
 

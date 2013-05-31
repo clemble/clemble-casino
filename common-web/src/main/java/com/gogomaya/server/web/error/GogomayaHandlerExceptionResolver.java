@@ -2,12 +2,15 @@ package com.gogomaya.server.web.error;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,6 +19,7 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.error.GogomayaFailure;
 
+@Controller
 public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolver {
 
     final ObjectMapper objectMapper;
@@ -25,8 +29,8 @@ public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolve
     }
 
     @Override
-    public @ResponseBody
-    ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+    @ExceptionHandler(value = Exception.class)
+    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         GogomayaFailure gogomayaFailure = null;
         if (ex instanceof GogomayaException) {
             gogomayaFailure = ((GogomayaException) ex).getFailure();
@@ -41,15 +45,16 @@ public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolve
             }
         }
 
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setHeader("Content-Type", "application/json");
         gogomayaFailure = gogomayaFailure == null ? GogomayaFailure.ServerError : gogomayaFailure;
 
         try {
             objectMapper.writeValue(response.getOutputStream(), gogomayaFailure);
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException ignore) {
+            ignore.printStackTrace();
         }
 
-        return null;
+        return new ModelAndView();
     }
 }

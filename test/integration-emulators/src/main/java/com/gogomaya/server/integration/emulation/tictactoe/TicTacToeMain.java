@@ -18,7 +18,7 @@ public class TicTacToeMain {
     public static void main(String[] arguments) {
         // Step 1. Reading application context configuration
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-        applicationContext.getEnvironment().setActiveProfiles("remoteIntegration");
+        applicationContext.getEnvironment().setActiveProfiles("localIntegration");
         applicationContext.register(TestConfiguration.class);
         applicationContext.register(MainConfiguration.class);
         applicationContext.refresh();

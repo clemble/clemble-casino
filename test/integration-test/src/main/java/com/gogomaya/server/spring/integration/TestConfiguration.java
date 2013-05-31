@@ -21,6 +21,7 @@ import com.gogomaya.server.integration.player.WebPlayerOperations;
 import com.gogomaya.server.integration.tictactoe.IntegrationTicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.WebTicTacToeOperations;
+import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.spring.web.WebGenericConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiConfiguration;
 import com.gogomaya.server.web.active.session.GameEngineController;
@@ -126,7 +127,9 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public RestTemplate restTemplate() {
-            return new RestTemplate();
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.setErrorHandler(new GogomayaHTTPErrorHandler());
+            return restTemplate;
         }
 
         @Bean
