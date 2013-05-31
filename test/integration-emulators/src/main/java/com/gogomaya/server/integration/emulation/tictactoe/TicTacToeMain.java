@@ -14,10 +14,11 @@ import com.gogomaya.server.spring.integration.TestConfiguration;
 
 public class TicTacToeMain {
 
+    @SuppressWarnings("resource")
     public static void main(String[] arguments) {
         // Step 1. Reading application context configuration
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-        applicationContext.getEnvironment().setActiveProfiles("localServerIntegration");
+        applicationContext.getEnvironment().setActiveProfiles("remoteIntegration");
         applicationContext.register(TestConfiguration.class);
         applicationContext.register(MainConfiguration.class);
         applicationContext.refresh();
@@ -26,6 +27,9 @@ public class TicTacToeMain {
         // Step 2. Starting game emulator
         GameplayEmulator<TicTacToeState> emulator = applicationContext.getBean(GameplayEmulator.class);
         emulator.emulate();
+
+        // Step 3. To guarantee proper resource release, registering shutdown hook
+        applicationContext.registerShutdownHook();
     }
 
     @Configuration

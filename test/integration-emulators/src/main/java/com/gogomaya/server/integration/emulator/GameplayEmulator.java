@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PreDestroy;
 
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
@@ -29,6 +32,19 @@ public class GameplayEmulator<State extends GameState> {
     public GameplayEmulator(final GameOperations<State> gameOperations, final GameActor<State> gameActor) {
         this.gameOperations = checkNotNull(gameOperations);
         this.actor = gameActor;
+    }
+
+    @PreDestroy
+    public void clean() {
+        System.out.println("Cleaning Emulators");
+        for (GameSpecification specification : playerEmulators.keySet()) {
+            for (PlayerEmulator<State> emulator : playerEmulators.get(specification)) {
+                try {
+                    emulator.stop();
+                } catch (Throwable ignore) {
+                }
+            }
+        }
     }
 
     public void emulate() {
@@ -52,7 +68,7 @@ public class GameplayEmulator<State extends GameState> {
             createEmulator(specification);
         }
         // Step 4. Creating executor to run all emulators separately
-        // executorService.scheduleAtFixedRate(new PlayerEmulatorManager(), 15, 15, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(new PlayerEmulatorManager(), 30, 30, TimeUnit.SECONDS);
     }
 
     private void createEmulator(GameSpecification specification) {
@@ -65,27 +81,22 @@ public class GameplayEmulator<State extends GameState> {
 
         @Override
         public void run() {
-            for(GameSpecification specification: playerEmulators.keySet()) {
-                List<PlayerEmulator<State>> damagedEmulators = new ArrayList<PlayerEmulator<State>>();
+            for (GameSpecification specification : playerEmulators.keySet()) {
+                List<PlayerEmulator<State>> emulatorsToRelease = new ArrayList<PlayerEmulator<State>>();
                 // Step 1. Checking all emulators from existing player emulators
                 // Step 1.1. Check if there is no pending users
-                boolean hasWaiting = false;
                 for (PlayerEmulator<State> emulator : playerEmulators.get(specification)) {
                     if (!emulator.isAlive()) {
                         emulator.stop();
-                        damagedEmulators.add(emulator);
+                        emulatorsToRelease.add(emulator);
                     }
-                    hasWaiting = hasWaiting || !emulator.isActive();
                 }
                 // Step 2. Removing all playerEmulators from the list
-                playerEmulators.get(specification).removeAll(damagedEmulators);
+                playerEmulators.get(specification).removeAll(emulatorsToRelease);
                 // Step 3. Creating new PlayerEmulators for the damaged specification
-                for (PlayerEmulator<State> emulator : damagedEmulators) {
+                for (PlayerEmulator<State> emulator : emulatorsToRelease) {
                     createEmulator(emulator.getSpecification());
                 }
-                // Step 4. If there is no pending or damaged users create one
-                if(hasWaiting && damagedEmulators.size() == 0)
-                    createEmulator(specification);
             }
         }
 

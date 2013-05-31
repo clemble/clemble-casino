@@ -2,6 +2,7 @@ package com.gogomaya.server.integration.emulator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -9,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameOperations;
@@ -59,11 +61,12 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     }
 
     public boolean isAlive() {
-        return true;
-    }
-
-    public boolean isActive() {
-        return !currentPlayer.get().getState().getNextMoves().isEmpty();
+        GameSessionState sessionState = currentPlayer.get().getTable().getCurrentSession().getSessionState();
+        if (sessionState == GameSessionState.inactive)
+            return true;
+        if (sessionState == GameSessionState.ended)
+            return false;
+        return lastMoved.get() < System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1);
     }
 
     public void stop() {
