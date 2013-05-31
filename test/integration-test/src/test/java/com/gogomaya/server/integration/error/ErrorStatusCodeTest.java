@@ -25,12 +25,21 @@ public class ErrorStatusCodeTest {
     @Inject
     GameOperations<TicTacToeState> gameOperations;
 
-    @Test(expected= GogomayaException.class)
-    public void testSimpleStart() {
+    @Test(expected = GogomayaException.class)
+    public void testSelectTwiceError() {
         List<GamePlayer<TicTacToeState>> players = gameOperations.start();
         TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
 
         playerA.select(0, 0);
+        playerA.select(1, 1);
+    }
+
+    @Test(expected = GogomayaException.class)
+    public void testBetBig() {
+        List<GamePlayer<TicTacToeState>> players = gameOperations.start();
+        TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
+
         playerA.select(0, 0);
+        playerA.bet(Integer.MAX_VALUE);
     }
 }

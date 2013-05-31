@@ -26,7 +26,7 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
     public Collection<GameEvent<TicTacToeState>> process(TicTacToeState state, GameMove move) {
         // Step 1. Processing Select cell move
         if (state.complete())
-            return ImmutableList.<GameEvent<TicTacToeState>>of();
+            return ImmutableList.<GameEvent<TicTacToeState>> of();
         if (move instanceof TicTacToeSelectCellMove) {
             return ImmutableList.<GameEvent<TicTacToeState>> of(processSelectCellMove(state, (TicTacToeSelectCellMove) move));
         } else if (move instanceof TicTacToeBetOnCellMove) {
@@ -44,9 +44,7 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
         Collection<Long> opponents = state.getOpponents(looser);
         if (opponents.size() == 0) {
             // Step 2. No game started just live the table
-            state
-                .setNoOutcome()
-                .increaseVersion();
+            state.setNoOutcome().increaseVersion();
             return ImmutableList.<GameEvent<TicTacToeState>> of(new PlayerGaveUpEvent<TicTacToeState>().setPlayerId(looser).setState(state),
                     new GameEndedEvent<TicTacToeState>().setOutcome(new NoOutcome()).setState(state));
         } else {
@@ -58,8 +56,9 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
     }
 
     private GameEvent<TicTacToeState> processBetOnCellMove(final TicTacToeState state, final TicTacToeBetOnCellMove betMove) {
+        // Step 1. Populating made moves
         state.addMadeMove(betMove);
-
+        // Step 2. Checking if everybody already made their bets
         if (state.getNextMoves().isEmpty()) {
             long[] players = state.getPlayerIterator().getPlayers();
 

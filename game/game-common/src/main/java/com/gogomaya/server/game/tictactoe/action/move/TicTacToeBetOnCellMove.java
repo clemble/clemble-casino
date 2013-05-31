@@ -2,8 +2,9 @@ package com.gogomaya.server.game.tictactoe.action.move;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gogomaya.server.game.action.move.BetMove;
 
-public class TicTacToeBetOnCellMove extends TicTacToeMove {
+public class TicTacToeBetOnCellMove extends TicTacToeMove implements BetMove {
 
     /**
      * Generated 02/04/13
@@ -25,6 +26,7 @@ public class TicTacToeBetOnCellMove extends TicTacToeMove {
         this.bet = bet;
     }
 
+    @Override
     public long getBet() {
         return bet;
     }

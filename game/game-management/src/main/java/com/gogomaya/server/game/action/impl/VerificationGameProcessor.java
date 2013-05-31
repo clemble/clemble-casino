@@ -2,8 +2,10 @@ package com.gogomaya.server.game.action.impl;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.action.move.BetMove;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.GiveUpMove;
 
@@ -30,6 +32,11 @@ public class VerificationGameProcessor<State extends GameState> extends Abstract
                 throw GogomayaException.create(GogomayaError.GamePlayNoMoveExpected);
             if (expectedMove.getClass() != move.getClass())
                 throw GogomayaException.create(GogomayaError.GamePlayWrongMoveType);
+            if (move instanceof BetMove) {
+                GamePlayerState gamePlayerState = state.getPlayerState(move.getPlayerId());
+                if (((BetMove) move).getBet() > gamePlayerState.getMoneyLeft())
+                    throw GogomayaException.create(GogomayaError.GamePlayBetOverflow);
+            }
         }
     }
 
