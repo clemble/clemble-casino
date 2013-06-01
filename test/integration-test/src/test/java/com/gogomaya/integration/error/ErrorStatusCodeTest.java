@@ -76,4 +76,14 @@ public class ErrorStatusCodeTest {
             playerBState.clear();
         }
     }
+
+    @Test(expected = GogomayaException.class)
+    public void testCreatingSimultaniousGames() {
+        Player playerA = playerOperations.createPlayer();
+
+        GameSpecification specification = gameOperations.selectSpecification();
+
+        gameOperations.construct(playerA, specification);
+        gameOperations.construct(playerA, specification);
+    }
 }

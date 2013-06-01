@@ -25,7 +25,7 @@ abstract public class AbstractPlayerOperations implements PlayerOperations {
         // Step 0. Sanity check
         checkNotNull(playerProfile);
         // Step 1. Creating RegistrationRequest for processing
-        PlayerCredential playerCredential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(20) + "@gmail.com").setPassword(
+        PlayerCredential playerCredential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(30) + "@gmail.com").setPassword(
                 UUID.randomUUID().toString());
         RegistrationRequest registrationRequest = new RegistrationRequest().setPlayerProfile(playerProfile).setPlayerCredential(playerCredential);
         // Step 2. Forwarding to appropriate method for processing

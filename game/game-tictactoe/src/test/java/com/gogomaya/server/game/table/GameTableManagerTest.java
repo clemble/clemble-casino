@@ -10,8 +10,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -31,11 +33,12 @@ import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
+import com.gogomaya.server.test.RedisCleaner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
-@Transactional
+@TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class GameTableManagerTest {
 
     @Inject

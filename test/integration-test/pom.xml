@@ -10,6 +10,10 @@
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
+            <artifactId>test-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gogomaya.server</groupId>
             <artifactId>common</artifactId>
         </dependency>
         <dependency>

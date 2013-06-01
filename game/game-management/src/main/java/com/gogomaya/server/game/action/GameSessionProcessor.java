@@ -9,6 +9,7 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.GiveUpMove;
+import com.gogomaya.server.game.active.ActivePlayerQueue;
 import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.event.GameEvent;
 import com.gogomaya.server.game.outcome.GameOutcomeService;
@@ -16,17 +17,18 @@ import com.gogomaya.server.game.outcome.GameOutcomeService;
 public class GameSessionProcessor<State extends GameState> {
 
     final private GameCacheService<State> cacheService;
-
     final private GameNotificationService<State> notificationService;
-
     final private GameOutcomeService<State> outcomeService;
+    final private ActivePlayerQueue activePlayerQueue;
 
     public GameSessionProcessor(final GameOutcomeService<State> outcomeService,
             final GameCacheService<State> cacheService,
-            final GameNotificationService<State> notificationService) {
+            final GameNotificationService<State> notificationService,
+            final ActivePlayerQueue activePlayerQueue) {
         this.notificationService = checkNotNull(notificationService);
         this.cacheService = checkNotNull(cacheService);
         this.outcomeService = checkNotNull(outcomeService);
+        this.activePlayerQueue = checkNotNull(activePlayerQueue);
     }
 
     public State process(long sessionId, GameMove move) {
@@ -40,8 +42,12 @@ public class GameSessionProcessor<State extends GameState> {
                 throw GogomayaException.create(GogomayaError.GamePlayGameNotStarted);
             }
         }
-        if (cache.getSession().getSessionState() == GameSessionState.ended)
-            throw GogomayaException.create(GogomayaError.GamePlayGameEnded);
+        if (cache.getSession().getSessionState() == GameSessionState.ended) {
+            if (!(move instanceof GiveUpMove)) {
+                throw GogomayaException.create(GogomayaError.GamePlayGameEnded);
+            }
+            return cache.getSession().getState();
+        }
         ReentrantLock reentrantLock = cache.getSessionLock();
         // Step 3. Acquiring lock for the session, to exclude parallel processing
         reentrantLock.lock();
@@ -54,8 +60,12 @@ public class GameSessionProcessor<State extends GameState> {
             Collection<GameEvent<State>> events = processor.process(state, move);
             for (GameEvent<State> event : events)
                 event.setSession(sessionId);
-            if (state.getOutcome() instanceof PlayerWonOutcome) {
-                outcomeService.finished(cache.getSession());
+            if (state.complete()) {
+                cache.getSession().setSessionState(GameSessionState.ended);
+                activePlayerQueue.markInActive(cache.getSession().getPlayers());
+                if (state.getOutcome() instanceof PlayerWonOutcome) {
+                    outcomeService.finished(cache.getSession());
+                }
             }
             // Step 7. Invoking appropriate notification
             notificationService.notify(cache.getConnection(), events);

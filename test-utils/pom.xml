@@ -3,20 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.gogomaya.server</groupId>
-        <artifactId>game</artifactId>
+        <artifactId>parent</artifactId>
         <version>0.0.3-SNAPSHOT</version>
     </parent>
-    <artifactId>game-tictactoe</artifactId>
+    <artifactId>test-utils</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>game-management</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>test-utils</artifactId>
-            <scope>test</scope>
+            <artifactId>common</artifactId>
         </dependency>
     </dependencies>
 </project>

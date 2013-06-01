@@ -1,6 +1,7 @@
 package com.gogomaya.server.spring.game;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
 import com.gogomaya.server.game.table.GameTableQueue;
-import com.gogomaya.server.game.table.JavaTableQueue;
+import com.gogomaya.server.game.table.JavaGameTableQueue;
 import com.gogomaya.server.game.table.RedisGameTableQueue;
 import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 
@@ -26,12 +27,6 @@ import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
 @Import(value = { CommonModuleSpringConfiguration.class, GameManagementSpringConfiguration.GameManagementTestConfiguration.class,
         GameManagementSpringConfiguration.GameManagementCloudConfiguration.class })
 public class GameManagementSpringConfiguration {
-
-    @Inject
-    public RedisTemplate<byte[], Long> redisTemplate;
-
-    @Inject
-    public GameServerConnectionManager serverConnectionManager;
 
     @Profile(value = { "default", "test" })
     public static class GameManagementTestConfiguration {
@@ -45,15 +40,16 @@ public class GameManagementSpringConfiguration {
         @Bean
         @Singleton
         public GameTableQueue gameTableQueue() {
-            return new JavaTableQueue();
+            return new JavaGameTableQueue();
         }
 
     }
 
     @Profile(value = { "cloud" })
     public static class GameManagementCloudConfiguration {
-        
+
         @Inject
+        @Named("tableQueueTemplate")
         public RedisTemplate<byte[], Long> redisTemplate;
 
         @Bean

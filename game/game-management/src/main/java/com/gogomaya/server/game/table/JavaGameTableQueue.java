@@ -12,7 +12,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class JavaTableQueue implements GameTableQueue {
+public class JavaGameTableQueue implements GameTableQueue {
 
     final private LoadingCache<SpecificationName, Queue<Long>> PENDING_SESSIONS_CACHE = CacheBuilder.newBuilder().build(
             new CacheLoader<SpecificationName, Queue<Long>>() {

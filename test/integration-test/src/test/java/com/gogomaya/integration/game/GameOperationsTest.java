@@ -5,12 +5,13 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import org.jbehave.core.annotations.UsingSteps;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.event.GogomayaEvent;
@@ -28,12 +29,12 @@ import com.gogomaya.server.integration.game.listener.ListenerChannel;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
-import com.gogomaya.tests.validation.PlayerCredentialsValidation;
+import com.gogomaya.server.test.RedisCleaner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@UsingSteps(instances = PlayerCredentialsValidation.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
+@TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
 public class GameOperationsTest {
 
     @Inject

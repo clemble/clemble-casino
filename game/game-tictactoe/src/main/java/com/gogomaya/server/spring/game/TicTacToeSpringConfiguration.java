@@ -1,6 +1,7 @@
 package com.gogomaya.server.spring.game;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -19,6 +20,8 @@ import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.game.action.GameTableFactory;
 import com.gogomaya.server.game.action.impl.TicTacToeProcessor;
 import com.gogomaya.server.game.action.impl.TicTacToeStateFactory;
+import com.gogomaya.server.game.active.ActivePlayerQueue;
+import com.gogomaya.server.game.active.RedisActivePlayerQueue;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
@@ -53,9 +56,6 @@ public class TicTacToeSpringConfiguration {
     public GameSpecificationRepository specificationRepository;
 
     @Inject
-    public RedisTemplate<byte[], Long> redisTemplate;
-
-    @Inject
     public GameTableRepository<TicTacToeState> tableRepository;
 
     @Inject
@@ -67,6 +67,16 @@ public class TicTacToeSpringConfiguration {
     @Inject
     public WalletTransactionManager walletTransactionManager;
 
+    @Inject
+    @Named("playerQueueTemplate")
+    public RedisTemplate<Long, Long> playerQueueTemplate;
+
+    @Bean
+    @Singleton
+    public ActivePlayerQueue activePlayerQueue() {
+        return new RedisActivePlayerQueue(playerQueueTemplate);
+    }
+
     @Bean
     @Singleton
     public GameNotificationService<TicTacToeState> gameNotificationManager() {
@@ -76,7 +86,7 @@ public class TicTacToeSpringConfiguration {
     @Bean
     @Singleton
     public GameMatchingServiceImpl<TicTacToeState> stateManager() {
-        return new GameMatchingServiceImpl<TicTacToeState>(tableQueue, tableRepository, gameNotificationManager(), tableFactory(), walletTransactionManager);
+        return new GameMatchingServiceImpl<TicTacToeState>(tableQueue, tableRepository, gameNotificationManager(), tableFactory(), walletTransactionManager, activePlayerQueue());
     }
 
     @Bean
@@ -118,7 +128,7 @@ public class TicTacToeSpringConfiguration {
     @Bean
     @Singleton
     public GameSessionProcessor<TicTacToeState> sessionProcessor() {
-        return new GameSessionProcessor<TicTacToeState>(outcomeService(), cacheService(), gameNotificationManager());
+        return new GameSessionProcessor<TicTacToeState>(outcomeService(), cacheService(), gameNotificationManager(), activePlayerQueue());
     }
 
     @Profile(value = { "default" })

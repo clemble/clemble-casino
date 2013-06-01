@@ -9,6 +9,8 @@
         <module>common</module>
         <module>common-web</module>
 
+        <module>test-utils</module>
+
         <module>player</module>
         <module>payment</module>
         <module>game</module>
@@ -42,7 +44,7 @@
         <spring.security.version>3.1.3.RELEASE</spring.security.version>
         <spring-data-jpa.version>1.3.1.RELEASE</spring-data-jpa.version>
         <spring-data-rest.version>1.0.0.RELEASE</spring-data-rest.version>
-        <spring-data-redis.version>1.0.3.RELEASE</spring-data-redis.version>
+        <spring-data-redis.version>1.0.4.RELEASE</spring-data-redis.version>
         <!-- NoSQL dependencies -->
         <jedis.version>2.1.0</jedis.version>
         <!-- Dependencies for Spring Social -->
@@ -104,6 +106,13 @@
                 <artifactId>common-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>test-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>game</artifactId>

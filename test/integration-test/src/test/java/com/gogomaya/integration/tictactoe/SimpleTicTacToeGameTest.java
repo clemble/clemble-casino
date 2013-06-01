@@ -4,12 +4,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.jbehave.core.annotations.UsingSteps;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.game.action.PlayerWonOutcome;
@@ -20,12 +21,12 @@ import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.spring.integration.TestConfiguration;
-import com.gogomaya.tests.validation.PlayerCredentialsValidation;
+import com.gogomaya.server.test.RedisCleaner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@UsingSteps(instances = PlayerCredentialsValidation.class)
 @ContextConfiguration(classes = { TestConfiguration.class })
+@TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
 public class SimpleTicTacToeGameTest {
 
     @Inject
@@ -39,26 +40,30 @@ public class SimpleTicTacToeGameTest {
         List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
         TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
         TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+        try {
+            int gamePrice = playerA.getSpecification().getBetRule().getPrice();
 
-        int gamePrice = playerA.getSpecification().getBetRule().getPrice();
+            long playerAidentifier = playerA.getPlayer().getPlayerId();
+            long playerBidentifier = playerB.getPlayer().getPlayerId();
 
-        long playerAidentifier = playerA.getPlayer().getPlayerId();
-        long playerBidentifier = playerB.getPlayer().getPlayerId();
+            Assert.assertNotNull(players);
+            Assert.assertEquals(playerA.getTableId(), playerB.getTableId());
+            Assert.assertEquals(players.size(), 2);
 
-        Assert.assertNotNull(players);
-        Assert.assertEquals(playerA.getTableId(), playerB.getTableId());
-        Assert.assertEquals(players.size(), 2);
+            playerA.select(0, 0);
 
-        playerA.select(0, 0);
+            playerA.bet(5);
+            playerB.bet(2);
 
-        playerA.bet(5);
-        playerB.bet(2);
-
-        Assert.assertTrue(playerB.getState().getBoard()[0][0].owned());
-        Assert.assertEquals(playerB.getState().getNextMoves().size(), 1);
-        Assert.assertEquals(playerB.getState().getPlayerState(playerAidentifier).getMoneyLeft(), gamePrice - 5);
-        Assert.assertEquals(playerB.getState().getPlayerState(playerBidentifier).getMoneyLeft(), gamePrice - 2);
-        Assert.assertNotNull(playerB.getState().getNextMove(playerBidentifier));
+            Assert.assertTrue(playerB.getState().getBoard()[0][0].owned());
+            Assert.assertEquals(playerB.getState().getNextMoves().size(), 1);
+            Assert.assertEquals(playerB.getState().getPlayerState(playerAidentifier).getMoneyLeft(), gamePrice - 5);
+            Assert.assertEquals(playerB.getState().getPlayerState(playerBidentifier).getMoneyLeft(), gamePrice - 2);
+            Assert.assertNotNull(playerB.getState().getNextMove(playerBidentifier));
+        } finally {
+            playerA.clear();
+            playerB.clear();
+        }
     }
 
     @Test

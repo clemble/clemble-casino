@@ -27,8 +27,15 @@ public class RedisSpringConfiguration {
     RedisConnectionFactory redisConnectionFactory;
 
     @Bean
-    public RedisTemplate<byte[], Long> redisTemplate() {
+    public RedisTemplate<byte[], Long> tableQueueTemplate() {
         RedisTemplate<byte[], Long> redisTemplate = new RedisTemplate<byte[], Long>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<Long, Long> playerQueueTemplate() {
+        RedisTemplate<Long, Long> redisTemplate = new RedisTemplate<Long, Long>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }
@@ -61,7 +68,7 @@ public class RedisSpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = {"default", "test"})
+    @Profile(value = { "default", "test" })
     static class RedisDefaultConfigurations {
 
         @Bean

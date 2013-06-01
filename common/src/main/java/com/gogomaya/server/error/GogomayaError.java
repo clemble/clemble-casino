@@ -54,6 +54,7 @@ public enum GogomayaError {
 
     GameSpecificationInvalid(Code.GAME_SPECIFICATION_INVAID_CODE, "Provided game specification is invalid"),
     GameSpecificationInsufficientMoney(Code.GAME_SPECIFICATION_INSUFFICIENT_MONEY_CODE, "Not enough money for this game"),
+    GameMatchPlayerHasPendingSessions(Code.GAMEMATCH_PLAYER_HAS_PENDING_SESSIONS_CODE, "Player has opened sessions"),
 
     GamePlayGameEnded(Code.GAMEPLAY_GAME_ENDED_CODE, "Game already ended"),
     GamePlayGameNotStarted(Code.GAMEPLAY_GAME_NOT_STARTED_CODE, "Game has not started yet"),
@@ -167,6 +168,8 @@ public enum GogomayaError {
         // Generic Client errors
         final public static String CLIENT_JSON_INVALID_ERROR_CODE = "0D0";
         final public static String CLIENT_JSON_FORMAT_ERROR_CODE = "0D1";
+        // Generic Match errors
+        final public static String GAMEMATCH_PLAYER_HAS_PENDING_SESSIONS_CODE = "0K0";
         // Generic Game configuration errors
         final public static String GAME_SPECIFICATION_INVAID_CODE = "0E0";
         final public static String GAME_SPECIFICATION_INSUFFICIENT_MONEY_CODE = "0E1";

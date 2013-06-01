@@ -9,6 +9,7 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.action.GameTableFactory;
+import com.gogomaya.server.game.active.ActivePlayerQueue;
 import com.gogomaya.server.game.connection.GameConnection;
 import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.event.GameStartedEvent;
@@ -29,6 +30,8 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
     final private GameTableFactory<State> tableFactory;
     final private GameNotificationService<State> notificationManager;
 
+    final private ActivePlayerQueue activePlayerQueue;
+
     final private WalletTransactionManager walletTransactionManager;
 
     @Inject
@@ -36,7 +39,9 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
             final GameTableRepository<State> tableRepository,
             final GameNotificationService<State> notificationManager,
             final GameTableFactory<State> tableFactory,
-            final WalletTransactionManager walletTransactionManager) {
+            final WalletTransactionManager walletTransactionManager,
+            final ActivePlayerQueue activePlayerQueue) {
+        this.activePlayerQueue = checkNotNull(activePlayerQueue);
         this.tableManager = checkNotNull(tableManager);
         this.tableRepository = checkNotNull(tableRepository);
         this.notificationManager = checkNotNull(notificationManager);
@@ -46,6 +51,9 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
 
     @Override
     public GameTable<State> reserve(final long playerId, final GameSpecification specification) {
+        Long currentSession = activePlayerQueue.isActive(playerId);
+        if (currentSession != null)
+            throw GogomayaException.create(GogomayaError.GameMatchPlayerHasPendingSessions);
         // Step 0. Checking player can afford to play this game
         WalletOperation operation = new WalletOperation().setPlayerId(playerId)
                 .setAmmount(new Money(specification.getCurrency(), specification.getBetRule().getPrice())).setOperation(Operation.Credit);
@@ -55,6 +63,8 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
         Long tableId = tableManager.poll(specification);
         GameTable<State> table = tableFactory.findTable(tableId, specification);
 
+        if (!activePlayerQueue.markActive(playerId, table.getCurrentSession().getSessionId()))
+            throw GogomayaException.create(GogomayaError.GameMatchPlayerHasPendingSessions);
         table.addPlayer(playerId);
         table = tableRepository.save(table);
 
