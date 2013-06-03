@@ -29,23 +29,22 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.game.specification.GameSpecificationAware;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_SESSION")
-@TypeDefs(
-    value = {
-            @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
-                    name = JsonHibernateType.CLASS_NAME_PARAMETER,
-                    value = "com.gogomaya.server.game.action.GameState") }),
-            @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
-                    name = JsonHibernateType.CLASS_NAME_PARAMETER,
-                    value = "com.gogomaya.server.game.action.GameState") })
+@TypeDefs(value = {
+        @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
+                name = JsonHibernateType.CLASS_NAME_PARAMETER,
+                value = "com.gogomaya.server.game.action.GameState") }),
+        @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
+                name = JsonHibernateType.CLASS_NAME_PARAMETER,
+                value = "com.gogomaya.server.game.action.GameState") })
 
-    }
-)
-public class GameSession<State extends GameState> implements Serializable {
+})
+public class GameSession<State extends GameState> implements GameSpecificationAware, Serializable {
 
     /**
      * Generated 16/02/13
@@ -89,6 +88,7 @@ public class GameSession<State extends GameState> implements Serializable {
         this.sessionId = newSessionId;
     }
 
+    @Override
     public GameSpecification getSpecification() {
         return specification;
     }

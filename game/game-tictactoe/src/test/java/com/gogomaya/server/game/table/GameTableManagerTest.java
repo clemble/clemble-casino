@@ -19,7 +19,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.match.GameMatchingServiceImpl;
+import com.gogomaya.server.game.match.GameConstructionServiceImpl;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
@@ -42,7 +42,7 @@ import com.gogomaya.server.test.RedisCleaner;
 public class GameTableManagerTest {
 
     @Inject
-    GameMatchingServiceImpl<TicTacToeState> gameStateManager;
+    GameConstructionServiceImpl<TicTacToeState> gameStateManager;
 
     @Inject
     GameSpecificationRepository specificationRepository;
@@ -59,14 +59,14 @@ public class GameTableManagerTest {
 
         specificationRepository.saveAndFlush(specification);
 
-        GameTable<TicTacToeState> table = gameStateManager.reserve(1, specification);
+        GameTable<TicTacToeState> table = gameStateManager.findOpponent(1, specification);
 
         String serialized = objectMapper.writeValueAsString(table);
         objectMapper.readValue(serialized, GameTable.class);
 
         Assert.assertEquals(table.getSpecification(), specification);
 
-        GameTable<TicTacToeState> anotherTable = gameStateManager.reserve(2, specification);
+        GameTable<TicTacToeState> anotherTable = gameStateManager.findOpponent(2, specification);
 
         Assert.assertEquals(table.getTableId(), anotherTable.getTableId());
     }

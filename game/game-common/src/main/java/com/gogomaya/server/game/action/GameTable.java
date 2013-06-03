@@ -26,6 +26,7 @@ import org.hibernate.annotations.TypeDef;
 
 import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.game.specification.GameSpecificationAware;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 
@@ -34,7 +35,7 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
         name = JsonHibernateType.CLASS_NAME_PARAMETER,
         value = "com.gogomaya.server.game.action.GameState") })
-public class GameTable<State extends GameState> implements Serializable {
+public class GameTable<State extends GameState> implements GameSpecificationAware, Serializable {
 
     /**
      * Generated 27/03/13
@@ -110,6 +111,7 @@ public class GameTable<State extends GameState> implements Serializable {
         return this;
     }
 
+    @Override
     public GameSpecification getSpecification() {
         return specification;
     }

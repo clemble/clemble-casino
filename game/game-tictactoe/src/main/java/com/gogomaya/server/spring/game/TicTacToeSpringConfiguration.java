@@ -27,7 +27,7 @@ import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.connection.RabbitGameNotificationService;
 import com.gogomaya.server.game.connection.SimpleGameServerConnectionManager;
-import com.gogomaya.server.game.match.GameMatchingServiceImpl;
+import com.gogomaya.server.game.match.GameConstructionServiceImpl;
 import com.gogomaya.server.game.outcome.TicTacToeOutcomeService;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
@@ -85,8 +85,8 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
-    public GameMatchingServiceImpl<TicTacToeState> stateManager() {
-        return new GameMatchingServiceImpl<TicTacToeState>(tableQueue, tableRepository, gameNotificationManager(), tableFactory(), walletTransactionManager, activePlayerQueue());
+    public GameConstructionServiceImpl<TicTacToeState> stateManager() {
+        return new GameConstructionServiceImpl<TicTacToeState>(tableQueue, tableRepository, gameNotificationManager(), tableFactory(), walletTransactionManager, activePlayerQueue());
     }
 
     @Bean

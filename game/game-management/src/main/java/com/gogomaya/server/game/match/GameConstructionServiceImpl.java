@@ -2,6 +2,8 @@ package com.gogomaya.server.game.match;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import com.gogomaya.server.error.GogomayaError;
@@ -23,7 +25,7 @@ import com.gogomaya.server.money.Operation;
 import com.gogomaya.server.player.wallet.WalletOperation;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
-public class GameMatchingServiceImpl<State extends GameState> implements GameMatchingService<State> {
+public class GameConstructionServiceImpl<State extends GameState> implements GameConstructionService<State> {
 
     final private GameTableQueue tableManager;
     final private GameTableRepository<State> tableRepository;
@@ -35,7 +37,7 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
     final private WalletTransactionManager walletTransactionManager;
 
     @Inject
-    public GameMatchingServiceImpl(final GameTableQueue tableManager,
+    public GameConstructionServiceImpl(final GameTableQueue tableManager,
             final GameTableRepository<State> tableRepository,
             final GameNotificationService<State> notificationManager,
             final GameTableFactory<State> tableFactory,
@@ -50,10 +52,16 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
     }
 
     @Override
-    public GameTable<State> reserve(final long playerId, final GameSpecification specification) {
+    public GameTable<State> findOpponent(final long playerId, final GameSpecification specification) {
         Long currentSession = activePlayerQueue.isActive(playerId);
-        if (currentSession != null)
-            throw GogomayaException.create(GogomayaError.GameMatchPlayerHasPendingSessions);
+        if (currentSession != null) {
+            GameTable<State> table = tableRepository.findBySessionId(currentSession);
+            if (table == null) {
+                activePlayerQueue.markInActive(playerId);
+            } else {
+                return table;
+            }
+        }
         // Step 0. Checking player can afford to play this game
         WalletOperation operation = new WalletOperation().setPlayerId(playerId)
                 .setAmmount(new Money(specification.getCurrency(), specification.getBetRule().getPrice())).setOperation(Operation.Credit);
@@ -86,4 +94,29 @@ public class GameMatchingServiceImpl<State extends GameState> implements GameMat
 
         return table;
     }
+
+    @Override
+    public ScheduledGame schedule(long initiator, Collection<Long> playerIds, GameSpecification specification) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ScheduledGame cancel(long initiator, long scheduledGameId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ScheduledGame accept(long playerId, long scheduledGameId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ScheduledGame decline(long playerId, long scheduledGameId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

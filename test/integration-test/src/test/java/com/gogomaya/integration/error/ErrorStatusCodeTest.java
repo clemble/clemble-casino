@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -77,13 +79,14 @@ public class ErrorStatusCodeTest {
         }
     }
 
-    @Test(expected = GogomayaException.class)
+    @Test
     public void testCreatingSimultaniousGames() {
         Player playerA = playerOperations.createPlayer();
 
         GameSpecification specification = gameOperations.selectSpecification();
 
-        gameOperations.construct(playerA, specification);
-        gameOperations.construct(playerA, specification);
+        GamePlayer<TicTacToeState> gamePlayer = gameOperations.construct(playerA, specification);
+        GamePlayer<TicTacToeState> anotherGamePlayer = gameOperations.construct(playerA, specification);
+        Assert.assertEquals(gamePlayer.getTableId(), anotherGamePlayer.getTableId());
     }
 }

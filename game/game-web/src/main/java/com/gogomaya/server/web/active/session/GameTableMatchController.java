@@ -17,7 +17,7 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.configuration.GameConfigurationManager;
-import com.gogomaya.server.game.match.GameMatchingService;
+import com.gogomaya.server.game.match.GameConstructionService;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.table.GameTableRepository;
 
@@ -26,11 +26,11 @@ public class GameTableMatchController<State extends GameState> {
 
     final private GameConfigurationManager configurationManager;
 
-    final private GameMatchingService<State> matchingService;
+    final private GameConstructionService<State> matchingService;
 
     final private GameTableRepository<State> tableRepository;
 
-    public GameTableMatchController(final GameMatchingService<State> matchingService,
+    public GameTableMatchController(final GameConstructionService<State> matchingService,
             final GameTableRepository<State> sessionRepository,
             final GameConfigurationManager configurationManager) {
         this.matchingService = checkNotNull(matchingService);
@@ -46,7 +46,7 @@ public class GameTableMatchController<State extends GameState> {
         if (!configurationManager.getSpecificationOptions().valid(gameSpecification))
             throw GogomayaException.create(GogomayaError.GameSpecificationInvalid);
         // Step 2. Invoking actual matching service
-        return matchingService.reserve(playerId, gameSpecification);
+        return matchingService.findOpponent(playerId, gameSpecification);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/active/session/{sessionId}", produces = "application/json")
