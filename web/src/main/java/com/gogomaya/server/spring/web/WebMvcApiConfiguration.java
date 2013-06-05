@@ -2,6 +2,8 @@ package com.gogomaya.server.spring.web;
 
 import java.util.Arrays;
 
+import javax.inject.Singleton;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +52,7 @@ public class WebMvcApiConfiguration {
      * @return
      */
     @Bean
+    @Singleton
     public PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
         return new PersistenceAnnotationBeanPostProcessor();
     }
@@ -60,6 +63,7 @@ public class WebMvcApiConfiguration {
      * @return
      */
     @Bean
+    @Singleton
     public JpaRepositoryExporter jpaRepositoryExporter() {
         if (null == customJpaRepositoryExporter) {
             return new JpaRepositoryExporter();
@@ -74,6 +78,7 @@ public class WebMvcApiConfiguration {
      * @return
      */
     @Bean
+    @Singleton
     public ValidatingRepositoryEventListener validatingRepositoryEventListener() {
         return (null == validatingRepositoryEventListener ? new ValidatingRepositoryEventListener() : validatingRepositoryEventListener);
     }
@@ -84,6 +89,7 @@ public class WebMvcApiConfiguration {
      * @return
      */
     @Bean
+    @Singleton
     public RepositoryAwareJacksonModule jacksonModule() {
         return new RepositoryAwareJacksonModule();
     }
@@ -95,6 +101,7 @@ public class WebMvcApiConfiguration {
      * @return
      */
     @Bean
+    @Singleton
     public RepositoryAwareMappingHttpMessageConverter mappingHttpMessageConverter() {
         return new RepositoryAwareMappingHttpMessageConverter();
     }
@@ -108,6 +115,7 @@ public class WebMvcApiConfiguration {
      * @return
      */
     @Bean
+    @Singleton
     public UriToDomainObjectUriResolver domainObjectResolver() {
         return new UriToDomainObjectUriResolver();
     }
@@ -120,26 +128,31 @@ public class WebMvcApiConfiguration {
      * @throws Exception
      */
     @Bean
+    @Singleton
     public RepositoryRestController repositoryRestController() throws Exception {
         return new RepositoryRestController();
     }
 
     @Bean
+    @Singleton
     public JsonSchemaController jsonSchemaController() {
         return new JsonSchemaController();
     }
 
     @Bean
+    @Singleton
     public BaseUriMethodArgumentResolver baseUriMethodArgumentResolver() {
         return new BaseUriMethodArgumentResolver();
     }
 
     @Bean
+    @Singleton
     public PagingAndSortingMethodArgumentResolver pagingAndSortingMethodArgumentResolver() {
         return new PagingAndSortingMethodArgumentResolver();
     }
 
     @Bean
+    @Singleton
     public ServerHttpRequestMethodArgumentResolver serverHttpRequestMethodArgumentResolver() {
         return new ServerHttpRequestMethodArgumentResolver();
     }
@@ -151,6 +164,7 @@ public class WebMvcApiConfiguration {
      * @return
      */
     @Bean
+    @Singleton
     public RepositoryRestHandlerAdapter repositoryExporterHandlerAdapter() {
         return new RepositoryRestHandlerAdapter();
     }
@@ -162,6 +176,7 @@ public class WebMvcApiConfiguration {
      * @return
      */
     @Bean
+    @Singleton
     public RepositoryRestHandlerMapping repositoryExporterHandlerMapping() {
         return new RepositoryRestHandlerMapping();
     }
@@ -172,6 +187,7 @@ public class WebMvcApiConfiguration {
      * @return
      */
     @Bean
+    @Singleton
     public ExceptionHandlerExceptionResolver exceptionHandlerExceptionResolver() {
         ExceptionHandlerExceptionResolver er = new ExceptionHandlerExceptionResolver();
         er.setCustomArgumentResolvers(Arrays.<HandlerMethodArgumentResolver> asList(new ServerHttpRequestMethodArgumentResolver()));

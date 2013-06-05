@@ -22,8 +22,7 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.event.GogomayaEvent;
 import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.connection.GameServerConnection;
+import com.gogomaya.server.player.security.PlayerSession;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.DefaultWebSocketListener;
 import com.ning.http.client.websocket.WebSocket;
@@ -34,23 +33,22 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
     final private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public GameListenerControl listen(final GameTable<State> gameTable, final GameListener gameListener) {
+    public GameListenerControl listen(PlayerSession playerSession, final GameListener gameListener) {
         // Step 1. Creating Server connection
-        // If channel was not defined, choose it randomly
-        return listen(gameTable, gameListener, ListenerChannel.values()[(int) (gameTable.getTableId() % ListenerChannel.values().length)]);
+        return listen(playerSession, gameListener, ListenerChannel.values()[(int) (playerSession.getPlayerId() % ListenerChannel.values().length)]);
     }
 
     @Override
-    public GameListenerControl listen(final GameTable<State> gameTable, final GameListener gameListener, ListenerChannel listenerChannel) {
+    public GameListenerControl listen(PlayerSession playerSession, final GameListener gameListener, ListenerChannel listenerChannel) {
         // Step 1. Setting default value
         listenerChannel = listenerChannel == null ? ListenerChannel.Rabbit : listenerChannel;
         // Step 2. Processing based on listener type
         switch (listenerChannel) {
         case Rabbit:
-            return addRabbitListener(gameTable, gameListener);
+            return addRabbitListener(playerSession, gameListener);
         case SockJS:
         case Stomp:
-            return addStompListener(gameTable, gameListener);
+            return addStompListener(playerSession, gameListener);
         default:
             break;
         }
@@ -58,14 +56,13 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
         throw new IllegalArgumentException("Was not able to construct listener");
     }
 
-    private GameListenerControl addRabbitListener(final GameTable<State> gameTable, final GameListener gameListener) {
+    private GameListenerControl addRabbitListener(final PlayerSession playerSession, final GameListener gameListener) {
         // Step 1. Creating Server connection
-        GameServerConnection serverConnection = gameTable.getServerResource();
-        ConnectionFactory connectionFactory = new CachingConnectionFactory(serverConnection.getNotificationURL());
+        ConnectionFactory connectionFactory = new CachingConnectionFactory(playerSession.getServer());
         // Step 2. Creating binding
         RabbitAdmin admin = new RabbitAdmin(connectionFactory);
         Queue tmpQueue = admin.declareQueue();
-        Binding tmpBinding = BindingBuilder.bind(tmpQueue).to(new TopicExchange("amq.topic")).with(String.valueOf(gameTable.getTableId()));
+        Binding tmpBinding = BindingBuilder.bind(tmpQueue).to(new TopicExchange("amq.topic")).with(String.valueOf(playerSession.getPlayerId()));
         admin.declareBinding(tmpBinding);
         // Step 3. Creating MessageListener
         final SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
@@ -97,12 +94,12 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
         };
     }
 
-    private GameListenerControl addStompListener(final GameTable<State> gameTable, final GameListener gameListener) {
-        final String channel = "/topic/" + Long.toString(gameTable.getTableId());
+    private GameListenerControl addStompListener(final PlayerSession playerSession, final GameListener gameListener) {
+        final String channel = "/topic/" + Long.toString(playerSession.getPlayerId());
         // Step 1. Creating a game table client
         try {
-            final Client stompClient = new Client(gameTable.getServerResource().getNotificationURL(), 61613, "guest", "guest");
-            stompClient.subscribe("/topic/" + Long.toString(gameTable.getTableId()), new Listener() {
+            final Client stompClient = new Client(playerSession.getServer(), 61613, "guest", "guest");
+            stompClient.subscribe("/topic/" + Long.toString(playerSession.getPlayerId()), new Listener() {
 
                 @Override
                 public void message(Map parameters, String message) {
@@ -134,16 +131,16 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
         }
     }
 
-    private GameListenerControl addSockJSListener(final GameTable<State> gameTable, final GameListener gameListener) {
+    private GameListenerControl addSockJSListener(final PlayerSession playerSession, final GameListener gameListener) {
         try {
             AsyncHttpClient asyncClient = new AsyncHttpClient();
-            final WebSocket webSocket = asyncClient.prepareGet("http://" + gameTable.getServerResource().getNotificationURL() + ":15674/stomp")
+            final WebSocket webSocket = asyncClient.prepareGet("http://" + playerSession.getServer() + ":15674/stomp")
                     .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(new DefaultWebSocketListener() {
 
                         @Override
                         public void onOpen(WebSocket websocket) {
                             super.onOpen(webSocket);
-                            websocket.sendTextMessage("SUBSCRIBE /topic/" + gameTable.getTableId());
+                            websocket.sendTextMessage("SUBSCRIBE /topic/" + playerSession.getPlayerId());
                         }
 
                         @Override

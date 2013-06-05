@@ -10,10 +10,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })
+@ContextConfiguration(classes = { CommonSpringConfiguration.class })
 public class GameSchemaGeneration {
 
     @Test

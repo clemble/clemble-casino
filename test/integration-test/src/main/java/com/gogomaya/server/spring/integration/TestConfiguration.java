@@ -29,6 +29,7 @@ import com.gogomaya.server.web.active.session.GameTableMatchController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.session.PlayerSessionController;
 import com.gogomaya.server.web.player.wallet.WalletController;
 
 @Configuration
@@ -38,7 +39,7 @@ public class TestConfiguration {
 
     @Configuration
     @Profile("default")
-    @Import(value = { WebGenericConfiguration.class, WebMvcSpiConfiguration.class })
+    @Import(value = { WebMvcSpiConfiguration.class })
     public static class LocalTestConfiguration {
 
         @Inject
@@ -46,6 +47,9 @@ public class TestConfiguration {
 
         @Inject
         RegistrationLoginController loginController;
+
+        @Inject
+        PlayerSessionController sessionController;
 
         @Inject
         WalletController walletController;
@@ -68,7 +72,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(signInContoller, loginController, walletController);
+            return new WebPlayerOperations(signInContoller, loginController, walletController, sessionController);
         }
 
         @Bean

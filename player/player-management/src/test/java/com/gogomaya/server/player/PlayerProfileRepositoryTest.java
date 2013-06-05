@@ -9,15 +9,19 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.spring.player.PlayerManagementConfiguration;
+import com.gogomaya.server.player.session.PlayerSessionRepository;
+import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = PlayerManagementConfiguration.class)
+@ContextConfiguration(classes = PlayerManagementSpringConfiguration.class)
 public class PlayerProfileRepositoryTest {
 
     @Autowired
     private PlayerProfileRepository playerProfileRepository;
+
+    @Autowired
+    private PlayerSessionRepository sessionRepository;
 
     @Before
     public void clean() {

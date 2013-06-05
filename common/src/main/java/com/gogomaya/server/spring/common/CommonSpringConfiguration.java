@@ -12,11 +12,16 @@ import org.springframework.context.annotation.Profile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaValidationService;
+import com.gogomaya.server.notification.ServerRegistry;
+import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
 
 @Configuration
-@Import({ CommonModuleSpringConfiguration.CommonModuleCloudFoundryConfigurations.class, RabbitSpringConfiguration.class, JPASpringConfiguration.class,
+@Import({ CommonSpringConfiguration.Cloud.class,
+        CommonSpringConfiguration.DefaultAndTest.class,
+        RabbitSpringConfiguration.class,
+        JPASpringConfiguration.class,
         RedisSpringConfiguration.class })
-public class CommonModuleSpringConfiguration {
+public class CommonSpringConfiguration {
 
     @Bean
     @Singleton
@@ -40,8 +45,30 @@ public class CommonModuleSpringConfiguration {
     }
 
     @Configuration
+    @Profile(value = { "default", "test" })
+    public static class DefaultAndTest {
+
+        @Bean
+        @Singleton
+        public SimplePlayerNotificationRegistry playerNotificationRegistry() {
+            final ServerRegistry serverRegistry = new ServerRegistry();
+            serverRegistry.register(1_000_000L, "localhost");
+            return new SimplePlayerNotificationRegistry(serverRegistry);
+        }
+
+    }
+
+    @Configuration
     @Profile(value = "cloud")
-    public static class CommonModuleCloudFoundryConfigurations {
+    public static class Cloud {
+
+        @Bean
+        @Singleton
+        public SimplePlayerNotificationRegistry playerNotificationRegistry() {
+            final ServerRegistry serverRegistry = new ServerRegistry();
+            serverRegistry.register(1_000_000L, "ec2-50-16-93-157.compute-1.amazonaws.com");
+            return new SimplePlayerNotificationRegistry(serverRegistry);
+        }
 
         @Bean
         @Singleton

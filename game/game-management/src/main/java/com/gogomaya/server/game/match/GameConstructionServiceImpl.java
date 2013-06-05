@@ -12,10 +12,9 @@ import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.game.action.GameTableFactory;
 import com.gogomaya.server.game.active.ActivePlayerQueue;
-import com.gogomaya.server.game.connection.GameConnection;
-import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.event.GameStartedEvent;
 import com.gogomaya.server.game.event.PlayerAddedEvent;
+import com.gogomaya.server.game.notification.GameNotificationService;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.table.GameTableQueue;
@@ -76,7 +75,7 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
         table.addPlayer(playerId);
         table = tableRepository.save(table);
 
-        notificationManager.notify(new GameConnection().setRoutingKey(table.getTableId()).setServerConnection(table.getServerResource()),
+        notificationManager.notify(table.getPlayers(),
                 new PlayerAddedEvent().setSession(table.getTableId()).setPlayerId(playerId));
 
         PlayerNumberRule numberRule = specification.getNumberRule();
@@ -86,7 +85,7 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
             // Step 3. Initializing start of the game session
             State state = table.getCurrentSession().getState();
 
-            notificationManager.notify(new GameConnection().setRoutingKey(table.getTableId()).setServerConnection(table.getServerResource()),
+            notificationManager.notify(table.getPlayers(),
                     new GameStartedEvent<State>().setNextMoves(state.getNextMoves()).setState(state).setSession(table.getTableId()));
         } else {
             tableManager.add(table.getTableId(), table.getSpecification());

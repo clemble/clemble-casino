@@ -29,10 +29,10 @@ import com.gogomaya.server.game.rule.time.TimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeBetOnCellMove;
 import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
-import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })
+@ContextConfiguration(classes = { CommonSpringConfiguration.class })
 public class SeDeRelizationTest {
 
     @Autowired

@@ -64,12 +64,13 @@ public class GameOperationsTest {
         // Step 2. Creating game table
         GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
+        long originalTableId = gameTable.getTableId();
         // Step 3. Adding another player to the table
         Player anotherPlayer = playerOperations.createPlayer(DataGenerator.randomProfile());
         Assert.assertNotSame(anotherPlayer.getPlayerId(), player.getPlayerId());
         gameTable = gameOperations.start(anotherPlayer, specification);
         Assert.assertNotNull(gameTable);
-        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), GameSessionState.active);
+        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), originalTableId == gameTable.getTableId() ? GameSessionState.active : GameSessionState.inactive);
         Assert.assertNotNull(gameTable.getCurrentSession().getState());
     }
 
@@ -87,18 +88,18 @@ public class GameOperationsTest {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameSpecification specification = selectSpecification(player, 2);
-        // Step 2. Creating game table
-        GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
-        Assert.assertNotNull(gameTable);
-        // Step 3. Adding listener
-        gameListenerOperations.listen(gameTable, new GameListener() {
+        // Step 2. Adding listener
+        gameListenerOperations.listen(player.getSession(), new GameListener() {
             @Override
             public void updated(GogomayaEvent event) {
                 System.out.println(event);
                 countDownLatch.countDown();
             }
         }, listenerChannel);
+        // Step 2. Creating game table
+        GameSpecification specification = selectSpecification(player, 2);
+        GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
+        Assert.assertNotNull(gameTable);
         // Step 4. Adding another player to the table
         player = playerOperations.createPlayer(DataGenerator.randomProfile());
         gameTable = gameOperations.start(player, specification);

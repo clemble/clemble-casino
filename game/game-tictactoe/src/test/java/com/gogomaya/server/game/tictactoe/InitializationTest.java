@@ -1,18 +1,16 @@
-package com.gogomaya.server.web.player;
+package com.gogomaya.server.game.tictactoe;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
+import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
 @ActiveProfiles("test")
-@ContextConfiguration(classes = { PlayerWebSpringConfiguration.class })
+@ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
 public class InitializationTest {
 
     @Test

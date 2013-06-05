@@ -19,11 +19,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @UsingSteps(instances = PlayerCredentialsValidation.class)
-@ContextConfiguration(classes = { CommonModuleSpringConfiguration.class})
+@ContextConfiguration(classes = { CommonSpringConfiguration.class})
 public class ValidationStory extends JUnitStory {
 
     @Autowired

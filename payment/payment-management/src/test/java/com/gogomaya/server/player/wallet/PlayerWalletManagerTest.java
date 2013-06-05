@@ -16,11 +16,11 @@ import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
-import com.gogomaya.server.spring.player.wallet.PlayerWalletManagementSpringConfiguration;
+import com.gogomaya.server.spring.player.wallet.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = PlayerWalletManagementSpringConfiguration.class)
+@ContextConfiguration(classes = PaymentManagementSpringConfiguration.class)
 public class PlayerWalletManagerTest {
 
     @Inject

@@ -1,6 +1,7 @@
 package com.gogomaya.server.spring.web.player;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,42 +14,52 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerProfileRepository;
+import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.player.security.PlayerCredentialRepository;
 import com.gogomaya.server.player.security.PlayerIdentityRepository;
+import com.gogomaya.server.player.session.PlayerSessionRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.player.registration.RegistrationSocialConnectionController;
+import com.gogomaya.server.web.player.session.PlayerSessionController;
 
 @Configuration
-@Import(value = {SocialModuleSpringConfiguration.class})
-public class WebPlayerConfiguration extends WebMvcConfigurationSupport {
+@Import(value = { SocialModuleSpringConfiguration.class })
+public class PlayerWebSpringConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
-    SocialConnectionDataAdapter connectionDataAdapter;
+    public SocialConnectionDataAdapter connectionDataAdapter;
 
     @Inject
-    PlayerProfileRepository playerProfileRepository;
+    public PlayerProfileRepository playerProfileRepository;
 
     @Inject
-    PlayerCredentialRepository playerCredentialRepository;
+    public PlayerCredentialRepository playerCredentialRepository;
 
     @Inject
-    PlayerIdentityRepository playerIdentityRepository;
-    
-    @Inject
-    PlayerRegistrationService playerRegistrationService;
+    public PlayerIdentityRepository playerIdentityRepository;
 
     @Inject
-    GogomayaValidationService validationService;
+    public PlayerRegistrationService playerRegistrationService;
 
     @Inject
-    ObjectMapper objectMapper;
+    public PlayerSessionRepository playerSessionRepository;
+
+    @Inject
+    public PlayerNotificationRegistry notificationRegistry;
+
+    @Inject
+    public GogomayaValidationService validationService;
+
+    @Inject
+    public ObjectMapper objectMapper;
 
     @Bean
+    @Singleton
     public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter() {
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
         messageConverter.setObjectMapper(objectMapper);
@@ -56,26 +67,37 @@ public class WebPlayerConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
+    @Singleton
     public RegistrationSocialConnectionController registrationSocialConnectionController() {
         return new RegistrationSocialConnectionController(connectionDataAdapter, playerIdentityRepository, validationService);
     }
 
     @Bean
+    @Singleton
     public RegistrationSignInContoller registrationSignInContoller() {
         return new RegistrationSignInContoller(playerRegistrationService, validationService);
     }
 
     @Bean
+    @Singleton
     public RegistrationLoginController registrationLoginController() {
         return new RegistrationLoginController(playerCredentialRepository, playerIdentityRepository);
     }
 
     @Bean
+    @Singleton
+    public PlayerSessionController sessionController() {
+        return new PlayerSessionController(notificationRegistry, playerSessionRepository);
+    }
+
+    @Bean
+    @Singleton
     public BaseUriMethodArgumentResolver baseUriMethodArgumentResolver() {
         return new BaseUriMethodArgumentResolver();
     }
 
     @Bean
+    @Singleton
     public HandlerExceptionResolver handlerExceptionResolver() {
         return new GogomayaHandlerExceptionResolver(objectMapper);
     }

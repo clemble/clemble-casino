@@ -20,10 +20,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
-import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })
+@ContextConfiguration(classes = { CommonSpringConfiguration.class })
 public class PlayerProfileTest {
 
     final private String FIRST_NAME = "Michael";

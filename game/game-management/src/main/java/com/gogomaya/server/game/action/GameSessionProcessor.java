@@ -10,8 +10,8 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.GiveUpMove;
 import com.gogomaya.server.game.active.ActivePlayerQueue;
-import com.gogomaya.server.game.connection.GameNotificationService;
 import com.gogomaya.server.game.event.GameEvent;
+import com.gogomaya.server.game.notification.GameNotificationService;
 import com.gogomaya.server.game.outcome.GameOutcomeService;
 
 public class GameSessionProcessor<State extends GameState> {
@@ -68,7 +68,7 @@ public class GameSessionProcessor<State extends GameState> {
                 }
             }
             // Step 7. Invoking appropriate notification
-            notificationService.notify(cache.getConnection(), events);
+            notificationService.notify(cache.getPlayerIds(), events);
             // Step 8. Returning state of the game
             return state;
         } finally {

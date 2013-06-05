@@ -14,12 +14,12 @@ import com.gogomaya.server.player.wallet.WalletRegistrationServiceImpl;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 import com.gogomaya.server.player.wallet.WalletTransactionManagerImpl;
 import com.gogomaya.server.player.wallet.WalletTransactionRepository;
-import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.player.wallet", entityManagerFactoryRef = "entityManagerFactory")
-@Import(CommonModuleSpringConfiguration.class)
-public class PlayerWalletManagementSpringConfiguration {
+@Import(CommonSpringConfiguration.class)
+public class PaymentManagementSpringConfiguration {
 
     @Inject
     public PlayerWalletRepository walletRepository;

@@ -4,7 +4,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
@@ -16,26 +15,25 @@ import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.player.security.PlayerCredentialRepository;
 import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.player.wallet.WalletRegistrationService;
-import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.player", entityManagerFactoryRef = "entityManagerFactory")
-@ComponentScan(basePackages = "com.gogomaya.server.player")
-@Import(value = { CommonModuleSpringConfiguration.class, PlayerManagementConfiguration.TestPlayerManagementConfiguration.class })
-public class PlayerManagementConfiguration {
+@Import(value = { CommonSpringConfiguration.class, PlayerManagementSpringConfiguration.Test.class })
+public class PlayerManagementSpringConfiguration {
 
     @Inject
-    PlayerIdentityRepository playerIdentityRepository;
+    public PlayerIdentityRepository playerIdentityRepository;
 
     @Inject
-    PlayerCredentialRepository playerCredentialRepository;
+    public PlayerCredentialRepository playerCredentialRepository;
 
     @Inject
-    PlayerProfileRepository playerProfileRepository;
+    public PlayerProfileRepository playerProfileRepository;
 
     @Inject
-    WalletRegistrationService walletRegistrationService;
+    public WalletRegistrationService walletRegistrationService;
 
     @Bean
     @Singleton
@@ -45,7 +43,7 @@ public class PlayerManagementConfiguration {
 
     @Configuration
     @Profile("test")
-    public static class TestPlayerManagementConfiguration {
+    public static class Test {
 
         @Bean
         @Singleton

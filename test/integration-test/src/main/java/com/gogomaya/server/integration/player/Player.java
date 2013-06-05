@@ -6,6 +6,7 @@ import com.gogomaya.server.player.PlayerAware;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
+import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.player.wallet.PlayerWallet;
 
 public class Player implements PlayerAware {
@@ -18,6 +19,8 @@ public class Player implements PlayerAware {
     private long playerId;
 
     private PlayerOperations playerOperations;
+
+    private PlayerSession session;
 
     private PlayerProfile profile;
 
@@ -68,6 +71,15 @@ public class Player implements PlayerAware {
 
     public Player setCredential(PlayerCredential credential) {
         this.credential = credential;
+        return this;
+    }
+
+    public PlayerSession getSession() {
+        return session;
+    }
+
+    public Player setSession(PlayerSession session) {
+        this.session = session;
         return this;
     }
 

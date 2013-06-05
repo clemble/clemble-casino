@@ -16,10 +16,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.player.SocialConnectionData;
-import com.gogomaya.server.spring.common.CommonModuleSpringConfiguration;
+import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CommonModuleSpringConfiguration.class })
+@ContextConfiguration(classes = { CommonSpringConfiguration.class })
 public class SocialConnectionDataTest {
 
     final private String PROVIDER_ID = "facebook";

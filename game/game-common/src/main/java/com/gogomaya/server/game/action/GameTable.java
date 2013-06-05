@@ -8,7 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,11 +19,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.TypeDef;
 
-import com.gogomaya.server.game.connection.GameServerConnection;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
@@ -47,9 +46,6 @@ public class GameTable<State extends GameState> implements GameSpecificationAwar
     @Column(name = "TABLE_ID")
     private long tableId;
 
-    @Embedded
-    private GameServerConnection serverResource;
-
     @ManyToOne
     @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
             @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP") })
@@ -64,21 +60,15 @@ public class GameTable<State extends GameState> implements GameSpecificationAwar
     @JoinColumn(name = "SESSION_ID")
     private GameSession<State> currentSession;
 
+    @Transient
+    private String server;
+
     public long getTableId() {
         return tableId;
     }
 
     public GameTable<State> setTableId(long tableId) {
         this.tableId = tableId;
-        return this;
-    }
-
-    public GameServerConnection getServerResource() {
-        return serverResource;
-    }
-
-    public GameTable<State> setServerResource(GameServerConnection serverResource) {
-        this.serverResource = serverResource;
         return this;
     }
 
@@ -126,6 +116,15 @@ public class GameTable<State extends GameState> implements GameSpecificationAwar
     public void clear() {
         this.currentSession = null;
         this.players.clear();
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public GameTable<State> setServer(String server) {
+        this.server = server;
+        return this;
     }
 
 }

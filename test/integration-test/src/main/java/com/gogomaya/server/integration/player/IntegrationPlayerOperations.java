@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
+import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.player.web.RegistrationRequest;
 
@@ -18,6 +19,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
     final private static String CREATE_URL = "/spi/registration/signin";
     final private static String LOGIN_URL = "/spi/registration/login";
     final private static String WALLET_URL = "/spi/wallet/";
+    final private static String SESSION_URL = "/spi/session/login";
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
@@ -35,8 +37,12 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + CREATE_URL, registrationRequest, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
-        return new Player(this).setPlayerId(playerIdentity.getPlayerId()).setIdentity(playerIdentity).setProfile(registrationRequest.getPlayerProfile())
+        Player player = new Player(this).setPlayerId(playerIdentity.getPlayerId()).setIdentity(playerIdentity).setProfile(registrationRequest.getPlayerProfile())
                 .setCredential(registrationRequest.getPlayerCredential());
+        // Step 3. Creating player session
+        player.setSession(startSession(player));
+        // Step 4. Returning player session result
+        return player;
     }
 
     @Override
@@ -47,12 +53,27 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + LOGIN_URL, credential, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
-        return new Player(this).setPlayerId(playerIdentity.getPlayerId()).setCredential(credential).setIdentity(playerIdentity);
+        Player player = new Player(this).setPlayerId(playerIdentity.getPlayerId()).setCredential(credential).setIdentity(playerIdentity);
+        // Step 3. Creating player session
+        player.setSession(startSession(player));
+        // Step 4. Returning player session result
+        return player;
+    }
+
+    public PlayerSession startSession(Player player) {
+        // Step 1. Creating Header
+        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
+        header.add("playerId", String.valueOf(player.getPlayerId()));
+        header.add("Content-Type", "application/json");
+        // Step 2. Generating request
+        HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
+        // Step 3. Rest template generation
+        return restTemplate.exchange(baseUrl + SESSION_URL, HttpMethod.POST, requestEntity, PlayerSession.class).getBody();
     }
 
     @Override
     public PlayerWallet wallet(Player player, long playerWalletId) {
-        // Step 1.
+        // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(player.getPlayerId()));
         header.add("Content-Type", "application/json");

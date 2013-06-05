@@ -2,18 +2,24 @@ package com.gogomaya.server.web.game;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.spring.web.WebGameConfiguration;
+import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.spring.web.TicTacToeWebSpringConfiguration;
+import com.gogomaya.server.web.active.session.GameTableMatchController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = WebGameConfiguration.class)
+@ContextConfiguration(classes = TicTacToeWebSpringConfiguration.class)
 @ActiveProfiles("test")
 @WebAppConfiguration
 public class SimpleContextInitiationTest {
+
+    @Autowired
+    private GameTableMatchController<GameState> tableMatchController;
 
     @Test
     public void testInitialized() {

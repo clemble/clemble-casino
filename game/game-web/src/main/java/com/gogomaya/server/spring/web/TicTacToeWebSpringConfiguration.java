@@ -1,6 +1,7 @@
 package com.gogomaya.server.spring.web;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +15,8 @@ import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
-import com.gogomaya.server.game.connection.GameNotificationService;
-import com.gogomaya.server.game.connection.GameServerConnectionManager;
 import com.gogomaya.server.game.match.GameConstructionService;
+import com.gogomaya.server.game.notification.GameNotificationService;
 import com.gogomaya.server.game.outcome.GameOutcomeService;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
@@ -31,14 +31,14 @@ import com.gogomaya.server.web.game.configuration.GameConfigurationManagerContro
 
 @Configuration
 @Import(value = { TicTacToeSpringConfiguration.class })
-public class WebGameConfiguration extends WebMvcConfigurationSupport {
+public class TicTacToeWebSpringConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
     GogomayaValidationService validationService;
 
     @Inject
     TicTacToeConfigurationManager configurationManager;
-    
+
     @Inject
     GameSessionProcessor<TicTacToeState> sessionProcessor;
 
@@ -64,15 +64,13 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     GameTableQueue tableQueue;
 
     @Inject
-    GameServerConnectionManager serverConnectionManager;
-
-    @Inject
     GameStateFactory<TicTacToeState> stateFactory;
 
     @Inject
     GameOutcomeService<TicTacToeState> outcomeService;
 
     @Bean
+    @Singleton
     public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter() {
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
         messageConverter.setObjectMapper(objectMapper);
@@ -80,21 +78,25 @@ public class WebGameConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
+    @Singleton
     public HandlerExceptionResolver handlerExceptionResolver() {
         return new GogomayaHandlerExceptionResolver(objectMapper);
     }
 
     @Bean
-    public GameTableMatchController<TicTacToeState> sessionController() {
+    @Singleton
+    public GameTableMatchController<TicTacToeState> gameTableMatchController() {
         return new GameTableMatchController<TicTacToeState>(stateManager, tableRepository, configurationManager);
     }
 
     @Bean
+    @Singleton
     public GameConfigurationManagerController gameOptionsController() {
         return new GameConfigurationManagerController(configurationManager);
     }
 
     @Bean
+    @Singleton
     public GameEngineController<TicTacToeState> gameController() {
         return new GameEngineController<TicTacToeState>(sessionProcessor, tableRepository);
     }

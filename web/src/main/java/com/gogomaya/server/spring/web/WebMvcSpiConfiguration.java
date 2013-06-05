@@ -1,6 +1,7 @@
 package com.gogomaya.server.spring.web;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,13 +19,13 @@ import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.web.RegistrationRequest;
-import com.gogomaya.server.spring.web.payment.WebPaymentConfiguration;
-import com.gogomaya.server.spring.web.player.WebPlayerConfiguration;
+import com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration;
+import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 import com.gogomaya.server.web.GenericSchemaController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 
 @Configuration
-@Import({WebGameConfiguration.class, WebPlayerConfiguration.class, WebPaymentConfiguration.class})
+@Import({ TicTacToeWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, PaymentWebSpringConfiguration.class })
 public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
@@ -34,6 +35,7 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     ObjectMapper objectMapper;
 
     @Bean
+    @Singleton
     public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter() {
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
         messageConverter.setObjectMapper(objectMapper);
@@ -41,11 +43,13 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
+    @Singleton
     public BaseUriMethodArgumentResolver baseUriMethodArgumentResolver() {
         return new BaseUriMethodArgumentResolver();
     }
 
     @Bean
+    @Singleton
     public GenericSchemaController jsonSchemaController() {
         GenericSchemaController genericSchemaController = new GenericSchemaController();
         genericSchemaController.addSchemaMapping("profile", PlayerProfile.class);
@@ -58,6 +62,7 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
+    @Singleton
     public HandlerExceptionResolver handlerExceptionResolver() {
         return new GogomayaHandlerExceptionResolver(objectMapper);
     }

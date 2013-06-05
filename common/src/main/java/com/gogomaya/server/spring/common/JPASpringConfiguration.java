@@ -34,15 +34,14 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 @Configuration
-@Import(value = { JPASpringConfiguration.DataSourceCloudFoundryConfiguration.class, JPASpringConfiguration.DataSourceDefaultConfiguration.class,
-        JPASpringConfiguration.DataSourceTestConfiguration.class })
+@Import(value = { JPASpringConfiguration.Cloud.class, JPASpringConfiguration.DefaultAndTest.class })
 public class JPASpringConfiguration {
 
     @Inject
-    DataSource dataSource;
+    public DataSource dataSource;
 
     @Inject
-    JpaVendorAdapter jpaVendorAdapter;
+    public JpaVendorAdapter jpaVendorAdapter;
 
     @Inject
     public JpaDialect jpaDialect() {
@@ -80,7 +79,7 @@ public class JPASpringConfiguration {
 
     @Configuration
     @Profile(value = "cloud")
-    static class DataSourceCloudFoundryConfiguration {
+    public static class Cloud {
 
         @Inject
         CloudEnvironment cloudEnvironment;
@@ -115,8 +114,8 @@ public class JPASpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = "default")
-    static class DataSourceDefaultConfiguration {
+    @Profile(value = { "default", "test" })
+    public static class DefaultAndTest {
 
         @Bean
         @Singleton
@@ -125,36 +124,6 @@ public class JPASpringConfiguration {
             hibernateJpaVendorAdapter.setDatabase(Database.H2);
             hibernateJpaVendorAdapter.setGenerateDdl(true);
             hibernateJpaVendorAdapter.setShowSql(true);
-            return hibernateJpaVendorAdapter;
-        }
-
-        @Bean
-        @Singleton
-        public DataSource dataSource() {
-            EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
-            factory.setDatabaseName("gogomaya");
-            factory.setDatabaseType(EmbeddedDatabaseType.H2);
-
-            ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
-            databasePopulator.addScript(new ClassPathResource("sql/tictactoe-init.sql"));
-            factory.setDatabasePopulator(databasePopulator);
-
-            return factory.getDatabase();
-        }
-
-    }
-
-    @Configuration
-    @Profile(value = "test")
-    static class DataSourceTestConfiguration {
-
-        @Bean
-        @Singleton
-        public JpaVendorAdapter jpaVendorAdapter() {
-            HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-            hibernateJpaVendorAdapter.setDatabase(Database.H2);
-            hibernateJpaVendorAdapter.setShowSql(true);
-            hibernateJpaVendorAdapter.setGenerateDdl(true);
             return hibernateJpaVendorAdapter;
         }
 

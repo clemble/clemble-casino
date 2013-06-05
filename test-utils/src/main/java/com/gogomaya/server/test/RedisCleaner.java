@@ -30,7 +30,7 @@ public class RedisCleaner implements TestExecutionListener {
     public void afterTestClass(TestContext testContext) throws Exception {
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private void clean(TestContext testContext) {
         Collection<RedisTemplate> contextTemplates = testContext.getApplicationContext().getBeansOfType(RedisTemplate.class).values();
         for (RedisTemplate template : contextTemplates) {

@@ -10,13 +10,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 import com.gogomaya.server.player.wallet.PlayerWalletRepository;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
-import com.gogomaya.server.spring.player.wallet.PlayerWalletManagementSpringConfiguration;
+import com.gogomaya.server.spring.player.wallet.PaymentManagementSpringConfiguration;
 import com.gogomaya.server.web.player.wallet.WalletController;
 import com.gogomaya.server.web.player.wallet.WalletTransactionController;
 
 @Configuration
-@Import(PlayerWalletManagementSpringConfiguration.class)
-public class WebPaymentConfiguration extends WebMvcConfigurationSupport {
+@Import(PaymentManagementSpringConfiguration.class)
+public class PaymentWebSpringConfiguration extends WebMvcConfigurationSupport {
 
     @Inject
     public WalletTransactionManager playerTransactionManager;

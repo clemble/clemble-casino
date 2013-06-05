@@ -22,7 +22,7 @@ import com.gogomaya.server.error.GogomayaFailure;
 @Controller
 public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolver {
 
-    final ObjectMapper objectMapper;
+    final private ObjectMapper objectMapper;
 
     public GogomayaHandlerExceptionResolver(ObjectMapper objectMapper) {
         this.objectMapper = checkNotNull(objectMapper);

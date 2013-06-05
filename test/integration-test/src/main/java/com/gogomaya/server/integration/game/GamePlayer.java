@@ -44,7 +44,7 @@ abstract public class GamePlayer<State extends GameState> {
         this.sessionId = table.getCurrentSession().getSessionId();
         // Step 3. Registering listener
         checkNotNull(listenerOperations);
-        this.listenerControl = listenerOperations.listen(table, new GameListener() {
+        this.listenerControl = listenerOperations.listen(player.getSession(), new GameListener() {
             @Override
             @SuppressWarnings("unchecked")
             public void updated(GogomayaEvent event) {

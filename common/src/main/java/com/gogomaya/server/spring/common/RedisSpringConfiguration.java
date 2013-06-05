@@ -20,13 +20,14 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 @Configuration
-@Import(value = { RedisSpringConfiguration.RedisCloudFoundryConfigurations.class, RedisSpringConfiguration.RedisDefaultConfigurations.class })
+@Import(value = { RedisSpringConfiguration.Cloud.class, RedisSpringConfiguration.DefaultAndTest.class })
 public class RedisSpringConfiguration {
 
     @Inject
-    RedisConnectionFactory redisConnectionFactory;
+    public RedisConnectionFactory redisConnectionFactory;
 
     @Bean
+    @Singleton
     public RedisTemplate<byte[], Long> tableQueueTemplate() {
         RedisTemplate<byte[], Long> redisTemplate = new RedisTemplate<byte[], Long>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -34,6 +35,7 @@ public class RedisSpringConfiguration {
     }
 
     @Bean
+    @Singleton
     public RedisTemplate<Long, Long> playerQueueTemplate() {
         RedisTemplate<Long, Long> redisTemplate = new RedisTemplate<Long, Long>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -42,7 +44,7 @@ public class RedisSpringConfiguration {
 
     @Configuration
     @Profile(value = "cloud")
-    static class RedisCloudFoundryConfigurations {
+    public static class Cloud {
 
         @Inject
         CloudEnvironment cloudEnvironment;
@@ -69,9 +71,10 @@ public class RedisSpringConfiguration {
 
     @Configuration
     @Profile(value = { "default", "test" })
-    static class RedisDefaultConfigurations {
+    public static class DefaultAndTest {
 
         @Bean
+        @Singleton
         public RedisConnectionFactory redisConnectionFactory() {
             return new JedisConnectionFactory();
         }
