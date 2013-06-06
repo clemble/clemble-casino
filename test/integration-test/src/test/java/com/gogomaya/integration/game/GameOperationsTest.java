@@ -54,6 +54,7 @@ public class GameOperationsTest {
         // Step 2. Creating game table
         GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
         Assert.assertNotNull(gameTable);
+        gameOperations.construct(specification);
     }
 
     @Test
@@ -102,7 +103,8 @@ public class GameOperationsTest {
         Assert.assertNotNull(gameTable);
         // Step 4. Adding another player to the table
         player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        gameTable = gameOperations.start(player, specification);
+        GameTable<TicTacToeState> anotherTable = gameOperations.start(player, specification);
+        Assert.assertEquals(anotherTable.getTableId(), gameTable.getTableId());
         // Step 5. Waiting for notification to happen
         try {
             countDownLatch.await(30, TimeUnit.SECONDS);

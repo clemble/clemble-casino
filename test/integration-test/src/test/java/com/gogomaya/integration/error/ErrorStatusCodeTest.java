@@ -90,5 +90,7 @@ public class ErrorStatusCodeTest {
         GamePlayer<TicTacToeState> gamePlayer = gameOperations.construct(playerA, specification);
         GamePlayer<TicTacToeState> anotherGamePlayer = gameOperations.construct(playerA, specification);
         Assert.assertEquals(gamePlayer.getTableId(), anotherGamePlayer.getTableId());
+
+        gamePlayer.clear();
     }
 }
