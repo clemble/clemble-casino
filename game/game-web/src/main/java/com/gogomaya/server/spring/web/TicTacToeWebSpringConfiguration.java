@@ -17,15 +17,14 @@ import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.match.GameConstructionService;
 import com.gogomaya.server.game.notification.GameNotificationService;
-import com.gogomaya.server.game.outcome.GameOutcomeService;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
-import com.gogomaya.server.game.table.GameTableQueue;
+import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
-import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.active.session.GameConstructionController;
+import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 
@@ -61,13 +60,10 @@ public class TicTacToeWebSpringConfiguration extends WebMvcConfigurationSupport 
     ObjectMapper objectMapper;
 
     @Inject
-    GameTableQueue tableQueue;
+    PendingSessionQueue tableQueue;
 
     @Inject
     GameStateFactory<TicTacToeState> stateFactory;
-
-    @Inject
-    GameOutcomeService<TicTacToeState> outcomeService;
 
     @Bean
     @Singleton

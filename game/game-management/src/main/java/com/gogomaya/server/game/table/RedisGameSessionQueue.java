@@ -9,12 +9,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.gogomaya.server.game.specification.GameSpecification;
 
-public class RedisGameTableQueue implements GameTableQueue {
+public class RedisGameSessionQueue implements PendingSessionQueue {
 
     final private RedisTemplate<byte[], Long> redisTemplate;
 
     @Inject
-    public RedisGameTableQueue(final RedisTemplate<byte[], Long> redisTemplate) {
+    public RedisGameSessionQueue(final RedisTemplate<byte[], Long> redisTemplate) {
         this.redisTemplate = checkNotNull(redisTemplate);
     }
 
@@ -35,6 +35,16 @@ public class RedisGameTableQueue implements GameTableQueue {
         byte[] key = specification.getName().toByteArray();
         BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(key);
         boundSetOperations.add(tableId);
+    }
+
+    @Override
+    public void invalidate(long session, GameSpecification specification) {
+        if (specification == null)
+            throw new IllegalArgumentException("Game table can't be null");
+        // Step 1. Adding table id as available to specification
+        byte[] key = specification.getName().toByteArray();
+        BoundSetOperations<byte[], Long> boundSetOperations = redisTemplate.boundSetOps(key);
+        boundSetOperations.remove(session);
     }
 
 }

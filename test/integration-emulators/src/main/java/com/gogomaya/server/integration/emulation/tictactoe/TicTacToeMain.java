@@ -14,7 +14,7 @@ import com.gogomaya.server.spring.integration.TestConfiguration;
 
 public class TicTacToeMain {
 
-    @SuppressWarnings("resource")
+    @SuppressWarnings({ "resource", "unchecked" })
     public static void main(String[] arguments) {
         // Step 1. Reading application context configuration
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();

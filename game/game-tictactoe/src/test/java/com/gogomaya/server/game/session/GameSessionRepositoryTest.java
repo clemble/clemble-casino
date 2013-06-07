@@ -26,7 +26,6 @@ import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.specification.SpecificationName;
-import com.gogomaya.server.game.table.GameTableQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.money.Currency;
@@ -46,9 +45,6 @@ public class GameSessionRepositoryTest {
 
     @Inject
     GameTableRepository<TicTacToeState> tableRepository;
-
-    @Inject
-    GameTableQueue tableQueue;
 
     @Inject
     TicTacToeStateFactory stateFactory;

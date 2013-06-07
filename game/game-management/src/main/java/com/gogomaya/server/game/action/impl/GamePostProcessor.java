@@ -4,16 +4,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import com.gogomaya.server.game.action.GameCacheService;
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameSession;
+import com.gogomaya.server.game.action.GameSessionState;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.PlayerWonOutcome;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.active.ActivePlayerQueue;
 import com.gogomaya.server.game.event.GameEvent;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
+import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
@@ -26,35 +26,40 @@ import com.gogomaya.server.player.wallet.WalletTransactionManager;
 public class GamePostProcessor<State extends GameState> extends AbstractGameProcessor<State> {
 
     final private ActivePlayerQueue activePlayerQueue;
+    final private PendingSessionQueue sessionQueue;
     final private WalletTransactionManager walletTransactionManager;
-    final private GameCacheService<State> cacheService;
 
-    public GamePostProcessor(final ActivePlayerQueue activePlayerQueue,
-            final WalletTransactionManager walletTransactionManager,
-            final GameCacheService<State> cacheService,
-            final GameProcessor<State> delegate) {
+    public GamePostProcessor(final ActivePlayerQueue activePlayerQueue, final WalletTransactionManager walletTransactionManager,
+            final PendingSessionQueue sessionQueue, final GameProcessor<State> delegate) {
         super(delegate);
         this.activePlayerQueue = checkNotNull(activePlayerQueue);
         this.walletTransactionManager = checkNotNull(walletTransactionManager);
-        this.cacheService = checkNotNull(cacheService);
+        this.sessionQueue = checkNotNull(sessionQueue);
     }
 
     @Override
-    public void beforMove(final long session, final State state, final GameMove move) {
+    public void beforMove(final GameSession<State> session, final State state, final GameMove move) {
     }
 
     @Override
-    public Collection<GameEvent<State>> afterMove(final long session, final State state, final Collection<GameEvent<State>> madeMoves) {
+    public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final State state, final Collection<GameEvent<State>> madeMoves) {
         // Step 0. Sanity check
         if (madeMoves == null)
             return madeMoves;
         // Step 1. Processing each step by step
         if (state.complete()) {
-            // cacheService.getSession().setSessionState(GameSessionState.ended);
-            // activePlayerQueue.markInActive(cacheService.getSession().getPlayers());
-            if (state.getOutcome() instanceof PlayerWonOutcome) {
-                winnerOutcome((PlayerWonOutcome) state.getOutcome(), cacheService.get(session).getSession());
+            if (session.getSessionState() == GameSessionState.inactive) {
+                sessionQueue.invalidate(session.getSessionId(), session.getSpecification());
             }
+
+            session.setSessionState(GameSessionState.ended);
+            for (long player : state.getPlayerIterator().getPlayers())
+                activePlayerQueue.markInActive(player);
+
+            if (state.getOutcome() instanceof PlayerWonOutcome) {
+                winnerOutcome((PlayerWonOutcome) state.getOutcome(), session);
+            }
+
         }
         return madeMoves;
     }

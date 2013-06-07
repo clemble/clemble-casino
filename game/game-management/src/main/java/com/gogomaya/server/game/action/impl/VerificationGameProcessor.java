@@ -6,6 +6,7 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameProcessor;
+import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.move.BetMove;
 import com.gogomaya.server.game.action.move.GameMove;
@@ -19,7 +20,7 @@ public class VerificationGameProcessor<State extends GameState> extends Abstract
     }
 
     @Override
-    public void beforMove(final long session, final State state, final GameMove move) {
+    public void beforMove(final GameSession<State> session, final State state, final GameMove move) {
         // Step 1. Sanity check
         if (move == null)
             throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
@@ -44,7 +45,7 @@ public class VerificationGameProcessor<State extends GameState> extends Abstract
     }
 
     @Override
-    public Collection<GameEvent<State>> afterMove(final long session, final State state, final Collection<GameEvent<State>> madeMoves) {
+    public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final State state, final Collection<GameEvent<State>> madeMoves) {
         return madeMoves;
     }
 

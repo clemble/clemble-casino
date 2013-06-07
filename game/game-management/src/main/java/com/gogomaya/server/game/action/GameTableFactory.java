@@ -27,11 +27,11 @@ public class GameTableFactory<State extends GameState> {
         this.tableRegistry = checkNotNull(serverRegistry);
     }
 
-    public GameTable<State> findTable(Long tableId, GameSpecification specification) {
-        if (tableId == null)
+    public GameTable<State> findTable(Long session, GameSpecification specification) {
+        if (session == null)
             return create(specification);
 
-        GameTable<State> table = tableRepository.findOne(tableId);
+        GameTable<State> table = tableRepository.findBySessionId(session);
         if (table == null)
             return create(specification);
 

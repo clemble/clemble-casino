@@ -2,8 +2,6 @@ package com.gogomaya.server.game.match;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Collection;
-
 import javax.inject.Inject;
 
 import com.gogomaya.server.error.GogomayaError;
@@ -18,7 +16,7 @@ import com.gogomaya.server.game.notification.GameNotificationService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.table.GameTableQueue;
+import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.Operation;
@@ -27,19 +25,17 @@ import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
 public class GameConstructionServiceImpl<State extends GameState> implements GameConstructionService<State> {
 
-    final private GameTableQueue tableManager;
+    final private PendingSessionQueue tableManager;
+    final private TableServerRegistry tableRegistry;
+    final private ActivePlayerQueue activePlayerQueue;
+
+    final private WalletTransactionManager walletTransactionManager;
     final private GameTableRepository<State> tableRepository;
     final private GameTableFactory<State> tableFactory;
     final private GameNotificationService<State> notificationManager;
 
-    final private ActivePlayerQueue activePlayerQueue;
-
-    final private WalletTransactionManager walletTransactionManager;
-    
-    final private TableServerRegistry tableRegistry;
-
     @Inject
-    public GameConstructionServiceImpl(final GameTableQueue tableManager,
+    public GameConstructionServiceImpl(final PendingSessionQueue tableManager,
             final GameTableRepository<State> tableRepository,
             final GameNotificationService<State> notificationManager,
             final GameTableFactory<State> tableFactory,
@@ -72,8 +68,8 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
         if (!walletTransactionManager.canAfford(operation))
             throw GogomayaException.create(GogomayaError.GameSpecificationInsufficientMoney);
         // Step 1. Pooling
-        Long tableId = tableManager.poll(specification);
-        GameTable<State> table = tableFactory.findTable(tableId, specification);
+        Long session = tableManager.poll(specification);
+        GameTable<State> table = tableFactory.findTable(session, specification);
 
         if (!activePlayerQueue.markActive(playerId, table.getCurrentSession().getSessionId()))
             throw GogomayaException.create(GogomayaError.GameMatchPlayerHasPendingSessions);
@@ -97,30 +93,6 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
         }
 
         return tableRegistry.specifyServer(table);
-    }
-
-    @Override
-    public ScheduledGame schedule(long initiator, Collection<Long> playerIds, GameSpecification specification) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public ScheduledGame cancel(long initiator, long scheduledGameId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public ScheduledGame accept(long playerId, long scheduledGameId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public ScheduledGame decline(long playerId, long scheduledGameId) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

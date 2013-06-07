@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.gogomaya.server.game.action.GameProcessor;
+import com.gogomaya.server.game.action.GameSession;
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.event.GameEvent;
@@ -18,7 +19,7 @@ abstract public class AbstractGameProcessor<State extends GameState> implements 
     }
 
     @Override
-    final public Collection<GameEvent<State>> process(final long session, final State state, final GameMove move) {
+    final public Collection<GameEvent<State>> process(final GameSession<State> session, final State state, final GameMove move) {
         // Step 1. Invoking process movement
         beforMove(session, state, move);
         // Step 2. Calling delegate
@@ -30,8 +31,8 @@ abstract public class AbstractGameProcessor<State extends GameState> implements 
         return events;
     }
 
-    abstract public void beforMove(final long session, final State state, final GameMove move);
+    abstract public void beforMove(final GameSession<State> session, final State state, final GameMove move);
 
-    abstract public Collection<GameEvent<State>> afterMove(final long session, final State state, final Collection<GameEvent<State>> events);
+    abstract public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final State state, final Collection<GameEvent<State>> events);
 
 }

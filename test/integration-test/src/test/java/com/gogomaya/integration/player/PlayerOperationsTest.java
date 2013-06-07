@@ -3,12 +3,8 @@ package com.gogomaya.integration.player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jbehave.core.annotations.UsingSteps;
 import org.junit.Test;
@@ -82,15 +78,8 @@ public class PlayerOperationsTest {
 
         try {
             System.out.println(new ObjectMapper().writeValueAsString(registrationRequest));
-        } catch (JsonGenerationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Throwable error) {
+            throw new RuntimeException(error);
         }
     }
 

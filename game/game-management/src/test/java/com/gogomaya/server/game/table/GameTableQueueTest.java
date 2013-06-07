@@ -32,7 +32,7 @@ public class GameTableQueueTest {
     final private int SIZE = 1000;
 
     @Inject
-    GameTableQueue tableQueue;
+    PendingSessionQueue tableQueue;
 
     GameSpecification specification;
 
@@ -90,28 +90,28 @@ public class GameTableQueueTest {
         @Override
         public Long call() {
             // Step 1. Pooling table from specification
-            Long polledTable = tableQueue.poll(specification);
-            while (polledTable == null) {
+            Long polledSession = tableQueue.poll(specification);
+            while (polledSession == null) {
                 // Step 2. In case of a failure try to poll again in timeout
                 try {
                     Thread.sleep(random.nextInt(100));
                 } catch (InterruptedException e) {
                 }
-                polledTable = tableQueue.poll(specification);
+                polledSession = tableQueue.poll(specification);
             }
             // Step 3. Adding it back
-            tableQueue.add(polledTable, specification);
+            tableQueue.add(polledSession, specification);
             // Step 4. Trying to poll again
-            polledTable = tableQueue.poll(specification);
-            while (polledTable == null) {
+            polledSession = tableQueue.poll(specification);
+            while (polledSession == null) {
                 // Step 2. In case of a failure try to poll again in timeout
                 try {
                     Thread.sleep(random.nextInt(100));
                 } catch (InterruptedException e) {
                 }
-                polledTable = tableQueue.poll(specification);
+                polledSession = tableQueue.poll(specification);
             }
-            return polledTable;
+            return polledSession;
         }
 
     }

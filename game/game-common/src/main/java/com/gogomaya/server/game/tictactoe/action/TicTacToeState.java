@@ -60,6 +60,11 @@ public class TicTacToeState extends AbstractGameState {
         return getCellState(cell.getRow(), cell.getColumn());
     }
 
+    public TicTacToeState setBoard(final TicTacToeCell cell, final TicTacToeCellState cellState) {
+        this.board[cell.getRow()][cell.getColumn()] = cellState;
+        return this;
+    }
+
     public TicTacToeState setBoard(TicTacToeCellState[][] board) {
         this.board = board;
         return this;

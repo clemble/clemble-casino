@@ -13,9 +13,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.gogomaya.server.game.notification.TableServerRegistry;
-import com.gogomaya.server.game.table.GameTableQueue;
-import com.gogomaya.server.game.table.JavaGameTableQueue;
-import com.gogomaya.server.game.table.RedisGameTableQueue;
+import com.gogomaya.server.game.table.PendingSessionQueue;
+import com.gogomaya.server.game.table.JavaPendingSessionQueue;
+import com.gogomaya.server.game.table.RedisGameSessionQueue;
 import com.gogomaya.server.notification.ServerRegistry;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
@@ -39,8 +39,8 @@ public class GameManagementSpringConfiguration {
 
         @Bean
         @Singleton
-        public GameTableQueue gameTableQueue() {
-            return new JavaGameTableQueue();
+        public PendingSessionQueue gameTableQueue() {
+            return new JavaPendingSessionQueue();
         }
 
     }
@@ -62,8 +62,8 @@ public class GameManagementSpringConfiguration {
 
         @Bean
         @Singleton
-        public GameTableQueue gameTableQueue() {
-            return new RedisGameTableQueue(redisTemplate);
+        public PendingSessionQueue gameTableQueue() {
+            return new RedisGameSessionQueue(redisTemplate);
         }
 
     }

@@ -68,6 +68,10 @@ public class GameTableManagerTest {
 
         GameTable<TicTacToeState> anotherTable = gameStateManager.findOpponent(2, specification);
 
+        if (table.getTableId() != anotherTable.getTableId()) {
+            anotherTable = gameStateManager.findOpponent(3, specification);
+        }
+
         Assert.assertEquals(table.getTableId(), anotherTable.getTableId());
     }
 }
