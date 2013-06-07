@@ -107,7 +107,7 @@ public class GameOperationsTest {
         Assert.assertEquals(anotherTable.getTableId(), gameTable.getTableId());
         // Step 5. Waiting for notification to happen
         try {
-            countDownLatch.await(30, TimeUnit.SECONDS);
+            countDownLatch.await(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
         }
         Assert.assertEquals(countDownLatch.getCount(), 0);

@@ -25,7 +25,7 @@ import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameEngineController;
-import com.gogomaya.server.web.active.session.GameTableMatchController;
+import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 
@@ -85,8 +85,8 @@ public class TicTacToeWebSpringConfiguration extends WebMvcConfigurationSupport 
 
     @Bean
     @Singleton
-    public GameTableMatchController<TicTacToeState> gameTableMatchController() {
-        return new GameTableMatchController<TicTacToeState>(stateManager, tableRepository, configurationManager);
+    public GameConstructionController<TicTacToeState> gameTableMatchController() {
+        return new GameConstructionController<TicTacToeState>(stateManager, tableRepository, configurationManager);
     }
 
     @Bean

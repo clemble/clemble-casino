@@ -35,7 +35,7 @@ public class GameTableFactory<State extends GameState> {
         if (table == null)
             return create(specification);
 
-        return specifyServer(table);
+        return tableRegistry.specifyServer(table);
     }
 
     public GameTable<State> startGame(GameTable<State> table) {
@@ -45,10 +45,6 @@ public class GameTableFactory<State extends GameState> {
         table.getCurrentSession().setSessionState(GameSessionState.active);
 
         return table;
-    }
-
-    private GameTable<State> specifyServer(GameTable<State> targetTable) {
-        return targetTable.setServer(tableRegistry.findServer(targetTable.getTableId()));
     }
 
     private GameTable<State> create(GameSpecification specification) {
@@ -65,6 +61,6 @@ public class GameTableFactory<State extends GameState> {
 
         table = tableRepository.save(table);
 
-        return specifyServer(table);
+        return tableRegistry.specifyServer(table);
     }
 }

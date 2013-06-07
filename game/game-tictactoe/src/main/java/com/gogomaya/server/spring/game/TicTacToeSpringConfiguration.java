@@ -71,7 +71,7 @@ public class TicTacToeSpringConfiguration {
     public RedisTemplate<Long, Long> playerQueueTemplate;
 
     @Inject
-    private TableServerRegistry serverRegistry;
+    private TableServerRegistry tableRegistry;
 
     @Bean
     @Singleton
@@ -89,13 +89,13 @@ public class TicTacToeSpringConfiguration {
     @Singleton
     public GameConstructionServiceImpl<TicTacToeState> stateManager() {
         return new GameConstructionServiceImpl<TicTacToeState>(tableQueue, tableRepository, gameNotificationManager(), tableFactory(),
-                walletTransactionManager, activePlayerQueue());
+                walletTransactionManager, activePlayerQueue(), tableRegistry);
     }
 
     @Bean
     @Singleton
     public GameTableFactory<TicTacToeState> tableFactory() {
-        return new GameTableFactory<TicTacToeState>(gameStateFactory(), tableRepository, sessionRepository, serverRegistry);
+        return new GameTableFactory<TicTacToeState>(gameStateFactory(), tableRepository, sessionRepository, tableRegistry);
     }
 
     @Bean

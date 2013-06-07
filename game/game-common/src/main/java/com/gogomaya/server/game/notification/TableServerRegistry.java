@@ -2,6 +2,8 @@ package com.gogomaya.server.game.notification;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.action.GameTable;
 import com.gogomaya.server.notification.ServerRegistry;
 
 public class TableServerRegistry {
@@ -14,6 +16,15 @@ public class TableServerRegistry {
 
     public String findServer(long tableId) {
         return SERVER_REGISTRY.find(tableId);
+    }
+
+    public <State extends GameState> GameTable<State> specifyServer(GameTable<State> table) {
+        if (table == null)
+            return table;
+
+        table.setServer(findServer(table.getTableId()));
+
+        return table;
     }
 
 }

@@ -22,7 +22,7 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.table.GameTableRepository;
 
 @Controller
-public class GameTableMatchController<State extends GameState> {
+public class GameConstructionController<State extends GameState> {
 
     final private GameConfigurationManager configurationManager;
 
@@ -30,7 +30,7 @@ public class GameTableMatchController<State extends GameState> {
 
     final private GameTableRepository<State> tableRepository;
 
-    public GameTableMatchController(final GameConstructionService<State> matchingService,
+    public GameConstructionController(final GameConstructionService<State> matchingService,
             final GameTableRepository<State> sessionRepository,
             final GameConfigurationManager configurationManager) {
         this.matchingService = checkNotNull(matchingService);

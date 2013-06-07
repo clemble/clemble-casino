@@ -2,8 +2,11 @@ package com.gogomaya.server.player.security;
 
 import java.util.Date;
 
+import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -13,13 +16,14 @@ import javax.persistence.Transient;
 public class PlayerSession {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SESSION_ID")
     private long sessionId;
 
     @Column(name = "PLAYER_ID")
     private long playerId;
 
-    @Transient
+    @Column(name = "SERVER")
     private String server;
 
     @Column(name = "START_TIME")

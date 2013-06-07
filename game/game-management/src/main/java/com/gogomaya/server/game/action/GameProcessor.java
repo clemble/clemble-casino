@@ -7,6 +7,6 @@ import com.gogomaya.server.game.event.GameEvent;
 
 public interface GameProcessor<State extends GameState> {
 
-    public Collection<GameEvent<State>> process(final State state, final GameMove move);
+    public Collection<GameEvent<State>> process(final long sessionId, final State state, final GameMove move);
 
 }

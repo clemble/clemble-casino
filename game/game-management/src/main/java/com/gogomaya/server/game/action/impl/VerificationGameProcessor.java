@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.action.impl;
 
+import java.util.Collection;
+
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.GamePlayerState;
@@ -8,6 +10,7 @@ import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.move.BetMove;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.action.move.GiveUpMove;
+import com.gogomaya.server.game.event.GameEvent;
 
 public class VerificationGameProcessor<State extends GameState> extends AbstractGameProcessor<State> {
 
@@ -16,7 +19,7 @@ public class VerificationGameProcessor<State extends GameState> extends Abstract
     }
 
     @Override
-    public void processMovement(State state, GameMove move) {
+    public void beforMove(final long session, final State state, final GameMove move) {
         // Step 1. Sanity check
         if (move == null)
             throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
@@ -38,6 +41,11 @@ public class VerificationGameProcessor<State extends GameState> extends Abstract
                     throw GogomayaException.create(GogomayaError.GamePlayBetOverflow);
             }
         }
+    }
+
+    @Override
+    public Collection<GameEvent<State>> afterMove(final long session, final State state, final Collection<GameEvent<State>> madeMoves) {
+        return madeMoves;
     }
 
 }

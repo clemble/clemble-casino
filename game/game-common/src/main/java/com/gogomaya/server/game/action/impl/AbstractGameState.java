@@ -9,6 +9,9 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.action.GameOutcome;
 import com.gogomaya.server.game.action.GamePlayerIterator;
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameState;
@@ -31,9 +34,12 @@ abstract public class AbstractGameState implements GameState {
     @JsonIgnore
     private Map<Long, GameMove> madeMoves = new HashMap<Long, GameMove>();
 
+    private GameOutcome outcome;
+
     @JsonProperty("version")
     private int version;
 
+    @Override
     final public Collection<GamePlayerState> getPlayerStates() {
         return playersState.values();
     }
@@ -62,8 +68,8 @@ abstract public class AbstractGameState implements GameState {
     final public Set<Long> getActiveUsers() {
         return nextMoves.keySet();
     }
-    
-    final public Set<Long> getOpponents(long playerId){
+
+    final public Set<Long> getOpponents(long playerId) {
         // Step 1. Calculating opponents from the original list
         Set<Long> opponents = new HashSet<Long>(getActiveUsers());
         // Step 2. Removing player from the player list
@@ -146,10 +152,26 @@ abstract public class AbstractGameState implements GameState {
         return version;
     }
 
+    abstract public GameOutcome calculate();
+
     @Override
-    final public int increaseVersion() {
+    public GameOutcome getOutcome() {
+        // Step 1. If we already calculated outcome return it
+        if (outcome != null)
+            return outcome;
+        // Step 2. Checking if there is a single winner
+        this.outcome = calculate();
+        // Step 3. Returning GameOutcome
+        return outcome;
+    }
+
+    @Override
+    public GameState setOutcome(GameOutcome outcome) {
+        if (this.outcome != null)
+            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+        this.outcome = outcome;
         this.version++;
-        return version;
+        return this;
     }
 
     final public void setVersion(int version) {

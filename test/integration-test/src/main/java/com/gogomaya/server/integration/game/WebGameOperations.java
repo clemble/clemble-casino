@@ -9,17 +9,17 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
-import com.gogomaya.server.web.active.session.GameTableMatchController;
+import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 
 public class WebGameOperations<State extends GameState> extends AbstractGameOperation<State> {
 
     final private GameConfigurationManagerController configuartionManagerController;
 
-    final private GameTableMatchController<TicTacToeState> matchController;
+    final private GameConstructionController<TicTacToeState> matchController;
 
     public WebGameOperations(final GameConfigurationManagerController configurationManagerController,
-            final GameTableMatchController<TicTacToeState> matchController,
+            final GameConstructionController<TicTacToeState> matchController,
             final GamePlayerFactory<State> playerFactory,
             final PlayerOperations playerOperations) {
         super(playerOperations, playerFactory);

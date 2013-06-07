@@ -15,6 +15,7 @@ import com.gogomaya.server.game.active.ActivePlayerQueue;
 import com.gogomaya.server.game.event.GameStartedEvent;
 import com.gogomaya.server.game.event.PlayerAddedEvent;
 import com.gogomaya.server.game.notification.GameNotificationService;
+import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.table.GameTableQueue;
@@ -34,6 +35,8 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
     final private ActivePlayerQueue activePlayerQueue;
 
     final private WalletTransactionManager walletTransactionManager;
+    
+    final private TableServerRegistry tableRegistry;
 
     @Inject
     public GameConstructionServiceImpl(final GameTableQueue tableManager,
@@ -41,13 +44,15 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
             final GameNotificationService<State> notificationManager,
             final GameTableFactory<State> tableFactory,
             final WalletTransactionManager walletTransactionManager,
-            final ActivePlayerQueue activePlayerQueue) {
+            final ActivePlayerQueue activePlayerQueue,
+            final TableServerRegistry tableServerRegistry) {
         this.activePlayerQueue = checkNotNull(activePlayerQueue);
         this.tableManager = checkNotNull(tableManager);
         this.tableRepository = checkNotNull(tableRepository);
         this.notificationManager = checkNotNull(notificationManager);
         this.tableFactory = checkNotNull(tableFactory);
         this.walletTransactionManager = checkNotNull(walletTransactionManager);
+        this.tableRegistry = tableServerRegistry;
     }
 
     @Override
@@ -58,7 +63,7 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
             if (table == null) {
                 activePlayerQueue.markInActive(playerId);
             } else {
-                return table;
+                return tableRegistry.specifyServer(table);
             }
         }
         // Step 0. Checking player can afford to play this game
@@ -91,7 +96,7 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
             tableManager.add(table.getTableId(), table.getSpecification());
         }
 
-        return table;
+        return tableRegistry.specifyServer(table);
     }
 
     @Override

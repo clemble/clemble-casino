@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.action.DrawOutcome;
 import com.gogomaya.server.game.action.GameOutcome;
 import com.gogomaya.server.game.action.GamePlayerState;
@@ -25,8 +23,6 @@ public class TicTacToeState extends AbstractGameState {
     private TicTacToeCellState[][] board = new TicTacToeCellState[3][3];
 
     private TicTacToeCell activeCell;
-
-    private GameOutcome outcome;
 
     public TicTacToeState() {
         // Step 0. Filling the board with empty cell value
@@ -75,30 +71,18 @@ public class TicTacToeState extends AbstractGameState {
         return getOutcome() != null;
     }
 
-    @Override
-    public GameOutcome getOutcome() {
-        // Step 1. If we already calculated outcome return it
-        if (outcome != null)
-            return outcome;
-        // Step 2. Checking if there is a single winner
+    public GameOutcome calculate() {
+        // Step 1. Checking if there is a single winner
         long winner = getWinner();
         if (winner != TicTacToeCellState.DEFAULT_OWNER) {
-            outcome = new PlayerWonOutcome(winner);
+            return new PlayerWonOutcome(winner);
         }
-        // Step 3. Checking if game ended in draw
+        // Step 2. Checking if game ended in draw
         if (!canHaveWinner()) {
-            outcome = new DrawOutcome();
+            return new DrawOutcome();
         }
-        // Step 4.
-        return outcome;
-    }
-
-    public TicTacToeState setOutcome(GameOutcome outcome) {
-        if (this.outcome != null)
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
-        this.outcome = outcome;
-        this.increaseVersion();
-        return this;
+        // Step 3. Returning default value
+        return null;
     }
 
     private long getWinner() {

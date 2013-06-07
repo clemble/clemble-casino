@@ -25,7 +25,7 @@ import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.spring.web.WebGenericConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiConfiguration;
 import com.gogomaya.server.web.active.session.GameEngineController;
-import com.gogomaya.server.web.active.session.GameTableMatchController;
+import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
@@ -58,7 +58,7 @@ public class TestConfiguration {
         GameConfigurationManagerController configuartionManagerController;
 
         @Inject
-        GameTableMatchController<TicTacToeState> matchController;
+        GameConstructionController<TicTacToeState> matchController;
 
         @Inject
         GameEngineController<TicTacToeState> engineController;

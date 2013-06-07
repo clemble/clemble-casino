@@ -10,14 +10,10 @@ import com.google.common.collect.ImmutableList;
 public class GameCache<State extends GameState> {
 
     final private ReentrantLock sessionLock = new ReentrantLock();
-
     final private GameSession<State> session;
-
-    final private State state;
-
     final private GameProcessor<State> processor;
-
     final private Collection<Long> playerIds;
+    final private State state;
 
     public GameCache(final GameSession<State> session, final State state, final GameProcessor<State> processor, final Collection<Long> playerIds) {
         this.session = checkNotNull(session);

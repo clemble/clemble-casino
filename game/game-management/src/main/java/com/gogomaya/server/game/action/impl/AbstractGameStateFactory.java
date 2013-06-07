@@ -24,10 +24,11 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
             throw GogomayaException.create(GogomayaError.GameStateReCreationFailure);
         }
         // Step 2. Re creating state
+        long session = gameSession.getSessionId();
         State restoredState = create(gameSession.getSpecification(), gameSession.getPlayers());
         GameProcessor<State> processor = processorFactory.create(gameSession.getSpecification());
         for (MadeMove madeMove : MadeMove.sort(gameSession.getMadeMoves())) {
-            processor.process(restoredState, madeMove.getMove());
+            processor.process(session, restoredState, madeMove.getMove());
         }
         // Step 3. Returning restored application state
         return restoredState;

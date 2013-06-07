@@ -8,10 +8,13 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
+
 // !!! NEED TO MAKE A COPY OF THIS ON EVERY OBJECT WITH GET METHOD CALL
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = TicTacToeState.class, name = "ticTacToe") })
 public interface GameState extends Serializable {
+
+    public Collection<GamePlayerState> getPlayerStates();
 
     public GamePlayerState getPlayerState(long playerId);
 
@@ -33,10 +36,10 @@ public interface GameState extends Serializable {
 
     public GameOutcome getOutcome();
 
+    public GameState setOutcome(GameOutcome outcome);
+
     public boolean complete();
 
     public int getVersion();
-
-    public int increaseVersion();
 
 }

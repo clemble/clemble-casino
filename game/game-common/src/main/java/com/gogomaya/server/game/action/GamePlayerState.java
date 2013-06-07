@@ -14,13 +14,20 @@ public class GamePlayerState implements PlayerAware {
     final private long playerId;
 
     private long moneyLeft;
+    private long moneySpent;
 
-    @JsonCreator
-    public GamePlayerState(
-            @JsonProperty("playerId") final long playerId,
-            @JsonProperty("moneyLeft") final long moneyLeft) {
+    public GamePlayerState(final long playerId, final long moneyLeft) {
         this.playerId = playerId;
         this.moneyLeft = moneyLeft;
+    }
+
+    @JsonCreator
+    public GamePlayerState(@JsonProperty("playerId") final long playerId,
+            @JsonProperty("moneyLeft") final long moneyLeft,
+            @JsonProperty("moneySpent") final long moneySpent) {
+        this.playerId = playerId;
+        this.moneyLeft = moneyLeft;
+        this.moneySpent = moneySpent;
     }
 
     @Override
@@ -34,11 +41,16 @@ public class GamePlayerState implements PlayerAware {
 
     public void subMoneyLeft(long money) {
         this.moneyLeft = moneyLeft - money;
+        this.moneySpent = moneySpent + money;
     }
 
     @Override
     public String toString() {
         return "PlayerState [player=" + playerId + ", money=" + moneyLeft + "]";
+    }
+
+    public long getMoneySpent() {
+        return moneySpent;
     }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.spring.web.TicTacToeWebSpringConfiguration;
-import com.gogomaya.server.web.active.session.GameTableMatchController;
+import com.gogomaya.server.web.active.session.GameConstructionController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TicTacToeWebSpringConfiguration.class)
@@ -19,7 +19,7 @@ import com.gogomaya.server.web.active.session.GameTableMatchController;
 public class SimpleContextInitiationTest {
 
     @Autowired
-    private GameTableMatchController<GameState> tableMatchController;
+    private GameConstructionController<GameState> tableMatchController;
 
     @Test
     public void testInitialized() {
