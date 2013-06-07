@@ -16,7 +16,6 @@
         <module>game</module>
 
         <module>web</module>
-        <module>web-client</module>
 
         <module>test</module>
     </modules>
