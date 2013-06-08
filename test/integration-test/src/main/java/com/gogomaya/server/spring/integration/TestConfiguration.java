@@ -118,7 +118,7 @@ public class TestConfiguration {
     public static class IntegrationTestConfiguration {
 
         public String getBaseUrl() {
-            return "http://localhost:8080/gogomaya-web";
+            return "http://localhost:8080/web";
         }
 
         @Bean

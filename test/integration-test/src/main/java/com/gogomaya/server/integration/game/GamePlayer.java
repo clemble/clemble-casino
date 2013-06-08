@@ -100,7 +100,7 @@ abstract public class GamePlayer<State extends GameState> {
     }
 
     final public void waitForTurn() {
-        while (keepAlive.get() && !isToMove())
+        while (keepAlive.get() && !isToMove() && !currentState.get().complete())
             waitVersion(getState().getVersion() + 1);
     }
 

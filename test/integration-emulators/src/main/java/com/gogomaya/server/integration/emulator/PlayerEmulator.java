@@ -45,17 +45,22 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     @Override
     public void run() {
         while (continueEmulation.get()) {
-            // Step 1. Start player emulator
-            GamePlayer<State> playerState = gameOperations.construct(specification);
-            logger.info("Registered {} on {} with session {}", new Object[] { playerState.getPlayer().getPlayerId(), playerState.getTable().getTableId(),
-                    playerState.getSessionId() });
-            currentPlayer.set(playerState);
-            lastMoved.set(System.currentTimeMillis());
-            while (!playerState.getState().complete()) {
-                // Step 2. Waiting for player turn
-                playerState.waitForTurn();
-                // Step 3. Performing action
-                actor.move(playerState);
+            try {
+                // Step 1. Start player emulator
+                GamePlayer<State> playerState = gameOperations.construct(specification);
+                logger.info("Registered {} on {} with session {}", new Object[] { playerState.getPlayer().getPlayerId(), playerState.getTable().getTableId(),
+                        playerState.getSessionId() });
+                currentPlayer.set(playerState);
+                lastMoved.set(System.currentTimeMillis());
+                while (!playerState.getState().complete()) {
+                    // Step 2. Waiting for player turn
+                    playerState.waitForTurn();
+                    // Step 3. Performing action
+                    if (playerState.isToMove())
+                        actor.move(playerState);
+                }
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
             }
         }
     }
@@ -66,7 +71,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
             return true;
         if (sessionState == GameSessionState.ended)
             return false;
-        return lastMoved.get() < System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1);
+        return lastMoved.get() + TimeUnit.MINUTES.toMillis(15) < System.currentTimeMillis();
     }
 
     public void stop() {

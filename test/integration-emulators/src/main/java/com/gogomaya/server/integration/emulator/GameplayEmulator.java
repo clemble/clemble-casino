@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PreDestroy;
 
@@ -68,7 +67,7 @@ public class GameplayEmulator<State extends GameState> {
             createEmulator(specification);
         }
         // Step 4. Creating executor to run all emulators separately
-        executorService.scheduleAtFixedRate(new PlayerEmulatorManager(), 30, 30, TimeUnit.SECONDS);
+        //executorService.scheduleAtFixedRate(new PlayerEmulatorManager(), 30, 30, TimeUnit.SECONDS);
     }
 
     private void createEmulator(GameSpecification specification) {

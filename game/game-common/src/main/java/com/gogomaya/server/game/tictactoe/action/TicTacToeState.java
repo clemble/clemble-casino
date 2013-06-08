@@ -87,6 +87,12 @@ public class TicTacToeState extends AbstractGameState {
             return new DrawOutcome();
         }
         // Step 3. Returning default value
+        for(GamePlayerState playerState: getPlayerStates()) {
+            if(playerState.getMoneyLeft() == 0) {
+                winner = getOpponents(playerState.getPlayerId()).iterator().next();
+                return new PlayerWonOutcome(winner);
+            }
+        }
         return null;
     }
 

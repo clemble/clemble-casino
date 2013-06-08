@@ -18,6 +18,4 @@ public interface GamePlayerIterator extends Serializable {
 
     public boolean contains(long playerId);
 
-    public GamePlayerIterator remove(long playerId);
-
 }

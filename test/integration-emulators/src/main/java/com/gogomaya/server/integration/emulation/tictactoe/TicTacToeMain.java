@@ -17,7 +17,7 @@ public class TicTacToeMain {
     @SuppressWarnings({ "resource", "unchecked" })
     public static void main(String[] arguments) {
         // Step 1. Reading application context configuration
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
         applicationContext.getEnvironment().setActiveProfiles("localServerIntegration");
         applicationContext.register(TestConfiguration.class);
         applicationContext.register(MainConfiguration.class);

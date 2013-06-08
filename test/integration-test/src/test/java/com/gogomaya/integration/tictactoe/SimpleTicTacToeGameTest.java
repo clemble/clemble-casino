@@ -136,4 +136,23 @@ public class SimpleTicTacToeGameTest {
             playerB.clear();
         }
     }
+
+    @Test
+    public void scenario1() {
+        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
+        TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
+        TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+        try {
+            playerA.select(0, 0);
+            playerA.bet(playerA.getMoneyLeft());
+            playerB.bet(1);
+
+            Assert.assertTrue(playerB.getState().complete());
+            Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerB.getPlayer().getPlayerId());
+        } finally {
+            playerA.clear();
+            playerB.clear();
+        }
+    }
+
 }

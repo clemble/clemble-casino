@@ -69,18 +69,4 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
         return false;
     }
 
-    @Override
-    public SequentialPlayerIterator remove(long playerId) {
-        long[] playersCopy = new long[players.length - 1];
-        int position = 0;
-        for(int i = 0, j = 0; i < players.length; i++) {
-            if(players[i] != playerId) {
-                playersCopy[j++] = players[i];
-            } else {
-                position = i;
-            }
-        }
-        return new SequentialPlayerIterator(position >= index ? index % players.length : (index + players.length - 1) % players.length, playersCopy);
-    }
-
 }

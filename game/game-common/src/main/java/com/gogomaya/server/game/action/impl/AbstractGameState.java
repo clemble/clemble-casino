@@ -64,17 +64,15 @@ abstract public class AbstractGameState implements GameState {
         this.playersState.put(playerState.getPlayerId(), playerState);
     }
 
-    @JsonIgnore
-    final public Set<Long> getActiveUsers() {
-        return nextMoves.keySet();
-    }
-
     final public Set<Long> getOpponents(long playerId) {
         // Step 1. Calculating opponents from the original list
-        Set<Long> opponents = new HashSet<Long>(getActiveUsers());
-        // Step 2. Removing player from the player list
-        opponents.remove(playerId);
-        // Step 3. Returning list of opponents
+        Set<Long> opponents = new HashSet<Long>();
+        for (long opponent : playerIterator.getPlayers()) {
+            if (opponent != playerId) {
+                opponents.add(opponent);
+            }
+        }
+        // Step 2. Returning list of opponents
         return opponents;
     }
 
