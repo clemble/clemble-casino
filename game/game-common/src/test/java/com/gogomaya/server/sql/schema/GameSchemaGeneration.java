@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.schema;
+package com.gogomaya.server.sql.schema;
 
 import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;

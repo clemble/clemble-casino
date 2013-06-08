@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.wallet;
+package com.gogomaya.server.sql.schema;
 
 import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gogomaya.server.player.wallet.PlayerWallet;
+import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
