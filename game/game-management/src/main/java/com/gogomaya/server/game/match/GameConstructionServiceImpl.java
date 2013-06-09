@@ -71,7 +71,7 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
         Long session = tableManager.poll(specification);
         GameTable<State> table = tableFactory.findTable(session, specification);
 
-        if (!activePlayerQueue.markActive(playerId, table.getCurrentSession().getSessionId()))
+        if (!activePlayerQueue.markActive(playerId, table.getCurrentSession().getSession()))
             throw GogomayaException.create(GogomayaError.GameMatchPlayerHasPendingSessions);
         table.addPlayer(playerId);
         table = tableRepository.save(table);

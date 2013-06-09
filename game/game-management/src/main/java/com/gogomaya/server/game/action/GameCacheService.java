@@ -29,12 +29,15 @@ public class GameCacheService<State extends GameState> {
     final private GameProcessorFactory<State> processorFactory;
     final private GameSessionRepository<State> sessionRepository;
 
-    public GameCacheService(final GameSessionRepository<State> sessionRepository,
-            GameProcessorFactory<State> processorFactory,
+    public GameCacheService(final GameSessionRepository<State> sessionRepository, GameProcessorFactory<State> processorFactory,
             GameStateFactory<State> stateFactory) {
         this.stateFactory = stateFactory;
         this.processorFactory = processorFactory;
         this.sessionRepository = sessionRepository;
+    }
+
+    public GameCache<State> get(SessionAware sessionAware) {
+        return get(sessionAware.getSession());
     }
 
     public GameCache<State> get(Long sessionId) {

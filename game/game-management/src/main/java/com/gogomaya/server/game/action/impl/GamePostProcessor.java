@@ -50,7 +50,7 @@ public class GamePostProcessor<State extends GameState> extends AbstractGameProc
         // Step 1. Processing each step by step
         if (session.getState().complete()) {
             if (session.getSessionState() == GameSessionState.inactive) {
-                sessionQueue.invalidate(session.getSessionId(), session.getSpecification());
+                sessionQueue.invalidate(session.getSession(), session.getSpecification());
             }
 
             session.setSessionState(GameSessionState.ended);
@@ -71,7 +71,7 @@ public class GamePostProcessor<State extends GameState> extends AbstractGameProc
         Currency currency = session.getSpecification().getCurrency();
         // Step 2. Generating wallet transaction
         long totalWinning = 0;
-        WalletTransactionId transactionId = new WalletTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(session.getSessionId());
+        WalletTransactionId transactionId = new WalletTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(session.getSession());
         WalletTransaction walletTransaction = new WalletTransaction().setTransactionId(transactionId);
         for (GamePlayerState playerState : session.getState().getPlayerStates()) {
             if (playerState.getPlayerId() != winnerId) {

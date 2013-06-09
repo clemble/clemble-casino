@@ -44,7 +44,7 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
                 value = "com.gogomaya.server.game.action.GameState") })
 
 })
-public class GameSession<State extends GameState> implements GameSpecificationAware, Serializable {
+public class GameSession<State extends GameState> implements GameSpecificationAware, SessionAware, Serializable {
 
     /**
      * Generated 16/02/13
@@ -54,7 +54,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SESSION_ID")
-    private long sessionId;
+    private long session;
 
     @ManyToOne
     @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
@@ -80,12 +80,13 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     @Column(name = "NUM_MADE_MOVES")
     private int numMadeMoves;
 
-    public long getSessionId() {
-        return sessionId;
+    @Override
+    public long getSession() {
+        return session;
     }
 
-    public void setSessionId(long newSessionId) {
-        this.sessionId = newSessionId;
+    public void setSession(long newSession) {
+        this.session = newSession;
     }
 
     @Override
@@ -154,7 +155,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
         int result = 1;
         result = prime * result + ((madeMoves == null) ? 0 : madeMoves.hashCode());
         result = prime * result + ((players == null) ? 0 : players.hashCode());
-        result = prime * result + (int) (sessionId ^ (sessionId >>> 32));
+        result = prime * result + (int) (session ^ (session >>> 32));
         result = prime * result + ((sessionState == null) ? 0 : sessionState.hashCode());
         result = prime * result + ((specification == null) ? 0 : specification.hashCode());
         return result;
@@ -180,7 +181,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
                 return false;
         } else if (!players.equals(other.players))
             return false;
-        if (sessionId != other.sessionId)
+        if (session != other.session)
             return false;
         if (sessionState != other.sessionState)
             return false;

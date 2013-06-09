@@ -10,7 +10,7 @@ import com.gogomaya.server.game.action.GameTable;
 @Repository
 public interface GameTableRepository<State extends GameState> extends JpaRepository<GameTable<State>, Long> {
 
-    @Query("select table from GameTable table where table.currentSession.sessionId = ?")
-    public GameTable<State> findBySessionId(long sessionId);
+    @Query("select table from GameTable table where table.currentSession.session = ?")
+    public GameTable<State> findBySessionId(long session);
 
 }

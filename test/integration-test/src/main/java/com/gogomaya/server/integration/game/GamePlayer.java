@@ -41,7 +41,7 @@ abstract public class GamePlayer<State extends GameState> {
         this.specification = checkNotNull(table.getSpecification());
         // Step 2. Specifying current state for the listener
         this.currentState.set(table.getCurrentSession().getState());
-        this.sessionId = table.getCurrentSession().getSessionId();
+        this.sessionId = table.getCurrentSession().getSession();
         // Step 3. Registering listener
         checkNotNull(listenerOperations);
         this.listenerControl = listenerOperations.listen(player.getSession(), new GameListener() {
