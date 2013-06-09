@@ -20,10 +20,11 @@ public class VerificationGameProcessor<State extends GameState> extends Abstract
     }
 
     @Override
-    public void beforMove(final GameSession<State> session, final State state, final GameMove move) {
+    public void beforeMove(final GameSession<State> session, final GameMove move) {
         // Step 1. Sanity check
         if (move == null)
             throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
+        State state = session.getState();
         // Step 2. Checking player participate in the game
         final long playerId = move.getPlayerId();
         if (!state.getPlayerIterator().contains(playerId)) {
@@ -45,7 +46,7 @@ public class VerificationGameProcessor<State extends GameState> extends Abstract
     }
 
     @Override
-    public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final State state, final Collection<GameEvent<State>> madeMoves) {
+    public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final Collection<GameEvent<State>> madeMoves) {
         return madeMoves;
     }
 

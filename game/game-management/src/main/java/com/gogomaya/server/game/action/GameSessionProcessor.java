@@ -48,18 +48,16 @@ public class GameSessionProcessor<State extends GameState> {
         // Step 3. Acquiring lock for the session, to exclude parallel processing
         reentrantLock.lock();
         try {
-            // Step 4. Recreating state if needed
-            State state = cache.getState();
-            // Step 5. Retrieving game processor based on session identifier
+            // Step 4. Retrieving game processor based on session identifier
             GameProcessor<State> processor = cache.getProcessor();
-            // Step 6. Processing movement
-            Collection<GameEvent<State>> events = processor.process(cache.getSession(), state, move);
+            // Step 5. Processing movement
+            Collection<GameEvent<State>> events = processor.process(cache.getSession(), move);
             for (GameEvent<State> event : events)
                 event.setSession(sessionId);
-            // Step 7. Invoking appropriate notification
+            // Step 6. Invoking appropriate notification
             notificationService.notify(cache.getPlayerIds(), events);
-            // Step 8. Returning state of the game
-            return state;
+            // Step 7. Returning state of the game
+            return cache.getSession().getState();
         } finally {
             reentrantLock.unlock();
         }

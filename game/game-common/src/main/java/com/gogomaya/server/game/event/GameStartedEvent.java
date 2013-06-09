@@ -3,6 +3,7 @@ package com.gogomaya.server.game.event;
 import java.util.Collection;
 
 import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.action.SessionAware;
 import com.gogomaya.server.game.action.move.GameMove;
 
 public class GameStartedEvent<State extends GameState> extends GameEvent<State> {
@@ -13,6 +14,13 @@ public class GameStartedEvent<State extends GameState> extends GameEvent<State> 
     private static final long serialVersionUID = -4474960027054354888L;
 
     private Collection<GameMove> nextMoves;
+
+    public GameStartedEvent() {
+    }
+
+    public GameStartedEvent(SessionAware sessionAware) {
+        super(sessionAware);
+    }
 
     public Collection<GameMove> getNextMoves() {
         return nextMoves;

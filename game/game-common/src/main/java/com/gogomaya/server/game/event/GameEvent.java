@@ -2,6 +2,7 @@ package com.gogomaya.server.game.event;
 
 import com.gogomaya.server.event.SessionAwareEvent;
 import com.gogomaya.server.event.impl.AbstractGogomayaEvent;
+import com.gogomaya.server.game.action.SessionAware;
 
 public class GameEvent<State> extends AbstractGogomayaEvent implements SessionAwareEvent {
 
@@ -13,6 +14,13 @@ public class GameEvent<State> extends AbstractGogomayaEvent implements SessionAw
     private long session;
 
     private State state;
+
+    public GameEvent() {
+    }
+
+    public GameEvent(SessionAware sessionAware) {
+        this.setSession(sessionAware.getSession());
+    }
 
     @Override
     public long getSession() {

@@ -8,7 +8,7 @@ public interface GameStateFactory<State extends GameState> {
 
     public State create();
 
-    public State create(final GameSession<State> gameSession);
+    public void restore(final GameSession<State> gameSession);
 
     public State create(final GameSpecification gameSpecification, final List<Long> playerIds);
 

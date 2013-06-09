@@ -2,6 +2,7 @@ package com.gogomaya.server.game.event;
 
 import com.gogomaya.server.game.action.GameOutcome;
 import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.action.SessionAware;
 
 public class GameEndedEvent<State extends GameState> extends GameEvent<State> {
 
@@ -12,7 +13,11 @@ public class GameEndedEvent<State extends GameState> extends GameEvent<State> {
 
     private GameOutcome outcome;
 
-    public GameEndedEvent() {
+    public GameEndedEvent(){
+    }
+
+    public GameEndedEvent(SessionAware sessionAware) {
+        super(sessionAware);
     }
 
     public GameEndedEvent(State state) {

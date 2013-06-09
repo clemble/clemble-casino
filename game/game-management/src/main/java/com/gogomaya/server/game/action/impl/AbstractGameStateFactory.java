@@ -18,7 +18,7 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
     }
 
     @Override
-    public State create(GameSession<State> session) {
+    public void restore(GameSession<State> session) {
         // Step 1. Sanity check
         if (session == null || session.getSpecification() == null) {
             throw GogomayaException.create(GogomayaError.GameStateReCreationFailure);
@@ -26,11 +26,13 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
         // Step 2. Re creating state
         State restoredState = create(session.getSpecification(), session.getPlayers());
         GameProcessor<State> processor = processorFactory.create(session.getSpecification());
+        // Step 2.1 To prevent population of original session with duplicated events
+        GameSession<State> tmpSession = new GameSession<State>();
         for (MadeMove madeMove : MadeMove.sort(session.getMadeMoves())) {
-            processor.process(session, restoredState, madeMove.getMove());
+            processor.process(tmpSession, madeMove.getMove());
         }
         // Step 3. Returning restored application state
-        return restoredState;
+        session.setState(restoredState);
     }
 
 }

@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.gogomaya.server.game.action.GameOutcome;
 import com.gogomaya.server.game.action.GamePlayerState;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameSession;
@@ -38,26 +39,27 @@ public class GamePostProcessor<State extends GameState> extends AbstractGameProc
     }
 
     @Override
-    public void beforMove(final GameSession<State> session, final State state, final GameMove move) {
+    public void beforeMove(final GameSession<State> session, final GameMove move) {
     }
 
     @Override
-    public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final State state, final Collection<GameEvent<State>> madeMoves) {
+    public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final Collection<GameEvent<State>> madeMoves) {
         // Step 0. Sanity check
         if (madeMoves == null)
             return madeMoves;
         // Step 1. Processing each step by step
-        if (state.complete()) {
+        if (session.getState().complete()) {
             if (session.getSessionState() == GameSessionState.inactive) {
                 sessionQueue.invalidate(session.getSessionId(), session.getSpecification());
             }
 
             session.setSessionState(GameSessionState.ended);
-            for (long player : state.getPlayerIterator().getPlayers())
+            for (long player : session.getState().getPlayerIterator().getPlayers())
                 activePlayerQueue.markInActive(player);
 
-            if (state.getOutcome() instanceof PlayerWonOutcome) {
-                winnerOutcome((PlayerWonOutcome) state.getOutcome(), session);
+            GameOutcome outcome = session.getState().getOutcome();
+            if (outcome instanceof PlayerWonOutcome) {
+                winnerOutcome((PlayerWonOutcome) outcome, session);
             }
 
         }

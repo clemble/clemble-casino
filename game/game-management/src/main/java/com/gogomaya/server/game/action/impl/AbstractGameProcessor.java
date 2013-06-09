@@ -19,20 +19,20 @@ abstract public class AbstractGameProcessor<State extends GameState> implements 
     }
 
     @Override
-    final public Collection<GameEvent<State>> process(final GameSession<State> session, final State state, final GameMove move) {
+    final public Collection<GameEvent<State>> process(final GameSession<State> session, final GameMove move) {
         // Step 1. Invoking process movement
-        beforMove(session, state, move);
+        beforeMove(session, move);
         // Step 2. Calling delegate
-        Collection<GameEvent<State>> events = delegate.process(session, state, move);
+        Collection<GameEvent<State>> events = delegate.process(session, move);
         // Step 3. Post processing after move was made
         if (events.size() != 0)
-            afterMove(session, state, events);
+            afterMove(session, events);
         // Step 4. returning processed events
         return events;
     }
 
-    abstract public void beforMove(final GameSession<State> session, final State state, final GameMove move);
+    abstract public void beforeMove(final GameSession<State> session, final GameMove move);
 
-    abstract public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final State state, final Collection<GameEvent<State>> events);
+    abstract public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final Collection<GameEvent<State>> events);
 
 }

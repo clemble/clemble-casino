@@ -26,7 +26,8 @@ import com.google.common.collect.ImmutableList;
 public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
 
     @Override
-    public Collection<GameEvent<TicTacToeState>> process(final GameSession<TicTacToeState> session, final TicTacToeState state, GameMove move) {
+    public Collection<GameEvent<TicTacToeState>> process(final GameSession<TicTacToeState> session, GameMove move) {
+        TicTacToeState state = session.getState();
         // Step 1. Processing Select cell move
         if (state.complete())
             return ImmutableList.<GameEvent<TicTacToeState>> of();

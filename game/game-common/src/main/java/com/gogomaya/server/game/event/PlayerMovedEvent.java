@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gogomaya.server.event.PlayerAwareEvent;
 import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.action.SessionAware;
 import com.gogomaya.server.game.action.move.GameMove;
 
 public class PlayerMovedEvent<State extends GameState> extends GameEvent<State> implements PlayerAwareEvent {
@@ -17,6 +18,13 @@ public class PlayerMovedEvent<State extends GameState> extends GameEvent<State> 
     private GameMove madeMove;
 
     private Collection<GameMove> nextMoves;
+
+    public PlayerMovedEvent() {
+    }
+
+    public PlayerMovedEvent(SessionAware sessionAware) {
+        super(sessionAware);
+    }
 
     public GameMove getMadeMove() {
         return madeMove;
