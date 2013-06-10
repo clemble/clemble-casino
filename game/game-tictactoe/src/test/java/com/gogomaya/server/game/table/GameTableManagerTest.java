@@ -18,7 +18,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.match.GameConstructionServiceImpl;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.MatchRule;
@@ -30,10 +30,10 @@ import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.specification.SpecificationName;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")

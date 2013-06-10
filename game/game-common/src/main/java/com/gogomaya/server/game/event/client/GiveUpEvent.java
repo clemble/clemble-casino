@@ -1,0 +1,45 @@
+package com.gogomaya.server.game.event.client;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gogomaya.server.event.ClientEvent;
+
+public class GiveUpEvent implements ClientEvent {
+
+    /**
+     * Generated 29/05/13
+     */
+    private static final long serialVersionUID = 4501169964446540650L;
+
+    final private long playerId;
+
+    @JsonCreator
+    public GiveUpEvent(@JsonProperty("player") long playerId) {
+        this.playerId = playerId;
+    }
+
+    @Override
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (playerId ^ (playerId >>> 32));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GiveUpEvent other = (GiveUpEvent) obj;
+        if (playerId != other.playerId)
+            return false;
+        return true;
+    }
+
+}

@@ -20,8 +20,8 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.event.GogomayaEvent;
-import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.event.ServerEvent;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.player.security.PlayerSession;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.DefaultWebSocketListener;
@@ -74,7 +74,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                 try {
                     System.out.println(new String(message.getBody()));
                     // Step 1. Parsing GameTable
-                    GogomayaEvent gameTable = objectMapper.readValue(new String(message.getBody()), GogomayaEvent.class);
+                    ServerEvent gameTable = objectMapper.readValue(new String(message.getBody()), ServerEvent.class);
                     // Step 2. Updating
                     gameListener.updated(gameTable);
                 } catch (Throwable e) {
@@ -106,7 +106,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                     try {
                         System.out.println(message);
                         // Step 1. Reading game table
-                        GogomayaEvent gameTable = objectMapper.readValue(message, GogomayaEvent.class);
+                        ServerEvent gameTable = objectMapper.readValue(message, ServerEvent.class);
                         // Step 2. Updating game table
                         gameListener.updated(gameTable);
                     } catch (Throwable e) {
@@ -149,7 +149,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                             try {
                                 System.out.println(message);
                                 // Step 1. Reading game table
-                                GogomayaEvent gameTable = objectMapper.readValue(message, GogomayaEvent.class);
+                                ServerEvent gameTable = objectMapper.readValue(message, ServerEvent.class);
                                 // Step 2. Updating game table
                                 gameListener.updated(gameTable);
                             } catch (Throwable e) {

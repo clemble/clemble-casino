@@ -2,8 +2,8 @@ package com.gogomaya.server.game.notification;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.notification.ServerRegistry;
 
 public class TableServerRegistry {

@@ -2,12 +2,12 @@ package com.gogomaya.server.game.action.impl;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.GameSession;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameProcessorFactory;
-import com.gogomaya.server.game.action.GameSession;
-import com.gogomaya.server.game.action.GameState;
 import com.gogomaya.server.game.action.GameStateFactory;
-import com.gogomaya.server.game.action.move.MadeMove;
+import com.gogomaya.server.game.event.client.MadeMove;
 
 abstract public class AbstractGameStateFactory<State extends GameState> implements GameStateFactory<State> {
 

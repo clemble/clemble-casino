@@ -6,12 +6,12 @@ import javax.inject.Inject;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.GameTable;
+import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.action.GameTableFactory;
 import com.gogomaya.server.game.active.ActivePlayerQueue;
-import com.gogomaya.server.game.event.GameStartedEvent;
-import com.gogomaya.server.game.event.PlayerAddedEvent;
+import com.gogomaya.server.game.event.server.GameStartedEvent;
+import com.gogomaya.server.game.event.server.PlayerAddedEvent;
 import com.gogomaya.server.game.notification.GameNotificationService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;

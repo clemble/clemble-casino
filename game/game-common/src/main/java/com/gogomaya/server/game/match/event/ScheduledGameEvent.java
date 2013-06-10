@@ -1,9 +1,9 @@
 package com.gogomaya.server.game.match.event;
 
-import com.gogomaya.server.event.impl.AbstractGogomayaEvent;
+import com.gogomaya.server.event.AbstractServerEvent;
 import com.gogomaya.server.game.match.ScheduledGameAware;
 
-abstract public class ScheduledGameEvent extends AbstractGogomayaEvent implements ScheduledGameAware {
+abstract public class ScheduledGameEvent extends AbstractServerEvent implements ScheduledGameAware {
 
     /**
      * Generated 02/06/13

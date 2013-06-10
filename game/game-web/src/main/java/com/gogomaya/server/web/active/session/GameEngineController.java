@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.action.GameSessionProcessor;
-import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.table.GameTableRepository;
 
 @Controller
@@ -39,7 +39,7 @@ public class GameEngineController<State extends GameState> {
             @RequestHeader("playerId") long playerId,
             @RequestHeader("sessionId") long sessionId,
             @RequestHeader("tableId") long tableId,
-            @RequestBody GameMove move) {
+            @RequestBody ClientEvent move) {
         // Step 1. Retrieving associated table
         GameTable<State> table = tableRepository.findOne(tableId);
         if (table == null)

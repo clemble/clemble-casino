@@ -7,9 +7,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.action.move.GameMove;
-import com.gogomaya.server.game.action.move.GiveUpMove;
-import com.gogomaya.server.game.event.GameEvent;
+import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.event.client.GiveUpEvent;
+import com.gogomaya.server.game.event.server.GameEvent;
 import com.gogomaya.server.game.notification.GameNotificationService;
 
 public class GameSessionProcessor<State extends GameState> {
@@ -23,7 +24,7 @@ public class GameSessionProcessor<State extends GameState> {
         this.cacheService = checkNotNull(cacheService);
     }
 
-    public State process(long sessionId, GameMove move) {
+    public State process(long sessionId, ClientEvent move) {
         // Step 1. Sanity check
         if (move == null)
             throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
@@ -32,12 +33,12 @@ public class GameSessionProcessor<State extends GameState> {
         // Step 3. Checking
         switch (cache.getSession().getSessionState()) {
         case inactive:
-            if (!(move instanceof GiveUpMove)) {
+            if (!(move instanceof GiveUpEvent)) {
                 throw GogomayaException.create(GogomayaError.GamePlayGameNotStarted);
             }
             break;
         case ended:
-            if (!(move instanceof GiveUpMove)) {
+            if (!(move instanceof GiveUpEvent)) {
                 throw GogomayaException.create(GogomayaError.GamePlayGameEnded);
             }
             return cache.getSession().getState();

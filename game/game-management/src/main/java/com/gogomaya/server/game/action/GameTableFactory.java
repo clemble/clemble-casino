@@ -2,6 +2,10 @@ package com.gogomaya.server.game.action;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.server.game.GameSession;
+import com.gogomaya.server.game.GameSessionState;
+import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecification;

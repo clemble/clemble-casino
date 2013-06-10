@@ -1,6 +1,6 @@
 package com.gogomaya.server.integration.game.listener;
 
-import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.player.security.PlayerSession;
 
 public interface GameListenerOperations<State extends GameState> {

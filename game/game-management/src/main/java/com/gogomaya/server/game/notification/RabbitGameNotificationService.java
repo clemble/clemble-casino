@@ -15,8 +15,8 @@ import org.springframework.amqp.support.converter.MessageConverter;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.event.GogomayaEvent;
-import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.event.ServerEvent;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.notification.GameNotificationService;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.google.common.cache.CacheBuilder;
@@ -49,7 +49,7 @@ public class RabbitGameNotificationService<State extends GameState> implements G
     }
 
     @Override
-    public void notify(final Collection<Long> playerIds, final GogomayaEvent event) {
+    public void notify(final Collection<Long> playerIds, final ServerEvent event) {
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
         // Step 2. Notifying specific player
@@ -58,14 +58,14 @@ public class RabbitGameNotificationService<State extends GameState> implements G
     }
 
     @Override
-    public void notify(final Collection<Long> playerIds, final Collection<? extends GogomayaEvent> events) {
+    public void notify(final Collection<Long> playerIds, final Collection<? extends ServerEvent> events) {
         // Step 1. Notifying each event one after another
-        for (GogomayaEvent event : events)
+        for (ServerEvent event : events)
             notify(playerIds, event);
     }
 
     @Override
-    public void notify(long playerId, GogomayaEvent event) {
+    public void notify(long playerId, ServerEvent event) {
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
         // Step 2. Notifying specific player

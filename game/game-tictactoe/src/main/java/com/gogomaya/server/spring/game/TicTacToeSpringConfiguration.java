@@ -31,11 +31,11 @@ import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.wallet.WalletOperation;
 import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @Configuration
 @EnableTransactionManagement

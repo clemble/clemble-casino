@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.spring.web.TicTacToeWebSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameConstructionController;
 

@@ -1,8 +1,8 @@
 package com.gogomaya.server.game.match.event;
 
-import com.gogomaya.server.event.PlayerAwareEvent;
+import com.gogomaya.server.player.PlayerAware;
 
-public class InvitationAcceptedEvent extends ScheduledGameEvent implements PlayerAwareEvent {
+public class InvitationAcceptedEvent extends ScheduledGameEvent implements PlayerAware {
 
     /**
      * Generated 02/06/2013

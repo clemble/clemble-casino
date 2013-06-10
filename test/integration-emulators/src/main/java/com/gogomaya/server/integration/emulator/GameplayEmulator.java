@@ -12,7 +12,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import javax.annotation.PreDestroy;
 
-import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;

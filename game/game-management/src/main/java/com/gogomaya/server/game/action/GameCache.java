@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.gogomaya.server.game.GameSession;
+import com.gogomaya.server.game.GameState;
 import com.google.common.collect.ImmutableList;
 
 public class GameCache<State extends GameState> {

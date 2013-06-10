@@ -4,16 +4,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import com.gogomaya.server.game.action.GameOutcome;
-import com.gogomaya.server.game.action.GamePlayerState;
+import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.GameOutcome;
+import com.gogomaya.server.game.GamePlayerState;
+import com.gogomaya.server.game.GameSession;
+import com.gogomaya.server.game.GameSessionState;
+import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.PlayerWonOutcome;
 import com.gogomaya.server.game.action.GameProcessor;
-import com.gogomaya.server.game.action.GameSession;
-import com.gogomaya.server.game.action.GameSessionState;
-import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.PlayerWonOutcome;
-import com.gogomaya.server.game.action.move.GameMove;
 import com.gogomaya.server.game.active.ActivePlayerQueue;
-import com.gogomaya.server.game.event.GameEvent;
+import com.gogomaya.server.game.event.server.GameEvent;
 import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
@@ -39,7 +39,7 @@ public class GamePostProcessor<State extends GameState> extends AbstractGameProc
     }
 
     @Override
-    public void beforeMove(final GameSession<State> session, final GameMove move) {
+    public void beforeMove(final GameSession<State> session, final ClientEvent move) {
     }
 
     @Override

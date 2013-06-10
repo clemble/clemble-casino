@@ -1,12 +1,13 @@
 package com.gogomaya.server.game.rule.time.action;
 
-import com.gogomaya.server.game.action.GameSession;
-import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.GameSession;
+import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.GameTimeState;
 
 public class TimeTaskFactory<State extends GameState> {
 
-    public TimeTask construct(GameSession<State> session) {
-        return new TimeTask(session.getSession(), session.getSpecification().getMoveTimeRule(), session.getSpecification().getTotalTimeRule());
+    public GameTimeState construct(GameSession<State> session) {
+        return new GameTimeState(session.getSession(), session.getSpecification().getMoveTimeRule(), session.getSpecification().getTotalTimeRule());
     }
 
 }

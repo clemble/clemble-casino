@@ -6,11 +6,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 
-import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
+import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.integration.game.GamePlayer;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.player.Player;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 public class TicTacToePlayer extends GamePlayer<TicTacToeState> {
 

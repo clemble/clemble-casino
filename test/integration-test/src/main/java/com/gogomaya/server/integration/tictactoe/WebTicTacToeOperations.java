@@ -1,8 +1,8 @@
 package com.gogomaya.server.integration.tictactoe;
 
-import com.gogomaya.server.game.action.move.GameMove;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
+import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 import com.gogomaya.server.web.active.session.GameEngineController;
 
 public class WebTicTacToeOperations extends AbstractTicTacToeOperations {
@@ -16,7 +16,7 @@ public class WebTicTacToeOperations extends AbstractTicTacToeOperations {
     }
 
     @Override
-    public TicTacToeState perform(TicTacToePlayer player, GameMove action) {
+    public TicTacToeState perform(TicTacToePlayer player, ClientEvent action) {
         // Step 0. Parsing player, session and table identifiers
         long playerId = player.getPlayer().getPlayerId();
         long tableId = player.getTableId();

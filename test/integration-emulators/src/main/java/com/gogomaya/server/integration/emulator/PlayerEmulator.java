@@ -10,8 +10,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gogomaya.server.game.action.GameSessionState;
-import com.gogomaya.server.game.action.GameState;
+import com.gogomaya.server.game.GameSessionState;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.GamePlayer;

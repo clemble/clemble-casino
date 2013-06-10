@@ -5,11 +5,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.gogomaya.server.event.GogomayaEvent;
-import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.action.GameTable;
-import com.gogomaya.server.game.action.move.GameMove;
-import com.gogomaya.server.game.event.GameEvent;
+import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.event.ServerEvent;
+import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.GameTable;
+import com.gogomaya.server.game.event.server.GameEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.listener.GameListener;
 import com.gogomaya.server.integration.game.listener.GameListenerControl;
@@ -47,7 +47,7 @@ abstract public class GamePlayer<State extends GameState> {
         this.listenerControl = listenerOperations.listen(player.getSession(), new GameListener() {
             @Override
             @SuppressWarnings("unchecked")
-            public void updated(GogomayaEvent event) {
+            public void updated(ServerEvent event) {
                 if (event instanceof GameEvent) {
                     setState(((GameEvent<State>) event).getState());
                 }
@@ -95,7 +95,7 @@ abstract public class GamePlayer<State extends GameState> {
         }
     }
 
-    final public GameMove getNextMove() {
+    final public ClientEvent getNextMove() {
         return getState().getNextMove(player.getPlayerId());
     }
 

@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
-import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.IntegrationGameOperations;
 import com.gogomaya.server.integration.game.WebGameOperations;
@@ -23,6 +22,7 @@ import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.WebTicTacToeOperations;
 import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.spring.web.WebMvcSpiConfiguration;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;

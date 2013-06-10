@@ -2,9 +2,9 @@ package com.gogomaya.server.integration.tictactoe;
 
 import org.jbehave.core.annotations.When;
 
-import com.gogomaya.server.game.action.move.GameMove;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
+import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.integration.game.GamePlayerFactory;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 public interface TicTacToeOperations extends GamePlayerFactory<TicTacToeState> {
 
@@ -17,6 +17,6 @@ public interface TicTacToeOperations extends GamePlayerFactory<TicTacToeState> {
     public TicTacToeState giveUp(TicTacToePlayer player);
 
     @When("$A preforms $move")
-    public TicTacToeState perform(TicTacToePlayer player, GameMove action);
+    public TicTacToeState perform(TicTacToePlayer player, ClientEvent action);
 
 }

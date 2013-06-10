@@ -2,6 +2,7 @@ package com.gogomaya.server.game.action;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.impl.GamePostProcessor;
 import com.gogomaya.server.game.action.impl.VerificationGameProcessor;
 import com.gogomaya.server.game.active.ActivePlayerQueue;

@@ -13,11 +13,11 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.game.action.GamePlayerState;
-import com.gogomaya.server.game.action.GameState;
-import com.gogomaya.server.game.tictactoe.action.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.action.move.TicTacToeSelectCellMove;
+import com.gogomaya.server.game.GamePlayerState;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
+import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.event.client.TicTacToeSelectCellEvent;
 
 @Ignore
 public class GameStateSerializationTest {
@@ -40,7 +40,7 @@ public class GameStateSerializationTest {
         players.add(new GamePlayerState(2L, 50L));
 
         TicTacToeState tacToeState = new TicTacToeState(players);
-        tacToeState.addMadeMove(new TicTacToeSelectCellMove(1L));
+        tacToeState.addMadeMove(new TicTacToeSelectCellEvent(1L));
         Assert.assertNotNull(tacToeState.getMadeMove(1L));
 
         String jsonPresentation = objectMapper.writeValueAsString(tacToeState);

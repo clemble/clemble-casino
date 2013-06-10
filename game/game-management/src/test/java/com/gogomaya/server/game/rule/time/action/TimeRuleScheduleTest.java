@@ -2,7 +2,6 @@ package com.gogomaya.server.game.rule.time.action;
 
 public class TimeRuleScheduleTest {
 
-    final TimeRuleScheduler ruleScheduler = new TimeRuleScheduler(new TimeTaskFactory());
     //
     // @Test
     // public void testComparison() {

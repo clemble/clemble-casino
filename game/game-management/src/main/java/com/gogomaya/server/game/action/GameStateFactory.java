@@ -2,6 +2,8 @@ package com.gogomaya.server.game.action;
 
 import java.util.List;
 
+import com.gogomaya.server.game.GameSession;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.specification.GameSpecification;
 
 public interface GameStateFactory<State extends GameState> {
