@@ -24,4 +24,14 @@ abstract public class AbstractClientEvent implements ClientEvent {
         return "GameMove [playerId=" + playerId + "]";
     }
 
+    @Override
+    public int hashCode() {
+        return (int) (playerId ^ (playerId >>> 32));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof AbstractClientEvent && playerId == ((AbstractClientEvent) obj).getPlayerId();
+    }
+
 }

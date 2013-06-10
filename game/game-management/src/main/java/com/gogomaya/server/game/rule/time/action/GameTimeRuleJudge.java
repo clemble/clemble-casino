@@ -12,8 +12,6 @@ import com.gogomaya.server.game.GameTimeState;
 import com.gogomaya.server.game.GameTimeState.TimeBreach;
 import com.gogomaya.server.game.GameTimeState.TotalTimeBreach;
 import com.gogomaya.server.game.action.GameSessionProcessor;
-import com.gogomaya.server.game.event.client.MoveTimeBreachedEvent;
-import com.gogomaya.server.game.event.client.TotalTimeBreachedEvent;
 
 public class GameTimeRuleJudge<State extends GameState> implements Serializable, Runnable {
 
@@ -68,9 +66,9 @@ public class GameTimeRuleJudge<State extends GameState> implements Serializable,
                 throw new IllegalArgumentException();
             } else {
                 if (timeBreach instanceof TotalTimeBreach) {
-                    sessionProcessor.process(nextTask.getSession(), new TotalTimeBreachedEvent(timeBreach.getPlayerId(), nextTask));
+                    //sessionProcessor.process(nextTask.getSession(), new TotalTimeBreachedEvent(timeBreach.getPlayerId(), nextTask));
                 } else {
-                    sessionProcessor.process(nextTask.getSession(), new MoveTimeBreachedEvent(timeBreach.getPlayerId(), nextTask));
+                    //sessionProcessor.process(nextTask.getSession(), new MoveTimeBreachedEvent(timeBreach.getPlayerId(), nextTask));
                 }
             }
             nextTask = poll();
