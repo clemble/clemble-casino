@@ -1,13 +1,12 @@
-package com.gogomaya.server.game;
+package com.gogomaya.server.game.active.time;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 
+import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
-import com.gogomaya.server.game.rule.time.TimeBreachPunishment;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
-import com.gogomaya.server.player.PlayerAware;
 
 public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
 
@@ -19,73 +18,7 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
     final private HashMap<Long, Long> lastMoveTime = new HashMap<Long, Long>();
     final private HashMap<Long, Long> totalTime = new HashMap<Long, Long>();
 
-    final PriorityQueue<TimeBreach> timeBreach = new PriorityQueue<TimeBreach>();
-
-    public static class TimeBreach implements Comparable<TimeBreach>, PlayerAware {
-
-        /**
-         * Generated 10/06/13
-         */
-        private static final long serialVersionUID = -8537249165242972837L;
-
-        final private long breachTime;
-        final private long playerId;
-        final private TimeBreachPunishment breachPunishment;
-
-        public TimeBreach(long playerId, long breachTime, TimeBreachPunishment breachPunishment) {
-            this.breachTime = breachTime;
-            this.breachPunishment = breachPunishment;
-            this.playerId = playerId;
-        }
-
-        public TimeBreachPunishment getBreachPunishment() {
-            return breachPunishment;
-        }
-
-        @Override
-        public long getPlayerId() {
-            return playerId;
-        }
-
-        public boolean breached() {
-            return System.currentTimeMillis() >= breachTime;
-        }
-
-        public long getBreachTime() {
-            return breachTime;
-        }
-
-        @Override
-        public int compareTo(TimeBreach o) {
-            return (int) (getBreachTime() - o.getBreachTime());
-        }
-
-    }
-
-    public static class MoveTimeBreach extends TimeBreach {
-
-        /**
-         * Generated 10/06/13
-         */
-        private static final long serialVersionUID = 5205762297043841246L;
-
-        public MoveTimeBreach(final long playerId, final MoveTimeRule moveTime) {
-            super(playerId, System.currentTimeMillis() + moveTime.getLimit(), moveTime.getPunishment());
-        }
-    }
-
-    public static class TotalTimeBreach extends TimeBreach {
-
-        /**
-         * Generated 10/06/13
-         */
-        private static final long serialVersionUID = -5828124513275245169L;
-
-        public TotalTimeBreach(final long playerId, final long timeSpent, final TotalTimeRule totalTimeRule) {
-            super(playerId, System.currentTimeMillis() + (totalTimeRule.getLimit() - timeSpent), totalTimeRule.getPunishment());
-        }
-
-    }
+    final PriorityQueue<GameTimeBreach> timeBreach = new PriorityQueue<GameTimeBreach>();
 
     public GameTimeState(final long session, final MoveTimeRule moveTimeRule, final TotalTimeRule totalTimeRule) {
         this.session = session;
@@ -98,8 +31,8 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
         if (lastMoveTime.get(player) == null) {
             lastMoveTime.put(player, System.currentTimeMillis());
 
-            timeBreach.add(new MoveTimeBreach(player, getMoveTimeRule()));
-            timeBreach.add(new TotalTimeBreach(player, totalTime.get(player), getTotalTimeRule()));
+            timeBreach.add(new GameTimeBreach(player, System.currentTimeMillis() + moveTimeRule.getLimit(), moveTimeRule));
+            timeBreach.add(new GameTimeBreach(player, System.currentTimeMillis() + (getTotalTime(player) - totalTime.get(player)), totalTimeRule));
         }
     }
 
@@ -113,7 +46,7 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
             totalTime.put(player, currentPlayerTotal == null ? currentMove : (currentPlayerTotal + currentMove));
         }
         // Step 3. Checking current state of the user
-        Iterator<TimeBreach> timeLimits = timeBreach.iterator();
+        Iterator<GameTimeBreach> timeLimits = timeBreach.iterator();
         while (timeLimits.hasNext()) {
             if (timeLimits.next().getPlayerId() == player) {
                 timeLimits.remove();
@@ -121,8 +54,8 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
         }
     }
 
-    public TimeBreach poll() {
-        return timeBreach.poll();
+    public GameTimeBreach peek() {
+        return timeBreach.peek();
     }
 
     public long getMoveTime(long player) {
@@ -141,18 +74,15 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
     public long getSession() {
         return session;
     }
+    
+    public boolean breached() {
+        GameTimeBreach breach = timeBreach.peek();
+        return breach != null ? breach.breached() : false;
+    }
 
     public long getCheckTime() {
-        TimeBreach breach = timeBreach.peek();
+        GameTimeBreach breach = timeBreach.peek();
         return breach != null ? breach.getBreachTime() : Long.MAX_VALUE;
-    }
-
-    public MoveTimeRule getMoveTimeRule() {
-        return moveTimeRule;
-    }
-
-    public TotalTimeRule getTotalTimeRule() {
-        return totalTimeRule;
     }
 
     @Override

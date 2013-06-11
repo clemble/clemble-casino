@@ -14,7 +14,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.gogomaya.server.game.action.GameCacheService;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.game.action.GameTableFactory;
@@ -22,6 +21,7 @@ import com.gogomaya.server.game.action.impl.TicTacToeProcessor;
 import com.gogomaya.server.game.action.impl.TicTacToeStateFactory;
 import com.gogomaya.server.game.active.ActivePlayerQueue;
 import com.gogomaya.server.game.active.RedisActivePlayerQueue;
+import com.gogomaya.server.game.cache.GameCacheService;
 import com.gogomaya.server.game.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.game.match.GameConstructionServiceImpl;
 import com.gogomaya.server.game.notification.GameNotificationService;

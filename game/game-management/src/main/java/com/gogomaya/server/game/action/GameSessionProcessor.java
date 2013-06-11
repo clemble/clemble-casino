@@ -9,6 +9,8 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.cache.GameCache;
+import com.gogomaya.server.game.cache.GameCacheService;
 import com.gogomaya.server.game.event.client.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameEvent;
 import com.gogomaya.server.game.notification.GameNotificationService;

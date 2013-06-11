@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.action;
+package com.gogomaya.server.game.cache;
 
 import java.util.concurrent.ExecutionException;
 
@@ -7,6 +7,9 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.SessionAware;
+import com.gogomaya.server.game.action.GameProcessor;
+import com.gogomaya.server.game.action.GameProcessorFactory;
+import com.gogomaya.server.game.action.GameStateFactory;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
