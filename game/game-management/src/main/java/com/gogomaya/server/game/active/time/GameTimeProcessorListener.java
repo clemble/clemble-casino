@@ -10,11 +10,11 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.server.GameEvent;
 
-public class GameTimeRuleProcessor<State extends GameState> implements GameProcessorListener<State> {
+public class GameTimeProcessorListener<State extends GameState> implements GameProcessorListener<State> {
 
     final GameTimeManagementService<State> timeScheduler;
 
-    public GameTimeRuleProcessor(final GameTimeManagementService<State> cacheService) {
+    public GameTimeProcessorListener(final GameTimeManagementService<State> cacheService) {
         this.timeScheduler = checkNotNull(cacheService);
     }
 

@@ -25,7 +25,7 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
         }
         // Step 2. Re creating state
         State restoredState = create(session.getSpecification(), session.getPlayers());
-        GameProcessor<State> processor = processorFactory.create(session.getSpecification());
+        GameProcessor<State> processor = processorFactory.create(session);
         // Step 2.1 To prevent population of original session with duplicated events
         GameSession<State> tmpSession = new GameSession<State>();
         for (MadeMove madeMove : MadeMove.sort(session.getMadeMoves())) {

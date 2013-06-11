@@ -4,34 +4,38 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.active.time.GameTimeProcessorListenerFactory;
 import com.gogomaya.server.game.event.server.GameEvent;
-import com.gogomaya.server.game.specification.GameSpecification;
 
 public class GameProcessorFactory<State extends GameState> {
 
     final private GameProcessor<State> coreProcessor;
-    final private LinkedHashSet<GameProcessorListener<State>> listeners;
+    final private GameProcessorListener<State>[] registeredListeners;
+    private GameTimeProcessorListenerFactory<State> timeListenerFactory;
 
     @SafeVarargs
     public GameProcessorFactory(final GameProcessor<State> coreProcessor, final GameProcessorListener<State>... listeners) {
         this.coreProcessor = checkNotNull(coreProcessor);
-        this.listeners = new LinkedHashSet<GameProcessorListener<State>>(Arrays.asList(listeners));
+        this.registeredListeners = Arrays.copyOf(listeners, listeners.length);
     }
 
-    public void register(GameProcessorListener<State> listener) {
-        if (listener != null) {
-            listeners.add(listener);
+    public void setTimeListenerFactory(GameTimeProcessorListenerFactory<State> timeListenerFactory) {
+        this.timeListenerFactory = timeListenerFactory;
+    }
+
+    public GameProcessor<State> create(GameSession<State> session) {
+        GameProcessorListener<State> timeListener = timeListenerFactory.construct(session);
+        if(timeListener == null) {
+            return new AggregatedGameProcessor<State>(coreProcessor, registeredListeners);
+        } else {
+            GameProcessorListener<State>[] extendedListeners = Arrays.copyOf(registeredListeners, registeredListeners.length + 1);
+            extendedListeners[registeredListeners.length] = timeListener;
+            return new AggregatedGameProcessor<State>(coreProcessor, extendedListeners);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    public GameProcessor<State> create(GameSpecification specification) {
-        return new AggregatedGameProcessor<State>(coreProcessor, listeners.toArray(new GameProcessorListener[0]));
     }
 
     public static class AggregatedGameProcessor<State extends GameState> implements GameProcessor<State> {

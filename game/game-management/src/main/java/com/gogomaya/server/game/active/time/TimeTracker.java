@@ -5,25 +5,16 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import com.gogomaya.server.game.SessionAware;
-import com.gogomaya.server.game.rule.time.MoveTimeRule;
-import com.gogomaya.server.game.rule.time.TotalTimeRule;
 
-public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
+abstract public class TimeTracker implements SessionAware, Comparable<TimeTracker> {
 
     final private long session;
 
-    final private MoveTimeRule moveTimeRule;
-    final private TotalTimeRule totalTimeRule;
-
     final private HashMap<Long, Long> lastMoveTime = new HashMap<Long, Long>();
-    final private HashMap<Long, Long> totalTime = new HashMap<Long, Long>();
+    final private PriorityQueue<GameTimeBreach> timeBreach = new PriorityQueue<GameTimeBreach>();
 
-    final PriorityQueue<GameTimeBreach> timeBreach = new PriorityQueue<GameTimeBreach>();
-
-    public GameTimeState(final long session, final MoveTimeRule moveTimeRule, final TotalTimeRule totalTimeRule) {
+    public TimeTracker(final long session) {
         this.session = session;
-        this.moveTimeRule = moveTimeRule;
-        this.totalTimeRule = totalTimeRule;
     }
 
     public void markStarted(long player) {
@@ -31,8 +22,7 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
         if (lastMoveTime.get(player) == null) {
             lastMoveTime.put(player, System.currentTimeMillis());
 
-            timeBreach.add(new GameTimeBreach(player, System.currentTimeMillis() + moveTimeRule.getLimit(), moveTimeRule));
-            timeBreach.add(new GameTimeBreach(player, System.currentTimeMillis() + (totalTimeRule.getLimit() - getTotalTime(player)), totalTimeRule));
+            startTracking(player);
         }
     }
 
@@ -40,10 +30,8 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
         // Step 1. Updating move and total time
         Long time = lastMoveTime.remove(player);
         if (time != null) {
-            long currentMove = System.currentTimeMillis() - time;
             // Step 2. Updating cache value
-            Long currentPlayerTotal = totalTime.get(player);
-            totalTime.put(player, currentPlayerTotal == null ? currentMove : (currentPlayerTotal + currentMove));
+            stopTracking(player, System.currentTimeMillis() - time);
         }
         // Step 3. Checking current state of the user
         Iterator<GameTimeBreach> timeLimits = timeBreach.iterator();
@@ -52,6 +40,14 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
                 timeLimits.remove();
             }
         }
+    }
+
+    abstract public void startTracking(long player);
+
+    abstract public void stopTracking(long player, long moveTime);
+
+    public void add(GameTimeBreach breach) {
+        timeBreach.add(breach);
     }
 
     public GameTimeBreach peek() {
@@ -65,17 +61,11 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
         return time == null ? 0 : System.currentTimeMillis() - time;
     }
 
-    public long getTotalTime(long player) {
-        Long totalTimeValue = totalTime.get(player);
-        // Step 1. Total time is the time since the last move + current move time
-        return (totalTimeValue == null ? 0 : totalTimeValue) + getMoveTime(player);
-    }
-
     @Override
     public long getSession() {
         return session;
     }
-    
+
     public boolean breached() {
         GameTimeBreach breach = timeBreach.peek();
         return breach != null ? breach.breached() : false;
@@ -87,7 +77,7 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
     }
 
     @Override
-    public int compareTo(GameTimeState o) {
+    public int compareTo(TimeTracker o) {
         return (int) (getCheckTime() - o.getCheckTime());
     }
 
@@ -98,7 +88,7 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof GameTimeState) && session == ((GameTimeState) obj).session;
+        return (obj instanceof TimeTracker) && session == ((TimeTracker) obj).session;
     }
 
 }

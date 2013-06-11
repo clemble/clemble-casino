@@ -31,29 +31,20 @@ public class GameTimeManagementService<State extends GameState> implements Seria
     private static final long serialVersionUID = 5594629008080772700L;
 
     final private GameSessionProcessor<State> sessionProcessor;
-    final private GameTimeStateFactory timeStateFactory;
     final private ScheduledExecutorService executorService;
 
-    final private PriorityBlockingQueue<GameTimeState> timeStateQueue = new PriorityBlockingQueue<GameTimeState>();
-    final private ConcurrentHashMap<Long, GameTimeState> timeStateMap = new ConcurrentHashMap<Long, GameTimeState>();
+    final private PriorityBlockingQueue<TimeTracker> timeStateQueue = new PriorityBlockingQueue<TimeTracker>();
+    final private ConcurrentHashMap<Long, TimeTracker> timeStateMap = new ConcurrentHashMap<Long, TimeTracker>();
 
-    public GameTimeManagementService(final GameTimeStateFactory timeStateFactory, final GameSessionProcessor<State> sessionProcessor,
-            final ScheduledExecutorService executorService) {
-        this.timeStateFactory = checkNotNull(timeStateFactory);
+    public GameTimeManagementService(final GameSessionProcessor<State> sessionProcessor, final ScheduledExecutorService executorService) {
         this.sessionProcessor = checkNotNull(sessionProcessor);
         this.executorService = checkNotNull(executorService);
 
         this.executorService.scheduleAtFixedRate(new GameTimeRuleActivator(), 1, 1, TimeUnit.SECONDS);
     }
 
-    public GameTimeState fetch(final GameSession<State> session) {
-        GameTimeState timeState = timeStateMap.get(session);
-        if (timeState == null) {
-            timeState = timeStateFactory.construct(session);
-            if (timeStateMap.putIfAbsent(timeState.getSession(), timeState) == null)
-                timeStateQueue.add(timeState);
-        }
-        return timeState;
+    public void put(final TimeTracker timeState) {
+        timeStateMap.put(timeState.getSession(), timeState);
     }
 
     public void markFinished(GameSession<State> session) {
@@ -61,12 +52,12 @@ public class GameTimeManagementService<State extends GameState> implements Seria
     }
 
     public void markStarted(GameSession<State> session, long player) {
-        fetch(session).markStarted(player);
+        timeStateMap.get(session.getSession()).markStarted(player);
     }
 
     public void markEnded(GameSession<State> session, long player) {
 
-        GameTimeState timeState = fetch(session);
+        TimeTracker timeState = timeStateMap.get(session.getSession());
         timeStateQueue.remove(timeState);
 
         timeState.markEnded(player);
@@ -79,8 +70,8 @@ public class GameTimeManagementService<State extends GameState> implements Seria
         @Override
         public void run() {
             // Step 1. Polling first entry
-            Iterator<GameTimeState> timeStateIterator = timeStateQueue.iterator();
-            GameTimeState timeState;
+            Iterator<TimeTracker> timeStateIterator = timeStateQueue.iterator();
+            TimeTracker timeState;
             Collection<Callable<State>> timeoutNotifications = new ArrayList<Callable<State>>();
             // Step 2. Generating appropriate failure events
             while (timeStateIterator.hasNext() && (timeState = timeStateIterator.next()).breached()) {

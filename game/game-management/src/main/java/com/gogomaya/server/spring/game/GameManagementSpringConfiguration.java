@@ -17,7 +17,6 @@ import com.gogomaya.server.game.action.impl.GamePostProcessorListener;
 import com.gogomaya.server.game.action.impl.VerificationGameProcessorListener;
 import com.gogomaya.server.game.active.ActivePlayerQueue;
 import com.gogomaya.server.game.active.RedisActivePlayerQueue;
-import com.gogomaya.server.game.active.time.GameTimeStateFactory;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.table.JavaPendingSessionQueue;
 import com.gogomaya.server.game.table.PendingSessionQueue;
@@ -58,11 +57,6 @@ public class GameManagementSpringConfiguration {
     @Bean
     public <State extends GameState> GamePostProcessorListener<State> gamePostProcessor() {
         return new GamePostProcessorListener<State>(activePlayerQueue(), walletTransactionManager, pendingSessionQueue);
-    }
-
-    @Bean
-    public GameTimeStateFactory timeStateFactory() {
-        return new GameTimeStateFactory();
     }
 
     @Profile(value = { "default", "test" })
