@@ -31,7 +31,7 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
+import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 import com.gogomaya.server.tictactoe.TicTacToeState;
 

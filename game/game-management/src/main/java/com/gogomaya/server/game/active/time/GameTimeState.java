@@ -32,7 +32,7 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
             lastMoveTime.put(player, System.currentTimeMillis());
 
             timeBreach.add(new GameTimeBreach(player, System.currentTimeMillis() + moveTimeRule.getLimit(), moveTimeRule));
-            timeBreach.add(new GameTimeBreach(player, System.currentTimeMillis() + (getTotalTime(player) - totalTime.get(player)), totalTimeRule));
+            timeBreach.add(new GameTimeBreach(player, System.currentTimeMillis() + (totalTimeRule.getLimit() - getTotalTime(player)), totalTimeRule));
         }
     }
 
@@ -66,8 +66,9 @@ public class GameTimeState implements SessionAware, Comparable<GameTimeState> {
     }
 
     public long getTotalTime(long player) {
+        Long totalTimeValue = totalTime.get(player);
         // Step 1. Total time is the time since the last move + current move time
-        return totalTime.get(player) + getMoveTime(player);
+        return (totalTimeValue == null ? 0 : totalTimeValue) + getMoveTime(player);
     }
 
     @Override

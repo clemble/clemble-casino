@@ -7,16 +7,14 @@ import java.util.Collection;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.action.GameProcessor;
-import com.gogomaya.server.game.action.impl.AbstractGameProcessor;
+import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.server.GameEvent;
 
-public class GameTimeRuleProcessor<State extends GameState> extends AbstractGameProcessor<State> {
+public class GameTimeRuleProcessor<State extends GameState> implements GameProcessorListener<State> {
 
     final GameTimeManagementService<State> timeScheduler;
 
-    public GameTimeRuleProcessor(final GameTimeManagementService<State> cacheService, final GameProcessor<State> delegate) {
-        super(delegate);
+    public GameTimeRuleProcessor(final GameTimeManagementService<State> cacheService) {
         this.timeScheduler = checkNotNull(cacheService);
     }
 

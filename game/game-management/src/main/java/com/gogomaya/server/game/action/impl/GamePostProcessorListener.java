@@ -11,7 +11,7 @@ import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameSessionState;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.PlayerWonOutcome;
-import com.gogomaya.server.game.action.GameProcessor;
+import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.active.ActivePlayerQueue;
 import com.gogomaya.server.game.event.server.GameEvent;
 import com.gogomaya.server.game.table.PendingSessionQueue;
@@ -24,15 +24,14 @@ import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.player.wallet.WalletTransactionId;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
-public class GamePostProcessor<State extends GameState> extends AbstractGameProcessor<State> {
+public class GamePostProcessorListener<State extends GameState> implements GameProcessorListener<State> {
 
     final private ActivePlayerQueue activePlayerQueue;
     final private PendingSessionQueue sessionQueue;
     final private WalletTransactionManager walletTransactionManager;
 
-    public GamePostProcessor(final ActivePlayerQueue activePlayerQueue, final WalletTransactionManager walletTransactionManager,
-            final PendingSessionQueue sessionQueue, final GameProcessor<State> delegate) {
-        super(delegate);
+    public GamePostProcessorListener(final ActivePlayerQueue activePlayerQueue, final WalletTransactionManager walletTransactionManager,
+            final PendingSessionQueue sessionQueue) {
         this.activePlayerQueue = checkNotNull(activePlayerQueue);
         this.walletTransactionManager = checkNotNull(walletTransactionManager);
         this.sessionQueue = checkNotNull(sessionQueue);

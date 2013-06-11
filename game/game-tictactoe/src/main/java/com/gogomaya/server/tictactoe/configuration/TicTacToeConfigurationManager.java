@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.configuration;
+package com.gogomaya.server.tictactoe.configuration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

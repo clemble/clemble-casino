@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameTable;
-import com.gogomaya.server.game.action.impl.TicTacToeStateFactory;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
@@ -28,8 +27,9 @@ import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.spring.game.TicTacToeSpringConfiguration;
+import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
 import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.action.impl.TicTacToeStateFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")

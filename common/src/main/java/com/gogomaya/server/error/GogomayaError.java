@@ -73,7 +73,8 @@ public enum GogomayaError {
     GameStateReCreationFailure(Code.GAME_STATE_RECREATION_FAILURE_CODE, "Can't create state from provided session"),
 
     PaymentTransactionInvalid(Code.PAYMENT_TRANSACTION_INVALID_CODE, "Payment transaction invalid"),
-    PaymentTransactionEmpty(Code.PAYMENT_TRANSACTION_EMPTY_CODE, "Payment transaction empty");
+    PaymentTransactionEmpty(Code.PAYMENT_TRANSACTION_EMPTY_CODE, "Payment transaction empty"),
+    TimeoutProcessingFailure(Code.TIMEOUT_PROCESSING_FAILURE_CODE, "Failed to invoke timeout events in Scheduler");
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
 
@@ -195,5 +196,7 @@ public enum GogomayaError {
         final public static String BAD_REQUEST_PLAYER_ID_HEADER_MISSING = "0J0";
         final public static String BAD_REQUEST_SESSION_ID_HEADER_MISSING = "0J1";
         final public static String BAD_REQUEST_TABLE_ID_HEADER_MISSING = "0J2";
+        // Timeout errors
+        final public static String TIMEOUT_PROCESSING_FAILURE_CODE = "0L0";
     }
 }

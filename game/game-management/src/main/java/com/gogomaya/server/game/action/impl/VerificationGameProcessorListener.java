@@ -8,16 +8,12 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.action.GameProcessor;
+import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
 import com.gogomaya.server.game.event.server.GameEvent;
 
-public class VerificationGameProcessor<State extends GameState> extends AbstractGameProcessor<State> {
-
-    public VerificationGameProcessor(final GameProcessor<State> delegate) {
-        super(delegate);
-    }
+public class VerificationGameProcessorListener<State extends GameState> implements GameProcessorListener<State> {
 
     @Override
     public void beforeMove(final GameSession<State> session, final ClientEvent move) {

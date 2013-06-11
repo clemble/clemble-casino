@@ -18,14 +18,18 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.action.impl.GamePostProcessorListener;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles("test")
 @ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
 public class GameTableQueueTest {
 
@@ -33,6 +37,9 @@ public class GameTableQueueTest {
 
     @Inject
     PendingSessionQueue tableQueue;
+
+    @Inject
+    GamePostProcessorListener<GameState> gamePostProcessorListener;
 
     GameSpecification specification;
 

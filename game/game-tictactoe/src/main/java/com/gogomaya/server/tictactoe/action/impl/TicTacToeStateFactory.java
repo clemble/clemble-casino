@@ -1,10 +1,11 @@
-package com.gogomaya.server.game.action.impl;
+package com.gogomaya.server.tictactoe.action.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.action.GameProcessorFactory;
+import com.gogomaya.server.game.action.impl.AbstractGameStateFactory;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.tictactoe.TicTacToeState;
