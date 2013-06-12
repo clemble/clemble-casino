@@ -1,7 +1,9 @@
-package com.gogomaya.server.sql.schema;
+package com.gogomaya.server.sql.player;
 
 import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
+import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,7 +20,7 @@ import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 public class PlayerSchemaGenerator {
 
     @Test
-    public void generatePlayerSchema() {
+    public void generateSchemaMySQL() {
         org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
 
         configuration
@@ -29,7 +31,31 @@ public class PlayerSchemaGenerator {
             .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
             .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 
-        new SchemaExport(configuration).setDelimiter(";").setFormat(true).setOutputFile("../../sql/player-schema.sql").create(true, false);
+        new SchemaExport(configuration)
+            .setDelimiter(";")
+            .setFormat(true)
+            .setOutputFile("../../sql/schema/mysql/player-schema.sql")
+            .create(true, false);
+    }
+
+    @Test
+    public void generateSchemaH2() {
+        org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
+
+        configuration
+            .addAnnotatedClass(PlayerProfile.class)
+            .addAnnotatedClass(PlayerCredential.class)
+            .addAnnotatedClass(PlayerIdentity.class)
+            .addAnnotatedClass(PlayerSession.class)
+            .setProperty(Environment.DIALECT, "org.hibernate.dialect.H2Dialect")
+            .setProperty(Environment.DRIVER, "org.h2.Driver")
+            ;
+
+        new SchemaExport(configuration)
+            .setDelimiter(";")
+            .setFormat(true)
+            .setOutputFile("../../sql/schema/h2/player-schema.sql")
+            .execute(Target.interpret(true, false), Type.CREATE);
     }
 
 }

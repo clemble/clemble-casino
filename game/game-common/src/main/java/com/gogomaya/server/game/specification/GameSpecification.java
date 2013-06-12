@@ -27,7 +27,7 @@ import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.money.Currency;
 
 @Entity
-@Table(name = "TIC_TAC_TOE_SPECIFICATION")
+@Table(name = "GAME_SPECIFICATION")
 @TypeDefs(value = {
         @TypeDef(name = "totalTime", typeClass = TotalTimeRuleHibernateType.class),
         @TypeDef(name = "moveTime", typeClass = MoveTimeRuleHibernateType.class)

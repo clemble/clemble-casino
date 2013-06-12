@@ -1,5 +1,6 @@
 package com.gogomaya.server.spring.common;
 
+import java.io.File;
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -117,6 +118,8 @@ public class JPASpringConfiguration {
     @Profile(value = { "default", "test" })
     public static class DefaultAndTest {
 
+        private EmbeddedDatabaseFactory factory = null;
+
         @Bean
         @Singleton
         public JpaVendorAdapter jpaVendorAdapter() {
@@ -129,18 +132,42 @@ public class JPASpringConfiguration {
 
         @Bean
         @Singleton
-        public DataSource dataSource() {
-            EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
-            factory.setDatabaseName("gogomaya");
-            factory.setDatabaseType(EmbeddedDatabaseType.H2);
-
-            ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
-            databasePopulator.addScript(new ClassPathResource("sql/tictactoe-init.sql"));
-            factory.setDatabasePopulator(databasePopulator);
-
-            return factory.getDatabase();
+        public EmbeddedDatabaseFactory dataSourceFactory() {
+            if (factory == null) {
+                factory = new EmbeddedDatabaseFactory();
+                factory.setDatabaseName("gogomaya");
+                factory.setDatabaseType(EmbeddedDatabaseType.H2);
+                factory.setDatabasePopulator(databasePopulator());
+            }
+            return factory;
         }
 
+        @Bean
+        @Singleton
+        public DataSource dataSource() {
+            return dataSourceFactory().getDatabase();
+        }
+
+        @Bean
+        @Singleton
+        public ResourceDatabasePopulator databasePopulator() {
+            ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
+            // Step 1. Searching for data script folder
+            File dataScripts = new File("sql/data/");
+            while (!dataScripts.exists()) {
+                dataScripts = new File("../" + dataScripts.getPath());
+            }
+            // Step 2. Inserting schema files 
+            for (File schemaFile : new File(dataScripts.getAbsolutePath() + "/../schema/h2").listFiles()) {
+                databasePopulator.addScript(new FileSystemResource(schemaFile));
+            }
+            // Step 3. Inserting data files
+            for (File schemaFile : dataScripts.listFiles()) {
+                databasePopulator.addScript(new FileSystemResource(schemaFile));
+            }
+            // Step 4. Returning aggregated script
+            return databasePopulator;
+        }
     }
 
 }

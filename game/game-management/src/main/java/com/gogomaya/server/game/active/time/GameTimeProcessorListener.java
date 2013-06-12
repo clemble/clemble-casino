@@ -26,7 +26,7 @@ public class GameTimeProcessorListener<State extends GameState> implements GameP
     @Override
     public Collection<GameEvent<State>> afterMove(GameSession<State> session, Collection<GameEvent<State>> events) {
         if(session.getState().complete()) {
-            
+            timeScheduler.markFinished(session);
         } else {
             for (ClientEvent nextMove : session.getState().getNextMoves()) {
                 timeScheduler.markStarted(session, nextMove.getPlayerId());

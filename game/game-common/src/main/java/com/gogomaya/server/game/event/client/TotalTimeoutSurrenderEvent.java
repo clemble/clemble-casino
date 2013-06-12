@@ -1,5 +1,8 @@
 package com.gogomaya.server.game.event.client;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TotalTimeoutSurrenderEvent extends SurrenderEvent {
 
     /**
@@ -7,7 +10,8 @@ public class TotalTimeoutSurrenderEvent extends SurrenderEvent {
      */
     private static final long serialVersionUID = 6999945454488627240L;
 
-    public TotalTimeoutSurrenderEvent(long playerId) {
+    @JsonCreator
+    public TotalTimeoutSurrenderEvent(@JsonProperty("playerId") long playerId) {
         super(playerId);
     }
 

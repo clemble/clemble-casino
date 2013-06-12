@@ -11,6 +11,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
+import com.gogomaya.server.game.event.client.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameEvent;
 
 public class VerificationGameProcessorListener<State extends GameState> implements GameProcessorListener<State> {
@@ -26,7 +27,7 @@ public class VerificationGameProcessorListener<State extends GameState> implemen
         if (!state.getPlayerIterator().contains(playerId)) {
             throw GogomayaException.create(GogomayaError.GamePlayPlayerNotParticipate);
         }
-        if (!(move instanceof GiveUpEvent)) {
+        if (!(move instanceof SurrenderEvent)) {
             // Step 3. Checking that move
             ClientEvent expectedMove = state.getNextMove(playerId);
             if (expectedMove == null)
