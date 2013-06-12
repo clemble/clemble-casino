@@ -8,7 +8,7 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessor;
-import com.gogomaya.server.game.event.server.GameEvent;
+import com.gogomaya.server.game.event.server.GameServerEvent;
 
 abstract public class AbstractGameProcessor<State extends GameState> implements GameProcessor<State> {
 
@@ -19,11 +19,11 @@ abstract public class AbstractGameProcessor<State extends GameState> implements 
     }
 
     @Override
-    final public Collection<GameEvent<State>> process(final GameSession<State> session, final ClientEvent move) {
+    final public Collection<GameServerEvent<State>> process(final GameSession<State> session, final ClientEvent move) {
         // Step 1. Invoking process movement
         beforeMove(session, move);
         // Step 2. Calling delegate
-        Collection<GameEvent<State>> events = delegate.process(session, move);
+        Collection<GameServerEvent<State>> events = delegate.process(session, move);
         // Step 3. Post processing after move was made
         if (events.size() != 0)
             afterMove(session, events);
@@ -33,6 +33,6 @@ abstract public class AbstractGameProcessor<State extends GameState> implements 
 
     abstract public void beforeMove(final GameSession<State> session, final ClientEvent move);
 
-    abstract public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final Collection<GameEvent<State>> events);
+    abstract public Collection<GameServerEvent<State>> afterMove(final GameSession<State> session, final Collection<GameServerEvent<State>> events);
 
 }

@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.match;
+package com.gogomaya.server.game.build;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -52,7 +52,7 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
     }
 
     @Override
-    public GameTable<State> findOpponent(final long playerId, final GameSpecification specification) {
+    public GameTable<State> instantGame(final long playerId, final GameSpecification specification) {
         Long currentSession = activePlayerQueue.isActive(playerId);
         if (currentSession != null) {
             GameTable<State> table = tableRepository.findBySessionId(currentSession);

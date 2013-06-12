@@ -8,7 +8,7 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessorListener;
-import com.gogomaya.server.game.event.server.GameEvent;
+import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class GameTimeProcessorListener<State extends GameState> implements GameProcessorListener<State> {
 
@@ -24,7 +24,7 @@ public class GameTimeProcessorListener<State extends GameState> implements GameP
     }
 
     @Override
-    public Collection<GameEvent<State>> afterMove(GameSession<State> session, Collection<GameEvent<State>> events) {
+    public Collection<GameServerEvent<State>> afterMove(GameSession<State> session, Collection<GameServerEvent<State>> events) {
         if(session.getState().complete()) {
             timeScheduler.markFinished(session);
         } else {

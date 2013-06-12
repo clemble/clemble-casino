@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface ActivePlayerQueue {
 
-    public Long isActive(Long playerId);
+    public Long isActive(long playerId);
 
-    public boolean markActive(Long playerId, Long sessionId);
+    public boolean markActive(long playerId, long sessionId);
 
-    public void markInActive(Long playerId);
+    public void markInActive(long playerId);
 
     public void markInActive(List<Long> playerIds);
 

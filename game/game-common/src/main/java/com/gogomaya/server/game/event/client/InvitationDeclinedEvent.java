@@ -1,13 +1,15 @@
-package com.gogomaya.server.game.match.event;
+package com.gogomaya.server.game.event.client;
 
+import com.gogomaya.server.game.event.ScheduledGameEvent;
 import com.gogomaya.server.player.PlayerAware;
 
-public class InvitationAcceptedEvent extends ScheduledGameEvent implements PlayerAware {
+
+public class InvitationDeclinedEvent extends ScheduledGameEvent implements PlayerAware, ClientConstructionEvent {
 
     /**
-     * Generated 02/06/2013
+     * Generated 02/06/13
      */
-    private static final long serialVersionUID = -4465974655141746411L;
+    private static final long serialVersionUID = 655381424177654890L;
 
     private long scheduledGameId;
 

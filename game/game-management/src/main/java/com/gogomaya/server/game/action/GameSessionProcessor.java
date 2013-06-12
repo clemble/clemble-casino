@@ -12,7 +12,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.cache.GameCache;
 import com.gogomaya.server.game.cache.GameCacheService;
 import com.gogomaya.server.game.event.client.SurrenderEvent;
-import com.gogomaya.server.game.event.server.GameEvent;
+import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.notification.GameNotificationService;
 
 public class GameSessionProcessor<State extends GameState> {
@@ -54,8 +54,8 @@ public class GameSessionProcessor<State extends GameState> {
             // Step 4. Retrieving game processor based on session identifier
             GameProcessor<State> processor = cache.getProcessor();
             // Step 5. Processing movement
-            Collection<GameEvent<State>> events = processor.process(cache.getSession(), move);
-            for (GameEvent<State> event : events)
+            Collection<GameServerEvent<State>> events = processor.process(cache.getSession(), move);
+            for (GameServerEvent<State> event : events)
                 event.setSession(sessionId);
             // Step 6. Invoking appropriate notification
             notificationService.notify(cache.getPlayerIds(), events);

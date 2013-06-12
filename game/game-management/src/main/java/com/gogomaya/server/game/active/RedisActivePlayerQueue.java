@@ -15,17 +15,17 @@ public class RedisActivePlayerQueue implements ActivePlayerQueue {
     }
 
     @Override
-    public Long isActive(Long playerId) {
+    public Long isActive(long playerId) {
         return redisTemplate.boundValueOps(playerId).get();
     }
 
     @Override
-    public boolean markActive(Long playerId, Long sessionId) {
+    public boolean markActive(long playerId, long sessionId) {
         return redisTemplate.boundValueOps(playerId).setIfAbsent(sessionId);
     }
 
     @Override
-    public void markInActive(Long playerId) {
+    public void markInActive(long playerId) {
         redisTemplate.delete(playerId);
     }
 

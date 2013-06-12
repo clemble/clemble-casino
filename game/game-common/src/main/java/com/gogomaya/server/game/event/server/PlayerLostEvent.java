@@ -5,7 +5,7 @@ import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.event.client.SurrenderEvent;
 import com.gogomaya.server.player.PlayerAware;
 
-public class PlayerLostEvent<State extends GameState> extends GameEvent<State> implements PlayerAware {
+public class PlayerLostEvent<State extends GameState> extends GameServerEvent<State> implements PlayerAware {
 
     /**
      * Generated 07/05/13

@@ -1,10 +1,9 @@
 package com.gogomaya.server.game.event.server;
 
-import com.gogomaya.server.event.AbstractServerEvent;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.player.PlayerAware;
 
-public class PlayerAddedEvent extends AbstractServerEvent implements PlayerAware, SessionAware {
+public class PlayerAddedEvent implements PlayerAware, SessionAware, ServerConstructionEvent {
 
     /**
      * Generated 14/05/13

@@ -1,7 +1,9 @@
-package com.gogomaya.server.event;
+package com.gogomaya.server.game.event.client;
+
+import com.gogomaya.server.event.ClientEvent;
 
 
-abstract public class AbstractClientEvent implements ClientEvent {
+abstract public class GameClientEvent implements ClientEvent {
 
     /**
      * Generated 02/04/13
@@ -10,7 +12,7 @@ abstract public class AbstractClientEvent implements ClientEvent {
 
     final private long playerId;
 
-    public AbstractClientEvent(final long playerId) {
+    public GameClientEvent(final long playerId) {
         this.playerId = playerId;
     }
 
@@ -31,7 +33,7 @@ abstract public class AbstractClientEvent implements ClientEvent {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof AbstractClientEvent && playerId == ((AbstractClientEvent) obj).getPlayerId();
+        return obj instanceof GameClientEvent && playerId == ((GameClientEvent) obj).getPlayerId();
     }
 
 }

@@ -12,7 +12,7 @@ import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
 import com.gogomaya.server.game.event.client.SurrenderEvent;
-import com.gogomaya.server.game.event.server.GameEvent;
+import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class VerificationGameProcessorListener<State extends GameState> implements GameProcessorListener<State> {
 
@@ -43,7 +43,7 @@ public class VerificationGameProcessorListener<State extends GameState> implemen
     }
 
     @Override
-    public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final Collection<GameEvent<State>> madeMoves) {
+    public Collection<GameServerEvent<State>> afterMove(final GameSession<State> session, final Collection<GameServerEvent<State>> madeMoves) {
         return madeMoves;
     }
 

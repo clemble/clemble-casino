@@ -6,7 +6,7 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.SessionAware;
 
-public class GameStartedEvent<State extends GameState> extends GameEvent<State> {
+public class GameStartedEvent<State extends GameState> extends GameServerEvent<State> {
 
     /**
      * Generated

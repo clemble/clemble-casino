@@ -5,10 +5,10 @@ import java.util.Collection;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.event.server.GameEvent;
+import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public interface GameProcessor<State extends GameState> {
 
-    public Collection<GameEvent<State>> process(final GameSession<State> session, final ClientEvent move);
+    public Collection<GameServerEvent<State>> process(final GameSession<State> session, final ClientEvent move);
 
 }

@@ -9,7 +9,7 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.active.time.GameTimeProcessorListenerFactory;
-import com.gogomaya.server.game.event.server.GameEvent;
+import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class GameProcessorFactory<State extends GameState> {
 
@@ -48,13 +48,13 @@ public class GameProcessorFactory<State extends GameState> {
         }
 
         @Override
-        public Collection<GameEvent<State>> process(GameSession<State> session, ClientEvent move) {
+        public Collection<GameServerEvent<State>> process(GameSession<State> session, ClientEvent move) {
             // Step 1. Before move notification
             for (GameProcessorListener<State> listener : listeners) {
                 listener.beforeMove(session, move);
             }
             // Step 2. Processing in core
-            Collection<GameEvent<State>> events = coreProcessor.process(session, move);
+            Collection<GameServerEvent<State>> events = coreProcessor.process(session, move);
             // Step 3. After move notification
             for (GameProcessorListener<State> listener : listeners) {
                 listener.afterMove(session, events);

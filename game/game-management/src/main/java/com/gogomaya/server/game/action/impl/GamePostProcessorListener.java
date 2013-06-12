@@ -13,7 +13,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.PlayerWonOutcome;
 import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.active.ActivePlayerQueue;
-import com.gogomaya.server.game.event.server.GameEvent;
+import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
@@ -42,7 +42,7 @@ public class GamePostProcessorListener<State extends GameState> implements GameP
     }
 
     @Override
-    public Collection<GameEvent<State>> afterMove(final GameSession<State> session, final Collection<GameEvent<State>> madeMoves) {
+    public Collection<GameServerEvent<State>> afterMove(final GameSession<State> session, final Collection<GameServerEvent<State>> madeMoves) {
         // Step 0. Sanity check
         if (madeMoves == null)
             return madeMoves;

@@ -1,8 +1,7 @@
 package com.gogomaya.server.game.event.client;
 
-import com.gogomaya.server.event.AbstractClientEvent;
 
-public class BetEvent extends AbstractClientEvent {
+public class BetEvent extends GameClientEvent {
 
     /**
      * Generated 10/06/13

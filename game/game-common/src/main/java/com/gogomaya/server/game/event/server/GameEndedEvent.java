@@ -4,7 +4,7 @@ import com.gogomaya.server.game.GameOutcome;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.SessionAware;
 
-public class GameEndedEvent<State extends GameState> extends GameEvent<State> {
+public class GameEndedEvent<State extends GameState> extends GameServerEvent<State> {
 
     /**
      * Generated 07/05/13

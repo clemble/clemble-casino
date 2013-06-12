@@ -1,11 +1,12 @@
-package com.gogomaya.server.game.match.event;
+package com.gogomaya.server.game.event.server;
 
-import com.gogomaya.server.game.match.InitiatorAware;
+import com.gogomaya.server.game.build.InitiatorAware;
+import com.gogomaya.server.game.event.ScheduledGameEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
 import com.gogomaya.server.player.PlayerAware;
 
-public class PlayerInvitationEvent extends ScheduledGameEvent implements InitiatorAware, PlayerAware, GameSpecificationAware {
+public class PlayerInvitationEvent extends ScheduledGameEvent implements InitiatorAware, ServerConstructionEvent, PlayerAware, GameSpecificationAware {
 
     /**
      * Generated 02/06/2013
@@ -51,4 +52,5 @@ public class PlayerInvitationEvent extends ScheduledGameEvent implements Initiat
     public void setScheduledGameId(long scheduledGameId) {
         this.scheduledGameId = scheduledGameId;
     }
+
 }

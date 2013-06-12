@@ -8,7 +8,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.player.PlayerAware;
 
-public class PlayerMovedEvent<State extends GameState> extends GameEvent<State> implements PlayerAware {
+public class PlayerMovedEvent<State extends GameState> extends GameServerEvent<State> implements PlayerAware {
 
     /**
      * Generated 07/05/2013

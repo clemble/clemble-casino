@@ -1,14 +1,19 @@
-package com.gogomaya.server.game.match;
+package com.gogomaya.server.game.build;
 
 import java.util.Collection;
-import java.util.Date;
 
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.specification.GameSpecificationAware;
 
-public class ScheduledGame implements GameSpecificationAware {
+public class ScheduledGameRequest implements GameRequest {
+
+    /**
+     * Generated 10/06/13
+     */
+    private static final long serialVersionUID = -5026198091605671710L;
 
     private long scheduledGameId;
+
+    private long playerId;
 
     private Collection<Long> playerIds;
 
@@ -18,13 +23,15 @@ public class ScheduledGame implements GameSpecificationAware {
 
     private GameSpecification specification;
 
-    private Date scheduledTime;
+    private GameTrigger trigger;
+
+    private GameDeclineBehavior declineBehavior;
 
     public long getScheduledGameId() {
         return scheduledGameId;
     }
 
-    public ScheduledGame setScheduledGameId(long scheduledGameId) {
+    public ScheduledGameRequest setScheduledGameId(long scheduledGameId) {
         this.scheduledGameId = scheduledGameId;
         return this;
     }
@@ -34,7 +41,7 @@ public class ScheduledGame implements GameSpecificationAware {
         return specification;
     }
 
-    public ScheduledGame setSpecification(GameSpecification specification) {
+    public ScheduledGameRequest setSpecification(GameSpecification specification) {
         this.specification = specification;
         return this;
     }
@@ -43,17 +50,8 @@ public class ScheduledGame implements GameSpecificationAware {
         return playerIds;
     }
 
-    public ScheduledGame setPlayerIds(Collection<Long> playerIds) {
+    public ScheduledGameRequest setPlayerIds(Collection<Long> playerIds) {
         this.playerIds = playerIds;
-        return this;
-    }
-
-    public Date getScheduledTime() {
-        return scheduledTime;
-    }
-
-    public ScheduledGame setScheduledTime(Date scheduledTime) {
-        this.scheduledTime = scheduledTime;
         return this;
     }
 
@@ -71,6 +69,27 @@ public class ScheduledGame implements GameSpecificationAware {
 
     public void setDeclinedPlayersIds(Collection<Long> declinedPlayersIds) {
         this.declinedPlayersIds = declinedPlayersIds;
+    }
+
+    @Override
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    public GameTrigger getTrigger() {
+        return trigger;
+    }
+
+    public void setTrigger(GameTrigger trigger) {
+        this.trigger = trigger;
+    }
+
+    public GameDeclineBehavior getDeclineBehavior() {
+        return declineBehavior;
+    }
+
+    public void setDeclineBehavior(GameDeclineBehavior declineBehavior) {
+        this.declineBehavior = declineBehavior;
     }
 
 }

@@ -9,7 +9,7 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.event.ServerEvent;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
-import com.gogomaya.server.game.event.server.GameEvent;
+import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.listener.GameListener;
 import com.gogomaya.server.integration.game.listener.GameListenerControl;
@@ -48,8 +48,8 @@ abstract public class GamePlayer<State extends GameState> {
             @Override
             @SuppressWarnings("unchecked")
             public void updated(ServerEvent event) {
-                if (event instanceof GameEvent) {
-                    setState(((GameEvent<State>) event).getState());
+                if (event instanceof GameServerEvent) {
+                    setState(((GameServerEvent<State>) event).getState());
                 }
             }
         });

@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.match;
+package com.gogomaya.server.game.build;
 
 public interface InitiatorAware {
 
