@@ -64,7 +64,8 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
         }
         // Step 0. Checking player can afford to play this game
         WalletOperation operation = new WalletOperation().setPlayerId(playerId)
-                .setAmmount(new Money(specification.getCurrency(), specification.getBetRule().getPrice())).setOperation(Operation.Credit);
+                .setAmmount(new Money(specification.getCurrency(), specification.getBetRule().getPrice()))
+                .setOperation(Operation.Credit);
         if (!walletTransactionManager.canAfford(operation))
             throw GogomayaException.create(GogomayaError.GameSpecificationInsufficientMoney);
         // Step 1. Pooling

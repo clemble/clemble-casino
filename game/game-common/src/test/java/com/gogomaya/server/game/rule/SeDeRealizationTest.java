@@ -98,7 +98,7 @@ public class SeDeRealizationTest {
                 "{ \"type\":\"selectSpecification\", \"specifications\": [{\"name\":{\"name\": \"low\",\"group\": \"basic\"},"
                         + "\"currency\": \"FakeMoney\",\"betRule\":{\"betType\": \"fixed\",\"price\": 50},"
                         + "\"giveUpRule\": \"all\",\"moveTimeRule\": { \"punishment\": \"loose\", \"limit\": 0 },"
-                        + "\"totalTimeRule\": {\"punishment\": \"loose\",\"limit\": 0 }, \"matchRule\": \"automatic\","
+                        + "\"totalTimeRule\": {\"punishment\": \"loose\",\"limit\": 0 }, "
                         + "\"privacyRule\": \"everybody\", \"numberRule\": \"two\"}] }", SelectSpecificationOptions.class);
         Assert.assertNotNull(selectSpecificationOptions);
     }

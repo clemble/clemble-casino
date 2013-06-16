@@ -40,7 +40,7 @@ abstract public class GamePlayer<State extends GameState> {
         this.table = checkNotNull(table);
         this.specification = checkNotNull(table.getSpecification());
         // Step 2. Specifying current state for the listener
-        this.currentState.set(table.getCurrentSession().getState());
+        setState(table.getCurrentSession().getState());
         this.sessionId = table.getCurrentSession().getSession();
         // Step 3. Registering listener
         checkNotNull(listenerOperations);
@@ -73,7 +73,7 @@ abstract public class GamePlayer<State extends GameState> {
 
     final public void setState(State newState) {
         synchronized (versionLock) {
-            if (this.currentState.get() == null || this.currentState.get().getVersion() < newState.getVersion()) {
+            if (newState != null && this.currentState.get() == null || this.currentState.get().getVersion() < newState.getVersion()) {
                 this.currentState.set(newState);
                 versionLock.notifyAll();
             }

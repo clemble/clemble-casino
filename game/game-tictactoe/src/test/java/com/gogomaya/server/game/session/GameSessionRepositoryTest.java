@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
-import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
@@ -37,7 +36,7 @@ import com.gogomaya.server.tictactoe.action.impl.TicTacToeStateFactory;
 public class GameSessionRepositoryTest {
 
     GameSpecification DEFAULT_SPECIFICATION = new GameSpecification().setName(new SpecificationName("DEFAULT", "")).setBetRule(new FixedBetRule(50))
-            .setCurrency(Currency.FakeMoney).setGiveUpRule(GiveUpRule.lost).setMatchRule(MatchRule.automatic).setMoveTimeRule(MoveTimeRule.DEFAULT)
+            .setCurrency(Currency.FakeMoney).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT)
             .setTotalTimeRule(TotalTimeRule.DEFAULT).setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);;
 
     @Inject

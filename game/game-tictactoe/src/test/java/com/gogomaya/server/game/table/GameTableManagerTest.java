@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.build.GameConstructionServiceImpl;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
-import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
@@ -54,7 +53,7 @@ public class GameTableManagerTest {
     public void testPlayersMapping() throws JsonGenerationException, JsonMappingException, IOException {
         GameSpecification specification = new GameSpecification().setName(new SpecificationName("", "")).setCurrency(Currency.FakeMoney)
                 .setBetRule(new FixedBetRule(50)).setGiveUpRule(GiveUpRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
-                .setMoveTimeRule(MoveTimeRule.DEFAULT).setMatchRule(MatchRule.automatic).setPrivacayRule(PrivacyRule.players)
+                .setMoveTimeRule(MoveTimeRule.DEFAULT).setPrivacayRule(PrivacyRule.players)
                 .setNumberRule(PlayerNumberRule.two);
 
         specificationRepository.saveAndFlush(specification);

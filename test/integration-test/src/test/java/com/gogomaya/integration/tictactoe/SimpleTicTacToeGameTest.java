@@ -112,28 +112,58 @@ public class SimpleTicTacToeGameTest {
     }
 
     @Test
-    public void testScenarioRowO() {
-        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
-        TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
-        TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
-        try {
-            playerA.select(0, 0);
-            playerA.bet(2);
-            playerB.bet(1);
-
-            playerB.select(1, 0);
-            playerB.bet(1);
-            playerA.bet(2);
-
-            playerA.select(2, 0);
-            playerA.bet(2);
-            playerB.bet(1);
-
-            Assert.assertTrue(playerB.getState().complete());
-            Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
-        } finally {
-            playerA.clear();
-            playerB.clear();
+    public void testScenarioRow() {
+        for(int row = 0; row < 3; row++){
+            List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
+            TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
+            TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+            try {
+                playerA.select(0, row);
+                playerA.bet(2);
+                playerB.bet(1);
+    
+                playerB.select(1, row);
+                playerB.bet(1);
+                playerA.bet(2);
+    
+                playerA.select(2, row);
+                playerA.bet(2);
+                playerB.bet(1);
+    
+                Assert.assertTrue(playerB.getState().complete());
+                Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
+            } finally {
+                playerA.clear();
+                playerB.clear();
+            }
+        }
+    }
+    
+    @Test
+    public void testScenarioColumn() {
+        for(int column = 0; column < 3; column++){
+            List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
+            TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
+            TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+            try {
+                playerA.select(column, 0);
+                playerA.bet(2);
+                playerB.bet(1);
+    
+                playerB.select(column, 1);
+                playerB.bet(1);
+                playerA.bet(2);
+    
+                playerA.select(column, 2);
+                playerA.bet(2);
+                playerB.bet(1);
+    
+                Assert.assertTrue(playerB.getState().complete());
+                Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
+            } finally {
+                playerA.clear();
+                playerB.clear();
+            }
         }
     }
 

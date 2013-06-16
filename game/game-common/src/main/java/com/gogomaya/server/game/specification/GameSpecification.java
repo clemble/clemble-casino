@@ -16,7 +16,6 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
-import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
@@ -44,7 +43,6 @@ public class GameSpecification implements Serializable {
         .setBetRule(new FixedBetRule(50))
         .setCurrency(Currency.FakeMoney)
         .setGiveUpRule(GiveUpRule.lost)
-        .setMatchRule(MatchRule.automatic)
         .setMoveTimeRule(MoveTimeRule.DEFAULT)
         .setTotalTimeRule(TotalTimeRule.DEFAULT)
         .setNumberRule(PlayerNumberRule.two)
@@ -72,10 +70,6 @@ public class GameSpecification implements Serializable {
     @Columns(columns = { @Column(name = "TOTAL_TIME_BREACH"), @Column(name = "TOTAL_TIME_LIMIT"), })
     private TotalTimeRule totalTimeRule;
 
-    @Column(name = "MATCH_RULE")
-    @Enumerated(EnumType.STRING)
-    private MatchRule matchRule;
-
     @Column(name = "PRIVACY_RULE")
     @Enumerated(EnumType.STRING)
     private PrivacyRule privacyRule;
@@ -93,15 +87,6 @@ public class GameSpecification implements Serializable {
 
     public GameSpecification setName(SpecificationName name) {
         this.name = name;
-        return this;
-    }
-
-    public MatchRule getMatchRule() {
-        return matchRule;
-    }
-
-    public GameSpecification setMatchRule(MatchRule matchRule) {
-        this.matchRule = matchRule;
         return this;
     }
 
@@ -175,7 +160,6 @@ public class GameSpecification implements Serializable {
         result = prime * result + ((betRule == null) ? 0 : betRule.hashCode());
         result = prime * result + ((currency == null) ? 0 : currency.hashCode());
         result = prime * result + ((giveUpRule == null) ? 0 : giveUpRule.hashCode());
-        result = prime * result + ((matchRule == null) ? 0 : matchRule.hashCode());
         result = prime * result + ((moveTimeRule == null) ? 0 : moveTimeRule.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((numberRule == null) ? 0 : numberRule.hashCode());
@@ -201,8 +185,6 @@ public class GameSpecification implements Serializable {
         if (currency != other.currency)
             return false;
         if (giveUpRule != other.giveUpRule)
-            return false;
-        if (matchRule != other.matchRule)
             return false;
         if (moveTimeRule == null) {
             if (other.moveTimeRule != null)

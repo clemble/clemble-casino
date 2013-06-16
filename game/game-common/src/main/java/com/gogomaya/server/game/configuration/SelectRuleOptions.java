@@ -1,7 +1,6 @@
 package com.gogomaya.server.game.configuration;
 
 import com.gogomaya.server.game.rule.bet.BetRule;
-import com.gogomaya.server.game.rule.construction.MatchRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
@@ -23,8 +22,6 @@ public class SelectRuleOptions implements GameSpecificationOptions {
 
     final private GameRuleOptions<GiveUpRule> giveUpOptions;
 
-    final private GameRuleOptions<MatchRule> matchOptions;
-
     final private GameRuleOptions<PrivacyRule> privacyOptions;
 
     final private GameRuleOptions<PlayerNumberRule> numberOptions;
@@ -36,7 +33,6 @@ public class SelectRuleOptions implements GameSpecificationOptions {
     public SelectRuleOptions(final GameRuleOptions<BetRule> betOptions,
             final GameRuleOptions<Currency> currencyOptions,
             final GameRuleOptions<GiveUpRule> giveUpOptions,
-            final GameRuleOptions<MatchRule> matchOptions,
             final GameRuleOptions<PlayerNumberRule> numberOptions,
             final GameRuleOptions<PrivacyRule> privacyOptions,
             final GameRuleOptions<MoveTimeRule> moveTimeOptions,
@@ -44,7 +40,6 @@ public class SelectRuleOptions implements GameSpecificationOptions {
         this.betOptions = betOptions;
         this.currencyOptions = currencyOptions;
         this.giveUpOptions = giveUpOptions;
-        this.matchOptions = matchOptions;
         this.numberOptions = numberOptions;
         this.privacyOptions = privacyOptions;
         this.moveTimeOptions = moveTimeOptions;
@@ -71,10 +66,6 @@ public class SelectRuleOptions implements GameSpecificationOptions {
         return totalTimeOptions;
     }
 
-    public GameRuleOptions<MatchRule> getMatchOptions() {
-        return matchOptions;
-    }
-
     public GameRuleOptions<PrivacyRule> getPrivacyOptions() {
         return privacyOptions;
     }
@@ -88,7 +79,6 @@ public class SelectRuleOptions implements GameSpecificationOptions {
         return specification != null &&
               betOptions.contains(specification.getBetRule()) &&
               currencyOptions.contains(specification.getCurrency()) &&
-              matchOptions.contains(specification.getMatchRule()) &&
               giveUpOptions.contains(specification.getGiveUpRule()) &&
               moveTimeOptions.contains(specification.getMoveTimeRule()) &&
               totalTimeOptions.contains(specification.getTotalTimeRule()) &&
