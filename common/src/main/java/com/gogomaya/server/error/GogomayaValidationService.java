@@ -2,7 +2,7 @@ package com.gogomaya.server.error;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -22,12 +22,12 @@ public class GogomayaValidationService {
         if (errors.isEmpty())
             return;
         // Step 2. Accumulating error codes
-        ArrayList<String> errorCodes = new ArrayList<String>();
+        Set<String> errorCodes = new HashSet<String>();
         for (ConstraintViolation<T> error : errors) {
             errorCodes.add(error.getMessage());
         }
         // Step 3. Generating Gogomaya error
         if (errorCodes.size() > 0)
-            throw GogomayaException.create(errorCodes);
+            throw GogomayaException.fromCodes(errorCodes);
     }
 }

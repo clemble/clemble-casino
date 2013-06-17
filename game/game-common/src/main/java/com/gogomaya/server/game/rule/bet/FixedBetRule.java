@@ -27,7 +27,7 @@ public class FixedBetRule implements BetRule {
 
     public FixedBetRule(final int priceToUse) {
         if (priceToUse < 0)
-            throw GogomayaException.create(GogomayaError.ClientJsonFormatError);
+            throw GogomayaException.fromError(GogomayaError.ClientJsonFormatError);
         this.price = priceToUse;
     }
 

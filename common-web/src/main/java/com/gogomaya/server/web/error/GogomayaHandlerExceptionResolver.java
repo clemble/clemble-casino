@@ -49,7 +49,7 @@ public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolve
                 errors.add(GogomayaError.BadRequestTableIdHeaderMissing);
             }
             if(errors.size() > 0)
-                gogomayaFailure = GogomayaFailureDescription.create(errors);
+                gogomayaFailure = new GogomayaFailureDescription().setErrors(errors);
         }
 
         response.setStatus(HttpStatus.BAD_REQUEST.value());

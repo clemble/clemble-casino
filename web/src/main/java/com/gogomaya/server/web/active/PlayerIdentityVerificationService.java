@@ -17,11 +17,11 @@ public class PlayerIdentityVerificationService {
     public void verify(PlayerIdentity playerIdentity) {
         // Step 1. Sanity check
         if(playerIdentity == null)
-            throw GogomayaException.create(GogomayaError.IdentityInvalid);
+            throw GogomayaException.fromError(GogomayaError.IdentityInvalid);
         // Step 2. Simple comparison of identities
         PlayerIdentity associatedIdentity = playerIdentityRepository.findOne(playerIdentity.getPlayerId());
         if(!associatedIdentity.getSecret().equals(playerIdentity.getSecret()))
-            throw GogomayaException.create(GogomayaError.IdentityInvalid);
+            throw GogomayaException.fromError(GogomayaError.IdentityInvalid);
     }
     
 }

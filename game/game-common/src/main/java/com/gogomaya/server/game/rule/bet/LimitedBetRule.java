@@ -54,7 +54,7 @@ public class LimitedBetRule implements BetRule {
         try {
             return INSTANCE_CACHE.get(((long) minBet << 32) | maxBet);
         } catch (ExecutionException e) {
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.ServerCacheError);
         }
     }
 

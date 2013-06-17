@@ -162,7 +162,7 @@ abstract public class AbstractGameState implements GameState {
     @Override
     public GameState setOutcome(GameOutcome outcome) {
         if (this.outcome != null)
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         this.outcome = outcome;
         this.version++;
         return this;

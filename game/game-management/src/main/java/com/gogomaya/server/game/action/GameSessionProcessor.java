@@ -29,19 +29,19 @@ public class GameSessionProcessor<State extends GameState> {
     public State process(long sessionId, ClientEvent move) {
         // Step 1. Sanity check
         if (move == null)
-            throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
+            throw GogomayaException.fromError(GogomayaError.GamePlayMoveUndefined);
         // Step 2. Acquiring lock for session event processing
         GameCache<State> cache = cacheService.get(sessionId);
         // Step 3. Checking
         switch (cache.getSession().getSessionState()) {
         case inactive:
             if (!(move instanceof SurrenderEvent)) {
-                throw GogomayaException.create(GogomayaError.GamePlayGameNotStarted);
+                throw GogomayaException.fromError(GogomayaError.GamePlayGameNotStarted);
             }
             break;
         case ended:
             if (!(move instanceof SurrenderEvent)) {
-                throw GogomayaException.create(GogomayaError.GamePlayGameEnded);
+                throw GogomayaException.fromError(GogomayaError.GamePlayGameEnded);
             }
             return cache.getSession().getState();
         default:

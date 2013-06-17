@@ -77,7 +77,7 @@ public class RabbitGameNotificationService<State extends GameState> implements G
             RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(notificationRegistry.findNotificationServer(playerId));
             rabbitTemplate.send(String.valueOf(playerId), message);
         } catch (ExecutionException e) {
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         }
     }
 

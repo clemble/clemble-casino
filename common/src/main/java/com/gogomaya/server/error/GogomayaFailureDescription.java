@@ -1,62 +1,55 @@
 package com.gogomaya.server.error;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gogomaya.server.error.GogomayaError.Code;
-import com.google.common.collect.ImmutableSet;
 
 public class GogomayaFailureDescription {
 
-    final public static GogomayaFailureDescription SERVER_ERROR = GogomayaFailureDescription.create(GogomayaError.ServerError);
+    final public static GogomayaFailureDescription SERVER_ERROR = new GogomayaFailureDescription().addProblem(new GogomayaFailure(GogomayaError.ServerError));
 
-    final Set<GogomayaFailure> failures;
+    final Set<GogomayaFailure> failures = new HashSet<GogomayaFailure>();
 
-    private GogomayaFailureDescription(Collection<GogomayaFailure> failures) {
-        this.failures = ImmutableSet.copyOf(failures);
+    public GogomayaFailureDescription() {
     }
 
-    private GogomayaFailureDescription(GogomayaFailure gogomayaFailure) {
-        this.failures = ImmutableSet.<GogomayaFailure> of(gogomayaFailure);
+    public GogomayaFailureDescription(Set<String> errorCodes) {
+        this(GogomayaError.forCodes(errorCodes));
+    }
+
+    @JsonCreator
+    public GogomayaFailureDescription(@JsonProperty("problems") Collection<GogomayaError> errors) {
+        for (GogomayaError error : errors)
+            this.failures.add(new GogomayaFailure(error));
     }
 
     public Set<GogomayaFailure> getProblems() {
         return failures;
     }
 
-    public static GogomayaFailureDescription create(GogomayaError gogomayaError) {
-        return new GogomayaFailureDescription(new GogomayaFailure(gogomayaError));
+    public GogomayaFailureDescription setProblems(Collection<GogomayaFailure> failures) {
+        this.failures.addAll(failures);
+        return this;
     }
 
-    @JsonCreator
-    public static GogomayaFailureDescription create(@JsonProperty("problems") Collection<GogomayaError> gogomayaError) {
-        Collection<GogomayaFailure> failures = new ArrayList<GogomayaFailure>();
-        for (GogomayaError error : gogomayaError) {
-            if (error != null)
-                failures.add(new GogomayaFailure(error));
-        }
-        return new GogomayaFailureDescription(failures);
+    public GogomayaFailureDescription addProblem(GogomayaFailure failure) {
+        if (failure != null)
+            this.failures.add(failure);
+        return this;
     }
 
-    public static GogomayaFailureDescription create(GogomayaFailure gogomayaFailure) {
-        return new GogomayaFailureDescription(gogomayaFailure);
+    public GogomayaFailureDescription addError(GogomayaError error) {
+        this.failures.add(new GogomayaFailure(error));
+        return this;
     }
 
-    public static GogomayaFailureDescription createForCodes(Collection<String> errorCodes) {
-        errorCodes = errorCodes == null || errorCodes.size() == 0 ? Collections.singleton(Code.SERVER_ERROR_CODE) : errorCodes;
-
-        Set<GogomayaError> verifiedErrors = new HashSet<GogomayaError>(errorCodes.size());
-        for (String errorCode : errorCodes) {
-            GogomayaError gogomayaError = GogomayaError.forCode(errorCode);
-            verifiedErrors.add(gogomayaError != null ? gogomayaError : GogomayaError.ServerError);
-        }
-
-        return create(verifiedErrors);
+    public GogomayaFailureDescription setErrors(Collection<GogomayaError> errors) {
+        for (GogomayaError error : errors)
+            this.failures.add(new GogomayaFailure(error));
+        return this;
     }
 
 }

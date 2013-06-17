@@ -93,7 +93,7 @@ public class GameTimeManagementService<State extends GameState> implements Seria
             try {
                 executorService.invokeAll(timeoutNotifications);
             } catch (InterruptedException e) {
-                throw GogomayaException.create(GogomayaError.TimeoutProcessingFailure);
+                throw GogomayaException.fromError(GogomayaError.TimeoutProcessingFailure);
             }
         }
     }

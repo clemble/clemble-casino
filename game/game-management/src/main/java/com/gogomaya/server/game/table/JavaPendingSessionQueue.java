@@ -27,16 +27,16 @@ public class JavaPendingSessionQueue implements PendingSessionQueue {
         try {
             return PENDING_SESSIONS_CACHE.get(specification.getName()).poll();
         } catch (ExecutionException e) {
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.GameConstructionTableQueuePutError);
         }
     }
 
     @Override
-    public void add(long tableId, GameSpecification specification) {
+    public void add(long session, GameSpecification specification) {
         try {
-            PENDING_SESSIONS_CACHE.get(specification.getName()).add(tableId);
+            PENDING_SESSIONS_CACHE.get(specification.getName()).add(session);
         } catch (ExecutionException e) {
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.GameConstructionTableQueueAddError);
         }
     }
 
@@ -45,7 +45,7 @@ public class JavaPendingSessionQueue implements PendingSessionQueue {
         try {
             PENDING_SESSIONS_CACHE.get(specification.getName()).remove(session);
         } catch (ExecutionException e) {
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.GameConstructionTableQueueInvalidateError);
         }
     }
 

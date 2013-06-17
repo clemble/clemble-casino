@@ -50,7 +50,7 @@ public class GameCacheService<State extends GameState> {
         try {
             return gameCache.get(sessionId);
         } catch (ExecutionException e) {
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         }
     }
 }

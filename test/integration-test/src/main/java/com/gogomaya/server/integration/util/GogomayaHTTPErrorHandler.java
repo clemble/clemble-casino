@@ -28,8 +28,8 @@ public class GogomayaHTTPErrorHandler implements ResponseErrorHandler {
         byte[] buffer = new byte[response.getBody().available()];
         response.getBody().read(buffer);
         String errorMessage = new String(buffer);
-        GogomayaFailureDescription failure = objectMapper.readValue(errorMessage, GogomayaFailureDescription.class);
+        GogomayaFailureDescription description = objectMapper.readValue(errorMessage, GogomayaFailureDescription.class);
         // Step 3. Generating GogomayaException
-        throw GogomayaException.create(failure);
+        throw GogomayaException.fromDescription(description);
     }
 }

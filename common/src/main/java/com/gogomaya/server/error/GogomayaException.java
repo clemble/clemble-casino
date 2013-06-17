@@ -19,20 +19,20 @@ public class GogomayaException extends RuntimeException {
         return failure;
     }
 
-    public static GogomayaException create(GogomayaError gogomayaError) {
-        return new GogomayaException(GogomayaFailureDescription.create(gogomayaError));
+    public static GogomayaException fromError(GogomayaError error) {
+        return new GogomayaException(new GogomayaFailureDescription().addError(error));
     }
 
-    public static GogomayaException create(GogomayaFailure gogomayaFailure) {
-        return new GogomayaException(GogomayaFailureDescription.create(gogomayaFailure));
+    public static GogomayaException fromFailures(Collection<GogomayaFailure> failures) {
+        return new GogomayaException(new GogomayaFailureDescription().setProblems(failures));
     }
 
-    public static GogomayaException create(GogomayaFailureDescription failureDescription) {
-        return new GogomayaException(failureDescription);
+    public static GogomayaException fromCodes(Collection<String> errors) {
+        return new GogomayaException(new GogomayaFailureDescription().setErrors(GogomayaError.forCodes(errors)));
     }
 
-    public static GogomayaException create(Collection<String> errorCodes) {
-        return new GogomayaException(GogomayaFailureDescription.createForCodes(errorCodes));
+    public static GogomayaException fromDescription(GogomayaFailureDescription description) {
+        return new GogomayaException(description);
     }
 
 }

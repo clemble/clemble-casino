@@ -51,9 +51,9 @@ public class WalletTransactionManagerImpl implements WalletTransactionManager {
     public void process(WalletTransaction walletTransaction) {
         // Step 1. Sanity check
         if (walletTransaction == null)
-            throw GogomayaException.create(GogomayaError.PaymentTransactionEmpty);
+            throw GogomayaException.fromError(GogomayaError.PaymentTransactionEmpty);
         if (!walletTransaction.valid())
-            throw GogomayaException.create(GogomayaError.PaymentTransactionInvalid);
+            throw GogomayaException.fromError(GogomayaError.PaymentTransactionInvalid);
         // Step 2. Processing wallet transactions
         for (WalletOperation walletOperation : walletTransaction.getWalletOperations()) {
             PlayerWallet associatedWallet = playerWalletRepository.findOne(walletOperation.getPlayerId());

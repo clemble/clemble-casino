@@ -61,7 +61,7 @@ public class BetRuleFormat {
             case NONE:
                 return UnlimitedBetRule.INSTANCE;
             }
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         }
 
         @Override
@@ -83,7 +83,7 @@ public class BetRuleFormat {
                 st.setLong(index++, 0);
                 break;
             default:
-                throw GogomayaException.create(GogomayaError.ServerCriticalError);
+                throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
             }
         }
 
@@ -122,7 +122,7 @@ public class BetRuleFormat {
                 return UnlimitedBetRule.INSTANCE;
             }
 
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         }
     }
 

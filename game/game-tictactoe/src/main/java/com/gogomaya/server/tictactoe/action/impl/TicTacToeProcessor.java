@@ -39,7 +39,7 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
             return processSurrenderEvent(state, (SurrenderEvent) clientEvent);
         }
         // Step 2. Returning default state
-        throw GogomayaException.create(GogomayaError.GamePlayMoveNotSupported);
+        throw GogomayaException.fromError(GogomayaError.GamePlayMoveNotSupported);
     }
 
     private Collection<GameServerEvent<TicTacToeState>> processSurrenderEvent(final TicTacToeState state, final SurrenderEvent surrenderEvent) {
@@ -96,7 +96,7 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
         TicTacToeCell cellToSelect = selectCellMove.getCell();
         // Step 1. Sanity check
         if (state.getBoard()[cellToSelect.getRow()][cellToSelect.getColumn()].owned()) {
-            throw GogomayaException.create(GogomayaError.TicTacToeCellOwned);
+            throw GogomayaException.fromError(GogomayaError.TicTacToeCellOwned);
         }
         // Step 2. Generating next moves
         state.setActiveCell(cellToSelect);

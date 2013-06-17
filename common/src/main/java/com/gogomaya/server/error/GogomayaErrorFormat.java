@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.gogomaya.server.game.SessionAware;
+import com.gogomaya.server.player.PlayerAware;
 
 public class GogomayaErrorFormat {
 
@@ -54,6 +56,66 @@ public class GogomayaErrorFormat {
             } while (token != null && token != JsonToken.END_OBJECT);
 
             return GogomayaError.forCode(code);
+        }
+    }
+
+    /**
+     * Custom {@link Date} Serializer, used by Jackson, through {@link JsonSerializer} annotation.
+     * 
+     * @author Anton Oparin
+     * 
+     */
+    public static class GogomayaFailureSerializer extends JsonSerializer<GogomayaFailure> {
+
+        @Override
+        public void serialize(GogomayaFailure failure, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException,
+                JsonProcessingException {
+            if (failure == null)
+                return;
+
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeFieldName("code");
+            jsonGenerator.writeString(failure.getError().getCode());
+            jsonGenerator.writeFieldName("description");
+            jsonGenerator.writeString(failure.getError().getDescription());
+
+            if (failure.getPlayerId() != PlayerAware.DEFAULT_PLAYER) {
+                jsonGenerator.writeFieldName("player");
+                jsonGenerator.writeNumber(failure.getPlayerId());
+            }
+
+            if (failure.getSession() != SessionAware.DEFAULT_SESSION) {
+                jsonGenerator.writeFieldName("session");
+                jsonGenerator.writeNumber(failure.getPlayerId());
+            }
+
+            jsonGenerator.writeEndObject();
+        }
+
+    }
+
+    public static class GogomayaFailureDeserializer extends JsonDeserializer<GogomayaFailure> {
+
+        @Override
+        public GogomayaFailure deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            String code = null;
+            JsonToken token = null;
+            long playerId = PlayerAware.DEFAULT_PLAYER;
+            long sessionId = SessionAware.DEFAULT_SESSION;
+            do {
+                if (jp.getCurrentName() == "code") {
+                    code = jp.getValueAsString();
+                } else if (jp.getCurrentName() == "description") {
+                    jp.getValueAsString();
+                } else if (jp.getCurrentName() == "player") {
+                    playerId = jp.getNumberValue().longValue();
+                } else if (jp.getCurrentName() == "session") {
+                    sessionId = jp.getNumberValue().longValue();
+                }
+                token = jp.nextToken();
+            } while (token != null && token != JsonToken.END_OBJECT);
+
+            return new GogomayaFailure(GogomayaError.forCode(code), playerId, sessionId);
         }
     }
 

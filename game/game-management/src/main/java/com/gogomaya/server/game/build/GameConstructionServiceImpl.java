@@ -2,12 +2,14 @@ package com.gogomaya.server.game.build;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.error.GogomayaFailure;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.action.GameTableFactory;
@@ -18,11 +20,9 @@ import com.gogomaya.server.game.notification.GameNotificationService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.game.table.GameTableRepository;
+import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.money.Money;
-import com.gogomaya.server.money.Operation;
-import com.gogomaya.server.player.wallet.WalletOperation;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
 public class GameConstructionServiceImpl<State extends GameState> implements GameConstructionService<State> {
@@ -66,13 +66,13 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
         }
         // Step 0. Checking player can afford to play this game
         if (!walletTransactionManager.canAfford(playerId, extractMoneyNeeded(specification)))
-            throw GogomayaException.create(GogomayaError.GameConstructionInsufficientMoney);
+            throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         // Step 1. Pooling
         Long session = tableManager.poll(specification);
         GameTable<State> table = tableFactory.findTable(session, specification);
 
         if (!activePlayerQueue.markActive(playerId, table.getCurrentSession().getSession()))
-            throw GogomayaException.create(GogomayaError.GameMatchPlayerHasPendingSessions);
+            throw GogomayaException.fromError(GogomayaError.GameMatchPlayerHasPendingSessions);
         table.addPlayer(playerId);
         table = tableRepository.save(table);
 
@@ -97,9 +97,20 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
 
     @Override
     public GameTable<State> avilabilityGame(long playerId, Collection<Long> opponenents, GameSpecification specification) {
+        Money moneyNeeded = extractMoneyNeeded(specification);
         // Step 0. Checking player can afford to play this game
-        if (!walletTransactionManager.canAfford(playerId, extractMoneyNeeded(specification)))
-            throw GogomayaException.create(GogomayaError.GameConstructionInsufficientMoney);
+        Collection<GogomayaFailure> failures = new ArrayList<GogomayaFailure>();
+        if (!walletTransactionManager.canAfford(playerId, moneyNeeded)){
+            failures.add(new GogomayaFailure(GogomayaError.GameConstructionInsufficientMoney, playerId));
+        }
+        for(long opponentId: opponenents) {
+            if(!walletTransactionManager.canAfford(opponentId, moneyNeeded)) {
+                failures.add(new GogomayaFailure(GogomayaError.GameConstructionInsufficientMoney, opponentId));
+            }
+        }
+        // Step 0.1. Throwing accumulated exception
+        if(failures.size() > 0)
+            throw GogomayaException.fromFailures(failures);
         return null;
     }
     

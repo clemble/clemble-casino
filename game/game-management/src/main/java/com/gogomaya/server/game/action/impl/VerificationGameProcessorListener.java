@@ -10,7 +10,6 @@ import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.client.BetEvent;
-import com.gogomaya.server.game.event.client.GiveUpEvent;
 import com.gogomaya.server.game.event.client.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 
@@ -20,24 +19,24 @@ public class VerificationGameProcessorListener<State extends GameState> implemen
     public void beforeMove(final GameSession<State> session, final ClientEvent move) {
         // Step 1. Sanity check
         if (move == null)
-            throw GogomayaException.create(GogomayaError.GamePlayMoveUndefined);
+            throw GogomayaException.fromError(GogomayaError.GamePlayMoveUndefined);
         State state = session.getState();
         // Step 2. Checking player participate in the game
         final long playerId = move.getPlayerId();
         if (!state.getPlayerIterator().contains(playerId)) {
-            throw GogomayaException.create(GogomayaError.GamePlayPlayerNotParticipate);
+            throw GogomayaException.fromError(GogomayaError.GamePlayPlayerNotParticipate);
         }
         if (!(move instanceof SurrenderEvent)) {
             // Step 3. Checking that move
             ClientEvent expectedMove = state.getNextMove(playerId);
             if (expectedMove == null)
-                throw GogomayaException.create(GogomayaError.GamePlayNoMoveExpected);
+                throw GogomayaException.fromError(GogomayaError.GamePlayNoMoveExpected);
             if (expectedMove.getClass() != move.getClass())
-                throw GogomayaException.create(GogomayaError.GamePlayWrongMoveType);
+                throw GogomayaException.fromError(GogomayaError.GamePlayWrongMoveType);
             if (move instanceof BetEvent) {
                 GamePlayerState gamePlayerState = state.getPlayerState(move.getPlayerId());
                 if (((BetEvent) move).getBet() > gamePlayerState.getMoneyLeft())
-                    throw GogomayaException.create(GogomayaError.GamePlayBetOverflow);
+                    throw GogomayaException.fromError(GogomayaError.GamePlayBetOverflow);
             }
         }
     }

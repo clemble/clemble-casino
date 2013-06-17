@@ -2,9 +2,15 @@ package com.gogomaya.server.error;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gogomaya.server.error.GogomayaErrorFormat.GogomayaFailureDeserializer;
+import com.gogomaya.server.error.GogomayaErrorFormat.GogomayaFailureSerializer;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.player.PlayerAware;
 
+@JsonSerialize(using = GogomayaFailureSerializer.class)
+@JsonDeserialize(using = GogomayaFailureDeserializer.class)
 public class GogomayaFailure implements PlayerAware, SessionAware {
 
     /**
@@ -13,19 +19,23 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
     private static final long serialVersionUID = 8151325637613551745L;
 
     final private GogomayaError error;
-    final private long playerId;
-    final private long sessionId;
+    final private long player;
+    final private long session;
 
     public GogomayaFailure(final GogomayaError error) {
         this(error, PlayerAware.DEFAULT_PLAYER, SessionAware.DEFAULT_SESSION);
     }
 
+    public GogomayaFailure(final GogomayaError error, final long playerId) {
+        this(error, playerId, SessionAware.DEFAULT_SESSION);
+    }
+
     @JsonCreator
-    public GogomayaFailure(@JsonProperty("error") final GogomayaError error, @JsonProperty("player") final long playerId,
+    public GogomayaFailure(@JsonProperty("error") final GogomayaError error, @JsonProperty("playerId") final long playerId,
             @JsonProperty("session") final long sessionId) {
         this.error = error;
-        this.playerId = playerId;
-        this.sessionId = sessionId;
+        this.player = playerId;
+        this.session = sessionId;
     }
 
     public GogomayaError getError() {
@@ -34,17 +44,17 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
 
     @Override
     public long getPlayerId() {
-        return playerId;
+        return player;
     }
 
     @Override
     public long getSession() {
-        return sessionId;
+        return session;
     }
 
     @Override
     public String toString() {
-        return "GogomayaFailure [error = " + error + ", player = " + playerId + ", session = " + sessionId + "]";
+        return "GogomayaFailure [error = " + error + ", player = " + player + ", session = " + session + "]";
     }
 
     @Override
@@ -52,8 +62,8 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((error == null) ? 0 : error.hashCode());
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
-        result = prime * result + (int) (sessionId ^ (sessionId >>> 32));
+        result = prime * result + (int) (player ^ (player >>> 32));
+        result = prime * result + (int) (session ^ (session >>> 32));
         return result;
     }
 
@@ -68,9 +78,9 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
         GogomayaFailure other = (GogomayaFailure) obj;
         if (error != other.error)
             return false;
-        if (playerId != other.playerId)
+        if (player != other.player)
             return false;
-        if (sessionId != other.sessionId)
+        if (session != other.session)
             return false;
         return true;
     }

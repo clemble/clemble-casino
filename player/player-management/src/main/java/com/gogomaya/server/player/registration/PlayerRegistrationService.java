@@ -44,7 +44,7 @@ public class PlayerRegistrationService {
                 return playerIdentityRepository.findOne(fetchedCredentials.getPlayerId());
             } else {
                 // Step 2.2 If password does not match this is an error
-                throw GogomayaException.create(GogomayaError.EmailAlreadyRegistered);
+                throw GogomayaException.fromError(GogomayaError.EmailAlreadyRegistered);
             }
         }
         // Step 3. Create new profile

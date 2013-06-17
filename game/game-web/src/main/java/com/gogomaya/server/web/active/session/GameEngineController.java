@@ -43,10 +43,10 @@ public class GameEngineController<State extends GameState> {
         // Step 1. Retrieving associated table
         GameTable<State> table = tableRepository.findOne(tableId);
         if (table == null)
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         // Step 2. Verifying associated Session identifier
         if (table.getCurrentSession().getSession() != sessionId)
-            throw GogomayaException.create(GogomayaError.ServerCriticalError);
+            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         // Step 3. Updating current state
         return sessionProcessor.process(sessionId, move);
     }

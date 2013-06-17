@@ -21,7 +21,7 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
     public void restore(GameSession<State> session) {
         // Step 1. Sanity check
         if (session == null || session.getSpecification() == null) {
-            throw GogomayaException.create(GogomayaError.GameStateReCreationFailure);
+            throw GogomayaException.fromError(GogomayaError.GameStateReCreationFailure);
         }
         // Step 2. Re creating state
         State restoredState = create(session.getSpecification(), session.getPlayers());
