@@ -25,6 +25,15 @@ public class WalletTransactionManagerImpl implements WalletTransactionManager {
     }
 
     @Override
+    public boolean canAfford(long playerId, Money ammount) {
+        // Step 1. Retrieving players wallet
+        PlayerWallet wallet = playerWalletRepository.findOne(playerId);
+        Money existingAmmount = wallet.getMoney(ammount.getCurrency());
+        // Step 2. If exising ammount is not enough player can't afford it
+        return existingAmmount.getAmount() >= ammount.getAmount();
+    }
+
+    @Override
     public boolean canAfford(WalletOperation walletOperation) {
         // Step 1. Checking positive operation
         if (walletOperation == null)
@@ -33,11 +42,8 @@ public class WalletTransactionManagerImpl implements WalletTransactionManager {
             return true;
         if (walletOperation.getOperation() == Operation.Credit && walletOperation.getAmmount().isNegative())
             return true;
-        // Step 2. Checking player wallet value
-        PlayerWallet wallet = playerWalletRepository.findOne(walletOperation.getPlayerId());
-        Money existingAmmount = wallet.getMoney(walletOperation.getAmmount().getCurrency());
-        // Step 2.1 If exising ammount is not enough player can't afford it
-        return existingAmmount.getAmount() > walletOperation.getAmmount().getAmount();
+        // Step 2. Checking if player can afford this
+        return canAfford(walletOperation.getPlayerId(), walletOperation.getAmmount());
     }
 
     @Override

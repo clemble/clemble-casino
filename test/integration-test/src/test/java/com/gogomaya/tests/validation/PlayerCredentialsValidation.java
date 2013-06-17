@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.error.GogomayaFailure;
+import com.gogomaya.server.error.GogomayaFailureDescription;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.security.PlayerCredential;
 
@@ -51,9 +52,9 @@ public class PlayerCredentialsValidation {
     @Then("Then error code returned")
     @Alias("error code returned")
     public void theAlertStatusShouldBe(String status) {
-        GogomayaFailure errors = validationError.getFailure();
-        Assert.assertEquals(errors.getErrors().size(), 1);
-        Assert.assertEquals(errors.getErrors().iterator().next(), "001");
+        GogomayaFailureDescription errors = validationError.getFailureDescription();
+        Assert.assertEquals(errors.getProblems().size(), 1);
+        Assert.assertEquals(errors.getProblems().iterator().next(), "001");
     }
 
     @When("$user validated")

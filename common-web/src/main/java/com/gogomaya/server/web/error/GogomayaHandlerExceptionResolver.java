@@ -3,6 +3,8 @@ package com.gogomaya.server.web.error;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.error.GogomayaFailure;
+import com.gogomaya.server.error.GogomayaFailureDescription;
 
 @Controller
 public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolver {
@@ -31,23 +33,28 @@ public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolve
     @Override
     @ExceptionHandler(value = Exception.class)
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        GogomayaFailure gogomayaFailure = null;
+        GogomayaFailureDescription gogomayaFailure = null;
         if (ex instanceof GogomayaException) {
-            gogomayaFailure = ((GogomayaException) ex).getFailure();
+            gogomayaFailure = ((GogomayaException) ex).getFailureDescription();
         } else if (ex instanceof ServletRequestBindingException) {
+            Collection<GogomayaError> errors = new ArrayList<GogomayaError>();
             ServletRequestBindingException bindingException = (ServletRequestBindingException) ex;
-            if (bindingException.getMessage().contains("playerId")) {
-                gogomayaFailure = new GogomayaFailure(GogomayaError.BadRequestPlayerIdHeaderMissing);
-            } else if (bindingException.getMessage().contains("sessionId")) {
-                gogomayaFailure = new GogomayaFailure(GogomayaError.BadRequestSessionIdHeaderMissing);
-            } else if (bindingException.getMessage().contains("tableId")) {
-                gogomayaFailure = new GogomayaFailure(GogomayaError.BadRequestTableIdHeaderMissing);
+            if (!bindingException.getMessage().contains("playerId")) {
+                errors.add(GogomayaError.BadRequestPlayerIdHeaderMissing);
             }
+            if (!bindingException.getMessage().contains("sessionId")) {
+                errors.add(GogomayaError.BadRequestSessionIdHeaderMissing);
+            }
+            if (!bindingException.getMessage().contains("tableId")) {
+                errors.add(GogomayaError.BadRequestTableIdHeaderMissing);
+            }
+            if(errors.size() > 0)
+                gogomayaFailure = GogomayaFailureDescription.create(errors);
         }
 
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setHeader("Content-Type", "application/json");
-        gogomayaFailure = gogomayaFailure == null ? GogomayaFailure.ServerError : gogomayaFailure;
+        gogomayaFailure = gogomayaFailure == null ? GogomayaFailureDescription.SERVER_ERROR : gogomayaFailure;
 
         try {
             objectMapper.writeValue(response.getOutputStream(), gogomayaFailure);

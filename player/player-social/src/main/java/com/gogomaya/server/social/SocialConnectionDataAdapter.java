@@ -36,7 +36,7 @@ public class SocialConnectionDataAdapter {
     public Long register(SocialConnectionData socialConnectionData) {
         // Step 1. Sanity check
         if (socialConnectionData == null)
-            throw GogomayaException.create(Code.SOCIAL_CONNECTION_INVALID_CODE);
+            throw GogomayaException.create(GogomayaError.SocialConnectionInvalid);
         // Step 2. Checking if user already exists
         String gamerId = null;
 

@@ -17,6 +17,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.error.GogomayaFailure;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.GamePlayer;
@@ -55,34 +56,6 @@ public class ErrorStatusCodeTest {
 
         playerA.select(0, 0);
         playerA.bet(1000);
-    }
-
-    @Test(expected = GogomayaException.class)
-    public void testOverTheLimit() {
-        Player playerA = playerOperations.createPlayer();
-        Player playerB = playerOperations.createPlayer();
-
-        GameSpecification specification = gameOperations.selectSpecification();
-
-        while (true) {
-            TicTacToePlayer playerAState = (TicTacToePlayer) gameOperations.construct(playerA, specification);
-            TicTacToePlayer playerBState = (TicTacToePlayer) gameOperations.construct(playerB, specification);
-
-            if (playerAState.isToMove()) {
-                playerAState.select(0, 0);
-                playerAState.bet(1);
-                playerBState.bet(1);
-            } else {
-                playerBState.select(0, 0);
-                playerBState.bet(1);
-                playerAState.bet(1);
-            }
-
-            playerAState.giveUp();
-
-            playerAState.clear();
-            playerBState.clear();
-        }
     }
 
     @Test
@@ -127,7 +100,7 @@ public class ErrorStatusCodeTest {
     public void testScenario2() {
         Player playerA = playerOperations.createPlayer();
 
-        Set<GogomayaError> errors = null;
+        Set<GogomayaFailure> errors = null;
         try {
             GameSpecification specification = gameOperations.selectSpecification();
 
@@ -138,10 +111,10 @@ public class ErrorStatusCodeTest {
             gamePlayer.select(1, 1);
             gamePlayer.clear();
         } catch (GogomayaException gogomayaException) {
-            errors = gogomayaException.getFailure().getErrors();
+            errors = gogomayaException.getFailureDescription().getProblems();
         }
 
         Assert.assertEquals(errors.size(), 1);
-        Assert.assertEquals(errors.iterator().next(), GogomayaError.GamePlayGameNotStarted);
+        Assert.assertEquals(errors.iterator().next().getError(), GogomayaError.GamePlayGameNotStarted);
     }
 }

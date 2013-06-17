@@ -2,6 +2,8 @@ package com.gogomaya.server.game.build;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import com.gogomaya.server.error.GogomayaError;
@@ -63,11 +65,8 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
             }
         }
         // Step 0. Checking player can afford to play this game
-        WalletOperation operation = new WalletOperation().setPlayerId(playerId)
-                .setAmmount(new Money(specification.getCurrency(), specification.getBetRule().getPrice()))
-                .setOperation(Operation.Credit);
-        if (!walletTransactionManager.canAfford(operation))
-            throw GogomayaException.create(GogomayaError.GameSpecificationInsufficientMoney);
+        if (!walletTransactionManager.canAfford(playerId, extractMoneyNeeded(specification)))
+            throw GogomayaException.create(GogomayaError.GameConstructionInsufficientMoney);
         // Step 1. Pooling
         Long session = tableManager.poll(specification);
         GameTable<State> table = tableFactory.findTable(session, specification);
@@ -94,6 +93,18 @@ public class GameConstructionServiceImpl<State extends GameState> implements Gam
         }
 
         return tableRegistry.specifyServer(table);
+    }
+
+    @Override
+    public GameTable<State> avilabilityGame(long playerId, Collection<Long> opponenents, GameSpecification specification) {
+        // Step 0. Checking player can afford to play this game
+        if (!walletTransactionManager.canAfford(playerId, extractMoneyNeeded(specification)))
+            throw GogomayaException.create(GogomayaError.GameConstructionInsufficientMoney);
+        return null;
+    }
+    
+    private Money extractMoneyNeeded(GameSpecification specification) {
+        return new Money(specification.getCurrency(), specification.getBetRule().getPrice());
     }
 
 }

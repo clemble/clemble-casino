@@ -9,7 +9,7 @@ import org.springframework.web.client.ResponseErrorHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.error.GogomayaFailure;
+import com.gogomaya.server.error.GogomayaFailureDescription;
 
 public class GogomayaHTTPErrorHandler implements ResponseErrorHandler {
 
@@ -28,7 +28,7 @@ public class GogomayaHTTPErrorHandler implements ResponseErrorHandler {
         byte[] buffer = new byte[response.getBody().available()];
         response.getBody().read(buffer);
         String errorMessage = new String(buffer);
-        GogomayaFailure failure = objectMapper.readValue(errorMessage, GogomayaFailure.class);
+        GogomayaFailureDescription failure = objectMapper.readValue(errorMessage, GogomayaFailureDescription.class);
         // Step 3. Generating GogomayaException
         throw GogomayaException.create(failure);
     }

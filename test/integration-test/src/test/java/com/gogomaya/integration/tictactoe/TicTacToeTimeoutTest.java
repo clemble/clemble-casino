@@ -114,10 +114,10 @@ public class TicTacToeTimeoutTest {
 
     public void assertGogomayaFailure(GogomayaException gogomayaException, GogomayaError error) {
         Assert.assertNotNull(gogomayaException);
-        Assert.assertNotNull(gogomayaException.getFailure());
-        Assert.assertNotNull(gogomayaException.getFailure().getErrors());
-        Assert.assertEquals(gogomayaException.getFailure().getErrors().size(), 1);
-        Assert.assertEquals(gogomayaException.getFailure().getErrors().iterator().next(), error);
+        Assert.assertNotNull(gogomayaException.getFailureDescription());
+        Assert.assertNotNull(gogomayaException.getFailureDescription().getProblems());
+        Assert.assertEquals(gogomayaException.getFailureDescription().getProblems().size(), 1);
+        Assert.assertEquals(gogomayaException.getFailureDescription().getProblems().iterator().next().getError(), error);
 
     }
 

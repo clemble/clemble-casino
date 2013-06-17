@@ -21,6 +21,7 @@ import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.table.JavaPendingSessionQueue;
 import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.game.table.RedisGameSessionQueue;
+import com.gogomaya.server.money.Money;
 import com.gogomaya.server.notification.ServerRegistry;
 import com.gogomaya.server.player.wallet.WalletOperation;
 import com.gogomaya.server.player.wallet.WalletTransaction;
@@ -92,6 +93,11 @@ public class GameManagementSpringConfiguration {
 
                 @Override
                 public boolean canAfford(WalletOperation walletOperation) {
+                    return true;
+                }
+
+                @Override
+                public boolean canAfford(long playerId, Money ammount) {
                     return true;
                 }
             };

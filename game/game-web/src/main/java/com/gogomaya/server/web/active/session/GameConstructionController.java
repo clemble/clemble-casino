@@ -26,14 +26,14 @@ public class GameConstructionController<State extends GameState> {
 
     final private GameConfigurationManager configurationManager;
 
-    final private GameConstructionService<State> matchingService;
+    final private GameConstructionService<State> constructionService;
 
     final private GameTableRepository<State> tableRepository;
 
     public GameConstructionController(final GameConstructionService<State> matchingService,
             final GameTableRepository<State> sessionRepository,
             final GameConfigurationManager configurationManager) {
-        this.matchingService = checkNotNull(matchingService);
+        this.constructionService = checkNotNull(matchingService);
         this.tableRepository = checkNotNull(sessionRepository);
         this.configurationManager = checkNotNull(configurationManager);
     }
@@ -46,7 +46,7 @@ public class GameConstructionController<State extends GameState> {
         if (!configurationManager.getSpecificationOptions().valid(gameSpecification))
             throw GogomayaException.create(GogomayaError.GameSpecificationInvalid);
         // Step 2. Invoking actual matching service
-        return matchingService.instantGame(playerId, gameSpecification);
+        return constructionService.instantGame(playerId, gameSpecification);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/active/session/{sessionId}", produces = "application/json")
