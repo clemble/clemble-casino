@@ -15,14 +15,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.impl.GamePostProcessorListener;
 import com.gogomaya.server.game.action.impl.VerificationGameProcessorListener;
-import com.gogomaya.server.game.active.PlayerStateManager;
-import com.gogomaya.server.game.active.RedisPlayerStateManager;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.table.JavaPendingSessionQueue;
 import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.game.table.RedisGameSessionQueue;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.notification.ServerRegistry;
+import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.player.state.RedisPlayerStateManager;
 import com.gogomaya.server.player.wallet.WalletOperation;
 import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
@@ -46,7 +46,7 @@ public class GameManagementSpringConfiguration {
 
     @Bean
     @Singleton
-    public PlayerStateManager activePlayerQueue() {
+    public PlayerStateManager playerStateManager() {
         return new RedisPlayerStateManager(playerQueueTemplate);
     }
 
@@ -57,7 +57,7 @@ public class GameManagementSpringConfiguration {
 
     @Bean
     public <State extends GameState> GamePostProcessorListener<State> gamePostProcessor() {
-        return new GamePostProcessorListener<State>(activePlayerQueue(), walletTransactionManager, pendingSessionQueue);
+        return new GamePostProcessorListener<State>(playerStateManager(), walletTransactionManager, pendingSessionQueue);
     }
 
     @Profile(value = { "default", "test" })

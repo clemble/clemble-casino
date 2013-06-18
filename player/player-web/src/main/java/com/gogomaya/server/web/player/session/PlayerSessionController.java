@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.player.session.PlayerSessionRepository;
+import com.gogomaya.server.player.state.PlayerStateManager;
 
 @Controller
 public class PlayerSessionController {
@@ -21,18 +22,25 @@ public class PlayerSessionController {
 
     final PlayerSessionRepository sessionRepository;
 
-    public PlayerSessionController(final PlayerNotificationRegistry notificationRegistry, final PlayerSessionRepository sessionRepository) {
+    final PlayerStateManager stateManager;
+
+    public PlayerSessionController(final PlayerNotificationRegistry notificationRegistry, final PlayerSessionRepository sessionRepository,
+            final PlayerStateManager stateManager) {
         this.notificationRegistry = checkNotNull(notificationRegistry);
         this.sessionRepository = checkNotNull(sessionRepository);
+        this.stateManager = checkNotNull(stateManager);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/session/login", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PlayerSession startSession(@RequestHeader("playerId") long playerId) {
+    public @ResponseBody
+    PlayerSession startSession(@RequestHeader("playerId") long playerId) {
         // Step 1. Generated player session
         PlayerSession session = new PlayerSession().setPlayerId(playerId).setServer(notificationRegistry.findNotificationServer(playerId));
         // Step 2. Providing result as a Session data
         session = sessionRepository.saveAndFlush(session);
+        // TODO Integrate this with session repository
+        stateManager.markAvailable(playerId);
         // Step 3. Returning session identifier
         return session;
     }

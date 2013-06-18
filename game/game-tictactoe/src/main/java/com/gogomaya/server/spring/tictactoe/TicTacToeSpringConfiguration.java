@@ -19,7 +19,6 @@ import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.game.action.GameTableFactory;
 import com.gogomaya.server.game.action.impl.GamePostProcessorListener;
 import com.gogomaya.server.game.action.impl.VerificationGameProcessorListener;
-import com.gogomaya.server.game.active.PlayerStateManager;
 import com.gogomaya.server.game.active.time.GameTimeManagementService;
 import com.gogomaya.server.game.active.time.GameTimeProcessorListenerFactory;
 import com.gogomaya.server.game.build.AvailabilityGameConstructor;
@@ -34,6 +33,7 @@ import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
+import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 import com.gogomaya.server.tictactoe.TicTacToeState;
@@ -80,7 +80,7 @@ public class TicTacToeSpringConfiguration {
     public GamePostProcessorListener<TicTacToeState> postProcessorListener;
 
     @Inject
-    public PlayerStateManager activePlayerQueue;
+    public PlayerStateManager playerStateQueue;
 
     @Bean
     @Singleton
@@ -90,21 +90,21 @@ public class TicTacToeSpringConfiguration {
 
     @Bean
     @Singleton
-    public InstantGameConstructor<TicTacToeState> stateManager() {
+    public InstantGameConstructor<TicTacToeState> instantGameConstructor() {
         return new InstantGameConstructor<TicTacToeState>(pendingSessionQueue, tableRepository, gameNotificationManager(), tableFactory(),
-                walletTransactionManager, activePlayerQueue, tableRegistry);
+                walletTransactionManager, playerStateQueue, tableRegistry);
     }
 
     @Bean
     @Singleton
     public AvailabilityGameConstructor<TicTacToeState> availabilityGameConstructor() {
-        return new AvailabilityGameConstructor<TicTacToeState>(walletTransactionManager);
+        return new AvailabilityGameConstructor<TicTacToeState>(walletTransactionManager, playerStateQueue, sessionRepository);
     }
     
     @Bean
     @Singleton
     public GameConstructionService<TicTacToeState> constructionService() {
-        return new GameConstructionService<TicTacToeState>(stateManager(), availabilityGameConstructor());
+        return new GameConstructionService<TicTacToeState>(instantGameConstructor(), availabilityGameConstructor());
     }
 
     @Bean

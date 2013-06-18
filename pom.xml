@@ -124,12 +124,17 @@
             </dependency>
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
-                <artifactId>user-social</artifactId>
+                <artifactId>player-social</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>game-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>player-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -1,11 +1,13 @@
 package com.gogomaya.server.spring.web.player;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.rest.webmvc.BaseUriMethodArgumentResolver;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -19,6 +21,8 @@ import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.player.security.PlayerCredentialRepository;
 import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.player.session.PlayerSessionRepository;
+import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.player.state.RedisPlayerStateManager;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
@@ -58,6 +62,16 @@ public class PlayerWebSpringConfiguration extends WebMvcConfigurationSupport {
     @Inject
     public ObjectMapper objectMapper;
 
+    @Inject
+    @Named("playerQueueTemplate")
+    public RedisTemplate<Long, Long> playerQueueTemplate;
+
+    @Bean
+    @Singleton
+    public PlayerStateManager playerStateManager() {
+        return new RedisPlayerStateManager(playerQueueTemplate);
+    }
+
     @Bean
     @Singleton
     public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter() {
@@ -87,7 +101,7 @@ public class PlayerWebSpringConfiguration extends WebMvcConfigurationSupport {
     @Bean
     @Singleton
     public PlayerSessionController sessionController() {
-        return new PlayerSessionController(notificationRegistry, playerSessionRepository);
+        return new PlayerSessionController(notificationRegistry, playerSessionRepository, playerStateManager());
     }
 
     @Bean

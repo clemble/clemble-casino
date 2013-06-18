@@ -9,8 +9,8 @@
     <artifactId>player</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>player-management</module>
         <module>player-common</module>
+        <module>player-management</module>
         <module>player-social</module>
         <module>player-web</module>
     </modules>

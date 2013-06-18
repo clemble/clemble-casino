@@ -37,11 +37,7 @@ import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @Entity
 @Table(name = "GAME_SESSION")
-@TypeDefs(value = {
-        @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(
-                name = JsonHibernateType.CLASS_NAME_PARAMETER,
-                value = "com.gogomaya.server.game.GameState") })
-})
+@TypeDefs(value = { @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.GameState") }) })
 public class GameSession<State extends GameState> implements GameSpecificationAware, SessionAware, Serializable {
 
     /**
@@ -95,8 +91,9 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
         return specification;
     }
 
-    public void setSpecification(GameSpecification specification) {
+    public GameSession<State> setSpecification(GameSpecification specification) {
         this.specification = specification;
+        return this;
     }
 
     public GameSessionState getSessionState() {
@@ -111,8 +108,9 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
         return players;
     }
 
-    public void setPlayers(List<Long> players) {
-        this.players = players;
+    public GameSession<State> setPlayers(Collection<Long> players) {
+        this.players.addAll(players);
+        return this;
     }
 
     public void addPlayer(Long player) {
@@ -146,16 +144,18 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
         return state;
     }
 
-    public void setState(State state) {
+    public GameSession<State> setState(State state) {
         this.state = state;
+        return this;
     }
 
     public GameRequest getConstructor() {
         return constructor;
     }
 
-    public void setConstructor(GameRequest constructor) {
+    public GameSession<State> setConstructor(GameRequest constructor) {
         this.constructor = constructor;
+        return this;
     }
 
     @Override
