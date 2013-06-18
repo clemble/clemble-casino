@@ -36,7 +36,7 @@ public class GameTableQueueTest {
     final private int SIZE = 1000;
 
     @Inject
-    PendingSessionQueue tableQueue;
+    PendingSessionQueue sessionQueue;
 
     @Inject
     GamePostProcessorListener<GameState> gamePostProcessorListener;
@@ -86,7 +86,7 @@ public class GameTableQueueTest {
         @Override
         public Long call() {
             // Step 1. Adding to the table Queue
-            tableQueue.add(tableId, specification);
+            sessionQueue.add(tableId, specification);
             return tableId;
         }
 
@@ -96,27 +96,27 @@ public class GameTableQueueTest {
 
         @Override
         public Long call() {
-            // Step 1. Pooling table from specification
-            Long polledSession = tableQueue.poll(specification);
+            // Step 1. Pooling session from specification
+            Long polledSession = sessionQueue.poll(specification);
             while (polledSession == null) {
                 // Step 2. In case of a failure try to poll again in timeout
                 try {
                     Thread.sleep(random.nextInt(100));
                 } catch (InterruptedException e) {
                 }
-                polledSession = tableQueue.poll(specification);
+                polledSession = sessionQueue.poll(specification);
             }
             // Step 3. Adding it back
-            tableQueue.add(polledSession, specification);
+            sessionQueue.add(polledSession, specification);
             // Step 4. Trying to poll again
-            polledSession = tableQueue.poll(specification);
+            polledSession = sessionQueue.poll(specification);
             while (polledSession == null) {
                 // Step 2. In case of a failure try to poll again in timeout
                 try {
                     Thread.sleep(random.nextInt(100));
                 } catch (InterruptedException e) {
                 }
-                polledSession = tableQueue.poll(specification);
+                polledSession = sessionQueue.poll(specification);
             }
             return polledSession;
         }

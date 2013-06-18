@@ -28,7 +28,7 @@ import org.hibernate.annotations.TypeDefs;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.build.GameConstructor;
+import com.gogomaya.server.game.build.GameRequest;
 import com.gogomaya.server.game.event.client.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
@@ -60,7 +60,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     private GameSpecification specification;
 
     @Transient
-    private GameConstructor constructor;
+    private GameRequest constructor;
 
     @Column(name = "SESSION_STATE")
     private GameSessionState sessionState;
@@ -150,11 +150,11 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
         this.state = state;
     }
 
-    public GameConstructor getConstructor() {
+    public GameRequest getConstructor() {
         return constructor;
     }
 
-    public void setConstructor(GameConstructor constructor) {
+    public void setConstructor(GameRequest constructor) {
         this.constructor = constructor;
     }
 

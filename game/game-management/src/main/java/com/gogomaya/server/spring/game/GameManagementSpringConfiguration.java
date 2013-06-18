@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.impl.GamePostProcessorListener;
 import com.gogomaya.server.game.action.impl.VerificationGameProcessorListener;
-import com.gogomaya.server.game.active.ActivePlayerQueue;
-import com.gogomaya.server.game.active.RedisActivePlayerQueue;
+import com.gogomaya.server.game.active.PlayerStateManager;
+import com.gogomaya.server.game.active.RedisPlayerStateManager;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.table.JavaPendingSessionQueue;
 import com.gogomaya.server.game.table.PendingSessionQueue;
@@ -46,8 +46,8 @@ public class GameManagementSpringConfiguration {
 
     @Bean
     @Singleton
-    public ActivePlayerQueue activePlayerQueue() {
-        return new RedisActivePlayerQueue(playerQueueTemplate);
+    public PlayerStateManager activePlayerQueue() {
+        return new RedisPlayerStateManager(playerQueueTemplate);
     }
 
     @Bean

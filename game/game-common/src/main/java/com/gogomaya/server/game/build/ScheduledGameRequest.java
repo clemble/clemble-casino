@@ -2,7 +2,7 @@ package com.gogomaya.server.game.build;
 
 import java.util.Collection;
 
-public class ScheduledGameConstructor extends GameConstructor {
+public class ScheduledGameRequest extends GameRequest {
 
     /**
      * Generated 10/06/13
@@ -18,7 +18,7 @@ public class ScheduledGameConstructor extends GameConstructor {
         return playerIds;
     }
 
-    public ScheduledGameConstructor setPlayerIds(Collection<Long> playerIds) {
+    public ScheduledGameRequest setPlayerIds(Collection<Long> playerIds) {
         this.playerIds = playerIds;
         return this;
     }

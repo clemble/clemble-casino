@@ -12,7 +12,7 @@ import com.gogomaya.server.game.GameSessionState;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.PlayerWonOutcome;
 import com.gogomaya.server.game.action.GameProcessorListener;
-import com.gogomaya.server.game.active.ActivePlayerQueue;
+import com.gogomaya.server.game.active.PlayerStateManager;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.money.Currency;
@@ -26,11 +26,11 @@ import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
 public class GamePostProcessorListener<State extends GameState> implements GameProcessorListener<State> {
 
-    final private ActivePlayerQueue activePlayerQueue;
+    final private PlayerStateManager activePlayerQueue;
     final private PendingSessionQueue sessionQueue;
     final private WalletTransactionManager walletTransactionManager;
 
-    public GamePostProcessorListener(final ActivePlayerQueue activePlayerQueue, final WalletTransactionManager walletTransactionManager,
+    public GamePostProcessorListener(final PlayerStateManager activePlayerQueue, final WalletTransactionManager walletTransactionManager,
             final PendingSessionQueue sessionQueue) {
         this.activePlayerQueue = checkNotNull(activePlayerQueue);
         this.walletTransactionManager = checkNotNull(walletTransactionManager);
@@ -54,7 +54,7 @@ public class GamePostProcessorListener<State extends GameState> implements GameP
 
             session.setSessionState(GameSessionState.ended);
             for (long player : session.getState().getPlayerIterator().getPlayers())
-                activePlayerQueue.markInActive(player);
+                activePlayerQueue.markAvailable(player);
 
             GameOutcome outcome = session.getState().getOutcome();
             if (outcome instanceof PlayerWonOutcome) {

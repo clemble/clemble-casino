@@ -24,29 +24,22 @@ import com.gogomaya.server.game.rule.time.TimeRuleFormat.MoveTimeRuleHibernateTy
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.TotalTimeRuleHibernateType;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.money.Currency;
+import com.gogomaya.server.money.Money;
 
 @Entity
 @Table(name = "GAME_SPECIFICATION")
-@TypeDefs(value = {
-        @TypeDef(name = "totalTime", typeClass = TotalTimeRuleHibernateType.class),
-        @TypeDef(name = "moveTime", typeClass = MoveTimeRuleHibernateType.class)
-})
+@TypeDefs(value = { @TypeDef(name = "totalTime", typeClass = TotalTimeRuleHibernateType.class),
+        @TypeDef(name = "moveTime", typeClass = MoveTimeRuleHibernateType.class) })
 public class GameSpecification implements Serializable {
 
     /**
-     * Generated 
+     * Generated
      */
     private static final long serialVersionUID = 6573909004152898162L;
-    
-    final public static GameSpecification DEFAULT = new GameSpecification()
-        .setName(new SpecificationName("DEFAULT", ""))
-        .setBetRule(new FixedBetRule(50))
-        .setCurrency(Currency.FakeMoney)
-        .setGiveUpRule(GiveUpRule.lost)
-        .setMoveTimeRule(MoveTimeRule.DEFAULT)
-        .setTotalTimeRule(TotalTimeRule.DEFAULT)
-        .setNumberRule(PlayerNumberRule.two)
-        .setPrivacayRule(PrivacyRule.everybody);
+
+    final public static GameSpecification DEFAULT = new GameSpecification().setName(new SpecificationName("DEFAULT", "")).setBetRule(new FixedBetRule(50))
+            .setCurrency(Currency.FakeMoney).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
+            .setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);
 
     @EmbeddedId
     private SpecificationName name;
@@ -151,6 +144,10 @@ public class GameSpecification implements Serializable {
     public GameSpecification setTotalTimeRule(TotalTimeRule totalTimeRule) {
         this.totalTimeRule = totalTimeRule;
         return this;
+    }
+
+    public Money extractMoneyNeeded() {
+        return new Money(currency, betRule.getPrice());
     }
 
     @Override

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.game.GameTable;
-import com.gogomaya.server.game.build.GameConstructionServiceImpl;
+import com.gogomaya.server.game.build.GameConstructionService;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
@@ -41,7 +41,7 @@ import com.gogomaya.server.tictactoe.TicTacToeState;
 public class GameTableManagerTest {
 
     @Inject
-    GameConstructionServiceImpl<TicTacToeState> gameStateManager;
+    GameConstructionService<TicTacToeState> gameStateManager;
 
     @Inject
     GameSpecificationRepository specificationRepository;
