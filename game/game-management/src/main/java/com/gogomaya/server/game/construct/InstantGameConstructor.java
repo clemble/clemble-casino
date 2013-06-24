@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.build;
+package com.gogomaya.server.game.construct;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -10,6 +10,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.action.GameTableFactory;
+import com.gogomaya.server.game.construct.InstantGameRequest;
 import com.gogomaya.server.game.event.schedule.PlayerAddedEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.notification.GameNotificationService;

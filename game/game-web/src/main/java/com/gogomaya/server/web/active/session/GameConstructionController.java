@@ -16,8 +16,8 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
-import com.gogomaya.server.game.build.GameConstructionService;
 import com.gogomaya.server.game.configuration.GameConfigurationManager;
+import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.table.GameTableRepository;
 

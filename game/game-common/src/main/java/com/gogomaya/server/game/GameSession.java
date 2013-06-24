@@ -28,7 +28,7 @@ import org.hibernate.annotations.TypeDefs;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.build.GameRequest;
+import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.event.client.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;

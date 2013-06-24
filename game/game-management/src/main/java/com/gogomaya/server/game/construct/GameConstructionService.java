@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.build;
+package com.gogomaya.server.game.construct;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -6,6 +6,8 @@ import java.util.Collection;
 
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
+import com.gogomaya.server.game.construct.AvailabilityGameRequest;
+import com.gogomaya.server.game.construct.InstantGameRequest;
 import com.gogomaya.server.game.specification.GameSpecification;
 
 public class GameConstructionService<State extends GameState> {

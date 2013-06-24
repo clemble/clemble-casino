@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.gogomaya.server.game.action.GameSessionProcessor;
-import com.gogomaya.server.game.build.GameConstructionService;
+import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
