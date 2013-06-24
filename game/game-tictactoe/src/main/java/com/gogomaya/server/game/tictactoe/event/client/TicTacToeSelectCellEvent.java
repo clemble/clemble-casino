@@ -1,12 +1,14 @@
-package com.gogomaya.server.tictactoe.event.client;
+package com.gogomaya.server.game.tictactoe.event.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.event.client.GameClientEvent;
-import com.gogomaya.server.tictactoe.TicTacToeCell;
+import com.gogomaya.server.game.tictactoe.TicTacToeCell;
 
+@JsonTypeName("select")
 @JsonIgnoreProperties(value = { "row", "column" })
 public class TicTacToeSelectCellEvent extends GameClientEvent implements TicTacToeEvent {
 

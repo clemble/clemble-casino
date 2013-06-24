@@ -2,7 +2,9 @@ package com.gogomaya.server.game.event.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
+@JsonTypeName("moveTimeBreached")
 public class MoveTimeoutSurrenderEvent extends SurrenderEvent {
 
     /**

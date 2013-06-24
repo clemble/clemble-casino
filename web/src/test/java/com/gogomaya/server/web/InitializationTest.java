@@ -10,8 +10,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.game.session.GameSessionRepository;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.spring.web.WebMvcSpiConfiguration;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

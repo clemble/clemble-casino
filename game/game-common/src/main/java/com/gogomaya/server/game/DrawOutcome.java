@@ -1,5 +1,8 @@
 package com.gogomaya.server.game;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("draw")
 public class DrawOutcome extends GameOutcome {
 
     /**

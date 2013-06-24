@@ -33,11 +33,10 @@ import com.gogomaya.server.game.event.client.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
 import com.gogomaya.server.hibernate.JsonHibernateType;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @Entity
 @Table(name = "GAME_SESSION")
-@TypeDefs(value = { @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = TicTacToeState.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.GameState") }) })
+@TypeDefs(value = { @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = GameState.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.GameState") }) })
 public class GameSession<State extends GameState> implements GameSpecificationAware, SessionAware, Serializable {
 
     /**
@@ -139,7 +138,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-    @JsonSubTypes({ @com.fasterxml.jackson.annotation.JsonSubTypes.Type(value = TicTacToeState.class, name = "ticTacToe") })
+    @JsonSubTypes({ @com.fasterxml.jackson.annotation.JsonSubTypes.Type(value = GameState.class, name = "ticTacToe") })
     public State getState() {
         return state;
     }

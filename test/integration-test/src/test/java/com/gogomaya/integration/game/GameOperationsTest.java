@@ -20,6 +20,7 @@ import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.data.DataGenerator;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.listener.GameListener;
@@ -29,7 +30,6 @@ import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

@@ -27,12 +27,12 @@ import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TimeBreachPunishment;
 import com.gogomaya.server.game.rule.time.TimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
-import com.gogomaya.server.spring.common.CommonSpringConfiguration;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeBetOnCellEvent;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeSelectCellEvent;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
+import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CommonSpringConfiguration.class })
+@ContextConfiguration(classes = { JsonSpringConfiguration.class })
 public class SeDeRealizationTest {
 
     @Autowired

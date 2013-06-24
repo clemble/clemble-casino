@@ -19,6 +19,7 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.error.GogomayaFailure;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.GamePlayer;
 import com.gogomaya.server.integration.player.Player;
@@ -26,7 +27,6 @@ import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

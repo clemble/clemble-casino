@@ -4,14 +4,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
+import com.gogomaya.server.game.tictactoe.TicTacToeCell;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeEvent;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.integration.game.GamePlayer;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.tictactoe.TicTacToeCell;
-import com.gogomaya.server.tictactoe.TicTacToeState;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeBetOnCellEvent;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeEvent;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeSelectCellEvent;
 
 abstract public class AbstractTicTacToeOperations implements TicTacToeOperations {
 

@@ -9,8 +9,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 
 public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations {
 

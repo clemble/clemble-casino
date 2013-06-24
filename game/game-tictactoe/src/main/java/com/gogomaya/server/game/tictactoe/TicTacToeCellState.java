@@ -1,4 +1,4 @@
-package com.gogomaya.server.tictactoe;
+package com.gogomaya.server.game.tictactoe;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,5 +43,33 @@ public class TicTacToeCellState {
     @Override
     public String toString() {
         return "CellState [owner=" + owner + ", first=" + firstPlayerBet + ", second=" + secondPlayerBet + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (firstPlayerBet ^ (firstPlayerBet >>> 32));
+        result = prime * result + (int) (owner ^ (owner >>> 32));
+        result = prime * result + (int) (secondPlayerBet ^ (secondPlayerBet >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TicTacToeCellState other = (TicTacToeCellState) obj;
+        if (firstPlayerBet != other.firstPlayerBet)
+            return false;
+        if (owner != other.owner)
+            return false;
+        if (secondPlayerBet != other.secondPlayerBet)
+            return false;
+        return true;
     }
 }

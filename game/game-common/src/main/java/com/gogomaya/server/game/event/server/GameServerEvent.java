@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.gogomaya.server.event.ServerEvent;
 import com.gogomaya.server.game.SessionAware;
 
-public class GameServerEvent<State> implements SessionAware, ServerEvent, Serializable {
+abstract public class GameServerEvent<State> implements SessionAware, ServerEvent, Serializable {
 
     /**
      * Generated 07/05/13

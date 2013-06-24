@@ -16,11 +16,11 @@ import com.gogomaya.server.game.event.server.GameEndedEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.event.server.PlayerLostEvent;
 import com.gogomaya.server.game.event.server.PlayerMovedEvent;
-import com.gogomaya.server.tictactoe.TicTacToeCell;
-import com.gogomaya.server.tictactoe.TicTacToeCellState;
-import com.gogomaya.server.tictactoe.TicTacToeState;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeBetOnCellEvent;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeSelectCellEvent;
+import com.gogomaya.server.game.tictactoe.TicTacToeCell;
+import com.gogomaya.server.game.tictactoe.TicTacToeCellState;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.google.common.collect.ImmutableList;
 
 public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {

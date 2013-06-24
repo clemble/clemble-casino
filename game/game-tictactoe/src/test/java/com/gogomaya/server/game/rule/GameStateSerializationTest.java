@@ -15,9 +15,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
-import com.gogomaya.server.tictactoe.TicTacToeState;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeSelectCellEvent;
 
 @Ignore
 public class GameStateSerializationTest {

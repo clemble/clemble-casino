@@ -1,5 +1,8 @@
 package com.gogomaya.server.game;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("none")
 public class NoOutcome extends GameOutcome {
 
     /**

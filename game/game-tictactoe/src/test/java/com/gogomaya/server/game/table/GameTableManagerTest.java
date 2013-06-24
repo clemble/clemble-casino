@@ -29,10 +29,10 @@ import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.specification.SpecificationName;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")

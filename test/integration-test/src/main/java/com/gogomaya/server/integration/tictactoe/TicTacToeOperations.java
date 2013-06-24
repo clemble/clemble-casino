@@ -3,8 +3,8 @@ package com.gogomaya.server.integration.tictactoe;
 import org.jbehave.core.annotations.When;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GamePlayerFactory;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 
 public interface TicTacToeOperations extends GamePlayerFactory<TicTacToeState> {
 

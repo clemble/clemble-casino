@@ -14,6 +14,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.game.PlayerWonOutcome;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.GamePlayer;
 import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
@@ -21,7 +22,6 @@ import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

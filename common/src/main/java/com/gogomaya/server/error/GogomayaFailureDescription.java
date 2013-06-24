@@ -52,4 +52,9 @@ public class GogomayaFailureDescription {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "GogomayaFailureDescription [failures=" + failures + "]";
+    }
+
 }

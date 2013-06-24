@@ -1,5 +1,6 @@
 package com.gogomaya.server.spring.common;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.Validation;
 
@@ -17,24 +18,21 @@ import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
 
 @Configuration
 @Import({ CommonSpringConfiguration.Cloud.class,
+        JsonSpringConfiguration.class,
         CommonSpringConfiguration.DefaultAndTest.class,
         RabbitSpringConfiguration.class,
         JPASpringConfiguration.class,
         RedisSpringConfiguration.class })
 public class CommonSpringConfiguration {
 
-    @Bean
-    @Singleton
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper;
-    }
+    @Inject
+    ObjectMapper objectMapper;
 
     @Bean
     @Singleton
     public Jackson2JsonMessageConverter jsonMessageConverter() {
         Jackson2JsonMessageConverter jsonMessageConverter = new Jackson2JsonMessageConverter();
-        jsonMessageConverter.setJsonObjectMapper(objectMapper());
+        jsonMessageConverter.setJsonObjectMapper(objectMapper);
         return jsonMessageConverter;
     }
 

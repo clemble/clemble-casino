@@ -7,11 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.rest.webmvc.BaseUriMethodArgumentResolver;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerProfile;
@@ -22,25 +18,13 @@ import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 import com.gogomaya.server.web.GenericSchemaController;
-import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 
 @Configuration
-@Import({ TicTacToeWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, PaymentWebSpringConfiguration.class })
-public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
+@Import({ CommonWebSpringConfiguration.class, TicTacToeWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, PaymentWebSpringConfiguration.class })
+public class WebMvcSpiConfiguration {
 
     @Inject
     GogomayaValidationService validationService;
-
-    @Inject
-    ObjectMapper objectMapper;
-
-    @Bean
-    @Singleton
-    public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter() {
-        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
-        messageConverter.setObjectMapper(objectMapper);
-        return messageConverter;
-    }
 
     @Bean
     @Singleton
@@ -59,12 +43,6 @@ public class WebMvcSpiConfiguration extends WebMvcConfigurationSupport {
         genericSchemaController.addSchemaMapping("registration", RegistrationRequest.class);
         genericSchemaController.addSchemaMapping("error", GogomayaError.class);
         return genericSchemaController;
-    }
-
-    @Bean
-    @Singleton
-    public HandlerExceptionResolver handlerExceptionResolver() {
-        return new GogomayaHandlerExceptionResolver(objectMapper);
     }
 
 }

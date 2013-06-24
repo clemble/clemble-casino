@@ -125,7 +125,7 @@ public class JPASpringConfiguration {
         public JpaVendorAdapter jpaVendorAdapter() {
             HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
             hibernateJpaVendorAdapter.setDatabase(Database.H2);
-            hibernateJpaVendorAdapter.setGenerateDdl(true);
+            hibernateJpaVendorAdapter.setGenerateDdl(false);
             hibernateJpaVendorAdapter.setShowSql(true);
             return hibernateJpaVendorAdapter;
         }

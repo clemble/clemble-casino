@@ -1,18 +1,20 @@
-package com.gogomaya.server.tictactoe;
+package com.gogomaya.server.game.tictactoe;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.AbstractGameState;
 import com.gogomaya.server.game.DrawOutcome;
 import com.gogomaya.server.game.GameOutcome;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.PlayerWonOutcome;
 import com.gogomaya.server.game.SequentialPlayerIterator;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeSelectCellEvent;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 
 @JsonIgnoreProperties({ "winner", "activeUsers" })
+@JsonTypeName("ticTacToe")
 public class TicTacToeState extends AbstractGameState {
 
     /**
@@ -136,6 +138,34 @@ public class TicTacToeState extends AbstractGameState {
         return (firstCell.getOwner() == secondCell.getOwner() && (firstCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER || therdCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER))
                 || (secondCell.getOwner() == therdCell.getOwner() && (secondCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER || firstCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER))
                 || (therdCell.getOwner() == firstCell.getOwner() && (therdCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER || secondCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER));
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((activeCell == null) ? 0 : activeCell.hashCode());
+        result = prime * result + Arrays.hashCode(board);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TicTacToeState other = (TicTacToeState) obj;
+        if (activeCell == null) {
+            if (other.activeCell != null)
+                return false;
+        } else if (!activeCell.equals(other.activeCell))
+            return false;
+        if (!Arrays.deepEquals(board, other.board))
+            return false;
+        return true;
     }
 
 }

@@ -13,8 +13,12 @@ import com.gogomaya.server.error.GogomayaFailureDescription;
 
 public class GogomayaHTTPErrorHandler implements ResponseErrorHandler {
 
-    final ObjectMapper objectMapper = new ObjectMapper();
-    
+    final ObjectMapper objectMapper;
+
+    public GogomayaHTTPErrorHandler(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     @Override
     public boolean hasError(ClientHttpResponse response) throws IOException {
         return response.getStatusCode().value() >= 400;

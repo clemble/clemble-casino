@@ -1,9 +1,11 @@
-package com.gogomaya.server.tictactoe.event.client;
+package com.gogomaya.server.game.tictactoe.event.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.event.client.BetEvent;
 
+@JsonTypeName("bet")
 public class TicTacToeBetOnCellEvent extends BetEvent implements TicTacToeEvent {
 
     /**

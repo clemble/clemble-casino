@@ -3,13 +3,13 @@ package com.gogomaya.server.integration.emulation.tictactoe;
 import java.util.Random;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.tictactoe.TicTacToeCellState;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.integration.emulator.GameActor;
 import com.gogomaya.server.integration.game.GamePlayer;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
-import com.gogomaya.server.tictactoe.TicTacToeCellState;
-import com.gogomaya.server.tictactoe.TicTacToeState;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeBetOnCellEvent;
-import com.gogomaya.server.tictactoe.event.client.TicTacToeSelectCellEvent;
 
 public class TicTacToeActor implements GameActor<TicTacToeState> {
 

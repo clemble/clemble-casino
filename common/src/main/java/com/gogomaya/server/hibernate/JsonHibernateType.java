@@ -15,16 +15,18 @@ import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
+import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 
 public class JsonHibernateType<T extends Serializable> implements ParameterizedType, UserType {
 
     final public static String CLASS_NAME_PARAMETER = "className";
 
-    final private static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    final private static ObjectMapper OBJECT_MAPPER;
 
     final private static int[] TYPES = new int[] { Types.VARCHAR };
 
     static {
+        OBJECT_MAPPER = JsonSpringConfiguration.createObjectMapper();
         OBJECT_MAPPER.setAnnotationIntrospector(new CustomJacksonAnnotationIntrospector());
     }
 

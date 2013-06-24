@@ -1,8 +1,8 @@
 package com.gogomaya.server.integration.tictactoe;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.listener.GameListenerOperations;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 import com.gogomaya.server.web.active.session.GameEngineController;
 
 public class WebTicTacToeOperations extends AbstractTicTacToeOperations {

@@ -10,8 +10,8 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.action.GameTableFactory;
+import com.gogomaya.server.game.event.schedule.PlayerAddedEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
-import com.gogomaya.server.game.event.server.PlayerAddedEvent;
 import com.gogomaya.server.game.notification.GameNotificationService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
@@ -70,7 +70,7 @@ public class InstantGameConstructor<State extends GameState> implements GameCons
         table.addPlayer(playerId);
         table = tableRepository.save(table);
 
-        notificationManager.notify(table.getPlayers(), new PlayerAddedEvent().setSession(table.getTableId()).setPlayerId(playerId));
+        notificationManager.notify(table.getPlayers(), new PlayerAddedEvent(table.getTableId(), playerId));
 
         PlayerNumberRule numberRule = specification.getNumberRule();
         if (table.getPlayers().size() >= numberRule.getMinPlayers()) {

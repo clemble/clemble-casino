@@ -25,9 +25,9 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.game.table.GameTableRepository;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
-import com.gogomaya.server.tictactoe.TicTacToeState;
 import com.gogomaya.server.tictactoe.action.impl.TicTacToeStateFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)

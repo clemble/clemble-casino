@@ -9,11 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.rest.webmvc.BaseUriMethodArgumentResolver;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
@@ -25,15 +21,15 @@ import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.player.state.RedisPlayerStateManager;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
-import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
+import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.player.registration.RegistrationSocialConnectionController;
 import com.gogomaya.server.web.player.session.PlayerSessionController;
 
 @Configuration
-@Import(value = { SocialModuleSpringConfiguration.class })
-public class PlayerWebSpringConfiguration extends WebMvcConfigurationSupport {
+@Import(value = { SocialModuleSpringConfiguration.class, CommonWebSpringConfiguration.class })
+public class PlayerWebSpringConfiguration {
 
     @Inject
     public SocialConnectionDataAdapter connectionDataAdapter;
@@ -60,9 +56,6 @@ public class PlayerWebSpringConfiguration extends WebMvcConfigurationSupport {
     public GogomayaValidationService validationService;
 
     @Inject
-    public ObjectMapper objectMapper;
-
-    @Inject
     @Named("playerQueueTemplate")
     public RedisTemplate<Long, Long> playerQueueTemplate;
 
@@ -70,14 +63,6 @@ public class PlayerWebSpringConfiguration extends WebMvcConfigurationSupport {
     @Singleton
     public PlayerStateManager playerStateManager() {
         return new RedisPlayerStateManager(playerQueueTemplate);
-    }
-
-    @Bean
-    @Singleton
-    public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter() {
-        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
-        messageConverter.setObjectMapper(objectMapper);
-        return messageConverter;
     }
 
     @Bean
@@ -108,12 +93,6 @@ public class PlayerWebSpringConfiguration extends WebMvcConfigurationSupport {
     @Singleton
     public BaseUriMethodArgumentResolver baseUriMethodArgumentResolver() {
         return new BaseUriMethodArgumentResolver();
-    }
-
-    @Bean
-    @Singleton
-    public HandlerExceptionResolver handlerExceptionResolver() {
-        return new GogomayaHandlerExceptionResolver(objectMapper);
     }
 
 }

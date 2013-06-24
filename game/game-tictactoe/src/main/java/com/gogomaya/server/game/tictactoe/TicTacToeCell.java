@@ -1,4 +1,4 @@
-package com.gogomaya.server.tictactoe;
+package com.gogomaya.server.game.tictactoe;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

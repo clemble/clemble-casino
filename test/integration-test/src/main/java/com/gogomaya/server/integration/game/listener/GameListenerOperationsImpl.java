@@ -1,5 +1,7 @@
 package com.gogomaya.server.integration.game.listener;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -20,6 +22,7 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.server.event.Event;
 import com.gogomaya.server.event.ServerEvent;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.player.security.PlayerSession;
@@ -30,7 +33,11 @@ import com.ning.http.client.websocket.WebSocketUpgradeHandler;
 
 public class GameListenerOperationsImpl<State extends GameState> implements GameListenerOperations<State> {
 
-    final private ObjectMapper objectMapper = new ObjectMapper();
+    final private ObjectMapper objectMapper;
+    
+    public GameListenerOperationsImpl(ObjectMapper objectMapper) {
+        this.objectMapper = checkNotNull(objectMapper);
+    }
 
     @Override
     public GameListenerControl listen(PlayerSession playerSession, final GameListener gameListener) {
@@ -74,9 +81,10 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                 try {
                     System.out.println(new String(message.getBody()));
                     // Step 1. Parsing GameTable
-                    ServerEvent gameTable = objectMapper.readValue(new String(message.getBody()), ServerEvent.class);
-                    // Step 2. Updating
-                    gameListener.updated(gameTable);
+                    Event event = objectMapper.readValue(new String(message.getBody()), Event.class);
+                    // Step 2. Updating game table
+                    if(event instanceof ServerEvent)
+                        gameListener.updated((ServerEvent) event);
                 } catch (Throwable e) {
                     e.printStackTrace();
                     throw new RuntimeException(e);
@@ -106,9 +114,10 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                     try {
                         System.out.println(message);
                         // Step 1. Reading game table
-                        ServerEvent gameTable = objectMapper.readValue(message, ServerEvent.class);
+                        Event event = objectMapper.readValue(message, Event.class);
                         // Step 2. Updating game table
-                        gameListener.updated(gameTable);
+                        if(event instanceof ServerEvent)
+                            gameListener.updated((ServerEvent) event);
                     } catch (Throwable e) {
                         e.printStackTrace();
                         throw new RuntimeException(e);
@@ -149,9 +158,10 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                             try {
                                 System.out.println(message);
                                 // Step 1. Reading game table
-                                ServerEvent gameTable = objectMapper.readValue(message, ServerEvent.class);
+                                Event event = objectMapper.readValue(message, Event.class);
                                 // Step 2. Updating game table
-                                gameListener.updated(gameTable);
+                                if(event instanceof ServerEvent)
+                                    gameListener.updated((ServerEvent) event);
                             } catch (Throwable e) {
                                 e.printStackTrace();
                                 throw new RuntimeException(e);

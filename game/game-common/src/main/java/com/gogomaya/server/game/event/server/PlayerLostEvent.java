@@ -1,10 +1,11 @@
 package com.gogomaya.server.game.event.server;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.event.client.SurrenderEvent;
 import com.gogomaya.server.player.PlayerAware;
 
+@JsonTypeName("playerGaveUp")
 public class PlayerLostEvent<State extends GameState> extends GameServerEvent<State> implements PlayerAware {
 
     /**
@@ -19,8 +20,8 @@ public class PlayerLostEvent<State extends GameState> extends GameServerEvent<St
     public PlayerLostEvent() {
     }
 
-    public PlayerLostEvent(SessionAware sessionAware) {
-        super(sessionAware);
+    public PlayerLostEvent(State state) {
+        this.setState(state);
     }
 
     @Override
@@ -40,6 +41,34 @@ public class PlayerLostEvent<State extends GameState> extends GameServerEvent<St
     public PlayerLostEvent<State> setReason(SurrenderEvent reason) {
         this.reason = reason;
         return this;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + ((reason == null) ? 0 : reason.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PlayerLostEvent other = (PlayerLostEvent) obj;
+        if (playerId != other.playerId)
+            return false;
+        if (reason == null) {
+            if (other.reason != null)
+                return false;
+        } else if (!reason.equals(other.reason))
+            return false;
+        return true;
     }
 
 }
