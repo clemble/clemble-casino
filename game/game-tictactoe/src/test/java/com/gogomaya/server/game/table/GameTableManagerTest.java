@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.construct.GameConstructionService;
+import com.gogomaya.server.game.construct.InstantGameRequest;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
@@ -58,17 +59,22 @@ public class GameTableManagerTest {
 
         specificationRepository.saveAndFlush(specification);
 
-        GameTable<TicTacToeState> table = gameStateManager.instantGame(1, specification);
+        InstantGameRequest instantGameRequest = new InstantGameRequest();
+        instantGameRequest.setSpecification(specification);
+        instantGameRequest.setPlayerId(1);
+        GameTable<TicTacToeState> table = gameStateManager.construct(instantGameRequest);
 
         String serialized = objectMapper.writeValueAsString(table);
         objectMapper.readValue(serialized, GameTable.class);
 
         Assert.assertEquals(table.getSpecification(), specification);
 
-        GameTable<TicTacToeState> anotherTable = gameStateManager.instantGame(2, specification);
+        instantGameRequest.setPlayerId(2);
+        GameTable<TicTacToeState> anotherTable = gameStateManager.construct(instantGameRequest);
 
         if (table.getTableId() != anotherTable.getTableId()) {
-            anotherTable = gameStateManager.instantGame(3, specification);
+            instantGameRequest.setPlayerId(3);
+            anotherTable = gameStateManager.construct(instantGameRequest);
         }
 
         Assert.assertEquals(table.getTableId(), anotherTable.getTableId());

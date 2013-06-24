@@ -28,10 +28,7 @@ public class GameCanceled<State extends GameState> implements ScheduleEvent {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (session ^ (session >>> 32));
-        return result;
+        return 31 + (int) (session ^ (session >>> 32));
     }
 
     @Override
@@ -42,10 +39,7 @@ public class GameCanceled<State extends GameState> implements ScheduleEvent {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GameCanceled other = (GameCanceled) obj;
-        if (session != other.session)
-            return false;
-        return true;
+        return session == ((GameCanceled<?>) obj).session;
     }
 
 }

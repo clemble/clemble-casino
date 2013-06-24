@@ -71,7 +71,7 @@ public class GameOperationsTest {
         Assert.assertNotSame(anotherPlayer.getPlayerId(), player.getPlayerId());
         gameTable = gameOperations.start(anotherPlayer, specification);
         Assert.assertNotNull(gameTable);
-        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), originalTableId == gameTable.getTableId() ? GameSessionState.active : GameSessionState.inactive);
+        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), originalTableId == gameTable.getTableId() ? GameSessionState.active : GameSessionState.construction);
         Assert.assertNotNull(gameTable.getCurrentSession().getState());
     }
 

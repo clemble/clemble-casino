@@ -10,7 +10,6 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.action.GameTableFactory;
-import com.gogomaya.server.game.construct.InstantGameRequest;
 import com.gogomaya.server.game.event.schedule.PlayerAddedEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.notification.GameNotificationService;
@@ -22,7 +21,7 @@ import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
-public class InstantGameConstructor<State extends GameState> implements GameConstructor<State, InstantGameRequest> {
+public class InstantGameConstructor<State extends GameState> implements GameConstruction<State, InstantGameRequest> {
 
     final private PendingSessionQueue sessionQueue;
     final private PlayerStateManager activePlayerQueue;

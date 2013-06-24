@@ -3,14 +3,15 @@ package com.gogomaya.server.game.construct;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
 
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
-import com.gogomaya.server.game.construct.AvailabilityGameRequest;
-import com.gogomaya.server.game.construct.InstantGameRequest;
-import com.gogomaya.server.game.specification.GameSpecification;
 
 public class GameConstructionService<State extends GameState> {
+
 
     final private InstantGameConstructor<State> instantGameConstructor;
     final private AvailabilityGameConstructor<State> availabilityGameConstructor;
@@ -20,21 +21,15 @@ public class GameConstructionService<State extends GameState> {
         this.availabilityGameConstructor = checkNotNull(availabilityGameConstructor);
     }
 
-    public GameTable<State> instantGame(final long playerId, final GameSpecification specification) {
-        InstantGameRequest instantGameRequest = new InstantGameRequest();
-        instantGameRequest.setSpecification(specification);
-        instantGameRequest.setPlayerId(playerId);
+    public GameTable<State> construct(final GameRequest gameRequest) {
+        if(gameRequest instanceof InstantGameRequest) {
+            return instantGameConstructor.construct((InstantGameRequest) gameRequest);
+        } else if(gameRequest instanceof AvailabilityGameRequest) {
+            return availabilityGameConstructor.construct((AvailabilityGameRequest) gameRequest);
+        } else {
+            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
+        }
 
-        return instantGameConstructor.construct(instantGameRequest);
-    }
-
-    public GameTable<State> avilabilityGame(final long playerId, final Collection<Long> opponents, final GameSpecification specification) {
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest();
-        availabilityGameRequest.setOpponents(opponents);
-        availabilityGameRequest.setPlayerId(playerId);
-        availabilityGameRequest.setSpecification(specification);
-
-        return availabilityGameConstructor.construct(availabilityGameRequest);
     }
 
 }

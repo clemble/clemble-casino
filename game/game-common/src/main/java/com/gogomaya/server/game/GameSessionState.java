@@ -2,8 +2,10 @@ package com.gogomaya.server.game;
 
 public enum GameSessionState {
 
-    inactive,
+    construction,
+    pending,
     active,
-    ended;
+    finished,
+    canceled;
 
 }

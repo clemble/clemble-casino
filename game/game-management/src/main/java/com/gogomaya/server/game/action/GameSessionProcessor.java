@@ -34,12 +34,13 @@ public class GameSessionProcessor<State extends GameState> {
         GameCache<State> cache = cacheService.get(sessionId);
         // Step 3. Checking
         switch (cache.getSession().getSessionState()) {
-        case inactive:
+        case construction:
+        case pending:
             if (!(move instanceof SurrenderEvent)) {
                 throw GogomayaException.fromError(GogomayaError.GamePlayGameNotStarted);
             }
             break;
-        case ended:
+        case finished:
             if (!(move instanceof SurrenderEvent)) {
                 throw GogomayaException.fromError(GogomayaError.GamePlayGameEnded);
             }

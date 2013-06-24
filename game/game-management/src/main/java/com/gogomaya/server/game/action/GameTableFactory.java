@@ -56,7 +56,7 @@ public class GameTableFactory<State extends GameState> {
 
         GameSession<State> session = new GameSession<>();
         session.setSpecification(specification);
-        session.setSessionState(GameSessionState.inactive);
+        session.setSessionState(GameSessionState.construction);
         session.setState(stateFactory.create());
         session = sessionRepository.saveAndFlush(session);
 

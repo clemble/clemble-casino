@@ -4,12 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.event.ScheduleEvent;
-import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.specification.GameSpecificationAware;
-import com.gogomaya.server.player.PlayerAware;
+import com.gogomaya.server.game.SessionAware;
+import com.gogomaya.server.game.construct.GameRequest;
 
 @JsonTypeName("invited")
-public class PlayerInvitedEvent implements ScheduleEvent, PlayerAware, GameSpecificationAware {
+public class PlayerInvitedEvent implements ScheduleEvent, SessionAware {
 
     /**
      * Generated 02/06/2013
@@ -17,25 +16,13 @@ public class PlayerInvitedEvent implements ScheduleEvent, PlayerAware, GameSpeci
     private static final long serialVersionUID = 1753173974867187325L;
 
     final private long session;
-    final private long playerId;
-    final private GameSpecification specification;
+
+    final private GameRequest request;
 
     @JsonCreator
-    public PlayerInvitedEvent(@JsonProperty("session") long session, @JsonProperty("playerId") long playerId,
-            @JsonProperty("specification") GameSpecification specification) {
+    public PlayerInvitedEvent(@JsonProperty("request") GameRequest request, @JsonProperty("session") long session) {
         this.session = session;
-        this.playerId = playerId;
-        this.specification = specification;
-    }
-
-    @Override
-    public long getPlayerId() {
-        return playerId;
-    }
-
-    @Override
-    public GameSpecification getSpecification() {
-        return specification;
+        this.request = request;
     }
 
     @Override
@@ -43,13 +30,16 @@ public class PlayerInvitedEvent implements ScheduleEvent, PlayerAware, GameSpeci
         return session;
     }
 
+    public GameRequest getRequest() {
+        return request;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + ((request == null) ? 0 : request.hashCode());
         result = prime * result + (int) (session ^ (session >>> 32));
-        result = prime * result + ((specification == null) ? 0 : specification.hashCode());
         return result;
     }
 
@@ -62,14 +52,12 @@ public class PlayerInvitedEvent implements ScheduleEvent, PlayerAware, GameSpeci
         if (getClass() != obj.getClass())
             return false;
         PlayerInvitedEvent other = (PlayerInvitedEvent) obj;
-        if (playerId != other.playerId)
+        if (request == null) {
+            if (other.request != null)
+                return false;
+        } else if (!request.equals(other.request))
             return false;
         if (session != other.session)
-            return false;
-        if (specification == null) {
-            if (other.specification != null)
-                return false;
-        } else if (!specification.equals(other.specification))
             return false;
         return true;
     }

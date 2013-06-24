@@ -1,11 +1,9 @@
 package com.gogomaya.server.game.event.schedule;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.server.event.ScheduleEvent;
-import com.gogomaya.server.player.PlayerAware;
 
 @JsonTypeName("declined")
-public class InvitationDeclinedEvent implements ScheduleEvent, PlayerAware {
+public class InvitationDeclinedEvent implements InvitationResponceEvent {
 
     /**
      * Generated 02/06/13

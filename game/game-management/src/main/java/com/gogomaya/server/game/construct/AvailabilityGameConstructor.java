@@ -18,7 +18,7 @@ import com.gogomaya.server.money.Money;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
-public class AvailabilityGameConstructor<State extends GameState> implements GameConstructor<State, AvailabilityGameRequest> {
+public class AvailabilityGameConstructor<State extends GameState> implements GameConstruction<State, AvailabilityGameRequest> {
 
     final private WalletTransactionManager walletTransactionManager;
     final private PlayerStateManager playerStateManager;

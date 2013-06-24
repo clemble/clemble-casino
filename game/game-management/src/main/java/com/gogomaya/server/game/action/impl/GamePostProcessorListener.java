@@ -48,11 +48,11 @@ public class GamePostProcessorListener<State extends GameState> implements GameP
             return madeMoves;
         // Step 1. Processing each step by step
         if (session.getState().complete()) {
-            if (session.getSessionState() == GameSessionState.inactive) {
+            if (session.getSessionState() == GameSessionState.construction) {
                 sessionQueue.invalidate(session.getSession(), session.getSpecification());
             }
 
-            session.setSessionState(GameSessionState.ended);
+            session.setSessionState(GameSessionState.finished);
             for (long player : session.getState().getPlayerIterator().getPlayers())
                 activePlayerQueue.markAvailable(player);
 

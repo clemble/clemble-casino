@@ -67,9 +67,9 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
 
     public boolean isAlive() {
         GameSessionState sessionState = currentPlayer.get().getTable().getCurrentSession().getSessionState();
-        if (sessionState == GameSessionState.inactive)
+        if (sessionState == GameSessionState.construction || sessionState == GameSessionState.pending)
             return true;
-        if (sessionState == GameSessionState.ended)
+        if (sessionState == GameSessionState.finished)
             return false;
         return lastMoved.get() + TimeUnit.MINUTES.toMillis(15) < System.currentTimeMillis();
     }

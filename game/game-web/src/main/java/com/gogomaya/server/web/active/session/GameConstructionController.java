@@ -18,6 +18,8 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.configuration.GameConfigurationManager;
 import com.gogomaya.server.game.construct.GameConstructionService;
+import com.gogomaya.server.game.construct.GameRequest;
+import com.gogomaya.server.game.construct.InstantGameRequest;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.table.GameTableRepository;
 
@@ -30,8 +32,7 @@ public class GameConstructionController<State extends GameState> {
 
     final private GameTableRepository<State> tableRepository;
 
-    public GameConstructionController(final GameConstructionService<State> matchingService,
-            final GameTableRepository<State> sessionRepository,
+    public GameConstructionController(final GameConstructionService<State> matchingService, final GameTableRepository<State> sessionRepository,
             final GameConfigurationManager configurationManager) {
         this.constructionService = checkNotNull(matchingService);
         this.tableRepository = checkNotNull(sessionRepository);
@@ -40,18 +41,31 @@ public class GameConstructionController<State extends GameState> {
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/session", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameTable<State> match(@RequestHeader("playerId") final long playerId, 
-            @RequestBody final GameSpecification gameSpecification) {
+    public @ResponseBody
+    GameTable<State> match(@RequestHeader("playerId") final long playerId, @RequestBody final GameSpecification specification) {
+        // Step 1. Generating Instant game request
+        InstantGameRequest instantGameRequest = new InstantGameRequest();
+        instantGameRequest.setSpecification(specification);
+        instantGameRequest.setPlayerId(playerId);
+        // Step 3. Invoking construction service
+        return constructionService.construct(instantGameRequest);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/active/constuct", produces = "application/json")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public @ResponseBody
+    GameTable<State> construct(@RequestHeader("playerId") final long playerId, @RequestBody final GameRequest gameRequest) {
         // Step 1. Checking that provided specification was valid
-        if (!configurationManager.getSpecificationOptions().valid(gameSpecification))
+        if (!configurationManager.getSpecificationOptions().valid(gameRequest.getSpecification()))
             throw GogomayaException.fromError(GogomayaError.GameSpecificationInvalid);
         // Step 2. Invoking actual matching service
-        return constructionService.instantGame(playerId, gameSpecification);
+        return constructionService.construct(gameRequest);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/active/session/{sessionId}", produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody GameTable<State> get(@PathVariable("tableId") final long tableId) {
+    public @ResponseBody
+    GameTable<State> get(@PathVariable("tableId") final long tableId) {
         return tableRepository.findOne(tableId);
     }
 }
