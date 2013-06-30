@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 
 public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations {
 
@@ -20,9 +19,7 @@ public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations 
     final private String baseUrl;
 
     public IntegrationTicTacToeOperations(final String baseUrl,
-            final RestTemplate restTemplate,
-            final GameListenerOperations<TicTacToeState> tableListenerOperations) {
-        super(tableListenerOperations);
+            final RestTemplate restTemplate) {
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
     }
@@ -32,7 +29,7 @@ public class IntegrationTicTacToeOperations extends AbstractTicTacToeOperations 
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(player.getPlayer().getPlayerId()));
         header.add("tableId", String.valueOf(player.getTableId()));
-        header.add("sessionId", String.valueOf(player.getSessionId()));
+        header.add("sessionId", String.valueOf(player.getSession()));
         header.add("Content-Type", "application/json");
         // Step 2. Generating request
         HttpEntity<ClientEvent> requestEntity = new HttpEntity<ClientEvent>(action, header);

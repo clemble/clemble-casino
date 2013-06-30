@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.springframework.stereotype.Component;
 
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.error.GogomayaFailure;
 import com.gogomaya.server.error.GogomayaFailureDescription;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.security.PlayerCredential;

@@ -13,7 +13,6 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.PlayerWonOutcome;
 import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.server.GameServerEvent;
-import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
@@ -27,14 +26,11 @@ import com.gogomaya.server.player.wallet.WalletTransactionManager;
 public class GamePostProcessorListener<State extends GameState> implements GameProcessorListener<State> {
 
     final private PlayerStateManager activePlayerQueue;
-    final private PendingSessionQueue sessionQueue;
     final private WalletTransactionManager walletTransactionManager;
 
-    public GamePostProcessorListener(final PlayerStateManager activePlayerQueue, final WalletTransactionManager walletTransactionManager,
-            final PendingSessionQueue sessionQueue) {
+    public GamePostProcessorListener(final PlayerStateManager activePlayerQueue, final WalletTransactionManager walletTransactionManager) {
         this.activePlayerQueue = checkNotNull(activePlayerQueue);
         this.walletTransactionManager = checkNotNull(walletTransactionManager);
-        this.sessionQueue = checkNotNull(sessionQueue);
     }
 
     @Override
@@ -48,10 +44,6 @@ public class GamePostProcessorListener<State extends GameState> implements GameP
             return madeMoves;
         // Step 1. Processing each step by step
         if (session.getState().complete()) {
-            if (session.getSessionState() == GameSessionState.construction) {
-                sessionQueue.invalidate(session.getSession(), session.getSpecification());
-            }
-
             session.setSessionState(GameSessionState.finished);
             for (long player : session.getState().getPlayerIterator().getPlayers())
                 activePlayerQueue.markAvailable(player);

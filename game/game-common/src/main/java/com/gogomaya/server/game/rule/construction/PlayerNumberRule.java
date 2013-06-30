@@ -20,7 +20,7 @@ public enum PlayerNumberRule implements GameRule {
         return minPlayers;
     }
 
-    public int getMaxPlayres() {
+    public int getMaxPlayers() {
         return maxPlayers;
     }
 

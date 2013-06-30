@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.notification;
+package com.gogomaya.server.player.notification;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -16,13 +16,11 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.Event;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class RabbitGameNotificationService<State extends GameState> implements GameNotificationService<State> {
+public class RabbitPlayerNotificationService implements PlayerNotificationService {
 
     final private LoadingCache<String, RabbitTemplate> RABBIT_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<String, RabbitTemplate>() {
 
@@ -42,7 +40,7 @@ public class RabbitGameNotificationService<State extends GameState> implements G
     final private PlayerNotificationRegistry notificationRegistry;
 
     @Inject
-    public RabbitGameNotificationService(final MessageConverter messageConverter, final PlayerNotificationRegistry notificationRegistry) {
+    public RabbitPlayerNotificationService(final MessageConverter messageConverter, final PlayerNotificationRegistry notificationRegistry) {
         this.messageConverter = checkNotNull(messageConverter);
         this.notificationRegistry = checkNotNull(notificationRegistry);
     }

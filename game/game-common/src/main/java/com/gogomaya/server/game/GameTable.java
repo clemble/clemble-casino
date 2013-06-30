@@ -2,6 +2,7 @@ package com.gogomaya.server.game;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -38,7 +39,7 @@ public class GameTable<State extends GameState> implements GameSpecificationAwar
     @Column(name = "TABLE_ID")
     private long tableId;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
     @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
             @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP") })
     private GameSpecification specification;
@@ -68,8 +69,8 @@ public class GameTable<State extends GameState> implements GameSpecificationAwar
         return players;
     }
 
-    public GameTable<State> setPlayers(List<Long> players) {
-        this.players = players;
+    public GameTable<State> setPlayers(Collection<Long> players) {
+        this.players = players instanceof List ? (List<Long>) players : new ArrayList<Long>(players);
         return this;
     }
 
@@ -117,6 +118,10 @@ public class GameTable<State extends GameState> implements GameSpecificationAwar
     public GameTable<State> setServer(String server) {
         this.server = server;
         return this;
+    }
+
+    public ServerResourse fetchServerResourse() {
+        return new ServerResourse(server, tableId);
     }
 
 }

@@ -7,6 +7,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.GameStateFactory;
+import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.event.client.MadeMove;
 
 abstract public class AbstractGameStateFactory<State extends GameState> implements GameStateFactory<State> {
@@ -18,21 +19,27 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
     }
 
     @Override
-    public void restore(GameSession<State> session) {
+    final public State constructState(final GameInitiation initiation) {
+        return constructState(initiation.getSpecification(), initiation.getParticipants());
+    }
+
+    @Override
+    public State constructState(final GameSession<State> session) {
         // Step 1. Sanity check
         if (session == null || session.getSpecification() == null) {
             throw GogomayaException.fromError(GogomayaError.GameStateReCreationFailure);
         }
         // Step 2. Re creating state
-        State restoredState = create(session.getSpecification(), session.getPlayers());
+        State restoredState = constructState(session.getSpecification(), session.getPlayers());
         GameProcessor<State> processor = processorFactory.create(session);
         // Step 2.1 To prevent population of original session with duplicated events
         GameSession<State> tmpSession = new GameSession<State>();
+        tmpSession.setState(restoredState);
         for (MadeMove madeMove : MadeMove.sort(session.getMadeMoves())) {
             processor.process(tmpSession, madeMove.getMove());
         }
         // Step 3. Returning restored application state
-        session.setState(restoredState);
+        return restoredState;
     }
 
 }

@@ -1,11 +1,10 @@
-package com.gogomaya.server.game.notification;
+package com.gogomaya.server.player.notification;
 
 import java.util.Collection;
 
 import com.gogomaya.server.event.Event;
-import com.gogomaya.server.game.GameState;
 
-public interface GameNotificationService<State extends GameState> {
+public interface PlayerNotificationService {
 
     public void notify(final long playerId, final Event gameEvent);
     

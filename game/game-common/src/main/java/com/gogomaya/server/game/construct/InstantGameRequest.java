@@ -10,4 +10,14 @@ public class InstantGameRequest extends GameRequest {
      */
     private static final long serialVersionUID = 4949060894194971610L;
 
+    private GameDeclineBehavior declineBehavior;
+
+    public GameDeclineBehavior getDeclineBehavior() {
+        return declineBehavior;
+    }
+
+    public void setDeclineBehavior(GameDeclineBehavior declineBehavior) {
+        this.declineBehavior = declineBehavior;
+    }
+
 }

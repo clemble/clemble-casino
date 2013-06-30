@@ -6,10 +6,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 
-import com.gogomaya.server.game.GameTable;
+import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GamePlayer;
-import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.player.Player;
 
 public class TicTacToePlayer extends GamePlayer<TicTacToeState> {
@@ -19,12 +18,11 @@ public class TicTacToePlayer extends GamePlayer<TicTacToeState> {
     final private AtomicInteger moneyLeft = new AtomicInteger();
 
     public TicTacToePlayer(final Player player,
-            final GameTable<TicTacToeState> table,
-            final TicTacToeOperations operations,
-            final GameListenerOperations<TicTacToeState> listenerOperations) {
-        super(player, table, listenerOperations);
+            final GameConstruction construction,
+            final TicTacToeOperations operations) {
+        super(player, construction);
         this.ticTacToeOperations = checkNotNull(operations);
-        this.moneyLeft.set(table.getSpecification().getBetRule().getPrice());
+        this.moneyLeft.set(construction.getRequest().getSpecification().getBetRule().getPrice());
     }
 
     public void select(int row, int column) {

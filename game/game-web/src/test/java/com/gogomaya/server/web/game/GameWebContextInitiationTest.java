@@ -16,7 +16,7 @@ import com.gogomaya.server.web.active.session.GameConstructionController;
 @ContextConfiguration(classes = TicTacToeWebSpringConfiguration.class)
 @ActiveProfiles("test")
 @WebAppConfiguration
-public class SimpleContextInitiationTest {
+public class GameWebContextInitiationTest {
 
     @Autowired
     private GameConstructionController<GameState> tableMatchController;

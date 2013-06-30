@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.event.schedule;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("declined")
@@ -12,7 +14,13 @@ public class InvitationDeclinedEvent implements InvitationResponceEvent {
 
     private long playerId;
 
-    private long session;
+    private long construction;
+
+    @JsonCreator
+    public InvitationDeclinedEvent(@JsonProperty("playerId") long playerId, @JsonProperty("construction") long construction) {
+        this.playerId = playerId;
+        this.construction = construction;
+    }
 
     @Override
     public long getPlayerId() {
@@ -24,8 +32,8 @@ public class InvitationDeclinedEvent implements InvitationResponceEvent {
     }
 
     @Override
-    public long getSession() {
-        return session;
+    public long getConstruction() {
+        return construction;
     }
 
     @Override
@@ -33,7 +41,7 @@ public class InvitationDeclinedEvent implements InvitationResponceEvent {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (playerId ^ (playerId >>> 32));
-        result = prime * result + (int) (session ^ (session >>> 32));
+        result = prime * result + (int) (construction ^ (construction >>> 32));
         return result;
     }
 
@@ -48,7 +56,7 @@ public class InvitationDeclinedEvent implements InvitationResponceEvent {
         InvitationDeclinedEvent other = (InvitationDeclinedEvent) obj;
         if (playerId != other.playerId)
             return false;
-        if (session != other.session)
+        if (construction != other.construction)
             return false;
         return true;
     }

@@ -20,56 +20,76 @@ import com.gogomaya.server.error.GogomayaErrorFormat.GogomayaErrorSerializer;
 @JsonDeserialize(using = GogomayaErrorDeserializer.class)
 public enum GogomayaError {
 
-    ServerError(Code.SERVER_ERROR_CODE, "Server error"), ServerCriticalError(Code.SERVER_CRITICAL_ERROR_CODE, "Server critical error"), ServerSessionProcessingError(
-            Code.SERVER_SESSION_PROCESSING_CRITICAL_CODE, "Server session processing error"), ServerCacheError(Code.SERVER_CACHE_ERROR_CODE,
-            "Server error cache problem"),
+    ServerError(Code.SERVER_ERROR_CODE, "Server error"),
+    ServerCriticalError(Code.SERVER_CRITICAL_ERROR_CODE, "Server critical error"),
+    ServerSessionProcessingError(Code.SERVER_SESSION_PROCESSING_CRITICAL_CODE, "Server session processing error"),
+    ServerCacheError(Code.SERVER_CACHE_ERROR_CODE, "Server error cache problem"),
+    ServerLatchError(Code.SERVER_LATCH_ERROR_CODE, "Latch error"),
 
-    BadRequestPlayerIdHeaderMissing(Code.BAD_REQUEST_PLAYER_ID_HEADER_MISSING, "Player ID missing from the Header"), BadRequestSessionIdHeaderMissing(
-            Code.BAD_REQUEST_SESSION_ID_HEADER_MISSING, "Session ID missing from the Header"), BadRequestTableIdHeaderMissing(
-            Code.BAD_REQUEST_TABLE_ID_HEADER_MISSING, "Table ID missing from the Header"),
+    BadRequestPlayerIdHeaderMissing(Code.BAD_REQUEST_PLAYER_ID_HEADER_MISSING, "Player ID missing from the Header"),
+    BadRequestSessionIdHeaderMissing(Code.BAD_REQUEST_SESSION_ID_HEADER_MISSING, "Session ID missing from the Header"),
+    BadRequestTableIdHeaderMissing(Code.BAD_REQUEST_TABLE_ID_HEADER_MISSING, "Table ID missing from the Header"),
 
-    EmailInvalid(Code.EMAIL_INVALID_CODE, "Email invalid"), EmailNotConfirmed(Code.EMAIL_NOT_CONFIRMED_CODE, "Email not confirmed"), EmailNotRegistered(
-            Code.EMAIL_NOT_REGISTERED_CODE, "Email not registered"), EmailAlreadyRegistered(Code.EMAIL_ALREADY_REGISTERED_CODE, "Email already registered"), PasswordMissingCode(
-            Code.PASSWORD_MISSING_CODE, "Password is missing"), PasswordTooShort(Code.PASSWORD_TOO_SHORT_CODE, "Password too short"), PasswordTooWeak(
-            Code.PASSWORD_TOO_WEAK_CODE, "Password too weak"), PasswordTooLong(Code.PASSWORD_TOO_LONG_CODE, "Password too long"), EmailOrPasswordIncorrect(
-            Code.EMAIL_OR_PASSWORD_INCORRECT_CODE, "Email or password is incorrect"),
+    EmailInvalid(Code.EMAIL_INVALID_CODE, "Email invalid"),
+    EmailNotConfirmed(Code.EMAIL_NOT_CONFIRMED_CODE, "Email not confirmed"),
+    EmailNotRegistered(Code.EMAIL_NOT_REGISTERED_CODE, "Email not registered"),
+    EmailAlreadyRegistered(Code.EMAIL_ALREADY_REGISTERED_CODE, "Email already registered"),
+    PasswordMissingCode(Code.PASSWORD_MISSING_CODE, "Password is missing"),
+    PasswordTooShort(Code.PASSWORD_TOO_SHORT_CODE, "Password too short"),
+    PasswordTooWeak(Code.PASSWORD_TOO_WEAK_CODE, "Password too weak"),
+    PasswordTooLong(Code.PASSWORD_TOO_LONG_CODE, "Password too long"),
+    EmailOrPasswordIncorrect(Code.EMAIL_OR_PASSWORD_INCORRECT_CODE, "Email or password is incorrect"),
 
     IdentityInvalid(Code.IDENTITY_INVALID_CODE, "Identity invalid"),
 
-    NickInvalid(Code.NICK_INVALID_CODE, "Nick invalid"), NickTooLong(Code.NICK_TOO_LONG_CODE, "Nick too long"), FirstNameTooLong(Code.FIRST_NAME_TOO_LONG_CODE,
-            "First name too long"), LastNameTooLong(Code.LAST_NAME_TOO_LONG_CODE, "Last name too long"), BirthDateInvalid(Code.BIRTH_DATE_INVALID_CODE,
-            "Birth date invalid"), ImageURLInvalid(Code.IMAGE_URL_INVALID_CODE, "Image URL invalid"),
+    NickInvalid(Code.NICK_INVALID_CODE, "Nick invalid"),
+    NickTooLong(Code.NICK_TOO_LONG_CODE, "Nick too long"),
+    FirstNameTooLong(Code.FIRST_NAME_TOO_LONG_CODE, "First name too long"),
+    LastNameTooLong(Code.LAST_NAME_TOO_LONG_CODE, "Last name too long"),
+    BirthDateInvalid(Code.BIRTH_DATE_INVALID_CODE, "Birth date invalid"),
+    ImageURLInvalid(Code.IMAGE_URL_INVALID_CODE, "Image URL invalid"),
 
-    SocialConnectionProviderUserNull(Code.SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE, "Social connection provider User can't be NULL"), SocialConnectionProviderIdNull(
-            Code.SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE, "Social connection provider ID can't be NULL"), SocialConnectionInvalid(
-            Code.SOCIAL_CONNECTION_INVALID_CODE, "Social connection is invalid"),
+    SocialConnectionProviderUserNull(Code.SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE, "Social connection provider User can't be NULL"),
+    SocialConnectionProviderIdNull(Code.SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE, "Social connection provider ID can't be NULL"),
+    SocialConnectionInvalid(Code.SOCIAL_CONNECTION_INVALID_CODE, "Social connection is invalid"),
 
-    ClientJsonInvalidError(Code.CLIENT_JSON_INVALID_ERROR_CODE, "Invalid Json"), ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json"),
+    ClientJsonInvalidError(Code.CLIENT_JSON_INVALID_ERROR_CODE, "Invalid Json"),
+    ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json"),
 
-    GameSpecificationInvalid(Code.GAME_SPECIFICATION_INVAID_CODE, "Provided game specification is invalid"), GameConstructionInsufficientMoney(
-            Code.GAME_CONSTRUCTION_INSUFFICIENT_MONEY_CODE, "Not enough money for this game"), GameConstructionTableQueuePutError(
-            Code.GAME_CONSTRUCTION_TABLE_QUEUE_PUT_ERROR_CODE, "Table Queue put error"), GameConstructionTableQueueAddError(
-            Code.GAME_CONSTRUCTION_TABLE_QUEUE_ADD_ERROR_CODE, "Table Queue add error"), GameConstructionTableQueueInvalidateError(
-            Code.GAME_CONSTRUCTION_TABLE_QUEUE_INVALIDATE_ERROR_CODE, "Table Queue invalidate error"), GameMatchPlayerHasPendingSessions(
-            Code.GAMEMATCH_PLAYER_HAS_PENDING_SESSIONS_CODE, "Player has opened sessions"),
+    GameSpecificationInvalid(Code.GAME_SPECIFICATION_INVAID_CODE, "Provided game specification is invalid"),
+    GameConstructionInsufficientMoney(Code.GAME_CONSTRUCTION_INSUFFICIENT_MONEY_CODE, "Not enough money for this game"),
+    GameConstructionTableQueuePutError(Code.GAME_CONSTRUCTION_TABLE_QUEUE_PUT_ERROR_CODE, "Table Queue put error"),
+    GameConstructionTableQueueAddError(Code.GAME_CONSTRUCTION_TABLE_QUEUE_ADD_ERROR_CODE, "Table Queue add error"),
+    GameConstructionTableQueueInvalidateError(Code.GAME_CONSTRUCTION_TABLE_QUEUE_INVALIDATE_ERROR_CODE, "Table Queue invalidate error"),
+    GameConstructionInvalidInvitationResponse(Code.GAME_CONSTRUCTION_INVALID_INVITATION_RESPONSE_ERROR_CODE, "Invalid invitation response"),
+    GameConstructionInvalidRequest(Code.GAME_CONSTRUCTION_INVALID_REQUEST_ERROR_CODE, "Game Request is invalid"),
+    GameConstructionInvalidState(Code.GAME_CONSTRUCTION_INVALID_STATE_ERROR_CODE, "State invalid for Construction"),
+    GameConstructionNonExistent(Code.GAME_CONSTRUCTION_NON_EXISTENT_ERROR_CODE, "Construction non existent"),
+    GameConstructionNotPartOfGame(Code.GAME_CONSTRUCTION_NOT_PART_OF_GAME_ERROR_CODE, "Not part of the game"),
+    GameMatchPlayerHasPendingSessions(Code.GAMEMATCH_PLAYER_HAS_PENDING_SESSIONS_CODE, "Player has opened sessions"),
 
-    GamePlayGameEnded(Code.GAMEPLAY_GAME_ENDED_CODE, "Game already ended"), GamePlayGameNotStarted(Code.GAMEPLAY_GAME_NOT_STARTED_CODE,
-            "Game has not started yet"),
+    GamePlayGameEnded(Code.GAMEPLAY_GAME_ENDED_CODE, "Game already ended"),
+    GamePlayGameNotStarted(Code.GAMEPLAY_GAME_NOT_STARTED_CODE, "Game has not started yet"),
 
-    GamePlayStayUndefined(Code.GAMEPLAY_STATE_UNDEFINED_CODE, "State is missing or illegal"), GamePlayMoveUndefined(Code.GAMEPLAY_MOVE_UNDEFINED_CODE,
-            "Move was not defined properly"), GamePlayMoveAlreadyMade(Code.GAMEPLAY_MOVE_ALREADY_MADE_CODE,
-            "Player already made a move, this one will be ignored"), GamePlayNoMoveExpected(Code.GAMEPLAY_NO_MOVE_EXPECTED_CODE,
-            "No move expected from the player"), GamePlayPlayerNotParticipate(Code.GAMEPLAY_PLAYER_NOT_PARTICIPATING, "Player is not part of the current game"), GamePlayWrongMoveType(
-            Code.GAMEPLAY_WRONG_MOVE_TYPE_CODE, "Wrong move type"), GamePlayMoveNotSupported(Code.GAMEPLAY_MOVE_NOT_SUPPORTED_CODE,
-            "Game does not support this move"), GamePlayBetOverflow(Code.GAMEPLAY_BET_OVERFLOW_CODE, "Bet ammount overflow"),
+    GamePlayStayUndefined(Code.GAMEPLAY_STATE_UNDEFINED_CODE, "State is missing or illegal"),
+    GamePlayMoveUndefined(Code.GAMEPLAY_MOVE_UNDEFINED_CODE, "Move was not defined properly"),
+    GamePlayMoveAlreadyMade(Code.GAMEPLAY_MOVE_ALREADY_MADE_CODE, "Player already made a move, this one will be ignored"),
+    GamePlayNoMoveExpected(Code.GAMEPLAY_NO_MOVE_EXPECTED_CODE, "No move expected from the player"),
+    GamePlayPlayerNotParticipate(Code.GAMEPLAY_PLAYER_NOT_PARTICIPATING, "Player is not part of the current game"),
+    GamePlayWrongMoveType(Code.GAMEPLAY_WRONG_MOVE_TYPE_CODE, "Wrong move type"),
+    GamePlayMoveNotSupported(Code.GAMEPLAY_MOVE_NOT_SUPPORTED_CODE, "Game does not support this move"),
+    GamePlayBetOverflow(Code.GAMEPLAY_BET_OVERFLOW_CODE, "Bet ammount overflow"),
 
     TicTacToeCellOwned(Code.TIC_TAC_TOE_CELL_OWNED_CODE, "Cell already Owned"),
 
     GameStateReCreationFailure(Code.GAME_STATE_RECREATION_FAILURE_CODE, "Can't create state from provided session"),
 
-    PaymentTransactionInvalid(Code.PAYMENT_TRANSACTION_INVALID_CODE, "Payment transaction invalid"), PaymentTransactionEmpty(
-            Code.PAYMENT_TRANSACTION_EMPTY_CODE, "Payment transaction empty"), TimeoutProcessingFailure(Code.TIMEOUT_PROCESSING_FAILURE_CODE,
-            "Failed to invoke timeout events in Scheduler");
+    PaymentTransactionInvalid(Code.PAYMENT_TRANSACTION_INVALID_CODE, "Payment transaction invalid"),
+    PaymentTransactionEmpty(Code.PAYMENT_TRANSACTION_EMPTY_CODE, "Payment transaction empty"),
+    TimeoutProcessingFailure(Code.TIMEOUT_PROCESSING_FAILURE_CODE, "Failed to invoke timeout events in Scheduler"),
+    
+    PlayerLockAcquireFailure(Code.PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE, "Failed to acquire player lock")
+    ;
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
 
@@ -141,6 +161,7 @@ public enum GogomayaError {
         final public static String SERVER_CRITICAL_ERROR_CODE = "0C1";
         final public static String SERVER_SESSION_PROCESSING_CRITICAL_CODE = "0C2";
         final public static String SERVER_CACHE_ERROR_CODE = "0C3";
+        final public static String SERVER_LATCH_ERROR_CODE = "0C4";
         // Credentials errors
         // Creation problems
         // Email
@@ -185,6 +206,11 @@ public enum GogomayaError {
         final public static String GAME_CONSTRUCTION_TABLE_QUEUE_PUT_ERROR_CODE = "0E2";
         final public static String GAME_CONSTRUCTION_TABLE_QUEUE_ADD_ERROR_CODE = "0E3";
         final public static String GAME_CONSTRUCTION_TABLE_QUEUE_INVALIDATE_ERROR_CODE = "0E4";
+        final public static String GAME_CONSTRUCTION_INVALID_STATE_ERROR_CODE = "0E5";
+        final public static String GAME_CONSTRUCTION_INVALID_REQUEST_ERROR_CODE = "0E6";
+        final public static String GAME_CONSTRUCTION_INVALID_INVITATION_RESPONSE_ERROR_CODE = "0E7";
+        final public static String GAME_CONSTRUCTION_NON_EXISTENT_ERROR_CODE = "0E8";
+        final public static String GAME_CONSTRUCTION_NOT_PART_OF_GAME_ERROR_CODE = "0E9";
         // Generic Game play errors
         final public static String GAMEPLAY_MOVE_ALREADY_MADE_CODE = "0F0";
         final public static String GAMEPLAY_NO_MOVE_EXPECTED_CODE = "0F1";
@@ -209,5 +235,7 @@ public enum GogomayaError {
         final public static String BAD_REQUEST_TABLE_ID_HEADER_MISSING = "0J2";
         // Timeout errors
         final public static String TIMEOUT_PROCESSING_FAILURE_CODE = "0L0";
+        // Player Lock errors
+        final public static String PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE = "0M0";
     }
 }

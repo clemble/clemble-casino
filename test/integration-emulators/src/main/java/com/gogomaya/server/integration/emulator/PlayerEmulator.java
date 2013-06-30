@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gogomaya.server.game.GameSessionState;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameOperations;
@@ -48,8 +47,8 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
             try {
                 // Step 1. Start player emulator
                 GamePlayer<State> playerState = gameOperations.construct(specification);
-                logger.info("Registered {} on {} with session {}", new Object[] { playerState.getPlayer().getPlayerId(), playerState.getTable().getTableId(),
-                        playerState.getSessionId() });
+                logger.info("Registered {} on {} with session {}", new Object[] { playerState.getPlayer().getPlayerId(), playerState.getServerResourse(),
+                        playerState.getSession() });
                 currentPlayer.set(playerState);
                 lastMoved.set(System.currentTimeMillis());
                 while (!playerState.getState().complete()) {
@@ -66,12 +65,8 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     }
 
     public boolean isAlive() {
-        GameSessionState sessionState = currentPlayer.get().getTable().getCurrentSession().getSessionState();
-        if (sessionState == GameSessionState.construction || sessionState == GameSessionState.pending)
-            return true;
-        if (sessionState == GameSessionState.finished)
-            return false;
-        return lastMoved.get() + TimeUnit.MINUTES.toMillis(15) < System.currentTimeMillis();
+        Boolean isAlive = currentPlayer.get().isAlive();
+        return (isAlive == null || isAlive) || (lastMoved.get() + TimeUnit.MINUTES.toMillis(15) < System.currentTimeMillis());
     }
 
     public void stop() {

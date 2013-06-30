@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -66,12 +67,12 @@ public class ErrorStatusCodeTest {
 
         GamePlayer<TicTacToeState> gamePlayer = gameOperations.construct(playerA, specification);
         GamePlayer<TicTacToeState> anotherGamePlayer = gameOperations.construct(playerA, specification);
-        Assert.assertEquals(gamePlayer.getTableId(), anotherGamePlayer.getTableId());
+        Assert.assertEquals(gamePlayer.getConstruction(), anotherGamePlayer.getConstruction());
 
         gamePlayer.clear();
     }
 
-    @Test
+    @Test @Ignore
     public void testCreatingSimultaniousGamesWithGiveUp() {
         List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
 
@@ -90,13 +91,16 @@ public class ErrorStatusCodeTest {
             playerB = (TicTacToePlayer) gameOperations.construct(playerB.getPlayer(), playerB.getSpecification());
 
             playerA.select(0, 0);
+        } catch (Throwable cause) {
+            cause.printStackTrace();
+            throw new RuntimeException(cause);
         } finally {
             playerA.clear();
             playerB.clear();
         }
     }
 
-    @Test
+    @Test @Ignore
     public void testScenario2() {
         Player playerA = playerOperations.createPlayer();
 

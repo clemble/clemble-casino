@@ -2,6 +2,8 @@ package com.gogomaya.server.player.wallet;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import org.springframework.transaction.annotation.Propagation;
@@ -31,6 +33,15 @@ public class WalletTransactionManagerImpl implements WalletTransactionManager {
         Money existingAmmount = wallet.getMoney(ammount.getCurrency());
         // Step 2. If exising ammount is not enough player can't afford it
         return existingAmmount.getAmount() >= ammount.getAmount();
+    }
+
+    @Override
+    public boolean canAfford(Collection<Long> players, Money ammount) {
+        for (Long player : players) {
+            if (!canAfford(player, ammount))
+                return false;
+        }
+        return true;
     }
 
     @Override

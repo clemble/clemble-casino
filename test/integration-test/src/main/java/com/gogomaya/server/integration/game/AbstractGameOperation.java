@@ -5,9 +5,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
+import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
@@ -15,13 +15,12 @@ import com.google.common.collect.ImmutableList;
 
 abstract public class AbstractGameOperation<State extends GameState> implements GameOperations<State> {
 
+    final private PlayerOperations playerOperations;
     final private GamePlayerFactory<State> playerFactory;
 
-    final private PlayerOperations playerOperations;
-
     protected AbstractGameOperation(final PlayerOperations playerOperations, final GamePlayerFactory<State> playerFactory) {
-        this.playerFactory = checkNotNull(playerFactory);
         this.playerOperations = checkNotNull(playerOperations);
+        this.playerFactory = checkNotNull(playerFactory);
     }
 
     @Override
@@ -59,15 +58,12 @@ abstract public class AbstractGameOperation<State extends GameState> implements 
     }
 
     @Override
-    final public GameTable<State> start(Player player) {
-        return start(player, selectSpecification());
-    }
-
-    @Override
     public List<GamePlayer<State>> constructGame(GameSpecification specification) {
         // Step 1. Creating user and trying to put them on the same table
         GamePlayer<State> playerA = construct(specification);
         GamePlayer<State> playerB = construct(specification);
+        playerA.waitForStart();
+        playerB.waitForStart();
         while (playerA.getTableId() != playerB.getTableId()) {
             playerA.clear();
             playerA = construct(specification);
@@ -93,11 +89,10 @@ abstract public class AbstractGameOperation<State extends GameState> implements 
     }
 
     @Override
-    final public GamePlayer<State> construct(Player player, GameSpecification specification) {
-        // Step 1. Connecting to the table
-        GameTable<State> table = start(player, specification);
-        // Step 2. Creating appropriate player
-        return playerFactory.construct(player, table);
+    public GamePlayer<State> construct(Player player, GameSpecification specification) {
+        return playerFactory.construct(player, request(player, specification));
     }
+
+    abstract protected GameConstruction request(Player player, GameSpecification specification);
 
 }

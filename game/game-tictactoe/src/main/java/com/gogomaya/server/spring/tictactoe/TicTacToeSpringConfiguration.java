@@ -6,7 +6,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,18 +21,16 @@ import com.gogomaya.server.game.action.impl.VerificationGameProcessorListener;
 import com.gogomaya.server.game.active.time.GameTimeManagementService;
 import com.gogomaya.server.game.active.time.GameTimeProcessorListenerFactory;
 import com.gogomaya.server.game.cache.GameCacheService;
-import com.gogomaya.server.game.construct.AvailabilityGameConstructor;
+import com.gogomaya.server.game.construct.GameConstructionRepository;
 import com.gogomaya.server.game.construct.GameConstructionService;
-import com.gogomaya.server.game.construct.InstantGameConstructor;
-import com.gogomaya.server.game.notification.GameNotificationService;
-import com.gogomaya.server.game.notification.RabbitGameNotificationService;
+import com.gogomaya.server.game.construct.GameInitiatorService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.table.GameTableRepository;
-import com.gogomaya.server.game.table.PendingSessionQueue;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
+import com.gogomaya.server.player.lock.PlayerLockService;
+import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
@@ -50,28 +47,19 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 public class TicTacToeSpringConfiguration {
 
     @Inject
-    public PendingSessionQueue pendingSessionQueue;
-
-    @Inject
     public GameSessionRepository<TicTacToeState> sessionRepository;
 
     @Inject
     public GameSpecificationRepository specificationRepository;
 
     @Inject
-    public GameTableRepository<TicTacToeState> tableRepository;
-
-    @Inject
-    public Jackson2JsonMessageConverter jsonMessageConverter;
-
-    @Inject
-    public PlayerNotificationRegistry notificationRegistry;
-
-    @Inject
     public WalletTransactionManager walletTransactionManager;
 
     @Inject
     private TableServerRegistry tableRegistry;
+
+    @Inject
+    public GameTableRepository<TicTacToeState> tableRepository;
 
     @Inject
     public VerificationGameProcessorListener<TicTacToeState> verificationGameProcessor;
@@ -82,35 +70,31 @@ public class TicTacToeSpringConfiguration {
     @Inject
     public PlayerStateManager playerStateQueue;
 
-    @Bean
-    @Singleton
-    public GameNotificationService<TicTacToeState> gameNotificationManager() {
-        return new RabbitGameNotificationService<TicTacToeState>(jsonMessageConverter, notificationRegistry);
-    }
+    @Inject
+    public PlayerNotificationService playerNotificationService;
 
-    @Bean
-    @Singleton
-    public InstantGameConstructor<TicTacToeState> instantGameConstructor() {
-        return new InstantGameConstructor<TicTacToeState>(pendingSessionQueue, tableRepository, gameNotificationManager(), tableFactory(),
-                walletTransactionManager, playerStateQueue, tableRegistry);
-    }
+    @Inject
+    public GameConstructionRepository constructionRepository;
 
-    @Bean
-    @Singleton
-    public AvailabilityGameConstructor<TicTacToeState> availabilityGameConstructor() {
-        return new AvailabilityGameConstructor<TicTacToeState>(walletTransactionManager, playerStateQueue, sessionRepository);
-    }
-    
-    @Bean
-    @Singleton
-    public GameConstructionService<TicTacToeState> constructionService() {
-        return new GameConstructionService<TicTacToeState>(instantGameConstructor(), availabilityGameConstructor());
-    }
+    @Inject
+    public PlayerLockService playerLockService;
 
     @Bean
     @Singleton
     public GameTableFactory<TicTacToeState> tableFactory() {
-        return new GameTableFactory<TicTacToeState>(gameStateFactory(), tableRepository, sessionRepository, tableRegistry);
+        return new GameTableFactory<TicTacToeState>(gameStateFactory(), tableRepository, tableRegistry);
+    }
+
+    @Bean
+    @Singleton
+    public GameConstructionService gameConstructionService() {
+        return new GameConstructionService(walletTransactionManager, playerNotificationService, constructionRepository, initiatorService(), playerLockService);
+    }
+
+    @Bean
+    @Singleton
+    public GameInitiatorService initiatorService() {
+        return new GameInitiatorService(sessionProcessor(), constructionRepository);
     }
 
     @Bean
@@ -149,7 +133,7 @@ public class TicTacToeSpringConfiguration {
     @Bean
     @Singleton
     public GameSessionProcessor<TicTacToeState> sessionProcessor() {
-        return new GameSessionProcessor<TicTacToeState>(cacheService(), gameNotificationManager());
+        return new GameSessionProcessor<TicTacToeState>(tableFactory(), cacheService(), playerNotificationService);
     }
 
     @Bean

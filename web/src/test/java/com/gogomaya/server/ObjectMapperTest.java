@@ -48,52 +48,13 @@ import com.stresstest.random.ObjectGenerator;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { CommonWebSpringConfiguration.class })
-public class ObjectMapperTest {
+public class ObjectMapperTest extends ObjectTest {
 
     @Inject
     ObjectMapper objectMapper;
 
     @Inject
     MappingJackson2HttpMessageConverter httpMessageConverter;
-
-    static {
-        ObjectGenerator.register(FixedBetRule.class, new AbstractValueGenerator<FixedBetRule>() {
-            @Override
-            public FixedBetRule generate() {
-                return new FixedBetRule(100);
-            }
-
-        });
-        ObjectGenerator.register(TicTacToeState.class, new AbstractValueGenerator<TicTacToeState>() {
-            public TicTacToeState generate() {
-                return new TicTacToeState();
-            }
-        });
-        ObjectGenerator.register(ClientEvent.class, new AbstractValueGenerator<ClientEvent>() {
-
-            @Override
-            public ClientEvent generate() {
-                return new GiveUpEvent(-1L);
-            }
-        });
-        ObjectGenerator.register(TicTacToeBetOnCellEvent.class, new AbstractValueGenerator<TicTacToeBetOnCellEvent>() {
-
-            @Override
-            public TicTacToeBetOnCellEvent generate() {
-                return new TicTacToeBetOnCellEvent(-1L, 100);
-            }
-        });
-        ObjectGenerator.register(GameStartedEvent.class, new AbstractValueGenerator<GameStartedEvent>() {
-
-            @Override
-            public GameStartedEvent generate() {
-                GameStartedEvent gameStartedEvent = new GameStartedEvent<>();
-                gameStartedEvent.setSession(10L);
-                gameStartedEvent.setState(new TicTacToeState());
-                return gameStartedEvent;
-            }
-        });
-    }
 
     @Test
     public void specialCase() {
@@ -135,6 +96,7 @@ public class ObjectMapperTest {
         if (errors.size() != 0) {
             for (Entry<Class<?>, Throwable> problem : errors.entrySet()) {
                 System.out.println("Problem " + problem.getKey().getSimpleName() + " > " + problem.getValue().getClass().getSimpleName());
+                System.out.println("Sample: " + objectMapper.writeValueAsString(ObjectGenerator.generate(problem.getKey())));
             }
         }
         Assert.assertTrue(errors.toString(), errors.isEmpty());

@@ -67,7 +67,7 @@ public class GameplayEmulator<State extends GameState> {
             createEmulator(specification);
         }
         // Step 4. Creating executor to run all emulators separately
-        //executorService.scheduleAtFixedRate(new PlayerEmulatorManager(), 30, 30, TimeUnit.SECONDS);
+        // executorService.scheduleAtFixedRate(new PlayerEmulatorManager(), 30, 30, TimeUnit.SECONDS);
     }
 
     private void createEmulator(GameSpecification specification) {

@@ -9,21 +9,35 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.cache.GameCache;
 import com.gogomaya.server.game.cache.GameCacheService;
+import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.event.client.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
-import com.gogomaya.server.game.notification.GameNotificationService;
+import com.gogomaya.server.game.event.server.GameStartedEvent;
+import com.gogomaya.server.player.notification.PlayerNotificationService;
 
 public class GameSessionProcessor<State extends GameState> {
 
     final private GameCacheService<State> cacheService;
-    final private GameNotificationService<State> notificationService;
+    final private GameTableFactory<State> tableFactory;
+    final private PlayerNotificationService notificationService;
 
-    public GameSessionProcessor(final GameCacheService<State> cacheService,
-            final GameNotificationService<State> notificationService) {
+    public GameSessionProcessor(final GameTableFactory<State> tableFactory, final GameCacheService<State> cacheService,
+            final PlayerNotificationService notificationService) {
         this.notificationService = checkNotNull(notificationService);
+        this.tableFactory = checkNotNull(tableFactory);
         this.cacheService = checkNotNull(cacheService);
+    }
+
+    public GameTable<State> start(GameInitiation initiation) {
+        // Step 1. Allocating table for game initiation
+        final GameTable<State> table = tableFactory.constructTable(initiation);
+        // Step 2. Sending notification for game started
+        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(initiation.getConstruction(), table));
+        // Step 3. Returning active table
+        return table;
     }
 
     public State process(long sessionId, ClientEvent move) {
@@ -34,12 +48,6 @@ public class GameSessionProcessor<State extends GameState> {
         GameCache<State> cache = cacheService.get(sessionId);
         // Step 3. Checking
         switch (cache.getSession().getSessionState()) {
-        case construction:
-        case pending:
-            if (!(move instanceof SurrenderEvent)) {
-                throw GogomayaException.fromError(GogomayaError.GamePlayGameNotStarted);
-            }
-            break;
         case finished:
             if (!(move instanceof SurrenderEvent)) {
                 throw GogomayaException.fromError(GogomayaError.GamePlayGameEnded);

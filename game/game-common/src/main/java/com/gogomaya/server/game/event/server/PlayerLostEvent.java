@@ -60,7 +60,7 @@ public class PlayerLostEvent<State extends GameState> extends GameServerEvent<St
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerLostEvent other = (PlayerLostEvent) obj;
+        PlayerLostEvent<State> other = (PlayerLostEvent<State>) obj;
         if (playerId != other.playerId)
             return false;
         if (reason == null) {

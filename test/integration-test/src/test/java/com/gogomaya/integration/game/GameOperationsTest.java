@@ -14,20 +14,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.event.ServerEvent;
-import com.gogomaya.server.game.GameSessionState;
-import com.gogomaya.server.game.GameTable;
+import com.gogomaya.server.event.Event;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.data.DataGenerator;
 import com.gogomaya.server.integration.game.GameOperations;
-import com.gogomaya.server.integration.game.listener.GameListener;
-import com.gogomaya.server.integration.game.listener.GameListenerOperations;
-import com.gogomaya.server.integration.game.listener.ListenerChannel;
+import com.gogomaya.server.integration.game.GamePlayer;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
+import com.gogomaya.server.integration.player.listener.ListenerChannel;
+import com.gogomaya.server.integration.player.listener.PlayerListener;
+import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 
@@ -44,7 +43,7 @@ public class GameOperationsTest {
     GameOperations<TicTacToeState> gameOperations;
 
     @Inject
-    GameListenerOperations<TicTacToeState> gameListenerOperations;
+    PlayerListenerOperations gameListenerOperations;
 
     @Test
     public void createWithGameSpecification() {
@@ -52,7 +51,7 @@ public class GameOperationsTest {
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = selectSpecification(player, 0);
         // Step 2. Creating game table
-        GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
+        GamePlayer<TicTacToeState> gameTable = gameOperations.construct(player, specification);
         Assert.assertNotNull(gameTable);
         gameOperations.construct(specification);
     }
@@ -63,16 +62,14 @@ public class GameOperationsTest {
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = selectSpecification(player, 1);
         // Step 2. Creating game table
-        GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
-        Assert.assertNotNull(gameTable);
-        long originalTableId = gameTable.getTableId();
+        GamePlayer<TicTacToeState> gamePlayer = gameOperations.construct(player, specification);
+        Assert.assertNotNull(gamePlayer);
         // Step 3. Adding another player to the table
         Player anotherPlayer = playerOperations.createPlayer(DataGenerator.randomProfile());
         Assert.assertNotSame(anotherPlayer.getPlayerId(), player.getPlayerId());
-        gameTable = gameOperations.start(anotherPlayer, specification);
-        Assert.assertNotNull(gameTable);
-        Assert.assertEquals(gameTable.getCurrentSession().getSessionState(), originalTableId == gameTable.getTableId() ? GameSessionState.active : GameSessionState.construction);
-        Assert.assertNotNull(gameTable.getCurrentSession().getState());
+        gamePlayer = gameOperations.construct(anotherPlayer, specification);
+        Assert.assertNotNull(gamePlayer);
+        Assert.assertNotNull(gamePlayer.getServerResourse());
     }
 
     @Test
@@ -90,20 +87,20 @@ public class GameOperationsTest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         // Step 2. Adding listener
-        gameListenerOperations.listen(player.getSession(), new GameListener() {
+        gameListenerOperations.listen(player.getSession(), new PlayerListener() {
             @Override
-            public void updated(ServerEvent event) {
+            public void updated(Event event) {
                 System.out.println(event);
                 countDownLatch.countDown();
             }
         }, listenerChannel);
         // Step 2. Creating game table
         GameSpecification specification = selectSpecification(player, 2);
-        GameTable<TicTacToeState> gameTable = gameOperations.start(player, specification);
+        GamePlayer<TicTacToeState> gameTable = gameOperations.construct(player, specification);
         Assert.assertNotNull(gameTable);
         // Step 4. Adding another player to the table
         player = playerOperations.createPlayer(DataGenerator.randomProfile());
-        GameTable<TicTacToeState> anotherTable = gameOperations.start(player, specification);
+        GamePlayer<TicTacToeState> anotherTable = gameOperations.construct(player, specification);
         Assert.assertEquals(anotherTable.getTableId(), gameTable.getTableId());
         // Step 5. Waiting for notification to happen
         try {

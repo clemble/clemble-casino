@@ -16,11 +16,11 @@ import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.IntegrationGameOperations;
 import com.gogomaya.server.integration.game.WebGameOperations;
-import com.gogomaya.server.integration.game.listener.GameListenerOperations;
-import com.gogomaya.server.integration.game.listener.GameListenerOperationsImpl;
 import com.gogomaya.server.integration.player.IntegrationPlayerOperations;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.WebPlayerOperations;
+import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
+import com.gogomaya.server.integration.player.listener.SimplePlayerListenerOperations;
 import com.gogomaya.server.integration.tictactoe.IntegrationTicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
 import com.gogomaya.server.integration.tictactoe.WebTicTacToeOperations;
@@ -71,14 +71,14 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameListenerOperations<TicTacToeState> tableListenerOperations() {
-            return new GameListenerOperationsImpl<TicTacToeState>(objectMapper);
+        public PlayerListenerOperations tableListenerOperations() {
+            return new SimplePlayerListenerOperations(objectMapper);
         }
 
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(signInContoller, loginController, walletController, sessionController);
+            return new WebPlayerOperations(signInContoller, loginController, walletController, sessionController, tableListenerOperations());
         }
 
         @Bean
@@ -90,7 +90,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public TicTacToeOperations ticTacToeOperations() {
-            return new WebTicTacToeOperations(tableListenerOperations(), engineController);
+            return new WebTicTacToeOperations(engineController);
         }
     }
 
@@ -133,8 +133,8 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameListenerOperations<TicTacToeState> tableListenerOperations() {
-            return new GameListenerOperationsImpl<TicTacToeState>(objectMapper);
+        public PlayerListenerOperations tableListenerOperations() {
+            return new SimplePlayerListenerOperations(objectMapper);
         }
 
         @Bean
@@ -155,7 +155,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate());
+            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), tableListenerOperations());
         }
 
         @Bean
@@ -167,7 +167,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public IntegrationTicTacToeOperations ticTacToeOperations() {
-            return new IntegrationTicTacToeOperations(getBaseUrl(), restTemplate(), tableListenerOperations());
+            return new IntegrationTicTacToeOperations(getBaseUrl(), restTemplate());
         }
     }
 }

@@ -2,7 +2,7 @@ package com.gogomaya.server.integration.tictactoe;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.GameTable;
+import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToeCell;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
@@ -10,20 +10,17 @@ import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.integration.game.GamePlayer;
-import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.player.Player;
+import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 
 abstract public class AbstractTicTacToeOperations implements TicTacToeOperations {
 
-    final private GameListenerOperations<TicTacToeState> listenerOperations;
-
-    public AbstractTicTacToeOperations(final GameListenerOperations<TicTacToeState> tableListenerOperations) {
-        this.listenerOperations = checkNotNull(tableListenerOperations);
+    public AbstractTicTacToeOperations() {
     }
 
     @Override
-    final public GamePlayer<TicTacToeState> construct(Player player, GameTable<TicTacToeState> table) {
-        return new TicTacToePlayer(player, table, this, listenerOperations);
+    final public GamePlayer<TicTacToeState> construct(Player player, GameConstruction construction) {
+        return new TicTacToePlayer(player, construction, this);
     }
 
     final public TicTacToeState select(TicTacToePlayer player, int row, int column) {
@@ -32,7 +29,7 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
         // Step 2. Performing actual TicTacToeMove
         return perform(player, move);
     }
-    
+
     @Override
     final public TicTacToeState giveUp(TicTacToePlayer player) {
         return perform(player, new GiveUpEvent(player.getPlayer().getPlayerId()));

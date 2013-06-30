@@ -1,12 +1,15 @@
 package com.gogomaya.server.game.construct;
 
+import java.util.Collection;
+import java.util.LinkedHashSet;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
 import com.gogomaya.server.player.PlayerAware;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-abstract public class GameRequest implements PlayerAware, GameSpecificationAware {
+abstract public class GameRequest implements PlayerAware, GameSpecificationAware, GameOpponentsAware {
 
     /**
      * Generated 10/06/13
@@ -14,9 +17,21 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
     private static final long serialVersionUID = 4949060894194971610L;
 
     private long playerId;
+
     private GameSpecification specification;
 
-    public GameRequest() {
+    private Collection<Long> participants = new LinkedHashSet<Long>();
+
+    @Override
+    public Collection<Long> getParticipants() {
+        return participants;
+    }
+
+    public GameRequest setParticipants(Collection<Long> participants) {
+        if (!participants.contains(playerId))
+            participants.add(playerId);
+        this.participants = participants;
+        return this;
     }
 
     @Override
@@ -33,8 +48,9 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
         return specification;
     }
 
-    public void setSpecification(GameSpecification specification) {
+    public GameRequest setSpecification(GameSpecification specification) {
         this.specification = specification;
+        return this;
     }
 
     @Override

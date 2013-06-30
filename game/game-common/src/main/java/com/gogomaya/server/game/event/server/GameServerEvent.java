@@ -3,9 +3,11 @@ package com.gogomaya.server.game.event.server;
 import java.io.Serializable;
 
 import com.gogomaya.server.event.ServerEvent;
+import com.gogomaya.server.game.GameSession;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.SessionAware;
 
-abstract public class GameServerEvent<State> implements SessionAware, ServerEvent, Serializable {
+abstract public class GameServerEvent<State extends GameState> implements SessionAware, ServerEvent, Serializable {
 
     /**
      * Generated 07/05/13
@@ -17,6 +19,11 @@ abstract public class GameServerEvent<State> implements SessionAware, ServerEven
     private State state;
 
     public GameServerEvent() {
+    }
+
+    public GameServerEvent(GameSession<State> session) {
+        this.session = session.getSession();
+        this.state = session.getState();
     }
 
     public GameServerEvent(SessionAware sessionAware) {

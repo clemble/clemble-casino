@@ -6,25 +6,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.event.ServerEvent;
+import com.gogomaya.server.event.Event;
+import com.gogomaya.server.game.GameConstuctionAware;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.GameTable;
+import com.gogomaya.server.game.ServerResourse;
+import com.gogomaya.server.game.SessionAware;
+import com.gogomaya.server.game.construct.GameConstruction;
+import com.gogomaya.server.game.event.server.GameEndedEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
+import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.integration.game.listener.GameListener;
-import com.gogomaya.server.integration.game.listener.GameListenerControl;
-import com.gogomaya.server.integration.game.listener.GameListenerOperations;
 import com.gogomaya.server.integration.player.Player;
 
-abstract public class GamePlayer<State extends GameState> {
+abstract public class GamePlayer<State extends GameState> implements SessionAware, GameConstuctionAware {
 
     final private Player player;
 
     final private GameSpecification specification;
-
-    final private GameTable<State> table;
-
-    final private long sessionId;
 
     final private Object versionLock = new Object();
 
@@ -32,27 +30,46 @@ abstract public class GamePlayer<State extends GameState> {
 
     final private AtomicReference<State> currentState = new AtomicReference<State>();
 
-    final private GameListenerControl listenerControl;
+    final private GameConstruction construction;
 
-    public GamePlayer(final Player player, final GameTable<State> table, final GameListenerOperations<State> listenerOperations) {
+    private Boolean isAlive;
+
+    private ServerResourse serverResourse;
+
+    private long session;
+
+    public GamePlayer(final Player player, final GameConstruction construction) {
         // Step 1. Generic check
         this.player = checkNotNull(player);
-        this.table = checkNotNull(table);
-        this.specification = checkNotNull(table.getSpecification());
-        // Step 2. Specifying current state for the listener
-        setState(table.getCurrentSession().getState());
-        this.sessionId = table.getCurrentSession().getSession();
-        // Step 3. Registering listener
-        checkNotNull(listenerOperations);
-        this.listenerControl = listenerOperations.listen(player.getSession(), new GameListener() {
+        this.specification = checkNotNull(construction.getRequest().getSpecification());
+        this.construction = construction;
+        // Step 2. Registering listener
+        this.player.listen(construction, new GameSessionListener() {
             @Override
-            @SuppressWarnings("unchecked")
-            public void updated(ServerEvent event) {
+            public void notify(Event event) {
+                if (event instanceof GameStartedEvent) {
+                    GameStartedEvent<State> gameStartedEvent = ((GameStartedEvent<State>) event);
+                    session = gameStartedEvent.getSession();
+                    setServerResourse(gameStartedEvent.getResource());
+                }
+
+                if (event instanceof GameEndedEvent || event instanceof GameStartedEvent) {
+                    isAlive = (event instanceof GameStartedEvent);
+
+                    synchronized (versionLock) {
+                        versionLock.notifyAll();
+                    }
+                }
+
                 if (event instanceof GameServerEvent) {
                     setState(((GameServerEvent<State>) event).getState());
                 }
             }
         });
+    }
+
+    public Boolean isAlive() {
+        return isAlive;
     }
 
     final public Player getPlayer() {
@@ -61,10 +78,6 @@ abstract public class GamePlayer<State extends GameState> {
 
     final public GameSpecification getSpecification() {
         return specification;
-    }
-
-    final public GameTable<State> getTable() {
-        return table;
     }
 
     final public State getState() {
@@ -99,6 +112,25 @@ abstract public class GamePlayer<State extends GameState> {
         return getState().getNextMove(player.getPlayerId());
     }
 
+    final public void waitForStart() {
+        waitForStart(15_000);
+    }
+
+    final public void waitForStart(long timeout) {
+        long expirationTime = System.currentTimeMillis() + timeout;
+        synchronized (versionLock) {
+            while ((isAlive == null || !isAlive) && expirationTime > System.currentTimeMillis()) {
+                try {
+                    versionLock.wait(timeout);
+                } catch (InterruptedException ignore) {
+                    throw new RuntimeException(ignore);
+                }
+            }
+        }
+        if (isAlive == null || !isAlive)
+            throw new RuntimeException();
+    }
+
     final public void waitForTurn() {
         while (keepAlive.get() && !isToMove() && !currentState.get().complete())
             waitVersion(getState().getVersion() + 1);
@@ -127,18 +159,37 @@ abstract public class GamePlayer<State extends GameState> {
         ;
     }
 
-    public long getSessionId() {
-        return sessionId;
+    @Override
+    public long getConstruction() {
+        return construction.getConstruction();
+    }
+
+    @Override
+    public long getSession() {
+        return session;
+    }
+
+    public void setSession(long session) {
+        this.session = session;
     }
 
     public long getTableId() {
-        return table.getTableId();
+        return serverResourse.getTableId();
+    }
+
+    public ServerResourse getServerResourse() {
+        return serverResourse;
+    }
+
+    public void setServerResourse(ServerResourse serverResourse) {
+        this.serverResourse = serverResourse;
     }
 
     public void clear() {
-        listenerControl.stopListener();
+        player.close();
         keepAlive.set(false);
-        giveUp();
+        if (isAlive != null && isAlive)
+            giveUp();
         synchronized (versionLock) {
             versionLock.notifyAll();
         }

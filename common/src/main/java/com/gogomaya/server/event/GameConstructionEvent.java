@@ -1,9 +1,9 @@
 package com.gogomaya.server.event;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.gogomaya.server.game.SessionAware;
+import com.gogomaya.server.game.GameConstuctionAware;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-public interface ScheduleEvent extends Event, SessionAware {
+public interface GameConstructionEvent extends Event, GameConstuctionAware {
 
 }

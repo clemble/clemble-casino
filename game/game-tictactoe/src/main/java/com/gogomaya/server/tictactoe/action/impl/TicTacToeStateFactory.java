@@ -1,6 +1,7 @@
 package com.gogomaya.server.tictactoe.action.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.gogomaya.server.game.GamePlayerState;
@@ -17,12 +18,12 @@ public class TicTacToeStateFactory extends AbstractGameStateFactory<TicTacToeSta
     }
 
     @Override
-    public TicTacToeState create() {
+    public TicTacToeState emptyState() {
         return new TicTacToeState();
     }
 
     @Override
-    public TicTacToeState create(final GameSpecification gameSpecification, final List<Long> playerIds) {
+    public TicTacToeState constructState(final GameSpecification gameSpecification, final Collection<Long> playerIds) {
         // Step 0. Create initial state
         if (gameSpecification == null)
             throw new IllegalArgumentException("Game specification can't be null");

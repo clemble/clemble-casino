@@ -68,7 +68,7 @@ public class PlayerMovedEvent<State extends GameState> extends GameServerEvent<S
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerMovedEvent other = (PlayerMovedEvent) obj;
+        PlayerMovedEvent<State> other = (PlayerMovedEvent) obj;
         if (madeMove == null) {
             if (other.madeMove != null)
                 return false;

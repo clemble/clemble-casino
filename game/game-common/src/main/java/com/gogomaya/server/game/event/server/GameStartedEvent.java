@@ -4,20 +4,34 @@ import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.GameConstuctionAware;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.GameTable;
+import com.gogomaya.server.game.ServerResourse;
 import com.gogomaya.server.game.SessionAware;
 
 @JsonTypeName("started")
-public class GameStartedEvent<State extends GameState> extends GameServerEvent<State> {
+public class GameStartedEvent<State extends GameState> extends GameServerEvent<State> implements GameConstuctionAware {
 
     /**
      * Generated
      */
     private static final long serialVersionUID = -4474960027054354888L;
 
+    private long construction;
+
+    private ServerResourse resource;
+
     private Collection<ClientEvent> nextMoves;
 
     public GameStartedEvent() {
+    }
+
+    public GameStartedEvent(long construction, GameTable<State> table) {
+        super(table.getCurrentSession());
+        this.construction = construction;
+        this.nextMoves = getState().getNextMoves();
+        this.resource = table.fetchServerResourse();
     }
 
     public GameStartedEvent(SessionAware sessionAware) {
@@ -36,6 +50,23 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
     public GameStartedEvent<State> setNextMoves(Collection<ClientEvent> nextMoves) {
         this.nextMoves = nextMoves;
         return this;
+    }
+
+    public ServerResourse getResource() {
+        return resource;
+    }
+
+    public void setResource(ServerResourse resource) {
+        this.resource = resource;
+    }
+
+    @Override
+    public long getConstruction() {
+        return construction;
+    }
+
+    public void setConstruction(long construction) {
+        this.construction = construction;
     }
 
     @Override
@@ -62,4 +93,5 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
             return false;
         return true;
     }
+
 }

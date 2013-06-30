@@ -1,4 +1,4 @@
-package com.gogomaya.server.integration.game.listener;
+package com.gogomaya.server.integration.player.listener;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -23,30 +23,28 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.event.Event;
-import com.gogomaya.server.event.ServerEvent;
-import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.player.security.PlayerSession;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.DefaultWebSocketListener;
 import com.ning.http.client.websocket.WebSocket;
 import com.ning.http.client.websocket.WebSocketUpgradeHandler;
 
-public class GameListenerOperationsImpl<State extends GameState> implements GameListenerOperations<State> {
+public class SimplePlayerListenerOperations implements PlayerListenerOperations {
 
     final private ObjectMapper objectMapper;
-    
-    public GameListenerOperationsImpl(ObjectMapper objectMapper) {
+
+    public SimplePlayerListenerOperations(ObjectMapper objectMapper) {
         this.objectMapper = checkNotNull(objectMapper);
     }
 
     @Override
-    public GameListenerControl listen(PlayerSession playerSession, final GameListener gameListener) {
+    public PlayerListenerControl listen(PlayerSession playerSession, final PlayerListener gameListener) {
         // Step 1. Creating Server connection
         return listen(playerSession, gameListener, ListenerChannel.values()[(int) (playerSession.getPlayerId() % ListenerChannel.values().length)]);
     }
 
     @Override
-    public GameListenerControl listen(PlayerSession playerSession, final GameListener gameListener, ListenerChannel listenerChannel) {
+    public PlayerListenerControl listen(PlayerSession playerSession, final PlayerListener gameListener, ListenerChannel listenerChannel) {
         // Step 1. Setting default value
         listenerChannel = listenerChannel == null ? ListenerChannel.Rabbit : listenerChannel;
         // Step 2. Processing based on listener type
@@ -63,7 +61,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
         throw new IllegalArgumentException("Was not able to construct listener");
     }
 
-    private GameListenerControl addRabbitListener(final PlayerSession playerSession, final GameListener gameListener) {
+    private PlayerListenerControl addRabbitListener(final PlayerSession playerSession, final PlayerListener playerListener) {
         // Step 1. Creating Server connection
         ConnectionFactory connectionFactory = new CachingConnectionFactory(playerSession.getServer());
         // Step 2. Creating binding
@@ -83,8 +81,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                     // Step 1. Parsing GameTable
                     Event event = objectMapper.readValue(new String(message.getBody()), Event.class);
                     // Step 2. Updating game table
-                    if(event instanceof ServerEvent)
-                        gameListener.updated((ServerEvent) event);
+                    playerListener.updated(event);
                 } catch (Throwable e) {
                     e.printStackTrace();
                     throw new RuntimeException(e);
@@ -93,7 +90,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
         });
         listenerContainer.start();
         // Step 4. Returning game listener with possibility to stop listener
-        return new GameListenerControl() {
+        return new PlayerListenerControl() {
 
             @Override
             public void stopListener() {
@@ -102,7 +99,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
         };
     }
 
-    private GameListenerControl addStompListener(final PlayerSession playerSession, final GameListener gameListener) {
+    private PlayerListenerControl addStompListener(final PlayerSession playerSession, final PlayerListener playerListener) {
         final String channel = "/topic/" + Long.toString(playerSession.getPlayerId());
         // Step 1. Creating a game table client
         try {
@@ -116,8 +113,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                         // Step 1. Reading game table
                         Event event = objectMapper.readValue(message, Event.class);
                         // Step 2. Updating game table
-                        if(event instanceof ServerEvent)
-                            gameListener.updated((ServerEvent) event);
+                        playerListener.updated(event);
                     } catch (Throwable e) {
                         e.printStackTrace();
                         throw new RuntimeException(e);
@@ -125,7 +121,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                 }
             });
             // Step 4. Returning game listener with possibility to stop STOMP listener
-            return new GameListenerControl() {
+            return new PlayerListenerControl() {
 
                 @Override
                 public void stopListener() {
@@ -140,7 +136,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
         }
     }
 
-    private GameListenerControl addSockJSListener(final PlayerSession playerSession, final GameListener gameListener) {
+    private PlayerListenerControl addSockJSListener(final PlayerSession playerSession, final PlayerListener playerListener) {
         try {
             AsyncHttpClient asyncClient = new AsyncHttpClient();
             final WebSocket webSocket = asyncClient.prepareGet("http://" + playerSession.getServer() + ":15674/stomp")
@@ -160,8 +156,7 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
                                 // Step 1. Reading game table
                                 Event event = objectMapper.readValue(message, Event.class);
                                 // Step 2. Updating game table
-                                if(event instanceof ServerEvent)
-                                    gameListener.updated((ServerEvent) event);
+                                playerListener.updated(event);
                             } catch (Throwable e) {
                                 e.printStackTrace();
                                 throw new RuntimeException(e);
@@ -172,8 +167,8 @@ public class GameListenerOperationsImpl<State extends GameState> implements Game
 
             System.out.println(webSocket.isOpen());
             // Step 4. Returning game listener with possibility to stop SOCKJS listener
-            return new GameListenerControl() {
-                
+            return new PlayerListenerControl() {
+
                 @Override
                 public void stopListener() {
                     webSocket.close();

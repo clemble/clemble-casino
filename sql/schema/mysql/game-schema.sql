@@ -23,6 +23,8 @@
         drop 
         foreign key FK9226F07474164E22;
 
+    drop table if exists GAME_CONSTRUCTION;
+
     drop table if exists GAME_SESSION;
 
     drop table if exists GAME_SESSION_MOVES;
@@ -34,6 +36,14 @@
     drop table if exists GAME_TABLE;
 
     drop table if exists GAME_TABLE_PLAYERS;
+
+    create table GAME_CONSTRUCTION (
+        CONSTRUCTION_ID bigint not null auto_increment,
+        REQUEST varchar(4096),
+        SESSION_ID bigint,
+        state varchar(255),
+        primary key (CONSTRUCTION_ID)
+    ) ENGINE=InnoDB;
 
     create table GAME_SESSION (
         SESSION_ID bigint not null auto_increment,
@@ -65,7 +75,6 @@
         PRICE integer,
         CURRENCY varchar(255),
         GIVE_UP varchar(255),
-        MATCH_RULE varchar(255),
         MOVE_TIME_LIMIT integer,
         MOVE_TIME_PUNISHMENT varchar(255),
         PLAYER_NUMBER varchar(255),

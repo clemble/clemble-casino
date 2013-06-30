@@ -2,7 +2,7 @@ package com.gogomaya.server.player.notification;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.notification.ServerRegistry;
+import com.gogomaya.server.ServerRegistry;
 
 public class SimplePlayerNotificationRegistry implements PlayerNotificationRegistry {
 

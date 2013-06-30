@@ -9,8 +9,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
+import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
@@ -47,9 +47,7 @@ public class IntegrationGameOperations<State extends GameState> extends Abstract
         return restTemplate.exchange(baseUrl + OPTIONS_URL, HttpMethod.GET, requestEntity, GameSpecificationOptions.class).getBody();
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public GameTable<State> start(Player player, GameSpecification gameSpecification) {
+    public GameConstruction request(Player player, GameSpecification gameSpecification) {
         gameSpecification = checkNotNull(gameSpecification);
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
@@ -58,7 +56,7 @@ public class IntegrationGameOperations<State extends GameState> extends Abstract
         // Step 2. Generating request
         HttpEntity<GameSpecification> requestEntity = new HttpEntity<GameSpecification>(gameSpecification, header);
         // Step 3. Rest template generation
-        return (GameTable<State>) restTemplate.exchange(baseUrl + CREATE_URL, HttpMethod.POST, requestEntity, GameTable.class).getBody();
+        return (GameConstruction) restTemplate.exchange(baseUrl + CREATE_URL, HttpMethod.POST, requestEntity, GameConstruction.class).getBody();
     }
 
 }

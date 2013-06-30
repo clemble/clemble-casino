@@ -18,7 +18,6 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
@@ -28,7 +27,6 @@ import org.hibernate.annotations.TypeDefs;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.event.client.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
@@ -53,9 +51,6 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
             @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP") })
     private GameSpecification specification;
-
-    @Transient
-    private GameRequest constructor;
 
     @Column(name = "SESSION_STATE")
     private GameSessionState sessionState;
@@ -145,15 +140,6 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
 
     public GameSession<State> setState(State state) {
         this.state = state;
-        return this;
-    }
-
-    public GameRequest getConstructor() {
-        return constructor;
-    }
-
-    public GameSession<State> setConstructor(GameRequest constructor) {
-        this.constructor = constructor;
         return this;
     }
 

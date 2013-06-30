@@ -1,4 +1,4 @@
-package com.gogomaya.server.notification;
+package com.gogomaya.server;
 
 import java.util.Map.Entry;
 import java.util.TreeMap;

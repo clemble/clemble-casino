@@ -23,13 +23,13 @@ import com.gogomaya.server.web.game.configuration.GameConfigurationManagerContro
 public class TicTacToeWebSpringConfiguration {
 
     @Inject
+    GameConstructionService constructionService;
+
+    @Inject
     TicTacToeConfigurationManager configurationManager;
 
     @Inject
     GameSessionProcessor<TicTacToeState> sessionProcessor;
-
-    @Inject
-    GameConstructionService<TicTacToeState> stateManager;
 
     @Inject
     GameSessionRepository<TicTacToeState> sessionRepository;
@@ -40,7 +40,7 @@ public class TicTacToeWebSpringConfiguration {
     @Bean
     @Singleton
     public GameConstructionController<TicTacToeState> gameTableMatchController() {
-        return new GameConstructionController<TicTacToeState>(stateManager, tableRepository, configurationManager);
+        return new GameConstructionController<TicTacToeState>(constructionService, configurationManager);
     }
 
     @Bean
@@ -52,7 +52,7 @@ public class TicTacToeWebSpringConfiguration {
     @Bean
     @Singleton
     public GameEngineController<TicTacToeState> gameController() {
-        return new GameEngineController<TicTacToeState>(sessionProcessor, tableRepository);
+        return new GameEngineController<TicTacToeState>(sessionProcessor);
     }
 
 }

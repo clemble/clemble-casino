@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.event.schedule;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("accepted")
@@ -10,9 +12,15 @@ public class InvitationAcceptedEvent implements InvitationResponceEvent {
      */
     private static final long serialVersionUID = -4465974655141746411L;
 
-    private long playerId;
+    final private long playerId;
 
-    private long session;
+    final private long construction;
+
+    @JsonCreator
+    public InvitationAcceptedEvent(@JsonProperty("construction") long construction, @JsonProperty("playerId") long playerId) {
+        this.construction = construction;
+        this.playerId = playerId;
+    }
 
     @Override
     public long getPlayerId() {
@@ -20,17 +28,13 @@ public class InvitationAcceptedEvent implements InvitationResponceEvent {
     }
 
     @Override
-    public long getSession() {
-        return session;
-    }
-
-    public void setPlayerId(long playerId) {
-        this.playerId = playerId;
+    public long getConstruction() {
+        return construction;
     }
 
     @Override
     public int hashCode() {
-        return 31 * ( 31 + (int) (playerId ^ (playerId >>> 32))) + (int) (session ^ (session >>> 32));
+        return 31 * (31 + (int) (playerId ^ (playerId >>> 32))) + (int) (construction ^ (construction >>> 32));
     }
 
     @Override
@@ -44,7 +48,7 @@ public class InvitationAcceptedEvent implements InvitationResponceEvent {
         InvitationAcceptedEvent other = (InvitationAcceptedEvent) obj;
         if (playerId != other.playerId)
             return false;
-        if (session != other.session)
+        if (construction != other.construction)
             return false;
         return true;
     }

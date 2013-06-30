@@ -8,6 +8,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.security.PlayerSession;
@@ -22,11 +23,13 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
     final private static String SESSION_URL = "/spi/session/login";
 
     final private String baseUrl;
+    final private PlayerListenerOperations listenerOperations;
     final private RestTemplate restTemplate;
 
-    public IntegrationPlayerOperations(final String baseUrl, final RestTemplate restTemplate) {
-        this.baseUrl = baseUrl;
-        this.restTemplate = restTemplate;
+    public IntegrationPlayerOperations(final String baseUrl, final RestTemplate restTemplate, final PlayerListenerOperations listenerOperations) {
+        this.baseUrl = checkNotNull(baseUrl);
+        this.restTemplate = checkNotNull(restTemplate);
+        this.listenerOperations = checkNotNull(listenerOperations);
     }
 
     @Override
@@ -37,11 +40,9 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + CREATE_URL, registrationRequest, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
-        Player player = new Player(this).setPlayerId(playerIdentity.getPlayerId()).setIdentity(playerIdentity).setProfile(registrationRequest.getPlayerProfile())
-                .setCredential(registrationRequest.getPlayerCredential());
-        // Step 3. Creating player session
-        player.setSession(startSession(player));
-        // Step 4. Returning player session result
+        Player player = new Player(playerIdentity, this, listenerOperations).setProfile(registrationRequest.getPlayerProfile()).setCredential(
+                registrationRequest.getPlayerCredential());
+        // Step 3. Returning player session result
         return player;
     }
 
@@ -53,14 +54,12 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + LOGIN_URL, credential, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
-        Player player = new Player(this).setPlayerId(playerIdentity.getPlayerId()).setCredential(credential).setIdentity(playerIdentity);
-        // Step 3. Creating player session
-        player.setSession(startSession(player));
-        // Step 4. Returning player session result
+        Player player = new Player(playerIdentity, this, listenerOperations).setCredential(credential);
+        // Step 3. Returning player session result
         return player;
     }
 
-    public PlayerSession startSession(Player player) {
+    public PlayerSession startSession(PlayerIdentity player) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(player.getPlayerId()));
