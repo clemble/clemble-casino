@@ -21,7 +21,6 @@ import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.game.GameConstuctionAware;
-import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
@@ -29,7 +28,7 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_CONSTRUCTION")
-@TypeDefs(value = { @TypeDef(name = "game_request", typeClass = JsonHibernateType.class, defaultForType = GameState.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.construct.GameRequest") }) })
+@TypeDefs(value = { @TypeDef(name = "game_request", typeClass = JsonHibernateType.class, defaultForType = GameRequest.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.construct.GameRequest") }) })
 public class GameConstruction implements SessionAware, GameConstuctionAware {
 
     @Id
@@ -100,7 +99,7 @@ public class GameConstruction implements SessionAware, GameConstuctionAware {
         this.responces = responces;
     }
 
-    public List<Long> getAcceptedParticipants() {
+    public List<Long> fetchAcceptedParticipants() {
         List<Long> acceptedParticipants = new ArrayList<Long>(responces.getParticipants().size());
 
         for (Entry<Long, InvitationResponceEvent> responceEntry : responces.get().entrySet()) {

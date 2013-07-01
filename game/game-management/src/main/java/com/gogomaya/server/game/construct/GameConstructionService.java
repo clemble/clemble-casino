@@ -14,6 +14,7 @@ import com.gogomaya.server.game.event.schedule.PlayerInvitedEvent;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
+import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
 public class GameConstructionService {
@@ -25,14 +26,18 @@ public class GameConstructionService {
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
 
-    public GameConstructionService(final WalletTransactionManager walletTransactionManager, final PlayerNotificationService playerNotificationService,
-            final GameConstructionRepository constructionRepository, final GameInitiatorService initiatorService, final PlayerLockService playerLockService) {
+    public GameConstructionService(final WalletTransactionManager walletTransactionManager,
+            final PlayerNotificationService playerNotificationService,
+            final GameConstructionRepository constructionRepository,
+            final GameInitiatorService initiatorService,
+            final PlayerLockService playerLockService,
+            final PlayerStateManager playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
         this.walletTransactionManager = checkNotNull(walletTransactionManager);
         this.playerNotificationService = checkNotNull(playerNotificationService);
         this.constructionRepository = checkNotNull(constructionRepository);
 
-        this.automaticGameInitiatorManager = new AutomaticGameInitiatorManager(initiatorService, constructionRepository, checkNotNull(playerLockService));
+        this.automaticGameInitiatorManager = new AutomaticGameInitiatorManager(initiatorService, constructionRepository, checkNotNull(playerLockService), playerStateManager);
     }
 
     final public GameConstruction construct(GameRequest request) {

@@ -68,7 +68,7 @@ public class TicTacToeSpringConfiguration {
     public GamePostProcessorListener<TicTacToeState> postProcessorListener;
 
     @Inject
-    public PlayerStateManager playerStateQueue;
+    public PlayerStateManager playerStateManager;
 
     @Inject
     public PlayerNotificationService playerNotificationService;
@@ -88,7 +88,7 @@ public class TicTacToeSpringConfiguration {
     @Bean
     @Singleton
     public GameConstructionService gameConstructionService() {
-        return new GameConstructionService(walletTransactionManager, playerNotificationService, constructionRepository, initiatorService(), playerLockService);
+        return new GameConstructionService(walletTransactionManager, playerNotificationService, constructionRepository, initiatorService(), playerLockService, playerStateManager);
     }
 
     @Bean

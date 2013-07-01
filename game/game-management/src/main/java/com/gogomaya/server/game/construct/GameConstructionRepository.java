@@ -15,4 +15,6 @@ public interface GameConstructionRepository extends JpaRepository<GameConstructi
     @Query(value = "update GameConstruction construction set construction.session = :session where construction.construction = :construction")
     public void specifySession(@Param("construction") Long construction, @Param("session") Long sessionId);
 
+    public GameConstruction findBySession(long session);
+
 }

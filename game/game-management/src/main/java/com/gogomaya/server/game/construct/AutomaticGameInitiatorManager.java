@@ -12,9 +12,11 @@ import java.util.concurrent.ExecutionException;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.GameTable;
+import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.player.lock.PlayerLockService;
+import com.gogomaya.server.player.state.PlayerStateManager;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -66,17 +68,26 @@ public class AutomaticGameInitiatorManager {
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
     final private PlayerLockService playerLockService;
+    final private PlayerStateManager playerStateManager;
 
-    public AutomaticGameInitiatorManager(final GameInitiatorService initiatorService, final GameConstructionRepository constructionRepository, final PlayerLockService playerLockService) {
+    public AutomaticGameInitiatorManager(final GameInitiatorService initiatorService, final GameConstructionRepository constructionRepository,
+            final PlayerLockService playerLockService, final PlayerStateManager playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
         this.constructionRepository = checkNotNull(constructionRepository);
         this.playerLockService = checkNotNull(playerLockService);
+        this.playerStateManager = checkNotNull(playerStateManager);
     }
 
     public GameConstruction register(AutomaticGameRequest request) {
         // Step 1. Sanity check
         if (request == null)
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
+        Long activeSession = playerStateManager.isActive(request.getPlayerId());
+        if (activeSession != null && activeSession != SessionAware.DEFAULT_SESSION) {
+            GameConstruction activeConstruction = constructionRepository.findBySession(activeSession);
+            if (activeConstruction != null)
+                return activeConstruction;
+        }
         // Step 2. Fetching associated Queue
         long player = request.getPlayerId();
         playerLockService.lock(player);

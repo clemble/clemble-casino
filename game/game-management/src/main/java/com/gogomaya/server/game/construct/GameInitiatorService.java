@@ -23,7 +23,7 @@ public class GameInitiatorService {
             throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         } else if (request instanceof InstantGameRequest) {
             InstantGameRequest instantGameRequest = (InstantGameRequest) request;
-            initiate(new GameInitiation(construction.getConstruction(), construction.getAcceptedParticipants(), instantGameRequest.getSpecification()));
+            initiate(new GameInitiation(construction.getConstruction(), construction.fetchAcceptedParticipants(), instantGameRequest.getSpecification()));
         } else {
             throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         }

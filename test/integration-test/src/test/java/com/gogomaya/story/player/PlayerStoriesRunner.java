@@ -16,6 +16,7 @@ import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.CandidateSteps;
 import org.jbehave.core.steps.ParameterConverters;
 import org.jbehave.core.steps.StepFinder;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,6 +28,7 @@ import com.google.common.collect.ImmutableList;
 import com.stresstest.jbehave.context.aop.StoryContextConverter;
 import com.stresstest.jbehave.context.configuration.StoryContextSpringStepsFactory;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class})

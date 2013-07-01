@@ -1,5 +1,7 @@
 package com.gogomaya.integration.tictactoe;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameOperations;
+import com.gogomaya.server.integration.game.GamePlayer;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
@@ -33,14 +36,17 @@ public class WalletOperationsTest {
 
     @Test(expected = GogomayaException.class)
     public void runingOutOfMoney() {
-        Player playerA = playerOperations.createPlayer();
-        Player playerB = playerOperations.createPlayer();
+        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
+        
+        TicTacToePlayer playerAState = (TicTacToePlayer) players.get(0);
+        Player playerA = playerAState.getPlayer();
+        
+        TicTacToePlayer playerBState = (TicTacToePlayer) players.get(1);
+        Player playerB = players.get(1).getPlayer();
 
         GameSpecification specification = gameOperations.selectSpecification();
 
-        while (true) {
-            TicTacToePlayer playerAState = (TicTacToePlayer) gameOperations.construct(playerA, specification);
-            TicTacToePlayer playerBState = (TicTacToePlayer) gameOperations.construct(playerB, specification);
+        do {
 
             if (playerAState.isToMove()) {
                 playerAState.select(0, 0);
@@ -54,9 +60,12 @@ public class WalletOperationsTest {
 
             playerAState.giveUp();
 
-            playerAState.clear();
-            playerBState.clear();
-        }
+            playerAState = (TicTacToePlayer) gameOperations.construct(playerA, specification);
+            playerBState = (TicTacToePlayer) gameOperations.construct(playerB, specification);
+            
+            playerAState.waitForStart();
+            playerBState.waitForStart();
+        } while(true);
     }
 
 }

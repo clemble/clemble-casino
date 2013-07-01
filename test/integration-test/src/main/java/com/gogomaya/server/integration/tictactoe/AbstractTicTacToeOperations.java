@@ -1,7 +1,5 @@
 package com.gogomaya.server.integration.tictactoe;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToeCell;
@@ -11,7 +9,6 @@ import com.gogomaya.server.game.tictactoe.event.client.TicTacToeEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.integration.game.GamePlayer;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 
 abstract public class AbstractTicTacToeOperations implements TicTacToeOperations {
 

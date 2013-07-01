@@ -13,6 +13,7 @@ import org.jbehave.core.reporters.ConsoleOutput;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.CandidateSteps;
 import org.jbehave.core.steps.spring.SpringStepsFactory;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -21,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @UsingSteps(instances = PlayerCredentialsValidation.class)
 @ContextConfiguration(classes = { CommonSpringConfiguration.class})

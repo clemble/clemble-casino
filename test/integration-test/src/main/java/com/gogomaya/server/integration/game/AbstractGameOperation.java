@@ -62,17 +62,18 @@ abstract public class AbstractGameOperation<State extends GameState> implements 
         // Step 1. Creating user and trying to put them on the same table
         GamePlayer<State> playerA = construct(specification);
         GamePlayer<State> playerB = construct(specification);
-        playerA.waitForStart();
-        playerB.waitForStart();
-        while (playerA.getTableId() != playerB.getTableId()) {
+        while (playerA.getConstruction() != playerB.getConstruction()) {
             playerA.clear();
             playerA = construct(specification);
             // waits added to be sure everyone on the same page
-            if (playerA.getTableId() != playerB.getTableId()) {
+            if (playerA.getConstruction() != playerB.getConstruction()) {
                 playerB.clear();
                 playerB = construct(specification);
             }
         }
+        playerA.waitForStart();
+        playerB.waitForStart();
+
         playerA.syncWith(playerB);
         // Step 3. Returning generated value who ever goes first is choosen as first
         State state = playerB.getState() != null ? playerB.getState() : playerA.getState();
