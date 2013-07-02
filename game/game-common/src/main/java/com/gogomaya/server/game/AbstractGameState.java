@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.player.PlayerAwareUtils;
 
 @JsonIgnoreProperties(value = { "activeUsers" })

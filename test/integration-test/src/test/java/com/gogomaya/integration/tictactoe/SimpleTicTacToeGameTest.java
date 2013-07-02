@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.game.PlayerWonOutcome;
+import com.gogomaya.server.game.outcome.PlayerWonOutcome;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.GamePlayer;

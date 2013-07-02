@@ -1,6 +1,5 @@
 package com.gogomaya.server.game.specification;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 import javax.persistence.Column;
@@ -9,8 +8,10 @@ import javax.persistence.Embeddable;
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonCreator;
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 
+import com.gogomaya.server.game.GameAware;
+
 @Embeddable
-public class SpecificationName implements Serializable {
+public class SpecificationName implements GameAware {
 
     /**
      * Generated 13/04/13
@@ -19,19 +20,19 @@ public class SpecificationName implements Serializable {
 
     final public static SpecificationName DEFAULT = new SpecificationName("", "");
 
-    @Column(name = "SPECIFICATION_NAME")
+    @Column(name = "GAME_NAME")
     private String name = "";
 
-    @Column(name = "SPECIFICATION_GROUP")
-    private String group = "";
+    @Column(name = "SPECIFICATION_NAME")
+    private String specificationName = "";
 
     public SpecificationName() {
     }
 
     @JsonCreator
     public SpecificationName(@JsonProperty("name") String name, @JsonProperty("group") String group) {
-        this.setName(name);
-        this.setGroup(group);
+        this.name = name;
+        this.specificationName = group;
     }
 
     public String getName() {
@@ -43,18 +44,18 @@ public class SpecificationName implements Serializable {
         return this;
     }
 
-    public String getGroup() {
-        return group;
+    public String getSpecificationName() {
+        return specificationName;
     }
 
-    public SpecificationName setGroup(String group) {
-        this.group = group;
+    public SpecificationName setSpecificationName(String specificationName) {
+        this.specificationName = specificationName;
         return this;
     }
 
     public byte[] toByteArray() {
         byte[] nameBytes = name.getBytes();
-        byte[] groupBytes = group.getBytes();
+        byte[] groupBytes = specificationName.getBytes();
         byte[] results = Arrays.copyOf(nameBytes, nameBytes.length + groupBytes.length);
 
         for (int i = nameBytes.length, j = 0; j < groupBytes.length; i++, j++)
@@ -65,14 +66,14 @@ public class SpecificationName implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + name + ", " + group + "]";
+        return "[" + name + ", " + specificationName + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((group == null) ? 0 : group.hashCode());
+        result = prime * result + ((specificationName == null) ? 0 : specificationName.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -86,10 +87,10 @@ public class SpecificationName implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         SpecificationName other = (SpecificationName) obj;
-        if (group == null) {
-            if (other.group != null)
+        if (specificationName == null) {
+            if (other.specificationName != null)
                 return false;
-        } else if (!group.equals(other.group))
+        } else if (!specificationName.equals(other.specificationName))
             return false;
         if (name == null) {
             if (other.name != null)

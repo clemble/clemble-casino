@@ -1,4 +1,4 @@
-package com.gogomaya.server.game;
+package com.gogomaya.server.game.outcome;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

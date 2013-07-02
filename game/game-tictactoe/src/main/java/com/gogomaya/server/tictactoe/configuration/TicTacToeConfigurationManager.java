@@ -6,6 +6,7 @@ import com.gogomaya.server.game.configuration.GameConfigurationManager;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecificationRepository;
+import com.gogomaya.server.game.tictactoe.TicTacToe;
 
 public class TicTacToeConfigurationManager implements GameConfigurationManager {
 
@@ -16,7 +17,7 @@ public class TicTacToeConfigurationManager implements GameConfigurationManager {
     }
 
     public GameSpecificationOptions getSpecificationOptions() {
-        return new SelectSpecificationOptions(specificationRepository.findAll());
+        return new SelectSpecificationOptions(TicTacToe.NAME, specificationRepository.findAll());
     }
 
 }

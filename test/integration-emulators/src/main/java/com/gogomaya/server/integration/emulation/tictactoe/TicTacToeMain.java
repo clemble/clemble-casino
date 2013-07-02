@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.emulator.GameplayEmulator;
 import com.gogomaya.server.integration.game.GameOperations;
+import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 
 public class TicTacToeMain {
@@ -37,6 +38,9 @@ public class TicTacToeMain {
 
         @Inject
         public GameOperations<TicTacToeState> gameOperations;
+        
+        @Inject
+        public PlayerOperations playerOperations;
 
         @Bean
         @Singleton
@@ -47,7 +51,7 @@ public class TicTacToeMain {
         @Bean
         @Singleton
         public GameplayEmulator<TicTacToeState> emulator() {
-            return new GameplayEmulator<>(gameOperations, actor());
+            return new GameplayEmulator<>(playerOperations, gameOperations, actor());
         }
 
     }

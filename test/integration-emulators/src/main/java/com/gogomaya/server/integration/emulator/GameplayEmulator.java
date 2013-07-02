@@ -17,10 +17,13 @@ import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameOperations;
+import com.gogomaya.server.integration.player.PlayerOperations;
 
 public class GameplayEmulator<State extends GameState> {
 
     final private GameOperations<State> gameOperations;
+
+    final private PlayerOperations playerOperations;
 
     final private GameActor<State> actor;
 
@@ -28,9 +31,10 @@ public class GameplayEmulator<State extends GameState> {
 
     private ScheduledExecutorService executorService;
 
-    public GameplayEmulator(final GameOperations<State> gameOperations, final GameActor<State> gameActor) {
+    public GameplayEmulator(final PlayerOperations playerOperations, final GameOperations<State> gameOperations, final GameActor<State> gameActor) {
         this.gameOperations = checkNotNull(gameOperations);
-        this.actor = gameActor;
+        this.actor = checkNotNull(gameActor);
+        this.playerOperations = checkNotNull(playerOperations);
     }
 
     @PreDestroy
@@ -71,7 +75,7 @@ public class GameplayEmulator<State extends GameState> {
     }
 
     private void createEmulator(GameSpecification specification) {
-        PlayerEmulator<State> playerEmulator = new PlayerEmulator<State>(actor, gameOperations, specification);
+        PlayerEmulator<State> playerEmulator = new PlayerEmulator<State>(actor, playerOperations, gameOperations, specification);
         playerEmulators.get(specification).add(playerEmulator);
         executorService.submit(playerEmulator);
     }

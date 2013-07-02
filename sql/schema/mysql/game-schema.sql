@@ -51,7 +51,7 @@
         NUM_MADE_MOVES integer,
         SESSION_STATE integer,
         GAME_STATE varchar(4096),
-        SPECIFICATION_GROUP varchar(255),
+        GAME_NAME varchar(255),
         SPECIFICATION_NAME varchar(255),
         primary key (SESSION_ID)
     ) ENGINE=InnoDB;
@@ -71,7 +71,7 @@
     ) ENGINE=InnoDB;
 
     create table GAME_SPECIFICATION (
-        SPECIFICATION_GROUP varchar(255) not null,
+        GAME_NAME varchar(255) not null,
         SPECIFICATION_NAME varchar(255) not null,
         PRICE integer,
         CURRENCY varchar(255),
@@ -82,13 +82,13 @@
         PRIVACY_RULE varchar(255),
         TOTAL_TIME_LIMIT integer,
         TOTAL_TIME_PUNISHMENT varchar(255),
-        primary key (SPECIFICATION_GROUP, SPECIFICATION_NAME)
+        primary key (GAME_NAME, SPECIFICATION_NAME)
     ) ENGINE=InnoDB;
 
     create table GAME_TABLE (
         TABLE_ID bigint not null auto_increment,
         SESSION_ID bigint,
-        SPECIFICATION_GROUP varchar(255),
+        GAME_NAME varchar(255),
         SPECIFICATION_NAME varchar(255),
         primary key (TABLE_ID)
     ) ENGINE=InnoDB;
@@ -101,10 +101,10 @@
     ) ENGINE=InnoDB;
 
     alter table GAME_SESSION 
-        add index FK8E8AE7291DA56B0A (SPECIFICATION_GROUP, SPECIFICATION_NAME), 
+        add index FK8E8AE7291DA56B0A (GAME_NAME, SPECIFICATION_NAME), 
         add constraint FK8E8AE7291DA56B0A 
-        foreign key (SPECIFICATION_GROUP, SPECIFICATION_NAME) 
-        references GAME_SPECIFICATION (SPECIFICATION_GROUP, SPECIFICATION_NAME);
+        foreign key (GAME_NAME, SPECIFICATION_NAME) 
+        references GAME_SPECIFICATION (GAME_NAME, SPECIFICATION_NAME);
 
     alter table GAME_SESSION_MOVES 
         add index FKDDDFCE0C575A4F22 (SESSION_ID), 
@@ -125,10 +125,10 @@
         references GAME_SESSION (SESSION_ID);
 
     alter table GAME_TABLE 
-        add index FK8D61AD211DA56B0A (SPECIFICATION_GROUP, SPECIFICATION_NAME), 
+        add index FK8D61AD211DA56B0A (GAME_NAME, SPECIFICATION_NAME), 
         add constraint FK8D61AD211DA56B0A 
-        foreign key (SPECIFICATION_GROUP, SPECIFICATION_NAME) 
-        references GAME_SPECIFICATION (SPECIFICATION_GROUP, SPECIFICATION_NAME);
+        foreign key (GAME_NAME, SPECIFICATION_NAME) 
+        references GAME_SPECIFICATION (GAME_NAME, SPECIFICATION_NAME);
 
     alter table GAME_TABLE_PLAYERS 
         add index FK9226F07474164E22 (TABLE_ID), 

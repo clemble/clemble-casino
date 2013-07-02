@@ -47,7 +47,6 @@ public class GameOperationsTest {
         // Step 2. Creating game table
         GamePlayer<TicTacToeState> gameTable = gameOperations.construct(player, specification);
         Assert.assertNotNull(gameTable);
-        gameOperations.construct(specification);
     }
 
     private GameSpecification selectSpecification(Player player, int id) {
@@ -55,7 +54,7 @@ public class GameOperationsTest {
         GameSpecification gameSpecification = null;
         GameSpecificationOptions specificationOptions = gameOperations.getOptions(player);
         if (specificationOptions instanceof SelectSpecificationOptions) {
-            gameSpecification = ((SelectSpecificationOptions) specificationOptions).specifications.get(id);
+            gameSpecification = ((SelectSpecificationOptions) specificationOptions).getSpecifications().get(id);
         } else {
             throw new UnsupportedOperationException("Do not support this kind of specification options");
         }

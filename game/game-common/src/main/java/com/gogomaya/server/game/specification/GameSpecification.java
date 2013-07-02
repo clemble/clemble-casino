@@ -204,5 +204,4 @@ public class GameSpecification implements Serializable {
             return false;
         return true;
     }
-
 }

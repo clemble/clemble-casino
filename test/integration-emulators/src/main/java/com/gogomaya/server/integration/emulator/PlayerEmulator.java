@@ -14,12 +14,16 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameOperations;
 import com.gogomaya.server.integration.game.GamePlayer;
+import com.gogomaya.server.integration.player.Player;
+import com.gogomaya.server.integration.player.PlayerOperations;
 
 public class PlayerEmulator<State extends GameState> implements Runnable {
 
     final private Logger logger = LoggerFactory.getLogger(PlayerEmulator.class);
 
     final private GameSpecification specification;
+    
+    final private PlayerOperations playerOperations;
 
     final private GameOperations<State> gameOperations;
 
@@ -31,10 +35,11 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
 
     final private AtomicReference<GamePlayer<State>> currentPlayer = new AtomicReference<GamePlayer<State>>();
 
-    public PlayerEmulator(final GameActor<State> actor, final GameOperations<State> gameOperations, final GameSpecification specification) {
+    public PlayerEmulator(final GameActor<State> actor, final PlayerOperations playerOperations, final GameOperations<State> gameOperations, final GameSpecification specification) {
         this.specification = checkNotNull(specification);
         this.gameOperations = checkNotNull(gameOperations);
         this.actor = checkNotNull(actor);
+        this.playerOperations = checkNotNull(playerOperations);
     }
 
     public GameSpecification getSpecification() {
@@ -45,8 +50,9 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     public void run() {
         while (continueEmulation.get()) {
             try {
+                Player player = playerOperations.createPlayer();
                 // Step 1. Start player emulator
-                GamePlayer<State> playerState = gameOperations.construct(specification);
+                GamePlayer<State> playerState = gameOperations.construct(player, specification);
                 logger.info("Registered {} on {} with session {}", new Object[] { playerState.getPlayer().getPlayerId(), playerState.getServerResourse(),
                         playerState.getSession() });
                 currentPlayer.set(playerState);

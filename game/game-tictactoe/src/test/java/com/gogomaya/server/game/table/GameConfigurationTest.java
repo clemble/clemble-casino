@@ -28,6 +28,6 @@ public class GameConfigurationTest {
     public void testOptions() {
         GameSpecificationOptions specificationOptions = configurationManager.getSpecificationOptions();
         Assert.assertNotNull(specificationOptions);
-        Assert.assertTrue(((SelectSpecificationOptions) specificationOptions).specifications.size() > 0);
+        Assert.assertTrue(((SelectSpecificationOptions) specificationOptions).getSpecifications().size() > 0);
     }
 }

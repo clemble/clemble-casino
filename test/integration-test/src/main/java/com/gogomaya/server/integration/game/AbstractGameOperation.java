@@ -46,14 +46,6 @@ abstract public class AbstractGameOperation<State extends GameState> implements 
     }
 
     @Override
-    final public GamePlayer<State> construct(GameSpecification specification) {
-        // Step 1. Creating player
-        Player player = checkNotNull(playerOperations.createPlayer());
-        // Step 2. Creating appropriate GamePlayer
-        return construct(player, specification);
-    }
-
-    @Override
     public List<GamePlayer<State>> constructGame() {
         // Step 1. Selecting specification for the game
         return constructGame(selectSpecification());
@@ -62,15 +54,15 @@ abstract public class AbstractGameOperation<State extends GameState> implements 
     @Override
     public List<GamePlayer<State>> constructGame(GameSpecification specification) {
         // Step 1. Creating user and trying to put them on the same table
-        GamePlayer<State> playerA = construct(specification);
-        GamePlayer<State> playerB = construct(specification);
+        GamePlayer<State> playerA = construct(playerOperations.createPlayer(), specification);
+        GamePlayer<State> playerB = construct(playerOperations.createPlayer(), specification);
         while (playerA.getConstruction() != playerB.getConstruction()) {
             playerA.clear();
-            playerA = construct(specification);
+            playerA = construct(playerOperations.createPlayer(), specification);
             // waits added to be sure everyone on the same page
             if (playerA.getConstruction() != playerB.getConstruction()) {
                 playerB.clear();
-                playerB = construct(specification);
+                playerB = construct(playerOperations.createPlayer(), specification);
             }
         }
         playerA.waitForStart();

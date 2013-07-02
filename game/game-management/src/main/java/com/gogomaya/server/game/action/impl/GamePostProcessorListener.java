@@ -5,14 +5,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameOutcome;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameSessionState;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.PlayerWonOutcome;
 import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.server.GameServerEvent;
+import com.gogomaya.server.game.outcome.GameOutcome;
+import com.gogomaya.server.game.outcome.PlayerWonOutcome;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;

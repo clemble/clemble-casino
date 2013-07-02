@@ -20,8 +20,6 @@ public interface GameOperations<State extends GameState> {
 
     public GamePlayer<State> construct(Player player);
 
-    public GamePlayer<State> construct(GameSpecification gameSpecification);
-
     public GamePlayer<State> construct(Player player, GameSpecification gameSpecification);
 
     public GamePlayer<State> construct(Player player, GameRequest request);

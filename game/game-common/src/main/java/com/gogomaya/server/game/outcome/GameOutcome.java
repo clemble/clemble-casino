@@ -1,4 +1,4 @@
-package com.gogomaya.server.game;
+package com.gogomaya.server.game.outcome;
 
 import java.io.Serializable;
 

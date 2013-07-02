@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.outcome.GameOutcome;
 
 // !!! NEED TO MAKE A COPY OF THIS ON EVERY OBJECT WITH GET METHOD CALL
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")

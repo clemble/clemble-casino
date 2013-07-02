@@ -49,7 +49,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
 
     @ManyToOne
     @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
-            @JoinColumn(name = "SPECIFICATION_GROUP", referencedColumnName = "SPECIFICATION_GROUP") })
+            @JoinColumn(name = "GAME_NAME", referencedColumnName = "GAME_NAME") })
     private GameSpecification specification;
 
     @Column(name = "SESSION_STATE")

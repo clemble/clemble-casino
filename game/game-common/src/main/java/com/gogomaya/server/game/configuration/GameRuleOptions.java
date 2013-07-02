@@ -9,15 +9,13 @@ import com.google.common.collect.ImmutableSet;
 
 public class GameRuleOptions<T> {
 
-    @JsonProperty("default")
     final private T defaultOption;
 
-    @JsonProperty("options")
     final private Collection<T> allOptions;
 
     @JsonCreator
     @SuppressWarnings("unchecked")
-    public GameRuleOptions(@JsonProperty("default") T defaultOption, @JsonProperty("options") T... otherOptions) {
+    public GameRuleOptions(@JsonProperty("default") T defaultOption, @JsonProperty("options") T ... otherOptions) {
         this.defaultOption = defaultOption;
         if (otherOptions == null || otherOptions.length == 0) {
             this.allOptions = ImmutableSet.<T> of(defaultOption);

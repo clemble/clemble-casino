@@ -6,11 +6,11 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.AbstractGameState;
-import com.gogomaya.server.game.DrawOutcome;
-import com.gogomaya.server.game.GameOutcome;
 import com.gogomaya.server.game.GamePlayerState;
-import com.gogomaya.server.game.PlayerWonOutcome;
 import com.gogomaya.server.game.SequentialPlayerIterator;
+import com.gogomaya.server.game.outcome.DrawOutcome;
+import com.gogomaya.server.game.outcome.GameOutcome;
+import com.gogomaya.server.game.outcome.PlayerWonOutcome;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 
 @JsonIgnoreProperties({ "winner", "activeUsers" })
