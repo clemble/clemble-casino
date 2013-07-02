@@ -94,7 +94,7 @@ public class TicTacToeSpringConfiguration {
     @Bean
     @Singleton
     public GameInitiatorService initiatorService() {
-        return new GameInitiatorService(sessionProcessor(), constructionRepository);
+        return new GameInitiatorService(sessionProcessor(), constructionRepository, playerStateManager);
     }
 
     @Bean

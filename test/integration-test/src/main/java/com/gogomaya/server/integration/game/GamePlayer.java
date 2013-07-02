@@ -111,6 +111,10 @@ abstract public class GamePlayer<State extends GameState> implements SessionAwar
     final public ClientEvent getNextMove() {
         return getState().getNextMove(player.getPlayerId());
     }
+    
+    final public void accept(long constuction) {
+        
+    }
 
     final public void waitForStart() {
         waitForStart(15_000);

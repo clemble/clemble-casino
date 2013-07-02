@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
@@ -20,15 +19,18 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.ActionLatch;
+import com.gogomaya.server.event.ExpectedAction;
 import com.gogomaya.server.game.GameConstuctionAware;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
-import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_CONSTRUCTION")
-@TypeDefs(value = { @TypeDef(name = "game_request", typeClass = JsonHibernateType.class, defaultForType = GameRequest.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.construct.GameRequest") }) })
+@TypeDefs({
+    @TypeDef(name = "game_request", typeClass = JsonHibernateType.class, defaultForType = GameRequest.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.construct.GameRequest")}),
+    @TypeDef(name = "action_latch", typeClass = JsonHibernateType.class, defaultForType = ActionLatch.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.ActionLatch")})
+})
 public class GameConstruction implements SessionAware, GameConstuctionAware {
 
     @Id
@@ -43,8 +45,9 @@ public class GameConstruction implements SessionAware, GameConstuctionAware {
     @Enumerated(EnumType.STRING)
     private GameConstructionState state;
 
-    @Transient
-    private ActionLatch<InvitationResponceEvent> responces;
+    @Type(type = "action_latch")
+    @Column(name = "RESPONSES", length = 4096)
+    private ActionLatch responces;
 
     @Column(name = "SESSION_ID")
     private long session;
@@ -54,7 +57,7 @@ public class GameConstruction implements SessionAware, GameConstuctionAware {
 
     public GameConstruction(GameRequest request) {
         this.request = request;
-        this.responces = new ActionLatch<InvitationResponceEvent>(((GameOpponentsAware) request).getParticipants());
+        this.responces = new ActionLatch(((GameOpponentsAware) request).getParticipants(), "response");
     }
 
     @Override
@@ -91,18 +94,18 @@ public class GameConstruction implements SessionAware, GameConstuctionAware {
         this.session = session;
     }
 
-    public ActionLatch<InvitationResponceEvent> getResponces() {
+    public ActionLatch getResponces() {
         return responces;
     }
 
-    public void setResponces(ActionLatch<InvitationResponceEvent> responces) {
+    public void setResponces(ActionLatch responces) {
         this.responces = responces;
     }
 
     public List<Long> fetchAcceptedParticipants() {
-        List<Long> acceptedParticipants = new ArrayList<Long>(responces.getParticipants().size());
+        List<Long> acceptedParticipants = new ArrayList<Long>(responces.fetchParticipants().size());
 
-        for (Entry<Long, InvitationResponceEvent> responceEntry : responces.get().entrySet()) {
+        for (Entry<Long, ExpectedAction> responceEntry : responces.fetchActionsMap().entrySet()) {
             if (responceEntry.getValue() instanceof InvitationAcceptedEvent)
                 acceptedParticipants.add(responceEntry.getKey());
         }

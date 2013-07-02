@@ -2,6 +2,9 @@ package com.gogomaya.server.integration.tictactoe;
 
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
+import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
+import com.gogomaya.server.game.event.schedule.InvitationDeclinedEvent;
+import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToeCell;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
@@ -38,5 +41,19 @@ abstract public class AbstractTicTacToeOperations implements TicTacToeOperations
         // Step 2. Performing actual TicTacToeMove
         return perform(player, move);
     }
+
+    @Override
+    final public void accept(Player player, long construction) {
+        InvitationResponceEvent acceptedEvents = new InvitationAcceptedEvent(construction, player.getPlayerId());
+        responce(acceptedEvents);
+    }
+
+    @Override
+    final public void decline(Player player, long construction) {
+        InvitationResponceEvent declinedEvents = new InvitationDeclinedEvent(construction, player.getPlayerId());
+        responce(declinedEvents);
+    }
+
+    abstract protected void responce(InvitationResponceEvent responceEvent);
 
 }

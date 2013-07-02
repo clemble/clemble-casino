@@ -6,24 +6,29 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.action.GameSessionProcessor;
+import com.gogomaya.server.player.state.PlayerStateManager;
 
 public class GameInitiatorService {
 
     final private GameSessionProcessor<?> processor;
     final private GameConstructionRepository constructionRepository;
 
-    public GameInitiatorService(GameSessionProcessor<?> stateFactory, GameConstructionRepository constructionRepository) {
+    final private AvailabilityGameInitiatorManager availabilityGameInitiatorManager;
+
+    public GameInitiatorService(final GameSessionProcessor<?> stateFactory, final GameConstructionRepository constructionRepository,
+            final PlayerStateManager playerStateManager) {
         this.processor = checkNotNull(stateFactory);
         this.constructionRepository = checkNotNull(constructionRepository);
+
+        this.availabilityGameInitiatorManager = new AvailabilityGameInitiatorManager(playerStateManager, this);
     }
 
     public void initiate(GameConstruction construction) {
         GameRequest request = construction.getRequest();
         if (request instanceof AutomaticGameRequest) {
             throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
-        } else if (request instanceof InstantGameRequest) {
-            InstantGameRequest instantGameRequest = (InstantGameRequest) request;
-            initiate(new GameInitiation(construction.getConstruction(), construction.fetchAcceptedParticipants(), instantGameRequest.getSpecification()));
+        } else if (request instanceof AvailabilityGameRequest) {
+            availabilityGameInitiatorManager.register(construction);
         } else {
             throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
         }

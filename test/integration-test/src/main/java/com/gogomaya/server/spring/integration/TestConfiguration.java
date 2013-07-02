@@ -64,7 +64,7 @@ public class TestConfiguration {
         GameConfigurationManagerController configuartionManagerController;
 
         @Inject
-        GameConstructionController<TicTacToeState> matchController;
+        GameConstructionController<TicTacToeState> constructionController;
 
         @Inject
         GameEngineController<TicTacToeState> engineController;
@@ -84,13 +84,13 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public GameOperations<TicTacToeState> gameOperations() {
-            return new WebGameOperations<TicTacToeState>(configuartionManagerController, matchController, ticTacToeOperations(), playerOperations());
+            return new WebGameOperations<TicTacToeState>(configuartionManagerController, constructionController, ticTacToeOperations(), playerOperations());
         }
 
         @Bean
         @Singleton
         public TicTacToeOperations ticTacToeOperations() {
-            return new WebTicTacToeOperations(engineController);
+            return new WebTicTacToeOperations(engineController, constructionController);
         }
     }
 

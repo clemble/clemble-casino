@@ -26,18 +26,16 @@ public class GameConstructionService {
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
 
-    public GameConstructionService(final WalletTransactionManager walletTransactionManager,
-            final PlayerNotificationService playerNotificationService,
-            final GameConstructionRepository constructionRepository,
-            final GameInitiatorService initiatorService,
-            final PlayerLockService playerLockService,
+    public GameConstructionService(final WalletTransactionManager walletTransactionManager, final PlayerNotificationService playerNotificationService,
+            final GameConstructionRepository constructionRepository, final GameInitiatorService initiatorService, final PlayerLockService playerLockService,
             final PlayerStateManager playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
         this.walletTransactionManager = checkNotNull(walletTransactionManager);
         this.playerNotificationService = checkNotNull(playerNotificationService);
         this.constructionRepository = checkNotNull(constructionRepository);
 
-        this.automaticGameInitiatorManager = new AutomaticGameInitiatorManager(initiatorService, constructionRepository, checkNotNull(playerLockService), playerStateManager);
+        this.automaticGameInitiatorManager = new AutomaticGameInitiatorManager(initiatorService, constructionRepository, checkNotNull(playerLockService),
+                playerStateManager);
     }
 
     final public GameConstruction construct(GameRequest request) {
@@ -69,7 +67,7 @@ public class GameConstructionService {
         return construction;
     }
 
-    final public void invitationResponsed(InvitationResponceEvent response) {
+    final public GameConstruction invitationResponsed(InvitationResponceEvent response) {
         // Step 1. Sanity check
         if (response == null)
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidInvitationResponse);
@@ -80,28 +78,30 @@ public class GameConstructionService {
         if (construction.getState() != GameConstructionState.pending)
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
         // Step 3. Checking if player is part of the game
-        ActionLatch<InvitationResponceEvent> action = construction.getResponces();
-        action.put(response.getPlayerId(), response);
+        ActionLatch responseLatch = construction.getResponces();
+        responseLatch.put(response.getPlayerId(), response);
         // Step 4. Checking if latch is full
         if (response instanceof InvitationDeclinedEvent) {
             // Step 4.1. In case declined send game canceled notification
             construction.setState(GameConstructionState.canceled);
-            constructionRepository.saveAndFlush(construction);
-            playerNotificationService.notify(action.getParticipants(), new GameCanceledEvent(response.getConstruction(), response.getPlayerId()));
-        } else if (action.complete()) {
-            constructionComplete(construction);
+            construction = constructionRepository.saveAndFlush(construction);
+            playerNotificationService.notify(responseLatch.fetchParticipants(), new GameCanceledEvent(response.getConstruction(), response.getPlayerId()));
+        } else if (responseLatch.complete()) {
+            construction = constructionComplete(construction);
         }
+        return construction;
     }
 
-    final private void constructionComplete(GameConstruction construction) {
+    final private GameConstruction constructionComplete(GameConstruction construction) {
         // Step 1. Updating state
         construction.setState(GameConstructionState.constructed);
-        constructionRepository.saveAndFlush(construction);
+        construction = constructionRepository.saveAndFlush(construction);
         // Step 2. Notifying Participants
-        ActionLatch<InvitationResponceEvent> action = construction.getResponces();
-        playerNotificationService.notify(action.getParticipants(), new GameConstructedEvent(construction.getConstruction()));
+        ActionLatch responseLatch = construction.getResponces();
+        playerNotificationService.notify(responseLatch.fetchParticipants(), new GameConstructedEvent(construction.getConstruction()));
         // Step 3. Moving to the next step
         initiatorService.initiate(construction);
+        return construction;
     }
 
 }

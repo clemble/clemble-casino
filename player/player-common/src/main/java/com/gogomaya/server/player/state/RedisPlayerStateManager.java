@@ -43,6 +43,36 @@ public class RedisPlayerStateManager implements PlayerStateManager {
     }
 
     @Override
+    public boolean isAvailable(final long player) {
+        Long activePlayerSession = isActive(player);
+        return activePlayerSession != null && activePlayerSession == SessionAware.DEFAULT_SESSION;
+    }
+
+    @Override
+    public boolean isAvailable(final Collection<Long> players) {
+        return redisTemplate.execute(new SessionCallback<Boolean>() {
+
+            @Override
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            public Boolean execute(RedisOperations operations) throws DataAccessException {
+                operations.watch(players);
+                operations.multi();
+                for (Long player : players) {
+                    BoundValueOperations valueOperations = operations.boundValueOps(player);
+                    if (valueOperations.get() == null || SessionAware.DEFAULT_SESSION != ((Long) valueOperations.get()).longValue()) {
+
+                        operations.discard();
+                        return false;
+                    }
+                }
+
+                operations.discard();
+                return true;
+            }
+        });
+    }
+
+    @Override
     public boolean markBusy(final long playerId, final long sessionId) {
         return markBusy(Collections.singleton(playerId), sessionId).size() == 0;
     }
@@ -64,15 +94,14 @@ public class RedisPlayerStateManager implements PlayerStateManager {
                         valueOperations.set(sessionId);
                     } else {
                         busyPlayers.add(player);
+                        break;
                     }
                 }
 
                 if (busyPlayers.size() != 0) {
                     operations.discard();
                     return false;
-                }
-
-                if (operations.exec() != null) {
+                } else if (operations.exec() != null) {
                     return true;
                 }
                 return false;

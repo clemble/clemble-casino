@@ -1,15 +1,22 @@
 package com.gogomaya.server.integration.tictactoe;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.active.session.GameEngineController;
 
 public class WebTicTacToeOperations extends AbstractTicTacToeOperations {
 
     final private GameEngineController<TicTacToeState> gameEngineController;
+    final private GameConstructionController<TicTacToeState> constructionController;
 
-    public WebTicTacToeOperations(final GameEngineController<TicTacToeState> gameEngineController) {
-        this.gameEngineController = gameEngineController;
+    public WebTicTacToeOperations(final GameEngineController<TicTacToeState> gameEngineController,
+            final GameConstructionController<TicTacToeState> constructionController) {
+        this.gameEngineController = checkNotNull(gameEngineController);
+        this.constructionController = checkNotNull(constructionController);
     }
 
     @Override
@@ -24,6 +31,11 @@ public class WebTicTacToeOperations extends AbstractTicTacToeOperations {
         player.setState(updatedState);
         // Step 3. Returning updated state
         return updatedState;
+    }
+
+    @Override
+    protected void responce(InvitationResponceEvent responceEvent) {
+        constructionController.invitationResponsed(responceEvent.getPlayerId(), responceEvent);
     }
 
 }

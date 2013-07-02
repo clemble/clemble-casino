@@ -40,6 +40,7 @@
     create table GAME_CONSTRUCTION (
         CONSTRUCTION_ID bigint not null auto_increment,
         REQUEST varchar(4096),
+        RESPONSES varchar(4096),
         SESSION_ID bigint,
         state varchar(255),
         primary key (CONSTRUCTION_ID)

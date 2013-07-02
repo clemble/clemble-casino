@@ -9,11 +9,11 @@ import com.gogomaya.server.player.web.RegistrationRequest;
 
 public interface PlayerOperations {
 
-    public PlayerWallet wallet(Player playerId, long playerWalletId);
-
     public Player login(PlayerCredential credential);
 
     public PlayerSession startSession(PlayerIdentity playerIdentity);
+
+    public PlayerWallet wallet(Player playerId, long playerWalletId);
 
     public Player createPlayer();
 

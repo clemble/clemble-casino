@@ -10,6 +10,10 @@ public interface PlayerStateManager {
 
     public void markAvailable(final long player);
 
+    public boolean isAvailable(final long player);
+
+    public boolean isAvailable(final Collection<Long> players);
+
     public boolean markBusy(final long player, final long sessionId);
 
     public Collection<Long> markBusy(final Collection<Long> players, final long sessionId);
@@ -19,7 +23,7 @@ public interface PlayerStateManager {
     public void subscribe(final Collection<Long> players, final MessageListener messageListener);
 
     public void unsubscribe(final long player, final MessageListener messageListener);
-    
+
     public void unsubscribe(final Collection<Long> players, final MessageListener messageListener);
 
 }

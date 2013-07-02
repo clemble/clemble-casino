@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
@@ -19,7 +19,7 @@ public class WebGameOperations<State extends GameState> extends AbstractGameOper
     final private GameConstructionController<TicTacToeState> matchController;
 
     public WebGameOperations(final GameConfigurationManagerController configurationManagerController,
-            final GameConstructionController<TicTacToeState> matchController, final GamePlayerFactory<State> playerFactory,
+            final GameConstructionController<TicTacToeState> matchController, final GamePlayerOperations<State> playerFactory,
             final PlayerOperations playerOperations) {
         super(playerOperations, playerFactory);
         this.configuartionManagerController = checkNotNull(configurationManagerController);
@@ -37,8 +37,8 @@ public class WebGameOperations<State extends GameState> extends AbstractGameOper
     }
 
     @Override
-    protected GameConstruction request(Player player, GameSpecification specification) {
-        return matchController.match(player.getPlayerId(), specification);
+    protected GameConstruction request(Player player, GameRequest request) {
+        return matchController.construct(player.getPlayerId(), request);
     }
 
 }

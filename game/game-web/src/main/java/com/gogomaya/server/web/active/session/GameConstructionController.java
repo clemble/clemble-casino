@@ -19,6 +19,7 @@ import com.gogomaya.server.game.construct.AutomaticGameRequest;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.game.construct.GameRequest;
+import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 
 @Controller
@@ -35,8 +36,7 @@ public class GameConstructionController<State extends GameState> {
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/session", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    GameConstruction match(@RequestHeader("playerId") final long playerId, @RequestBody final GameSpecification specification) {
+    public @ResponseBody GameConstruction match(@RequestHeader("playerId") final long playerId, @RequestBody final GameSpecification specification) {
         // Step 1. Generating Instant game request
         AutomaticGameRequest instantGameRequest = new AutomaticGameRequest();
         instantGameRequest.setSpecification(specification);
@@ -47,12 +47,18 @@ public class GameConstructionController<State extends GameState> {
 
     @RequestMapping(method = RequestMethod.POST, value = "/active/constuct", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    GameConstruction construct(@RequestHeader("playerId") final long playerId, @RequestBody final GameRequest gameRequest) {
+    public @ResponseBody GameConstruction construct(@RequestHeader("playerId") final long playerId, @RequestBody final GameRequest gameRequest) {
         // Step 1. Checking that provided specification was valid
         if (!configurationManager.getSpecificationOptions().valid(gameRequest.getSpecification()))
             throw GogomayaException.fromError(GogomayaError.GameSpecificationInvalid);
         // Step 2. Invoking actual matching service
         return constructionService.construct(gameRequest);
+    }
+    
+    @RequestMapping(method = RequestMethod.POST, value = "/active/constuct/responce", produces = "application/json")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public @ResponseBody GameConstruction invitationResponsed(@RequestHeader("playerId") final long playerId, @RequestBody final InvitationResponceEvent gameRequest) {
+        // Step 1. Invoking actual matching service
+        return constructionService.invitationResponsed(gameRequest);
     }
 }

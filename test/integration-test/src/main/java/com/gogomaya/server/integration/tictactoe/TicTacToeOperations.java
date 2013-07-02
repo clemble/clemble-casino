@@ -2,9 +2,9 @@ package com.gogomaya.server.integration.tictactoe;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.integration.game.GamePlayerFactory;
+import com.gogomaya.server.integration.game.GamePlayerOperations;
 
-public interface TicTacToeOperations extends GamePlayerFactory<TicTacToeState> {
+public interface TicTacToeOperations extends GamePlayerOperations<TicTacToeState> {
 
     public TicTacToeState select(TicTacToePlayer player, int row, int column);
 

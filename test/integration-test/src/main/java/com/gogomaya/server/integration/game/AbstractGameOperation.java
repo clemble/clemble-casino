@@ -7,7 +7,9 @@ import java.util.List;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
+import com.gogomaya.server.game.construct.AutomaticGameRequest;
 import com.gogomaya.server.game.construct.GameConstruction;
+import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
@@ -16,9 +18,9 @@ import com.google.common.collect.ImmutableList;
 abstract public class AbstractGameOperation<State extends GameState> implements GameOperations<State> {
 
     final private PlayerOperations playerOperations;
-    final private GamePlayerFactory<State> playerFactory;
+    final private GamePlayerOperations<State> playerFactory;
 
-    protected AbstractGameOperation(final PlayerOperations playerOperations, final GamePlayerFactory<State> playerFactory) {
+    protected AbstractGameOperation(final PlayerOperations playerOperations, final GamePlayerOperations<State> playerFactory) {
         this.playerOperations = checkNotNull(playerOperations);
         this.playerFactory = checkNotNull(playerFactory);
     }
@@ -91,9 +93,17 @@ abstract public class AbstractGameOperation<State extends GameState> implements 
 
     @Override
     public GamePlayer<State> construct(Player player, GameSpecification specification) {
-        return playerFactory.construct(player, request(player, specification));
+        GameRequest defaultRequest = new AutomaticGameRequest();
+        defaultRequest.setPlayerId(player.getPlayerId());
+        defaultRequest.setSpecification(specification);
+        return construct(player, defaultRequest);
     }
 
-    abstract protected GameConstruction request(Player player, GameSpecification specification);
+    @Override
+    public GamePlayer<State> construct(Player player, GameRequest request) {
+        return playerFactory.construct(player, request(player, request));
+    }
+
+    abstract protected GameConstruction request(Player player, GameRequest request);
 
 }

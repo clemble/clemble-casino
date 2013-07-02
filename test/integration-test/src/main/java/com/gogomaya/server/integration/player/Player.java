@@ -3,7 +3,6 @@ package com.gogomaya.server.integration.player;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
