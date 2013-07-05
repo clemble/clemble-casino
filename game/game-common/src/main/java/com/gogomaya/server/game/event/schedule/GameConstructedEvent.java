@@ -1,7 +1,11 @@
 package com.gogomaya.server.game.event.schedule;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.event.GameConstructionEvent;
 
+@JsonTypeName("gameConstructed")
 public class GameConstructedEvent implements GameConstructionEvent {
 
     /**
@@ -11,8 +15,9 @@ public class GameConstructedEvent implements GameConstructionEvent {
 
     final private long construction;
 
-    public GameConstructedEvent(long session) {
-        this.construction = session;
+    @JsonCreator
+    public GameConstructedEvent(@JsonProperty("constructor") long construction) {
+        this.construction = construction;
     }
 
     @Override

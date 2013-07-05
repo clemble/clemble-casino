@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.gogomaya.server.game.action.GameSessionProcessor;
+import com.gogomaya.server.game.construct.GameConstructionRepository;
 import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.game.session.GameSessionRepository;
 import com.gogomaya.server.game.table.GameTableRepository;
@@ -37,10 +38,13 @@ public class TicTacToeWebSpringConfiguration {
     @Inject
     GameTableRepository<TicTacToeState> tableRepository;
 
+    @Inject
+    GameConstructionRepository constructionRepository;
+
     @Bean
     @Singleton
     public GameConstructionController<TicTacToeState> gameTableMatchController() {
-        return new GameConstructionController<TicTacToeState>(constructionService, configurationManager);
+        return new GameConstructionController<TicTacToeState>(constructionRepository, constructionService, configurationManager);
     }
 
     @Bean

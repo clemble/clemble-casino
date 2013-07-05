@@ -20,7 +20,7 @@ import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.event.ExpectedAction;
-import com.gogomaya.server.game.GameConstuctionAware;
+import com.gogomaya.server.game.ConstructionAware;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.hibernate.JsonHibernateType;
@@ -31,7 +31,7 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
     @TypeDef(name = "game_request", typeClass = JsonHibernateType.class, defaultForType = GameRequest.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.construct.GameRequest")}),
     @TypeDef(name = "action_latch", typeClass = JsonHibernateType.class, defaultForType = ActionLatch.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.ActionLatch")})
 })
-public class GameConstruction implements SessionAware, GameConstuctionAware {
+public class GameConstruction implements SessionAware, ConstructionAware {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,14 +39,15 @@ public class GameConstruction implements SessionAware, GameConstuctionAware {
     private long construction;
 
     @Type(type = "game_request")
-    @Column(name = "REQUEST", length = 4096)
+    @Column(name = "REQUEST", length = 4096, nullable = false)
     private GameRequest request;
 
+    @Column(name = "STATE", nullable = false)
     @Enumerated(EnumType.STRING)
     private GameConstructionState state;
 
     @Type(type = "action_latch")
-    @Column(name = "RESPONSES", length = 4096)
+    @Column(name = "RESPONSES", length = 4096, nullable = false)
     private ActionLatch responces;
 
     @Column(name = "SESSION_ID")

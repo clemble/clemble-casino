@@ -2,8 +2,7 @@ package com.gogomaya.server.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import javax.inject.Inject;
-
+import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
@@ -27,14 +26,16 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
 
     final private PlayerListenerOperations listenerOperations;
 
-    @Inject
+    final private GameConstructionOperations[] gameConstructionOperations;
+    
     public WebPlayerOperations(RegistrationSignInContoller signInContoller, RegistrationLoginController loginController, WalletController walletController,
-            PlayerSessionController sessionController, PlayerListenerOperations listenerOperations) {
+            PlayerSessionController sessionController, PlayerListenerOperations listenerOperations, GameConstructionOperations ... gameConstructionOperations) {
         this.signInContoller = checkNotNull(signInContoller);
         this.loginController = checkNotNull(loginController);
         this.walletController = checkNotNull(walletController);
         this.sessionController = checkNotNull(sessionController);
         this.listenerOperations = checkNotNull(listenerOperations);
+        this.gameConstructionOperations = checkNotNull(gameConstructionOperations);
     }
 
     @Override
@@ -45,8 +46,8 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = signInContoller.createUser(registrationRequest);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
-        Player player = new Player(playerIdentity, this, listenerOperations)
-                .setProfile(registrationRequest.getPlayerProfile()).setCredential(registrationRequest.getPlayerCredential());
+        Player player = new Player(playerIdentity, registrationRequest.getPlayerCredential(), this, listenerOperations, gameConstructionOperations)
+                .setProfile(registrationRequest.getPlayerProfile());
         // Step 3. Returning player session result
         return player;
 
@@ -60,7 +61,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = loginController.createUser(credential);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
-        Player player = new Player(playerIdentity, this, listenerOperations).setCredential(credential);
+        Player player = new Player(playerIdentity, credential, this, listenerOperations, gameConstructionOperations);
         // Step 3. Returning player session result
         return player;
     }

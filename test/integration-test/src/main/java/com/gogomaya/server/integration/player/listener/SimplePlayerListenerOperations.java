@@ -77,7 +77,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
             @Override
             public void onMessage(Message message) {
                 try {
-                    System.out.println(new String(message.getBody()));
+                    System.out.println(playerSession.getPlayerId() + " > " + new String(message.getBody()));
                     // Step 1. Parsing GameTable
                     Event event = objectMapper.readValue(new String(message.getBody()), Event.class);
                     // Step 2. Updating game table
@@ -93,23 +93,24 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
         return new PlayerListenerControl() {
 
             @Override
-            public void stopListener() {
+            public void close() {
                 listenerContainer.stop();
             }
         };
     }
 
     private PlayerListenerControl addStompListener(final PlayerSession playerSession, final PlayerListener playerListener) {
-        final String channel = "/topic/" + Long.toString(playerSession.getPlayerId());
+        final long player = playerSession.getPlayerId();
+        final String channel = "/topic/" + player;
         // Step 1. Creating a game table client
         try {
             final Client stompClient = new Client(playerSession.getServer(), 61613, "guest", "guest");
-            stompClient.subscribe("/topic/" + Long.toString(playerSession.getPlayerId()), new Listener() {
+            stompClient.subscribe(channel, new Listener() {
 
                 @Override
                 public void message(Map parameters, String message) {
                     try {
-                        System.out.println(message);
+                        System.out.println(player + " > " + message);
                         // Step 1. Reading game table
                         Event event = objectMapper.readValue(message, Event.class);
                         // Step 2. Updating game table
@@ -124,7 +125,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
             return new PlayerListenerControl() {
 
                 @Override
-                public void stopListener() {
+                public void close() {
                     stompClient.unsubscribe(channel);
                     stompClient.disconnect();
                 }
@@ -170,7 +171,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
             return new PlayerListenerControl() {
 
                 @Override
-                public void stopListener() {
+                public void close() {
                     webSocket.close();
                 }
             };

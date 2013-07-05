@@ -1,7 +1,10 @@
 package com.gogomaya.server.integration.player.listener;
 
-public interface PlayerListenerControl {
+import java.io.Closeable;
 
-    public void stopListener();
+public interface PlayerListenerControl extends Closeable {
+
+    @Override
+    public void close();
 
 }

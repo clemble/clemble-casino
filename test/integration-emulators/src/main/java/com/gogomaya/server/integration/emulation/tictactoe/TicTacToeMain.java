@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.emulator.GameplayEmulator;
-import com.gogomaya.server.integration.game.GameOperations;
+import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 
@@ -37,7 +37,7 @@ public class TicTacToeMain {
     public static class MainConfiguration {
 
         @Inject
-        public GameOperations<TicTacToeState> gameOperations;
+        public GameConstructionOperations<TicTacToeState> gameOperations;
         
         @Inject
         public PlayerOperations playerOperations;

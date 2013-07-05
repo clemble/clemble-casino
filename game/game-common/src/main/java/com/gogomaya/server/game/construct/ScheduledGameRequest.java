@@ -1,6 +1,11 @@
 package com.gogomaya.server.game.construct;
 
+import java.util.Collection;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.server.game.specification.GameSpecification;
 
 @JsonTypeName("scheduled")
 public class ScheduledGameRequest extends GameRequest {
@@ -10,14 +15,17 @@ public class ScheduledGameRequest extends GameRequest {
      */
     private static final long serialVersionUID = -5026198091605671710L;
 
-    private GameDeclineBehavior declineBehavior;
+    final private GameDeclineBehavior declineBehavior;
+
+    @JsonCreator
+    public ScheduledGameRequest(@JsonProperty("playerId") long playerId, @JsonProperty("specification") GameSpecification specification,
+            @JsonProperty("participants") Collection<Long> participants, @JsonProperty("declineBehavior") GameDeclineBehavior declineBehavior) {
+        super(playerId, specification, participants);
+        this.declineBehavior = declineBehavior != null ? declineBehavior : GameDeclineBehavior.invalidate;
+    }
 
     public GameDeclineBehavior getDeclineBehavior() {
         return declineBehavior;
-    }
-
-    public void setDeclineBehavior(GameDeclineBehavior declineBehavior) {
-        this.declineBehavior = declineBehavior;
     }
 
 }

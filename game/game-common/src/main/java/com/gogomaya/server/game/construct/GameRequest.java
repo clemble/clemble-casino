@@ -1,12 +1,12 @@
 package com.gogomaya.server.game.construct;
 
 import java.util.Collection;
-import java.util.LinkedHashSet;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
 import com.gogomaya.server.player.PlayerAware;
+import com.google.common.collect.ImmutableSet;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 abstract public class GameRequest implements PlayerAware, GameSpecificationAware, GameOpponentsAware {
@@ -16,22 +16,28 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
      */
     private static final long serialVersionUID = 4949060894194971610L;
 
-    private long playerId;
+    final private long playerId;
 
-    private GameSpecification specification;
+    final private GameSpecification specification;
 
-    private Collection<Long> participants = new LinkedHashSet<Long>();
+    final private Collection<Long> participants;
+
+    public GameRequest(long playerId, GameSpecification specification) {
+        this(playerId, specification, ImmutableSet.<Long> of(playerId));
+    }
+
+    public GameRequest(long playerId, GameSpecification specification, Collection<Long> participants) {
+        this.playerId = playerId;
+        this.specification = specification;
+
+        if (!participants.contains(playerId))
+            participants.add(playerId);
+        this.participants = participants;
+    }
 
     @Override
     public Collection<Long> getParticipants() {
         return participants;
-    }
-
-    public GameRequest setParticipants(Collection<Long> participants) {
-        if (!participants.contains(playerId))
-            participants.add(playerId);
-        this.participants = participants;
-        return this;
     }
 
     @Override
@@ -39,18 +45,9 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
         return playerId;
     }
 
-    public void setPlayerId(long playerId) {
-        this.playerId = playerId;
-    }
-
     @Override
     public GameSpecification getSpecification() {
         return specification;
-    }
-
-    public GameRequest setSpecification(GameSpecification specification) {
-        this.specification = specification;
-        return this;
     }
 
     @Override

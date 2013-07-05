@@ -16,8 +16,8 @@ import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.data.DataGenerator;
-import com.gogomaya.server.integration.game.GameOperations;
-import com.gogomaya.server.integration.game.GamePlayer;
+import com.gogomaya.server.integration.game.GameSessionPlayer;
+import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
@@ -34,7 +34,7 @@ public class GameOperationsTest {
     PlayerOperations playerOperations;
 
     @Inject
-    GameOperations<TicTacToeState> gameOperations;
+    GameConstructionOperations<TicTacToeState> gameOperations;
 
     @Inject
     PlayerListenerOperations gameListenerOperations;
@@ -45,7 +45,7 @@ public class GameOperationsTest {
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = selectSpecification(player, 0);
         // Step 2. Creating game table
-        GamePlayer<TicTacToeState> gameTable = gameOperations.construct(player, specification);
+        GameSessionPlayer<TicTacToeState> gameTable = gameOperations.constructAutomatic(player, specification);
         Assert.assertNotNull(gameTable);
     }
 

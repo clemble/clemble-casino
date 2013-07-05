@@ -447,6 +447,12 @@
         </dependency>
         <dependency>
             <groupId>com.stresstest</groupId>
+            <artifactId>spring-cleaners</artifactId>
+            <version>${stresstest.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.stresstest</groupId>
             <artifactId>jbehave-stress</artifactId>
             <version>${stresstest.version}</version>
             <scope>test</scope>

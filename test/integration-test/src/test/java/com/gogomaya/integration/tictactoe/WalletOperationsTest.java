@@ -1,5 +1,6 @@
 package com.gogomaya.integration.tictactoe;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
@@ -13,14 +14,17 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.integration.game.GameOperations;
-import com.gogomaya.server.integration.game.GamePlayer;
+import com.gogomaya.server.integration.game.GameSessionPlayer;
+import com.gogomaya.server.integration.game.construction.GameScenarios;
+import com.gogomaya.server.integration.game.construction.PlayerGameConstructionOperations;
+import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
-import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
+import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -32,40 +36,38 @@ public class WalletOperationsTest {
     private PlayerOperations playerOperations;
 
     @Autowired
-    private GameOperations<TicTacToeState> gameOperations;
+    private GameScenarios gameOperations;
 
     @Test(expected = GogomayaException.class)
     public void runingOutOfMoney() {
-        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
-        
-        TicTacToePlayer playerAState = (TicTacToePlayer) players.get(0);
-        Player playerA = playerAState.getPlayer();
-        
-        TicTacToePlayer playerBState = (TicTacToePlayer) players.get(1);
-        Player playerB = players.get(1).getPlayer();
+        Player playerA = playerOperations.createPlayer();
+        Player playerB = playerOperations.createPlayer();
 
-        GameSpecification specification = gameOperations.selectSpecification();
+        Collection<Long> participants = ImmutableList.of(playerA.getPlayerId(), playerB.getPlayerId());
+
+        PlayerGameConstructionOperations<TicTacToeState> playerAConstructionOp = playerA.getGameConstructor(TicTacToe.NAME);
+        PlayerGameConstructionOperations<TicTacToeState> playerBConstructionOp = playerB.getGameConstructor(TicTacToe.NAME);
 
         do {
+            TicTacToeSessionPlayer sessionAPlayer = (TicTacToeSessionPlayer) playerAConstructionOp.constructAvailability(
+                    playerAConstructionOp.selectSpecification(), participants);
+            TicTacToeSessionPlayer sessionBPlayer = (TicTacToeSessionPlayer) playerBConstructionOp.acceptInvitation(sessionAPlayer.getConstruction());
 
-            if (playerAState.isToMove()) {
-                playerAState.select(0, 0);
-                playerAState.bet(1);
-                playerBState.bet(1);
+            sessionAPlayer.waitForStart();
+            sessionBPlayer.waitForStart();
+
+            if (sessionAPlayer.isToMove()) {
+                sessionAPlayer.select(0, 0);
+                sessionAPlayer.bet(1);
+                sessionBPlayer.bet(1);
             } else {
-                playerBState.select(0, 0);
-                playerBState.bet(1);
-                playerAState.bet(1);
+                sessionBPlayer.select(0, 0);
+                sessionBPlayer.bet(1);
+                sessionAPlayer.bet(1);
             }
 
-            playerAState.giveUp();
-
-            playerAState = (TicTacToePlayer) gameOperations.construct(playerA, specification);
-            playerBState = (TicTacToePlayer) gameOperations.construct(playerB, specification);
-            
-            playerAState.waitForStart();
-            playerBState.waitForStart();
-        } while(true);
+            sessionAPlayer.giveUp();
+        } while (true);
     }
 
 }

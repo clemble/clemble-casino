@@ -12,7 +12,7 @@ public interface PlayerStateManager {
 
     public boolean isAvailable(final long player);
 
-    public boolean isAvailable(final Collection<Long> players);
+    public boolean areAvailable(final Collection<Long> players);
 
     public boolean markBusy(final long player, final long sessionId);
 

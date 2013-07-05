@@ -1,5 +1,6 @@
 package com.gogomaya.server;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,12 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ExpectedAction;
 import com.gogomaya.server.event.SimpleExpectedAction;
 
-public class ActionLatch {
+public class ActionLatch implements Serializable {
+
+    /**
+     * Generated 04/07/13
+     */
+    private static final long serialVersionUID = -7689529505293361503L;
 
     final private Map<Long, ExpectedAction> actions = new HashMap<Long, ExpectedAction>();
 
@@ -56,7 +62,10 @@ public class ActionLatch {
     }
 
     public boolean complete() {
-        return actions.size() == actions.keySet().size();
+        for (ExpectedAction action : actions.values())
+            if (action instanceof SimpleExpectedAction)
+                return false;
+        return true;
     }
 
     @Override

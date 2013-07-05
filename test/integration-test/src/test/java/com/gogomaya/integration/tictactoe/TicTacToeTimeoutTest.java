@@ -15,10 +15,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.integration.game.GameOperations;
-import com.gogomaya.server.integration.game.GamePlayer;
-import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
+import com.gogomaya.server.integration.game.GameSessionPlayer;
+import com.gogomaya.server.integration.game.construction.GameScenarios;
+import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 
@@ -29,18 +30,18 @@ import com.gogomaya.server.test.RedisCleaner;
 public class TicTacToeTimeoutTest {
 
     @Inject
-    public GameOperations<TicTacToeState> gameOperations;
+    public GameScenarios gameOperations;
 
     @Test
     public void testMoveTimeout() {
-        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
-        TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
-        TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+        List<GameSessionPlayer<TicTacToeState>> players = gameOperations.constructGame(TicTacToe.NAME);
+        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+        TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
         GogomayaException gogomayaException = null;
         try {
 
             Assert.assertNotNull(players);
-            Assert.assertEquals(playerA.getTableId(), playerB.getTableId());
+            Assert.assertEquals(playerA.getConstruction(), playerB.getConstruction());
             Assert.assertEquals(players.size(), 2);
 
             playerA.select(0, 0);
@@ -51,8 +52,8 @@ public class TicTacToeTimeoutTest {
         } catch (GogomayaException exception) {
             gogomayaException = exception;
         } finally {
-            playerA.clear();
-            playerB.clear();
+            playerA.close();
+            playerB.close();
         }
 
         assertGogomayaFailure(gogomayaException, GogomayaError.GamePlayGameEnded);
@@ -60,35 +61,37 @@ public class TicTacToeTimeoutTest {
 
     @Test
     public void testTotalTimeout() {
-        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
-        TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
-        TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+        List<GameSessionPlayer<TicTacToeState>> players = gameOperations.constructGame(TicTacToe.NAME);
+        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+        TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
         GogomayaException gogomayaException = null;
 
         Assert.assertTrue(playerA.getSpecification().getTotalTimeRule().getLimit() > 0);
         Assert.assertTrue(playerA.getSpecification().getMoveTimeRule().getLimit() > 0);
 
         int step = 0;
+        int stepWaitTimeout = 300 + playerA.getSpecification().getTotalTimeRule().getLimit() / 4;
+
         try {
 
             Assert.assertNotNull(players);
-            Assert.assertEquals(playerA.getTableId(), playerB.getTableId());
+            Assert.assertEquals(playerA.getConstruction(), playerB.getConstruction());
             Assert.assertEquals(players.size(), 2);
 
             playerA.select(0, 0);
 
-            sleep(1200);
+            sleep(stepWaitTimeout);
             step++;
 
             playerA.bet(1);
             playerB.bet(1);
 
-            sleep(1200);
+            sleep(stepWaitTimeout);
             step++;
 
             playerB.select(1, 0);
 
-            sleep(1200);
+            sleep(stepWaitTimeout);
             step++;
 
             playerA.bet(1);
@@ -96,19 +99,21 @@ public class TicTacToeTimeoutTest {
 
             playerA.select(0, 1);
 
-            sleep(1200);
+            sleep(stepWaitTimeout);
             step++;
 
             playerA.bet(1);
+            playerB.bet(1);
 
         } catch (GogomayaException exception) {
             gogomayaException = exception;
         } finally {
-            playerA.clear();
-            playerB.clear();
+            playerA.close();
+            playerB.close();
         }
 
         Assert.assertEquals(4, step);
+        Assert.assertNotNull(gogomayaException);
         assertGogomayaFailure(gogomayaException, GogomayaError.GamePlayGameEnded);
     }
 

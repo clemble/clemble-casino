@@ -5,11 +5,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import com.gogomaya.server.game.GameConstuctionAware;
+import com.gogomaya.server.game.ConstructionAware;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
 
-public class GameInitiation implements GameOpponentsAware, GameSpecificationAware, GameConstuctionAware {
+public class GameInitiation implements GameOpponentsAware, GameSpecificationAware, ConstructionAware {
 
     final private long construction;
 

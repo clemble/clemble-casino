@@ -26,12 +26,12 @@ public class GogomayaHTTPErrorHandler implements ResponseErrorHandler {
 
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
-        // Step 1. Checking that response is of JSON type
-        Assert.assertTrue(response.getHeaders().getContentType().toString().contains(MediaType.APPLICATION_JSON_VALUE));
-        // Step 2. Converting to GogomayaFailure
+        // Step 1. Reading error string
         byte[] buffer = new byte[response.getBody().available()];
         response.getBody().read(buffer);
         String errorMessage = new String(buffer);
+        // Step 2. Checking that response is of JSON type
+        Assert.assertTrue("Wrong type" + errorMessage, response.getHeaders().getContentType().toString().contains(MediaType.APPLICATION_JSON_VALUE));
         GogomayaFailureDescription description = objectMapper.readValue(errorMessage, GogomayaFailureDescription.class);
         // Step 3. Generating GogomayaException
         throw GogomayaException.fromDescription(description);

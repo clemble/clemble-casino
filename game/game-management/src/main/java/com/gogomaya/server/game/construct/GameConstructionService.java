@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.GameSessionState;
 import com.gogomaya.server.game.event.schedule.GameCanceledEvent;
 import com.gogomaya.server.game.event.schedule.GameConstructedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
@@ -55,8 +56,9 @@ public class GameConstructionService {
             throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(request);
+        construction.setState(GameConstructionState.pending);
+        construction.getResponces().put(request.getPlayerId(), new InvitationAcceptedEvent(construction.getConstruction(), request.getPlayerId()));
         construction = constructionRepository.saveAndFlush(construction);
-        construction.getResponces().put(request.getPlayerId(), new InvitationAcceptedEvent(request.getPlayerId(), construction.getConstruction()));
         // Step 4. Sending invitation to opponents
         if (!construction.getResponces().complete()) {
             playerNotificationService.notify(request.getParticipants(), new PlayerInvitedEvent(construction.getConstruction(), request));
@@ -74,7 +76,7 @@ public class GameConstructionService {
         // Step 2. Checking associated construction
         GameConstruction construction = constructionRepository.findOne(response.getConstruction());
         if (construction == null)
-            throw GogomayaException.fromError(GogomayaError.GameConstructionNonExistent);
+            throw GogomayaException.fromError(GogomayaError.GameConstructionDoesNotExistent);
         if (construction.getState() != GameConstructionState.pending)
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
         // Step 3. Checking if player is part of the game
@@ -84,11 +86,11 @@ public class GameConstructionService {
         if (response instanceof InvitationDeclinedEvent) {
             // Step 4.1. In case declined send game canceled notification
             construction.setState(GameConstructionState.canceled);
-            construction = constructionRepository.saveAndFlush(construction);
-            playerNotificationService.notify(responseLatch.fetchParticipants(), new GameCanceledEvent(response.getConstruction(), response.getPlayerId()));
         } else if (responseLatch.complete()) {
             construction = constructionComplete(construction);
         }
+        construction = constructionRepository.saveAndFlush(construction);
+        playerNotificationService.notify(responseLatch.fetchParticipants(), response);
         return construction;
     }
 

@@ -45,11 +45,7 @@ public class GameConstructionRepositoryTest {
 
     @Test
     public void testSaving() {
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest();
-        availabilityGameRequest.setDeclineBehavior(GameDeclineBehavior.invalidate);
-        availabilityGameRequest.setPlayerId(1L);
-        availabilityGameRequest.setParticipants(ImmutableList.<Long> of(1L, 2L));
-        availabilityGameRequest.setSpecification(GameSpecification.DEFAULT);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(1L, GameSpecification.DEFAULT, ImmutableList.<Long> of(1L, 2L), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         Assert.assertNotNull(construction.getResponces());

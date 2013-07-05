@@ -3,6 +3,7 @@ package com.gogomaya.server.spring.integration;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -12,18 +13,21 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.integration.game.GameOperations;
-import com.gogomaya.server.integration.game.IntegrationGameOperations;
-import com.gogomaya.server.integration.game.WebGameOperations;
+import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
+import com.gogomaya.server.integration.game.IntegrationGameSessionPlayerFactory;
+import com.gogomaya.server.integration.game.WebGameSessionPlayerFactory;
+import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
+import com.gogomaya.server.integration.game.construction.GameScenarios;
+import com.gogomaya.server.integration.game.construction.IntegrationGameConstructionOperations;
+import com.gogomaya.server.integration.game.construction.WebGameConstructionOperations;
+import com.gogomaya.server.integration.game.tictactoe.TicTacToePlayerSessionFactory;
 import com.gogomaya.server.integration.player.IntegrationPlayerOperations;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.WebPlayerOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.listener.SimplePlayerListenerOperations;
-import com.gogomaya.server.integration.tictactoe.IntegrationTicTacToeOperations;
-import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
-import com.gogomaya.server.integration.tictactoe.WebTicTacToeOperations;
 import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiConfiguration;
@@ -39,6 +43,15 @@ import com.gogomaya.server.web.player.wallet.WalletController;
 @Import(value = { JsonSpringConfiguration.class, TestConfiguration.LocalTestConfiguration.class, TestConfiguration.LocalIntegrationTestConfiguration.class,
         TestConfiguration.RemoteIntegrationTestConfiguration.class })
 public class TestConfiguration {
+
+    @Autowired
+    PlayerOperations playerOperations;
+
+    @Bean
+    @Singleton
+    public GameScenarios gameScenarios() {
+        return new GameScenarios(playerOperations);
+    }
 
     @Configuration
     @Profile("default")
@@ -78,20 +91,29 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(signInContoller, loginController, walletController, sessionController, tableListenerOperations());
+            return new WebPlayerOperations(signInContoller, loginController, walletController, sessionController, tableListenerOperations(),
+                    ticTacToeGameConstructionOperations());
         }
 
         @Bean
         @Singleton
-        public GameOperations<TicTacToeState> gameOperations() {
-            return new WebGameOperations<TicTacToeState>(configuartionManagerController, constructionController, ticTacToeOperations(), playerOperations());
+        public GameSessionPlayerFactory<?> genericGameSessionFactory() {
+            return new WebGameSessionPlayerFactory<>(engineController, constructionController);
         }
 
         @Bean
         @Singleton
-        public TicTacToeOperations ticTacToeOperations() {
-            return new WebTicTacToeOperations(engineController, constructionController);
+        public GameConstructionOperations<TicTacToeState> ticTacToeGameConstructionOperations() {
+            return new WebGameConstructionOperations<TicTacToeState>(TicTacToe.NAME, configuartionManagerController, constructionController,
+                    ticTacToeSessionPlayerFactory());
         }
+
+        @Bean
+        @Singleton
+        public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionPlayerFactory() {
+            return new TicTacToePlayerSessionFactory((GameSessionPlayerFactory<TicTacToeState>) genericGameSessionFactory());
+        }
+
     }
 
     @Configuration
@@ -128,7 +150,7 @@ public class TestConfiguration {
         public ObjectMapper objectMapper;
 
         public String getBaseUrl() {
-            return "http://localhost:8080/web";
+            return "http://localhost:8080/gogomaya-web";
         }
 
         @Bean
@@ -143,7 +165,7 @@ public class TestConfiguration {
             RestTemplate restTemplate = new RestTemplate();
 
             for (HttpMessageConverter<?> messageConverter : restTemplate.getMessageConverters()) {
-                if(messageConverter instanceof MappingJackson2HttpMessageConverter) {
+                if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
                     ((MappingJackson2HttpMessageConverter) messageConverter).setObjectMapper(objectMapper);
                 }
             }
@@ -155,19 +177,26 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), tableListenerOperations());
+            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), tableListenerOperations(), ticTacToeGameConstructionOperations());
         }
 
         @Bean
         @Singleton
-        public GameOperations<TicTacToeState> gameOperations() {
-            return new IntegrationGameOperations<TicTacToeState>(getBaseUrl(), restTemplate(), ticTacToeOperations(), playerOperations());
+        public GameSessionPlayerFactory<?> genericGameSessionFactory() {
+            return new IntegrationGameSessionPlayerFactory<>(restTemplate(), getBaseUrl());
         }
 
         @Bean
         @Singleton
-        public IntegrationTicTacToeOperations ticTacToeOperations() {
-            return new IntegrationTicTacToeOperations(getBaseUrl(), restTemplate());
+        public GameConstructionOperations<TicTacToeState> ticTacToeGameConstructionOperations() {
+            return new IntegrationGameConstructionOperations<TicTacToeState>(TicTacToe.NAME, getBaseUrl(), restTemplate(), ticTacToeSessionPlayerFactory());
         }
+
+        @Bean
+        @Singleton
+        public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionPlayerFactory() {
+            return new TicTacToePlayerSessionFactory((GameSessionPlayerFactory<TicTacToeState>) genericGameSessionFactory());
+        }
+
     }
 }

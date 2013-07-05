@@ -56,6 +56,7 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
 
     @Override
     public void notify(final Collection<Long> playerIds, final Collection<? extends Event> events) {
+        
         // Step 1. Notifying each event one after another
         for (Event event : events)
             notify(playerIds, event);

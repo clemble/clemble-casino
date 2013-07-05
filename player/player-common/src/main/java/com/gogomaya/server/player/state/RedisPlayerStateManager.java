@@ -49,7 +49,7 @@ public class RedisPlayerStateManager implements PlayerStateManager {
     }
 
     @Override
-    public boolean isAvailable(final Collection<Long> players) {
+    public boolean areAvailable(final Collection<Long> players) {
         return redisTemplate.execute(new SessionCallback<Boolean>() {
 
             @Override
@@ -59,8 +59,8 @@ public class RedisPlayerStateManager implements PlayerStateManager {
                 operations.multi();
                 for (Long player : players) {
                     BoundValueOperations valueOperations = operations.boundValueOps(player);
-                    if (valueOperations.get() == null || SessionAware.DEFAULT_SESSION != ((Long) valueOperations.get()).longValue()) {
-
+                    Long currentSession = (Long) valueOperations.get();
+                    if (currentSession != null && SessionAware.DEFAULT_SESSION != currentSession.longValue()) {
                         operations.discard();
                         return false;
                     }

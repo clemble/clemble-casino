@@ -8,6 +8,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
@@ -25,11 +26,13 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
     final private String baseUrl;
     final private PlayerListenerOperations listenerOperations;
     final private RestTemplate restTemplate;
+    final private GameConstructionOperations[] gameConstructionOprations;
 
-    public IntegrationPlayerOperations(final String baseUrl, final RestTemplate restTemplate, final PlayerListenerOperations listenerOperations) {
+    public IntegrationPlayerOperations(final String baseUrl, final RestTemplate restTemplate, final PlayerListenerOperations listenerOperations, GameConstructionOperations ... factories) {
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);
         this.listenerOperations = checkNotNull(listenerOperations);
+        this.gameConstructionOprations = checkNotNull(factories);
     }
 
     @Override
@@ -40,8 +43,8 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + CREATE_URL, registrationRequest, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
-        Player player = new Player(playerIdentity, this, listenerOperations).setProfile(registrationRequest.getPlayerProfile()).setCredential(
-                registrationRequest.getPlayerCredential());
+        Player player = new Player(playerIdentity, registrationRequest.getPlayerCredential(), this, listenerOperations, gameConstructionOprations)
+            .setProfile(registrationRequest.getPlayerProfile());
         // Step 3. Returning player session result
         return player;
     }
@@ -54,7 +57,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + LOGIN_URL, credential, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
-        Player player = new Player(playerIdentity, this, listenerOperations).setCredential(credential);
+        Player player = new Player(playerIdentity, credential, this, listenerOperations, gameConstructionOprations);
         // Step 3. Returning player session result
         return player;
     }

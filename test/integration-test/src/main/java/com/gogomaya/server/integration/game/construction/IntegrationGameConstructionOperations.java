@@ -1,4 +1,4 @@
-package com.gogomaya.server.integration.game;
+package com.gogomaya.server.integration.game.construction;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -12,21 +12,28 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameRequest;
+import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.integration.player.PlayerOperations;
 
-public class IntegrationGameOperations<State extends GameState> extends AbstractGameOperation<State> {
+public class IntegrationGameConstructionOperations<State extends GameState> extends AbstractGameConstructionOperation<State> {
+
+    /**
+     * Generated 03/07/13
+     */
+    private static final long serialVersionUID = 5388660689519677191L;
 
     final private static String CREATE_URL = "/spi/active/constuct";
+    final private static String CONSTRUCTION_URL = "/spi/active/constuct/responce";
     final private static String OPTIONS_URL = "/spi/active/options";
 
     final private RestTemplate restTemplate;
     final private String baseUrl;
 
-    public IntegrationGameOperations(final String baseUrl, final RestTemplate restTemplate, final GamePlayerOperations<State> playerFactory,
-            final PlayerOperations playerOperations) {
-        super(playerOperations, playerFactory);
+    public IntegrationGameConstructionOperations(final String name, final String baseUrl, final RestTemplate restTemplate,
+            final GameSessionPlayerFactory<State> playerFactory) {
+        super(name, playerFactory);
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
     }
@@ -59,6 +66,18 @@ public class IntegrationGameOperations<State extends GameState> extends Abstract
         HttpEntity<GameRequest> requestEntity = new HttpEntity<GameRequest>(gameRequest, header);
         // Step 3. Rest template generation
         return (GameConstruction) restTemplate.exchange(baseUrl + CREATE_URL, HttpMethod.POST, requestEntity, GameConstruction.class).getBody();
+    }
+
+    @Override
+    protected void responce(InvitationResponceEvent responceEvent) {
+        // Step 1. Initializing headers
+        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
+        header.add("playerId", String.valueOf(responceEvent.getPlayerId()));
+        header.add("Content-Type", "application/json");
+        // Step 2. Generating request
+        HttpEntity<InvitationResponceEvent> requestEntity = new HttpEntity<InvitationResponceEvent>(responceEvent, header);
+        // Step 3. Rest template generation
+        restTemplate.exchange(baseUrl + CONSTRUCTION_URL, HttpMethod.POST, requestEntity, GameConstruction.class);
     }
 
 }

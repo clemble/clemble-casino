@@ -16,12 +16,12 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.integration.game.GameOperations;
+import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.PlayerOperations;
 
 public class GameplayEmulator<State extends GameState> {
 
-    final private GameOperations<State> gameOperations;
+    final private GameConstructionOperations<State> gameOperations;
 
     final private PlayerOperations playerOperations;
 
@@ -31,7 +31,7 @@ public class GameplayEmulator<State extends GameState> {
 
     private ScheduledExecutorService executorService;
 
-    public GameplayEmulator(final PlayerOperations playerOperations, final GameOperations<State> gameOperations, final GameActor<State> gameActor) {
+    public GameplayEmulator(final PlayerOperations playerOperations, final GameConstructionOperations<State> gameOperations, final GameActor<State> gameActor) {
         this.gameOperations = checkNotNull(gameOperations);
         this.actor = checkNotNull(gameActor);
         this.playerOperations = checkNotNull(playerOperations);
@@ -80,7 +80,7 @@ public class GameplayEmulator<State extends GameState> {
         executorService.submit(playerEmulator);
     }
 
-    private class PlayerEmulatorManager implements Runnable {
+    public class PlayerEmulatorManager implements Runnable {
 
         @Override
         public void run() {

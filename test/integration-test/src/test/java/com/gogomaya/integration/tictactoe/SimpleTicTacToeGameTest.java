@@ -14,12 +14,14 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
+import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.integration.game.GameOperations;
-import com.gogomaya.server.integration.game.GamePlayer;
-import com.gogomaya.server.integration.tictactoe.TicTacToeOperations;
-import com.gogomaya.server.integration.tictactoe.TicTacToePlayer;
-import com.gogomaya.server.money.Money;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
+import com.gogomaya.server.integration.game.GameSessionPlayer;
+import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
+import com.gogomaya.server.integration.game.construction.GameScenarios;
+import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
+import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 
@@ -30,58 +32,57 @@ import com.gogomaya.server.test.RedisCleaner;
 public class SimpleTicTacToeGameTest {
 
     @Inject
-    TicTacToeOperations ticTacToeOperations;
+    GameScenarios gameScenarios;
 
     @Inject
-    GameOperations<TicTacToeState> gameOperations;
+    GameConstructionOperations<TicTacToeState> gameOperations;
 
     @Test
-    public void testSimpleStart() {
-        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
-        TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
-        TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+    public void testMoneyAndMoveProcessing() {
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+        TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
         try {
             int gamePrice = playerA.getSpecification().getBetRule().getPrice();
-
-            long playerAidentifier = playerA.getPlayer().getPlayerId();
-            long playerBidentifier = playerB.getPlayer().getPlayerId();
-
-            Assert.assertNotNull(players);
-            Assert.assertEquals(playerA.getTableId(), playerB.getTableId());
-            Assert.assertEquals(players.size(), 2);
 
             playerA.select(0, 0);
 
             playerA.bet(5);
             playerB.bet(2);
 
+            playerB.isToMove();
+            Assert.assertEquals(playerB.getNextMove().getClass(), TicTacToeSelectCellEvent.class);
+            playerA.syncWith(playerB);
+
             Assert.assertTrue(playerB.getState().getBoard()[0][0].owned());
             Assert.assertEquals(playerB.getState().getNextMoves().size(), 1);
-            Assert.assertEquals(playerB.getState().getPlayerState(playerAidentifier).getMoneyLeft(), gamePrice - 5);
-            Assert.assertEquals(playerB.getState().getPlayerState(playerBidentifier).getMoneyLeft(), gamePrice - 2);
-            Assert.assertNotNull(playerB.getState().getNextMove(playerBidentifier));
+            Assert.assertEquals(playerB.getMoneyLeft(), gamePrice - 2);
+            Assert.assertEquals(playerA.getMoneyLeft(), gamePrice - 5);
+            Assert.assertNotNull(playerB.getState().getNextMove(playerB.getPlayerId()));
         } finally {
-            playerA.clear();
-            playerB.clear();
+            playerA.close();
+            playerB.close();
         }
     }
 
     @Test
     public void testSimpleScenario() {
-        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
-        TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
-        TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+        TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
 
-        Money gamePrice = Money.create(playerA.getSpecification().getCurrency(), playerA.getSpecification().getBetRule().getPrice());
-        Money originalAmount = playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency());
+        Currency currency = playerA.getSpecification().getCurrency();
+        Assert.assertEquals(playerA.getSpecification().getCurrency(), playerB.getSpecification().getCurrency());
+        int gamePrice = playerA.getSpecification().getBetRule().getPrice();
+        long originalAmount = playerA.getPlayer().getWallet().getMoney(currency).getAmount();
 
         try {
             playerA.syncWith(playerB);
             playerA.select(0, 0);
 
             playerA.bet(2);
-            Assert.assertEquals(playerA.getState().getPlayerState(playerA.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
-            Assert.assertEquals(playerA.getState().getPlayerState(playerB.getPlayer().getPlayerId()).getMoneyLeft(), gamePrice.getAmount());
+            Assert.assertEquals(playerA.getMoneyLeft(), gamePrice);
+            Assert.assertEquals(playerB.getMoneyLeft(), gamePrice);
             playerB.bet(1);
             playerB.syncWith(playerA);
 
@@ -98,90 +99,90 @@ public class SimpleTicTacToeGameTest {
             playerB.bet(1);
             playerB.syncWith(playerA);
 
-            Assert.assertEquals(playerB.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.subtract(gamePrice));
-            Assert.assertEquals(playerA.getPlayer().getWallet().getMoney(gamePrice.getCurrency()), originalAmount.add(gamePrice));
+            Assert.assertEquals(playerB.getPlayer().getWallet().getMoney(currency).getAmount(), originalAmount - gamePrice);
+            Assert.assertEquals(playerA.getPlayer().getWallet().getMoney(currency).getAmount(), originalAmount + gamePrice);
 
             playerA.syncWith(playerB);
 
             Assert.assertTrue(playerB.getState().complete());
             Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
         } finally {
-            playerA.clear();
-            playerB.clear();
+            playerA.close();
+            playerB.close();
         }
     }
 
     @Test
     public void testScenarioRow() {
-        for(int row = 0; row < 3; row++){
-            List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
-            TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
-            TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+        for (int row = 0; row < 3; row++) {
+            List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+            TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+            TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
             try {
                 playerA.select(0, row);
                 playerA.bet(2);
                 playerB.bet(1);
-    
+
                 playerB.select(1, row);
                 playerB.bet(1);
                 playerA.bet(2);
-    
+
                 playerA.select(2, row);
                 playerA.bet(2);
                 playerB.bet(1);
-    
+
                 Assert.assertTrue(playerB.getState().complete());
                 Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
             } finally {
-                playerA.clear();
-                playerB.clear();
+                playerA.close();
+                playerB.close();
             }
         }
     }
-    
+
     @Test
     public void testScenarioColumn() {
-        for(int column = 0; column < 3; column++){
-            List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
-            TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
-            TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+        for (int column = 0; column < 3; column++) {
+            List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+            TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+            TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
             try {
                 playerA.select(column, 0);
                 playerA.bet(2);
                 playerB.bet(1);
-    
+
                 playerB.select(column, 1);
                 playerB.bet(1);
                 playerA.bet(2);
-    
+
                 playerA.select(column, 2);
                 playerA.bet(2);
                 playerB.bet(1);
-    
+
                 Assert.assertTrue(playerB.getState().complete());
                 Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
             } finally {
-                playerA.clear();
-                playerB.clear();
+                playerA.close();
+                playerB.close();
             }
         }
     }
 
     @Test
     public void scenario1() {
-        List<GamePlayer<TicTacToeState>> players = gameOperations.constructGame();
-        TicTacToePlayer playerA = (TicTacToePlayer) players.get(0);
-        TicTacToePlayer playerB = (TicTacToePlayer) players.get(1);
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+        TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
         try {
             playerA.select(0, 0);
-            playerA.bet(playerA.getMoneyLeft());
+            playerA.bet((int) playerA.getMoneyLeft());
             playerB.bet(1);
 
             Assert.assertTrue(playerB.getState().complete());
             Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerB.getPlayer().getPlayerId());
         } finally {
-            playerA.clear();
-            playerB.clear();
+            playerA.close();
+            playerB.close();
         }
     }
 

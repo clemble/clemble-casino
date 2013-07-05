@@ -18,7 +18,7 @@ public class AvailabilityGameInitiatorManager {
         // Step 1. Checking all users are active
         Collection<Long> participants = availabilityRequest.fetchAcceptedParticipants();
         // Step 2. Checking all participants are available
-        if (playerStateManager.isAvailable(participants)) {
+        if (playerStateManager.areAvailable(participants)) {
             initiatorService.initiate(new GameInitiation(availabilityRequest.getConstruction(), participants, availabilityRequest.getRequest()
                     .getSpecification()));
         }
