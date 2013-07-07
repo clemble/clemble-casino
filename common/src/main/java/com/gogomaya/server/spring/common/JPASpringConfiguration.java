@@ -3,7 +3,6 @@ package com.gogomaya.server.spring.common;
 import java.io.File;
 import java.util.Collection;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -12,12 +11,15 @@ import org.cloudfoundry.runtime.env.CloudEnvironment;
 import org.cloudfoundry.runtime.service.AbstractServiceCreator.ServiceNameTuple;
 import org.cloudfoundry.runtime.service.relational.CloudDataSourceFactory;
 import org.hibernate.ejb.HibernatePersistence;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -35,16 +37,20 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 @Configuration
+@EnableJpaRepositories(basePackages = "com.gogomaya.server.repository", entityManagerFactoryRef = "entityManagerFactory")
 @Import(value = { JPASpringConfiguration.Cloud.class, JPASpringConfiguration.DefaultAndTest.class })
-public class JPASpringConfiguration {
+public class JPASpringConfiguration implements SpringConfiguration {
 
-    @Inject
+    @Autowired
+    @Qualifier("dataSource")
     public DataSource dataSource;
 
-    @Inject
+    @Autowired
+    @Qualifier("jpaVendorAdapter")
     public JpaVendorAdapter jpaVendorAdapter;
 
-    @Inject
+    @Bean
+    @Singleton
     public JpaDialect jpaDialect() {
         return new HibernateJpaDialect();
     }
@@ -82,8 +88,8 @@ public class JPASpringConfiguration {
     @Profile(value = "cloud")
     public static class Cloud {
 
-        @Inject
-        CloudEnvironment cloudEnvironment;
+        @Autowired
+        public CloudEnvironment cloudEnvironment;
 
         @Bean
         @Singleton
@@ -118,8 +124,6 @@ public class JPASpringConfiguration {
     @Profile(value = { "default", "test" })
     public static class DefaultAndTest {
 
-        private EmbeddedDatabaseFactory factory = null;
-
         @Bean
         @Singleton
         public JpaVendorAdapter jpaVendorAdapter() {
@@ -133,12 +137,10 @@ public class JPASpringConfiguration {
         @Bean
         @Singleton
         public EmbeddedDatabaseFactory dataSourceFactory() {
-            if (factory == null) {
-                factory = new EmbeddedDatabaseFactory();
-                factory.setDatabaseName("gogomaya");
-                factory.setDatabaseType(EmbeddedDatabaseType.H2);
-                factory.setDatabasePopulator(databasePopulator());
-            }
+            EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
+            factory.setDatabaseName("gogomaya");
+            factory.setDatabaseType(EmbeddedDatabaseType.H2);
+            factory.setDatabasePopulator(databasePopulator());
             return factory;
         }
 
@@ -157,7 +159,7 @@ public class JPASpringConfiguration {
             while (!dataScripts.exists()) {
                 dataScripts = new File("../" + dataScripts.getPath());
             }
-            // Step 2. Inserting schema files 
+            // Step 2. Inserting schema files
             for (File schemaFile : new File(dataScripts.getAbsolutePath() + "/../schema/h2").listFiles()) {
                 databasePopulator.addScript(new FileSystemResource(schemaFile));
             }

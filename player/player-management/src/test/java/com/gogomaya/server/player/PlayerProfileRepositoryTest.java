@@ -9,7 +9,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.player.session.PlayerSessionRepository;
+import com.gogomaya.server.repository.player.PlayerProfileRepository;
+import com.gogomaya.server.repository.player.PlayerSessionRepository;
 import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -22,11 +22,11 @@ import com.gogomaya.server.tictactoe.configuration.TicTacToeConfigurationManager
 public class GameConfigurationTest {
 
     @Inject
-    TicTacToeConfigurationManager configurationManager;
+    TicTacToeConfigurationManager ticTacToeConfigurationManager;
 
     @Test
     public void testOptions() {
-        GameSpecificationOptions specificationOptions = configurationManager.getSpecificationOptions();
+        GameSpecificationOptions specificationOptions = ticTacToeConfigurationManager.getSpecificationOptions();
         Assert.assertNotNull(specificationOptions);
         Assert.assertTrue(((SelectSpecificationOptions) specificationOptions).getSpecifications().size() > 0);
     }

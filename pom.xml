@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gogomaya.server</groupId>
     <artifactId>parent</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>common</module>
@@ -54,6 +54,7 @@
         <spring.social.vkontakte.version>1.0.4</spring.social.vkontakte.version>
         <spring.social.google.version>0.0.1-SNAPSHOT</spring.social.google.version>
         <!-- Generic dependencies -->
+        <logback.version>1.0.6</logback.version>
         <jackson.version>2.2.1</jackson.version>
         <!-- Test dependencies -->
         <stresstest.version>0.1.0-SNAPSHOT</stresstest.version>

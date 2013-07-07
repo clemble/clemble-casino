@@ -5,8 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.GameSessionState;
-import com.gogomaya.server.game.event.schedule.GameCanceledEvent;
 import com.gogomaya.server.game.event.schedule.GameConstructedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationDeclinedEvent;
@@ -17,6 +15,7 @@ import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
 
 public class GameConstructionService {
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.player.wallet.PlayerWallet;
-import com.gogomaya.server.player.wallet.PlayerWalletRepository;
+import com.gogomaya.server.repository.payment.PlayerWalletRepository;
 
 @Controller
 public class WalletController {

@@ -17,6 +17,7 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -82,7 +83,7 @@ public class AutomaticGameInitiatorManager {
         // Step 1. Sanity check
         if (request == null)
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
-        Long activeSession = playerStateManager.isActive(request.getPlayerId());
+        Long activeSession = playerStateManager.getActiveSession(request.getPlayerId());
         if (activeSession != null && activeSession != SessionAware.DEFAULT_SESSION) {
             GameConstruction activeConstruction = constructionRepository.findBySession(activeSession);
             if (activeConstruction != null)

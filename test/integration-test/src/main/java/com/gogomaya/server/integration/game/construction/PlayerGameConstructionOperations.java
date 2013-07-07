@@ -48,6 +48,10 @@ public class PlayerGameConstructionOperations<State extends GameState> implement
         return gameOperations.constructAutomatic(player, gameSpecification);
     }
 
+    public GameSessionPlayer<State> constructAvailability(Collection<Long> participants) {
+        return constructAvailability(selectSpecification(), participants);
+    }
+
     public GameSessionPlayer<State> constructAvailability(GameSpecification specification, Collection<Long> participants) {
         return gameOperations.constructAvailability(player, specification, participants);
     }

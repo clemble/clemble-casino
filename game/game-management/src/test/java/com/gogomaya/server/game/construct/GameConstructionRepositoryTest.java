@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 import com.google.common.collect.ImmutableList;
 
@@ -48,6 +49,7 @@ public class GameConstructionRepositoryTest {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(1L, GameSpecification.DEFAULT, ImmutableList.<Long> of(1L, 2L), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
+        construction.setState(GameConstructionState.pending);
         Assert.assertNotNull(construction.getResponces());
         construction = constructionRepository.saveAndFlush(construction);
         Assert.assertNotNull(construction.getResponces());

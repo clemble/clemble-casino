@@ -9,7 +9,7 @@ import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.table.GameTableRepository;
+import com.gogomaya.server.repository.game.GameTableRepository;
 
 public class GameTableFactory<State extends GameState> {
 

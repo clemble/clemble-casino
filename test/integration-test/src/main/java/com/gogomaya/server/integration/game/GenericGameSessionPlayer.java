@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GameClientEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
@@ -34,6 +35,11 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     @Override
     final public long getConstruction() {
         return actualPlayer.getConstruction();
+    }
+
+    @Override
+    public GameConstruction getConstructionInfo() {
+        return actualPlayer.getConstructionInfo();
     }
 
     @Override
@@ -92,8 +98,12 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
+    public int getVersion() {
+        return actualPlayer.getVersion();
+    }
+
+    @Override
     public void waitVersion(int version) {
         actualPlayer.waitVersion(version);
     }
-
 }

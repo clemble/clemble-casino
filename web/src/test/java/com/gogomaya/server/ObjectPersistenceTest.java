@@ -20,13 +20,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.spring.web.WebMvcSpiConfiguration;
+import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.stresstest.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
 @WebAppConfiguration
-@ContextConfiguration(classes = { WebMvcSpiConfiguration.class })
+@ContextConfiguration(classes = { WebMvcSpiSpringConfiguration.class })
 public class ObjectPersistenceTest extends ObjectTest implements ApplicationContextAware {
 
     Map<String, JpaRepository> repositories;

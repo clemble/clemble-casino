@@ -10,7 +10,7 @@ import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.GameStateFactory;
-import com.gogomaya.server.game.session.GameSessionRepository;
+import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

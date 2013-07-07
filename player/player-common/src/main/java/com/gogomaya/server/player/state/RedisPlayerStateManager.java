@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -20,31 +21,31 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.Topic;
 
+import com.gogomaya.server.error.GogomayaError;
+import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.player.PlayerState;
-import com.gogomaya.server.utils.NumberUtils;
 
 public class RedisPlayerStateManager implements PlayerStateManager {
 
-    final private ReentrantLock containerLock = new ReentrantLock();
+    final private Logger LOGGER = LoggerFactory.getLogger(RedisPlayerStateManager.class);
 
     final private RedisTemplate<Long, Long> redisTemplate;
     final private RedisMessageListenerContainer listenerContainer;
 
-    public RedisPlayerStateManager(RedisTemplate<Long, Long> redisTemplate) {
+    public RedisPlayerStateManager(RedisTemplate<Long, Long> redisTemplate, RedisMessageListenerContainer listenerContainer) {
         this.redisTemplate = checkNotNull(redisTemplate);
-        this.listenerContainer = new RedisMessageListenerContainer();
-        this.listenerContainer.setConnectionFactory(redisTemplate.getConnectionFactory());
+        this.listenerContainer = listenerContainer;
     }
 
     @Override
-    public Long isActive(long playerId) {
+    public Long getActiveSession(long playerId) {
         return redisTemplate.boundValueOps(playerId).get();
     }
 
     @Override
     public boolean isAvailable(final long player) {
-        Long activePlayerSession = isActive(player);
+        Long activePlayerSession = getActiveSession(player);
         return activePlayerSession != null && activePlayerSession == SessionAware.DEFAULT_SESSION;
     }
 
@@ -53,20 +54,11 @@ public class RedisPlayerStateManager implements PlayerStateManager {
         return redisTemplate.execute(new SessionCallback<Boolean>() {
 
             @Override
-            @SuppressWarnings({ "rawtypes", "unchecked" })
-            public Boolean execute(RedisOperations operations) throws DataAccessException {
-                operations.watch(players);
-                operations.multi();
+            public <K, V> Boolean execute(RedisOperations<K, V> operations) throws DataAccessException {
                 for (Long player : players) {
-                    BoundValueOperations valueOperations = operations.boundValueOps(player);
-                    Long currentSession = (Long) valueOperations.get();
-                    if (currentSession != null && SessionAware.DEFAULT_SESSION != currentSession.longValue()) {
-                        operations.discard();
+                    if (!isAvailable(player))
                         return false;
-                    }
                 }
-
-                operations.discard();
                 return true;
             }
         });
@@ -74,6 +66,8 @@ public class RedisPlayerStateManager implements PlayerStateManager {
 
     @Override
     public boolean markBusy(final long playerId, final long sessionId) {
+        if (!isAvailable(playerId))
+            throw GogomayaException.fromError(GogomayaError.PlayerSessionTimeout);
         return markBusy(Collections.singleton(playerId), sessionId).size() == 0;
     }
 
@@ -86,18 +80,23 @@ public class RedisPlayerStateManager implements PlayerStateManager {
             @Override
             @SuppressWarnings({ "rawtypes", "unchecked" })
             public Boolean execute(RedisOperations operations) throws DataAccessException {
+                // Step 1. Checking all players are available
+                for (Long player : players)
+                    if (!isAvailable(player))
+                        return false;
+                // Step 2. Performing atomic operation
                 operations.watch(players);
                 operations.multi();
                 for (Long player : players) {
                     BoundValueOperations valueOperations = operations.boundValueOps(player);
-                    if (valueOperations.get() == null || SessionAware.DEFAULT_SESSION == ((Long) valueOperations.get()).longValue()) {
+                    if (SessionAware.DEFAULT_SESSION == ((Long) valueOperations.get()).longValue()) {
                         valueOperations.set(sessionId);
                     } else {
                         busyPlayers.add(player);
                         break;
                     }
                 }
-
+                // Step 3. If operation failed discard it
                 if (busyPlayers.size() != 0) {
                     operations.discard();
                     return false;
@@ -125,16 +124,16 @@ public class RedisPlayerStateManager implements PlayerStateManager {
 
     @Override
     public void subscribe(final long playerId, final MessageListener messageListener) {
-        // Step 1. Subscribing to channel
-        listenerContainer.addMessageListener(messageListener, new ChannelTopic(String.valueOf(playerId)));
-        // Step 2. Start container
-        startListenerContainer();
+        subscribe(Collections.singleton(playerId), messageListener);
     }
 
     @Override
     public void subscribe(Collection<Long> players, MessageListener messageListener) {
         // Step 1. Add message listener
         listenerContainer.addMessageListener(messageListener, toTopics(players));
+        // Step 2. Checking if listener container is alive, and starting it if needed
+        if (!listenerContainer.isActive() || !listenerContainer.isRunning())
+            listenerContainer.start();
     }
 
     @Override
@@ -160,25 +159,16 @@ public class RedisPlayerStateManager implements PlayerStateManager {
     }
 
     private void notifyStateChange(final long playerId, final PlayerState state) {
-        redisTemplate.execute(new RedisCallback<Long>() {
+        long numUpdatedClients = redisTemplate.execute(new RedisCallback<Long>() {
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
-                connection.publish(NumberUtils.toByteArray(playerId), NumberUtils.toByteArray(state));
-                return playerId;
+                // Step 1. Generating channel byte array from player identifier
+                byte[] channel = redisTemplate.getStringSerializer().serialize(String.valueOf(playerId));
+                // Step 2. Performing actual publish
+                return connection.publish(channel, new byte[] { (byte) state.ordinal() });
             }
         });
-    }
 
-    private void startListenerContainer() {
-        if (!listenerContainer.isActive()) {
-            containerLock.lock();
-            try {
-                if (!listenerContainer.isActive()) {
-                    listenerContainer.start();
-                }
-            } finally {
-                containerLock.unlock();
-            }
-        }
+        LOGGER.debug("Notified of change in {} state {} listeners", playerId, numUpdatedClients);
     }
 
 }

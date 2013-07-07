@@ -58,6 +58,7 @@ public class GameConstruction implements SessionAware, ConstructionAware {
 
     public GameConstruction(GameRequest request) {
         this.request = request;
+        this.state = GameConstructionState.pending;
         this.responces = new ActionLatch(((GameOpponentsAware) request).getParticipants(), "response");
     }
 

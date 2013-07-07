@@ -27,12 +27,13 @@
     </context-param>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>com.gogomaya.server.spring.web.WebGenericConfiguration</param-value>
+        <param-value>com.gogomaya.server.spring.web.WebGenericSpringConfiguration</param-value>
     </context-param>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+<!-- Don't need this anymore
     <servlet>
         <servlet-name>api-rest-exporter</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -42,7 +43,7 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>com.gogomaya.server.spring.web.WebMvcApiConfiguration</param-value>
+            <param-value>com.gogomaya.server.spring.web.WebMvcApiSpringConfiguration</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
@@ -50,6 +51,7 @@
         <servlet-name>api-rest-exporter</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
+ -->
 
     <servlet>
         <servlet-name>spi-rest-exporter</servlet-name>
@@ -60,7 +62,7 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>com.gogomaya.server.spring.web.WebMvcSpiConfiguration</param-value>
+            <param-value>com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration</param-value>
         </init-param>
         <load-on-startup>3</load-on-startup>
     </servlet>

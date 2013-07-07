@@ -5,13 +5,13 @@ import java.util.UUID;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.player.PlayerProfile;
-import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.security.PlayerCredentialRepository;
 import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.player.wallet.WalletRegistrationService;
 import com.gogomaya.server.player.web.RegistrationRequest;
+import com.gogomaya.server.repository.player.PlayerCredentialRepository;
+import com.gogomaya.server.repository.player.PlayerIdentityRepository;
+import com.gogomaya.server.repository.player.PlayerProfileRepository;
 
 public class PlayerRegistrationService {
 

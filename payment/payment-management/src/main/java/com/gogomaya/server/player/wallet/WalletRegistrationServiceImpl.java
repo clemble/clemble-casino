@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
+import com.gogomaya.server.repository.payment.PlayerWalletRepository;
 
 public class WalletRegistrationServiceImpl implements WalletRegistrationService {
 

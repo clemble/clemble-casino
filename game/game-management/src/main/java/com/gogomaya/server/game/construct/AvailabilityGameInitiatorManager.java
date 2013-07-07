@@ -2,6 +2,9 @@ package com.gogomaya.server.game.construct;
 
 import java.util.Collection;
 
+import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.connection.MessageListener;
+
 import com.gogomaya.server.player.state.PlayerStateManager;
 
 public class AvailabilityGameInitiatorManager {
@@ -14,13 +17,29 @@ public class AvailabilityGameInitiatorManager {
         this.initiatorService = initiatorService;
     }
 
-    public void register(GameConstruction availabilityRequest) {
+    public void retry(GameConstruction construction) {
+
+    }
+
+    public void register(final GameConstruction availabilityRequest) {
         // Step 1. Checking all users are active
-        Collection<Long> participants = availabilityRequest.fetchAcceptedParticipants();
+        final Collection<Long> participants = availabilityRequest.fetchAcceptedParticipants();
         // Step 2. Checking all participants are available
         if (playerStateManager.areAvailable(participants)) {
             initiatorService.initiate(new GameInitiation(availabilityRequest.getConstruction(), participants, availabilityRequest.getRequest()
                     .getSpecification()));
+        } else {
+            // Step 2.1 Pretty naive implementation of MessageListener functionality
+            playerStateManager.subscribe(participants, new MessageListener() {
+
+                @Override
+                public void onMessage(Message message, byte[] pattern) {
+                    playerStateManager.unsubscribe(participants, this);
+                    register(availabilityRequest);
+                }
+
+            });
         }
     }
+
 }

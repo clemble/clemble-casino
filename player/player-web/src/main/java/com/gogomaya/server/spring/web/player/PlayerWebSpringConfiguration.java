@@ -1,25 +1,25 @@
 package com.gogomaya.server.spring.web.player;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.rest.webmvc.BaseUriMethodArgumentResolver;
 
 import com.gogomaya.server.error.GogomayaValidationService;
-import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
-import com.gogomaya.server.player.security.PlayerCredentialRepository;
-import com.gogomaya.server.player.security.PlayerIdentityRepository;
-import com.gogomaya.server.player.session.PlayerSessionRepository;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.player.state.RedisPlayerStateManager;
+import com.gogomaya.server.repository.player.PlayerCredentialRepository;
+import com.gogomaya.server.repository.player.PlayerIdentityRepository;
+import com.gogomaya.server.repository.player.PlayerProfileRepository;
+import com.gogomaya.server.repository.player.PlayerSessionRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
+import com.gogomaya.server.spring.common.SpringConfiguration;
+import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
@@ -29,52 +29,54 @@ import com.gogomaya.server.web.player.session.PlayerSessionController;
 
 @Configuration
 @Import(value = { SocialModuleSpringConfiguration.class, CommonWebSpringConfiguration.class })
-public class PlayerWebSpringConfiguration {
+public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
-    @Inject
-    public SocialConnectionDataAdapter connectionDataAdapter;
+    @Autowired
+    @Qualifier("socialConnectionDataAdapter")
+    public SocialConnectionDataAdapter socialConnectionDataAdapter;
 
-    @Inject
+    @Autowired
+    @Qualifier("playerProfileRepository")
     public PlayerProfileRepository playerProfileRepository;
 
-    @Inject
+    @Autowired
+    @Qualifier("playerCredentialRepository")
     public PlayerCredentialRepository playerCredentialRepository;
 
-    @Inject
+    @Autowired
+    @Qualifier("playerIdentityRepository")
     public PlayerIdentityRepository playerIdentityRepository;
 
-    @Inject
+    @Autowired
+    @Qualifier("playerRegistrationService")
     public PlayerRegistrationService playerRegistrationService;
 
-    @Inject
+    @Autowired
+    @Qualifier("playerSessionRepository")
     public PlayerSessionRepository playerSessionRepository;
 
-    @Inject
-    public PlayerNotificationRegistry notificationRegistry;
+    @Autowired
+    @Qualifier("playerNotificationRegistry")
+    public PlayerNotificationRegistry playerNotificationRegistry;
 
-    @Inject
-    public GogomayaValidationService validationService;
+    @Autowired
+    @Qualifier("gogomayaValidationService")
+    public GogomayaValidationService gogomayaValidationService;
 
-    @Inject
-    @Named("playerQueueTemplate")
-    public RedisTemplate<Long, Long> playerQueueTemplate;
-
-    @Bean
-    @Singleton
-    public PlayerStateManager playerStateManager() {
-        return new RedisPlayerStateManager(playerQueueTemplate);
-    }
+    @Autowired
+    @Qualifier("playerStateManager")
+    public PlayerStateManager playerStateManager;
 
     @Bean
     @Singleton
     public RegistrationSocialConnectionController registrationSocialConnectionController() {
-        return new RegistrationSocialConnectionController(connectionDataAdapter, playerIdentityRepository, validationService);
+        return new RegistrationSocialConnectionController(socialConnectionDataAdapter, playerIdentityRepository, gogomayaValidationService);
     }
 
     @Bean
     @Singleton
     public RegistrationSignInContoller registrationSignInContoller() {
-        return new RegistrationSignInContoller(playerRegistrationService, validationService);
+        return new RegistrationSignInContoller(playerRegistrationService, gogomayaValidationService);
     }
 
     @Bean
@@ -85,8 +87,8 @@ public class PlayerWebSpringConfiguration {
 
     @Bean
     @Singleton
-    public PlayerSessionController sessionController() {
-        return new PlayerSessionController(notificationRegistry, playerSessionRepository, playerStateManager());
+    public PlayerSessionController playerSessionController() {
+        return new PlayerSessionController(playerNotificationRegistry, playerSessionRepository, playerStateManager);
     }
 
     @Bean

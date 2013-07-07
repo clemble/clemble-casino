@@ -14,10 +14,9 @@ import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.gogomaya.server.utils.ReflectionUtils;
 
 @Configuration
-public class JsonSpringConfiguration {
+public class JsonSpringConfiguration implements SpringConfiguration {
 
-    @Bean
-    @Singleton
+    @Bean @Singleton
     public ObjectMapper objectMapper() {
         return createObjectMapper();
     }

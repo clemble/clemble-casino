@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.security.PlayerSession;
-import com.gogomaya.server.player.session.PlayerSessionRepository;
 import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.repository.player.PlayerSessionRepository;
 
 @Controller
 public class PlayerSessionController {

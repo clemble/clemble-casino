@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.security.PlayerCredentialRepository;
 import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.security.PlayerIdentityRepository;
+import com.gogomaya.server.repository.player.PlayerCredentialRepository;
+import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 
 @Controller
 public class RegistrationLoginController {

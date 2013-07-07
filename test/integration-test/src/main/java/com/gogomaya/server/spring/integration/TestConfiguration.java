@@ -1,9 +1,9 @@
 package com.gogomaya.server.spring.integration;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -30,7 +30,7 @@ import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.listener.SimplePlayerListenerOperations;
 import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
-import com.gogomaya.server.spring.web.WebMvcSpiConfiguration;
+import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
@@ -45,7 +45,8 @@ import com.gogomaya.server.web.player.wallet.WalletController;
 public class TestConfiguration {
 
     @Autowired
-    PlayerOperations playerOperations;
+    @Qualifier("playerOperations")
+    public PlayerOperations playerOperations;
 
     @Bean
     @Singleton
@@ -55,56 +56,64 @@ public class TestConfiguration {
 
     @Configuration
     @Profile("default")
-    @Import(value = { WebMvcSpiConfiguration.class })
+    @Import(value = { WebMvcSpiSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
-        @Inject
+        @Autowired
+        @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
-        @Inject
-        RegistrationSignInContoller signInContoller;
+        @Autowired
+        @Qualifier("registrationSignInContoller")
+        public RegistrationSignInContoller registrationSignInContoller;
 
-        @Inject
-        RegistrationLoginController loginController;
+        @Autowired
+        @Qualifier("registrationLoginController")
+        public RegistrationLoginController registrationLoginController;
 
-        @Inject
-        PlayerSessionController sessionController;
+        @Autowired
+        @Qualifier("playerSessionController")
+        public PlayerSessionController playerSessionController;
 
-        @Inject
-        WalletController walletController;
+        @Autowired
+        @Qualifier("walletController")
+        public WalletController walletController;
 
-        @Inject
-        GameConfigurationManagerController configuartionManagerController;
+        @Autowired
+        @Qualifier("ticTacToeConfigurationManagerController")
+        public GameConfigurationManagerController ticTacToeConfigurationManagerController;
 
-        @Inject
-        GameConstructionController<TicTacToeState> constructionController;
+        @Autowired
+        @Qualifier("ticTacToeConstructionController")
+        public GameConstructionController<TicTacToeState> ticTacToeConstructionController;
 
-        @Inject
-        GameEngineController<TicTacToeState> engineController;
+        @Autowired
+        @Qualifier("ticTacToeEngineController")
+        public GameEngineController<TicTacToeState> ticTacToeEngineController;
 
         @Bean
         @Singleton
-        public PlayerListenerOperations tableListenerOperations() {
+        public PlayerListenerOperations playerListenerOperations() {
             return new SimplePlayerListenerOperations(objectMapper);
         }
 
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(signInContoller, loginController, walletController, sessionController, tableListenerOperations(),
-                    ticTacToeGameConstructionOperations());
+            return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, walletController, playerSessionController,
+                    playerListenerOperations(), ticTacToeGameConstructionOperations());
         }
 
         @Bean
         @Singleton
         public GameSessionPlayerFactory<?> genericGameSessionFactory() {
-            return new WebGameSessionPlayerFactory<>(engineController, constructionController);
+            return new WebGameSessionPlayerFactory<>(ticTacToeEngineController, ticTacToeConstructionController);
         }
 
         @Bean
         @Singleton
         public GameConstructionOperations<TicTacToeState> ticTacToeGameConstructionOperations() {
-            return new WebGameConstructionOperations<TicTacToeState>(TicTacToe.NAME, configuartionManagerController, constructionController,
+            return new WebGameConstructionOperations<TicTacToeState>(TicTacToe.NAME, ticTacToeConfigurationManagerController, ticTacToeConstructionController,
                     ticTacToeSessionPlayerFactory());
         }
 
@@ -146,7 +155,8 @@ public class TestConfiguration {
 
     public static class IntegrationTestConfiguration {
 
-        @Inject
+        @Autowired
+        @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
         public String getBaseUrl() {
@@ -155,7 +165,7 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public PlayerListenerOperations tableListenerOperations() {
+        public PlayerListenerOperations playerListenerOperations() {
             return new SimplePlayerListenerOperations(objectMapper);
         }
 
@@ -177,7 +187,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), tableListenerOperations(), ticTacToeGameConstructionOperations());
+            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), ticTacToeGameConstructionOperations());
         }
 
         @Bean

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.security.PlayerIdentityRepository;
+import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 
 @Service
 public class PlayerIdentityVerificationService {

@@ -1,18 +1,20 @@
 package com.gogomaya.server.spring.web;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.gogomaya.server.game.action.GameSessionProcessor;
-import com.gogomaya.server.game.construct.GameConstructionRepository;
 import com.gogomaya.server.game.construct.GameConstructionService;
-import com.gogomaya.server.game.session.GameSessionRepository;
-import com.gogomaya.server.game.table.GameTableRepository;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
+import com.gogomaya.server.repository.game.GameSessionRepository;
+import com.gogomaya.server.repository.game.GameTableRepository;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
 import com.gogomaya.server.tictactoe.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.web.active.session.GameConstructionController;
@@ -21,42 +23,48 @@ import com.gogomaya.server.web.game.configuration.GameConfigurationManagerContro
 
 @Configuration
 @Import(value = { TicTacToeSpringConfiguration.class, CommonWebSpringConfiguration.class })
-public class TicTacToeWebSpringConfiguration {
+public class TicTacToeWebSpringConfiguration implements SpringConfiguration {
 
-    @Inject
-    GameConstructionService constructionService;
+    @Autowired
+    @Qualifier("gameSessionRepository")
+    public GameSessionRepository<TicTacToeState> gameSessionRepository;
 
-    @Inject
-    TicTacToeConfigurationManager configurationManager;
+    @Autowired
+    @Qualifier("gameTableRepository")
+    public GameTableRepository<TicTacToeState> tableRepository;
 
-    @Inject
-    GameSessionProcessor<TicTacToeState> sessionProcessor;
+    @Autowired
+    @Qualifier("gameConstructionRepository")
+    public GameConstructionRepository constructionRepository;
 
-    @Inject
-    GameSessionRepository<TicTacToeState> sessionRepository;
+    @Autowired
+    @Qualifier("ticTacToeConstructionService")
+    public GameConstructionService constructionService;
 
-    @Inject
-    GameTableRepository<TicTacToeState> tableRepository;
+    @Autowired
+    @Qualifier("ticTacToeConfigurationManager")
+    public TicTacToeConfigurationManager ticTacToeConfigurationManager;
 
-    @Inject
-    GameConstructionRepository constructionRepository;
+    @Autowired
+    @Qualifier("ticTacToeSessionProcessor")
+    public GameSessionProcessor<TicTacToeState> ticTacToeSessionProcessor;
 
     @Bean
     @Singleton
-    public GameConstructionController<TicTacToeState> gameTableMatchController() {
-        return new GameConstructionController<TicTacToeState>(constructionRepository, constructionService, configurationManager);
+    public GameConstructionController<TicTacToeState> ticTacToeConstructionController() {
+        return new GameConstructionController<TicTacToeState>(constructionRepository, constructionService, ticTacToeConfigurationManager);
     }
 
     @Bean
     @Singleton
-    public GameConfigurationManagerController gameOptionsController() {
-        return new GameConfigurationManagerController(configurationManager);
+    public GameConfigurationManagerController ticTacToeConfigurationManagerController() {
+        return new GameConfigurationManagerController(ticTacToeConfigurationManager);
     }
 
     @Bean
     @Singleton
-    public GameEngineController<TicTacToeState> gameController() {
-        return new GameEngineController<TicTacToeState>(sessionProcessor);
+    public GameEngineController<TicTacToeState> ticTacToeEngineController() {
+        return new GameEngineController<TicTacToeState>(ticTacToeSessionProcessor);
     }
 
 }

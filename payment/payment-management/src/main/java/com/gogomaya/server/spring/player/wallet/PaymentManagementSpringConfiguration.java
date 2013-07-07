@@ -1,30 +1,32 @@
 package com.gogomaya.server.spring.player.wallet;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.gogomaya.server.player.wallet.PlayerWalletRepository;
 import com.gogomaya.server.player.wallet.WalletRegistrationService;
 import com.gogomaya.server.player.wallet.WalletRegistrationServiceImpl;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
 import com.gogomaya.server.player.wallet.WalletTransactionManagerImpl;
-import com.gogomaya.server.player.wallet.WalletTransactionRepository;
+import com.gogomaya.server.repository.payment.PlayerWalletRepository;
+import com.gogomaya.server.repository.payment.WalletTransactionRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.gogomaya.server.player.wallet", entityManagerFactoryRef = "entityManagerFactory")
 @Import(CommonSpringConfiguration.class)
-public class PaymentManagementSpringConfiguration {
+public class PaymentManagementSpringConfiguration implements SpringConfiguration {
 
-    @Inject
+    @Autowired
+    @Qualifier("playerWalletRepository")
     public PlayerWalletRepository walletRepository;
 
-    @Inject
+    @Autowired
+    @Qualifier("walletTransactionRepository")
     public WalletTransactionRepository walletTransactionRepository;
 
     @Bean

@@ -16,6 +16,7 @@ import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
+import com.gogomaya.server.repository.payment.PlayerWalletRepository;
 import com.gogomaya.server.spring.player.wallet.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)

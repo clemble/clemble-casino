@@ -87,8 +87,9 @@ public enum GogomayaError {
     PaymentTransactionInvalid(Code.PAYMENT_TRANSACTION_INVALID_CODE, "Payment transaction invalid"),
     PaymentTransactionEmpty(Code.PAYMENT_TRANSACTION_EMPTY_CODE, "Payment transaction empty"),
     TimeoutProcessingFailure(Code.TIMEOUT_PROCESSING_FAILURE_CODE, "Failed to invoke timeout events in Scheduler"),
-    
-    PlayerLockAcquireFailure(Code.PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE, "Failed to acquire player lock")
+
+    PlayerLockAcquireFailure(Code.PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE, "Failed to acquire player lock"),
+    PlayerSessionTimeout(Code.PLAYER_SESSION_TIMEOUT_ERROR_CODE, "Player session timeout")
     ;
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
@@ -235,7 +236,8 @@ public enum GogomayaError {
         final public static String BAD_REQUEST_TABLE_ID_HEADER_MISSING = "0J2";
         // Timeout errors
         final public static String TIMEOUT_PROCESSING_FAILURE_CODE = "0L0";
-        // Player Lock errors
+        // Player errors
         final public static String PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE = "0M0";
+        final public static String PLAYER_SESSION_TIMEOUT_ERROR_CODE = "0M1";
     }
 }

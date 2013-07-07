@@ -13,6 +13,8 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.Operation;
+import com.gogomaya.server.repository.payment.PlayerWalletRepository;
+import com.gogomaya.server.repository.payment.WalletTransactionRepository;
 
 public class WalletTransactionManagerImpl implements WalletTransactionManager {
 

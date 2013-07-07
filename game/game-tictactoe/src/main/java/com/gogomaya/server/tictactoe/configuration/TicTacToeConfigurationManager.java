@@ -5,8 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.gogomaya.server.game.configuration.GameConfigurationManager;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
-import com.gogomaya.server.game.specification.GameSpecificationRepository;
 import com.gogomaya.server.game.tictactoe.TicTacToe;
+import com.gogomaya.server.repository.game.GameSpecificationRepository;
 
 public class TicTacToeConfigurationManager implements GameConfigurationManager {
 

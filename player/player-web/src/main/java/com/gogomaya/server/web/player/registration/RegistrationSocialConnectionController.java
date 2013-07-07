@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.security.PlayerIdentityRepository;
+import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 
 @Controller

@@ -15,7 +15,7 @@ import com.gogomaya.server.player.lock.PlayerLockService;
 
 @Configuration
 @Import({ CommonSpringConfiguration.Cloud.class, RabbitSpringConfiguration.class, JPASpringConfiguration.class, RedisSpringConfiguration.class })
-public class CommonSpringConfiguration {
+public class CommonSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Singleton
@@ -25,7 +25,7 @@ public class CommonSpringConfiguration {
 
     @Bean
     @Singleton
-    public GogomayaValidationService validationService() {
+    public GogomayaValidationService gogomayaValidationService() {
         return new GogomayaValidationService(Validation.buildDefaultValidatorFactory());
     }
 

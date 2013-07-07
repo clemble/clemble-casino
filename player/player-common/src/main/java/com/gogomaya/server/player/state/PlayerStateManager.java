@@ -6,13 +6,13 @@ import org.springframework.data.redis.connection.MessageListener;
 
 public interface PlayerStateManager {
 
-    public Long isActive(final long player);
-
-    public void markAvailable(final long player);
-
     public boolean isAvailable(final long player);
 
     public boolean areAvailable(final Collection<Long> players);
+
+    public void markAvailable(final long player);
+
+    public Long getActiveSession(final long player);
 
     public boolean markBusy(final long player, final long sessionId);
 

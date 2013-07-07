@@ -18,11 +18,11 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameConfigurationManager;
 import com.gogomaya.server.game.construct.AutomaticGameRequest;
 import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.construct.GameConstructionRepository;
 import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
 
 @Controller
 public class GameConstructionController<State extends GameState> {

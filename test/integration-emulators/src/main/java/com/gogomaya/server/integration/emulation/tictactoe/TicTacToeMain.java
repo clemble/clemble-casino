@@ -38,7 +38,7 @@ public class TicTacToeMain {
 
         @Inject
         public GameConstructionOperations<TicTacToeState> gameOperations;
-        
+
         @Inject
         public PlayerOperations playerOperations;
 

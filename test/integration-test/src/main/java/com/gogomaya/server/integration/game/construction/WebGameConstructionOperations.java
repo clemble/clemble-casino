@@ -10,7 +10,6 @@ import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 

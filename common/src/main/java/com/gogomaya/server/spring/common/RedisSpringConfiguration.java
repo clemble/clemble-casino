@@ -2,12 +2,13 @@ package com.gogomaya.server.spring.common;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.cloudfoundry.runtime.env.CloudEnvironment;
 import org.cloudfoundry.runtime.service.AbstractServiceCreator.ServiceNameTuple;
 import org.cloudfoundry.runtime.service.keyvalue.CloudRedisConnectionFactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,21 +22,20 @@ import com.google.common.collect.Collections2;
 
 @Configuration
 @Import(value = { RedisSpringConfiguration.Cloud.class, RedisSpringConfiguration.DefaultAndTest.class })
-public class RedisSpringConfiguration {
+public class RedisSpringConfiguration implements SpringConfiguration {
 
-    @Inject
+    @Autowired
+    @Qualifier("redisConnectionFactory")
     public RedisConnectionFactory redisConnectionFactory;
 
-    @Bean
-    @Singleton
+    @Bean @Singleton
     public RedisTemplate<byte[], Long> tableQueueTemplate() {
         RedisTemplate<byte[], Long> redisTemplate = new RedisTemplate<byte[], Long>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }
 
-    @Bean
-    @Singleton
+    @Bean @Singleton
     public RedisTemplate<Long, Long> playerQueueTemplate() {
         RedisTemplate<Long, Long> redisTemplate = new RedisTemplate<Long, Long>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -46,11 +46,10 @@ public class RedisSpringConfiguration {
     @Profile(value = "cloud")
     public static class Cloud {
 
-        @Inject
+        @Autowired
         CloudEnvironment cloudEnvironment;
 
-        @Bean
-        @Singleton
+        @Bean @Singleton
         public RedisConnectionFactory redisConnectionFactory() {
             CloudRedisConnectionFactoryBean cloudRedisFactory = new CloudRedisConnectionFactoryBean(cloudEnvironment);
             try {
@@ -73,8 +72,7 @@ public class RedisSpringConfiguration {
     @Profile(value = { "default", "test" })
     public static class DefaultAndTest {
 
-        @Bean
-        @Singleton
+        @Bean @Singleton
         public RedisConnectionFactory redisConnectionFactory() {
             return new JedisConnectionFactory();
         }

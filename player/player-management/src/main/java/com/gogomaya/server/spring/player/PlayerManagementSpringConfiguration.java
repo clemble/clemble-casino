@@ -1,38 +1,40 @@
 package com.gogomaya.server.spring.player;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.gogomaya.server.player.PlayerProfileRepository;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
-import com.gogomaya.server.player.security.PlayerCredentialRepository;
-import com.gogomaya.server.player.security.PlayerIdentityRepository;
 import com.gogomaya.server.player.wallet.WalletRegistrationService;
+import com.gogomaya.server.repository.player.PlayerCredentialRepository;
+import com.gogomaya.server.repository.player.PlayerIdentityRepository;
+import com.gogomaya.server.repository.player.PlayerProfileRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 
 @Configuration
-@EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "com.gogomaya.server.player", entityManagerFactoryRef = "entityManagerFactory")
-@Import(value = { CommonSpringConfiguration.class, PlayerManagementSpringConfiguration.Test.class })
-public class PlayerManagementSpringConfiguration {
+@Import(value = { CommonSpringConfiguration.class, PlayerManagementSpringConfiguration.Test.class, PlayerCommonSpringConfiguration.class })
+public class PlayerManagementSpringConfiguration implements SpringConfiguration {
 
-    @Inject
+    @Autowired
+    @Qualifier("playerIdentityRepository")
     public PlayerIdentityRepository playerIdentityRepository;
 
-    @Inject
+    @Autowired
+    @Qualifier("playerCredentialRepository")
     public PlayerCredentialRepository playerCredentialRepository;
 
-    @Inject
+    @Autowired
+    @Qualifier("playerProfileRepository")
     public PlayerProfileRepository playerProfileRepository;
 
-    @Inject
+    @Autowired
+    @Qualifier("walletRegistrationService")
     public WalletRegistrationService walletRegistrationService;
 
     @Bean

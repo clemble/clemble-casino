@@ -1,14 +1,16 @@
 package com.gogomaya.server.spring.web.payment;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.gogomaya.server.player.wallet.PlayerWalletRepository;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
+import com.gogomaya.server.repository.payment.PlayerWalletRepository;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.player.wallet.PaymentManagementSpringConfiguration;
 import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
 import com.gogomaya.server.web.player.wallet.WalletController;
@@ -16,24 +18,26 @@ import com.gogomaya.server.web.player.wallet.WalletTransactionController;
 
 @Configuration
 @Import({ PaymentManagementSpringConfiguration.class, CommonWebSpringConfiguration.class })
-public class PaymentWebSpringConfiguration {
+public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
-    @Inject
-    public WalletTransactionManager playerTransactionManager;
+    @Autowired
+    @Qualifier("walletTransactionManager")
+    public WalletTransactionManager walletTransactionManager;
 
-    @Inject
-    public PlayerWalletRepository walletRepository;
+    @Autowired
+    @Qualifier("playerWalletRepository")
+    public PlayerWalletRepository playerWalletRepository;
 
     @Bean
     @Singleton
     public WalletTransactionController walletTransactionController() {
-        return new WalletTransactionController(playerTransactionManager);
+        return new WalletTransactionController(walletTransactionManager);
     }
 
     @Bean
     @Singleton
     public WalletController walletController() {
-        return new WalletController(walletRepository);
+        return new WalletController(playerWalletRepository);
     }
 
 }

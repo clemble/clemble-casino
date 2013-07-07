@@ -1,7 +1,7 @@
 
     alter table GAME_SESSION 
         drop 
-        foreign key FK8E8AE7291DA56B0A;
+        foreign key FK8E8AE729E7296D7F;
 
     alter table GAME_SESSION_MOVES 
         drop 
@@ -17,7 +17,7 @@
 
     alter table GAME_TABLE 
         drop 
-        foreign key FK8D61AD211DA56B0A;
+        foreign key FK8D61AD21E7296D7F;
 
     alter table GAME_TABLE_PLAYERS 
         drop 
@@ -39,10 +39,10 @@
 
     create table GAME_CONSTRUCTION (
         CONSTRUCTION_ID bigint not null auto_increment,
-        REQUEST varchar(4096),
-        RESPONSES varchar(4096),
+        REQUEST varchar(4096) not null,
+        RESPONSES varchar(4096) not null,
         SESSION_ID bigint,
-        state varchar(255),
+        STATE varchar(255) not null,
         primary key (CONSTRUCTION_ID)
     ) ENGINE=InnoDB;
 
@@ -101,8 +101,8 @@
     ) ENGINE=InnoDB;
 
     alter table GAME_SESSION 
-        add index FK8E8AE7291DA56B0A (GAME_NAME, SPECIFICATION_NAME), 
-        add constraint FK8E8AE7291DA56B0A 
+        add index FK8E8AE729E7296D7F (GAME_NAME, SPECIFICATION_NAME), 
+        add constraint FK8E8AE729E7296D7F 
         foreign key (GAME_NAME, SPECIFICATION_NAME) 
         references GAME_SPECIFICATION (GAME_NAME, SPECIFICATION_NAME);
 
@@ -125,8 +125,8 @@
         references GAME_SESSION (SESSION_ID);
 
     alter table GAME_TABLE 
-        add index FK8D61AD211DA56B0A (GAME_NAME, SPECIFICATION_NAME), 
-        add constraint FK8D61AD211DA56B0A 
+        add index FK8D61AD21E7296D7F (GAME_NAME, SPECIFICATION_NAME), 
+        add constraint FK8D61AD21E7296D7F 
         foreign key (GAME_NAME, SPECIFICATION_NAME) 
         references GAME_SPECIFICATION (GAME_NAME, SPECIFICATION_NAME);
 

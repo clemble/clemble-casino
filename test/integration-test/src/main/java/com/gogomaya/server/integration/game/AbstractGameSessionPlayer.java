@@ -53,6 +53,10 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         });
     }
 
+    final public GameConstruction getConstructionInfo() {
+        return construction;
+    }
+
     @Override
     final public long getConstruction() {
         return construction != null ? construction.getConstruction() : 0;
@@ -89,7 +93,12 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     final public boolean isAlive() {
-        return keepAlive.get() && currentState.get() != null;
+        return keepAlive.get() && currentState.get() != null && currentState.get().getOutcome() == null;
+    }
+
+    @Override
+    final public int getVersion() {
+        return this.currentState.get() == null ? -1 : this.currentState.get().getVersion();
     }
 
     @Override
@@ -161,8 +170,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     @Override
     public void syncWith(GameSessionPlayer<State> anotherSessionPlayer) {
         // Step 1. While versions do not match iterate
-        while (keepAlive.get() && getState().getVersion() != anotherSessionPlayer.getState().getVersion()) {
-            int maxVersion = Math.max(getState().getVersion(), anotherSessionPlayer.getState().getVersion());
+        while (keepAlive.get() && getVersion() != anotherSessionPlayer.getVersion()) {
+            int maxVersion = Math.max(getVersion(), anotherSessionPlayer.getVersion());
             // Step 2.1 Checking who we need to update
             anotherSessionPlayer.waitVersion(maxVersion);
             waitVersion(maxVersion);

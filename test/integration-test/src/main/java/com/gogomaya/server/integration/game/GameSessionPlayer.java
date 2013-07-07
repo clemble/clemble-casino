@@ -5,6 +5,7 @@ import java.io.Closeable;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.ConstructionAware;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GameClientEvent;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
 import com.gogomaya.server.integration.player.Player;
@@ -13,6 +14,8 @@ import com.gogomaya.server.player.PlayerAware;
 public interface GameSessionPlayer<State extends GameState> extends ConstructionAware, PlayerAware, Closeable, GameSpecificationAware {
 
     public Player getPlayer();
+
+    public GameConstruction getConstructionInfo();
 
     public State getState();
 
@@ -23,6 +26,8 @@ public interface GameSessionPlayer<State extends GameState> extends Construction
     public void waitForStart();
 
     public void waitForTurn();
+
+    public int getVersion();
 
     public void waitVersion(int version);
 

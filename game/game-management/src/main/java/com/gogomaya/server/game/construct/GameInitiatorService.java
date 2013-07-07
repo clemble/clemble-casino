@@ -7,6 +7,7 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
 
 public class GameInitiatorService {
 

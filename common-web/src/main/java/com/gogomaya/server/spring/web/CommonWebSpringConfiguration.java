@@ -1,8 +1,9 @@
 package com.gogomaya.server.spring.web;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -14,15 +15,17 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 import com.google.common.collect.ImmutableList;
 
 @Configuration
 @Import(JsonSpringConfiguration.class)
-public class CommonWebSpringConfiguration extends WebMvcConfigurationSupport {
+public class CommonWebSpringConfiguration extends WebMvcConfigurationSupport implements SpringConfiguration {
 
-    @Inject
-    ObjectMapper objectMapper;
+    @Autowired
+    @Qualifier("objectMapper")
+    public ObjectMapper objectMapper;
 
     @Bean
     @Singleton
@@ -39,6 +42,7 @@ public class CommonWebSpringConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
+    @Singleton
     @Override
     public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
 
