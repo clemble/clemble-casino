@@ -1,22 +1,26 @@
 package com.gogomaya.server.repository.game;
 
+import java.util.List;
+
+import javax.persistence.LockModeType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.server.game.construct.GameConstruction;
 
 @Repository
+@Transactional
 public interface GameConstructionRepository extends JpaRepository<GameConstruction, Long> {
 
-    @Modifying
-    @Transactional
-    @Query(value = "update GameConstruction construction set construction.session = :session where construction.construction = :construction")
-    public void specifySession(@Param("construction") Long construction, @Param("session") Long sessionId);
+    @Override
+    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+    public <S extends GameConstruction> List<S> save(Iterable<S> entities);
 
-    public GameConstruction findBySession(long session);
+    @Override
+    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+    public GameConstruction saveAndFlush(GameConstruction construction);
 
 }

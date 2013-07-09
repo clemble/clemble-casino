@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
@@ -21,17 +22,19 @@ import org.hibernate.annotations.TypeDefs;
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.event.ExpectedAction;
 import com.gogomaya.server.game.ConstructionAware;
-import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_CONSTRUCTION")
 @TypeDefs({
-    @TypeDef(name = "game_request", typeClass = JsonHibernateType.class, defaultForType = GameRequest.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.construct.GameRequest")}),
-    @TypeDef(name = "action_latch", typeClass = JsonHibernateType.class, defaultForType = ActionLatch.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.ActionLatch")})
-})
-public class GameConstruction implements SessionAware, ConstructionAware {
+        @TypeDef(name = "game_request", typeClass = JsonHibernateType.class, defaultForType = GameRequest.class, parameters = { @Parameter(
+                name = JsonHibernateType.CLASS_NAME_PARAMETER,
+                value = "com.gogomaya.server.game.construct.GameRequest") }),
+        @TypeDef(name = "action_latch", typeClass = JsonHibernateType.class, defaultForType = ActionLatch.class, parameters = { @Parameter(
+                name = JsonHibernateType.CLASS_NAME_PARAMETER,
+                value = "com.gogomaya.server.ActionLatch") }) })
+public class GameConstruction implements ConstructionAware {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,8 +53,8 @@ public class GameConstruction implements SessionAware, ConstructionAware {
     @Column(name = "RESPONSES", length = 4096, nullable = false)
     private ActionLatch responces;
 
-    @Column(name = "SESSION_ID")
-    private long session;
+    @Version
+    private int version;
 
     public GameConstruction() {
     }
@@ -88,14 +91,6 @@ public class GameConstruction implements SessionAware, ConstructionAware {
         this.state = state;
     }
 
-    public long getSession() {
-        return session;
-    }
-
-    public void setSession(long session) {
-        this.session = session;
-    }
-
     public ActionLatch getResponces() {
         return responces;
     }
@@ -113,6 +108,14 @@ public class GameConstruction implements SessionAware, ConstructionAware {
         }
 
         return acceptedParticipants;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
 }

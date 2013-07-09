@@ -14,8 +14,8 @@ import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.Topic;
@@ -25,44 +25,41 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.player.PlayerState;
 
-public class RedisPlayerStateManager implements PlayerStateManager {
+public class StringRedisPlayerStateManager implements PlayerStateManager {
 
-    final private Logger LOGGER = LoggerFactory.getLogger(RedisPlayerStateManager.class);
+    final private Logger LOGGER = LoggerFactory.getLogger(StringRedisPlayerStateManager.class);
 
-    final private RedisTemplate<String, Long> redisTemplate;
+    final private String ZERO_SESSION = String.valueOf(SessionAware.DEFAULT_SESSION);
+
+    final private StringRedisTemplate redisTemplate;
     final private RedisMessageListenerContainer listenerContainer;
 
-    public RedisPlayerStateManager(RedisTemplate<String, Long> redisTemplate, RedisMessageListenerContainer listenerContainer) {
+    public StringRedisPlayerStateManager(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer) {
         this.redisTemplate = checkNotNull(redisTemplate);
         this.listenerContainer = listenerContainer;
     }
 
     @Override
     public Long getActiveSession(long playerId) {
-        return redisTemplate.boundValueOps(String.valueOf(playerId)).get();
+        String session = redisTemplate.boundValueOps(String.valueOf(playerId)).get();
+        return session != null ? Long.valueOf(session) : null;
     }
 
     @Override
     public boolean isAvailable(final long player) {
         // Step 1. Fetch active session
         Long activePlayerSession = getActiveSession(player);
-        // Step 2. Only if player has session 0, it is available 
+        // Step 2. Only if player has session 0, it is available
         return activePlayerSession != null && activePlayerSession == SessionAware.DEFAULT_SESSION;
     }
 
     @Override
     public boolean areAvailable(final Collection<Long> players) {
-        return redisTemplate.execute(new SessionCallback<Boolean>() {
-
-            @Override
-            public <K, V> Boolean execute(RedisOperations<K, V> operations) throws DataAccessException {
-                for (Long player : players) {
-                    if (!isAvailable(player))
-                        return false;
-                }
-                return true;
-            }
-        });
+        for (Long player : players) {
+            if (!isAvailable(player))
+                return false;
+        }
+        return true;
     }
 
     @Override
@@ -90,9 +87,7 @@ public class RedisPlayerStateManager implements PlayerStateManager {
                 // Step 2. Performing atomic operation
                 operations.multi();
                 for (Long player : players) {
-                    operations
-                        .boundValueOps(String.valueOf(player))
-                        .set(sessionId);
+                    operations.boundValueOps(String.valueOf(player)).set(String.valueOf(sessionId));
                 }
                 // Step 3. If operation failed discard it
                 try {
@@ -113,7 +108,7 @@ public class RedisPlayerStateManager implements PlayerStateManager {
     @Override
     public void markAvailable(final long playerId) {
         // Step 1. Specifying null state as identifier that player is active, and available
-        redisTemplate.boundValueOps(String.valueOf(playerId)).set(SessionAware.DEFAULT_SESSION, 30, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps(String.valueOf(playerId)).set(ZERO_SESSION, 30, TimeUnit.MINUTES);
         // Step 2. Sending notification, for player state update
         notifyStateChange(playerId, PlayerState.available);
     }
@@ -159,8 +154,9 @@ public class RedisPlayerStateManager implements PlayerStateManager {
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
                 // Step 1. Generating channel byte array from player identifier
                 byte[] channel = redisTemplate.getStringSerializer().serialize(String.valueOf(playerId));
+                byte[] message = redisTemplate.getStringSerializer().serialize(state.name());
                 // Step 2. Performing actual publish
-                return connection.publish(channel, new byte[] { (byte) state.ordinal() });
+                return connection.publish(channel, message);
             }
         });
 

@@ -16,7 +16,7 @@ public interface PlayerStateManager {
 
     public boolean markBusy(final long player, final long sessionId);
 
-    public Collection<Long> markBusy(final Collection<Long> players, final long sessionId);
+    public boolean markBusy(final Collection<Long> players, final long sessionId);
 
     public void subscribe(final long player, final MessageListener messageListener);
 

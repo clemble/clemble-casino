@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutionException;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.SpecificationName;
@@ -22,7 +21,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class AutomaticGameInitiatorManager {
+public class AutomaticConstructionManager implements GameConstructionManager<AutomaticGameRequest> {
 
     final public static class AutomaticGameConstruction {
         final private GameConstruction construction;
@@ -66,26 +65,30 @@ public class AutomaticGameInitiatorManager {
 
     final private Map<Long, AutomaticGameConstruction> playerConstructions = new ConcurrentHashMap<>();
 
-    final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
+    final private GameInitiatorService initiatorService;
+
     final private PlayerLockService playerLockService;
     final private PlayerStateManager playerStateManager;
 
-    public AutomaticGameInitiatorManager(final GameInitiatorService initiatorService, final GameConstructionRepository constructionRepository,
-            final PlayerLockService playerLockService, final PlayerStateManager playerStateManager) {
+    public AutomaticConstructionManager(final GameInitiatorService initiatorService,
+            final GameConstructionRepository constructionRepository,
+            final PlayerLockService playerLockService,
+            final PlayerStateManager playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
         this.constructionRepository = checkNotNull(constructionRepository);
         this.playerLockService = checkNotNull(playerLockService);
         this.playerStateManager = checkNotNull(playerStateManager);
     }
 
+    @Override
     public GameConstruction register(AutomaticGameRequest request) {
         // Step 1. Sanity check
         if (request == null)
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
         Long activeSession = playerStateManager.getActiveSession(request.getPlayerId());
         if (activeSession != null && activeSession != SessionAware.DEFAULT_SESSION) {
-            GameConstruction activeConstruction = constructionRepository.findBySession(activeSession);
+            GameConstruction activeConstruction = constructionRepository.findOne(activeSession);
             if (activeConstruction != null)
                 return activeConstruction;
         }
@@ -119,15 +122,9 @@ public class AutomaticGameInitiatorManager {
                 // Step 3.2 Construction was present appending to existing one
                 if (pendingConstuction.append(request)) {
                     GameInitiation initiation = pendingConstuction.toInitiation();
-                    playerLockService.lock(initiation.getParticipants());
-                    try {
-                        GameTable<?> table = initiatorService.initiate(initiation);
-                        pendingConstuction.getConstruction().setSession(table.getCurrentSession().getSession());
-
+                    if (initiatorService.initiate(initiation)) {
                         for (Long participant : initiation.getParticipants())
                             playerConstructions.remove(participant);
-                    } finally {
-                        playerLockService.unlock(initiation.getParticipants());
                     }
                 } else {
                     playerConstructions.put(player, pendingConstuction);

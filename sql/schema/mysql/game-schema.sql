@@ -41,13 +41,13 @@
         CONSTRUCTION_ID bigint not null auto_increment,
         REQUEST varchar(4096) not null,
         RESPONSES varchar(4096) not null,
-        SESSION_ID bigint,
         STATE varchar(255) not null,
+        version integer not null,
         primary key (CONSTRUCTION_ID)
     ) ENGINE=InnoDB;
 
     create table GAME_SESSION (
-        SESSION_ID bigint not null auto_increment,
+        SESSION_ID bigint not null,
         NUM_MADE_MOVES integer,
         SESSION_STATE integer,
         GAME_STATE varchar(4096),

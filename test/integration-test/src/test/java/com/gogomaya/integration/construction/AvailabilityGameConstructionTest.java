@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,42 +67,48 @@ public class AvailabilityGameConstructionTest {
     }
 
     @Test
-    @Ignore
-    public void testBusyGameInteration() {
+    public void testBusyGameInitiation() {
         // Step 1. Generating 3 players - A, B, C
         Player playerA = playerOperations.createPlayer();
         Player playerB = playerOperations.createPlayer();
         Player playerC = playerOperations.createPlayer();
-        // Step 2. Generating 2 instant game request A - B and A - C
-        TicTacToeSessionPlayer sessionABPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(TicTacToe.NAME).constructAvailability(
-                ImmutableList.<Long> of(playerA.getPlayerId(), playerB.getPlayerId()));
-        TicTacToeSessionPlayer sessionACPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(TicTacToe.NAME).constructAvailability(
-                ImmutableList.<Long> of(playerA.getPlayerId(), playerC.getPlayerId()));
-        // Step 3. Accepting A - C game request to start A - C game
-        TicTacToeSessionPlayer sessionCAPlayer = (TicTacToeSessionPlayer) playerC.<TicTacToeState> getGameConstructor(TicTacToe.NAME).acceptInvitation(
-                sessionACPlayer.getConstruction());
-        sessionACPlayer.waitForStart();
-        sessionACPlayer.syncWith(sessionCAPlayer);
-        // Step 4. Accepting A - B game request to start A - B game, it should not be started until A - C game finishes
-        TicTacToeSessionPlayer sessionBAPlayer = (TicTacToeSessionPlayer) playerB.<TicTacToeState> getGameConstructor(TicTacToe.NAME).acceptInvitation(
-                sessionABPlayer.getConstruction());
-        // Step 4.1 Checking appropriate alive states for A - B game
-        assertLivenes(sessionBAPlayer, false);
-        assertLivenes(sessionABPlayer, false);
-        // Step 4.1 Checking appropriate alive states for A - C game
-        assertLivenes(sessionACPlayer, true);
-        assertLivenes(sessionCAPlayer, true);
-        // Step 5. Stopping A - C game
-        sessionACPlayer.giveUp();
-        // Step 6. Game A - B must start automatically
-        sessionBAPlayer.waitForStart();
-        sessionBAPlayer.syncWith(sessionABPlayer);
-        // Step 7. Checking appropriate alive states for A - B game
-        assertLivenes(sessionBAPlayer, true);
-        assertLivenes(sessionABPlayer, true);
-        // Step 8. Checking appropriate alive states for A - C game
-        assertLivenes(sessionACPlayer, false);
-        assertLivenes(sessionCAPlayer, false);
+        try {
+            // Step 2. Generating 2 instant game request A - B and A - C
+            TicTacToeSessionPlayer sessionABPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(TicTacToe.NAME)
+                    .constructAvailability(ImmutableList.<Long> of(playerA.getPlayerId(), playerB.getPlayerId()));
+            TicTacToeSessionPlayer sessionACPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(TicTacToe.NAME)
+                    .constructAvailability(ImmutableList.<Long> of(playerA.getPlayerId(), playerC.getPlayerId()));
+            // Step 3. Accepting A - C game request to start A - C game
+            TicTacToeSessionPlayer sessionCAPlayer = (TicTacToeSessionPlayer) playerC.<TicTacToeState> getGameConstructor(TicTacToe.NAME).acceptInvitation(
+                    sessionACPlayer.getConstruction());
+            sessionACPlayer.waitForStart();
+            sessionACPlayer.syncWith(sessionCAPlayer);
+            // Step 4. Accepting A - B game request to start A - B game, it should not be started until A - C game finishes
+            TicTacToeSessionPlayer sessionBAPlayer = (TicTacToeSessionPlayer) playerB.<TicTacToeState> getGameConstructor(TicTacToe.NAME).acceptInvitation(
+                    sessionABPlayer.getConstruction());
+            // Step 4.1 Checking appropriate alive states for A - B game
+            assertLivenes(sessionBAPlayer, false);
+            assertLivenes(sessionABPlayer, false);
+            // Step 4.1 Checking appropriate alive states for A - C game
+            assertLivenes(sessionACPlayer, true);
+            assertLivenes(sessionCAPlayer, true);
+            // Step 5. Stopping A - C game
+            sessionACPlayer.giveUp();
+            // Step 6. Game A - B must start automatically
+            sessionBAPlayer.waitForStart();
+            sessionBAPlayer.syncWith(sessionABPlayer);
+            // Step 7. Checking appropriate alive states for A - B game
+            assertLivenes(sessionBAPlayer, true);
+            assertLivenes(sessionABPlayer, true);
+            // Step 8. Checking appropriate alive states for A - C game
+            sessionCAPlayer.syncWith(sessionACPlayer);
+            assertLivenes(sessionACPlayer, false);
+            assertLivenes(sessionCAPlayer, false);
+        } finally {
+            playerA.close();
+            playerB.close();
+            playerC.close();
+        }
     }
 
     private <State extends GameState> void assertLivenes(GameSessionPlayer<State> player, boolean alive) {

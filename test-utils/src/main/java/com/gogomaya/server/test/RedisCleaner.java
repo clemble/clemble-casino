@@ -34,11 +34,7 @@ public class RedisCleaner implements TestExecutionListener {
     private void clean(TestContext testContext) {
         Collection<RedisTemplate> contextTemplates = testContext.getApplicationContext().getBeansOfType(RedisTemplate.class).values();
         for (RedisTemplate template : contextTemplates) {
-            Object randomKey = template.randomKey();
-            while (randomKey != null) {
-                template.delete(randomKey);
-                randomKey = template.randomKey();
-            }
+            template.delete(template.keys("*"));
         }
 
     }

@@ -16,12 +16,20 @@ import com.gogomaya.server.ServerRegistry;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.impl.GamePostProcessorListener;
 import com.gogomaya.server.game.action.impl.VerificationGameProcessorListener;
+import com.gogomaya.server.game.construct.GameConstruction;
+import com.gogomaya.server.game.construct.GameConstructionService;
+import com.gogomaya.server.game.construct.GameInitiation;
+import com.gogomaya.server.game.construct.GameInitiatorService;
+import com.gogomaya.server.game.construct.SimpleGameConstructionService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.money.Money;
+import com.gogomaya.server.player.lock.PlayerLockService;
+import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.player.wallet.WalletOperation;
 import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
@@ -67,6 +75,40 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Configuration
     @Profile(value = { "test" })
     public static class Test {
+
+        @Autowired
+        public PlayerLockService playerLockService;
+
+        @Autowired
+        public PlayerStateManager playerStateManager;
+
+        @Autowired
+        public PlayerNotificationService playerNotificationService;
+
+        @Autowired
+        public GameConstructionRepository constructionRepository;
+
+        @Bean
+        @Singleton
+        public GameConstructionService gameConstructionService() {
+            return new SimpleGameConstructionService(walletTransactionManager(), playerNotificationService, constructionRepository, initiatorService(),
+                    playerLockService, playerStateManager);
+        }
+
+        @Bean
+        @Singleton
+        public GameInitiatorService initiatorService() {
+            return new GameInitiatorService() {
+                @Override
+                public void initiate(GameConstruction construction) {
+                }
+
+                @Override
+                public boolean initiate(GameInitiation initiation) {
+                    return true;
+                }
+            };
+        }
 
         @Bean
         @Singleton

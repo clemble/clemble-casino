@@ -30,6 +30,7 @@ public class GameTableFactory<State extends GameState> {
         GameSpecification specification = initiation.getSpecification();
 
         GameSession<State> session = new GameSession<State>();
+        session.setSession(initiation.getConstruction());
         session.setSpecification(specification);
         session.setSessionState(GameSessionState.active);
         session.setPlayers(initiation.getParticipants());

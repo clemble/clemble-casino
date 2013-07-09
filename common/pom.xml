@@ -19,8 +19,8 @@
             <artifactId>spring-data-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
+            <groupId>com.lambdaworks</groupId>
+            <artifactId>lettuce</artifactId>
         </dependency>
 
         <!-- Common dependencies -->

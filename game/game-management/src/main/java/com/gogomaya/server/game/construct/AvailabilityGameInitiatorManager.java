@@ -25,17 +25,15 @@ public class AvailabilityGameInitiatorManager {
         // Step 1. Checking all users are active
         final Collection<Long> participants = availabilityRequest.fetchAcceptedParticipants();
         // Step 2. Checking all participants are available
-        if (playerStateManager.areAvailable(participants)) {
-            initiatorService.initiate(new GameInitiation(availabilityRequest.getConstruction(), participants, availabilityRequest.getRequest()
-                    .getSpecification()));
-        } else {
+        final GameInitiation initiation = new GameInitiation(availabilityRequest.getConstruction(), participants, availabilityRequest.getRequest().getSpecification());
+        if (!initiatorService.initiate(initiation)) {
             // Step 2.1 Pretty naive implementation of MessageListener functionality
             playerStateManager.subscribe(participants, new MessageListener() {
 
                 @Override
                 public void onMessage(Message message, byte[] pattern) {
-                    playerStateManager.unsubscribe(participants, this);
-                    register(availabilityRequest);
+                    if(initiatorService.initiate(initiation))
+                        playerStateManager.unsubscribe(participants, this);
                 }
 
             });

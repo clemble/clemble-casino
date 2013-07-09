@@ -10,8 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
@@ -34,7 +32,9 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_SESSION")
-@TypeDefs(value = { @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = GameState.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.GameState") }) })
+@TypeDefs(value = { @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = GameState.class, parameters = { @Parameter(
+        name = JsonHibernateType.CLASS_NAME_PARAMETER,
+        value = "com.gogomaya.server.game.GameState") }) })
 public class GameSession<State extends GameState> implements GameSpecificationAware, SessionAware, Serializable {
 
     /**
@@ -43,7 +43,6 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     private static final long serialVersionUID = -6572596573895530995L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SESSION_ID")
     private long session;
 
@@ -70,6 +69,9 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
 
     @Column(name = "NUM_MADE_MOVES")
     private int numMadeMoves;
+
+    public GameSession() {
+    }
 
     @Override
     public long getSession() {
