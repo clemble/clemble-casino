@@ -3,6 +3,7 @@ package com.gogomaya.server.integration.emulation.tictactoe;
 import java.util.Random;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeCellState;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
@@ -13,7 +14,17 @@ import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
 
 public class TicTacToeActor implements GameActor<TicTacToeState> {
 
+    /**
+     * Generated 13/07/13
+     */
+    private static final long serialVersionUID = 8438692609799609799L;
+
     final private Random random = new Random();
+
+    @Override
+    public String getName() {
+        return TicTacToe.NAME;
+    }
 
     @Override
     public void move(GameSessionPlayer<TicTacToeState> playerToMove) {
@@ -41,4 +52,5 @@ public class TicTacToeActor implements GameActor<TicTacToeState> {
             }
         }
     }
+
 }

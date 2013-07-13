@@ -6,7 +6,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameRequest;
-import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
+import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.player.Player;
@@ -32,13 +32,8 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
     }
 
     @Override
-    public GameSpecificationOptions getOptions() {
-        return getOptions(null);
-    }
-
-    @Override
-    public GameSpecificationOptions getOptions(Player player) {
-        return configuartionManagerController.get(player != null ? player.getPlayerId() : -1L);
+    public GameSpecificationOptions getOptions(String name, Player player) {
+        return configuartionManagerController.get(player != null ? player.getPlayerId() : -1L, name);
     }
 
     @Override
@@ -47,7 +42,7 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
     }
 
     @Override
-    protected void responce(InvitationResponceEvent responceEvent) {
+    protected void responce(InvitationResponseEvent responceEvent) {
         constructionController.invitationResponsed(responceEvent.getPlayerId(), responceEvent);
     }
 

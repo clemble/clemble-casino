@@ -4,6 +4,6 @@ import com.gogomaya.server.event.ExpectedAction;
 import com.gogomaya.server.event.GameConstructionEvent;
 import com.gogomaya.server.player.PlayerAware;
 
-public interface InvitationResponceEvent extends GameConstructionEvent, PlayerAware, ExpectedAction {
+public interface InvitationResponseEvent extends GameConstructionEvent, PlayerAware, ExpectedAction {
 
 }

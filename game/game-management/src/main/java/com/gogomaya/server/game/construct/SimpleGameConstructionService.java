@@ -11,7 +11,7 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.event.schedule.GameConstructedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationDeclinedEvent;
-import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
+import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.game.event.schedule.PlayerInvitedEvent;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.player.lock.PlayerLockService;
@@ -75,14 +75,14 @@ public class SimpleGameConstructionService implements GameConstructionService {
         return construction;
     }
 
-    final public GameConstruction invitationResponsed(InvitationResponceEvent response) {
+    final public GameConstruction invitationResponsed(InvitationResponseEvent response) {
         // Step 1. Sanity check
         if (response == null)
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidInvitationResponse);
         return tryAcceptResponce(response);
     }
 
-    final private GameConstruction tryAcceptResponce(InvitationResponceEvent response) {
+    final private GameConstruction tryAcceptResponce(InvitationResponseEvent response) {
         try {
             // Step 1. Checking associated construction
             GameConstruction construction = constructionRepository.findOne(response.getConstruction());

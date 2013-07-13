@@ -12,7 +12,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameRequest;
-import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
+import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.player.Player;
@@ -28,7 +28,9 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
     final private RestTemplate restTemplate;
     final private String baseUrl;
 
-    public IntegrationGameConstructionOperations(final String name, final String baseUrl, final RestTemplate restTemplate,
+    public IntegrationGameConstructionOperations(final String name,
+            final String baseUrl,
+            final RestTemplate restTemplate,
             final GameSessionPlayerFactory<State> playerFactory) {
         super(name, playerFactory);
         this.restTemplate = checkNotNull(restTemplate);
@@ -36,12 +38,7 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
     }
 
     @Override
-    public GameSpecificationOptions getOptions() {
-        return getOptions(null);
-    }
-
-    @Override
-    public GameSpecificationOptions getOptions(Player player) {
+    public GameSpecificationOptions getOptions(String name, Player player) {
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         if (player != null)
@@ -50,7 +47,8 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
         // Step 2. Generating request
         HttpEntity<GameSpecification> requestEntity = new HttpEntity<GameSpecification>(header);
         // Step 3. Rest template generation
-        return restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_OPTIONS, HttpMethod.GET, requestEntity, GameSpecificationOptions.class).getBody();
+        return restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SPECIFICATION_OPTIONS, HttpMethod.GET, requestEntity,
+                GameSpecificationOptions.class, name).getBody();
     }
 
     public GameConstruction request(Player player, GameRequest gameRequest) {
@@ -62,19 +60,22 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
         // Step 2. Generating request
         HttpEntity<GameRequest> requestEntity = new HttpEntity<GameRequest>(gameRequest, header);
         // Step 3. Rest template generation
-        return (GameConstruction) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION_GENERIC, HttpMethod.POST, requestEntity, GameConstruction.class).getBody();
+        return (GameConstruction) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION_GENERIC, HttpMethod.POST,
+                requestEntity, GameConstruction.class, gameRequest.getSpecification().getName().getName()).getBody();
     }
 
     @Override
-    protected void responce(InvitationResponceEvent responceEvent) {
+    protected void responce(InvitationResponseEvent responceEvent) {
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(responceEvent.getPlayerId()));
         header.add("Content-Type", "application/json");
         // Step 2. Generating request
-        HttpEntity<InvitationResponceEvent> requestEntity = new HttpEntity<InvitationResponceEvent>(responceEvent, header);
+        HttpEntity<InvitationResponseEvent> requestEntity = new HttpEntity<InvitationResponseEvent>(responceEvent, header);
         // Step 3. Rest template generation
-        restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION_RESPONCE, HttpMethod.POST, requestEntity, GameConstruction.class);
+        restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION_RESPONSE, HttpMethod.POST, requestEntity,
+                GameConstruction.class, responceEvent.getConstruction());
     }
+
 
 }

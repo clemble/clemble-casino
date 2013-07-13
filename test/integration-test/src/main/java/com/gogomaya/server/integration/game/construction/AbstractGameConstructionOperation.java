@@ -13,7 +13,7 @@ import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationDeclinedEvent;
-import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
+import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
@@ -34,13 +34,14 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
         this.playerFactory = checkNotNull(playerFactory);
     }
 
+    @Override
     final public String getName() {
         return name;
     }
 
     @Override
     final public GameSpecification selectSpecification(Player player) {
-        GameSpecificationOptions specificationOptions = getOptions(player);
+        GameSpecificationOptions specificationOptions = getOptions(getName(), player);
         if (specificationOptions instanceof SelectSpecificationOptions) {
             return ((SelectSpecificationOptions) specificationOptions).getSpecifications().get(0);
         } else {
@@ -49,16 +50,25 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
     }
 
     @Override
+    final public GameSpecificationOptions getOptions() {
+        return getOptions(name, null);
+    }
+
+    @Override
+    final public GameSpecificationOptions getOptions(Player player) {
+        return getOptions(name, player);
+    }
+
+    abstract public GameSpecificationOptions getOptions(String name, Player player);
+
+    @Override
     final public GameSessionPlayer<State> constructAutomatic(Player player) {
         return constructAutomatic(player, selectSpecification(player));
     }
 
     @Override
     public GameSessionPlayer<State> constructAutomatic(Player player, GameSpecification specification) {
-        specification = specification == null ? selectSpecification(player) : specification;
-
         GameRequest automaticGameRequest = new AutomaticGameRequest(player.getPlayerId(), specification);
-
         return construct(player, automaticGameRequest);
     }
 
@@ -81,17 +91,17 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
         // Step 1. Need to start listening before sending accept, otherwise constructed event might be missed
         GameSessionPlayer<State> sessionPlayer = playerFactory.construct(player, construction);
         // Step 2. Sending accept message to the server
-        InvitationResponceEvent acceptedEvents = new InvitationAcceptedEvent(construction, player.getPlayerId());
+        InvitationResponseEvent acceptedEvents = new InvitationAcceptedEvent(construction, player.getPlayerId());
         responce(acceptedEvents);
         return sessionPlayer;
     }
 
     @Override
     final public void declineInvitation(Player player, long construction) {
-        InvitationResponceEvent declinedEvents = new InvitationDeclinedEvent(construction, player.getPlayerId());
+        InvitationResponseEvent declinedEvents = new InvitationDeclinedEvent(construction, player.getPlayerId());
         responce(declinedEvents);
     }
 
-    abstract protected void responce(InvitationResponceEvent responceEvent);
+    abstract protected void responce(InvitationResponseEvent responceEvent);
 
 }

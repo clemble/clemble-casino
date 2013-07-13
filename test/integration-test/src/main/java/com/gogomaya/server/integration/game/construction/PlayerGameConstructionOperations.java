@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import com.gogomaya.server.game.GameAware;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
@@ -32,24 +31,12 @@ public class PlayerGameConstructionOperations<State extends GameState> implement
         return gameOperations.getName();
     }
 
-    public GameSpecificationOptions getOptions() {
-        return gameOperations.getOptions(player);
-    }
-
     public GameSpecification selectSpecification() {
         return gameOperations.selectSpecification(player);
     }
-
-    public GameSessionPlayer<State> constructAutomatic() {
-        return gameOperations.constructAutomatic(player);
-    }
-
-    public GameSessionPlayer<State> constructAutomatic(GameSpecification gameSpecification) {
-        return gameOperations.constructAutomatic(player, gameSpecification);
-    }
-
-    public GameSessionPlayer<State> constructAvailability(Collection<Long> participants) {
-        return constructAvailability(selectSpecification(), participants);
+    
+    public GameSessionPlayer<State> constructAvailability(Collection<Long> participants){
+        return gameOperations.constructAvailability(player, selectSpecification(), participants);
     }
 
     public GameSessionPlayer<State> constructAvailability(GameSpecification specification, Collection<Long> participants) {

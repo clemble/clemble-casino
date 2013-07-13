@@ -16,6 +16,7 @@ import com.gogomaya.server.ServerRegistry;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.impl.GamePostProcessorListener;
 import com.gogomaya.server.game.action.impl.VerificationGameProcessorListener;
+import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.game.construct.GameInitiation;
@@ -57,6 +58,12 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Singleton
     public <State extends GameState> GamePostProcessorListener<State> gamePostProcessorListener() {
         return new GamePostProcessorListener<State>(playerStateManager, walletTransactionManager);
+    }
+
+    @Bean
+    @Singleton
+    public GameSpecificationRegistry gameSpecificationRegistry() {
+        return new GameSpecificationRegistry();
     }
 
     @Profile(value = { "default", "test" })

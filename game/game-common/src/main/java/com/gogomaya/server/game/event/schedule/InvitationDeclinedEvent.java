@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("declined")
-public class InvitationDeclinedEvent implements InvitationResponceEvent {
+public class InvitationDeclinedEvent implements InvitationResponseEvent {
 
     /**
      * Generated 02/06/13

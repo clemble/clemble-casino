@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.gogomaya.server.game.action.GameSessionProcessor;
+import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
@@ -49,16 +50,19 @@ public class TicTacToeWebSpringConfiguration implements SpringConfiguration {
     @Qualifier("ticTacToeSessionProcessor")
     public GameSessionProcessor<TicTacToeState> ticTacToeSessionProcessor;
 
+    @Autowired
+    public GameSpecificationRegistry gameSpecificationRegistry;
+
     @Bean
     @Singleton
     public GameConstructionController<TicTacToeState> ticTacToeConstructionController() {
-        return new GameConstructionController<TicTacToeState>(constructionRepository, constructionService, ticTacToeConfigurationManager);
+        return new GameConstructionController<TicTacToeState>(constructionRepository, constructionService, gameSpecificationRegistry);
     }
 
     @Bean
     @Singleton
     public GameConfigurationManagerController ticTacToeConfigurationManagerController() {
-        return new GameConfigurationManagerController(ticTacToeConfigurationManager);
+        return new GameConfigurationManagerController(gameSpecificationRegistry);
     }
 
     @Bean

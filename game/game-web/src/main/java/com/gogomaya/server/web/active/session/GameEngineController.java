@@ -25,7 +25,7 @@ public class GameEngineController<State extends GameState> {
         this.sessionProcessor = checkNotNull(sessionProcessor);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_MOVE, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSION_MOVE, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody State process(
             @RequestHeader("playerId") long playerId,

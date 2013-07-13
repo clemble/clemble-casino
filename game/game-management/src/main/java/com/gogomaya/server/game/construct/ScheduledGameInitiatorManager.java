@@ -5,7 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.concurrent.ExecutorService;
 
 import com.gogomaya.server.repository.game.GameScheduleRepository;
-import com.google.common.collect.MinMaxPriorityQueue;
 
 public class ScheduledGameInitiatorManager implements GameInitiatorManager {
 
