@@ -1,13 +1,12 @@
 package com.gogomaya.server.spring.common;
 
 import java.nio.ByteBuffer;
-import java.util.Collection;
 
 import javax.inject.Singleton;
 
 import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.service.AbstractServiceCreator.ServiceNameTuple;
-import org.cloudfoundry.runtime.service.keyvalue.CloudRedisConnectionFactoryBean;
+import org.cloudfoundry.runtime.env.RedisServiceInfo;
+import org.cloudfoundry.runtime.service.keyvalue.RedisServiceCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -19,9 +18,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 
 @Configuration
 @Import(value = { RedisSpringConfiguration.Cloud.class, RedisSpringConfiguration.DefaultAndTest.class })
@@ -83,16 +79,13 @@ public class RedisSpringConfiguration implements SpringConfiguration {
         @Bean
         @Singleton
         public RedisConnectionFactory redisConnectionFactory() {
-            CloudRedisConnectionFactoryBean cloudRedisFactory = new CloudRedisConnectionFactoryBean(cloudEnvironment);
             try {
-                Collection<ServiceNameTuple<RedisConnectionFactory>> redisConnectionFactories = cloudRedisFactory.createInstances();
-                redisConnectionFactories = Collections2.filter(redisConnectionFactories, new Predicate<ServiceNameTuple<RedisConnectionFactory>>() {
-                    public boolean apply(ServiceNameTuple<RedisConnectionFactory> input) {
-                        return input.name.equalsIgnoreCase("gogomaya-redis");
-                    }
-                });
-                assert redisConnectionFactories.size() == 1 : "Returned illegal ConnectionFactory";
-                return redisConnectionFactories.iterator().next().service;
+                RedisServiceInfo serviceInfo = cloudEnvironment.getServiceInfo("gogomaya-redis", RedisServiceInfo.class);
+                RedisServiceCreator serviceCreator = new RedisServiceCreator();
+                RedisConnectionFactory connectionFactory = serviceCreator.createService(serviceInfo);
+                if (connectionFactory == null)
+                    throw new NullPointerException("Redis Connection factory can't be created");
+                return connectionFactory;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

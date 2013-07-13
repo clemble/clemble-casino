@@ -106,8 +106,8 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameSessionPlayerFactory<?> genericGameSessionFactory() {
-            return new WebGameSessionPlayerFactory<>(ticTacToeEngineController, ticTacToeConstructionController);
+        public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionFactory() {
+            return new WebGameSessionPlayerFactory<TicTacToeState>(ticTacToeEngineController, ticTacToeConstructionController);
         }
 
         @Bean
@@ -120,7 +120,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionPlayerFactory() {
-            return new TicTacToePlayerSessionFactory((GameSessionPlayerFactory<TicTacToeState>) genericGameSessionFactory());
+            return new TicTacToePlayerSessionFactory(ticTacToeSessionFactory());
         }
 
     }
@@ -131,7 +131,8 @@ public class TestConfiguration {
 
         @Override
         public String getBaseUrl() {
-            return "http://gogomaya.cloudfoundry.com/";
+            // return "http://gogomaya.cfapps.io/";
+            return "http://ec2-50-16-93-157.compute-1.amazonaws.com/gogomaya/";
         }
 
     }

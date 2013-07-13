@@ -1,15 +1,14 @@
 package com.gogomaya.server.spring.common;
 
 import java.io.File;
-import java.util.Collection;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.service.AbstractServiceCreator.ServiceNameTuple;
-import org.cloudfoundry.runtime.service.relational.CloudDataSourceFactory;
+import org.cloudfoundry.runtime.env.RdbmsServiceInfo;
+import org.cloudfoundry.runtime.service.relational.RdbmsServiceCreator;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,9 +31,6 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.repository", entityManagerFactoryRef = "entityManagerFactory")
@@ -103,16 +99,13 @@ public class JPASpringConfiguration implements SpringConfiguration {
         @Bean
         @Singleton
         public DataSource dataSource() {
-            CloudDataSourceFactory cloudDataSourceFactory = new CloudDataSourceFactory(cloudEnvironment);
             try {
-                Collection<ServiceNameTuple<DataSource>> dataSources = cloudDataSourceFactory.createInstances();
-                dataSources = Collections2.filter(dataSources, new Predicate<ServiceNameTuple<DataSource>>() {
-                    public boolean apply(ServiceNameTuple<DataSource> input) {
-                        return input.name.equalsIgnoreCase("gogomaya-mysql");
-                    }
-                });
-                assert dataSources.size() == 1 : "Returned illegal DataSource";
-                return dataSources.iterator().next().service;
+                RdbmsServiceInfo serviceInfo = cloudEnvironment.getServiceInfo("gogomaya-mysql", RdbmsServiceInfo.class);
+                RdbmsServiceCreator serviceCreator = new RdbmsServiceCreator();
+                DataSource dataSource = serviceCreator.createService(serviceInfo);
+                if (dataSource == null)
+                    throw new NullPointerException("Data source can't be created");
+                return dataSource;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

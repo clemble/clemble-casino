@@ -20,10 +20,12 @@
         <module>test</module>
     </modules>
     <properties>
-        <cloudfoundry.runtime.version>0.8.2</cloudfoundry.runtime.version>
         <!-- Sources encoding for the maven generated jars -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Cloud foundry dependencies -->
+        <cloudfoundry.runtime.version>0.8.4</cloudfoundry.runtime.version>
+        <!-- Generic dependencies -->
         <java.serlet-api.version>3.0.1</java.serlet-api.version>
         <commons-lang.version>3.1</commons-lang.version>
         <guava.version>14.0.1</guava.version>

@@ -1,12 +1,10 @@
 package com.gogomaya.server.spring.common;
 
-import java.util.Collection;
-
 import javax.inject.Singleton;
 
 import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.service.AbstractServiceCreator.ServiceNameTuple;
-import org.cloudfoundry.runtime.service.messaging.CloudRabbitConnectionFactoryBean;
+import org.cloudfoundry.runtime.env.RabbitServiceInfo;
+import org.cloudfoundry.runtime.service.messaging.RabbitServiceCreator;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -26,8 +24,6 @@ import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.notification.RabbitPlayerNotificationService;
 import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 
 @Configuration
 @Import({ RabbitSpringConfiguration.Cloud.class, RabbitSpringConfiguration.DefaultAndTest.class, JsonSpringConfiguration.class })
@@ -45,14 +41,16 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     @Qualifier("playerNotificationRegistry")
     public PlayerNotificationRegistry playerNotificationRegistry;
 
-    @Bean @Singleton
+    @Bean
+    @Singleton
     public Jackson2JsonMessageConverter jsonMessageConverter() {
         Jackson2JsonMessageConverter jsonMessageConverter = new Jackson2JsonMessageConverter();
         jsonMessageConverter.setJsonObjectMapper(objectMapper);
         return jsonMessageConverter;
     }
 
-    @Bean @Singleton
+    @Bean
+    @Singleton
     public RabbitTemplate rabbitTemplate() {
         // Step 1. Creating Queue
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
@@ -63,7 +61,8 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
         return rabbitTemplate;
     }
 
-    @Bean @Singleton
+    @Bean
+    @Singleton
     public PlayerNotificationService playerNotificationService() {
         return new RabbitPlayerNotificationService(jsonMessageConverter(), playerNotificationRegistry);
     }
@@ -75,24 +74,29 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
         @Autowired
         public CloudEnvironment cloudEnvironment;
 
-        @Bean @Singleton
+        @Bean
+        @Singleton
         public ConnectionFactory connectionFactory() {
-            CloudRabbitConnectionFactoryBean cloudRabbitFactory = new CloudRabbitConnectionFactoryBean(cloudEnvironment);
             try {
-                Collection<ServiceNameTuple<ConnectionFactory>> connectionFactories = cloudRabbitFactory.createInstances();
-                connectionFactories = Collections2.filter(connectionFactories, new Predicate<ServiceNameTuple<ConnectionFactory>>() {
-                    public boolean apply(ServiceNameTuple<ConnectionFactory> input) {
-                        return input.name.equalsIgnoreCase("gogomaya-rabbit");
-                    }
-                });
-                assert connectionFactories.size() == 1 : "Returned illegal ConnectionFactory";
-                return connectionFactories.iterator().next().service;
+                RabbitServiceInfo serviceInfo = cloudEnvironment.getServiceInfo("gogomaya-rabbit", RabbitServiceInfo.class);
+                RabbitServiceCreator serviceCreator = new RabbitServiceCreator();
+                ConnectionFactory connectionFactory = serviceCreator.createService(serviceInfo);
+                if (connectionFactory == null)
+                    throw new NullPointerException("Rabbit Connection factory can't be created");
+                return connectionFactory;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
 
-        @Bean @Singleton
+    }
+
+    @Configuration
+    @Profile(value = { "cloud", "development" })
+    public static class Development {
+
+        @Bean
+        @Singleton
         public SimplePlayerNotificationRegistry playerNotificationRegistry() {
             final ServerRegistry serverRegistry = new ServerRegistry();
             serverRegistry.register(1_000_000L, "ec2-50-16-93-157.compute-1.amazonaws.com");
@@ -105,12 +109,14 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     @Profile(value = { "default", "test" })
     public static class DefaultAndTest {
 
-        @Bean @Singleton
+        @Bean
+        @Singleton
         public ConnectionFactory connectionFactory() {
             return new CachingConnectionFactory();
         }
 
-        @Bean @Singleton
+        @Bean
+        @Singleton
         public SimplePlayerNotificationRegistry playerNotificationRegistry() {
             final ServerRegistry serverRegistry = new ServerRegistry();
             serverRegistry.register(1_000_000L, "localhost");

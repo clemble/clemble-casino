@@ -26,9 +26,9 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
     final private String baseUrl;
     final private PlayerListenerOperations listenerOperations;
     final private RestTemplate restTemplate;
-    final private GameConstructionOperations[] gameConstructionOprations;
+    final private GameConstructionOperations<?>[] gameConstructionOprations;
 
-    public IntegrationPlayerOperations(final String baseUrl, final RestTemplate restTemplate, final PlayerListenerOperations listenerOperations, GameConstructionOperations ... factories) {
+    public IntegrationPlayerOperations(final String baseUrl, final RestTemplate restTemplate, final PlayerListenerOperations listenerOperations, GameConstructionOperations<?> ... factories) {
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);
         this.listenerOperations = checkNotNull(listenerOperations);

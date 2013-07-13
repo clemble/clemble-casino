@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import javax.inject.Inject;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.jbehave.core.annotations.UsingSteps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,10 +23,8 @@ import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.tests.validation.PlayerCredentialsValidation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@UsingSteps(instances = PlayerCredentialsValidation.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
