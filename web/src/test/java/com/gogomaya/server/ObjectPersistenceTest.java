@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +21,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.gogomaya.server.game.construct.ScheduledGame;
+import com.gogomaya.server.repository.game.GameScheduleRepository;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.stresstest.random.ObjectGenerator;
 
@@ -30,6 +33,21 @@ import com.stresstest.random.ObjectGenerator;
 public class ObjectPersistenceTest extends ObjectTest implements ApplicationContextAware {
 
     Map<String, JpaRepository> repositories;
+
+    @Autowired
+    public GameScheduleRepository gameScheduleRepository;
+
+    @Test
+    public void testSpecialCase() {
+        ScheduledGame scheduledGame = ObjectGenerator.generate(ScheduledGame.class);
+
+        ScheduledGame savedScheduledGame = gameScheduleRepository.saveAndFlush(scheduledGame);
+        Assert.assertEquals(scheduledGame, savedScheduledGame);
+
+        ScheduledGame foundScheduledGame = gameScheduleRepository.findOne(savedScheduledGame.getConstruction());
+        Assert.assertEquals(foundScheduledGame, savedScheduledGame);
+        Assert.assertEquals(foundScheduledGame, scheduledGame);
+    }
 
     @Test
     @SuppressWarnings("unchecked")
@@ -69,7 +87,7 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
 
         }
 
-        Assert.assertTrue(errors.isEmpty());
+        Assert.assertTrue(String.valueOf(errors), errors.isEmpty());
     }
 
     public Class<?> getDomainClass(JpaRepository repository) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,

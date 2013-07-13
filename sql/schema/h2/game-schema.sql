@@ -8,6 +8,12 @@
         primary key (CONSTRUCTION_ID)
     );
 
+    create table GAME_SCHEDULE (
+        CONSTRUCTION_ID bigint not null,
+        START_TIME bigint,
+        primary key (CONSTRUCTION_ID)
+    );
+
     create table GAME_SESSION (
         SESSION_ID bigint not null,
         NUM_MADE_MOVES integer,

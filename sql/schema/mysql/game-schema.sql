@@ -25,6 +25,8 @@
 
     drop table if exists GAME_CONSTRUCTION;
 
+    drop table if exists GAME_SCHEDULE;
+
     drop table if exists GAME_SESSION;
 
     drop table if exists GAME_SESSION_MOVES;
@@ -43,6 +45,12 @@
         RESPONSES varchar(4096) not null,
         STATE varchar(255) not null,
         version integer not null,
+        primary key (CONSTRUCTION_ID)
+    ) ENGINE=InnoDB;
+
+    create table GAME_SCHEDULE (
+        CONSTRUCTION_ID bigint not null,
+        START_TIME bigint,
         primary key (CONSTRUCTION_ID)
     ) ENGINE=InnoDB;
 

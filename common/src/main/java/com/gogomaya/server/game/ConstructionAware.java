@@ -1,6 +1,8 @@
 package com.gogomaya.server.game;
 
-public interface ConstructionAware {
+import java.io.Serializable;
+
+public interface ConstructionAware extends Serializable {
 
     public long getConstruction();
 

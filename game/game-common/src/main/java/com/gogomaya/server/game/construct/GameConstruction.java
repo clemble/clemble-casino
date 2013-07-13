@@ -36,6 +36,11 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
                 value = "com.gogomaya.server.ActionLatch") }) })
 public class GameConstruction implements ConstructionAware {
 
+    /**
+     * Generated 10/07/13
+     */
+    private static final long serialVersionUID = 2712386710995109913L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CONSTRUCTION_ID")

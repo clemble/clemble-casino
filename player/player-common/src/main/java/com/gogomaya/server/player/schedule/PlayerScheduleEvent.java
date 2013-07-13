@@ -1,36 +1,47 @@
 package com.gogomaya.server.player.schedule;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gogomaya.server.game.ConstructionAware;
 import com.gogomaya.server.player.PlayerAware;
 
-public class PlayerScheduleEvent implements PlayerAware, Comparable<PlayerScheduleEvent> {
+@Entity
+@Table(name = "PLAYER_SCHEDULED_EVENT")
+public class PlayerScheduleEvent implements PlayerAware, ConstructionAware, Comparable<PlayerScheduleEvent> {
 
     /**
      * Generated 19/06/13
      */
     private static final long serialVersionUID = -361237726667152884L;
 
-    final long playerId;
-    final private long scheduledTime;
-    final private ScheduledEventPriority priority;
+    @Id
+    @Column(name = "PLAYER_ID")
+    private long playerId;
+    @Id
+    @Column(name = "CONSTRUCTION_ID")
+    private long construction;
+    @Column(name = "START_TIME")
+    private long startTime;
+    @Column(name = "END_TIME")
+    private long endTime;
 
-    public PlayerScheduleEvent(long player) {
-        this(player, System.currentTimeMillis());
-    }
-
-    public PlayerScheduleEvent(long player, long scheduledDate) {
-        this(player, scheduledDate, ScheduledEventPriority.low);
+    public PlayerScheduleEvent() {
     }
 
     @JsonCreator
-    public PlayerScheduleEvent(@JsonProperty("playerId") long player, @JsonProperty("scheduledTime") long scheduledTime,
-            @JsonProperty("priority") ScheduledEventPriority eventPriority) {
+    public PlayerScheduleEvent(@JsonProperty("playerId") long player,
+            @JsonProperty("construction") long construction,
+            @JsonProperty("startTime") long startTime,
+            @JsonProperty("endTime") long endTime) {
         this.playerId = player;
-        this.scheduledTime = scheduledTime;
-        this.priority = checkNotNull(eventPriority);
+        this.construction = construction;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     @Override
@@ -38,27 +49,48 @@ public class PlayerScheduleEvent implements PlayerAware, Comparable<PlayerSchedu
         return playerId;
     }
 
-    public ScheduledEventPriority getPriority() {
-        return priority;
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
     }
 
-    public long getScheduledTime() {
-        return scheduledTime;
+    @Override
+    public long getConstruction() {
+        return construction;
+    }
+
+    public void setConstruction(long construction) {
+        this.construction = construction;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 
     @Override
     public int compareTo(PlayerScheduleEvent o) {
-        int comparison = Long.compare(o.scheduledTime, scheduledTime);
-        return comparison == 0 ? o.priority.compareTo(priority) : comparison;
+        return Long.compare(o.getStartTime(), getStartTime());
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
-        result = prime * result + ((priority == null) ? 0 : priority.hashCode());
-        result = prime * result + (int) (scheduledTime ^ (scheduledTime >>> 32));
+        result = prime * result + (int) (construction ^ (construction >>> 32));
+        result = prime * result + (int) (endTime ^ (endTime >>> 32));
+        result = prime * result + (int) (getPlayerId() ^ (getPlayerId() >>> 32));
+        result = prime * result + (int) (startTime ^ (startTime >>> 32));
         return result;
     }
 
@@ -71,13 +103,8 @@ public class PlayerScheduleEvent implements PlayerAware, Comparable<PlayerSchedu
         if (getClass() != obj.getClass())
             return false;
         PlayerScheduleEvent other = (PlayerScheduleEvent) obj;
-        if (playerId != other.playerId)
+        if (construction != other.construction)
             return false;
-        if (priority != other.priority)
-            return false;
-        if (scheduledTime != other.scheduledTime)
-            return false;
-        return true;
+        return (endTime == other.endTime) && (getPlayerId() == other.getPlayerId()) && (startTime == other.startTime);
     }
-
 }

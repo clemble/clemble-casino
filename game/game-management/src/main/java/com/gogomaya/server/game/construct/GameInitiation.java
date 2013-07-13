@@ -11,6 +11,11 @@ import com.gogomaya.server.game.specification.GameSpecificationAware;
 
 public class GameInitiation implements GameOpponentsAware, GameSpecificationAware, ConstructionAware {
 
+    /**
+     * Generated 10/07/13
+     */
+    private static final long serialVersionUID = -8584404446775359390L;
+
     final private long construction;
 
     final private GameSpecification specification;
