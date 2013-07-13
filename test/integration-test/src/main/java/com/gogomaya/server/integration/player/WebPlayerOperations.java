@@ -26,10 +26,14 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
 
     final private PlayerListenerOperations listenerOperations;
 
-    final private GameConstructionOperations[] gameConstructionOperations;
-    
-    public WebPlayerOperations(RegistrationSignInContoller signInContoller, RegistrationLoginController loginController, WalletController walletController,
-            PlayerSessionController sessionController, PlayerListenerOperations listenerOperations, GameConstructionOperations ... gameConstructionOperations) {
+    final private GameConstructionOperations<?>[] gameConstructionOperations;
+
+    public WebPlayerOperations(RegistrationSignInContoller signInContoller,
+            RegistrationLoginController loginController,
+            WalletController walletController,
+            PlayerSessionController sessionController,
+            PlayerListenerOperations listenerOperations,
+            GameConstructionOperations<?>... gameConstructionOperations) {
         this.signInContoller = checkNotNull(signInContoller);
         this.loginController = checkNotNull(loginController);
         this.walletController = checkNotNull(walletController);

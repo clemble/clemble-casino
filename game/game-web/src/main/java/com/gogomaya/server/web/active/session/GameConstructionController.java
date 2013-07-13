@@ -23,6 +23,7 @@ import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.event.schedule.InvitationResponceEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
+import com.gogomaya.server.web.mapping.GameWebMapping;
 
 @Controller
 public class GameConstructionController<State extends GameState> {
@@ -31,14 +32,15 @@ public class GameConstructionController<State extends GameState> {
     final private GameConstructionService constructionService;
     final private GameConstructionRepository constructionRepository;
 
-    public GameConstructionController(final GameConstructionRepository constructionRepository, final GameConstructionService matchingService,
+    public GameConstructionController(final GameConstructionRepository constructionRepository,
+            final GameConstructionService matchingService,
             final GameConfigurationManager configurationManager) {
         this.constructionService = checkNotNull(matchingService);
         this.configurationManager = checkNotNull(configurationManager);
         this.constructionRepository = constructionRepository;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/active/session", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_CONSTRUCTION_AUTOMATIC, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     GameConstruction match(@RequestHeader("playerId") final long playerId, @RequestBody final GameSpecification specification) {
@@ -48,7 +50,7 @@ public class GameConstructionController<State extends GameState> {
         return constructionService.construct(instantGameRequest);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/active/constuct", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_CONSTRUCTION_GENERIC, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     GameConstruction construct(@RequestHeader("playerId") final long playerId, @RequestBody final GameRequest gameRequest) {
@@ -59,7 +61,7 @@ public class GameConstructionController<State extends GameState> {
         return constructionService.construct(gameRequest);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/active/constuct/responce", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_CONSTRUCTION_RESPONCE, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     GameConstruction invitationResponsed(@RequestHeader("playerId") final long playerId, @RequestBody final InvitationResponceEvent gameRequest) {
@@ -67,7 +69,7 @@ public class GameConstructionController<State extends GameState> {
         return constructionService.invitationResponsed(gameRequest);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/active/constuct/{constructionId}", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONSTRUCTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     GameConstruction getConstruct(@RequestHeader("playerId") final long playerId, @PathVariable("constructionId") final long constructionId) {

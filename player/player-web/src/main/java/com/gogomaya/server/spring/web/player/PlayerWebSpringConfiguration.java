@@ -19,7 +19,6 @@ import com.gogomaya.server.repository.player.PlayerProfileRepository;
 import com.gogomaya.server.repository.player.PlayerSessionRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;

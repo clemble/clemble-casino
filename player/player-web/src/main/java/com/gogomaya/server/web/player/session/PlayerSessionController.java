@@ -14,6 +14,7 @@ import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.player.PlayerSessionRepository;
+import com.gogomaya.server.web.mapping.PlayerWebMapping;
 
 @Controller
 public class PlayerSessionController {
@@ -31,7 +32,7 @@ public class PlayerSessionController {
         this.stateManager = checkNotNull(stateManager);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/session/login", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_SESSION_LOGIN, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerSession startSession(@RequestHeader("playerId") long playerId) {

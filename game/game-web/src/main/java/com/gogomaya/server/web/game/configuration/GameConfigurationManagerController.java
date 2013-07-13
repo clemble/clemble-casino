@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.game.configuration.GameConfigurationManager;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
+import com.gogomaya.server.web.mapping.GameWebMapping;
 
 @Controller
 public class GameConfigurationManagerController {
@@ -22,7 +23,7 @@ public class GameConfigurationManagerController {
         this.configurationManager = checkNotNull(configurationManager);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/active/options", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_OPTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     // Can be null
     public @ResponseBody

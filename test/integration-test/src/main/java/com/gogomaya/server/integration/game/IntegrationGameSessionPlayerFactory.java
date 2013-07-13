@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.integration.player.Player;
+import com.gogomaya.server.web.mapping.GameWebMapping;
 
 public class IntegrationGameSessionPlayerFactory<State extends GameState> implements GameSessionPlayerFactory<State> {
 
@@ -16,8 +17,6 @@ public class IntegrationGameSessionPlayerFactory<State extends GameState> implem
      * Generated 04/07/13
      */
     private static final long serialVersionUID = -7652085755416835994L;
-
-    final private String CONSTRUCTION_URL = "/spi/active/constuct/";
 
     final private RestTemplate restTemplate;
     final private String baseUrl;
@@ -46,7 +45,8 @@ public class IntegrationGameSessionPlayerFactory<State extends GameState> implem
         // Step 2. Generating request
         HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
         // Step 3. Requesting associated Construction
-        GameConstruction construction = (GameConstruction) restTemplate.exchange(baseUrl + CONSTRUCTION_URL + constructionId, HttpMethod.GET, requestEntity, GameConstruction.class).getBody();
+        GameConstruction construction = (GameConstruction) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION,
+                HttpMethod.GET, requestEntity, GameConstruction.class, constructionId).getBody();
         // Step 4. Returning IntegrationGameSessionProcessor
         return new IntegrationGameSessionPlayer<State>(player, construction, restTemplate, baseUrl);
     }

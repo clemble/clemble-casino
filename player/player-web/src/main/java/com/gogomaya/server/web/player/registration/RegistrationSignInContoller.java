@@ -14,6 +14,7 @@ import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.web.RegistrationRequest;
+import com.gogomaya.server.web.mapping.PlayerWebMapping;
 
 @Controller
 public class RegistrationSignInContoller {
@@ -27,7 +28,7 @@ public class RegistrationSignInContoller {
         this.playerRegistrationService = checkNotNull(playerRegistrationService);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/registration/signin", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_REGISTRATION_SIGN_IN, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerIdentity createUser(@RequestBody final RegistrationRequest registrationRequest) {

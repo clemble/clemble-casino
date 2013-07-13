@@ -15,6 +15,7 @@ import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
+import com.gogomaya.server.web.mapping.PlayerWebMapping;
 
 @Controller
 public class RegistrationSocialConnectionController {
@@ -31,7 +32,7 @@ public class RegistrationSocialConnectionController {
         this.validationService = checkNotNull(validationService);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/registration/social", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_REGISTRATION_SOCIAL, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerIdentity createUser(@RequestBody SocialConnectionData socialConnectionData) {
         validationService.validate(socialConnectionData);

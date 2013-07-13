@@ -15,13 +15,10 @@ import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.player.web.RegistrationRequest;
+import com.gogomaya.server.web.mapping.PaymentWebMapping;
+import com.gogomaya.server.web.mapping.PlayerWebMapping;
 
 public class IntegrationPlayerOperations extends AbstractPlayerOperations {
-
-    final private static String CREATE_URL = "/spi/registration/signin";
-    final private static String LOGIN_URL = "/spi/registration/login";
-    final private static String WALLET_URL = "/spi/wallet/";
-    final private static String SESSION_URL = "/spi/session/login";
 
     final private String baseUrl;
     final private PlayerListenerOperations listenerOperations;
@@ -40,7 +37,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(registrationRequest);
         // Step 1. Performing actual player creation
-        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + CREATE_URL, registrationRequest, PlayerIdentity.class);
+        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + PlayerWebMapping.PLAYER_PREFIX + PlayerWebMapping.PLAYER_REGISTRATION_SIGN_IN, registrationRequest, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
         Player player = new Player(playerIdentity, registrationRequest.getPlayerCredential(), this, listenerOperations, gameConstructionOprations)
@@ -54,7 +51,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(credential);
         // Step 1. Performing actual player login
-        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + LOGIN_URL, credential, PlayerIdentity.class);
+        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + PlayerWebMapping.PLAYER_PREFIX + PlayerWebMapping.PLAYER_REGISTRATION_LOGIN, credential, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
         Player player = new Player(playerIdentity, credential, this, listenerOperations, gameConstructionOprations);
@@ -70,7 +67,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         // Step 2. Generating request
         HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
         // Step 3. Rest template generation
-        return restTemplate.exchange(baseUrl + SESSION_URL, HttpMethod.POST, requestEntity, PlayerSession.class).getBody();
+        return restTemplate.exchange(baseUrl + PlayerWebMapping.PLAYER_PREFIX + PlayerWebMapping.PLAYER_SESSION_LOGIN, HttpMethod.POST, requestEntity, PlayerSession.class).getBody();
     }
 
     @Override
@@ -82,7 +79,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         // Step 2. Generating request
         HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
         // Step 3. Rest template generation
-        return restTemplate.exchange(baseUrl + WALLET_URL + playerWalletId, HttpMethod.GET, requestEntity, PlayerWallet.class).getBody();
+        return restTemplate.exchange(baseUrl + PaymentWebMapping.WALLET_PREFIX + PaymentWebMapping.WALLET_PLAYER, HttpMethod.GET, requestEntity, PlayerWallet.class, playerWalletId).getBody();
     }
 
 }

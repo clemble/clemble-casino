@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.player.wallet.WalletOperation;
 import com.gogomaya.server.player.wallet.WalletTransactionManager;
+import com.gogomaya.server.web.mapping.PaymentWebMapping;
 
 @Controller
 public class WalletTransactionController {
@@ -21,7 +22,7 @@ public class WalletTransactionController {
         this.playerMoneyWalletManager = checkNotNull(playerWalletManager);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/player/wallet/transaction", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.WALLET_TRANSACTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     WalletOperation debit(WalletOperation transaction) {

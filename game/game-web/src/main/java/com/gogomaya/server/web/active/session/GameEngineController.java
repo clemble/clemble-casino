@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameSessionProcessor;
+import com.gogomaya.server.web.mapping.GameWebMapping;
 
 @Controller
 public class GameEngineController<State extends GameState> {
@@ -24,10 +25,10 @@ public class GameEngineController<State extends GameState> {
         this.sessionProcessor = checkNotNull(sessionProcessor);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/active/action", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_MOVE, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    State process(@RequestHeader("playerId") long playerId,
+    public @ResponseBody State process(
+            @RequestHeader("playerId") long playerId,
             @RequestHeader("sessionId") long sessionId,
             @RequestHeader("tableId") long tableId,
             @RequestBody ClientEvent move) {

@@ -4,6 +4,9 @@
 *.jar
 *.war
 *.ear
+*.tar.gz
+*.tar
+*.gz
 # Eclipse configurations #
 .idea
 *.iml

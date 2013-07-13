@@ -12,6 +12,7 @@ import com.gogomaya.server.game.ServerResourse;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GameClientEvent;
 import com.gogomaya.server.integration.player.Player;
+import com.gogomaya.server.web.mapping.GameWebMapping;
 
 public class IntegrationGameSessionPlayer<State extends GameState> extends AbstractGameSessionPlayer<State> {
 
@@ -22,8 +23,6 @@ public class IntegrationGameSessionPlayer<State extends GameState> extends Abstr
 
     final private RestTemplate restTemplate;
     final private String baseUrl;
-
-    final private static String ACTION_URL = "/spi/active/action";
 
     public IntegrationGameSessionPlayer(Player player, GameConstruction construction, RestTemplate restTemplate, String baseUrl) {
         super(player, construction);
@@ -43,7 +42,7 @@ public class IntegrationGameSessionPlayer<State extends GameState> extends Abstr
         // Step 2. Generating request
         HttpEntity<ClientEvent> requestEntity = new HttpEntity<ClientEvent>(clientEvent, header);
         // Step 3. Rest template generation
-        return (State) restTemplate.exchange(baseUrl + ACTION_URL, HttpMethod.POST, requestEntity, GameState.class).getBody();
+        return (State) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_MOVE, HttpMethod.POST, requestEntity, GameState.class).getBody();
     }
 
 }

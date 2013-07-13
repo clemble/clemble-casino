@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.repository.payment.PlayerWalletRepository;
+import com.gogomaya.server.web.mapping.PaymentWebMapping;
 
 @Controller
 public class WalletController {
@@ -21,7 +22,7 @@ public class WalletController {
         this.walletRepository = walletRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/wallet/{playerId}", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.WALLET_PLAYER, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerWallet get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
         return walletRepository.findOne(playerWalletId);
