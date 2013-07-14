@@ -28,6 +28,9 @@ import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.WebPlayerOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.listener.SimplePlayerListenerOperations;
+import com.gogomaya.server.integration.player.profile.IntegrationPlayerProfileOperations;
+import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
+import com.gogomaya.server.integration.player.profile.WebPlayerProfileOperations;
 import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
@@ -36,6 +39,7 @@ import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.session.PlayerProfileController;
 import com.gogomaya.server.web.player.session.PlayerSessionController;
 import com.gogomaya.server.web.player.wallet.WalletController;
 
@@ -91,6 +95,9 @@ public class TestConfiguration {
         @Qualifier("ticTacToeEngineController")
         public GameEngineController<TicTacToeState> ticTacToeEngineController;
 
+        @Autowired
+        public PlayerProfileController playerProfileController;
+
         @Bean
         @Singleton
         public PlayerListenerOperations playerListenerOperations() {
@@ -101,7 +108,13 @@ public class TestConfiguration {
         @Singleton
         public PlayerOperations playerOperations() {
             return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, walletController, playerSessionController,
-                    playerListenerOperations(), ticTacToeGameConstructionOperations());
+                    playerListenerOperations(), playerProfileOperations(), ticTacToeGameConstructionOperations());
+        }
+
+        @Bean
+        @Singleton
+        public PlayerProfileOperations playerProfileOperations() {
+            return new WebPlayerProfileOperations(playerProfileController);
         }
 
         @Bean
@@ -188,7 +201,14 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), ticTacToeGameConstructionOperations());
+            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), playerProfileOperations(),
+                    ticTacToeGameConstructionOperations());
+        }
+
+        @Bean
+        @Singleton
+        public PlayerProfileOperations playerProfileOperations() {
+            return new IntegrationPlayerProfileOperations(restTemplate(), getBaseUrl());
         }
 
         @Bean

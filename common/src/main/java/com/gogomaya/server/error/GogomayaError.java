@@ -89,7 +89,9 @@ public enum GogomayaError {
     TimeoutProcessingFailure(Code.TIMEOUT_PROCESSING_FAILURE_CODE, "Failed to invoke timeout events in Scheduler"),
 
     PlayerLockAcquireFailure(Code.PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE, "Failed to acquire player lock"),
-    PlayerSessionTimeout(Code.PLAYER_SESSION_TIMEOUT_ERROR_CODE, "Player session timeout")
+    PlayerSessionTimeout(Code.PLAYER_SESSION_TIMEOUT_ERROR_CODE, "Player session timeout"),
+    PlayerNotProfileOwner(Code.PLAYER_NOT_PROFILE_OWNER, "Profile can be changed only by the owner"),
+    PlayerProfileInvalid(Code.PLAYER_PROFILE_INVALID, "Player Profile invalid")
     ;
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
@@ -239,5 +241,7 @@ public enum GogomayaError {
         // Player errors
         final public static String PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE = "0M0";
         final public static String PLAYER_SESSION_TIMEOUT_ERROR_CODE = "0M1";
+        final public static String PLAYER_NOT_PROFILE_OWNER = "0M2";
+        final public static String PLAYER_PROFILE_INVALID = "0M3";
     }
 }

@@ -12,6 +12,7 @@ import com.gogomaya.server.integration.game.construction.GameConstructionOperati
 import com.gogomaya.server.integration.game.construction.PlayerGameConstructionOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerManager;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
+import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
 import com.gogomaya.server.player.PlayerAware;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
@@ -31,16 +32,21 @@ public class Player implements PlayerAware {
     final private PlayerSession session;
     final private PlayerIdentity identity;
     final private PlayerListenerManager playerListenersManager;
-    final private PlayerOperations playerOperations;
     final private PlayerCredential credential;
 
     final private Map<String, PlayerGameConstructionOperations<?>> gameConstructors;
 
-    private PlayerProfile profile;
+    final private PlayerOperations playerOperations;
+    final private PlayerProfileOperations profileOperations;
 
-    public Player(final PlayerIdentity playerIdentity, final PlayerCredential credential, final PlayerOperations playerOperations,
-            final PlayerListenerOperations listenerOperations, final GameConstructionOperations<?>... playerConstructionOperations) {
+    public Player(final PlayerIdentity playerIdentity,
+            final PlayerCredential credential,
+            final PlayerOperations playerOperations,
+            final PlayerProfileOperations playerProfileOperations,
+            final PlayerListenerOperations listenerOperations,
+            final GameConstructionOperations<?>... playerConstructionOperations) {
         this.playerOperations = checkNotNull(playerOperations);
+        this.profileOperations = checkNotNull(playerProfileOperations);
         this.identity = checkNotNull(playerIdentity);
         this.playerId = identity.getPlayerId();
         this.session = checkNotNull(playerOperations.startSession(playerIdentity));
@@ -60,12 +66,11 @@ public class Player implements PlayerAware {
     }
 
     public PlayerProfile getProfile() {
-        return profile;
+        return profileOperations.get(this, playerId);
     }
 
-    public Player setProfile(PlayerProfile profile) {
-        this.profile = profile;
-        this.profile.setPlayerId(playerId);
+    public Player setProfile(PlayerProfile newProfile) {
+        profileOperations.put(this, playerId, newProfile);
         return this;
     }
 

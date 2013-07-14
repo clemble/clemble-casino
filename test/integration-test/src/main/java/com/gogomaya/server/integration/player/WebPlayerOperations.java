@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
+import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.security.PlayerSession;
@@ -17,29 +18,22 @@ import com.gogomaya.server.web.player.wallet.WalletController;
 public class WebPlayerOperations extends AbstractPlayerOperations {
 
     final private RegistrationSignInContoller signInContoller;
-
     final private RegistrationLoginController loginController;
-
     final private PlayerSessionController sessionController;
-
     final private WalletController walletController;
-
-    final private PlayerListenerOperations listenerOperations;
-
-    final private GameConstructionOperations<?>[] gameConstructionOperations;
 
     public WebPlayerOperations(RegistrationSignInContoller signInContoller,
             RegistrationLoginController loginController,
             WalletController walletController,
             PlayerSessionController sessionController,
             PlayerListenerOperations listenerOperations,
+            PlayerProfileOperations playerProfileOperations,
             GameConstructionOperations<?>... gameConstructionOperations) {
+        super(listenerOperations, playerProfileOperations, gameConstructionOperations);
         this.signInContoller = checkNotNull(signInContoller);
         this.loginController = checkNotNull(loginController);
         this.walletController = checkNotNull(walletController);
         this.sessionController = checkNotNull(sessionController);
-        this.listenerOperations = checkNotNull(listenerOperations);
-        this.gameConstructionOperations = checkNotNull(gameConstructionOperations);
     }
 
     @Override
@@ -50,8 +44,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = signInContoller.createUser(registrationRequest);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
-        Player player = new Player(playerIdentity, registrationRequest.getPlayerCredential(), this, listenerOperations, gameConstructionOperations)
-                .setProfile(registrationRequest.getPlayerProfile());
+        Player player = super.create(playerIdentity, registrationRequest.getPlayerCredential());
         // Step 3. Returning player session result
         return player;
 
@@ -65,7 +58,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         PlayerIdentity playerIdentity = loginController.createUser(credential);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
-        Player player = new Player(playerIdentity, credential, this, listenerOperations, gameConstructionOperations);
+        Player player = super.create(playerIdentity, credential);
         // Step 3. Returning player session result
         return player;
     }

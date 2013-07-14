@@ -63,7 +63,7 @@
         <!-- Test dependencies -->
         <stresstest.version>0.1.0-SNAPSHOT</stresstest.version>
         <h2.database.version>1.3.159</h2.database.version>
-        <junit.version>4.10</junit.version>
+        <junit.version>4.11</junit.version>
         <!-- Plugin dependencies -->
         <maven.failsafe.plugin.version>2.14.1</maven.failsafe.plugin.version>
         <maven.compile.plugin.version>2.3.2</maven.compile.plugin.version>
@@ -437,16 +437,6 @@
         </dependency>
 
         <!-- Test dependencies common for every project -->
-        <dependency>
-            <groupId>org.jbehave</groupId>
-            <artifactId>jbehave-core</artifactId>
-            <version>${jbehave.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jbehave</groupId>
-            <artifactId>jbehave-spring</artifactId>
-            <version>${jbehave.version}</version>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

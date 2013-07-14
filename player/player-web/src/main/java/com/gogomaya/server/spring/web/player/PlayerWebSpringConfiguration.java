@@ -24,6 +24,7 @@ import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.player.registration.RegistrationSocialConnectionController;
+import com.gogomaya.server.web.player.session.PlayerProfileController;
 import com.gogomaya.server.web.player.session.PlayerSessionController;
 
 @Configuration
@@ -65,6 +66,12 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     @Autowired
     @Qualifier("playerStateManager")
     public PlayerStateManager playerStateManager;
+
+    @Bean
+    @Singleton
+    public PlayerProfileController playerProfileController() {
+        return new PlayerProfileController(playerProfileRepository);
+    }
 
     @Bean
     @Singleton

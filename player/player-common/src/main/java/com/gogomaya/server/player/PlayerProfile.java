@@ -153,7 +153,6 @@ public class PlayerProfile implements PlayerAware, Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
         result = prime * result + ((category == null) ? 0 : category.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((gender == null) ? 0 : gender.hashCode());
@@ -173,11 +172,6 @@ public class PlayerProfile implements PlayerAware, Serializable {
         if (getClass() != obj.getClass())
             return false;
         PlayerProfile other = (PlayerProfile) obj;
-        if (birthDate == null) {
-            if (other.birthDate != null)
-                return false;
-        } else if (!birthDate.equals(other.birthDate))
-            return false;
         if (category != other.category)
             return false;
         if (firstName == null) {
@@ -205,6 +199,12 @@ public class PlayerProfile implements PlayerAware, Serializable {
         if (playerId != other.playerId)
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerProfile [playerId=" + playerId + ", nickName=" + nickName + ", firstName=" + firstName + ", lastName=" + lastName + ", gender=" + gender
+                + ", birthDate=" + birthDate + ", imageUrl=" + imageUrl + ", category=" + category + "]";
     }
 
 }
