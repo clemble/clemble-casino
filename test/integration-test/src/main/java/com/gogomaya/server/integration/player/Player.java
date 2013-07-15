@@ -5,6 +5,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.integration.game.GameSessionListener;
@@ -69,7 +73,7 @@ public class Player implements PlayerAware {
     public PlayerSessionOperations getSessionOperations() {
         return playerSessionOperations;
     }
-    
+
     public PlayerProfileOperations getProfileOperations() {
         return profileOperations;
     }
@@ -110,6 +114,28 @@ public class Player implements PlayerAware {
 
     public Map<String, PlayerGameConstructionOperations<?>> getGameConstructors() {
         return gameConstructors;
+    }
+
+    // TODO When signing key must change, in order to provide safety, otherwise 
+    // Attacker can emulate user, by sending signed request back
+    public <T> HttpEntity<T> sign(T value) {
+        // Step 1. Creating Header
+        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
+        header.add("playerId", String.valueOf(playerId));
+        header.add("Content-Type", "application/json");
+        // Step 2. Generating request
+        return new HttpEntity<T>(value, header);
+    }
+
+    public <T> HttpEntity<T> signGame(long session, long table, T value) {
+        // Step 1. Creating Header
+        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
+        header.add("playerId", String.valueOf(playerId));
+        header.add("tableId", String.valueOf(table));
+        header.add("sessionId", String.valueOf(session));
+        header.add("Content-Type", "application/json");
+        // Step 2. Generating request
+        return new HttpEntity<T>(value, header);
     }
 
     public void listen(long session, GameSessionListener sessionListener) {

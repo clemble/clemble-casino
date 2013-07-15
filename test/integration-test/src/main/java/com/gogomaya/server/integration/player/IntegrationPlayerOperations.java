@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
@@ -58,12 +56,8 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
 
     @Override
     public PlayerWallet wallet(Player player, long playerWalletId) {
-        // Step 1. Creating Header
-        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(player.getPlayerId()));
-        header.add("Content-Type", "application/json");
-        // Step 2. Generating request
-        HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
+        // Step 1. Generating signed request
+        HttpEntity<Void> requestEntity = player.<Void>sign(null);
         // Step 3. Rest template generation
         return restTemplate.exchange(baseUrl + PaymentWebMapping.WALLET_PREFIX + PaymentWebMapping.WALLET_PLAYER, HttpMethod.GET, requestEntity, PlayerWallet.class, playerWalletId).getBody();
     }

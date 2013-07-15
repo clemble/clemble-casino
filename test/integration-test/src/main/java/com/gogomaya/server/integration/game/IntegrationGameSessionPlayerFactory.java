@@ -2,8 +2,6 @@ package com.gogomaya.server.integration.game;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.game.GameState;
@@ -38,12 +36,8 @@ public class IntegrationGameSessionPlayerFactory<State extends GameState> implem
 
     @Override
     public GameSessionPlayer<State> construct(Player player, long constructionId) {
-        // Step 1. Initializing headers
-        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(player.getPlayerId()));
-        header.add("Content-Type", "application/json");
-        // Step 2. Generating request
-        HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
+        // Step 1. Generating signed request
+        HttpEntity<Void> requestEntity = player.<Void>sign(null);
         // Step 3. Requesting associated Construction
         GameConstruction construction = (GameConstruction) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION,
                 HttpMethod.GET, requestEntity, GameConstruction.class, constructionId).getBody();

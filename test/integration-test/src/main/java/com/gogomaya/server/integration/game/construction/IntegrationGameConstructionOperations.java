@@ -53,29 +53,20 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
 
     public GameConstruction request(Player player, GameRequest gameRequest) {
         checkNotNull(gameRequest);
-        // Step 1. Initializing headers
-        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(player.getPlayerId()));
-        header.add("Content-Type", "application/json");
-        // Step 2. Generating request
-        HttpEntity<GameRequest> requestEntity = new HttpEntity<GameRequest>(gameRequest, header);
-        // Step 3. Rest template generation
+        // Step 1. Generating signed player request
+        HttpEntity<GameRequest> requestEntity = player.<GameRequest> sign(gameRequest);
+        // Step 2. Rest template generation
         return (GameConstruction) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION_GENERIC, HttpMethod.POST,
                 requestEntity, GameConstruction.class, gameRequest.getSpecification().getName().getName()).getBody();
     }
 
     @Override
-    protected void responce(InvitationResponseEvent responceEvent) {
-        // Step 1. Initializing headers
-        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(responceEvent.getPlayerId()));
-        header.add("Content-Type", "application/json");
-        // Step 2. Generating request
-        HttpEntity<InvitationResponseEvent> requestEntity = new HttpEntity<InvitationResponseEvent>(responceEvent, header);
-        // Step 3. Rest template generation
+    protected void responce(Player player, InvitationResponseEvent responceEvent) {
+        // Step 1. Generating signed request
+        HttpEntity<InvitationResponseEvent> requestEntity = player.<InvitationResponseEvent> sign(responceEvent);
+        // Step 2. Rest template generation
         restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION_RESPONSE, HttpMethod.POST, requestEntity,
                 GameConstruction.class, responceEvent.getConstruction());
     }
-
 
 }

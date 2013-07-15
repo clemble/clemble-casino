@@ -180,9 +180,9 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     public void perform(GameClientEvent gameAction) {
-        setState(perform(serverResourse, session, gameAction));
+        setState(perform(player, serverResourse, session, gameAction));
     }
 
-    abstract public State perform(ServerResourse resourse, long session, GameClientEvent clientEvent);
+    abstract public State perform(Player player, ServerResourse resourse, long session, GameClientEvent clientEvent);
 
 }

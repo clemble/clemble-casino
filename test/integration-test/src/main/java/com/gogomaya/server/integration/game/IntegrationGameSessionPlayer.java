@@ -32,17 +32,12 @@ public class IntegrationGameSessionPlayer<State extends GameState> extends Abstr
 
     @Override
     @SuppressWarnings("unchecked")
-    public State perform(ServerResourse resourse, long session, GameClientEvent clientEvent) {
-        // Step 1. Initializing headers
-        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(clientEvent.getPlayerId()));
-        header.add("tableId", String.valueOf(resourse.getTableId()));
-        header.add("sessionId", String.valueOf(session));
-        header.add("Content-Type", "application/json");
-        // Step 2. Generating request
-        HttpEntity<ClientEvent> requestEntity = new HttpEntity<ClientEvent>(clientEvent, header);
-        // Step 3. Rest template generation
-        return (State) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SESSION_MOVE, HttpMethod.POST, requestEntity, GameState.class).getBody();
+    public State perform(Player player, ServerResourse resourse, long session, GameClientEvent clientEvent) {
+        // Step 1. Generating signed request
+        HttpEntity<ClientEvent> requestEntity = player.<ClientEvent> signGame(session, resourse.getTableId(), clientEvent);
+        // Step 2. Rest template generation
+        return (State) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SESSION_MOVE, HttpMethod.POST, requestEntity,
+                GameState.class).getBody();
     }
 
 }

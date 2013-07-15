@@ -24,7 +24,7 @@ public class WebGameSessionPlayer<State extends GameState> extends AbstractGameS
     }
 
     @Override
-    public State perform(ServerResourse resourse, long session, GameClientEvent clientEvent) {
+    public State perform(Player player, ServerResourse resourse, long session, GameClientEvent clientEvent) {
         // Step 0. Parsing player, session and table identifiers
         long playerId = clientEvent.getPlayerId();
         long tableId = resourse.getTableId();
