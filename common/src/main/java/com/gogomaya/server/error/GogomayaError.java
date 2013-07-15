@@ -90,9 +90,10 @@ public enum GogomayaError {
 
     PlayerLockAcquireFailure(Code.PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE, "Failed to acquire player lock"),
     PlayerSessionTimeout(Code.PLAYER_SESSION_TIMEOUT_ERROR_CODE, "Player session timeout"),
-    PlayerNotProfileOwner(Code.PLAYER_NOT_PROFILE_OWNER, "Profile can be changed only by the owner"),
-    PlayerProfileInvalid(Code.PLAYER_PROFILE_INVALID, "Player Profile invalid")
-    ;
+    PlayerNotProfileOwner(Code.PLAYER_NOT_PROFILE_OWNER_ERROR_CODE, "Profile can be changed only by the owner"),
+    PlayerProfileInvalid(Code.PLAYER_PROFILE_INVALID_ERROR_CODE, "Player Profile invalid"),
+    PlayerNotSessionOwner(Code.PLAYER_NOT_SESSION_OWNER_ERROR_CODE, "Player can't change session, he does not own"),
+    PlayerSessionClosed(Code.PLAYER_SESSION_CLOSED_ERROR_CODE, "Player session already closed");
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
 
@@ -241,7 +242,9 @@ public enum GogomayaError {
         // Player errors
         final public static String PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE = "0M0";
         final public static String PLAYER_SESSION_TIMEOUT_ERROR_CODE = "0M1";
-        final public static String PLAYER_NOT_PROFILE_OWNER = "0M2";
-        final public static String PLAYER_PROFILE_INVALID = "0M3";
+        final public static String PLAYER_NOT_PROFILE_OWNER_ERROR_CODE = "0M2";
+        final public static String PLAYER_PROFILE_INVALID_ERROR_CODE = "0M3";
+        final public static String PLAYER_NOT_SESSION_OWNER_ERROR_CODE = "0M4";
+        final public static String PLAYER_SESSION_CLOSED_ERROR_CODE = "0M5";
     }
 }

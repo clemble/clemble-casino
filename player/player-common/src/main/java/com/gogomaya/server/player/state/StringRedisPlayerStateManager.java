@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.SessionCallback;
@@ -28,6 +30,8 @@ import com.gogomaya.server.player.PlayerState;
 public class StringRedisPlayerStateManager implements PlayerStateManager {
 
     final private Logger LOGGER = LoggerFactory.getLogger(StringRedisPlayerStateManager.class);
+
+    final private long EXPIRATION_TIME = TimeUnit.MINUTES.toMillis(20);
 
     final private String ZERO_SESSION = String.valueOf(SessionAware.DEFAULT_SESSION);
 
@@ -108,7 +112,7 @@ public class StringRedisPlayerStateManager implements PlayerStateManager {
     @Override
     public void markAvailable(final long playerId) {
         // Step 1. Specifying null state as identifier that player is active, and available
-        redisTemplate.boundValueOps(String.valueOf(playerId)).set(ZERO_SESSION, 30, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps(String.valueOf(playerId)).set(ZERO_SESSION);;
         // Step 2. Sending notification, for player state update
         notifyStateChange(playerId, PlayerState.available);
     }
@@ -163,4 +167,25 @@ public class StringRedisPlayerStateManager implements PlayerStateManager {
         LOGGER.debug("Notified of change in {} state {} listeners", playerId, numUpdatedClients);
     }
 
+    @Override
+    public void markLeft(long player) {
+        redisTemplate.delete(String.valueOf(player));
+        notifyStateChange(player, PlayerState.left);
+    }
+
+    @Override
+    public Date refresh(long player) {
+        Date newExpirationTime = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
+        redisTemplate.boundValueOps(String.valueOf(player)).expireAt(newExpirationTime);
+        return newExpirationTime;
+    }
+
+    @Override
+    public Date markAlive(long player) {
+        Date newExpirationTime = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
+        BoundValueOperations<String, String> valueOperations = redisTemplate.boundValueOps(String.valueOf(player));
+        valueOperations.set(ZERO_SESSION);
+        valueOperations.expireAt(newExpirationTime);
+        return newExpirationTime;
+    }
 }

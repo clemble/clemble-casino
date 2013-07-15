@@ -28,19 +28,22 @@ import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.WebPlayerOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.listener.SimplePlayerListenerOperations;
-import com.gogomaya.server.integration.player.profile.IntegrationPlayerProfileOperations;
-import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
-import com.gogomaya.server.integration.player.profile.WebPlayerProfileOperations;
+import com.gogomaya.server.integration.player.profile.IntegrationProfileOperations;
+import com.gogomaya.server.integration.player.profile.ProfileOperations;
+import com.gogomaya.server.integration.player.profile.WebProfileOperations;
+import com.gogomaya.server.integration.player.session.IntegrationSessionOperations;
+import com.gogomaya.server.integration.player.session.SessionOperations;
+import com.gogomaya.server.integration.player.session.WebSessionOperations;
 import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
+import com.gogomaya.server.web.player.PlayerProfileController;
+import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
-import com.gogomaya.server.web.player.session.PlayerProfileController;
-import com.gogomaya.server.web.player.session.PlayerSessionController;
 import com.gogomaya.server.web.player.wallet.WalletController;
 
 @Configuration
@@ -107,14 +110,20 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, walletController, playerSessionController,
+            return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, walletController, sessionOperations(),
                     playerListenerOperations(), playerProfileOperations(), ticTacToeGameConstructionOperations());
         }
 
         @Bean
         @Singleton
-        public PlayerProfileOperations playerProfileOperations() {
-            return new WebPlayerProfileOperations(playerProfileController);
+        public SessionOperations sessionOperations() {
+            return new WebSessionOperations(playerSessionController);
+        }
+
+        @Bean
+        @Singleton
+        public ProfileOperations playerProfileOperations() {
+            return new WebProfileOperations(playerProfileController);
         }
 
         @Bean
@@ -174,7 +183,7 @@ public class TestConfiguration {
         public ObjectMapper objectMapper;
 
         public String getBaseUrl() {
-            return "http://localhost:8080/gogomaya-web";
+            return "http://localhost:8080/gogomaya-server-web";
         }
 
         @Bean
@@ -201,14 +210,20 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), playerProfileOperations(),
+            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
                     ticTacToeGameConstructionOperations());
         }
 
         @Bean
         @Singleton
-        public PlayerProfileOperations playerProfileOperations() {
-            return new IntegrationPlayerProfileOperations(restTemplate(), getBaseUrl());
+        public SessionOperations sessionOperations() {
+            return new IntegrationSessionOperations(restTemplate(), getBaseUrl());
+        }
+
+        @Bean
+        @Singleton
+        public ProfileOperations playerProfileOperations() {
+            return new IntegrationProfileOperations(restTemplate(), getBaseUrl());
         }
 
         @Bean

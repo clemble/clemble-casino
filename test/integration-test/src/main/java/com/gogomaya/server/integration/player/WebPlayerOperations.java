@@ -4,36 +4,33 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
-import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
+import com.gogomaya.server.integration.player.profile.ProfileOperations;
+import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
-import com.gogomaya.server.web.player.session.PlayerSessionController;
 import com.gogomaya.server.web.player.wallet.WalletController;
 
 public class WebPlayerOperations extends AbstractPlayerOperations {
 
     final private RegistrationSignInContoller signInContoller;
     final private RegistrationLoginController loginController;
-    final private PlayerSessionController sessionController;
     final private WalletController walletController;
 
     public WebPlayerOperations(RegistrationSignInContoller signInContoller,
             RegistrationLoginController loginController,
             WalletController walletController,
-            PlayerSessionController sessionController,
+            SessionOperations playerSessionOperations,
             PlayerListenerOperations listenerOperations,
-            PlayerProfileOperations playerProfileOperations,
+            ProfileOperations playerProfileOperations,
             GameConstructionOperations<?>... gameConstructionOperations) {
-        super(listenerOperations, playerProfileOperations, gameConstructionOperations);
+        super(listenerOperations, playerProfileOperations, playerSessionOperations, gameConstructionOperations);
         this.signInContoller = checkNotNull(signInContoller);
         this.loginController = checkNotNull(loginController);
         this.walletController = checkNotNull(walletController);
-        this.sessionController = checkNotNull(sessionController);
     }
 
     @Override
@@ -66,10 +63,6 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
     @Override
     public PlayerWallet wallet(Player player, long playerWalletId) {
         return walletController.get(player.getPlayerId(), playerWalletId);
-    }
-
-    public PlayerSession startSession(PlayerIdentity player) {
-        return sessionController.startSession(player.getPlayerId());
     }
 
 }

@@ -1,4 +1,4 @@
-package com.gogomaya.server.web.player.session;
+package com.gogomaya.server.web.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -18,6 +18,7 @@ import com.gogomaya.server.web.mapping.PlayerWebMapping;
 
 @Controller
 public class PlayerProfileController {
+
     final private PlayerProfileRepository profileRepository;
 
     public PlayerProfileController(PlayerProfileRepository playerProfileRepository) {
@@ -25,14 +26,12 @@ public class PlayerProfileController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILE, produces = "application/json")
-    public @ResponseBody
-    PlayerProfile get(@RequestHeader("playerId") long requestor, @PathVariable("player") long playerId) {
+    public @ResponseBody PlayerProfile get(@RequestHeader("playerId") long requestor, @PathVariable("playerId") long playerId) {
         return profileRepository.findOne(playerId);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_PROFILE, produces = "application/json")
-    public @ResponseBody
-    PlayerProfile put(@RequestHeader("playerId") long requestor, @PathVariable("player") long playerId, @RequestBody PlayerProfile playerProfile) {
+    public @ResponseBody PlayerProfile put(@RequestHeader("playerId") long requestor, @PathVariable("playerId") long playerId, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (requestor != playerId)
             throw GogomayaException.fromError(GogomayaError.PlayerNotProfileOwner);

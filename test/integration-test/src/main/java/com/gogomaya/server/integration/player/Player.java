@@ -13,6 +13,9 @@ import com.gogomaya.server.integration.game.construction.PlayerGameConstructionO
 import com.gogomaya.server.integration.player.listener.PlayerListenerManager;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
+import com.gogomaya.server.integration.player.profile.ProfileOperations;
+import com.gogomaya.server.integration.player.session.PlayerSessionOperations;
+import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.player.PlayerAware;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
@@ -37,19 +40,22 @@ public class Player implements PlayerAware {
     final private Map<String, PlayerGameConstructionOperations<?>> gameConstructors;
 
     final private PlayerOperations playerOperations;
+    final private PlayerSessionOperations playerSessionOperations;
     final private PlayerProfileOperations profileOperations;
 
     public Player(final PlayerIdentity playerIdentity,
             final PlayerCredential credential,
             final PlayerOperations playerOperations,
-            final PlayerProfileOperations playerProfileOperations,
+            final ProfileOperations playerProfileOperations,
+            final SessionOperations sessionOperations,
             final PlayerListenerOperations listenerOperations,
             final GameConstructionOperations<?>... playerConstructionOperations) {
         this.playerOperations = checkNotNull(playerOperations);
-        this.profileOperations = checkNotNull(playerProfileOperations);
+        this.profileOperations = new PlayerProfileOperations(this, playerProfileOperations);
+        this.playerSessionOperations = new PlayerSessionOperations(this, sessionOperations);
         this.identity = checkNotNull(playerIdentity);
         this.playerId = identity.getPlayerId();
-        this.session = checkNotNull(playerOperations.startSession(playerIdentity));
+        this.session = checkNotNull(playerSessionOperations.start());
         this.credential = checkNotNull(credential);
         this.playerListenersManager = new PlayerListenerManager(this, listenerOperations);
 
@@ -60,17 +66,25 @@ public class Player implements PlayerAware {
         this.gameConstructors = ImmutableMap.<String, PlayerGameConstructionOperations<?>> copyOf(map);
     }
 
+    public PlayerSessionOperations getSessionOperations() {
+        return playerSessionOperations;
+    }
+    
+    public PlayerProfileOperations getProfileOperations() {
+        return profileOperations;
+    }
+
     @Override
     public long getPlayerId() {
         return playerId;
     }
 
     public PlayerProfile getProfile() {
-        return profileOperations.get(this, playerId);
+        return profileOperations.get();
     }
 
     public Player setProfile(PlayerProfile newProfile) {
-        profileOperations.put(this, playerId, newProfile);
+        profileOperations.set(newProfile);
         return this;
     }
 

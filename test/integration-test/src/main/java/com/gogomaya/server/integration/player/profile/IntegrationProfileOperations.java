@@ -12,12 +12,12 @@ import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.web.mapping.PlayerWebMapping;
 
-public class IntegrationPlayerProfileOperations implements PlayerProfileOperations {
+public class IntegrationProfileOperations implements ProfileOperations {
 
     final private RestTemplate restTemplate;
     final private String baseUrl;
 
-    public IntegrationPlayerProfileOperations(RestTemplate restTemplate, String baseUrl) {
+    public IntegrationProfileOperations(RestTemplate restTemplate, String baseUrl) {
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
     }

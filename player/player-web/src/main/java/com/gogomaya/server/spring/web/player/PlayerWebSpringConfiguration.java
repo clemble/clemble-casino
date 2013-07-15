@@ -21,11 +21,11 @@ import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
+import com.gogomaya.server.web.player.PlayerProfileController;
+import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.player.registration.RegistrationSocialConnectionController;
-import com.gogomaya.server.web.player.session.PlayerProfileController;
-import com.gogomaya.server.web.player.session.PlayerSessionController;
 
 @Configuration
 @Import(value = { SocialModuleSpringConfiguration.class, CommonWebSpringConfiguration.class })

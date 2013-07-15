@@ -34,6 +34,7 @@
 
     create table PLAYER_SESSION (
         SESSION_ID bigint not null auto_increment,
+        EXPIRATION_TIME datetime,
         PLAYER_ID bigint,
         SERVER varchar(255),
         START_TIME datetime,

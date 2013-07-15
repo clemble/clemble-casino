@@ -22,7 +22,7 @@
     </filter-mapping>
 
     <servlet>
-        <servlet-name>payment-exporter</servlet-name>
+        <servlet-name>player-exporter</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextClass</param-name>
@@ -30,12 +30,12 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration</param-value>
+            <param-value>com.gogomaya.server.spring.web.payment.PlayerWebSpringConfiguration</param-value>
         </init-param>
         <load-on-startup>3</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>payment-exporter</servlet-name>
-        <url-pattern>/payment/*</url-pattern>
+        <servlet-name>player-exporter</servlet-name>
+        <url-pattern>/spi/*</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -14,6 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
+import com.gogomaya.server.web.player.PlayerSessionController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -29,7 +30,7 @@ public class PlayerSessionControllerTest {
 
     @Test
     public void testPlayerAvailable() {
-        PlayerSession playerSession = playerSessionController.startSession(9);
+        PlayerSession playerSession = playerSessionController.post(9, 9);
         Assert.assertNotNull(playerSession);
         Assert.assertEquals(playerSession.getPlayerId(), 9);
         Assert.assertTrue(playerStateManager.isAvailable(9));

@@ -8,7 +8,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
-import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
+import com.gogomaya.server.integration.player.profile.ProfileOperations;
+import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
@@ -18,13 +19,16 @@ abstract public class AbstractPlayerOperations implements PlayerOperations {
 
     final private PlayerListenerOperations listenerOperations;
     final private GameConstructionOperations<?>[] gameConstructionOprations;
-    final private PlayerProfileOperations playerProfileOperations;
+    final private ProfileOperations playerProfileOperations;
+    final private SessionOperations playerSessionOperations;
 
     protected AbstractPlayerOperations(PlayerListenerOperations listenerOperations,
-            PlayerProfileOperations profileOperations,
+            ProfileOperations profileOperations,
+            SessionOperations sessionOperations,
             GameConstructionOperations<?>[] gameConstructionOprations) {
         this.listenerOperations = checkNotNull(listenerOperations);
         this.gameConstructionOprations = checkNotNull(gameConstructionOprations);
+        this.playerSessionOperations = checkNotNull(sessionOperations);
         this.playerProfileOperations = checkNotNull(profileOperations);
     }
 
@@ -47,7 +51,7 @@ abstract public class AbstractPlayerOperations implements PlayerOperations {
     }
 
     final public Player create(PlayerIdentity playerIdentity, PlayerCredential credential) {
-        return new Player(playerIdentity, credential, this, playerProfileOperations, listenerOperations, gameConstructionOprations);
+        return new Player(playerIdentity, credential, this, playerProfileOperations, playerSessionOperations, listenerOperations, gameConstructionOprations);
     }
 
 }

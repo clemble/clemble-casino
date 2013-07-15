@@ -17,7 +17,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
-import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
+import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.util.GogomayaErrorMatcher;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.spring.integration.TestConfiguration;
@@ -31,7 +31,7 @@ import com.stresstest.random.ObjectGenerator;
 public class PlayerProfileOperationsTest {
 
     @Autowired
-    public PlayerProfileOperations playerProfileOperations;
+    public ProfileOperations playerProfileOperations;
 
     @Autowired
     public PlayerOperations playerOperations;

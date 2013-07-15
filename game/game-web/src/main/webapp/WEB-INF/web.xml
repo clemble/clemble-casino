@@ -21,20 +21,8 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <context-param>
-        <param-name>contextClass</param-name>
-        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
-    </context-param>
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>com.gogomaya.server.spring.web.WebGameConfiguration</param-value>
-    </context-param>
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-
     <servlet>
-        <servlet-name>spi-rest-exporter</servlet-name>
+        <servlet-name>game-exporter</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextClass</param-name>
@@ -42,12 +30,12 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>com.gogomaya.server.spring.web.WebGameConfiguration</param-value>
+            <param-value>com.gogomaya.server.spring.web.TicTacToeWebSpringConfiguration</param-value>
         </init-param>
         <load-on-startup>3</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>game-exporter</servlet-name>
-        <url-pattern>/game/*</url-pattern>
+        <url-pattern>/tictactoe/*</url-pattern>
     </servlet-mapping>
 </web-app>

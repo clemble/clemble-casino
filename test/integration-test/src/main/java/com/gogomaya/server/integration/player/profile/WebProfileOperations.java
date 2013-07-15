@@ -4,13 +4,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.player.PlayerProfile;
-import com.gogomaya.server.web.player.session.PlayerProfileController;
+import com.gogomaya.server.web.player.PlayerProfileController;
 
-public class WebPlayerProfileOperations implements PlayerProfileOperations {
+public class WebProfileOperations implements ProfileOperations {
 
     final private PlayerProfileController profileController;
 
-    public WebPlayerProfileOperations(PlayerProfileController profileController) {
+    public WebProfileOperations(PlayerProfileController profileController) {
         this.profileController = checkNotNull(profileController);
     }
 

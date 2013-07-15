@@ -1,6 +1,7 @@
 package com.gogomaya.server.player.state;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.data.redis.connection.MessageListener;
 
@@ -11,6 +12,12 @@ public interface PlayerStateManager {
     public boolean areAvailable(final Collection<Long> players);
 
     public void markAvailable(final long player);
+
+    public Date refresh(final long player);
+
+    public Date markAlive(final long player);
+
+    public void markLeft(final long player);
 
     public Long getActiveSession(final long player);
 
