@@ -34,6 +34,9 @@ import com.gogomaya.server.integration.player.profile.WebProfileOperations;
 import com.gogomaya.server.integration.player.session.IntegrationSessionOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.integration.player.session.WebSessionOperations;
+import com.gogomaya.server.integration.player.wallet.IntegrationWalletOperations;
+import com.gogomaya.server.integration.player.wallet.WalletOperations;
+import com.gogomaya.server.integration.player.wallet.WebWalletOperations;
 import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
@@ -84,7 +87,7 @@ public class TestConfiguration {
 
         @Autowired
         @Qualifier("walletController")
-        public PlayerWalletController walletController;
+        public PlayerWalletController playerWalletController;
 
         @Autowired
         @Qualifier("ticTacToeConfigurationManagerController")
@@ -110,8 +113,14 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, walletController, sessionOperations(),
+            return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, sessionOperations(), walletOperations(),
                     playerListenerOperations(), playerProfileOperations(), ticTacToeGameConstructionOperations());
+        }
+
+        @Bean
+        @Singleton
+        public WalletOperations walletOperations() {
+            return new WebWalletOperations(playerWalletController);
         }
 
         @Bean
@@ -209,9 +218,15 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
+        public WalletOperations walletOperations() {
+            return new IntegrationWalletOperations(restTemplate(), getBaseUrl());
+        }
+
+        @Bean
+        @Singleton
         public PlayerOperations playerOperations() {
             return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
-                    ticTacToeGameConstructionOperations());
+                    walletOperations(), ticTacToeGameConstructionOperations());
         }
 
         @Bean
@@ -240,6 +255,7 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
+        @SuppressWarnings("unchecked")
         public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionPlayerFactory() {
             return new TicTacToePlayerSessionFactory((GameSessionPlayerFactory<TicTacToeState>) genericGameSessionFactory());
         }

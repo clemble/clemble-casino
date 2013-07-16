@@ -20,12 +20,13 @@ import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.PlayerSessionOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
+import com.gogomaya.server.integration.player.wallet.PlayerWalletOperations;
+import com.gogomaya.server.integration.player.wallet.WalletOperations;
 import com.gogomaya.server.player.PlayerAware;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.security.PlayerSession;
-import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.google.common.collect.ImmutableMap;
 
 public class Player implements PlayerAware {
@@ -43,20 +44,21 @@ public class Player implements PlayerAware {
 
     final private Map<String, PlayerGameConstructionOperations<?>> gameConstructors;
 
-    final private PlayerOperations playerOperations;
     final private PlayerSessionOperations playerSessionOperations;
+    final private PlayerWalletOperations playerWalletOperations;
     final private PlayerProfileOperations profileOperations;
 
     public Player(final PlayerIdentity playerIdentity,
             final PlayerCredential credential,
-            final PlayerOperations playerOperations,
             final ProfileOperations playerProfileOperations,
             final SessionOperations sessionOperations,
+            final WalletOperations walletOperations,
             final PlayerListenerOperations listenerOperations,
             final GameConstructionOperations<?>... playerConstructionOperations) {
-        this.playerOperations = checkNotNull(playerOperations);
         this.profileOperations = new PlayerProfileOperations(this, playerProfileOperations);
         this.playerSessionOperations = new PlayerSessionOperations(this, sessionOperations);
+        this.playerWalletOperations = new PlayerWalletOperations(this, walletOperations);
+
         this.identity = checkNotNull(playerIdentity);
         this.playerId = identity.getPlayerId();
         this.session = checkNotNull(playerSessionOperations.start());
@@ -78,6 +80,10 @@ public class Player implements PlayerAware {
         return profileOperations;
     }
 
+    public PlayerWalletOperations getWalletOperations() {
+        return playerWalletOperations;
+    }
+
     @Override
     public long getPlayerId() {
         return playerId;
@@ -90,10 +96,6 @@ public class Player implements PlayerAware {
     public Player setProfile(PlayerProfile newProfile) {
         profileOperations.set(newProfile);
         return this;
-    }
-
-    public PlayerWallet getWallet() {
-        return playerOperations.wallet(this, playerId);
     }
 
     public PlayerIdentity getIdentity() {
@@ -116,7 +118,7 @@ public class Player implements PlayerAware {
         return gameConstructors;
     }
 
-    // TODO When signing key must change, in order to provide safety, otherwise 
+    // TODO When signing key must change, in order to provide safety, otherwise
     // Attacker can emulate user, by sending signed request back
     public <T> HttpEntity<T> sign(T value) {
         // Step 1. Creating Header

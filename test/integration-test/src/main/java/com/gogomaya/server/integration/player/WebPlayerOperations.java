@@ -6,31 +6,28 @@ import com.gogomaya.server.integration.game.construction.GameConstructionOperati
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
+import com.gogomaya.server.integration.player.wallet.WalletOperations;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
-import com.gogomaya.server.web.player.wallet.PlayerWalletController;
 
 public class WebPlayerOperations extends AbstractPlayerOperations {
 
     final private RegistrationSignInContoller signInContoller;
     final private RegistrationLoginController loginController;
-    final private PlayerWalletController walletController;
 
     public WebPlayerOperations(RegistrationSignInContoller signInContoller,
             RegistrationLoginController loginController,
-            PlayerWalletController walletController,
             SessionOperations playerSessionOperations,
+            WalletOperations walletOperations,
             PlayerListenerOperations listenerOperations,
             ProfileOperations playerProfileOperations,
             GameConstructionOperations<?>... gameConstructionOperations) {
-        super(listenerOperations, playerProfileOperations, playerSessionOperations, gameConstructionOperations);
+        super(listenerOperations, playerProfileOperations, playerSessionOperations, walletOperations, gameConstructionOperations);
         this.signInContoller = checkNotNull(signInContoller);
         this.loginController = checkNotNull(loginController);
-        this.walletController = checkNotNull(walletController);
     }
 
     @Override
@@ -58,11 +55,6 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         Player player = super.create(playerIdentity, credential);
         // Step 3. Returning player session result
         return player;
-    }
-
-    @Override
-    public PlayerWallet wallet(Player player, long playerWalletId) {
-        return walletController.get(player.getPlayerId(), playerWalletId);
     }
 
 }
