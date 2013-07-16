@@ -23,12 +23,12 @@ import com.gogomaya.server.repository.player.PlayerWalletRepository;
 import com.gogomaya.server.web.mapping.PaymentWebMapping;
 
 @Controller
-public class WalletController {
+public class PlayerWalletController {
 
     final private PlayerWalletRepository walletRepository;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public WalletController(PlayerWalletRepository walletRepository, PaymentTransactionRepository walletTransactionRepository) {
+    public PlayerWalletController(PlayerWalletRepository walletRepository, PaymentTransactionRepository walletTransactionRepository) {
         this.walletRepository = checkNotNull(walletRepository);
         this.paymentTransactionRepository = checkNotNull(walletTransactionRepository);
     }
@@ -42,8 +42,7 @@ public class WalletController {
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.WALLET_PLAYER_TRANSACTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    List<PaymentTransaction> listPlayerTransaction(@RequestHeader("playerId") long requesterId, @PathVariable("playerId") long playerId) {
+    public @ResponseBody List<PaymentTransaction> listPlayerTransaction(@RequestHeader("playerId") long requesterId, @PathVariable("playerId") long playerId) {
         // Step 1. Checking request/player identifier matches
         if (requesterId != playerId)
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionAccessDenied);
@@ -53,8 +52,7 @@ public class WalletController {
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.WALLET_PLAYER_TRANSACTIONS_TRANSACTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    PaymentTransaction getPlayerTransaction(
+    public @ResponseBody PaymentTransaction getPlayerTransaction(
             @RequestHeader("playerId") long requesterId,
             @PathVariable("playerId") long playerId,
             @PathVariable("source") String source,

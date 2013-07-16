@@ -14,7 +14,7 @@ import com.gogomaya.server.repository.player.PlayerWalletRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.player.wallet.PaymentManagementSpringConfiguration;
 import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
-import com.gogomaya.server.web.player.wallet.WalletController;
+import com.gogomaya.server.web.player.wallet.PlayerWalletController;
 import com.gogomaya.server.web.player.wallet.PaymentTransactionController;
 
 @Configuration
@@ -40,8 +40,8 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Singleton
-    public WalletController walletController() {
-        return new WalletController(playerWalletRepository, walletTransactionRepository);
+    public PlayerWalletController walletController() {
+        return new PlayerWalletController(playerWalletRepository, walletTransactionRepository);
     }
 
 }

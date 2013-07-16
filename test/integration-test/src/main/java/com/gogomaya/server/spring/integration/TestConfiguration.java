@@ -44,7 +44,7 @@ import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
-import com.gogomaya.server.web.player.wallet.WalletController;
+import com.gogomaya.server.web.player.wallet.PlayerWalletController;
 
 @Configuration
 @Import(value = { JsonSpringConfiguration.class, TestConfiguration.LocalTestConfiguration.class, TestConfiguration.LocalIntegrationTestConfiguration.class,
@@ -84,7 +84,7 @@ public class TestConfiguration {
 
         @Autowired
         @Qualifier("walletController")
-        public WalletController walletController;
+        public PlayerWalletController walletController;
 
         @Autowired
         @Qualifier("ticTacToeConfigurationManagerController")

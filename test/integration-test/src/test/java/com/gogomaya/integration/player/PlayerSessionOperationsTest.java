@@ -20,7 +20,7 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.server.integration.util.GogomayaErrorMatcher;
+import com.gogomaya.server.integration.util.GogomayaExceptionMatcherFactory;
 import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
@@ -78,7 +78,7 @@ public class PlayerSessionOperationsTest {
         sessionOperations.end(player, currentSession);
         Assert.assertTrue(sessionOperations.get(player, currentSession.getSessionId()).expired());
 
-        expectedException.expect(GogomayaErrorMatcher.create(GogomayaError.PlayerSessionClosed));
+        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerSessionClosed));
 
         sessionOperations.end(player, currentSession);
     }
@@ -92,7 +92,7 @@ public class PlayerSessionOperationsTest {
         PlayerSession currentSession = player.getSession();
         Assert.assertEquals(currentSession, sessionOperations.get(player, currentSession.getSessionId()));
 
-        expectedException.expect(GogomayaErrorMatcher.create(GogomayaError.PlayerNotSessionOwner));
+        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotSessionOwner));
 
         sessionOperations.end(anotherPlayer, currentSession);
     }
@@ -105,7 +105,7 @@ public class PlayerSessionOperationsTest {
         // Step 2. When player was created he started session
         PlayerSession currentSession = player.getSession();
 
-        expectedException.expect(GogomayaErrorMatcher.create(GogomayaError.PlayerNotSessionOwner));
+        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotSessionOwner));
 
         Assert.assertEquals(currentSession, sessionOperations.get(anotherPlayer, currentSession.getSessionId()));
     }

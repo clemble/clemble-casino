@@ -18,7 +18,7 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
-import com.gogomaya.server.integration.util.GogomayaErrorMatcher;
+import com.gogomaya.server.integration.util.GogomayaExceptionMatcherFactory;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
@@ -59,6 +59,15 @@ public class PlayerProfileOperationsTest {
     }
 
     @Test
+    public void testProfileReadNonExistent() {
+        Player player = playerOperations.createPlayer();
+
+        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerProfileDoesNotExists));
+
+        playerProfileOperations.get(player, -1);
+    }
+
+    @Test
     public void testProfileWrite() {
         PlayerProfile playerProfile = randomProfile();
 
@@ -90,8 +99,25 @@ public class PlayerProfileOperationsTest {
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayerId(player.getPlayerId());
 
-        expectedException.expect(GogomayaErrorMatcher.create(GogomayaError.PlayerNotProfileOwner));
+        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotProfileOwner));
+
         Assert.assertEquals(newProfile, playerProfileOperations.put(anotherPlayer, player.getPlayerId(), newProfile));
+    }
+
+    @Test
+    public void testProfileWriteNull() {
+        PlayerProfile playerProfile = randomProfile();
+        playerProfile.setPlayerId(0);
+
+        Player player = playerOperations.createPlayer(playerProfile);
+        playerProfile.setPlayerId(player.getPlayerId());
+        Assert.assertEquals(playerProfile, player.getProfile());
+
+        PlayerProfile newProfile = null;
+
+        expectedException.expect(GogomayaExceptionMatcherFactory.fromPossibleErrors(GogomayaError.PlayerProfileInvalid, GogomayaError.ServerError));
+
+        Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayerId(), newProfile));
     }
 
     @Test
@@ -106,7 +132,8 @@ public class PlayerProfileOperationsTest {
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayerId(player.getPlayerId() + newProfile.getPlayerId());
 
-        expectedException.expect(GogomayaErrorMatcher.create(GogomayaError.PlayerNotProfileOwner));
+        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotProfileOwner));
+
         Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayerId(), newProfile));
     }
 }

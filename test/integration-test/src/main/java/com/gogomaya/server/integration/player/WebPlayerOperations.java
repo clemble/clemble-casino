@@ -12,17 +12,17 @@ import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
-import com.gogomaya.server.web.player.wallet.WalletController;
+import com.gogomaya.server.web.player.wallet.PlayerWalletController;
 
 public class WebPlayerOperations extends AbstractPlayerOperations {
 
     final private RegistrationSignInContoller signInContoller;
     final private RegistrationLoginController loginController;
-    final private WalletController walletController;
+    final private PlayerWalletController walletController;
 
     public WebPlayerOperations(RegistrationSignInContoller signInContoller,
             RegistrationLoginController loginController,
-            WalletController walletController,
+            PlayerWalletController walletController,
             SessionOperations playerSessionOperations,
             PlayerListenerOperations listenerOperations,
             ProfileOperations playerProfileOperations,

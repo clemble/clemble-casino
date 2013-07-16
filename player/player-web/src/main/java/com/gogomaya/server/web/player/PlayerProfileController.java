@@ -27,7 +27,13 @@ public class PlayerProfileController {
 
     @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILE, produces = "application/json")
     public @ResponseBody PlayerProfile get(@RequestHeader("playerId") long requestor, @PathVariable("playerId") long playerId) {
-        return profileRepository.findOne(playerId);
+        // Step 1. Fetching playerProfile
+        PlayerProfile playerProfile = profileRepository.findOne(playerId);
+        // Step 2. Checking profile
+        if(playerProfile == null)
+            throw GogomayaException.fromError(GogomayaError.PlayerProfileDoesNotExists);
+        // Step 3. Returning profile
+        return playerProfile;
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_PROFILE, produces = "application/json")
@@ -35,7 +41,9 @@ public class PlayerProfileController {
         // Step 1. Sanity check
         if (requestor != playerId)
             throw GogomayaException.fromError(GogomayaError.PlayerNotProfileOwner);
-        if (playerProfile == null || playerProfile.getPlayerId() != 0 && playerProfile.getPlayerId() != playerId)
+        if (playerProfile == null)
+            throw GogomayaException.fromError(GogomayaError.PlayerProfileInvalid);
+        if (playerProfile.getPlayerId() != 0 && playerProfile.getPlayerId() != playerId)
             throw GogomayaException.fromError(GogomayaError.PlayerNotProfileOwner);
         playerProfile.setPlayerId(playerId);
         // Step 2. Updating Profile
