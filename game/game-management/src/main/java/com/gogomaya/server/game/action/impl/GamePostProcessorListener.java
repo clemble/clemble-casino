@@ -17,20 +17,20 @@ import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
+import com.gogomaya.server.payment.PaymentOperation;
+import com.gogomaya.server.payment.PaymentTransaction;
+import com.gogomaya.server.payment.PaymentTransactionId;
+import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.player.wallet.WalletOperation;
-import com.gogomaya.server.player.wallet.WalletTransaction;
-import com.gogomaya.server.player.wallet.WalletTransactionId;
-import com.gogomaya.server.player.wallet.WalletTransactionManager;
 
 public class GamePostProcessorListener<State extends GameState> implements GameProcessorListener<State> {
 
     final private PlayerStateManager activePlayerQueue;
-    final private WalletTransactionManager walletTransactionManager;
+    final private PaymentTransactionService paymentTransactionService;
 
-    public GamePostProcessorListener(final PlayerStateManager activePlayerQueue, final WalletTransactionManager walletTransactionManager) {
+    public GamePostProcessorListener(final PlayerStateManager activePlayerQueue, final PaymentTransactionService paymentTransactionService) {
         this.activePlayerQueue = checkNotNull(activePlayerQueue);
-        this.walletTransactionManager = checkNotNull(walletTransactionManager);
+        this.paymentTransactionService = checkNotNull(paymentTransactionService);
     }
 
     @Override
@@ -62,19 +62,19 @@ public class GamePostProcessorListener<State extends GameState> implements GameP
         Currency currency = session.getSpecification().getCurrency();
         // Step 2. Generating wallet transaction
         long totalWinning = 0;
-        WalletTransactionId transactionId = new WalletTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(session.getSession());
-        WalletTransaction walletTransaction = new WalletTransaction().setTransactionId(transactionId);
+        PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(session.getSession());
+        PaymentTransaction walletTransaction = new PaymentTransaction().setTransactionId(transactionId);
         for (GamePlayerState playerState : session.getState().getPlayerStates()) {
             if (playerState.getPlayerId() != winnerId) {
                 totalWinning = playerState.getMoneySpent();
-                walletTransaction.addWalletOperation(new WalletOperation().setAmmount(Money.create(currency, playerState.getMoneySpent()))
+                walletTransaction.addWalletOperation(new PaymentOperation().setAmmount(Money.create(currency, playerState.getMoneySpent()))
                         .setOperation(Operation.Credit).setPlayerId(playerState.getPlayerId()));
             }
         }
-        walletTransaction.addWalletOperation(new WalletOperation().setAmmount(Money.create(currency, totalWinning)).setOperation(Operation.Debit)
+        walletTransaction.addWalletOperation(new PaymentOperation().setAmmount(Money.create(currency, totalWinning)).setOperation(Operation.Debit)
                 .setPlayerId(winnerId));
         // Step 3. Processing wallet transaction
-        walletTransactionManager.process(walletTransaction);
+        paymentTransactionService.process(walletTransaction);
     }
 
 }

@@ -17,19 +17,19 @@ import com.gogomaya.server.money.Money;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.player.wallet.WalletTransactionManager;
+import com.gogomaya.server.player.wallet.PlayerWalletService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 
 public class SimpleGameConstructionService implements GameConstructionService {
 
     final private AutomaticConstructionManager automaticGameInitiatorManager;
 
-    final private WalletTransactionManager walletTransactionManager;
+    final private PlayerWalletService walletTransactionManager;
     final private PlayerNotificationService playerNotificationService;
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
 
-    public SimpleGameConstructionService(final WalletTransactionManager walletTransactionManager,
+    public SimpleGameConstructionService(final PlayerWalletService walletTransactionManager,
             final PlayerNotificationService playerNotificationService,
             final GameConstructionRepository constructionRepository,
             final GameInitiatorService initiatorService,

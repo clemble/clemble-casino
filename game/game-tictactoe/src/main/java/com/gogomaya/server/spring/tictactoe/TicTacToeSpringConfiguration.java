@@ -28,7 +28,7 @@ import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.player.wallet.WalletTransactionManager;
+import com.gogomaya.server.player.wallet.PlayerWalletService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.repository.game.GameSpecificationRepository;
@@ -54,7 +54,7 @@ public class TicTacToeSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("walletTransactionManager")
-    public WalletTransactionManager walletTransactionManager;
+    public PlayerWalletService walletTransactionManager;
 
     @Autowired
     @Qualifier("tableServerRegistry")

@@ -9,23 +9,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.player.wallet.WalletOperation;
-import com.gogomaya.server.player.wallet.WalletTransactionManager;
+import com.gogomaya.server.payment.PaymentTransaction;
+import com.gogomaya.server.player.wallet.PlayerWalletService;
 import com.gogomaya.server.web.mapping.PaymentWebMapping;
 
 @Controller
-public class WalletTransactionController {
+public class PaymentTransactionController {
 
-    final WalletTransactionManager playerMoneyWalletManager;
+    final PlayerWalletService playerMoneyWalletManager;
 
-    public WalletTransactionController(final WalletTransactionManager playerWalletManager) {
+    public PaymentTransactionController(final PlayerWalletService playerWalletManager) {
         this.playerMoneyWalletManager = checkNotNull(playerWalletManager);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.WALLET_TRANSACTION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.WALLET_TRANSACTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    WalletOperation debit(WalletOperation transaction) {
+    public @ResponseBody PaymentTransaction perform(PaymentTransaction paymentTransaction) {
         return null;
     }
 

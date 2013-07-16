@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.player.wallet.PlayerWallet;
-import com.gogomaya.server.player.wallet.WalletTransaction;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,7 +23,7 @@ public class PaymentSchemaGenerator {
 
         configuration
             .addAnnotatedClass(PlayerWallet.class)
-            .addAnnotatedClass(WalletTransaction.class)
+            .addAnnotatedClass(PaymentTransaction.class)
             .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
             .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
 
@@ -40,7 +40,7 @@ public class PaymentSchemaGenerator {
 
         configuration
             .addAnnotatedClass(PlayerWallet.class)
-            .addAnnotatedClass(WalletTransaction.class)
+            .addAnnotatedClass(PaymentTransaction.class)
             .setProperty(Environment.DIALECT, "org.hibernate.dialect.H2Dialect")
             .setProperty(Environment.DRIVER, "org.h2.Driver")
             ;

@@ -86,6 +86,7 @@ public enum GogomayaError {
 
     PaymentTransactionInvalid(Code.PAYMENT_TRANSACTION_INVALID_CODE, "Payment transaction invalid"),
     PaymentTransactionEmpty(Code.PAYMENT_TRANSACTION_EMPTY_CODE, "Payment transaction empty"),
+
     TimeoutProcessingFailure(Code.TIMEOUT_PROCESSING_FAILURE_CODE, "Failed to invoke timeout events in Scheduler"),
 
     PlayerLockAcquireFailure(Code.PLAYER_LOCK_ACQUIRE_EXCEPTION_FAILURE_CODE, "Failed to acquire player lock"),
@@ -93,7 +94,10 @@ public enum GogomayaError {
     PlayerNotProfileOwner(Code.PLAYER_NOT_PROFILE_OWNER_ERROR_CODE, "Profile can be changed only by the owner"),
     PlayerProfileInvalid(Code.PLAYER_PROFILE_INVALID_ERROR_CODE, "Player Profile invalid"),
     PlayerNotSessionOwner(Code.PLAYER_NOT_SESSION_OWNER_ERROR_CODE, "Player can't change session, he does not own"),
-    PlayerSessionClosed(Code.PLAYER_SESSION_CLOSED_ERROR_CODE, "Player session already closed");
+    PlayerSessionClosed(Code.PLAYER_SESSION_CLOSED_ERROR_CODE, "Player session already closed"),
+
+    PaymentTransactionAccessDenied(Code.PAYMENT_TRANSACTION_ACCESS_DENIED, "Player payment transaction access denied"),
+    PaymentTransactionNotExists(Code.PAYMENT_TRANSACTION_DOES_NOT_EXISTS, "Player payment transaction does not exists");
 
     final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
 
@@ -246,5 +250,8 @@ public enum GogomayaError {
         final public static String PLAYER_PROFILE_INVALID_ERROR_CODE = "0M3";
         final public static String PLAYER_NOT_SESSION_OWNER_ERROR_CODE = "0M4";
         final public static String PLAYER_SESSION_CLOSED_ERROR_CODE = "0M5";
+        // Payment errors
+        final public static String PAYMENT_TRANSACTION_ACCESS_DENIED = "0N0";
+        final public static String PAYMENT_TRANSACTION_DOES_NOT_EXISTS = "0N1";
     }
 }

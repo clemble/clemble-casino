@@ -14,14 +14,14 @@ import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
+import com.gogomaya.server.payment.PaymentOperation;
+import com.gogomaya.server.payment.PaymentTransaction;
+import com.gogomaya.server.payment.PaymentTransactionId;
 import com.gogomaya.server.player.PlayerCategory;
 import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.wallet.PlayerWallet;
-import com.gogomaya.server.player.wallet.WalletOperation;
-import com.gogomaya.server.player.wallet.WalletTransaction;
-import com.gogomaya.server.player.wallet.WalletTransactionId;
 import com.stresstest.random.AbstractValueGenerator;
 import com.stresstest.random.ObjectGenerator;
 
@@ -75,14 +75,14 @@ public class ObjectTest {
             }
 
         });
-        ObjectGenerator.register(WalletTransaction.class, new AbstractValueGenerator<WalletTransaction>() {
+        ObjectGenerator.register(PaymentTransaction.class, new AbstractValueGenerator<PaymentTransaction>() {
 
             @Override
-            public WalletTransaction generate() {
-                return new WalletTransaction()
-                    .setTransactionId(new WalletTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(0))
-                    .addWalletOperation(new WalletOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayerId(0))
-                    .addWalletOperation(new WalletOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit).setPlayerId(1));
+            public PaymentTransaction generate() {
+                return new PaymentTransaction()
+                    .setTransactionId(new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(0))
+                    .addWalletOperation(new PaymentOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayerId(0))
+                    .addWalletOperation(new PaymentOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit).setPlayerId(1));
             }
 
         });

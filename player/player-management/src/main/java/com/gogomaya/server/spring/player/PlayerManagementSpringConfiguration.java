@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
+import com.gogomaya.server.payment.PaymentTransaction;
+import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
-import com.gogomaya.server.player.wallet.WalletRegistrationService;
+import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
@@ -34,13 +36,13 @@ public class PlayerManagementSpringConfiguration implements SpringConfiguration 
     public PlayerProfileRepository playerProfileRepository;
 
     @Autowired
-    @Qualifier("walletRegistrationService")
-    public WalletRegistrationService walletRegistrationService;
+    @Qualifier("paymentTransactionService")
+    public PaymentTransactionService paymentTransactionService;
 
     @Bean
     @Singleton
     public PlayerRegistrationService playerRegistrationService() {
-        return new PlayerRegistrationService(playerProfileRepository, playerIdentityRepository, playerCredentialRepository, walletRegistrationService);
+        return new PlayerRegistrationService(playerProfileRepository, playerIdentityRepository, playerCredentialRepository, paymentTransactionService);
     }
 
     @Configuration
@@ -49,10 +51,18 @@ public class PlayerManagementSpringConfiguration implements SpringConfiguration 
 
         @Bean
         @Singleton
-        public WalletRegistrationService walletRegistrationService() {
-            return new WalletRegistrationService() {
+        public PaymentTransactionService paymentTransactionService() {
+            return new PaymentTransactionService() {
+
                 @Override
-                public void register(long playerId) {
+                public PlayerWallet register(long playerId) {
+                    return new PlayerWallet();
+                }
+
+                @Override
+                public PaymentTransaction process(PaymentTransaction walletTransaction) {
+                    // TODO Auto-generated method stub
+                    return null;
                 }
             };
         }

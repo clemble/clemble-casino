@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.wallet;
+package com.gogomaya.server.payment;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.Operation;
 
 @Embeddable
-public class WalletOperation implements Serializable {
+public class PaymentOperation implements Serializable {
 
     /**
      * Generated 05/05/13
@@ -36,7 +36,7 @@ public class WalletOperation implements Serializable {
         return playerId;
     }
 
-    public WalletOperation setPlayerId(long playerId) {
+    public PaymentOperation setPlayerId(long playerId) {
         this.playerId = playerId;
         return this;
     }
@@ -45,7 +45,7 @@ public class WalletOperation implements Serializable {
         return ammount;
     }
 
-    public WalletOperation setAmmount(Money ammount) {
+    public PaymentOperation setAmmount(Money ammount) {
         this.ammount = ammount;
         return this;
     }
@@ -54,7 +54,7 @@ public class WalletOperation implements Serializable {
         return operation;
     }
 
-    public WalletOperation setOperation(Operation operation) {
+    public PaymentOperation setOperation(Operation operation) {
         this.operation = operation;
         return this;
     }

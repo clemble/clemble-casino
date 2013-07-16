@@ -2,8 +2,7 @@ package com.gogomaya.server.player.wallet;
 
 import javax.inject.Inject;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +15,11 @@ import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
-import com.gogomaya.server.repository.payment.PlayerWalletRepository;
+import com.gogomaya.server.payment.PaymentOperation;
+import com.gogomaya.server.payment.PaymentTransaction;
+import com.gogomaya.server.payment.PaymentTransactionId;
+import com.gogomaya.server.payment.PaymentTransactionService;
+import com.gogomaya.server.repository.player.PlayerWalletRepository;
 import com.gogomaya.server.spring.player.wallet.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,7 +31,7 @@ public class PlayerWalletManagerTest {
     public PlayerWalletRepository walletRepository;
 
     @Inject
-    public WalletTransactionManager walletManager;
+    public PaymentTransactionService paymentTransactionService;
 
     private long playerFrom = RandomUtils.nextLong();
     private long playerTo = RandomUtils.nextLong();
@@ -47,13 +50,13 @@ public class PlayerWalletManagerTest {
     public void testWalletUpdate() {
         Money ammount = Money.create(Currency.FakeMoney, RandomUtils.nextInt(100));
 
-        WalletTransactionId transactionId = new WalletTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(1L);
+        PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(1L);
 
-        WalletTransaction walletTransaction = new WalletTransaction().setTransactionId(transactionId)
-                .addWalletOperation(new WalletOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmmount(ammount))
-                .addWalletOperation(new WalletOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmmount(ammount));
+        PaymentTransaction walletTransaction = new PaymentTransaction().setTransactionId(transactionId)
+                .addWalletOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmmount(ammount))
+                .addWalletOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmmount(ammount));
 
-        walletManager.process(walletTransaction);
+        paymentTransactionService.process(walletTransaction);
 
         Assert.assertEquals(walletRepository.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + ammount.getAmount());
         Assert.assertEquals(walletRepository.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - ammount.getAmount());

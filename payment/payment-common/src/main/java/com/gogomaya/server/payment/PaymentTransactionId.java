@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.wallet;
+package com.gogomaya.server.payment;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import javax.persistence.Enumerated;
 import com.gogomaya.server.money.MoneySource;
 
 @Embeddable
-public class WalletTransactionId implements Serializable {
+public class PaymentTransactionId implements Serializable {
 
     /**
      * Generated 05/05/13
@@ -24,11 +24,19 @@ public class WalletTransactionId implements Serializable {
     @Enumerated(EnumType.STRING)
     private MoneySource source;
 
+    public PaymentTransactionId() {
+    }
+
+    public PaymentTransactionId(String source, long transactionId) {
+        this.source = MoneySource.valueOf(source);
+        this.transactionId = transactionId;
+    }
+
     public long getTransactionId() {
         return transactionId;
     }
 
-    public WalletTransactionId setTransactionId(long transactionId) {
+    public PaymentTransactionId setTransactionId(long transactionId) {
         this.transactionId = transactionId;
         return this;
     }
@@ -37,7 +45,7 @@ public class WalletTransactionId implements Serializable {
         return source;
     }
 
-    public WalletTransactionId setSource(MoneySource source) {
+    public PaymentTransactionId setSource(MoneySource source) {
         this.source = source;
         return this;
     }

@@ -24,12 +24,14 @@ import com.gogomaya.server.game.construct.GameInitiatorService;
 import com.gogomaya.server.game.construct.SimpleGameConstructionService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.money.Money;
+import com.gogomaya.server.payment.PaymentOperation;
+import com.gogomaya.server.payment.PaymentTransaction;
+import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.player.wallet.WalletOperation;
-import com.gogomaya.server.player.wallet.WalletTransaction;
-import com.gogomaya.server.player.wallet.WalletTransactionManager;
+import com.gogomaya.server.player.wallet.PlayerWallet;
+import com.gogomaya.server.player.wallet.PlayerWalletService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
@@ -41,8 +43,8 @@ import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired
-    @Qualifier("walletTransactionManager")
-    public WalletTransactionManager walletTransactionManager;
+    @Qualifier("paymentTransactionService")
+    public PaymentTransactionService paymentTransactionService;
 
     @Autowired
     @Qualifier("playerStateManager")
@@ -57,7 +59,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     @Singleton
     public <State extends GameState> GamePostProcessorListener<State> gamePostProcessorListener() {
-        return new GamePostProcessorListener<State>(playerStateManager, walletTransactionManager);
+        return new GamePostProcessorListener<State>(playerStateManager, paymentTransactionService);
     }
 
     @Bean
@@ -119,14 +121,27 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public WalletTransactionManager walletTransactionManager() {
-            return new WalletTransactionManager() {
+        public PaymentTransactionService paymentTransactionService() {
+            return new PaymentTransactionService() {
+
                 @Override
-                public void process(WalletTransaction walletTransaction) {
+                public PaymentTransaction process(PaymentTransaction paymentTransaction) {
+                    return paymentTransaction;
                 }
 
                 @Override
-                public boolean canAfford(WalletOperation walletOperation) {
+                public PlayerWallet register(long playerId) {
+                    return new PlayerWallet();
+                }
+            };
+        }
+
+        @Bean
+        @Singleton
+        public PlayerWalletService walletTransactionManager() {
+            return new PlayerWalletService() {
+                @Override
+                public boolean canAfford(PaymentOperation walletOperation) {
                     return true;
                 }
 

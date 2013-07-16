@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.wallet;
+package com.gogomaya.server.payment;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +23,7 @@ import com.gogomaya.server.money.MoneyHibernate;
 @Entity
 @Table(name = "PLAYER_WALLET_TRANSACTION")
 @TypeDef(name = "money", typeClass = MoneyHibernate.class)
-public class WalletTransaction implements Serializable {
+public class PaymentTransaction implements Serializable {
 
     /**
      * Generated 05/05/13
@@ -31,34 +31,41 @@ public class WalletTransaction implements Serializable {
     private static final long serialVersionUID = 2610517770966910840L;
 
     @EmbeddedId
-    private WalletTransactionId transactionId;
+    private PaymentTransactionId transactionId;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "PLAYER_WALLET_OPERATION", joinColumns = { @JoinColumn(name = "TRANSACTION_ID"), @JoinColumn(name = "MONEY_SOURCE") })
-    private Set<WalletOperation> walletOperations = new HashSet<WalletOperation>();
+    private Set<PaymentOperation> walletOperations = new HashSet<PaymentOperation>();
 
     @Column(name = "TRANSACTION_DATE")
     private Date transactionDate;
 
-    public WalletTransactionId getTransactionId() {
+    public PaymentTransactionId getTransactionId() {
         return transactionId;
     }
 
-    public WalletTransaction setTransactionId(WalletTransactionId transactionId) {
+    public PaymentTransaction setTransactionId(PaymentTransactionId transactionId) {
         this.transactionId = transactionId;
         return this;
     }
 
-    public Set<WalletOperation> getWalletOperations() {
+    public boolean isParticipant(long playerId) {
+        for (PaymentOperation walletOperation : walletOperations)
+            if (walletOperation.getPlayerId() == playerId)
+                return true;
+        return false;
+    }
+
+    public Set<PaymentOperation> getWalletOperations() {
         return walletOperations;
     }
 
-    public WalletTransaction setWalletOperations(Set<WalletOperation> walletOperations) {
+    public PaymentTransaction setWalletOperations(Set<PaymentOperation> walletOperations) {
         this.walletOperations = walletOperations;
         return this;
     }
 
-    public WalletTransaction addWalletOperation(WalletOperation walletOperation) {
+    public PaymentTransaction addWalletOperation(PaymentOperation walletOperation) {
         if (walletOperation != null)
             this.walletOperations.add(walletOperation);
         return this;
@@ -68,7 +75,7 @@ public class WalletTransaction implements Serializable {
         return transactionDate;
     }
 
-    public WalletTransaction setTransactionDate(Date transactionDate) {
+    public PaymentTransaction setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
         return this;
     }
@@ -76,7 +83,7 @@ public class WalletTransaction implements Serializable {
     public boolean valid() {
         // Step 1. Checking currency
         Currency currency = null;
-        for (WalletOperation walletOperation : walletOperations) {
+        for (PaymentOperation walletOperation : walletOperations) {
             if (currency == null) {
                 currency = walletOperation.getAmmount().getCurrency();
             } else if (currency != walletOperation.getAmmount().getCurrency()) {
@@ -86,7 +93,7 @@ public class WalletTransaction implements Serializable {
         // Step 2. Checking credit and debit ammount match up
         Money creditAmmount = null;
         Money debitAmmount = null;
-        for (WalletOperation walletOperation : walletOperations) {
+        for (PaymentOperation walletOperation : walletOperations) {
             Money ammount = walletOperation.getAmmount();
             if (ammount.getAmount() > 0) {
                 switch (walletOperation.getOperation()) {

@@ -1,0 +1,12 @@
+Security
+1. Each player has a key, using which he signs every request to the server
+	key must emulate changes on every request (to prevent duplicate calls)
+	(optional) key is updated with each new player session
+2. All communications inside the server environment must also be protected
+	This mainly applies to payment transaction
+	Each payment transaction performed through the signed server request
+		Each server has his unique key
+		Game transaction can be checked against the server, on which game is on
+Generic
+1. There is a unique id for the game in the system, and it goes from birth, and never changes 
+	It can be composite, must it be so?

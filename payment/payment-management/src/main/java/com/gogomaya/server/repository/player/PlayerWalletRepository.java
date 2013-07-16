@@ -1,4 +1,4 @@
-package com.gogomaya.server.repository.payment;
+package com.gogomaya.server.repository.player;
 
 import javax.persistence.LockModeType;
 
