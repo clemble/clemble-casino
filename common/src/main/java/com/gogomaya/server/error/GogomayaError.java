@@ -96,6 +96,7 @@ public enum GogomayaError {
     PlayerProfileInvalid(Code.PLAYER_PROFILE_INVALID_ERROR_CODE, "Player Profile invalid"),
     PlayerNotSessionOwner(Code.PLAYER_NOT_SESSION_OWNER_ERROR_CODE, "Player can't change session, he does not own"),
     PlayerSessionClosed(Code.PLAYER_SESSION_CLOSED_ERROR_CODE, "Player session already closed"),
+    PlayerWalletAccessDenied(Code.PLAYER_WALLET_ACCESS_DENIED, "Player wallet access denied"),
 
     PaymentTransactionAccessDenied(Code.PAYMENT_TRANSACTION_ACCESS_DENIED, "Player payment transaction access denied"),
     PaymentTransactionNotExists(Code.PAYMENT_TRANSACTION_DOES_NOT_EXISTS, "Player payment transaction does not exists");
@@ -252,6 +253,7 @@ public enum GogomayaError {
         final public static String PLAYER_PROFILE_INVALID_ERROR_CODE = "0M4";
         final public static String PLAYER_NOT_SESSION_OWNER_ERROR_CODE = "0M5";
         final public static String PLAYER_SESSION_CLOSED_ERROR_CODE = "0M6";
+        final public static String PLAYER_WALLET_ACCESS_DENIED = "0M7";
         // Payment errors
         final public static String PAYMENT_TRANSACTION_ACCESS_DENIED = "0N0";
         final public static String PAYMENT_TRANSACTION_DOES_NOT_EXISTS = "0N1";

@@ -1,7 +1,6 @@
 package com.gogomaya.integration.tictactoe;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +12,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
 import com.gogomaya.server.integration.game.construction.PlayerGameConstructionOperations;
 import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;

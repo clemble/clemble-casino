@@ -35,8 +35,11 @@ public class PlayerWalletController {
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.WALLET_PLAYER, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    PlayerWallet get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
+    public @ResponseBody PlayerWallet get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
+        // Step 1. Wallet can't be accessed someone other, then owner
+        if (playerId != playerWalletId)
+            throw GogomayaException.fromError(GogomayaError.PlayerWalletAccessDenied);
+        // Step 2. Returning wallet repository
         return walletRepository.findOne(playerWalletId);
     }
 
