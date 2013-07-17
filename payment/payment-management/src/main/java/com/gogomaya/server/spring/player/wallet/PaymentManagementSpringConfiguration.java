@@ -31,7 +31,7 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
 
     @Bean
     @Singleton
-    public PlayerWalletService walletTransactionManager() {
+    public PlayerWalletService playerWalletService() {
         return new PlayerWalletServiceImpl(playerWalletRepository);
     }
     

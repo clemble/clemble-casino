@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.wallet.PlayerWalletService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerWalletRepository;
@@ -22,26 +23,31 @@ import com.gogomaya.server.web.player.wallet.PaymentTransactionController;
 public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
-    @Qualifier("walletTransactionManager")
-    public PlayerWalletService walletTransactionManager;
+    @Qualifier("playerWalletService")
+    public PlayerWalletService playerWalletService;
 
     @Autowired
     @Qualifier("playerWalletRepository")
     public PlayerWalletRepository playerWalletRepository;
 
     @Autowired
-    public PaymentTransactionRepository walletTransactionRepository;
+    @Qualifier("paymentTransactionRepository")
+    public PaymentTransactionRepository paymentTransactionRepository;
+
+    @Autowired
+    @Qualifier("paymentTransactionService")
+    public PaymentTransactionService paymentTransactionService;
 
     @Bean
     @Singleton
     public PaymentTransactionController walletTransactionController() {
-        return new PaymentTransactionController(walletTransactionManager);
+        return new PaymentTransactionController(paymentTransactionRepository, paymentTransactionService);
     }
 
     @Bean
     @Singleton
     public PlayerWalletController walletController() {
-        return new PlayerWalletController(playerWalletRepository, walletTransactionRepository);
+        return new PlayerWalletController(playerWalletRepository, paymentTransactionRepository);
     }
 
 }

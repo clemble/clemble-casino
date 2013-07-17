@@ -28,7 +28,11 @@ public class PaymentTransactionId implements Serializable {
     }
 
     public PaymentTransactionId(String source, long transactionId) {
-        this.source = MoneySource.valueOf(source);
+        this(MoneySource.valueOf(source), transactionId);
+    }
+
+    public PaymentTransactionId(MoneySource source, long transactionId) {
+        this.source = source;
         this.transactionId = transactionId;
     }
 
@@ -48,6 +52,36 @@ public class PaymentTransactionId implements Serializable {
     public PaymentTransactionId setSource(MoneySource source) {
         this.source = source;
         return this;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((source == null) ? 0 : source.hashCode());
+        result = prime * result + (int) (transactionId ^ (transactionId >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PaymentTransactionId other = (PaymentTransactionId) obj;
+        if (source != other.source)
+            return false;
+        if (transactionId != other.transactionId)
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "PaymentTransactionId [transactionId=" + transactionId + ", source=" + source + "]";
     }
 
 }

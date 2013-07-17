@@ -64,4 +64,35 @@ public class PaymentOperation implements Serializable {
         return "WalletOperation [playerId=" + playerId + ", ammount=" + ammount + ", operation=" + operation + "]";
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((ammount == null) ? 0 : ammount.hashCode());
+        result = prime * result + ((operation == null) ? 0 : operation.hashCode());
+        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PaymentOperation other = (PaymentOperation) obj;
+        if (ammount == null) {
+            if (other.ammount != null)
+                return false;
+        } else if (!ammount.equals(other.ammount))
+            return false;
+        if (operation != other.operation)
+            return false;
+        if (playerId != other.playerId)
+            return false;
+        return true;
+    }
+
 }

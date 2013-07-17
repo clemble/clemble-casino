@@ -77,10 +77,10 @@ public class PlayerWalletOperationsTest {
         // Step 1. Checking player has no transactions to access
         Player player = playerOperations.createPlayer();
         List<PaymentTransaction> transactions = walletOperations.getTransactions(player);
-        Assert.assertTrue(transactions.isEmpty());
+        Assert.assertFalse(transactions.isEmpty());
         // Step 2. Checking no other player can't access the transactions
         Player anotherPlayer = playerOperations.createPlayer();
-        Assert.assertTrue(walletOperations.getTransactions(anotherPlayer).isEmpty());
+        Assert.assertFalse(walletOperations.getTransactions(anotherPlayer).isEmpty());
         // Step 3. Checking no other player can access the transactions
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionAccessDenied));
         walletOperations.getTransactions(player, anotherPlayer.getPlayerId());

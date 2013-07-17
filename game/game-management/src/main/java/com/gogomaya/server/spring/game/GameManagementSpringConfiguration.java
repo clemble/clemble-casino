@@ -27,10 +27,10 @@ import com.gogomaya.server.money.Money;
 import com.gogomaya.server.payment.PaymentOperation;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionService;
+import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.player.wallet.PlayerWalletService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
@@ -100,7 +100,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Bean
         @Singleton
         public GameConstructionService gameConstructionService() {
-            return new SimpleGameConstructionService(walletTransactionManager(), playerNotificationService, constructionRepository, initiatorService(),
+            return new SimpleGameConstructionService(playerWalletService(), playerNotificationService, constructionRepository, initiatorService(),
                     playerLockService, playerStateManager);
         }
 
@@ -130,15 +130,15 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
                 }
 
                 @Override
-                public PlayerWallet register(long playerId) {
-                    return new PlayerWallet();
+                public PaymentTransaction register(PlayerProfile playerId) {
+                    return new PaymentTransaction();
                 }
             };
         }
 
         @Bean
         @Singleton
-        public PlayerWalletService walletTransactionManager() {
+        public PlayerWalletService playerWalletService() {
             return new PlayerWalletService() {
                 @Override
                 public boolean canAfford(PaymentOperation walletOperation) {

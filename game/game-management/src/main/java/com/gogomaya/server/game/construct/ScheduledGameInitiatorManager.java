@@ -8,12 +8,12 @@ import com.gogomaya.server.repository.game.GameScheduleRepository;
 
 public class ScheduledGameInitiatorManager implements GameInitiatorManager {
 
- //   final private MinMaxPriorityQueue<ScheduledGame> maxScheduledQueue = MinMaxPriorityQueue.<ScheduledGame>maximumSize(100).<ScheduledGame>create();
-    final private ExecutorService scheduledExecutorService;
+//    final private MinMaxPriorityQueue<ScheduledGame> maxScheduledQueue = MinMaxPriorityQueue.<ScheduledGame>maximumSize(100).<ScheduledGame>create();
+//    final private ExecutorService scheduledExecutorService;
     final private GameScheduleRepository scheduleRepository;
 
     public ScheduledGameInitiatorManager(GameScheduleRepository scheduleRepository, ExecutorService scheduledExecutorService) {
-        this.scheduledExecutorService = checkNotNull(scheduledExecutorService);
+//        this.scheduledExecutorService = checkNotNull(scheduledExecutorService);
         this.scheduleRepository = checkNotNull(scheduleRepository);
     }
 

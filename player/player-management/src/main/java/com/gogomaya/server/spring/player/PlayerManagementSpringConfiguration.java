@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Profile;
 
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionService;
+import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
-import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
@@ -53,16 +53,14 @@ public class PlayerManagementSpringConfiguration implements SpringConfiguration 
         @Singleton
         public PaymentTransactionService paymentTransactionService() {
             return new PaymentTransactionService() {
-
                 @Override
-                public PlayerWallet register(long playerId) {
-                    return new PlayerWallet();
+                public PaymentTransaction register(PlayerProfile playerId) {
+                    return new PaymentTransaction();
                 }
 
                 @Override
                 public PaymentTransaction process(PaymentTransaction walletTransaction) {
-                    // TODO Auto-generated method stub
-                    return null;
+                    return walletTransaction;
                 }
             };
         }

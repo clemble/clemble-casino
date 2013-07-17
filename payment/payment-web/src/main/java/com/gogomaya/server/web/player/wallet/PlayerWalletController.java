@@ -50,7 +50,7 @@ public class PlayerWalletController {
         if (requesterId != playerId)
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionAccessDenied);
         // Step 2. Sending transactions
-        return paymentTransactionRepository.findByWalletOperationsPlayerId(playerId);
+        return paymentTransactionRepository.findByPaymentOperationsPlayerId(playerId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.WALLET_PLAYER_TRANSACTIONS_TRANSACTION, produces = "application/json")

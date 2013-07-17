@@ -60,7 +60,7 @@ public class ObjectTest {
 
             @Override
             public GameStartedEvent generate() {
-                GameStartedEvent gameStartedEvent = new GameStartedEvent<>();
+                GameStartedEvent<TicTacToeState> gameStartedEvent = new GameStartedEvent<>();
                 gameStartedEvent.setSession(10L);
                 gameStartedEvent.setState(new TicTacToeState());
                 return gameStartedEvent;
@@ -80,9 +80,11 @@ public class ObjectTest {
             @Override
             public PaymentTransaction generate() {
                 return new PaymentTransaction()
-                    .setTransactionId(new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(0))
-                    .addWalletOperation(new PaymentOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayerId(0))
-                    .addWalletOperation(new PaymentOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit).setPlayerId(1));
+                        .setTransactionId(new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(0))
+                        .addPaymentOperation(
+                                new PaymentOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayerId(0))
+                        .addPaymentOperation(
+                                new PaymentOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit).setPlayerId(1));
             }
 
         });
@@ -90,9 +92,7 @@ public class ObjectTest {
 
             @Override
             public PlayerCredential generate() {
-                return new PlayerCredential()
-                    .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
-                    .setPassword(RandomStringUtils.random(10));
+                return new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.random(10));
             }
 
         });
@@ -100,13 +100,8 @@ public class ObjectTest {
 
             @Override
             public PlayerProfile generate() {
-                return new PlayerProfile()
-                    .setBirthDate(new Date(0))
-                    .setCategory(PlayerCategory.Amateur)
-                    .setFirstName(RandomStringUtils.randomAlphabetic(10))
-                    .setGender(PlayerGender.M)
-                    .setLastName(RandomStringUtils.randomAlphabetic(10))
-                    .setNickName(RandomStringUtils.randomAlphabetic(10));
+                return new PlayerProfile().setBirthDate(new Date(0)).setCategory(PlayerCategory.Amateur).setFirstName(RandomStringUtils.randomAlphabetic(10))
+                        .setGender(PlayerGender.M).setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10));
             }
 
         });

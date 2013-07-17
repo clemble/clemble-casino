@@ -11,6 +11,6 @@ import com.gogomaya.server.payment.PaymentTransactionId;
 @Repository
 public interface PaymentTransactionRepository extends JpaRepository<PaymentTransaction, PaymentTransactionId> {
 
-    public List<PaymentTransaction> findByWalletOperationsPlayerId(long player);
+    public List<PaymentTransaction> findByPaymentOperationsPlayerId(long player);
 
 }

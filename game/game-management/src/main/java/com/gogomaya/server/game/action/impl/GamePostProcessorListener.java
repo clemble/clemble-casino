@@ -67,11 +67,11 @@ public class GamePostProcessorListener<State extends GameState> implements GameP
         for (GamePlayerState playerState : session.getState().getPlayerStates()) {
             if (playerState.getPlayerId() != winnerId) {
                 totalWinning = playerState.getMoneySpent();
-                walletTransaction.addWalletOperation(new PaymentOperation().setAmmount(Money.create(currency, playerState.getMoneySpent()))
+                walletTransaction.addPaymentOperation(new PaymentOperation().setAmmount(Money.create(currency, playerState.getMoneySpent()))
                         .setOperation(Operation.Credit).setPlayerId(playerState.getPlayerId()));
             }
         }
-        walletTransaction.addWalletOperation(new PaymentOperation().setAmmount(Money.create(currency, totalWinning)).setOperation(Operation.Debit)
+        walletTransaction.addPaymentOperation(new PaymentOperation().setAmmount(Money.create(currency, totalWinning)).setOperation(Operation.Debit)
                 .setPlayerId(winnerId));
         // Step 3. Processing wallet transaction
         paymentTransactionService.process(walletTransaction);

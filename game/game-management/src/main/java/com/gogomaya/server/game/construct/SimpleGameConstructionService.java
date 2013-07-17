@@ -24,7 +24,7 @@ public class SimpleGameConstructionService implements GameConstructionService {
 
     final private AutomaticConstructionManager automaticGameInitiatorManager;
 
-    final private PlayerWalletService walletTransactionManager;
+    final private PlayerWalletService playerWalletService;
     final private PlayerNotificationService playerNotificationService;
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
@@ -36,7 +36,7 @@ public class SimpleGameConstructionService implements GameConstructionService {
             final PlayerLockService playerLockService,
             final PlayerStateManager playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
-        this.walletTransactionManager = checkNotNull(walletTransactionManager);
+        this.playerWalletService = checkNotNull(walletTransactionManager);
         this.playerNotificationService = checkNotNull(playerNotificationService);
         this.constructionRepository = checkNotNull(constructionRepository);
 
@@ -52,13 +52,13 @@ public class SimpleGameConstructionService implements GameConstructionService {
         // Step 2. Checking players can afford operations
         // Step 2.1. Checking initiator
         Money ammountNeeded = request.getSpecification().extractMoneyNeeded();
-        if (!walletTransactionManager.canAfford(request.getPlayerId(), ammountNeeded))
+        if (!playerWalletService.canAfford(request.getPlayerId(), ammountNeeded))
             throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         if (request instanceof AutomaticGameRequest) {
             return automaticGameInitiatorManager.register((AutomaticGameRequest) request);
         }
         // Step 2.2. Checking opponents
-        if (!walletTransactionManager.canAfford(request.getParticipants(), ammountNeeded))
+        if (!playerWalletService.canAfford(request.getParticipants(), ammountNeeded))
             throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(request);

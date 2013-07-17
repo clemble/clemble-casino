@@ -57,7 +57,7 @@ public class PlayerRegistrationService {
         PlayerIdentity playerIdentity = new PlayerIdentity().setPlayerId(playerProfile.getPlayerId()).setSecret(UUID.randomUUID().toString());
         playerIdentity = playerIdentityRepository.saveAndFlush(playerIdentity);
         // Step 6. Registering in a Wallet registrar
-        paymentTransactionService.register(playerIdentity.getPlayerId());
+        paymentTransactionService.register(playerProfile);
         // Step 7. Sending player identity
         return playerIdentity;
     }

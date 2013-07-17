@@ -23,6 +23,9 @@ import com.gogomaya.server.integration.game.construction.GameScenarios;
 import com.gogomaya.server.integration.game.construction.IntegrationGameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.WebGameConstructionOperations;
 import com.gogomaya.server.integration.game.tictactoe.TicTacToePlayerSessionFactory;
+import com.gogomaya.server.integration.payment.IntegrationPaymentTransactionOperations;
+import com.gogomaya.server.integration.payment.PaymentTransactionOperations;
+import com.gogomaya.server.integration.payment.WebPaymentTransactionOperations;
 import com.gogomaya.server.integration.player.IntegrationPlayerOperations;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.WebPlayerOperations;
@@ -38,6 +41,7 @@ import com.gogomaya.server.integration.player.wallet.IntegrationWalletOperations
 import com.gogomaya.server.integration.player.wallet.WalletOperations;
 import com.gogomaya.server.integration.player.wallet.WebWalletOperations;
 import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
+import com.gogomaya.server.payment.PaymentOperation;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameConstructionController;
@@ -47,6 +51,7 @@ import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.wallet.PaymentTransactionController;
 import com.gogomaya.server.web.player.wallet.PlayerWalletController;
 
 @Configuration
@@ -104,6 +109,9 @@ public class TestConfiguration {
         @Autowired
         public PlayerProfileController playerProfileController;
 
+        @Autowired
+        public PaymentTransactionController paymentTransactionController;
+
         @Bean
         @Singleton
         public PlayerListenerOperations playerListenerOperations() {
@@ -152,6 +160,12 @@ public class TestConfiguration {
         @Singleton
         public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionPlayerFactory() {
             return new TicTacToePlayerSessionFactory(ticTacToeSessionFactory());
+        }
+
+        @Bean
+        @Singleton
+        public PaymentTransactionOperations paymentTransactionOperations() {
+            return new WebPaymentTransactionOperations(paymentTransactionController);
         }
 
     }
@@ -258,6 +272,12 @@ public class TestConfiguration {
         @SuppressWarnings("unchecked")
         public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionPlayerFactory() {
             return new TicTacToePlayerSessionFactory((GameSessionPlayerFactory<TicTacToeState>) genericGameSessionFactory());
+        }
+
+        @Bean
+        @Singleton
+        public PaymentTransactionOperations paymentTransactionOperations() {
+            return new IntegrationPaymentTransactionOperations(restTemplate(), getBaseUrl());
         }
 
     }

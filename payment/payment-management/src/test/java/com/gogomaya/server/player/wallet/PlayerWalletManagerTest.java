@@ -53,8 +53,8 @@ public class PlayerWalletManagerTest {
         PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(1L);
 
         PaymentTransaction walletTransaction = new PaymentTransaction().setTransactionId(transactionId)
-                .addWalletOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmmount(ammount))
-                .addWalletOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmmount(ammount));
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmmount(ammount))
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmmount(ammount));
 
         paymentTransactionService.process(walletTransaction);
 
