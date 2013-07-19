@@ -61,12 +61,12 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
     }
 
     @Override
-    protected void responce(Player player, InvitationResponseEvent responceEvent) {
+    protected void response(Player player, InvitationResponseEvent responseEvent) {
         // Step 1. Generating signed request
-        HttpEntity<InvitationResponseEvent> requestEntity = player.<InvitationResponseEvent> sign(responceEvent);
+        HttpEntity<InvitationResponseEvent> requestEntity = player.<InvitationResponseEvent> sign(responseEvent);
         // Step 2. Rest template generation
         restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION_RESPONSE, HttpMethod.POST, requestEntity,
-                GameConstruction.class, responceEvent.getConstruction());
+                GameConstruction.class, responseEvent.getConstruction());
     }
 
 }

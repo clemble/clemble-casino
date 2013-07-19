@@ -92,16 +92,16 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
         GameSessionPlayer<State> sessionPlayer = playerFactory.construct(player, construction);
         // Step 2. Sending accept message to the server
         InvitationResponseEvent acceptedEvents = new InvitationAcceptedEvent(construction, player.getPlayerId());
-        responce(player, acceptedEvents);
+        response(player, acceptedEvents);
         return sessionPlayer;
     }
 
     @Override
     final public void declineInvitation(Player player, long construction) {
         InvitationResponseEvent declinedEvents = new InvitationDeclinedEvent(construction, player.getPlayerId());
-        responce(player, declinedEvents);
+        response(player, declinedEvents);
     }
 
-    abstract protected void responce(Player player, InvitationResponseEvent responceEvent);
+    abstract protected void response(Player player, InvitationResponseEvent responseEvent);
 
 }

@@ -50,8 +50,8 @@ public class GameConstructionRepositoryTest {
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setState(GameConstructionState.pending);
-        Assert.assertNotNull(construction.getResponces());
+        Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
-        Assert.assertNotNull(construction.getResponces());
+        Assert.assertNotNull(construction.getResponses());
     }
 }

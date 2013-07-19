@@ -114,7 +114,7 @@ public class AvailabilityGameConstructionTest {
     private <State extends GameState> void assertLivenes(GameSessionPlayer<State> player, boolean alive) {
         if (player.isAlive() != alive) {
             long playerIdentifier = player.getPlayerId();
-            List<Long> opponents = new ArrayList<>(player.getConstructionInfo().getResponces().fetchParticipants());
+            List<Long> opponents = new ArrayList<>(player.getConstructionInfo().getResponses().fetchParticipants());
             opponents.remove(playerIdentifier);
             Assert.fail(playerIdentifier + " with opponents " + opponents + " expected " + (alive ? "to be" : "not to be") + " alive");
         }

@@ -56,7 +56,7 @@ public class GameConstruction implements ConstructionAware {
 
     @Type(type = "action_latch")
     @Column(name = "RESPONSES", length = 4096, nullable = false)
-    private ActionLatch responces;
+    private ActionLatch responses;
 
     @Version
     private int version;
@@ -67,7 +67,7 @@ public class GameConstruction implements ConstructionAware {
     public GameConstruction(GameRequest request) {
         this.request = request;
         this.state = GameConstructionState.pending;
-        this.responces = new ActionLatch(((GameOpponentsAware) request).getParticipants(), "response");
+        this.responses = new ActionLatch(((GameOpponentsAware) request).getParticipants(), "response");
     }
 
     @Override
@@ -96,20 +96,20 @@ public class GameConstruction implements ConstructionAware {
         this.state = state;
     }
 
-    public ActionLatch getResponces() {
-        return responces;
+    public ActionLatch getResponses() {
+        return responses;
     }
 
-    public void setResponces(ActionLatch responces) {
-        this.responces = responces;
+    public void setResponses(ActionLatch responses) {
+        this.responses = responses;
     }
 
     public List<Long> fetchAcceptedParticipants() {
-        List<Long> acceptedParticipants = new ArrayList<Long>(responces.fetchParticipants().size());
+        List<Long> acceptedParticipants = new ArrayList<Long>(responses.fetchParticipants().size());
 
-        for (Entry<Long, ExpectedAction> responceEntry : responces.fetchActionsMap().entrySet()) {
-            if (responceEntry.getValue() instanceof InvitationAcceptedEvent)
-                acceptedParticipants.add(responceEntry.getKey());
+        for (Entry<Long, ExpectedAction> responseEntry : responses.fetchActionsMap().entrySet()) {
+            if (responseEntry.getValue() instanceof InvitationAcceptedEvent)
+                acceptedParticipants.add(responseEntry.getKey());
         }
 
         return acceptedParticipants;
