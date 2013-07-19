@@ -1,6 +1,6 @@
 package com.gogomaya.server.web.mapping;
 
-public class PlayerWebMapping implements WebMapping {
+public interface PlayerWebMapping extends WebMapping {
 
     final public static String PLAYER_PREFIX = "/spi";
 
@@ -12,9 +12,5 @@ public class PlayerWebMapping implements WebMapping {
     final public static String PLAYER_PROFILE = "/player/{playerId}/profile";
     final public static String PLAYER_SESSIONS = "/player/{playerId}/session";
     final public static String PLAYER_SESSIONS_SESSION = "/player/{playerId}/session/{sessionId}";
-
-    private PlayerWebMapping() {
-        throw new IllegalAccessError();
-    }
 
 }

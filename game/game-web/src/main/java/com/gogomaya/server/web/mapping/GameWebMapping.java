@@ -1,6 +1,6 @@
 package com.gogomaya.server.web.mapping;
 
-public class GameWebMapping implements WebMapping {
+public interface GameWebMapping extends WebMapping {
 
     final public static String GAME_PREFIX = "/spi";
 
@@ -12,9 +12,5 @@ public class GameWebMapping implements WebMapping {
     final public static String GAME_CONSTRUCTION_RESPONSE = "/active/constuction/{constructionId}/response";
 
     final public static String GAME_SESSION_MOVE = "/active/action";
-
-    private GameWebMapping() {
-        throw new IllegalAccessError();
-    }
 
 }
