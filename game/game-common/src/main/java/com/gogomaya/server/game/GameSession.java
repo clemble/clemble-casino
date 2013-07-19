@@ -105,6 +105,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     }
 
     public GameSession<State> setPlayers(Collection<Long> players) {
+        this.players.clear();
         this.players.addAll(players);
         return this;
     }

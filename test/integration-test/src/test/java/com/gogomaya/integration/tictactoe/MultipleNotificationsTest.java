@@ -1,0 +1,130 @@
+package com.gogomaya.integration.tictactoe;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import com.gogomaya.server.event.Event;
+import com.gogomaya.server.game.event.server.GameServerEvent;
+import com.gogomaya.server.game.outcome.PlayerWonOutcome;
+import com.gogomaya.server.game.tictactoe.TicTacToe;
+import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.integration.game.GameSessionListener;
+import com.gogomaya.server.integration.game.GameSessionPlayer;
+import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
+import com.gogomaya.server.integration.game.construction.GameScenarios;
+import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
+import com.gogomaya.server.spring.integration.TestConfiguration;
+import com.gogomaya.server.test.RedisCleaner;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = { TestConfiguration.class })
+@TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
+public class MultipleNotificationsTest {
+
+    @Autowired
+    public GameScenarios gameScenarios;
+
+    @Autowired
+    public GameConstructionOperations<TicTacToeState> gameOperations;
+
+    public class NotificationsCounter extends GameSessionListener {
+
+        final private Object sync = new Object();
+
+        final public Map<Integer, Integer> notifications = new HashMap<Integer, Integer>();
+
+        @Override
+        protected void notify(Event event) {
+            synchronized (sync) {
+                if (event instanceof GameServerEvent) {
+                    @SuppressWarnings("unchecked")
+                    GameServerEvent<TicTacToeState> serverEvent = (GameServerEvent<TicTacToeState>) event;
+                    Integer currentCounter = notifications.get(serverEvent.getState().getVersion());
+                    if (currentCounter == null) {
+                        notifications.put(serverEvent.getState().getVersion(), 1);
+                    } else {
+                        notifications.put(serverEvent.getState().getVersion(), currentCounter + 1);
+                    }
+                }
+            }
+        }
+
+    }
+
+    @Test
+    public void testMultipleNotificationOnTicTacToe() throws InterruptedException {
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+        TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
+
+        final AtomicBoolean notifiedTwice = new AtomicBoolean(false);
+
+        for (int i = 0; i < 3; i++) {
+            playerA.syncWith(playerB);
+
+            final NotificationsCounter notificationcCounter = new NotificationsCounter();
+            playerA.getPlayer().listen(playerA.getConstruction(), notificationcCounter);
+
+            try {
+                playerA.syncWith(playerB);
+                playerA.select(0, 0);
+
+                playerA.bet(2);
+                playerB.bet(1);
+                playerB.syncWith(playerA);
+
+                playerB.select(1, 1);
+
+                playerB.bet(1);
+                playerB.syncWith(playerA);
+                playerA.bet(2);
+
+                playerA.select(2, 2);
+
+                playerA.bet(2);
+                playerA.syncWith(playerB);
+                playerB.bet(1);
+                playerB.syncWith(playerA);
+
+                playerA.syncWith(playerB);
+
+                assertTrue(playerB.getState().complete());
+                assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
+                assertTrue(playerA.getState().complete());
+                assertEquals(((PlayerWonOutcome) playerA.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
+            } finally {
+                playerA.close();
+                playerB.close();
+            }
+            assertFalse(notifiedTwice.get());
+            assertTrue(notificationcCounter.notifications.size() > 0);
+            Thread.sleep(1000);
+            System.out.println("wtk786 size: " + notificationcCounter.notifications.size());
+            for (Integer version : notificationcCounter.notifications.keySet()) {
+                System.out.println("wtk786 version: " + version + " / " + notificationcCounter.notifications.get(version));
+                assertEquals(Integer.valueOf(1), notificationcCounter.notifications.get(version));
+            }
+
+            playerA = ((TicTacToeSessionPlayer) (GameSessionPlayer<TicTacToeState>) (GameSessionPlayer<?>) playerA.getPlayer()
+                    .getGameConstructor(TicTacToe.NAME).constructAvailability(playerB.getPlayer()));
+            playerB = ((TicTacToeSessionPlayer) (GameSessionPlayer<TicTacToeState>) (GameSessionPlayer<?>) playerB.getPlayer()
+                    .getGameConstructor(TicTacToe.NAME).acceptInvitation(playerA.getConstruction()));
+        }
+    }
+}
