@@ -6,10 +6,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
+@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @ContextConfiguration(classes = SocialModuleSpringConfiguration.class)
 public class InitializationTest {
 

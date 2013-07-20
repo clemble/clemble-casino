@@ -13,12 +13,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 import com.gogomaya.server.web.player.PlayerSessionController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ActiveProfiles("test")
+@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @ContextConfiguration(classes = { PlayerWebSpringConfiguration.class })
 public class PlayerSessionControllerTest {
 

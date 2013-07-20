@@ -63,7 +63,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         return new GameSpecificationRegistry();
     }
 
-    @Profile(value = { "default", "test" })
+    @Profile(value = { PROFILE_DEFAULT, PROFILE_TEST })
     public static class DefaultAndTest {
 
         @Bean
@@ -77,7 +77,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { "test" })
+    @Profile(value = { PROFILE_TEST })
     public static class Test {
 
         @Autowired
@@ -119,7 +119,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     }
 
-    @Profile(value = { "cloud" })
+    @Profile(value = { PROFILE_CLOUD })
     public static class Cloud {
 
         @Autowired

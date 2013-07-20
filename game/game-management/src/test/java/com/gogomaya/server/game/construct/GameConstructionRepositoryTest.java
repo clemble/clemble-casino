@@ -17,11 +17,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
+@ActiveProfiles(profiles = SpringConfiguration.PROFILE_TEST)
 @ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
 public class GameConstructionRepositoryTest {
 

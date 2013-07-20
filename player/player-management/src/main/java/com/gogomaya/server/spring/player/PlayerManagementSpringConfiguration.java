@@ -46,7 +46,7 @@ public class PlayerManagementSpringConfiguration implements SpringConfiguration 
     }
 
     @Configuration
-    @Profile("test")
+    @Profile(SpringConfiguration.PROFILE_TEST)
     public static class Test {
 
         @Bean

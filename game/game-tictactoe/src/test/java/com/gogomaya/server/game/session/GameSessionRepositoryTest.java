@@ -28,11 +28,12 @@ import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.repository.game.GameSpecificationRepository;
 import com.gogomaya.server.repository.game.GameTableRepository;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
 import com.gogomaya.server.tictactoe.action.impl.TicTacToeStateFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
+@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
 public class GameSessionRepositoryTest {
 

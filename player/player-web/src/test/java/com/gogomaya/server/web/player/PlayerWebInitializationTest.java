@@ -7,11 +7,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ActiveProfiles("test")
+@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @ContextConfiguration(classes = { PlayerWebSpringConfiguration.class })
 public class PlayerWebInitializationTest {
 

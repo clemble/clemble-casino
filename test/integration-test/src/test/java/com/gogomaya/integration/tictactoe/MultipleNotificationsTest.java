@@ -75,56 +75,46 @@ public class MultipleNotificationsTest {
 
         final AtomicBoolean notifiedTwice = new AtomicBoolean(false);
 
-        for (int i = 0; i < 3; i++) {
+        final NotificationsCounter notificationcCounter = new NotificationsCounter();
+        playerA.getPlayer().listen(playerA.getSession(), notificationcCounter);
+
+        try {
+            playerA.syncWith(playerB);
+            playerA.select(0, 0);
+
+            playerA.bet(2);
+            playerB.bet(1);
+            playerB.syncWith(playerA);
+
+            playerB.select(1, 1);
+
+            playerB.bet(1);
+            playerB.syncWith(playerA);
+            playerA.bet(2);
+
+            playerA.select(2, 2);
+
+            playerA.bet(2);
+            playerA.syncWith(playerB);
+            playerB.bet(1);
+            playerB.syncWith(playerA);
+
             playerA.syncWith(playerB);
 
-            final NotificationsCounter notificationcCounter = new NotificationsCounter();
-            playerA.getPlayer().listen(playerA.getSession(), notificationcCounter);
-
-            try {
-                playerA.syncWith(playerB);
-                playerA.select(0, 0);
-
-                playerA.bet(2);
-                playerB.bet(1);
-                playerB.syncWith(playerA);
-
-                playerB.select(1, 1);
-
-                playerB.bet(1);
-                playerB.syncWith(playerA);
-                playerA.bet(2);
-
-                playerA.select(2, 2);
-
-                playerA.bet(2);
-                playerA.syncWith(playerB);
-                playerB.bet(1);
-                playerB.syncWith(playerA);
-
-                playerA.syncWith(playerB);
-
-                assertTrue(playerB.getState().complete());
-                assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
-                assertTrue(playerA.getState().complete());
-                assertEquals(((PlayerWonOutcome) playerA.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
-            } finally {
-                playerA.close();
-                playerB.close();
-            }
-            assertFalse(notifiedTwice.get());
-            assertTrue(notificationcCounter.notifications.size() > 0);
-            Thread.sleep(1000);
-            System.out.println("wtk786 size: " + notificationcCounter.notifications.size());
-            for (Integer version : notificationcCounter.notifications.keySet()) {
-                System.out.println("wtk786 version: " + version + " / " + notificationcCounter.notifications.get(version));
-                assertEquals(Integer.valueOf(1), notificationcCounter.notifications.get(version));
-            }
-
-            playerA = ((TicTacToeSessionPlayer) (GameSessionPlayer<TicTacToeState>) (GameSessionPlayer<?>) playerA.getPlayer()
-                    .getGameConstructor(TicTacToe.NAME).constructAvailability(playerB.getPlayer()));
-            playerB = ((TicTacToeSessionPlayer) (GameSessionPlayer<TicTacToeState>) (GameSessionPlayer<?>) playerB.getPlayer()
-                    .getGameConstructor(TicTacToe.NAME).acceptInvitation(playerA.getSession()));
+            assertTrue(playerB.getState().complete());
+            assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
+            assertTrue(playerA.getState().complete());
+            assertEquals(((PlayerWonOutcome) playerA.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
+        } finally {
+            playerA.close();
+            playerB.close();
         }
+        assertFalse(notifiedTwice.get());
+        assertTrue(notificationcCounter.notifications.size() > 0);
+        Thread.sleep(1000);
+        for (Integer version : notificationcCounter.notifications.keySet()) {
+            assertEquals(Integer.valueOf(1), notificationcCounter.notifications.get(version));
+        }
+
     }
 }

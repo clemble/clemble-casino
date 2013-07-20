@@ -41,8 +41,8 @@ import com.gogomaya.server.integration.player.session.IntegrationSessionOperatio
 import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.integration.player.session.WebSessionOperations;
 import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
-import com.gogomaya.server.payment.PaymentOperation;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.active.session.GameEngineController;
@@ -70,7 +70,7 @@ public class TestConfiguration {
     }
 
     @Configuration
-    @Profile("default")
+    @Profile(value = SpringConfiguration.PROFILE_DEFAULT)
     @Import(value = { WebMvcSpiSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
@@ -171,7 +171,7 @@ public class TestConfiguration {
     }
 
     @Configuration
-    @Profile("remoteIntegration")
+    @Profile(value = SpringConfiguration.PROFILE_INTEGRATION_CLOUD)
     public static class RemoteIntegrationTestConfiguration extends IntegrationTestConfiguration {
 
         @Override
@@ -183,7 +183,7 @@ public class TestConfiguration {
     }
 
     @Configuration
-    @Profile("localIntegration")
+    @Profile(value = SpringConfiguration.PROFILE_INTEGRATION_LOCAL_TEST)
     public static class LocalIntegrationTestConfiguration extends IntegrationTestConfiguration {
 
         @Override
@@ -194,7 +194,7 @@ public class TestConfiguration {
     }
 
     @Configuration
-    @Profile("localServerIntegration")
+    @Profile(value = SpringConfiguration.PROFILE_INTEGRATION_LOCAL_SERVER)
     public static class LocalServerIntegrationTestConfiguration extends IntegrationTestConfiguration {
 
     }

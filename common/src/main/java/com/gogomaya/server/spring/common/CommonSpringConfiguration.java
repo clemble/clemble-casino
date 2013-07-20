@@ -30,7 +30,7 @@ public class CommonSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = "cloud")
+    @Profile(value = PROFILE_CLOUD)
     public static class Cloud {
 
         @Bean

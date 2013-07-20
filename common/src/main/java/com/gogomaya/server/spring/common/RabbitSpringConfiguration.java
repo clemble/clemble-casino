@@ -68,7 +68,7 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = "cloud")
+    @Profile(value = PROFILE_CLOUD)
     public static class Cloud {
 
         @Autowired
@@ -92,7 +92,7 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { "cloud", "development" })
+    @Profile(value = { PROFILE_CLOUD })
     public static class Development {
 
         @Bean
@@ -106,7 +106,7 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { "default", "test" })
+    @Profile(value = { PROFILE_DEFAULT, PROFILE_TEST })
     public static class DefaultAndTest {
 
         @Bean

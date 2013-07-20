@@ -23,11 +23,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.game.construct.ScheduledGame;
 import com.gogomaya.server.repository.game.GameScheduleRepository;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.stresstest.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
+@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @WebAppConfiguration
 @ContextConfiguration(classes = { WebMvcSpiSpringConfiguration.class })
 public class ObjectPersistenceTest extends ObjectTest implements ApplicationContextAware {

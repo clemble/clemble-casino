@@ -9,12 +9,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.TicTacToeWebSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameConstructionController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TicTacToeWebSpringConfiguration.class)
-@ActiveProfiles("test")
+@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @WebAppConfiguration
 public class GameWebContextInitiationTest {
 

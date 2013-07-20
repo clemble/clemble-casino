@@ -20,7 +20,7 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 public class CommonPaymentSpringConfiguration implements SpringConfiguration {
 
     @Configuration
-    @Profile("test")
+    @Profile(SpringConfiguration.PROFILE_TEST)
     public static class Test {
 
         @Bean

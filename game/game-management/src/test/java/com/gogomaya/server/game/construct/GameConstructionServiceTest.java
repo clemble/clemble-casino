@@ -22,10 +22,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
+@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
 public class GameConstructionServiceTest {
 
