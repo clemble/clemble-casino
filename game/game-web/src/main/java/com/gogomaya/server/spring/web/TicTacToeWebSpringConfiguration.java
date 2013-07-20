@@ -19,7 +19,7 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
 import com.gogomaya.server.tictactoe.configuration.TicTacToeConfigurationManager;
 import com.gogomaya.server.web.active.session.GameConstructionController;
-import com.gogomaya.server.web.active.session.GameEngineController;
+import com.gogomaya.server.web.active.session.GameActionController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 
 @Configuration
@@ -67,8 +67,8 @@ public class TicTacToeWebSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Singleton
-    public GameEngineController<TicTacToeState> ticTacToeEngineController() {
-        return new GameEngineController<TicTacToeState>(ticTacToeSessionProcessor);
+    public GameActionController<TicTacToeState> ticTacToeEngineController() {
+        return new GameActionController<TicTacToeState>(ticTacToeSessionProcessor);
     }
 
 }

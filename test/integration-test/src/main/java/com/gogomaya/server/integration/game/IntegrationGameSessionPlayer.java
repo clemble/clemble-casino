@@ -34,8 +34,8 @@ public class IntegrationGameSessionPlayer<State extends GameState> extends Abstr
         // Step 1. Generating signed request
         HttpEntity<ClientEvent> requestEntity = player.<ClientEvent> signGame(session, resourse.getTableId(), clientEvent);
         // Step 2. Rest template generation
-        return (State) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SESSION_MOVE, HttpMethod.POST, requestEntity,
-                GameState.class).getBody();
+        return (State) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SESSION_ACTIONS, HttpMethod.POST, requestEntity,
+                GameState.class, session).getBody();
     }
 
 }

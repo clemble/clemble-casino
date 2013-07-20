@@ -7,7 +7,7 @@ import com.gogomaya.server.game.ServerResourse;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GameClientEvent;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.web.active.session.GameEngineController;
+import com.gogomaya.server.web.active.session.GameActionController;
 
 public class WebGameSessionPlayer<State extends GameState> extends AbstractGameSessionPlayer<State> {
 
@@ -16,9 +16,9 @@ public class WebGameSessionPlayer<State extends GameState> extends AbstractGameS
      */
     private static final long serialVersionUID = 694894192572157764L;
 
-    final private GameEngineController<State> gameEngineController;
+    final private GameActionController<State> gameEngineController;
 
-    public WebGameSessionPlayer(final Player player, final GameConstruction construction, final GameEngineController<State> gameEngineController) {
+    public WebGameSessionPlayer(final Player player, final GameConstruction construction, final GameActionController<State> gameEngineController) {
         super(player, construction);
         this.gameEngineController = checkNotNull(gameEngineController);
     }
@@ -29,7 +29,7 @@ public class WebGameSessionPlayer<State extends GameState> extends AbstractGameS
         long playerId = clientEvent.getPlayerId();
         long tableId = resourse.getTableId();
         // Step 1. Processing action by controller
-        return (State) gameEngineController.process(playerId, session, tableId, clientEvent);
+        return (State) gameEngineController.process(playerId, session, session, tableId, clientEvent);
     }
 
 }

@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,19 +18,21 @@ import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.web.mapping.GameWebMapping;
 
 @Controller
-public class GameEngineController<State extends GameState> {
+public class GameActionController<State extends GameState> {
 
     final private GameSessionProcessor<State> sessionProcessor;
 
-    public GameEngineController(final GameSessionProcessor<State> sessionProcessor) {
+    public GameActionController(final GameSessionProcessor<State> sessionProcessor) {
         this.sessionProcessor = checkNotNull(sessionProcessor);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSION_MOVE, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSION_ACTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody State process(
+    public @ResponseBody
+    State process(
             @RequestHeader("playerId") long playerId,
             @RequestHeader("sessionId") long sessionId,
+            @PathVariable("sessionId") long requestSessionId,
             @RequestHeader("tableId") long tableId,
             @RequestBody ClientEvent move) {
         // Step 1. Retrieving associated table

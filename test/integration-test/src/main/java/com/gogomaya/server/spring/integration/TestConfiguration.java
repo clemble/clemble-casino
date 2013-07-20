@@ -45,7 +45,7 @@ import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameConstructionController;
-import com.gogomaya.server.web.active.session.GameEngineController;
+import com.gogomaya.server.web.active.session.GameActionController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
 import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.PlayerProfileController;
@@ -104,7 +104,7 @@ public class TestConfiguration {
 
         @Autowired
         @Qualifier("ticTacToeEngineController")
-        public GameEngineController<TicTacToeState> ticTacToeEngineController;
+        public GameActionController<TicTacToeState> ticTacToeEngineController;
 
         @Autowired
         public PlayerProfileController playerProfileController;

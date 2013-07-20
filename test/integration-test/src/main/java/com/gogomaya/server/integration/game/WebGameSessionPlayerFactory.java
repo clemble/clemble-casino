@@ -4,7 +4,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.web.active.session.GameConstructionController;
-import com.gogomaya.server.web.active.session.GameEngineController;
+import com.gogomaya.server.web.active.session.GameActionController;
 
 public class WebGameSessionPlayerFactory<State extends GameState> implements GameSessionPlayerFactory<State> {
 
@@ -13,10 +13,10 @@ public class WebGameSessionPlayerFactory<State extends GameState> implements Gam
      */
     private static final long serialVersionUID = -7652085755416835994L;
 
-    final private GameEngineController<State> engineController;
+    final private GameActionController<State> engineController;
     final private GameConstructionController<State> constructionController;
 
-    public WebGameSessionPlayerFactory(GameEngineController<State> engineController, GameConstructionController<State> constructionController) {
+    public WebGameSessionPlayerFactory(GameActionController<State> engineController, GameConstructionController<State> constructionController) {
         this.engineController = engineController;
         this.constructionController = constructionController;
     }

@@ -7,20 +7,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 
-import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionService;
-import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
+import com.gogomaya.server.spring.payment.CommonPaymentSpringConfiguration;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, PlayerManagementSpringConfiguration.Test.class, PlayerCommonSpringConfiguration.class })
+@Import(value = { CommonSpringConfiguration.class, CommonPaymentSpringConfiguration.class, PlayerCommonSpringConfiguration.class })
 public class PlayerManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -45,25 +43,4 @@ public class PlayerManagementSpringConfiguration implements SpringConfiguration 
         return new PlayerRegistrationService(playerProfileRepository, playerIdentityRepository, playerCredentialRepository, paymentTransactionService);
     }
 
-    @Configuration
-    @Profile(SpringConfiguration.PROFILE_TEST)
-    public static class Test {
-
-        @Bean
-        @Singleton
-        public PaymentTransactionService paymentTransactionService() {
-            return new PaymentTransactionService() {
-                @Override
-                public PaymentTransaction register(PlayerProfile playerId) {
-                    return new PaymentTransaction();
-                }
-
-                @Override
-                public PaymentTransaction process(PaymentTransaction paymentTransaction) {
-                    return paymentTransaction;
-                }
-            };
-        }
-
-    }
 }

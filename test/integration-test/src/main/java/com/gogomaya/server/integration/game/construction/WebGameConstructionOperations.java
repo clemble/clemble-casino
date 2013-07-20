@@ -43,7 +43,7 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
 
     @Override
     protected void response(Player player, InvitationResponseEvent responseEvent) {
-        constructionController.invitationResponsed(responseEvent.getPlayerId(), responseEvent);
+        constructionController.invitationResponsed(player.getPlayerId(), responseEvent.getSession(), responseEvent);
     }
 
 }

@@ -16,12 +16,10 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
-import com.gogomaya.server.game.construct.AutomaticGameRequest;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
-import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.web.mapping.GameWebMapping;
 
@@ -37,20 +35,10 @@ public class GameConstructionController<State extends GameState> {
             final GameSpecificationRegistry configurationManager) {
         this.constructionService = checkNotNull(matchingService);
         this.configurationManager = checkNotNull(configurationManager);
-        this.constructionRepository = constructionRepository;
+        this.constructionRepository = checkNotNull(constructionRepository);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_CONSTRUCTION_AUTOMATIC, produces = "application/json")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    GameConstruction match(@RequestHeader("playerId") final long playerId, @RequestBody final GameSpecification specification) {
-        // Step 1. Generating Instant game request
-        AutomaticGameRequest instantGameRequest = new AutomaticGameRequest(playerId, specification);
-        // Step 3. Invoking construction service
-        return constructionService.construct(instantGameRequest);
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_CONSTRUCTION_GENERIC, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     GameConstruction construct(@RequestHeader("playerId") final long playerId, @RequestBody final GameRequest gameRequest) {
@@ -61,20 +49,23 @@ public class GameConstructionController<State extends GameState> {
         return constructionService.construct(gameRequest);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_CONSTRUCTION_RESPONSE, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
-    GameConstruction invitationResponsed(@RequestHeader("playerId") final long playerId, @RequestBody final InvitationResponseEvent gameRequest) {
+    GameConstruction invitationResponsed(
+            @RequestHeader("playerId") final long playerId,
+            @PathVariable("sessionId") long sessionId,
+            @RequestBody final InvitationResponseEvent gameRequest) {
         // Step 1. Invoking actual matching service
         return constructionService.invitationResponsed(gameRequest);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONSTRUCTION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    GameConstruction getConstruct(@RequestHeader("playerId") final long playerId, @PathVariable("constructionId") final long constructionId) {
+    GameConstruction getConstruct(@RequestHeader("playerId") final long playerId, @PathVariable("sessionId") final long session) {
         // Step 1. Searching for construction
-        GameConstruction construction = constructionRepository.findOne(constructionId);
+        GameConstruction construction = constructionRepository.findOne(session);
         // Step 2. Sending error in case resource not found
         if (construction == null)
             throw GogomayaException.fromError(GogomayaError.GameConstructionDoesNotExistent);
