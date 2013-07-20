@@ -55,7 +55,7 @@ public class PlayerListenerManager implements PlayerListener, Closeable {
 
     public void listen(GameConstruction construction, GameSessionListener sessionListener) {
         synchronized (listenerSync) {
-            listen(construction.getConstruction(), sessionListener);
+            listen(construction.getSession(), sessionListener);
         }
     }
 

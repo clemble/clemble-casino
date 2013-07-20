@@ -1,6 +1,8 @@
 package com.gogomaya.server.game;
 
-public interface SessionAware {
+import java.io.Serializable;
+
+public interface SessionAware extends Serializable {
 
     final long DEFAULT_SESSION = 0L;
 

@@ -58,8 +58,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    final public long getConstruction() {
-        return construction != null ? construction.getConstruction() : 0;
+    final public long getSession() {
+        return construction != null ? construction.getSession() : 0;
     }
 
     @Override

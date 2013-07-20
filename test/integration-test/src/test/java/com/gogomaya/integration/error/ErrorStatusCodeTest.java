@@ -67,7 +67,7 @@ public class ErrorStatusCodeTest {
 
         GameSessionPlayer<TicTacToeState> gamePlayer = gameOperations.constructAutomatic(playerA, specification);
         GameSessionPlayer<TicTacToeState> anotherGamePlayer = gameOperations.constructAutomatic(playerA, specification);
-        Assert.assertEquals(gamePlayer.getConstruction(), anotherGamePlayer.getConstruction());
+        Assert.assertEquals(gamePlayer.getSession(), anotherGamePlayer.getSession());
 
         gamePlayer.close();
     }

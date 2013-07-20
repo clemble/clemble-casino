@@ -14,18 +14,18 @@ public class PlayerAddedEvent implements GameConstructionEvent, PlayerAware {
      */
     private static final long serialVersionUID = -5442563161615470910L;
 
-    final private long construction;
+    final private long session;
     final private long playerId;
 
     @JsonCreator
-    public PlayerAddedEvent(@JsonProperty("construction") long construction, @JsonProperty("playerId") long player) {
-        this.construction = construction;
+    public PlayerAddedEvent(@JsonProperty("session") long session, @JsonProperty("playerId") long player) {
+        this.session = session;
         this.playerId = player;
     }
 
     @Override
-    public long getConstruction() {
-        return construction;
+    public long getSession() {
+        return session;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class PlayerAddedEvent implements GameConstructionEvent, PlayerAware {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (playerId ^ (playerId >>> 32));
-        result = prime * result + (int) (construction ^ (construction >>> 32));
+        result = prime * result + (int) (session ^ (session >>> 32));
         return result;
     }
 
@@ -53,7 +53,7 @@ public class PlayerAddedEvent implements GameConstructionEvent, PlayerAware {
         PlayerAddedEvent other = (PlayerAddedEvent) obj;
         if (playerId != other.playerId)
             return false;
-        if (construction != other.construction)
+        if (session != other.session)
             return false;
         return true;
     }

@@ -4,21 +4,20 @@ import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.ConstructionAware;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.ServerResourse;
 import com.gogomaya.server.game.SessionAware;
 
 @JsonTypeName("started")
-public class GameStartedEvent<State extends GameState> extends GameServerEvent<State> implements ConstructionAware {
+public class GameStartedEvent<State extends GameState> extends GameServerEvent<State> implements SessionAware {
 
     /**
      * Generated
      */
     private static final long serialVersionUID = -4474960027054354888L;
 
-    private long construction;
+    private long session;
 
     private ServerResourse resource;
 
@@ -27,9 +26,9 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
     public GameStartedEvent() {
     }
 
-    public GameStartedEvent(long construction, GameTable<State> table) {
+    public GameStartedEvent(long session, GameTable<State> table) {
         super(table.getCurrentSession());
-        this.construction = construction;
+        this.session = session;
         this.nextMoves = getState().getNextMoves();
         this.resource = table.fetchServerResourse();
     }
@@ -61,12 +60,13 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
     }
 
     @Override
-    public long getConstruction() {
-        return construction;
+    public long getSession() {
+        return session;
     }
 
-    public void setConstruction(long construction) {
-        this.construction = construction;
+    public GameServerEvent<State> setSession(long construction) {
+        this.session = construction;
+        return this;
     }
 
     @Override

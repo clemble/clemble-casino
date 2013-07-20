@@ -53,7 +53,7 @@ public class AvailabilityGameConstructionTest {
 
         TicTacToeSessionPlayer sessionPlayer = (TicTacToeSessionPlayer) constructionOperations.constructAvailability(specification,
                 ImmutableList.<Long> of(playerA.getPlayerId(), playerB.getPlayerId()));
-        playerB.getGameConstructor(TicTacToe.NAME).acceptInvitation(sessionPlayer.getConstruction());
+        playerB.getGameConstructor(TicTacToe.NAME).acceptInvitation(sessionPlayer.getSession());
 
         sessionPlayer.waitForStart();
         Assert.assertTrue(sessionPlayer.isAlive());
@@ -80,12 +80,12 @@ public class AvailabilityGameConstructionTest {
                     .constructAvailability(ImmutableList.<Long> of(playerA.getPlayerId(), playerC.getPlayerId()));
             // Step 3. Accepting A - C game request to start A - C game
             TicTacToeSessionPlayer sessionCAPlayer = (TicTacToeSessionPlayer) playerC.<TicTacToeState> getGameConstructor(TicTacToe.NAME).acceptInvitation(
-                    sessionACPlayer.getConstruction());
+                    sessionACPlayer.getSession());
             sessionACPlayer.waitForStart();
             sessionACPlayer.syncWith(sessionCAPlayer);
             // Step 4. Accepting A - B game request to start A - B game, it should not be started until A - C game finishes
             TicTacToeSessionPlayer sessionBAPlayer = (TicTacToeSessionPlayer) playerB.<TicTacToeState> getGameConstructor(TicTacToe.NAME).acceptInvitation(
-                    sessionABPlayer.getConstruction());
+                    sessionABPlayer.getSession());
             // Step 4.1 Checking appropriate alive states for A - B game
             assertLivenes(sessionBAPlayer, false);
             assertLivenes(sessionABPlayer, false);

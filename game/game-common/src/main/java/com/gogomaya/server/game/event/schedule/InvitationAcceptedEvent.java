@@ -14,11 +14,11 @@ public class InvitationAcceptedEvent implements InvitationResponseEvent {
 
     final private long playerId;
 
-    final private long construction;
+    final private long session;
 
     @JsonCreator
-    public InvitationAcceptedEvent(@JsonProperty("construction") long construction, @JsonProperty("playerId") long playerId) {
-        this.construction = construction;
+    public InvitationAcceptedEvent(@JsonProperty("session") long session, @JsonProperty("playerId") long playerId) {
+        this.session = session;
         this.playerId = playerId;
     }
 
@@ -28,13 +28,13 @@ public class InvitationAcceptedEvent implements InvitationResponseEvent {
     }
 
     @Override
-    public long getConstruction() {
-        return construction;
+    public long getSession() {
+        return session;
     }
 
     @Override
     public int hashCode() {
-        return 31 * (31 + (int) (playerId ^ (playerId >>> 32))) + (int) (construction ^ (construction >>> 32));
+        return 31 * (31 + (int) (playerId ^ (playerId >>> 32))) + (int) (session ^ (session >>> 32));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class InvitationAcceptedEvent implements InvitationResponseEvent {
         InvitationAcceptedEvent other = (InvitationAcceptedEvent) obj;
         if (playerId != other.playerId)
             return false;
-        if (construction != other.construction)
+        if (session != other.session)
             return false;
         return true;
     }

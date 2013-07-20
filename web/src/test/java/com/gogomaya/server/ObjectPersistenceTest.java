@@ -44,7 +44,7 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
         ScheduledGame savedScheduledGame = gameScheduleRepository.saveAndFlush(scheduledGame);
         Assert.assertEquals(scheduledGame, savedScheduledGame);
 
-        ScheduledGame foundScheduledGame = gameScheduleRepository.findOne(savedScheduledGame.getConstruction());
+        ScheduledGame foundScheduledGame = gameScheduleRepository.findOne(savedScheduledGame.getSession());
         Assert.assertEquals(foundScheduledGame, savedScheduledGame);
         Assert.assertEquals(foundScheduledGame, scheduledGame);
     }

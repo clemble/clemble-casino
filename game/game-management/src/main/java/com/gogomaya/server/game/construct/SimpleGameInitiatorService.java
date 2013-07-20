@@ -36,7 +36,7 @@ public class SimpleGameInitiatorService implements GameInitiatorService {
 
     @Override
     public boolean initiate(GameInitiation initiation) {
-        if (playerStateManager.markBusy(initiation.getParticipants(), initiation.getConstruction())) {
+        if (playerStateManager.markBusy(initiation.getParticipants(), initiation.getSession())) {
             processor.start(initiation);
             return true;
         }

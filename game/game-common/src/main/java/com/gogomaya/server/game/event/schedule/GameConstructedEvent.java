@@ -13,23 +13,23 @@ public class GameConstructedEvent implements GameConstructionEvent {
      */
     private static final long serialVersionUID = 1069615920429317027L;
 
-    final private long construction;
+    final private long session;
 
     @JsonCreator
-    public GameConstructedEvent(@JsonProperty("constructor") long construction) {
-        this.construction = construction;
+    public GameConstructedEvent(@JsonProperty("session") long session) {
+        this.session = session;
     }
 
     @Override
-    public long getConstruction() {
-        return construction;
+    public long getSession() {
+        return session;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (construction ^ (construction >>> 32));
+        result = prime * result + (int) (session ^ (session >>> 32));
         return result;
     }
 
@@ -42,7 +42,7 @@ public class GameConstructedEvent implements GameConstructionEvent {
         if (getClass() != obj.getClass())
             return false;
         GameConstructedEvent other = (GameConstructedEvent) obj;
-        if (construction != other.construction)
+        if (session != other.session)
             return false;
         return true;
     }

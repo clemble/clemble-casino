@@ -33,8 +33,8 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
-    final public long getConstruction() {
-        return actualPlayer.getConstruction();
+    final public long getSession() {
+        return actualPlayer.getSession();
     }
 
     @Override

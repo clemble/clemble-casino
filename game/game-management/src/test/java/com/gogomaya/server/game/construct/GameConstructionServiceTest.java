@@ -50,10 +50,10 @@ public class GameConstructionServiceTest {
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
 
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
-            constructionService.invitationResponsed(new InvitationAcceptedEvent(construction.getConstruction(), participants.get(i)));
+            constructionService.invitationResponsed(new InvitationAcceptedEvent(construction.getSession(), participants.get(i)));
         }
 
-        GameConstruction finalConstructionState = constructionRepository.findOne(construction.getConstruction());
+        GameConstruction finalConstructionState = constructionRepository.findOne(construction.getSession());
         Assert.assertEquals(finalConstructionState.getState(), GameConstructionState.constructed);
     }
 
@@ -70,7 +70,7 @@ public class GameConstructionServiceTest {
         final CountDownLatch downLatch = new CountDownLatch(NUM_PARTICIPANTS - 1);
         Collection<Callable<GameConstruction>> constructionJobs = new ArrayList<>();
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
-            constructionJobs.add(new GameResponce(construction.getConstruction(), participants.get(i), downLatch, constructionService));
+            constructionJobs.add(new GameResponce(construction.getSession(), participants.get(i), downLatch, constructionService));
         }
 
         ExecutorService executorService = Executors.newFixedThreadPool(NUM_PARTICIPANTS);
@@ -78,7 +78,7 @@ public class GameConstructionServiceTest {
 
         downLatch.await(10, TimeUnit.SECONDS);
 
-        GameConstruction finalConstructionState = constructionRepository.findOne(construction.getConstruction());
+        GameConstruction finalConstructionState = constructionRepository.findOne(construction.getSession());
         Assert.assertEquals(downLatch.getCount(), 0);
         Assert.assertEquals(finalConstructionState.getState(), GameConstructionState.constructed);
     }

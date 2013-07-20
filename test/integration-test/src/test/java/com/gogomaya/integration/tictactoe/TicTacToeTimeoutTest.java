@@ -41,7 +41,7 @@ public class TicTacToeTimeoutTest {
         try {
 
             Assert.assertNotNull(players);
-            Assert.assertEquals(playerA.getConstruction(), playerB.getConstruction());
+            Assert.assertEquals(playerA.getSession(), playerB.getSession());
             Assert.assertEquals(players.size(), 2);
 
             playerA.select(0, 0);
@@ -75,7 +75,7 @@ public class TicTacToeTimeoutTest {
         try {
 
             Assert.assertNotNull(players);
-            Assert.assertEquals(playerA.getConstruction(), playerB.getConstruction());
+            Assert.assertEquals(playerA.getSession(), playerB.getSession());
             Assert.assertEquals(players.size(), 2);
 
             playerA.select(0, 0);

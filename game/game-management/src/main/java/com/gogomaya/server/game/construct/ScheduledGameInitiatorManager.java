@@ -28,7 +28,7 @@ public class ScheduledGameInitiatorManager implements GameInitiatorManager {
         }
         // Step 2. Saving scheduled game
         long startTime = ((ScheduledGameRequest) construction.getRequest()).getStartTime().getTime();
-        ScheduledGame scheduledGame = new ScheduledGame(startTime, construction.getConstruction());
+        ScheduledGame scheduledGame = new ScheduledGame(startTime, construction.getSession());
         scheduledGame = scheduleRepository.saveAndFlush(scheduledGame);
         // Step 3. Checking value
     }

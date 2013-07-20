@@ -21,12 +21,12 @@ import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.event.ExpectedAction;
-import com.gogomaya.server.game.ConstructionAware;
+import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
-@Table(name = "GAME_CONSTRUCTION")
+@Table(name = "GAME_SESSION_CONSTRUCTION")
 @TypeDefs({
         @TypeDef(name = "game_request", typeClass = JsonHibernateType.class, defaultForType = GameRequest.class, parameters = { @Parameter(
                 name = JsonHibernateType.CLASS_NAME_PARAMETER,
@@ -34,7 +34,7 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
         @TypeDef(name = "action_latch", typeClass = JsonHibernateType.class, defaultForType = ActionLatch.class, parameters = { @Parameter(
                 name = JsonHibernateType.CLASS_NAME_PARAMETER,
                 value = "com.gogomaya.server.ActionLatch") }) })
-public class GameConstruction implements ConstructionAware {
+public class GameConstruction implements SessionAware {
 
     /**
      * Generated 10/07/13
@@ -43,8 +43,8 @@ public class GameConstruction implements ConstructionAware {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CONSTRUCTION_ID")
-    private long construction;
+    @Column(name = "SESSION_ID")
+    private long session;
 
     @Type(type = "game_request")
     @Column(name = "REQUEST", length = 4096, nullable = false)
@@ -71,12 +71,12 @@ public class GameConstruction implements ConstructionAware {
     }
 
     @Override
-    public long getConstruction() {
-        return construction;
+    public long getSession() {
+        return session;
     }
 
-    public void setConstruction(long construction) {
-        this.construction = construction;
+    public void setConstruction(long session) {
+        this.session = session;
     }
 
     public GameRequest getRequest() {

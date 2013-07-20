@@ -66,7 +66,7 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
         HttpEntity<InvitationResponseEvent> requestEntity = player.<InvitationResponseEvent> sign(responseEvent);
         // Step 2. Rest template generation
         restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_CONSTRUCTION_RESPONSE, HttpMethod.POST, requestEntity,
-                GameConstruction.class, responseEvent.getConstruction());
+                GameConstruction.class, responseEvent.getSession());
     }
 
 }

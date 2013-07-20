@@ -7,12 +7,12 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gogomaya.server.game.ConstructionAware;
+import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.player.PlayerAware;
 
 @Entity
 @Table(name = "PLAYER_SCHEDULED_EVENT")
-public class PlayerScheduleEvent implements PlayerAware, ConstructionAware, Comparable<PlayerScheduleEvent> {
+public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparable<PlayerScheduleEvent> {
 
     /**
      * Generated 19/06/13
@@ -24,7 +24,7 @@ public class PlayerScheduleEvent implements PlayerAware, ConstructionAware, Comp
     private long playerId;
     @Id
     @Column(name = "CONSTRUCTION_ID")
-    private long construction;
+    private long session;
     @Column(name = "START_TIME")
     private long startTime;
     @Column(name = "END_TIME")
@@ -39,7 +39,7 @@ public class PlayerScheduleEvent implements PlayerAware, ConstructionAware, Comp
             @JsonProperty("startTime") long startTime,
             @JsonProperty("endTime") long endTime) {
         this.playerId = player;
-        this.construction = construction;
+        this.session = construction;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -54,12 +54,12 @@ public class PlayerScheduleEvent implements PlayerAware, ConstructionAware, Comp
     }
 
     @Override
-    public long getConstruction() {
-        return construction;
+    public long getSession() {
+        return session;
     }
 
-    public void setConstruction(long construction) {
-        this.construction = construction;
+    public void setSession(long session) {
+        this.session = session;
     }
 
     public long getStartTime() {
@@ -87,7 +87,7 @@ public class PlayerScheduleEvent implements PlayerAware, ConstructionAware, Comp
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (construction ^ (construction >>> 32));
+        result = prime * result + (int) (session ^ (session >>> 32));
         result = prime * result + (int) (endTime ^ (endTime >>> 32));
         result = prime * result + (int) (getPlayerId() ^ (getPlayerId() >>> 32));
         result = prime * result + (int) (startTime ^ (startTime >>> 32));
@@ -103,7 +103,7 @@ public class PlayerScheduleEvent implements PlayerAware, ConstructionAware, Comp
         if (getClass() != obj.getClass())
             return false;
         PlayerScheduleEvent other = (PlayerScheduleEvent) obj;
-        if (construction != other.construction)
+        if (session != other.session)
             return false;
         return (endTime == other.endTime) && (getPlayerId() == other.getPlayerId()) && (startTime == other.startTime);
     }

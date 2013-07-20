@@ -14,19 +14,19 @@ public class PlayerInvitedEvent implements GameConstructionEvent {
      */
     private static final long serialVersionUID = 1753173974867187325L;
 
-    final private long constuction;
+    final private long session;
 
     final private GameRequest gameRequest;
 
     @JsonCreator
-    public PlayerInvitedEvent(@JsonProperty("construction") long constuction, @JsonProperty("gameRequest") GameRequest request) {
-        this.constuction = constuction;
+    public PlayerInvitedEvent(@JsonProperty("session") long session, @JsonProperty("gameRequest") GameRequest request) {
+        this.session = session;
         this.gameRequest = request;
     }
 
     @Override
-    public long getConstruction() {
-        return constuction;
+    public long getSession() {
+        return session;
     }
 
     public GameRequest getGameRequest() {
@@ -38,7 +38,7 @@ public class PlayerInvitedEvent implements GameConstructionEvent {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((gameRequest == null) ? 0 : gameRequest.hashCode());
-        result = prime * result + (int) (constuction ^ (constuction >>> 32));
+        result = prime * result + (int) (session ^ (session >>> 32));
         return result;
     }
 
@@ -56,7 +56,7 @@ public class PlayerInvitedEvent implements GameConstructionEvent {
                 return false;
         } else if (!gameRequest.equals(other.gameRequest))
             return false;
-        if (constuction != other.constuction)
+        if (session != other.session)
             return false;
         return true;
     }

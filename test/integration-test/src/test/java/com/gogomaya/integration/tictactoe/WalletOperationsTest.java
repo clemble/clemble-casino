@@ -48,7 +48,7 @@ public class WalletOperationsTest {
         do {
             TicTacToeSessionPlayer sessionAPlayer = (TicTacToeSessionPlayer) playerAConstructionOp.constructAvailability(
                     playerAConstructionOp.selectSpecification(), participants);
-            TicTacToeSessionPlayer sessionBPlayer = (TicTacToeSessionPlayer) playerBConstructionOp.acceptInvitation(sessionAPlayer.getConstruction());
+            TicTacToeSessionPlayer sessionBPlayer = (TicTacToeSessionPlayer) playerBConstructionOp.acceptInvitation(sessionAPlayer.getSession());
 
             sessionAPlayer.waitForStart();
             sessionBPlayer.waitForStart();

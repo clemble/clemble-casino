@@ -12,14 +12,14 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
      */
     private static final long serialVersionUID = 655381424177654890L;
 
-    private long playerId;
+    final private long playerId;
 
-    private long construction;
+    final private long session;
 
     @JsonCreator
-    public InvitationDeclinedEvent(@JsonProperty("playerId") long playerId, @JsonProperty("construction") long construction) {
+    public InvitationDeclinedEvent(@JsonProperty("playerId") long playerId, @JsonProperty("session") long session) {
         this.playerId = playerId;
-        this.construction = construction;
+        this.session = session;
     }
 
     @Override
@@ -27,13 +27,9 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
         return playerId;
     }
 
-    public void setPlayerId(long playerId) {
-        this.playerId = playerId;
-    }
-
     @Override
-    public long getConstruction() {
-        return construction;
+    public long getSession() {
+        return session;
     }
 
     @Override
@@ -41,7 +37,7 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (playerId ^ (playerId >>> 32));
-        result = prime * result + (int) (construction ^ (construction >>> 32));
+        result = prime * result + (int) (session ^ (session >>> 32));
         return result;
     }
 
@@ -56,7 +52,7 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
         InvitationDeclinedEvent other = (InvitationDeclinedEvent) obj;
         if (playerId != other.playerId)
             return false;
-        if (construction != other.construction)
+        if (session != other.session)
             return false;
         return true;
     }

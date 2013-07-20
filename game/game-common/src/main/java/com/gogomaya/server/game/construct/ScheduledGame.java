@@ -5,11 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.gogomaya.server.game.ConstructionAware;
+import com.gogomaya.server.game.SessionAware;
 
 @Entity
 @Table(name = "GAME_SCHEDULE")
-public class ScheduledGame implements ConstructionAware {
+public class ScheduledGame implements SessionAware {
 
     /**
      * Generated 10/07/13
@@ -18,7 +18,7 @@ public class ScheduledGame implements ConstructionAware {
 
     @Id
     @Column(name = "CONSTRUCTION_ID")
-    private long construction;
+    private long session;
 
     @Column(name = "START_TIME")
     private long startDate;
@@ -26,18 +26,18 @@ public class ScheduledGame implements ConstructionAware {
     public ScheduledGame() {
     }
 
-    public ScheduledGame( long construction, long startDate) {
-        this.construction = construction;
+    public ScheduledGame( long session, long startDate) {
+        this.session = session;
         this.startDate = startDate;
     }
 
     @Override
-    public long getConstruction() {
-        return construction;
+    public long getSession() {
+        return session;
     }
 
-    public void setConstruction(long construction) {
-        this.construction = construction;
+    public void setSession(long construction) {
+        this.session = construction;
     }
 
     public long getStartDate() {
@@ -52,7 +52,7 @@ public class ScheduledGame implements ConstructionAware {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (construction ^ (construction >>> 32));
+        result = prime * result + (int) (session ^ (session >>> 32));
         result = prime * result + (int) (startDate ^ (startDate >>> 32));
         return result;
     }
@@ -66,7 +66,7 @@ public class ScheduledGame implements ConstructionAware {
         if (getClass() != obj.getClass())
             return false;
         ScheduledGame other = (ScheduledGame) obj;
-        if (construction != other.construction)
+        if (session != other.session)
             return false;
         if (startDate != other.startDate)
             return false;

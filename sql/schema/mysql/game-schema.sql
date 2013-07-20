@@ -23,11 +23,11 @@
         drop 
         foreign key FK9226F07474164E22;
 
-    drop table if exists GAME_CONSTRUCTION;
-
     drop table if exists GAME_SCHEDULE;
 
     drop table if exists GAME_SESSION;
+
+    drop table if exists GAME_SESSION_CONSTRUCTION;
 
     drop table if exists GAME_SESSION_MOVES;
 
@@ -38,15 +38,6 @@
     drop table if exists GAME_TABLE;
 
     drop table if exists GAME_TABLE_PLAYERS;
-
-    create table GAME_CONSTRUCTION (
-        CONSTRUCTION_ID bigint not null auto_increment,
-        REQUEST varchar(4096) not null,
-        RESPONSES varchar(4096) not null,
-        STATE varchar(255) not null,
-        version integer not null,
-        primary key (CONSTRUCTION_ID)
-    ) ENGINE=InnoDB;
 
     create table GAME_SCHEDULE (
         CONSTRUCTION_ID bigint not null,
@@ -61,6 +52,15 @@
         GAME_STATE varchar(4096),
         GAME_NAME varchar(255),
         SPECIFICATION_NAME varchar(255),
+        primary key (SESSION_ID)
+    ) ENGINE=InnoDB;
+
+    create table GAME_SESSION_CONSTRUCTION (
+        SESSION_ID bigint not null auto_increment,
+        REQUEST varchar(4096) not null,
+        RESPONSES varchar(4096) not null,
+        STATE varchar(255) not null,
+        version integer not null,
         primary key (SESSION_ID)
     ) ENGINE=InnoDB;
 

@@ -54,7 +54,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
                 Player player = playerOperations.createPlayer();
                 // Step 1. Start player emulator
                 GameSessionPlayer<State> playerState = gameOperations.constructAutomatic(player, specification);
-                logger.info("Registered {} with construction {} ", playerState.getPlayerId(), playerState.getConstruction());
+                logger.info("Registered {} with construction {} ", playerState.getPlayerId(), playerState.getSession());
                 currentPlayer.set(playerState);
                 lastMoved.set(System.currentTimeMillis());
                 while (!playerState.getState().complete()) {

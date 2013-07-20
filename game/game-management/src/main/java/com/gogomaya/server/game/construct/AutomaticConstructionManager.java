@@ -51,7 +51,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
 
         public GameInitiation toInitiation() {
             // Step 1. Creating instant game request
-            return new GameInitiation(construction.getConstruction(), participants, specification);
+            return new GameInitiation(construction.getSession(), participants, specification);
         }
     }
 

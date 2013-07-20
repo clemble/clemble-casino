@@ -35,7 +35,7 @@ public class GameSessionProcessor<State extends GameState> {
         // Step 1. Allocating table for game initiation
         final GameTable<State> table = tableFactory.constructTable(initiation);
         // Step 2. Sending notification for game started
-        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(initiation.getConstruction(), table));
+        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(initiation.getSession(), table));
         // Step 3. Returning active table
         return table;
     }

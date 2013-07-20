@@ -79,7 +79,7 @@ public class MultipleNotificationsTest {
             playerA.syncWith(playerB);
 
             final NotificationsCounter notificationcCounter = new NotificationsCounter();
-            playerA.getPlayer().listen(playerA.getConstruction(), notificationcCounter);
+            playerA.getPlayer().listen(playerA.getSession(), notificationcCounter);
 
             try {
                 playerA.syncWith(playerB);
@@ -124,7 +124,7 @@ public class MultipleNotificationsTest {
             playerA = ((TicTacToeSessionPlayer) (GameSessionPlayer<TicTacToeState>) (GameSessionPlayer<?>) playerA.getPlayer()
                     .getGameConstructor(TicTacToe.NAME).constructAvailability(playerB.getPlayer()));
             playerB = ((TicTacToeSessionPlayer) (GameSessionPlayer<TicTacToeState>) (GameSessionPlayer<?>) playerB.getPlayer()
-                    .getGameConstructor(TicTacToe.NAME).acceptInvitation(playerA.getConstruction()));
+                    .getGameConstructor(TicTacToe.NAME).acceptInvitation(playerA.getSession()));
         }
     }
 }

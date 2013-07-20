@@ -63,11 +63,11 @@ public class SimpleGameConstructionService implements GameConstructionService {
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(request);
         construction.setState(GameConstructionState.pending);
-        construction.getResponses().put(request.getPlayerId(), new InvitationAcceptedEvent(construction.getConstruction(), request.getPlayerId()));
+        construction.getResponses().put(request.getPlayerId(), new InvitationAcceptedEvent(construction.getSession(), request.getPlayerId()));
         construction = constructionRepository.saveAndFlush(construction);
         // Step 4. Sending invitation to opponents
         if (!construction.getResponses().complete()) {
-            playerNotificationService.notify(request.getParticipants(), new PlayerInvitedEvent(construction.getConstruction(), request));
+            playerNotificationService.notify(request.getParticipants(), new PlayerInvitedEvent(construction.getSession(), request));
         } else {
             constructionComplete(construction);
         }
@@ -85,7 +85,7 @@ public class SimpleGameConstructionService implements GameConstructionService {
     final private GameConstruction tryAcceptResponce(InvitationResponseEvent response) {
         try {
             // Step 1. Checking associated construction
-            GameConstruction construction = constructionRepository.findOne(response.getConstruction());
+            GameConstruction construction = constructionRepository.findOne(response.getSession());
             if (construction == null)
                 throw GogomayaException.fromError(GogomayaError.GameConstructionDoesNotExistent);
             if (construction.getState() != GameConstructionState.pending)
@@ -114,7 +114,7 @@ public class SimpleGameConstructionService implements GameConstructionService {
         construction = constructionRepository.saveAndFlush(construction);
         // Step 2. Notifying Participants
         ActionLatch responseLatch = construction.getResponses();
-        playerNotificationService.notify(responseLatch.fetchParticipants(), new GameConstructedEvent(construction.getConstruction()));
+        playerNotificationService.notify(responseLatch.fetchParticipants(), new GameConstructedEvent(construction.getSession()));
         // Step 3. Moving to the next step
         initiatorService.initiate(construction);
         return construction;

@@ -49,7 +49,7 @@ public class GameScenarios {
         // Step 2. Creating availability game request
         GameSessionPlayer<State> sessionPlayer = players.get(0).<State> getGameConstructor(gameName).constructAvailability(specification, participants);
         constructedGames.add(sessionPlayer);
-        long construction = sessionPlayer.getConstruction();
+        long construction = sessionPlayer.getSession();
         for (int i = 1; i < numPlayers; i++) {
             constructedGames.add(players.get(i).<State> getGameConstructor(gameName).acceptInvitation(construction));
         }
