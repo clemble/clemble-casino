@@ -1,7 +1,5 @@
 package com.gogomaya.server.spring.game;
 
-import java.util.Collection;
-
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +21,7 @@ import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.construct.GameInitiatorService;
 import com.gogomaya.server.game.construct.SimpleGameConstructionService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.payment.PaymentOperation;
-import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionService;
-import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
@@ -35,11 +29,12 @@ import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
+import com.gogomaya.server.spring.payment.CommonPaymentSpringConfiguration;
 import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, GameManagementSpringConfiguration.DefaultAndTest.class,
-        GameManagementSpringConfiguration.Cloud.class, GameManagementSpringConfiguration.Test.class })
+@Import(value = { CommonSpringConfiguration.class, CommonPaymentSpringConfiguration.class, PlayerCommonSpringConfiguration.class,
+        GameManagementSpringConfiguration.DefaultAndTest.class, GameManagementSpringConfiguration.Cloud.class, GameManagementSpringConfiguration.Test.class })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -97,10 +92,13 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Autowired
         public GameConstructionRepository constructionRepository;
 
+        @Autowired
+        public PlayerAccountService playerAccountService;
+
         @Bean
         @Singleton
         public GameConstructionService gameConstructionService() {
-            return new SimpleGameConstructionService(playerWalletService(), playerNotificationService, constructionRepository, initiatorService(),
+            return new SimpleGameConstructionService(playerAccountService, playerNotificationService, constructionRepository, initiatorService(),
                     playerLockService, playerStateManager);
         }
 
@@ -114,44 +112,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
                 @Override
                 public boolean initiate(GameInitiation initiation) {
-                    return true;
-                }
-            };
-        }
-
-        @Bean
-        @Singleton
-        public PaymentTransactionService paymentTransactionService() {
-            return new PaymentTransactionService() {
-
-                @Override
-                public PaymentTransaction process(PaymentTransaction paymentTransaction) {
-                    return paymentTransaction;
-                }
-
-                @Override
-                public PaymentTransaction register(PlayerProfile playerId) {
-                    return new PaymentTransaction();
-                }
-            };
-        }
-
-        @Bean
-        @Singleton
-        public PlayerAccountService playerWalletService() {
-            return new PlayerAccountService() {
-                @Override
-                public boolean canAfford(PaymentOperation paymentOperation) {
-                    return true;
-                }
-
-                @Override
-                public boolean canAfford(long playerId, Money ammount) {
-                    return true;
-                }
-
-                @Override
-                public boolean canAfford(Collection<Long> playerId, Money ammount) {
                     return true;
                 }
             };

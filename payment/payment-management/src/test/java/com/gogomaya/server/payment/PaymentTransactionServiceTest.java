@@ -21,7 +21,7 @@ import com.gogomaya.server.payment.PaymentTransactionId;
 import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
-import com.gogomaya.server.spring.player.account.PaymentManagementSpringConfiguration;
+import com.gogomaya.server.spring.payment.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")

@@ -1,4 +1,4 @@
-package com.gogomaya.server.spring.player.account;
+package com.gogomaya.server.spring.payment;
 
 import javax.inject.Singleton;
 

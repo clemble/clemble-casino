@@ -13,7 +13,7 @@ import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.player.account.PaymentManagementSpringConfiguration;
+import com.gogomaya.server.spring.payment.PaymentManagementSpringConfiguration;
 import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
 import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.account.PlayerAccountController;
