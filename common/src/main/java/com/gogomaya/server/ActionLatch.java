@@ -55,6 +55,10 @@ public class ActionLatch implements Serializable {
         return actions;
     }
 
+    public ExpectedAction fetchAction(long player) {
+        return actions.get(player);
+    }
+
     public ExpectedAction put(long participant, ExpectedAction action) {
         if (contains(participant))
             return actions.put(participant, action);

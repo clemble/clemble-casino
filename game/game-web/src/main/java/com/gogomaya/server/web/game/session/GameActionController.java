@@ -1,4 +1,4 @@
-package com.gogomaya.server.web.active.session;
+package com.gogomaya.server.web.game.session;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -15,15 +15,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameSessionProcessor;
+import com.gogomaya.server.game.event.client.MadeMove;
+import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.web.mapping.GameWebMapping;
 
 @Controller
 public class GameActionController<State extends GameState> {
 
     final private GameSessionProcessor<State> sessionProcessor;
+    final private GameSessionRepository<State> sessionRepository;
 
-    public GameActionController(final GameSessionProcessor<State> sessionProcessor) {
+    public GameActionController(final GameSessionRepository<State> sessionRepository, final GameSessionProcessor<State> sessionProcessor) {
         this.sessionProcessor = checkNotNull(sessionProcessor);
+        this.sessionRepository = checkNotNull(sessionRepository);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSION_ACTIONS, produces = "application/json")
@@ -39,4 +43,10 @@ public class GameActionController<State extends GameState> {
         return sessionProcessor.process(sessionId, move);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSION_ACTIONS_ACTION, produces = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody
+    MadeMove getAction(@RequestHeader("playerId") long playerId, @PathVariable("sessionId") long sessionId, @PathVariable("actionId") int actionId) {
+        return sessionRepository.findAction(sessionId, actionId);
+    }
 }

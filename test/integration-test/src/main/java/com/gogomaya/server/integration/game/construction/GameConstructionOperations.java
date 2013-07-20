@@ -2,6 +2,7 @@ package com.gogomaya.server.integration.game.construction;
 
 import java.util.Collection;
 
+import com.gogomaya.server.event.ExpectedAction;
 import com.gogomaya.server.game.GameAware;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
@@ -17,6 +18,8 @@ public interface GameConstructionOperations<State extends GameState> extends Gam
     public GameSpecification selectSpecification(Player player);
 
     public GameSpecificationOptions getOptions(Player player);
+
+    public ExpectedAction constructionResponse(Player player, long requested, long construction);
 
     public GameSessionPlayer<State> constructAutomatic(Player player);
 

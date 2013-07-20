@@ -1,4 +1,4 @@
-package com.gogomaya.server.web.game.configuration;
+package com.gogomaya.server.web.game.options;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

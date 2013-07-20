@@ -3,8 +3,8 @@ package com.gogomaya.server.integration.game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.web.active.session.GameConstructionController;
-import com.gogomaya.server.web.active.session.GameActionController;
+import com.gogomaya.server.web.game.session.GameActionController;
+import com.gogomaya.server.web.game.session.GameConstructionController;
 
 public class WebGameSessionPlayerFactory<State extends GameState> implements GameSessionPlayerFactory<State> {
 

@@ -1,4 +1,4 @@
-package com.gogomaya.server.web.active.session;
+package com.gogomaya.server.web.game.session;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.event.ExpectedAction;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.server.game.construct.GameConstruction;
@@ -49,17 +50,6 @@ public class GameConstructionController<State extends GameState> {
         return constructionService.construct(gameRequest);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, produces = "application/json")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    GameConstruction invitationResponsed(
-            @RequestHeader("playerId") final long playerId,
-            @PathVariable("sessionId") long sessionId,
-            @RequestBody final InvitationResponseEvent gameRequest) {
-        // Step 1. Invoking actual matching service
-        return constructionService.invitationResponsed(gameRequest);
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
@@ -71,5 +61,26 @@ public class GameConstructionController<State extends GameState> {
             throw GogomayaException.fromError(GogomayaError.GameConstructionDoesNotExistent);
         // Step 3. Returning construction
         return construction;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, produces = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody
+    ExpectedAction getResponce(
+            @RequestHeader("playerId") final long requester,
+            @PathVariable("sessionId") final long session,
+            @PathVariable("playerId") final long player) {
+        return constructionRepository.findOne(session).getResponses().fetchAction(player);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, produces = "application/json")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public @ResponseBody
+    GameConstruction invitationResponsed(
+            @RequestHeader("playerId") final long playerId,
+            @PathVariable("sessionId") long sessionId,
+            @RequestBody final InvitationResponseEvent gameRequest) {
+        // Step 1. Invoking actual matching service
+        return constructionService.invitationResponsed(gameRequest);
     }
 }

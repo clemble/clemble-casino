@@ -2,6 +2,7 @@ package com.gogomaya.server.integration.game.construction;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.server.event.ExpectedAction;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameConstruction;
@@ -10,8 +11,8 @@ import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.web.active.session.GameConstructionController;
-import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
+import com.gogomaya.server.web.game.options.GameConfigurationManagerController;
+import com.gogomaya.server.web.game.session.GameConstructionController;
 
 public class WebGameConstructionOperations<State extends GameState> extends AbstractGameConstructionOperation<State> {
 
@@ -24,8 +25,10 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
 
     final private GameConstructionController<TicTacToeState> constructionController;
 
-    public WebGameConstructionOperations(final String name, final GameConfigurationManagerController configurationManagerController,
-            final GameConstructionController<TicTacToeState> matchController, final GameSessionPlayerFactory<State> playerFactory) {
+    public WebGameConstructionOperations(final String name,
+            final GameConfigurationManagerController configurationManagerController,
+            final GameConstructionController<TicTacToeState> matchController,
+            final GameSessionPlayerFactory<State> playerFactory) {
         super(name, playerFactory);
         this.configuartionManagerController = checkNotNull(configurationManagerController);
         this.constructionController = checkNotNull(matchController);
@@ -44,6 +47,11 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
     @Override
     protected void response(Player player, InvitationResponseEvent responseEvent) {
         constructionController.invitationResponsed(player.getPlayerId(), responseEvent.getSession(), responseEvent);
+    }
+
+    @Override
+    public ExpectedAction constructionResponse(Player player, long requested, long construction) {
+        return constructionController.getResponce(player.getPlayerId(), construction, requested);
     }
 
 }

@@ -7,7 +7,7 @@ import com.gogomaya.server.game.ServerResourse;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GameClientEvent;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.web.active.session.GameActionController;
+import com.gogomaya.server.web.game.session.GameActionController;
 
 public class WebGameSessionPlayer<State extends GameState> extends AbstractGameSessionPlayer<State> {
 
