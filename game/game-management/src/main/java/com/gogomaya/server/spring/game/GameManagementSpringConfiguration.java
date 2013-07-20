@@ -28,10 +28,10 @@ import com.gogomaya.server.payment.PaymentOperation;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.player.wallet.PlayerWalletService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
@@ -138,10 +138,10 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public PlayerWalletService playerWalletService() {
-            return new PlayerWalletService() {
+        public PlayerAccountService playerWalletService() {
+            return new PlayerAccountService() {
                 @Override
-                public boolean canAfford(PaymentOperation walletOperation) {
+                public boolean canAfford(PaymentOperation paymentOperation) {
                     return true;
                 }
 

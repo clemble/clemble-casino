@@ -29,6 +29,9 @@ import com.gogomaya.server.integration.payment.WebPaymentTransactionOperations;
 import com.gogomaya.server.integration.player.IntegrationPlayerOperations;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.WebPlayerOperations;
+import com.gogomaya.server.integration.player.account.AccountOperations;
+import com.gogomaya.server.integration.player.account.IntegrationAccountOperations;
+import com.gogomaya.server.integration.player.account.WebAccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.listener.SimplePlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.IntegrationProfileOperations;
@@ -37,9 +40,6 @@ import com.gogomaya.server.integration.player.profile.WebProfileOperations;
 import com.gogomaya.server.integration.player.session.IntegrationSessionOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.integration.player.session.WebSessionOperations;
-import com.gogomaya.server.integration.player.wallet.IntegrationWalletOperations;
-import com.gogomaya.server.integration.player.wallet.WalletOperations;
-import com.gogomaya.server.integration.player.wallet.WebWalletOperations;
 import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.payment.PaymentOperation;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
@@ -47,12 +47,12 @@ import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.gogomaya.server.web.active.session.GameConstructionController;
 import com.gogomaya.server.web.active.session.GameEngineController;
 import com.gogomaya.server.web.game.configuration.GameConfigurationManagerController;
+import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
+import com.gogomaya.server.web.player.account.PlayerAccountController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
-import com.gogomaya.server.web.player.wallet.PaymentTransactionController;
-import com.gogomaya.server.web.player.wallet.PlayerWalletController;
 
 @Configuration
 @Import(value = { JsonSpringConfiguration.class, TestConfiguration.LocalTestConfiguration.class, TestConfiguration.LocalIntegrationTestConfiguration.class,
@@ -91,8 +91,8 @@ public class TestConfiguration {
         public PlayerSessionController playerSessionController;
 
         @Autowired
-        @Qualifier("walletController")
-        public PlayerWalletController playerWalletController;
+        @Qualifier("playerAccountController")
+        public PlayerAccountController playerAccountController;
 
         @Autowired
         @Qualifier("ticTacToeConfigurationManagerController")
@@ -121,14 +121,14 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, sessionOperations(), walletOperations(),
+            return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, sessionOperations(), accountOperations(),
                     playerListenerOperations(), playerProfileOperations(), ticTacToeGameConstructionOperations());
         }
 
         @Bean
         @Singleton
-        public WalletOperations walletOperations() {
-            return new WebWalletOperations(playerWalletController);
+        public AccountOperations accountOperations() {
+            return new WebAccountOperations(playerAccountController);
         }
 
         @Bean
@@ -232,15 +232,15 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public WalletOperations walletOperations() {
-            return new IntegrationWalletOperations(restTemplate(), getBaseUrl());
+        public AccountOperations accountOperations() {
+            return new IntegrationAccountOperations(restTemplate(), getBaseUrl());
         }
 
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
             return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
-                    walletOperations(), ticTacToeGameConstructionOperations());
+                    accountOperations(), ticTacToeGameConstructionOperations());
         }
 
         @Bean

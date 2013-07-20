@@ -6,6 +6,6 @@ public interface PaymentTransactionService {
 
     public PaymentTransaction register(PlayerProfile playerProfile);
 
-    public PaymentTransaction process(PaymentTransaction walletTransaction);
+    public PaymentTransaction process(PaymentTransaction paymentTransaction);
 
 }

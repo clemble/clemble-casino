@@ -60,21 +60,21 @@ public class GamePostProcessorListener<State extends GameState> implements GameP
     private void winnerOutcome(final PlayerWonOutcome outcome, final GameSession<State> session) {
         long winnerId = outcome.getWinner();
         Currency currency = session.getSpecification().getCurrency();
-        // Step 2. Generating wallet transaction
+        // Step 2. Generating payment transaction
         long totalWinning = 0;
         PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(session.getSession());
-        PaymentTransaction walletTransaction = new PaymentTransaction().setTransactionId(transactionId);
+        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionId(transactionId);
         for (GamePlayerState playerState : session.getState().getPlayerStates()) {
             if (playerState.getPlayerId() != winnerId) {
                 totalWinning = playerState.getMoneySpent();
-                walletTransaction.addPaymentOperation(new PaymentOperation().setAmmount(Money.create(currency, playerState.getMoneySpent()))
+                paymentTransaction.addPaymentOperation(new PaymentOperation().setAmmount(Money.create(currency, playerState.getMoneySpent()))
                         .setOperation(Operation.Credit).setPlayerId(playerState.getPlayerId()));
             }
         }
-        walletTransaction.addPaymentOperation(new PaymentOperation().setAmmount(Money.create(currency, totalWinning)).setOperation(Operation.Debit)
+        paymentTransaction.addPaymentOperation(new PaymentOperation().setAmmount(Money.create(currency, totalWinning)).setOperation(Operation.Debit)
                 .setPlayerId(winnerId));
-        // Step 3. Processing wallet transaction
-        paymentTransactionService.process(walletTransaction);
+        // Step 3. Processing payment transaction
+        paymentTransactionService.process(paymentTransaction);
     }
 
 }

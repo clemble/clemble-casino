@@ -3,17 +3,17 @@
         drop 
         foreign key FK27595F6D8230C2AC;
 
-    alter table PLAYER_WALLET_MONEY 
+    alter table PLAYER_ACCOUNT_AMOUNT 
         drop 
-        foreign key FK927D05788C841CF1;
+        foreign key FKC949D3E88E9CB787;
 
     drop table if exists PAYMENT_TRANSACTION;
 
     drop table if exists PAYMENT_TRANSACTION_OPERATION;
 
-    drop table if exists PLAYER_WALLET;
+    drop table if exists PLAYER_ACCOUNT;
 
-    drop table if exists PLAYER_WALLET_MONEY;
+    drop table if exists PLAYER_ACCOUNT_AMOUNT;
 
     create table PAYMENT_TRANSACTION (
         MONEY_SOURCE varchar(255) not null,
@@ -31,12 +31,12 @@
         PLAYER_ID bigint
     ) ENGINE=InnoDB;
 
-    create table PLAYER_WALLET (
+    create table PLAYER_ACCOUNT (
         PLAYER_ID bigint not null,
         primary key (PLAYER_ID)
     ) ENGINE=InnoDB;
 
-    create table PLAYER_WALLET_MONEY (
+    create table PLAYER_ACCOUNT_AMOUNT (
         PLAYER_ID bigint not null,
         CURRENCY integer,
         AMOUNT bigint
@@ -48,8 +48,8 @@
         foreign key (TRANSACTION_ID, MONEY_SOURCE) 
         references PAYMENT_TRANSACTION (MONEY_SOURCE, TRANSACTION_ID);
 
-    alter table PLAYER_WALLET_MONEY 
-        add index FK927D05788C841CF1 (PLAYER_ID), 
-        add constraint FK927D05788C841CF1 
+    alter table PLAYER_ACCOUNT_AMOUNT 
+        add index FKC949D3E88E9CB787 (PLAYER_ID), 
+        add constraint FKC949D3E88E9CB787 
         foreign key (PLAYER_ID) 
-        references PLAYER_WALLET (PLAYER_ID);
+        references PLAYER_ACCOUNT (PLAYER_ID);

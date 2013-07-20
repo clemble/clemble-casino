@@ -59,8 +59,8 @@ public class PlayerManagementSpringConfiguration implements SpringConfiguration 
                 }
 
                 @Override
-                public PaymentTransaction process(PaymentTransaction walletTransaction) {
-                    return walletTransaction;
+                public PaymentTransaction process(PaymentTransaction paymentTransaction) {
+                    return paymentTransaction;
                 }
             };
         }

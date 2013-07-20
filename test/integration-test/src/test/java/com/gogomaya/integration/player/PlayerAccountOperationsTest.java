@@ -21,12 +21,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
-import com.gogomaya.server.integration.player.wallet.WalletOperations;
+import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.util.GogomayaExceptionMatcherFactory;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.player.wallet.PlayerWallet;
+import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 
@@ -34,13 +34,13 @@ import com.gogomaya.server.test.RedisCleaner;
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
-public class PlayerWalletOperationsTest {
+public class PlayerAccountOperationsTest {
 
     @Autowired
     public PlayerOperations playerOperations;
 
     @Autowired
-    public WalletOperations walletOperations;
+    public AccountOperations accountOperations;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -50,40 +50,40 @@ public class PlayerWalletOperationsTest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer();
         // Step 2. Checking there is at least one
-        PlayerWallet wallet = player.getWalletOperations().getWallet();
+        PlayerAccount accountA = player.getWalletOperations().getAccount();
         // Step 3. Checking that there are some fake moneys in the newly created account
-        assertNotNull(wallet);
-        assertNotNull(wallet.getMoney(Currency.FakeMoney));
-        assertTrue(wallet.getMoney(Currency.FakeMoney).getAmount() > 0);
+        assertNotNull(accountA);
+        assertNotNull(accountA.getMoney(Currency.FakeMoney));
+        assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
         // Step 4. Checking that there are some fake moneys in the newly created account, accesed through WalletOperations
-        PlayerWallet walletThrough = walletOperations.getWallet(player);
-        assertNotNull(walletThrough);
-        assertNotNull(walletThrough.getMoney(Currency.FakeMoney));
-        assertEquals(walletThrough, wallet);
+        PlayerAccount accountB = accountOperations.getAccount(player);
+        assertNotNull(accountB);
+        assertNotNull(accountB.getMoney(Currency.FakeMoney));
+        assertEquals(accountB, accountA);
         // Step 5. Checking that there are some fake moneys in the newly created account, accesed through another WalletOperations
-        PlayerWallet anotherWallet = walletOperations.getWallet(player, player.getPlayerId());
+        PlayerAccount anotherWallet = accountOperations.getAccount(player, player.getPlayerId());
         assertNotNull(anotherWallet);
         assertNotNull(anotherWallet.getMoney(Currency.FakeMoney));
-        assertEquals(anotherWallet, wallet);
+        assertEquals(anotherWallet, accountA);
 
         Player anotherPlayer = playerOperations.createPlayer();
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerWalletAccessDenied));
-        walletOperations.getWallet(player, anotherPlayer.getPlayerId());
+        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerAccountAccessDenied));
+        accountOperations.getAccount(player, anotherPlayer.getPlayerId());
     }
 
     @Test
     public void testTransactionsListAccess() {
         // Step 1. Checking player has no transactions to access
         Player player = playerOperations.createPlayer();
-        List<PaymentTransaction> transactions = walletOperations.getTransactions(player);
+        List<PaymentTransaction> transactions = accountOperations.getTransactions(player);
         Assert.assertFalse(transactions.isEmpty());
         // Step 2. Checking no other player can't access the transactions
         Player anotherPlayer = playerOperations.createPlayer();
-        Assert.assertFalse(walletOperations.getTransactions(anotherPlayer).isEmpty());
+        Assert.assertFalse(accountOperations.getTransactions(anotherPlayer).isEmpty());
         // Step 3. Checking no other player can access the transactions
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionAccessDenied));
-        walletOperations.getTransactions(player, anotherPlayer.getPlayerId());
+        accountOperations.getTransactions(player, anotherPlayer.getPlayerId());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class PlayerWalletOperationsTest {
         // Step 1. Checking player has no transactions to access
         Player player = playerOperations.createPlayer();
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionNotExists));
-        walletOperations.getTransaction(player, MoneySource.TicTacToe, -1);
+        accountOperations.getTransaction(player, MoneySource.TicTacToe, -1);
     }
 
 }

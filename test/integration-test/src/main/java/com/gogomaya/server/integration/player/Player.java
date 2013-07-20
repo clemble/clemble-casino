@@ -14,14 +14,14 @@ import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.integration.game.GameSessionListener;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.PlayerGameConstructionOperations;
+import com.gogomaya.server.integration.player.account.AccountOperations;
+import com.gogomaya.server.integration.player.account.PlayerAccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerManager;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.PlayerSessionOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.server.integration.player.wallet.PlayerWalletOperations;
-import com.gogomaya.server.integration.player.wallet.WalletOperations;
 import com.gogomaya.server.player.PlayerAware;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
@@ -45,19 +45,19 @@ public class Player implements PlayerAware {
     final private Map<String, PlayerGameConstructionOperations<?>> gameConstructors;
 
     final private PlayerSessionOperations playerSessionOperations;
-    final private PlayerWalletOperations playerWalletOperations;
+    final private PlayerAccountOperations playerWalletOperations;
     final private PlayerProfileOperations profileOperations;
 
     public Player(final PlayerIdentity playerIdentity,
             final PlayerCredential credential,
             final ProfileOperations playerProfileOperations,
             final SessionOperations sessionOperations,
-            final WalletOperations walletOperations,
+            final AccountOperations accountOperations,
             final PlayerListenerOperations listenerOperations,
             final GameConstructionOperations<?>... playerConstructionOperations) {
         this.profileOperations = new PlayerProfileOperations(this, playerProfileOperations);
         this.playerSessionOperations = new PlayerSessionOperations(this, sessionOperations);
-        this.playerWalletOperations = new PlayerWalletOperations(this, walletOperations);
+        this.playerWalletOperations = new PlayerAccountOperations(this, accountOperations);
 
         this.identity = checkNotNull(playerIdentity);
         this.playerId = identity.getPlayerId();
@@ -80,7 +80,7 @@ public class Player implements PlayerAware {
         return profileOperations;
     }
 
-    public PlayerWalletOperations getWalletOperations() {
+    public PlayerAccountOperations getWalletOperations() {
         return playerWalletOperations;
     }
 

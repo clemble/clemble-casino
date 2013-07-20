@@ -1,17 +1,17 @@
-package com.gogomaya.server.integration.player.wallet;
+package com.gogomaya.server.integration.player.account;
 
 import java.util.List;
 
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.player.wallet.PlayerWallet;
+import com.gogomaya.server.player.account.PlayerAccount;
 
-abstract public class AbstractWalletOperations implements WalletOperations {
+abstract public class AbstractAccountOperations implements AccountOperations {
 
     @Override
-    final public PlayerWallet getWallet(Player player) {
-        return getWallet(player, player.getPlayerId());
+    final public PlayerAccount getAccount(Player player) {
+        return getAccount(player, player.getPlayerId());
     }
 
     @Override

@@ -15,12 +15,12 @@
         PLAYER_ID bigint
     );
 
-    create table PLAYER_WALLET (
+    create table PLAYER_ACCOUNT (
         PLAYER_ID bigint not null,
         primary key (PLAYER_ID)
     );
 
-    create table PLAYER_WALLET_MONEY (
+    create table PLAYER_ACCOUNT_AMOUNT (
         PLAYER_ID bigint not null,
         CURRENCY integer,
         AMOUNT bigint
@@ -31,7 +31,7 @@
         foreign key (TRANSACTION_ID, MONEY_SOURCE) 
         references PAYMENT_TRANSACTION;
 
-    alter table PLAYER_WALLET_MONEY 
-        add constraint FK927D05788C841CF1 
+    alter table PLAYER_ACCOUNT_AMOUNT 
+        add constraint FKC949D3E88E9CB787 
         foreign key (PLAYER_ID) 
-        references PLAYER_WALLET;
+        references PLAYER_ACCOUNT;

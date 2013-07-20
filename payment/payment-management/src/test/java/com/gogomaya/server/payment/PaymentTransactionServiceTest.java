@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.wallet;
+package com.gogomaya.server.payment;
 
 import javax.inject.Inject;
 
@@ -19,16 +19,17 @@ import com.gogomaya.server.payment.PaymentOperation;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionId;
 import com.gogomaya.server.payment.PaymentTransactionService;
-import com.gogomaya.server.repository.player.PlayerWalletRepository;
-import com.gogomaya.server.spring.player.wallet.PaymentManagementSpringConfiguration;
+import com.gogomaya.server.player.account.PlayerAccount;
+import com.gogomaya.server.repository.player.PlayerAccountRepository;
+import com.gogomaya.server.spring.player.account.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
 @ContextConfiguration(classes = PaymentManagementSpringConfiguration.class)
-public class PlayerWalletManagerTest {
+public class PaymentTransactionServiceTest {
 
     @Inject
-    public PlayerWalletRepository walletRepository;
+    public PlayerAccountRepository playerAccountRepository;
 
     @Inject
     public PaymentTransactionService paymentTransactionService;
@@ -38,12 +39,12 @@ public class PlayerWalletManagerTest {
 
     @Before
     public void initialize() {
-        PlayerWallet walletFrom = new PlayerWallet().add(Money.create(Currency.FakeMoney, 100)).setPlayerId(playerFrom);
+        PlayerAccount accountFrom = new PlayerAccount().add(Money.create(Currency.FakeMoney, 100)).setPlayerId(playerFrom);
 
-        PlayerWallet walletTo = new PlayerWallet().add(Money.create(Currency.FakeMoney, 50)).setPlayerId(playerTo);
+        PlayerAccount accountTo = new PlayerAccount().add(Money.create(Currency.FakeMoney, 50)).setPlayerId(playerTo);
 
-        walletRepository.saveAndFlush(walletFrom);
-        walletRepository.saveAndFlush(walletTo);
+        playerAccountRepository.saveAndFlush(accountFrom);
+        playerAccountRepository.saveAndFlush(accountTo);
     }
 
     @Test
@@ -52,14 +53,14 @@ public class PlayerWalletManagerTest {
 
         PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(1L);
 
-        PaymentTransaction walletTransaction = new PaymentTransaction().setTransactionId(transactionId)
+        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionId(transactionId)
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmmount(ammount))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmmount(ammount));
 
-        paymentTransactionService.process(walletTransaction);
+        paymentTransactionService.process(paymentTransaction);
 
-        Assert.assertEquals(walletRepository.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + ammount.getAmount());
-        Assert.assertEquals(walletRepository.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - ammount.getAmount());
+        Assert.assertEquals(playerAccountRepository.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + ammount.getAmount());
+        Assert.assertEquals(playerAccountRepository.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - ammount.getAmount());
     }
 
 }

@@ -20,8 +20,8 @@ import com.gogomaya.server.payment.PaymentTransactionId;
 import com.gogomaya.server.player.PlayerCategory;
 import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.wallet.PlayerWallet;
 import com.stresstest.random.AbstractValueGenerator;
 import com.stresstest.random.ObjectGenerator;
 
@@ -67,11 +67,11 @@ public class ObjectTest {
             }
 
         });
-        ObjectGenerator.register(PlayerWallet.class, new AbstractValueGenerator<PlayerWallet>() {
+        ObjectGenerator.register(PlayerAccount.class, new AbstractValueGenerator<PlayerAccount>() {
 
             @Override
-            public PlayerWallet generate() {
-                return new PlayerWallet().setPlayerId(0).add(Money.create(Currency.FakeMoney, 500));
+            public PlayerAccount generate() {
+                return new PlayerAccount().setPlayerId(0).add(Money.create(Currency.FakeMoney, 500));
             }
 
         });

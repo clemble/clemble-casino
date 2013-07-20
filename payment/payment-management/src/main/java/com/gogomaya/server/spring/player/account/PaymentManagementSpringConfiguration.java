@@ -1,4 +1,4 @@
-package com.gogomaya.server.spring.player.wallet;
+package com.gogomaya.server.spring.player.account;
 
 import javax.inject.Singleton;
 
@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Import;
 
 import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.payment.PaymentTransactionServiceImpl;
-import com.gogomaya.server.player.wallet.PlayerWalletService;
-import com.gogomaya.server.player.wallet.PlayerWalletServiceImpl;
+import com.gogomaya.server.player.account.PlayerAccountService;
+import com.gogomaya.server.player.account.PlayerAccountServiceImpl;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
-import com.gogomaya.server.repository.player.PlayerWalletRepository;
+import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 
@@ -22,8 +22,8 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 public class PaymentManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired
-    @Qualifier("playerWalletRepository")
-    public PlayerWalletRepository playerWalletRepository;
+    @Qualifier("playerAccountRepository")
+    public PlayerAccountRepository playerAccountRepository;
 
     @Autowired
     @Qualifier("paymentTransactionRepository")
@@ -31,14 +31,14 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
 
     @Bean
     @Singleton
-    public PlayerWalletService playerWalletService() {
-        return new PlayerWalletServiceImpl(playerWalletRepository);
+    public PlayerAccountService playerWalletService() {
+        return new PlayerAccountServiceImpl(playerAccountRepository);
     }
     
     @Bean
     @Singleton
     public PaymentTransactionService paymentTransactionService() {
-        return new PaymentTransactionServiceImpl(paymentTransactionRepository, playerWalletRepository);
+        return new PaymentTransactionServiceImpl(paymentTransactionRepository, playerAccountRepository);
     }
 
 }

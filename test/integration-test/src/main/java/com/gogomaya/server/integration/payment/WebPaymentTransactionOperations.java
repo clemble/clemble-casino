@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.web.player.wallet.PaymentTransactionController;
+import com.gogomaya.server.web.payment.PaymentTransactionController;
 
 public class WebPaymentTransactionOperations  extends AbstractPaymentTransactionOperations {
 

@@ -22,7 +22,7 @@ public class IntegrationPaymentTransactionOperations extends AbstractPaymentTran
 
     @Override
     public PaymentTransaction perform(PaymentTransaction transaction) {
-        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.WALLET_PREFIX + PaymentWebMapping.WALLET_TRANSACTIONS, transaction,
+        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_TRANSACTIONS, transaction,
                 PaymentTransaction.class).getBody();
     }
 
@@ -31,7 +31,7 @@ public class IntegrationPaymentTransactionOperations extends AbstractPaymentTran
         // Step 1. Generating empty signed request
         HttpEntity<Void> signedRequest = player.sign(null);
         // Step 2. Performing empty signed GET request
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.WALLET_PREFIX + PaymentWebMapping.WALLET_TRANSACTIONS_TRANSACTION, HttpMethod.GET, signedRequest,
+        return restTemplate.exchange(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, signedRequest,
                 PaymentTransaction.class, source, transactionId).getBody();
     }
 

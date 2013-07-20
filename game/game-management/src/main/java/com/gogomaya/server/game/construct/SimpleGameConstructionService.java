@@ -14,29 +14,29 @@ import com.gogomaya.server.game.event.schedule.InvitationDeclinedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.game.event.schedule.PlayerInvitedEvent;
 import com.gogomaya.server.money.Money;
+import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.player.wallet.PlayerWalletService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 
 public class SimpleGameConstructionService implements GameConstructionService {
 
     final private AutomaticConstructionManager automaticGameInitiatorManager;
 
-    final private PlayerWalletService playerWalletService;
+    final private PlayerAccountService playerAccounttService;
     final private PlayerNotificationService playerNotificationService;
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
 
-    public SimpleGameConstructionService(final PlayerWalletService walletTransactionManager,
+    public SimpleGameConstructionService(final PlayerAccountService playerAccountService,
             final PlayerNotificationService playerNotificationService,
             final GameConstructionRepository constructionRepository,
             final GameInitiatorService initiatorService,
             final PlayerLockService playerLockService,
             final PlayerStateManager playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
-        this.playerWalletService = checkNotNull(walletTransactionManager);
+        this.playerAccounttService = checkNotNull(playerAccountService);
         this.playerNotificationService = checkNotNull(playerNotificationService);
         this.constructionRepository = checkNotNull(constructionRepository);
 
@@ -52,13 +52,13 @@ public class SimpleGameConstructionService implements GameConstructionService {
         // Step 2. Checking players can afford operations
         // Step 2.1. Checking initiator
         Money ammountNeeded = request.getSpecification().extractMoneyNeeded();
-        if (!playerWalletService.canAfford(request.getPlayerId(), ammountNeeded))
+        if (!playerAccounttService.canAfford(request.getPlayerId(), ammountNeeded))
             throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         if (request instanceof AutomaticGameRequest) {
             return automaticGameInitiatorManager.register((AutomaticGameRequest) request);
         }
         // Step 2.2. Checking opponents
-        if (!playerWalletService.canAfford(request.getParticipants(), ammountNeeded))
+        if (!playerAccounttService.canAfford(request.getParticipants(), ammountNeeded))
             throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(request);

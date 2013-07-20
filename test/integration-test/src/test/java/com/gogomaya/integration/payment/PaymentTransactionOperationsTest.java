@@ -152,7 +152,7 @@ public class PaymentTransactionOperationsTest {
     public void testRegistrationTransaction() {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer();
-        // Step 2. Checking wallet exists
+        // Step 2. Checking account exists
         PaymentTransaction paymentTransaction = paymentTransactionOperations.get(player, MoneySource.Registration, player.getPlayerId());
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
@@ -160,10 +160,10 @@ public class PaymentTransactionOperationsTest {
                 associatedOperation.add(paymentOperation);
             }
         }
-        // Step 3. Checking there is at list one opeartion availableO
+        // Step 3. Checking there is at list one operation available
         Assert.assertTrue(associatedOperation.size() > 0);
         for (PaymentOperation operation : associatedOperation)
-            assertEquals(player.getWalletOperations().getWallet().getMoney(operation.getAmmount().getCurrency()), operation.getAmmount());
+            assertEquals(player.getWalletOperations().getAccount().getMoney(operation.getAmmount().getCurrency()), operation.getAmmount());
     }
 
 }

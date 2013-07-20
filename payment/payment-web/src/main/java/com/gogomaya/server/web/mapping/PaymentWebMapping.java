@@ -2,15 +2,27 @@ package com.gogomaya.server.web.mapping;
 
 public interface PaymentWebMapping extends WebMapping {
 
-    final public static String WALLET_PREFIX = "/spi";
+    final public static String ACCOUNT_PREFIX = "/spi";
 
-    final public static String WALLET_PLAYER = "/wallet/{playerId}";
-    final public static String WALLET_PLAYER_TRANSACTIONS = "/wallet/{playerId}/transaction";
-    final public static String WALLET_PLAYER_TRANSACTIONS_TRANSACTION = "/wallet/{playerId}/transaction/{source}/{transactionId}";
+    /**
+     * Supports POST, that can only be used by the server
+     */
+    final public static String PAYMENT_ACCOUNTS = "/account";
 
-    final public static String WALLET_REGISTER = "/register";
+    /**
+     * Supports GET, that can only be used by the owner
+     */
+    final public static String PAYMENT_ACCOUNTS_PLAYER = "/account/{playerId}";
+    final public static String PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS = "/account/{playerId}/transaction";
+    final public static String PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS_TRANSACTION = "/account/{playerId}/transaction/{source}/{transactionId}";
 
-    final public static String WALLET_TRANSACTIONS = "/transaction"; // Not used yet
-    final public static String WALLET_TRANSACTIONS_TRANSACTION = "/transaction/{source}/{transactionId}";
+    /**
+     * Supports POST, that can only be used by the server
+     */
+    final public static String PAYMENT_TRANSACTIONS = "/transaction";
+    /**
+     * Supports GET, that can only be used by the owners
+     */
+    final public static String PAYMENT_TRANSACTIONS_TRANSACTION = "/transaction/{source}/{transactionId}";
 
 }

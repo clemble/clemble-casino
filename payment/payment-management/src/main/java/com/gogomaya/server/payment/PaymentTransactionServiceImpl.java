@@ -16,25 +16,25 @@ import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
 import com.gogomaya.server.player.PlayerAware;
 import com.gogomaya.server.player.PlayerProfile;
-import com.gogomaya.server.player.wallet.PlayerWallet;
+import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
-import com.gogomaya.server.repository.player.PlayerWalletRepository;
+import com.gogomaya.server.repository.player.PlayerAccountRepository;
 
 public class PaymentTransactionServiceImpl implements PaymentTransactionService {
 
     final private PaymentTransactionRepository paymentTransactionRepository;
-    final private PlayerWalletRepository playerWalletRepository;
+    final private PlayerAccountRepository playerAccountRepository;
 
-    public PaymentTransactionServiceImpl(PaymentTransactionRepository paymentTransactionRepository, PlayerWalletRepository playerWalletRepository) {
+    public PaymentTransactionServiceImpl(PaymentTransactionRepository paymentTransactionRepository, PlayerAccountRepository playerWalletRepository) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
-        this.playerWalletRepository = checkNotNull(playerWalletRepository);
+        this.playerAccountRepository = checkNotNull(playerWalletRepository);
     }
 
     @Override
     public PaymentTransaction register(PlayerProfile player) {
-        // Step 1. Creating initial empty wallet
-        PlayerWallet initialWallet = new PlayerWallet().setPlayerId(player.getPlayerId());
-        initialWallet = playerWalletRepository.save(initialWallet);
+        // Step 1. Creating initial empty account
+        PlayerAccount initialWallet = new PlayerAccount().setPlayerId(player.getPlayerId());
+        initialWallet = playerAccountRepository.save(initialWallet);
         // Step 2. Creating initial empty
         Money initialBalance = Money.create(Currency.FakeMoney, 500);
         PaymentTransaction initialTransaction = new PaymentTransaction()
@@ -53,30 +53,30 @@ public class PaymentTransactionServiceImpl implements PaymentTransactionService 
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionEmpty);
         if (!paymentTransaction.valid())
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionInvalid);
-        // Step 2. Processing wallet transactions
+        // Step 2. Processing payment transactions
         return processTransaction(paymentTransaction);
     }
 
     private PaymentTransaction processTransaction(PaymentTransaction paymentTransaction) {
-        // Step 1. Processing wallet transactions
-        Collection<PlayerWallet> updatedWallets = new ArrayList<>(paymentTransaction.getPaymentOperations().size());
-        for (PaymentOperation walletOperation : paymentTransaction.getPaymentOperations()) {
-            PlayerWallet associatedWallet = playerWalletRepository.findOne(walletOperation.getPlayerId());
+        // Step 1. Processing payment transactions
+        Collection<PlayerAccount> updatedWallets = new ArrayList<>(paymentTransaction.getPaymentOperations().size());
+        for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
+            PlayerAccount associatedWallet = playerAccountRepository.findOne(paymentOperation.getPlayerId());
             if (associatedWallet == null) {
                 throw GogomayaException.fromError(GogomayaError.PaymentTransactionUnknownPlayers);
-            } else if (walletOperation.getOperation() == Operation.Credit) {
-                associatedWallet.subtract(walletOperation.getAmmount());
-            } else if (walletOperation.getOperation() == Operation.Debit) {
-                associatedWallet.add(walletOperation.getAmmount());
+            } else if (paymentOperation.getOperation() == Operation.Credit) {
+                associatedWallet.subtract(paymentOperation.getAmmount());
+            } else if (paymentOperation.getOperation() == Operation.Debit) {
+                associatedWallet.add(paymentOperation.getAmmount());
             } else {
                 throw GogomayaException.fromError(GogomayaError.PaymentTransactionInvalid);
             }
             updatedWallets.add(associatedWallet);
         }
-        // Step 2. Performing all wallet operations at a batch
-        playerWalletRepository.save(updatedWallets);
-        playerWalletRepository.flush();
-        // Step 3. Saving wallet transaction
+        // Step 2. Performing all account operations at a batch
+        playerAccountRepository.save(updatedWallets);
+        playerAccountRepository.flush();
+        // Step 3. Saving account transaction
         return paymentTransactionRepository.save(paymentTransaction);
 
     }

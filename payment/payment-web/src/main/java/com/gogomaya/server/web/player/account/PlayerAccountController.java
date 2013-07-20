@@ -1,4 +1,4 @@
-package com.gogomaya.server.web.player.wallet;
+package com.gogomaya.server.web.player.account;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -17,33 +17,33 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionId;
-import com.gogomaya.server.player.wallet.PlayerWallet;
+import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
-import com.gogomaya.server.repository.player.PlayerWalletRepository;
+import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.web.mapping.PaymentWebMapping;
 
 @Controller
-public class PlayerWalletController {
+public class PlayerAccountController {
 
-    final private PlayerWalletRepository walletRepository;
+    final private PlayerAccountRepository playerAccountRepository;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PlayerWalletController(PlayerWalletRepository walletRepository, PaymentTransactionRepository walletTransactionRepository) {
-        this.walletRepository = checkNotNull(walletRepository);
-        this.paymentTransactionRepository = checkNotNull(walletTransactionRepository);
+    public PlayerAccountController(PlayerAccountRepository playerAccountRepository, PaymentTransactionRepository paymentTransactionRepository) {
+        this.playerAccountRepository = checkNotNull(playerAccountRepository);
+        this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.WALLET_PLAYER, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerWallet get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
+    public @ResponseBody PlayerAccount get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
         // Step 1. Wallet can't be accessed someone other, then owner
         if (playerId != playerWalletId)
-            throw GogomayaException.fromError(GogomayaError.PlayerWalletAccessDenied);
-        // Step 2. Returning wallet repository
-        return walletRepository.findOne(playerWalletId);
+            throw GogomayaException.fromError(GogomayaError.PlayerAccountAccessDenied);
+        // Step 2. Returning account from repository
+        return playerAccountRepository.findOne(playerWalletId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.WALLET_PLAYER_TRANSACTIONS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<PaymentTransaction> listPlayerTransaction(@RequestHeader("playerId") long requesterId, @PathVariable("playerId") long playerId) {
         // Step 1. Checking request/player identifier matches
@@ -53,7 +53,7 @@ public class PlayerWalletController {
         return paymentTransactionRepository.findByPaymentOperationsPlayerId(playerId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.WALLET_PLAYER_TRANSACTIONS_TRANSACTION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS_TRANSACTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PaymentTransaction getPlayerTransaction(
             @RequestHeader("playerId") long requesterId,

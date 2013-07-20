@@ -25,10 +25,10 @@ import com.gogomaya.server.game.construct.SimpleGameConstructionService;
 import com.gogomaya.server.game.construct.SimpleGameInitiatorService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.player.wallet.PlayerWalletService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.repository.game.GameSpecificationRepository;
@@ -54,7 +54,7 @@ public class TicTacToeSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("playerWalletService")
-    public PlayerWalletService playerWalletService;
+    public PlayerAccountService playerWalletService;
 
     @Autowired
     @Qualifier("tableServerRegistry")

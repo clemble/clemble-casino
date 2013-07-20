@@ -74,7 +74,7 @@ public class SimpleTicTacToeGameTest {
         Currency currency = playerA.getSpecification().getCurrency();
         Assert.assertEquals(playerA.getSpecification().getCurrency(), playerB.getSpecification().getCurrency());
         int gamePrice = playerA.getSpecification().getBetRule().getPrice();
-        long originalAmount = playerA.getPlayer().getWalletOperations().getWallet().getMoney(currency).getAmount();
+        long originalAmount = playerA.getPlayer().getWalletOperations().getAccount().getMoney(currency).getAmount();
 
         try {
             playerA.syncWith(playerB);
@@ -99,8 +99,8 @@ public class SimpleTicTacToeGameTest {
             playerB.bet(1);
             playerB.syncWith(playerA);
 
-            Assert.assertEquals(playerB.getPlayer().getWalletOperations().getWallet().getMoney(currency).getAmount(), originalAmount - gamePrice);
-            Assert.assertEquals(playerA.getPlayer().getWalletOperations().getWallet().getMoney(currency).getAmount(), originalAmount + gamePrice);
+            Assert.assertEquals(playerB.getPlayer().getWalletOperations().getAccount().getMoney(currency).getAmount(), originalAmount - gamePrice);
+            Assert.assertEquals(playerA.getPlayer().getWalletOperations().getAccount().getMoney(currency).getAmount(), originalAmount + gamePrice);
 
             playerA.syncWith(playerB);
 

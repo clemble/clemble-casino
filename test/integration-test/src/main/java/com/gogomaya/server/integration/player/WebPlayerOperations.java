@@ -3,10 +3,10 @@ package com.gogomaya.server.integration.player;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
+import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.server.integration.player.wallet.WalletOperations;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.web.RegistrationRequest;
@@ -21,11 +21,11 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
     public WebPlayerOperations(RegistrationSignInContoller signInContoller,
             RegistrationLoginController loginController,
             SessionOperations playerSessionOperations,
-            WalletOperations walletOperations,
+            AccountOperations accountOperations,
             PlayerListenerOperations listenerOperations,
             ProfileOperations playerProfileOperations,
             GameConstructionOperations<?>... gameConstructionOperations) {
-        super(listenerOperations, playerProfileOperations, playerSessionOperations, walletOperations, gameConstructionOperations);
+        super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations, gameConstructionOperations);
         this.signInContoller = checkNotNull(signInContoller);
         this.loginController = checkNotNull(loginController);
     }

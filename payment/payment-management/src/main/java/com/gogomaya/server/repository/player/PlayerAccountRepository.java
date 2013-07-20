@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 
-import com.gogomaya.server.player.wallet.PlayerWallet;
+import com.gogomaya.server.player.account.PlayerAccount;
 
 @Repository
-public interface PlayerWalletRepository extends JpaRepository<PlayerWallet, Long> {
+public interface PlayerAccountRepository extends JpaRepository<PlayerAccount, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public PlayerWallet findOne(Long playerId);
+    public PlayerAccount findOne(Long playerId);
 
 }

@@ -50,8 +50,8 @@ public class PaymentTransaction implements Serializable {
     }
 
     public boolean isParticipant(long playerId) {
-        for (PaymentOperation walletOperation : paymentOperations)
-            if (walletOperation.getPlayerId() == playerId)
+        for (PaymentOperation paymentOperation: paymentOperations)
+            if (paymentOperation.getPlayerId() == playerId)
                 return true;
         return false;
     }
@@ -60,14 +60,14 @@ public class PaymentTransaction implements Serializable {
         return paymentOperations;
     }
 
-    public PaymentTransaction setPaymentOperations(Set<PaymentOperation> walletOperations) {
-        this.paymentOperations = walletOperations;
+    public PaymentTransaction setPaymentOperations(Set<PaymentOperation> paymentOperations) {
+        this.paymentOperations = paymentOperations;
         return this;
     }
 
-    public PaymentTransaction addPaymentOperation(PaymentOperation walletOperation) {
-        if (walletOperation != null)
-            this.paymentOperations.add(walletOperation);
+    public PaymentTransaction addPaymentOperation(PaymentOperation paymentOperation) {
+        if (paymentOperation != null)
+            this.paymentOperations.add(paymentOperation);
         return this;
     }
 
@@ -83,35 +83,35 @@ public class PaymentTransaction implements Serializable {
     public boolean valid() {
         // Step 1. Checking currency
         Currency currency = null;
-        for (PaymentOperation walletOperation : paymentOperations) {
+        for (PaymentOperation paymentOperation : paymentOperations) {
             if (currency == null) {
-                currency = walletOperation.getAmmount().getCurrency();
-            } else if (currency != walletOperation.getAmmount().getCurrency()) {
+                currency = paymentOperation.getAmmount().getCurrency();
+            } else if (currency != paymentOperation.getAmmount().getCurrency()) {
                 return false;
             }
         }
         // Step 2. Checking credit and debit ammount match up
         Money creditAmmount = null;
         Money debitAmmount = null;
-        for (PaymentOperation walletOperation : paymentOperations) {
-            Money ammount = walletOperation.getAmmount();
+        for (PaymentOperation paymentOperation : paymentOperations) {
+            Money ammount = paymentOperation.getAmmount();
             if (ammount.getAmount() > 0) {
-                switch (walletOperation.getOperation()) {
+                switch (paymentOperation.getOperation()) {
                 case Credit:
-                    creditAmmount = creditAmmount == null ? walletOperation.getAmmount() : creditAmmount.add(ammount);
+                    creditAmmount = creditAmmount == null ? paymentOperation.getAmmount() : creditAmmount.add(ammount);
                     break;
                 case Debit:
-                    debitAmmount = debitAmmount == null ? walletOperation.getAmmount() : debitAmmount.add(walletOperation.getAmmount());
+                    debitAmmount = debitAmmount == null ? paymentOperation.getAmmount() : debitAmmount.add(paymentOperation.getAmmount());
                     break;
                 }
             } else {
                 ammount = ammount.negate();
-                switch (walletOperation.getOperation()) {
+                switch (paymentOperation.getOperation()) {
                 case Credit:
-                    debitAmmount = debitAmmount == null ? walletOperation.getAmmount() : debitAmmount.add(walletOperation.getAmmount());
+                    debitAmmount = debitAmmount == null ? paymentOperation.getAmmount() : debitAmmount.add(paymentOperation.getAmmount());
                     break;
                 case Debit:
-                    creditAmmount = creditAmmount == null ? walletOperation.getAmmount() : creditAmmount.add(ammount);
+                    creditAmmount = creditAmmount == null ? paymentOperation.getAmmount() : creditAmmount.add(ammount);
                     break;
                 }
             }
@@ -159,7 +159,7 @@ public class PaymentTransaction implements Serializable {
 
     @Override
     public String toString() {
-        return "PaymentTransaction [transactionId=" + transactionId + ", walletOperations=" + paymentOperations + ", transactionDate=" + transactionDate + "]";
+        return "PaymentTransaction [transactionId=" + transactionId + ", paymentOperations=" + paymentOperations + ", transactionDate=" + transactionDate + "]";
     }
 
 }

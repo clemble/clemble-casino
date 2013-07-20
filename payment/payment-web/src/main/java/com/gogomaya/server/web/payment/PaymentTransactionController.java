@@ -1,4 +1,4 @@
-package com.gogomaya.server.web.player.wallet;
+package com.gogomaya.server.web.payment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -33,21 +33,21 @@ public class PaymentTransactionController {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.WALLET_REGISTER, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PaymentTransaction register(@RequestBody PlayerProfile playerProfile) {
         return paymentTransactionService.register(playerProfile);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.WALLET_TRANSACTIONS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_TRANSACTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PaymentTransaction perform(@RequestBody PaymentTransaction paymentTransaction) {
         return paymentTransactionService.process(paymentTransaction);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.WALLET_TRANSACTIONS_TRANSACTION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, produces = "application/json")
     public @ResponseBody
     PaymentTransaction get(@RequestHeader("playerId") long requesterId, @PathVariable("source") String source, @PathVariable("transactionId") long transactionId) {
         // Step 1. Checking payment transaction exists

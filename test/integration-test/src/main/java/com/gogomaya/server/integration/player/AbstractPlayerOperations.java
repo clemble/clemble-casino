@@ -7,10 +7,10 @@ import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
+import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.server.integration.player.wallet.WalletOperations;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
@@ -20,20 +20,20 @@ abstract public class AbstractPlayerOperations implements PlayerOperations {
 
     final private ProfileOperations profileOperations;
     final private SessionOperations sessionOperations;
-    final private WalletOperations walletOperations;
+    final private AccountOperations accountOperations;
     final private PlayerListenerOperations listenerOperations;
     final private GameConstructionOperations<?>[] gameConstructionOperations;
 
     protected AbstractPlayerOperations(PlayerListenerOperations listenerOperations,
             ProfileOperations profileOperations,
             SessionOperations sessionOperations,
-            WalletOperations walletOperations,
+            AccountOperations accountOperations,
             GameConstructionOperations<?>[] gameConstructionOprations) {
         this.listenerOperations = checkNotNull(listenerOperations);
         this.gameConstructionOperations = checkNotNull(gameConstructionOprations);
         this.sessionOperations = checkNotNull(sessionOperations);
         this.profileOperations = checkNotNull(profileOperations);
-        this.walletOperations = checkNotNull(walletOperations);
+        this.accountOperations = checkNotNull(accountOperations);
     }
 
     @Override
@@ -55,7 +55,7 @@ abstract public class AbstractPlayerOperations implements PlayerOperations {
     }
 
     final public Player create(PlayerIdentity playerIdentity, PlayerCredential credential) {
-        return new Player(playerIdentity, credential, profileOperations, sessionOperations, walletOperations, listenerOperations, gameConstructionOperations);
+        return new Player(playerIdentity, credential, profileOperations, sessionOperations, accountOperations, listenerOperations, gameConstructionOperations);
     }
 
 }

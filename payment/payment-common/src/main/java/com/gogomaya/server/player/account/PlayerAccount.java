@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.wallet;
+package com.gogomaya.server.player.account;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,9 +22,9 @@ import com.gogomaya.server.money.MoneyHibernate;
 import com.gogomaya.server.player.PlayerAware;
 
 @Entity
-@Table(name = "PLAYER_WALLET")
+@Table(name = "PLAYER_ACCOUNT")
 @TypeDef(name = "money", typeClass = MoneyHibernate.class)
-public class PlayerWallet implements PlayerAware {
+public class PlayerAccount implements PlayerAware {
 
     /**
      * Generated 16/02/13
@@ -36,7 +36,7 @@ public class PlayerWallet implements PlayerAware {
     private long playerId;
 
     @ElementCollection(targetClass = Money.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "PLAYER_WALLET_MONEY", joinColumns = @JoinColumn(name = "PLAYER_ID"))
+    @CollectionTable(name = "PLAYER_ACCOUNT_AMOUNT", joinColumns = @JoinColumn(name = "PLAYER_ID"))
     @Type(type = "money")
     @Columns(columns = { @Column(name = "CURRENCY"), @Column(name = "AMOUNT") })
     private Set<Money> playerMoney = new HashSet<Money>();
@@ -46,7 +46,7 @@ public class PlayerWallet implements PlayerAware {
         return playerId;
     }
 
-    public PlayerWallet setPlayerId(long playerId) {
+    public PlayerAccount setPlayerId(long playerId) {
         this.playerId = playerId;
         return this;
     }
@@ -66,12 +66,12 @@ public class PlayerWallet implements PlayerAware {
         return Money.create(currency, 0);
     }
 
-    public PlayerWallet setMoney(final Set<Money> playerMoney) {
+    public PlayerAccount setMoney(final Set<Money> playerMoney) {
         this.playerMoney = playerMoney;
         return this;
     }
 
-    public PlayerWallet add(final Money money) {
+    public PlayerAccount add(final Money money) {
         if (money != null && money.getAmount() != 0) {
             Money currentAmount = getMoney(money.getCurrency());
             if (currentAmount != null)
@@ -81,7 +81,7 @@ public class PlayerWallet implements PlayerAware {
         return this;
     }
 
-    public PlayerWallet subtract(final Money money) {
+    public PlayerAccount subtract(final Money money) {
         if (money != null && money.getAmount() > 0)
             add(money.negate());
         return this;
@@ -109,7 +109,7 @@ public class PlayerWallet implements PlayerAware {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerWallet other = (PlayerWallet) obj;
+        PlayerAccount other = (PlayerAccount) obj;
         if (playerId != other.playerId)
             return false;
         if (playerMoney == null) {

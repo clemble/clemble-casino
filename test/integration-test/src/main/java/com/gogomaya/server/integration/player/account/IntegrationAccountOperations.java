@@ -1,4 +1,4 @@
-package com.gogomaya.server.integration.player.wallet;
+package com.gogomaya.server.integration.player.account;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -11,25 +11,25 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.player.wallet.PlayerWallet;
+import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.web.mapping.PaymentWebMapping;
 
-public class IntegrationWalletOperations extends AbstractWalletOperations {
+public class IntegrationAccountOperations extends AbstractAccountOperations {
 
     final private RestTemplate restTemplate;
     final private String baseUrl;
 
-    public IntegrationWalletOperations(RestTemplate restTemplate, String baseUrl) {
+    public IntegrationAccountOperations(RestTemplate restTemplate, String baseUrl) {
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
     }
 
     @Override
-    public PlayerWallet getWallet(Player player, long playerId) {
+    public PlayerAccount getAccount(Player player, long playerId) {
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
-        // Step 2. Requesting wallet associated with the playerId
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.WALLET_PREFIX + PaymentWebMapping.WALLET_PLAYER, HttpMethod.GET, request, PlayerWallet.class,
+        // Step 2. Requesting account associated with the playerId
+        return restTemplate.exchange(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, request, PlayerAccount.class,
                 playerId).getBody();
     }
 
@@ -37,8 +37,8 @@ public class IntegrationWalletOperations extends AbstractWalletOperations {
     public List<PaymentTransaction> getTransactions(Player player, long playerId) {
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
-        // Step 2. Requesting wallet associated with the playerId
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.WALLET_PREFIX + PaymentWebMapping.WALLET_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
+        // Step 2. Requesting account associated with the playerId
+        return restTemplate.exchange(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
                 new ParameterizedTypeReference<List<PaymentTransaction>>() {
                 }, playerId).getBody();
     }
@@ -47,8 +47,8 @@ public class IntegrationWalletOperations extends AbstractWalletOperations {
     public PaymentTransaction getTransaction(Player player, long playerId, String moneySource, long transactionId) {
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
-        // Step 2. Requesting wallet associated with the playerId
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.WALLET_PREFIX + PaymentWebMapping.WALLET_PLAYER_TRANSACTIONS_TRANSACTION, HttpMethod.GET,
+        // Step 2. Requesting account associated with the playerId
+        return restTemplate.exchange(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS_TRANSACTION, HttpMethod.GET,
                 request, PaymentTransaction.class, playerId, moneySource, transactionId).getBody();
 
     }
