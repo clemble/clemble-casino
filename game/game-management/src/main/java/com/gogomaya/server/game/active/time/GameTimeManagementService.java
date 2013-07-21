@@ -100,6 +100,11 @@ public class GameTimeManagementService<State extends GameState> implements Seria
 
     public class TimeoutNotificationTask implements Callable<State>, SessionAware {
 
+        /**
+         * Generated 20/07/13
+         */
+        private static final long serialVersionUID = 916826521123786635L;
+
         final private long session;
         final private ClientEvent timeoutEvent;
 

@@ -2,9 +2,8 @@ package com.gogomaya.server.game.construct;
 
 import java.util.Collection;
 
-import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
-
+import com.gogomaya.server.player.PlayerState;
+import com.gogomaya.server.player.state.PlayerStateListener;
 import com.gogomaya.server.player.state.PlayerStateManager;
 
 public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
@@ -25,16 +24,14 @@ public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
                 .getSpecification());
         if (!initiatorService.initiate(initiation)) {
             // Step 2.1 Pretty naive implementation of MessageListener functionality
-            playerStateManager.subscribe(participants, new MessageListener() {
+            playerStateManager.subscribe(participants, new PlayerStateListener() {
 
                 @Override
-                public void onMessage(Message message, byte[] pattern) {
+                public void onUpdate(long playerId, PlayerState state) {
                     if (initiatorService.initiate(initiation))
                         playerStateManager.unsubscribe(participants, this);
                 }
-
             });
         }
     }
-
 }

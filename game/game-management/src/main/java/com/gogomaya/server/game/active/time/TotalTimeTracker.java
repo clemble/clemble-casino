@@ -8,6 +8,11 @@ import com.gogomaya.server.game.rule.time.TotalTimeRule;
 
 public class TotalTimeTracker extends TimeTracker {
 
+    /**
+     * Generated 20/07/13
+     */
+    private static final long serialVersionUID = -5174948343979628680L;
+
     final private TotalTimeRule totalTimeRule;
     final private HashMap<Long, Long> totalTime = new HashMap<Long, Long>();
 

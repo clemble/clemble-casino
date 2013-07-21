@@ -6,6 +6,11 @@ import com.gogomaya.server.game.rule.time.MoveTimeRule;
 
 public class MoveTimeTracker extends TimeTracker {
 
+    /**
+     * Generated 20/07/13
+     */
+    private static final long serialVersionUID = 8518793626890158975L;
+
     final private MoveTimeRule moveTimeRule;
 
     public MoveTimeTracker(long session, MoveTimeRule moveTimeRule) {

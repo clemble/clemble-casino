@@ -13,10 +13,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -203,7 +199,7 @@ public class PlayerStateManagerTest {
         }
     }
 
-    private class PlayerListener implements MessageListener {
+    private class PlayerListener implements PlayerStateListener {
         final public CountDownLatch countDownLatch;
         final public ArrayBlockingQueue<Long> expectedPlayer;
         final public ArrayBlockingQueue<PlayerState> expectedState;
@@ -215,19 +211,16 @@ public class PlayerStateManagerTest {
         }
 
         @Override
-        public void onMessage(Message message, byte[] pattern) {
+        public void onUpdate(long playerId, PlayerState state) {
             try {
-                RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-                String deserializedChannel = stringSerializer.deserialize(message.getChannel());
-                String deserializedMessage = stringSerializer.deserialize(message.getBody());
-
-                expectedPlayer.put(Long.valueOf(deserializedChannel));
-                expectedState.put(PlayerState.valueOf(deserializedMessage));
+                expectedPlayer.put(playerId);
+                expectedState.put(state);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             } finally {
                 countDownLatch.countDown();
             }
+
         }
     }
 

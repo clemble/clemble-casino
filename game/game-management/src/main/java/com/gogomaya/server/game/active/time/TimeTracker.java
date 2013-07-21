@@ -8,6 +8,11 @@ import com.gogomaya.server.game.SessionAware;
 
 abstract public class TimeTracker implements SessionAware, Comparable<TimeTracker> {
 
+    /**
+     * Generated 20/07/13
+     */
+    private static final long serialVersionUID = -7295625809660173928L;
+
     final private long session;
 
     final private HashMap<Long, Long> lastMoveTime = new HashMap<Long, Long>();

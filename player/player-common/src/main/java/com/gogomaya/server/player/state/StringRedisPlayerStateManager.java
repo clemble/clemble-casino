@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisCallback;
@@ -21,6 +20,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.Topic;
+import org.springframework.data.redis.serializer.RedisSerializer;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
@@ -36,10 +36,12 @@ public class StringRedisPlayerStateManager implements PlayerStateManager {
     final private String ZERO_SESSION = String.valueOf(SessionAware.DEFAULT_SESSION);
 
     final private StringRedisTemplate redisTemplate;
+    final private RedisSerializer<String> stringRedisSerializer;
     final private RedisMessageListenerContainer listenerContainer;
 
     public StringRedisPlayerStateManager(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer) {
         this.redisTemplate = checkNotNull(redisTemplate);
+        this.stringRedisSerializer = redisTemplate.getStringSerializer();
         this.listenerContainer = listenerContainer;
     }
 
@@ -112,33 +114,34 @@ public class StringRedisPlayerStateManager implements PlayerStateManager {
     @Override
     public void markAvailable(final long playerId) {
         // Step 1. Specifying null state as identifier that player is active, and available
-        redisTemplate.boundValueOps(String.valueOf(playerId)).set(ZERO_SESSION);;
+        redisTemplate.boundValueOps(String.valueOf(playerId)).set(ZERO_SESSION);
+        ;
         // Step 2. Sending notification, for player state update
         notifyStateChange(playerId, PlayerState.available);
     }
 
     @Override
-    public void subscribe(final long playerId, final MessageListener messageListener) {
+    public void subscribe(final long playerId, final PlayerStateListener messageListener) {
         subscribe(Collections.singleton(playerId), messageListener);
     }
 
     @Override
-    public void subscribe(Collection<Long> players, MessageListener messageListener) {
+    public void subscribe(Collection<Long> players, PlayerStateListener messageListener) {
         // Step 1. Add message listener
-        listenerContainer.addMessageListener(messageListener, toTopics(players));
+        listenerContainer.addMessageListener(new PlayerStateListenerWrapper(redisTemplate.getStringSerializer(), messageListener), toTopics(players));
         // Step 2. Checking if listener container is alive, and starting it if needed
         if (!listenerContainer.isActive() || !listenerContainer.isRunning())
             listenerContainer.start();
     }
 
     @Override
-    public void unsubscribe(final long player, final MessageListener messageListener) {
+    public void unsubscribe(final long player, final PlayerStateListener messageListener) {
         unsubscribe(Collections.singleton(player), messageListener);
     }
 
     @Override
-    public void unsubscribe(Collection<Long> players, MessageListener messageListener) {
-        listenerContainer.removeMessageListener(messageListener, toTopics(players));
+    public void unsubscribe(Collection<Long> players, PlayerStateListener playerStateListener) {
+        listenerContainer.removeMessageListener(new PlayerStateListenerWrapper(stringRedisSerializer, playerStateListener), toTopics(players));
     }
 
     private Collection<Topic> toTopics(Collection<Long> players) {
