@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.event.client.GameClientEvent;
-import com.gogomaya.server.game.tictactoe.TicTacToeCell;
+import com.gogomaya.server.game.tictactoe.Cell;
 
 @JsonTypeName("select")
 @JsonIgnoreProperties(value = { "row", "column" })
@@ -17,18 +17,18 @@ public class TicTacToeSelectCellEvent extends GameClientEvent implements TicTacT
      */
     private static final long serialVersionUID = -3938747678529156779L;
 
-    final private TicTacToeCell cell;
+    final private Cell cell;
 
     public TicTacToeSelectCellEvent(final long playerId) {
         this(playerId, Byte.MIN_VALUE, Byte.MIN_VALUE);
     }
 
     public TicTacToeSelectCellEvent(final long playerId, final byte row, final byte column) {
-        this(playerId, TicTacToeCell.create(row, column));
+        this(playerId, Cell.create(row, column));
     }
 
     @JsonCreator
-    public TicTacToeSelectCellEvent(@JsonProperty("playerId") final long playerId, @JsonProperty("cell") final TicTacToeCell cell) {
+    public TicTacToeSelectCellEvent(@JsonProperty("playerId") final long playerId, @JsonProperty("cell") final Cell cell) {
         super(playerId);
         this.cell = cell;
     }
@@ -43,7 +43,7 @@ public class TicTacToeSelectCellEvent extends GameClientEvent implements TicTacT
         return cell.getColumn();
     }
 
-    public TicTacToeCell getCell() {
+    public Cell getCell() {
         return cell;
     }
 

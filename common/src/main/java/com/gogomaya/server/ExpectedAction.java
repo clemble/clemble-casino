@@ -1,11 +1,12 @@
-package com.gogomaya.server.event;
+package com.gogomaya.server;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.server.event.ClientEvent;
 
 @JsonTypeName("expected")
-public class SimpleExpectedAction implements ExpectedAction {
+public class ExpectedAction implements ClientEvent {
 
     /**
      * Generated 02/07/13
@@ -16,7 +17,7 @@ public class SimpleExpectedAction implements ExpectedAction {
     final private String action;
 
     @JsonCreator
-    public SimpleExpectedAction(@JsonProperty("playerId") long playerId, @JsonProperty("action") String action) {
+    public ExpectedAction(@JsonProperty("playerId") long playerId, @JsonProperty("action") String action) {
         this.playerId = playerId;
         this.action = action;
     }
@@ -47,7 +48,7 @@ public class SimpleExpectedAction implements ExpectedAction {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SimpleExpectedAction other = (SimpleExpectedAction) obj;
+        ExpectedAction other = (ExpectedAction) obj;
         if (action == null) {
             if (other.action != null)
                 return false;

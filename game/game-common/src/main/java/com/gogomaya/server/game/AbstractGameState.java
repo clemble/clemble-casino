@@ -9,6 +9,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;

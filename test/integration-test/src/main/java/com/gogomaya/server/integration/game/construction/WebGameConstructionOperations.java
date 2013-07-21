@@ -2,7 +2,7 @@ package com.gogomaya.server.integration.game.construction;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.event.ExpectedAction;
+import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameConstruction;
@@ -50,7 +50,7 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
     }
 
     @Override
-    public ExpectedAction constructionResponse(Player player, long requested, long construction) {
+    public ClientEvent constructionResponse(Player player, long requested, long construction) {
         return constructionController.getResponce(player.getPlayerId(), construction, requested);
     }
 

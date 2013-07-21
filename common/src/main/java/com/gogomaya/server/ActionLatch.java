@@ -10,8 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.event.ExpectedAction;
-import com.gogomaya.server.event.SimpleExpectedAction;
+import com.gogomaya.server.event.ClientEvent;
 
 public class ActionLatch implements Serializable {
 
@@ -20,17 +19,17 @@ public class ActionLatch implements Serializable {
      */
     private static final long serialVersionUID = -7689529505293361503L;
 
-    final private Map<Long, ExpectedAction> actions = new HashMap<Long, ExpectedAction>();
+    final private Map<Long, ClientEvent> actions = new HashMap<Long, ClientEvent>();
 
     public ActionLatch(final Collection<Long> participants, final String action) {
         for (Long participant : participants) {
-            actions.put(participant, new SimpleExpectedAction(participant, action));
+            actions.put(participant, new ExpectedAction(participant, action));
         }
     }
 
     @JsonCreator
-    public ActionLatch(@JsonProperty("actions") final Collection<ExpectedAction> expectedActions) {
-        for (ExpectedAction expectedAction : expectedActions) {
+    public ActionLatch(@JsonProperty("actions") final Collection<ClientEvent> expectedActions) {
+        for (ClientEvent expectedAction : expectedActions) {
             actions.put(expectedAction.getPlayerId(), expectedAction);
         }
     }
@@ -39,35 +38,31 @@ public class ActionLatch implements Serializable {
         return actions.keySet().contains(participant);
     }
 
-    public boolean get(long participant) {
-        return actions.containsKey(participant);
-    }
-
     public Set<Long> fetchParticipants() {
         return actions.keySet();
     }
 
-    public Collection<ExpectedAction> getActions() {
+    public Collection<ClientEvent> getActions() {
         return actions.values();
     }
 
-    public Map<Long, ExpectedAction> fetchActionsMap() {
+    public Map<Long, ClientEvent> fetchActionsMap() {
         return actions;
     }
 
-    public ExpectedAction fetchAction(long player) {
+    public ClientEvent fetchAction(long player) {
         return actions.get(player);
     }
 
-    public ExpectedAction put(long participant, ExpectedAction action) {
+    public com.gogomaya.server.event.ClientEvent put(long participant, ClientEvent action) {
         if (contains(participant))
             return actions.put(participant, action);
         throw GogomayaException.fromError(GogomayaError.ServerLatchError);
     }
 
     public boolean complete() {
-        for (ExpectedAction action : actions.values())
-            if (action instanceof SimpleExpectedAction)
+        for (ClientEvent action : actions.values())
+            if (action instanceof ExpectedAction)
                 return false;
         return true;
     }

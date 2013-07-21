@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.tictactoe.TicTacToe;
-import com.gogomaya.server.game.tictactoe.TicTacToeCellState;
+import com.gogomaya.server.game.tictactoe.ExposedCellState;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
@@ -33,7 +33,7 @@ public class TicTacToeActor implements GameActor<TicTacToeState> {
         ClientEvent nextMove = playerToMove.getNextMove();
         if (nextMove instanceof TicTacToeSelectCellEvent) {
             // Step 1.1 Select move to be made
-            TicTacToeCellState[][] board = playerToMove.getState().getBoard();
+            ExposedCellState[][] board = playerToMove.getState().getBoard();
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     if (!board[i][j].owned()) {

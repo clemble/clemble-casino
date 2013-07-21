@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 
-import com.gogomaya.server.game.tictactoe.TicTacToeCell;
+import com.gogomaya.server.game.tictactoe.Cell;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
@@ -27,7 +27,7 @@ public class TicTacToeSessionPlayer extends GenericGameSessionPlayer<TicTacToeSt
     public void select(int row, int column) {
         int beforeSelecting = this.getState() != null ? this.getState().getVersion() : -1;
         // Step 1. Generating bet move
-        perform(new TicTacToeSelectCellEvent(actualPlayer.getPlayerId(), TicTacToeCell.create(row, column)));
+        perform(new TicTacToeSelectCellEvent(actualPlayer.getPlayerId(), Cell.create(row, column)));
         Assert.assertNotSame(beforeSelecting + " remained " + this.getState().getVersion(), this.getState().getVersion());
     }
 

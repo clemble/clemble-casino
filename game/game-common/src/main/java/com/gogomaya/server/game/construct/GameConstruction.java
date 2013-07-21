@@ -20,7 +20,7 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.ActionLatch;
-import com.gogomaya.server.event.ExpectedAction;
+import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.hibernate.JsonHibernateType;
@@ -107,7 +107,7 @@ public class GameConstruction implements SessionAware {
     public List<Long> fetchAcceptedParticipants() {
         List<Long> acceptedParticipants = new ArrayList<Long>(responses.fetchParticipants().size());
 
-        for (Entry<Long, ExpectedAction> responseEntry : responses.fetchActionsMap().entrySet()) {
+        for (Entry<Long, ClientEvent> responseEntry : responses.fetchActionsMap().entrySet()) {
             if (responseEntry.getValue() instanceof InvitationAcceptedEvent)
                 acceptedParticipants.add(responseEntry.getKey());
         }

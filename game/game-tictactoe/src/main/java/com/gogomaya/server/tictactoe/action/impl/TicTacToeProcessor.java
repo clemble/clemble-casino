@@ -16,8 +16,8 @@ import com.gogomaya.server.game.event.server.PlayerMovedEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.NoOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
-import com.gogomaya.server.game.tictactoe.TicTacToeCell;
-import com.gogomaya.server.game.tictactoe.TicTacToeCellState;
+import com.gogomaya.server.game.tictactoe.Cell;
+import com.gogomaya.server.game.tictactoe.ExposedCellState;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
@@ -75,10 +75,10 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
             long secondPlayerBet = ((TicTacToeBetOnCellEvent) state.getMadeMove(players[1])).getBet();
             state.getPlayerState(players[1]).subMoneyLeft(secondPlayerBet);
 
-            TicTacToeCellState cellState = (firstPlayerBet == secondPlayerBet) ? new TicTacToeCellState(0L, firstPlayerBet, secondPlayerBet)
-                    : new TicTacToeCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet);
-            state.setBoard(state.getActiveCell(), cellState);
-            state.setActiveCell(TicTacToeCell.DEFAULT);
+            ExposedCellState cellState = (firstPlayerBet == secondPlayerBet) ? new ExposedCellState(0L, firstPlayerBet, secondPlayerBet)
+                    : new ExposedCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet);
+            state.setBoard(state.getSelected(), cellState);
+            state.setSelected(Cell.DEFAULT);
 
             GameOutcome outcome = state.getOutcome();
             if (outcome != null && state.getOutcome() instanceof PlayerWonOutcome) {
@@ -93,13 +93,13 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
     }
 
     private GameServerEvent<TicTacToeState> processSelectCellEvent(final TicTacToeState state, final TicTacToeSelectCellEvent selectCellMove) {
-        TicTacToeCell cellToSelect = selectCellMove.getCell();
+        Cell cellToSelect = selectCellMove.getCell();
         // Step 1. Sanity check
         if (state.getBoard()[cellToSelect.getRow()][cellToSelect.getColumn()].owned()) {
             throw GogomayaException.fromError(GogomayaError.TicTacToeCellOwned);
         }
         // Step 2. Generating next moves
-        state.setActiveCell(cellToSelect);
+        state.setSelected(cellToSelect);
         state.cleanMadeMove();
         long[] players = state.getPlayerIterator().getPlayers();
         Collection<ClientEvent> nextMoves = (ImmutableList.<ClientEvent> of(new TicTacToeBetOnCellEvent(players[0]), new TicTacToeBetOnCellEvent(players[1])));

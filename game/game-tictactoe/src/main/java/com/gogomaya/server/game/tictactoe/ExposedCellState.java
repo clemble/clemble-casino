@@ -2,14 +2,11 @@ package com.gogomaya.server.game.tictactoe;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gogomaya.server.player.PlayerAware;
 
-public class TicTacToeCellState {
+public class ExposedCellState extends CellState {
 
-    final public static long DEFAULT_OWNER = -1L;
-    final public static TicTacToeCellState DEFAULT_CELL_STATE = new TicTacToeCellState(DEFAULT_OWNER, -1, -1);
-
-    @JsonProperty("owner")
-    final private long owner;
+    final public static ExposedCellState DEFAULT_CELL_STATE = new ExposedCellState(PlayerAware.DEFAULT_PLAYER, 0, 0);
 
     @JsonProperty("firstPlayerBet")
     final private long firstPlayerBet;
@@ -18,18 +15,12 @@ public class TicTacToeCellState {
     final private long secondPlayerBet;
 
     @JsonCreator
-    public TicTacToeCellState(@JsonProperty("owner") long owner, @JsonProperty("firstPlayerBet") long firstPlayerBet, @JsonProperty("secondPlayerBet") long secondPlayerBet) {
-        this.owner = owner;
+    public ExposedCellState(@JsonProperty("owner") long owner,
+            @JsonProperty("firstPlayerBet") long firstPlayerBet,
+            @JsonProperty("secondPlayerBet") long secondPlayerBet) {
+        super(owner);
         this.firstPlayerBet = firstPlayerBet;
         this.secondPlayerBet = secondPlayerBet;
-    }
-
-    public long getOwner() {
-        return owner;
-    }
-
-    public boolean owned() {
-        return owner != DEFAULT_OWNER;
     }
 
     public long getFirstPlayerBet() {
@@ -41,16 +32,10 @@ public class TicTacToeCellState {
     }
 
     @Override
-    public String toString() {
-        return "CellState [owner=" + owner + ", first=" + firstPlayerBet + ", second=" + secondPlayerBet + "]";
-    }
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (firstPlayerBet ^ (firstPlayerBet >>> 32));
-        result = prime * result + (int) (owner ^ (owner >>> 32));
         result = prime * result + (int) (secondPlayerBet ^ (secondPlayerBet >>> 32));
         return result;
     }
@@ -63,13 +48,17 @@ public class TicTacToeCellState {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        TicTacToeCellState other = (TicTacToeCellState) obj;
+        ExposedCellState other = (ExposedCellState) obj;
         if (firstPlayerBet != other.firstPlayerBet)
-            return false;
-        if (owner != other.owner)
             return false;
         if (secondPlayerBet != other.secondPlayerBet)
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "ExposedCellState [firstPlayerBet=" + firstPlayerBet + ", secondPlayerBet=" + secondPlayerBet + "]";
+    }
+
 }

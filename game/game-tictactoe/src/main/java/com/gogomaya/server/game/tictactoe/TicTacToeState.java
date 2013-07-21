@@ -12,6 +12,7 @@ import com.gogomaya.server.game.outcome.DrawOutcome;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
+import com.gogomaya.server.player.PlayerAware;
 
 @JsonIgnoreProperties({ "winner", "activeUsers" })
 @JsonTypeName("ticTacToe")
@@ -22,14 +23,14 @@ public class TicTacToeState extends AbstractGameState {
      */
     private static final long serialVersionUID = -3282042914639667829L;
 
-    private TicTacToeCellState[][] board = new TicTacToeCellState[3][3];
+    private ExposedCellState[][] board = new ExposedCellState[3][3];
 
-    private TicTacToeCell activeCell;
+    private Cell selected;
 
     public TicTacToeState() {
         // Step 0. Filling the board with empty cell value
-        for (TicTacToeCellState[] row : board) {
-            Arrays.fill(row, TicTacToeCellState.DEFAULT_CELL_STATE);
+        for (ExposedCellState[] row : board) {
+            Arrays.fill(row, ExposedCellState.DEFAULT_CELL_STATE);
         }
     }
 
@@ -41,33 +42,33 @@ public class TicTacToeState extends AbstractGameState {
         setNextMove(new TicTacToeSelectCellEvent(getPlayerIterator().current()));
     }
 
-    public TicTacToeCell getActiveCell() {
-        return activeCell;
+    public Cell getSelected() {
+        return selected;
     }
 
-    public TicTacToeState setActiveCell(TicTacToeCell cell) {
-        this.activeCell = cell;
+    public TicTacToeState setSelected(Cell cell) {
+        this.selected = cell;
         return this;
     }
 
-    public TicTacToeCellState[][] getBoard() {
+    public ExposedCellState[][] getBoard() {
         return board;
     }
 
-    public TicTacToeCellState getCellState(int row, int column) {
+    public ExposedCellState getCellState(int row, int column) {
         return row >= 0 && row < board.length && column >= 0 && column < board.length ? board[row][column] : null;
     }
 
-    public TicTacToeCellState getCellState(TicTacToeCell cell) {
+    public ExposedCellState getCellState(Cell cell) {
         return getCellState(cell.getRow(), cell.getColumn());
     }
 
-    public TicTacToeState setBoard(final TicTacToeCell cell, final TicTacToeCellState cellState) {
+    public TicTacToeState setBoard(final Cell cell, final ExposedCellState cellState) {
         this.board[cell.getRow()][cell.getColumn()] = cellState;
         return this;
     }
 
-    public TicTacToeState setBoard(TicTacToeCellState[][] board) {
+    public TicTacToeState setBoard(ExposedCellState[][] board) {
         this.board = board;
         return this;
     }
@@ -81,7 +82,7 @@ public class TicTacToeState extends AbstractGameState {
     public GameOutcome calculate() {
         // Step 1. Checking if there is a single winner
         long winner = getWinner();
-        if (winner != TicTacToeCellState.DEFAULT_OWNER) {
+        if (winner != PlayerAware.DEFAULT_PLAYER) {
             return new PlayerWonOutcome(winner);
         }
         // Step 2. Checking if game ended in draw
@@ -114,14 +115,14 @@ public class TicTacToeState extends AbstractGameState {
         completnece[7] = owner(board[0][2], board[1][1], board[2][0]);
         // Step 2. If at least one complete game is complete
         for (long complete : completnece)
-            if (complete != TicTacToeCellState.DEFAULT_OWNER)
+            if (complete != PlayerAware.DEFAULT_PLAYER)
                 return complete;
-        return TicTacToeCellState.DEFAULT_OWNER;
+        return PlayerAware.DEFAULT_PLAYER;
     }
 
-    private long owner(TicTacToeCellState firstCell, TicTacToeCellState secondCell, TicTacToeCellState therdCell) {
+    private long owner(ExposedCellState firstCell, ExposedCellState secondCell, ExposedCellState therdCell) {
         return (firstCell.getOwner() == secondCell.getOwner() && secondCell.getOwner() == therdCell.getOwner()) ? firstCell.getOwner()
-                : TicTacToeCellState.DEFAULT_OWNER;
+                : PlayerAware.DEFAULT_PLAYER;
     }
 
     private boolean canHaveWinner() {
@@ -134,17 +135,17 @@ public class TicTacToeState extends AbstractGameState {
                 || canHaveSingleOwner(board[0][0], board[1][1], board[2][2]) || canHaveSingleOwner(board[0][2], board[1][1], board[2][0]);
     }
 
-    private boolean canHaveSingleOwner(TicTacToeCellState firstCell, TicTacToeCellState secondCell, TicTacToeCellState therdCell) {
-        return (firstCell.getOwner() == secondCell.getOwner() && (firstCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER || therdCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER))
-                || (secondCell.getOwner() == therdCell.getOwner() && (secondCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER || firstCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER))
-                || (therdCell.getOwner() == firstCell.getOwner() && (therdCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER || secondCell.getOwner() == TicTacToeCellState.DEFAULT_OWNER));
+    private boolean canHaveSingleOwner(ExposedCellState firstCell, ExposedCellState secondCell, ExposedCellState therdCell) {
+        return (firstCell.getOwner() == secondCell.getOwner() && (!firstCell.owned() || !therdCell.owned()))
+                || (secondCell.getOwner() == therdCell.getOwner() && (!secondCell.owned() || !firstCell.owned()))
+                || (therdCell.getOwner() == firstCell.getOwner() && (!therdCell.owned() || !secondCell.owned()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((activeCell == null) ? 0 : activeCell.hashCode());
+        result = prime * result + ((selected == null) ? 0 : selected.hashCode());
         result = prime * result + Arrays.hashCode(board);
         return result;
     }
@@ -158,10 +159,10 @@ public class TicTacToeState extends AbstractGameState {
         if (getClass() != obj.getClass())
             return false;
         TicTacToeState other = (TicTacToeState) obj;
-        if (activeCell == null) {
-            if (other.activeCell != null)
+        if (selected == null) {
+            if (other.selected != null)
                 return false;
-        } else if (!activeCell.equals(other.activeCell))
+        } else if (!selected.equals(other.selected))
             return false;
         if (!Arrays.deepEquals(board, other.board))
             return false;

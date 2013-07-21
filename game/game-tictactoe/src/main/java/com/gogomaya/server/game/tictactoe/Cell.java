@@ -3,14 +3,15 @@ package com.gogomaya.server.game.tictactoe;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TicTacToeCell {
+public class Cell {
 
-    final public static TicTacToeCell DEFAULT = new TicTacToeCell(Byte.MIN_VALUE, Byte.MIN_VALUE);
+    final public static Cell DEFAULT = new Cell(Byte.MIN_VALUE, Byte.MIN_VALUE);
 
     final private byte row;
     final private byte column;
 
-    private TicTacToeCell(byte row, byte column) {
+    @JsonCreator
+    private Cell(@JsonProperty("row") byte row, @JsonProperty("column")byte column) {
         this.row = row;
         this.column = column;
     }
@@ -24,11 +25,11 @@ public class TicTacToeCell {
     }
 
     @JsonCreator
-    public static TicTacToeCell create(@JsonProperty("row") byte row, @JsonProperty("column") byte column) {
-        return new TicTacToeCell(row, column);
+    public static Cell create(@JsonProperty("row") byte row, @JsonProperty("column") byte column) {
+        return new Cell(row, column);
     }
 
-    public static TicTacToeCell create(int row, int column) {
+    public static Cell create(int row, int column) {
         return create((byte) row, (byte) column);
     }
 
@@ -54,7 +55,7 @@ public class TicTacToeCell {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        TicTacToeCell other = (TicTacToeCell) obj;
+        Cell other = (Cell) obj;
         if (column != other.column)
             return false;
         if (row != other.row)

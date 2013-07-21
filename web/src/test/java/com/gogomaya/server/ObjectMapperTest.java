@@ -62,6 +62,7 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void testSpecialSerialization() {
+        Assert.assertNull(checkSerialization(TicTacToeState.class));
         Assert.assertNull(checkSerialization(GameEndedEvent.class));
         Assert.assertNull(checkSerialization(TicTacToeBetOnCellEvent.class));
         Assert.assertNull(checkSerialization(PlayerMovedEvent.class));
@@ -106,7 +107,7 @@ public class ObjectMapperTest extends ObjectTest {
             String stringPresentation = objectMapper.writeValueAsString(expected);
             Object actual = objectMapper.readValue(stringPresentation, candidate);
 
-            Assert.assertEquals(expected, actual);
+            Assert.assertEquals(stringPresentation, expected, actual);
 
             Class<?> originalClass = getOriginal(candidate);
             Assert.assertNotNull(originalClass);

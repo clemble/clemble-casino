@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.event.ExpectedAction;
+import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.server.game.construct.GameConstruction;
@@ -66,11 +66,11 @@ public class GameConstructionController<State extends GameState> {
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    ExpectedAction getResponce(
+    ClientEvent getResponce(
             @RequestHeader("playerId") final long requester,
             @PathVariable("sessionId") final long session,
             @PathVariable("playerId") final long player) {
-        return constructionRepository.findOne(session).getResponses().fetchAction(player);
+        return (ClientEvent) constructionRepository.findOne(session).getResponses().fetchAction(player);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, produces = "application/json")
