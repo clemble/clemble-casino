@@ -1,4 +1,4 @@
-package com.gogomaya.server.game;
+package com.gogomaya.server.game.tictactoe;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,7 +13,12 @@ import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.GamePlayerIterator;
+import com.gogomaya.server.game.GamePlayerState;
+import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.outcome.GameOutcome;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
+import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.player.PlayerAwareUtils;
 
 @JsonIgnoreProperties(value = { "activeUsers" })
@@ -28,9 +33,7 @@ abstract public class AbstractGameState implements GameState {
     @JsonIgnore
     private GamePlayerIterator playerIterator;
 
-    private Map<Long, ClientEvent> nextMoves = new HashMap<Long, ClientEvent>();
-    @JsonIgnore
-    private Map<Long, ClientEvent> madeMoves = new HashMap<Long, ClientEvent>();
+    private ActionLatch actionLatch;
 
     private GameOutcome outcome;
 
@@ -43,7 +46,7 @@ abstract public class AbstractGameState implements GameState {
     }
 
     final public GameState setPlayerStates(Collection<GamePlayerState> playersStates) {
-        playersState = PlayerAwareUtils.toMap(playersStates);
+        this.playersState = PlayerAwareUtils.toMap(playersStates);
         return this;
     }
 
@@ -74,61 +77,29 @@ abstract public class AbstractGameState implements GameState {
         return opponents;
     }
 
-    @Override
-    @JsonProperty("nextMoves")
-    final public Collection<ClientEvent> getNextMoves() {
-        return nextMoves.values();
+    public ActionLatch getActionLatch() {
+        return actionLatch;
     }
 
-    @Override
-    final public ClientEvent getNextMove(long playerId) {
-        return nextMoves.get(playerId);
+    public void setActionLatch(ActionLatch actionLatch) {
+        this.actionLatch = actionLatch;
     }
 
-    final public GameState setNextMove(ClientEvent move) {
-        nextMoves.clear();
-        nextMoves.put(move.getPlayerId(), move);
-        version++;
+    final public GameState setSelectNext() {
+        this.actionLatch = new ActionLatch(playerIterator.next(), "select", TicTacToeSelectCellEvent.class);
+        this.version++;
         return this;
     }
 
-    final public GameState setNextMoves(Collection<ClientEvent> moves) {
-        nextMoves.clear();
-        for (ClientEvent move : moves)
-            nextMoves.put(move.getPlayerId(), move);
-        version++;
+    final public GameState setBetNext() {
+        this.actionLatch = new ActionLatch(playersState.keySet(), "bet", TicTacToeBetOnCellEvent.class);
+        this.version++;
         return this;
-    }
-
-    final public ClientEvent getMadeMove(long playerId) {
-        return madeMoves.get(playerId);
-    }
-
-    final public void setMadeMoves(Collection<ClientEvent> gameMoves) {
-        madeMoves.clear();
-        for (ClientEvent move : gameMoves) {
-            madeMoves.put(move.getPlayerId(), move);
-        }
-        version++;
-    }
-
-    @Override
-    @JsonIgnore
-    @JsonProperty("madeMoves")
-    final public Collection<ClientEvent> getMadeMoves() {
-        return madeMoves.values();
     }
 
     final public GameState addMadeMove(ClientEvent playerMove) {
-        if (nextMoves.remove(playerMove.getPlayerId()) != null) {
-            madeMoves.put(playerMove.getPlayerId(), playerMove);
-            version++;
-        }
-        return this;
-    }
-
-    final public GameState cleanMadeMove() {
-        madeMoves.clear();
+        this.actionLatch.put(playerMove.getPlayerId(), playerMove);
+        this.version++;
         return this;
     }
 
@@ -141,11 +112,6 @@ abstract public class AbstractGameState implements GameState {
     final public GameState setPlayerIterator(GamePlayerIterator playerIterator) {
         this.playerIterator = playerIterator;
         return this;
-    }
-
-    @Override
-    final public int getVersion() {
-        return version;
     }
 
     abstract public GameOutcome calculate();
@@ -168,6 +134,11 @@ abstract public class AbstractGameState implements GameState {
         this.outcome = outcome;
         this.version++;
         return this;
+    }
+
+    @Override
+    final public int getVersion() {
+        return version;
     }
 
     final public void setVersion(int version) {

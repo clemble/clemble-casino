@@ -1,7 +1,5 @@
 package com.gogomaya.server.game.event.server;
 
-import java.util.Collection;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.event.ClientEvent;
@@ -17,8 +15,6 @@ public class PlayerMovedEvent<State extends GameState> extends GameServerEvent<S
     private static final long serialVersionUID = -3272848407005579296L;
 
     private ClientEvent madeMove;
-
-    private Collection<ClientEvent> nextMoves;
 
     public PlayerMovedEvent() {
     }
@@ -36,15 +32,6 @@ public class PlayerMovedEvent<State extends GameState> extends GameServerEvent<S
         return this;
     }
 
-    public Collection<ClientEvent> getNextMoves() {
-        return nextMoves;
-    }
-
-    public PlayerMovedEvent<State> setNextMoves(Collection<ClientEvent> nextMoves) {
-        this.nextMoves = nextMoves;
-        return this;
-    }
-
     @Override
     @JsonIgnore
     public long getPlayerId() {
@@ -56,7 +43,6 @@ public class PlayerMovedEvent<State extends GameState> extends GameServerEvent<S
         final int prime = 31;
         int result = 1;
         result = prime * result + ((madeMove == null) ? 0 : madeMove.hashCode());
-        result = prime * result + ((nextMoves == null) ? 0 : nextMoves.hashCode());
         return result;
     }
 
@@ -73,11 +59,6 @@ public class PlayerMovedEvent<State extends GameState> extends GameServerEvent<S
             if (other.madeMove != null)
                 return false;
         } else if (!madeMove.equals(other.madeMove))
-            return false;
-        if (nextMoves == null) {
-            if (other.nextMoves != null)
-                return false;
-        } else if (!nextMoves.equals(other.nextMoves))
             return false;
         return true;
     }

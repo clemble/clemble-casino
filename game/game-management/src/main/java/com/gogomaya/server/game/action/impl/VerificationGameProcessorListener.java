@@ -28,11 +28,6 @@ public class VerificationGameProcessorListener<State extends GameState> implemen
         }
         if (!(move instanceof SurrenderEvent)) {
             // Step 3. Checking that move
-            ClientEvent expectedMove = state.getNextMove(playerId);
-            if (expectedMove == null)
-                throw GogomayaException.fromError(GogomayaError.GamePlayNoMoveExpected);
-            if (expectedMove.getClass() != move.getClass())
-                throw GogomayaException.fromError(GogomayaError.GamePlayWrongMoveType);
             if (move instanceof BetEvent) {
                 GamePlayerState gamePlayerState = state.getPlayerState(move.getPlayerId());
                 if (((BetEvent) move).getBet() > gamePlayerState.getMoneyLeft())

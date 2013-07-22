@@ -5,16 +5,14 @@ import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.server.game.AbstractGameState;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.SequentialPlayerIterator;
 import com.gogomaya.server.game.outcome.DrawOutcome;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.player.PlayerAware;
 
-@JsonIgnoreProperties({ "winner", "activeUsers" })
+@JsonIgnoreProperties({ "activeUsers" })
 @JsonTypeName("ticTacToe")
 public class TicTacToeState extends AbstractGameState {
 
@@ -39,7 +37,7 @@ public class TicTacToeState extends AbstractGameState {
 
         setPlayerStates(playersStates);
         setPlayerIterator(new SequentialPlayerIterator(playersStates));
-        setNextMove(new TicTacToeSelectCellEvent(getPlayerIterator().current()));
+        setSelectNext();
     }
 
     public Cell getSelected() {
@@ -53,14 +51,6 @@ public class TicTacToeState extends AbstractGameState {
 
     public ExposedCellState[][] getBoard() {
         return board;
-    }
-
-    public ExposedCellState getCellState(int row, int column) {
-        return row >= 0 && row < board.length && column >= 0 && column < board.length ? board[row][column] : null;
-    }
-
-    public ExposedCellState getCellState(Cell cell) {
-        return getCellState(cell.getRow(), cell.getColumn());
     }
 
     public TicTacToeState setBoard(final Cell cell, final ExposedCellState cellState) {
@@ -81,7 +71,7 @@ public class TicTacToeState extends AbstractGameState {
 
     public GameOutcome calculate() {
         // Step 1. Checking if there is a single winner
-        long winner = getWinner();
+        long winner = hasWinner();
         if (winner != PlayerAware.DEFAULT_PLAYER) {
             return new PlayerWonOutcome(winner);
         }
@@ -90,8 +80,8 @@ public class TicTacToeState extends AbstractGameState {
             return new DrawOutcome();
         }
         // Step 3. Returning default value
-        for(GamePlayerState playerState: getPlayerStates()) {
-            if(playerState.getMoneyLeft() == 0) {
+        for (GamePlayerState playerState : getPlayerStates()) {
+            if (playerState.getMoneyLeft() == 0) {
                 winner = getOpponents(playerState.getPlayerId()).iterator().next();
                 return new PlayerWonOutcome(winner);
             }
@@ -99,25 +89,12 @@ public class TicTacToeState extends AbstractGameState {
         return null;
     }
 
-    private long getWinner() {
-        long completnece[] = new long[8];
-        Arrays.fill(completnece, -1L);
-        // Checking rows
-        completnece[0] = owner(board[0][0], board[0][1], board[0][2]);
-        completnece[1] = owner(board[1][0], board[1][1], board[1][2]);
-        completnece[2] = owner(board[2][0], board[2][1], board[2][2]);
-        // Checking columns
-        completnece[3] = owner(board[0][0], board[1][0], board[2][0]);
-        completnece[4] = owner(board[0][1], board[1][1], board[2][1]);
-        completnece[5] = owner(board[0][2], board[1][2], board[2][2]);
-        // Checking diagonals
-        completnece[6] = owner(board[0][0], board[1][1], board[2][2]);
-        completnece[7] = owner(board[0][2], board[1][1], board[2][0]);
-        // Step 2. If at least one complete game is complete
-        for (long complete : completnece)
-            if (complete != PlayerAware.DEFAULT_PLAYER)
-                return complete;
-        return PlayerAware.DEFAULT_PLAYER;
+    private long hasWinner() {
+        return owner(board[0][0], board[0][1], board[0][2]) // Checking rows
+                + owner(board[1][0], board[1][1], board[1][2]) + owner(board[2][0], board[2][1], board[2][2]) + owner(board[0][0], board[1][0], board[2][0]) // Checking
+                                                                                                                                                             // columns
+                + owner(board[0][1], board[1][1], board[2][1]) + owner(board[0][2], board[1][2], board[2][2]) // Checking diagonals
+                + owner(board[0][0], board[1][1], board[2][2]) + owner(board[0][2], board[1][1], board[2][0]);
     }
 
     private long owner(ExposedCellState firstCell, ExposedCellState secondCell, ExposedCellState therdCell) {
@@ -136,6 +113,7 @@ public class TicTacToeState extends AbstractGameState {
     }
 
     private boolean canHaveSingleOwner(ExposedCellState firstCell, ExposedCellState secondCell, ExposedCellState therdCell) {
+        // In arbitrary line XOX if X is free, it can be owned by O, if O is free it also can be owned by X
         return (firstCell.getOwner() == secondCell.getOwner() && (!firstCell.owned() || !therdCell.owned()))
                 || (secondCell.getOwner() == therdCell.getOwner() && (!secondCell.owned() || !firstCell.owned()))
                 || (therdCell.getOwner() == firstCell.getOwner() && (!therdCell.owned() || !secondCell.owned()));

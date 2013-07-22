@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.gogomaya.server.ExpectedAction;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
 import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
@@ -51,14 +52,12 @@ public class SimpleTicTacToeGameTest {
             playerB.bet(2);
 
             playerB.isToMove();
-            Assert.assertEquals(playerB.getNextMove().getClass(), TicTacToeSelectCellEvent.class);
+            Assert.assertEquals(playerB.getNextMove().getClass(), ExpectedAction.class);
             playerA.syncWith(playerB);
 
             Assert.assertTrue(playerB.getState().getBoard()[0][0].owned());
-            Assert.assertEquals(playerB.getState().getNextMoves().size(), 1);
             Assert.assertEquals(playerB.getMoneyLeft(), gamePrice - 2);
             Assert.assertEquals(playerA.getMoneyLeft(), gamePrice - 5);
-            Assert.assertNotNull(playerB.getState().getNextMove(playerB.getPlayerId()));
         } finally {
             playerA.close();
             playerB.close();

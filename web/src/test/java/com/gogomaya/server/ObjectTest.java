@@ -5,9 +5,13 @@ import java.util.Date;
 import org.apache.commons.lang.RandomStringUtils;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.construct.AutomaticGameRequest;
+import com.gogomaya.server.game.construct.GameConstruction;
+import com.gogomaya.server.game.construct.GameConstructionState;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
+import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.money.Currency;
@@ -22,6 +26,7 @@ import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.player.security.PlayerCredential;
+import com.google.common.collect.ImmutableList;
 import com.stresstest.random.AbstractValueGenerator;
 import com.stresstest.random.ObjectGenerator;
 
@@ -104,6 +109,16 @@ public class ObjectTest {
                         .setGender(PlayerGender.M).setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10));
             }
 
+        });
+        ObjectGenerator.register(GameConstruction.class, new AbstractValueGenerator<GameConstruction>() {
+
+            @Override
+            public GameConstruction generate() {
+                return new GameConstruction()
+                    .setRequest(new AutomaticGameRequest(1, GameSpecification.DEFAULT))
+                    .setResponses(new ActionLatch(ImmutableList.<Long>of(1L, 2L),"response"))
+                    .setState(GameConstructionState.pending);
+            }
         });
     }
 

@@ -4,10 +4,9 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.game.outcome.GameOutcome;
 
-// !!! NEED TO MAKE A COPY OF THIS ON EVERY OBJECT WITH GET METHOD CALL
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public interface GameState extends Serializable {
 
@@ -19,17 +18,11 @@ public interface GameState extends Serializable {
 
     public GameState setPlayerStates(Collection<GamePlayerState> playersStates);
 
-    public ClientEvent getNextMove(long playerId);
-
-    public Collection<ClientEvent> getNextMoves();
-
-    public ClientEvent getMadeMove(long playerId);
-
-    public Collection<ClientEvent> getMadeMoves();
-
     public GamePlayerIterator getPlayerIterator();
 
     public GameState setPlayerIterator(GamePlayerIterator playerIterator);
+
+    public ActionLatch getActionLatch();
 
     public GameOutcome getOutcome();
 

@@ -40,18 +40,18 @@ public class GameStateSerializationTest {
 
         TicTacToeState tacToeState = new TicTacToeState(players);
         tacToeState.addMadeMove(new TicTacToeSelectCellEvent(1L));
-        Assert.assertNotNull(tacToeState.getMadeMove(1L));
+        Assert.assertNotNull(tacToeState.getActionLatch().fetchAction(1L));
 
         String jsonPresentation = objectMapper.writeValueAsString(tacToeState);
         System.out.println(jsonPresentation);
         readState = (TicTacToeState) objectMapper.readValue(jsonPresentation, GameState.class);
-        Assert.assertNull(readState.getMadeMove(1L));
+        Assert.assertFalse(readState.getActionLatch().acted(1L));
 
         jsonPresentation = anotherObjectMapper.writeValueAsString(tacToeState);
         System.out.println(jsonPresentation);
         readState = (TicTacToeState) anotherObjectMapper.readValue(jsonPresentation, GameState.class);
 
-        Assert.assertNotNull(readState.getMadeMove(1L));
+        Assert.assertTrue(readState.getActionLatch().acted(1L));
 
     }
 

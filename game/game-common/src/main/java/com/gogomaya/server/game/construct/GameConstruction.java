@@ -92,16 +92,18 @@ public class GameConstruction implements SessionAware {
         return state;
     }
 
-    public void setState(GameConstructionState state) {
+    public GameConstruction setState(GameConstructionState state) {
         this.state = state;
+        return this;
     }
 
     public ActionLatch getResponses() {
         return responses;
     }
 
-    public void setResponses(ActionLatch responses) {
+    public GameConstruction setResponses(ActionLatch responses) {
         this.responses = responses;
+        return this;
     }
 
     public List<Long> fetchAcceptedParticipants() {

@@ -28,7 +28,7 @@ public class GameTimeProcessorListener<State extends GameState> implements GameP
         if(session.getState().complete()) {
             timeScheduler.markFinished(session);
         } else {
-            for (ClientEvent nextMove : session.getState().getNextMoves()) {
+            for (ClientEvent nextMove : session.getState().getActionLatch().getActions()) {
                 timeScheduler.markStarted(session, nextMove.getPlayerId());
             }
         }

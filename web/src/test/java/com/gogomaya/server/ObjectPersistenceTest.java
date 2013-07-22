@@ -21,7 +21,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.ScheduledGame;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameScheduleRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
@@ -38,8 +40,13 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
     @Autowired
     public GameScheduleRepository gameScheduleRepository;
 
+    @Autowired
+    public GameConstructionRepository constructionRepository;
+
     @Test
     public void testSpecialCase() {
+        check(constructionRepository, GameConstruction.class);
+
         ScheduledGame scheduledGame = ObjectGenerator.generate(ScheduledGame.class);
 
         ScheduledGame savedScheduledGame = gameScheduleRepository.saveAndFlush(scheduledGame);
@@ -89,6 +96,11 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
         }
 
         Assert.assertTrue(String.valueOf(errors), errors.isEmpty());
+    }
+
+    private <T> void check(JpaRepository<T, Long> relatedEntityRepository, Class<T> domainClass) {
+        T objectToSave = ObjectGenerator.generate(domainClass);
+        relatedEntityRepository.saveAndFlush(objectToSave);
     }
 
     public Class<?> getDomainClass(JpaRepository repository) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,

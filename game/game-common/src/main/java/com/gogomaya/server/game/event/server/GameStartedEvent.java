@@ -1,9 +1,6 @@
 package com.gogomaya.server.game.event.server;
 
-import java.util.Collection;
-
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.ServerResourse;
@@ -21,15 +18,12 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
 
     private ServerResourse resource;
 
-    private Collection<ClientEvent> nextMoves;
-
     public GameStartedEvent() {
     }
 
     public GameStartedEvent(long session, GameTable<State> table) {
         super(table.getCurrentSession());
         this.session = session;
-        this.nextMoves = getState().getNextMoves();
         this.resource = table.fetchServerResourse();
     }
 
@@ -40,15 +34,6 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
     public GameStartedEvent(SessionAware sessionAware, State state) {
         super(sessionAware);
         this.setState(state);
-    }
-
-    public Collection<ClientEvent> getNextMoves() {
-        return nextMoves;
-    }
-
-    public GameStartedEvent<State> setNextMoves(Collection<ClientEvent> nextMoves) {
-        this.nextMoves = nextMoves;
-        return this;
     }
 
     public ServerResourse getResource() {
@@ -73,7 +58,8 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((nextMoves == null) ? 0 : nextMoves.hashCode());
+        result = prime * result + ((resource == null) ? 0 : resource.hashCode());
+        result = prime * result + (int) (session ^ (session >>> 32));
         return result;
     }
 
@@ -85,11 +71,13 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GameStartedEvent<State> other = (GameStartedEvent<State>) obj;
-        if (nextMoves == null) {
-            if (other.nextMoves != null)
+        GameStartedEvent other = (GameStartedEvent) obj;
+        if (resource == null) {
+            if (other.resource != null)
                 return false;
-        } else if (!nextMoves.equals(other.nextMoves))
+        } else if (!resource.equals(other.resource))
+            return false;
+        if (session != other.session)
             return false;
         return true;
     }
