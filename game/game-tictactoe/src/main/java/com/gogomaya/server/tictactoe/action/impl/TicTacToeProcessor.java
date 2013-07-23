@@ -9,8 +9,11 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.action.GameProcessor;
+import com.gogomaya.server.game.cell.Cell;
+import com.gogomaya.server.game.cell.ExposedCellState;
 import com.gogomaya.server.game.event.client.BetEvent;
-import com.gogomaya.server.game.event.client.SurrenderEvent;
+import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
+import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameEndedEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.event.server.PlayerLostEvent;
@@ -18,10 +21,7 @@ import com.gogomaya.server.game.event.server.PlayerMovedEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.NoOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
-import com.gogomaya.server.game.tictactoe.Cell;
-import com.gogomaya.server.game.tictactoe.ExposedCellState;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.google.common.collect.ImmutableList;
 
 public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
@@ -32,8 +32,8 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
         // Step 1. Processing Select cell move
         if (state.complete()) {
             return ImmutableList.<GameServerEvent<TicTacToeState>> of();
-        } else if (clientEvent instanceof TicTacToeSelectCellEvent) {
-            return ImmutableList.<GameServerEvent<TicTacToeState>> of(processSelectCellEvent(state, (TicTacToeSelectCellEvent) clientEvent));
+        } else if (clientEvent instanceof SelectCellEvent) {
+            return ImmutableList.<GameServerEvent<TicTacToeState>> of(processSelectCellEvent(state, (SelectCellEvent) clientEvent));
         } else if (clientEvent instanceof BetEvent) {
             return ImmutableList.<GameServerEvent<TicTacToeState>> of(processBetOnCellEvent(state, (BetEvent) clientEvent));
         } else if (clientEvent instanceof SurrenderEvent) {
@@ -88,7 +88,7 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
         return new PlayerMovedEvent<TicTacToeState>().setMadeMove(betMove).setState(state);
     }
 
-    private GameServerEvent<TicTacToeState> processSelectCellEvent(final TicTacToeState state, final TicTacToeSelectCellEvent selectCellMove) {
+    private GameServerEvent<TicTacToeState> processSelectCellEvent(final TicTacToeState state, final SelectCellEvent selectCellMove) {
         state.addMadeMove(selectCellMove);
         Cell cellToSelect = selectCellMove.getCell();
         // Step 1. Sanity check

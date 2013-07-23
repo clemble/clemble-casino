@@ -13,7 +13,7 @@ import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.cache.GameCache;
 import com.gogomaya.server.game.cache.GameCacheService;
 import com.gogomaya.server.game.construct.GameInitiation;
-import com.gogomaya.server.game.event.client.SurrenderEvent;
+import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.player.notification.PlayerNotificationService;

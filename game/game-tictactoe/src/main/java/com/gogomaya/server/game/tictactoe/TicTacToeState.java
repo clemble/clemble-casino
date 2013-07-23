@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.SequentialPlayerIterator;
+import com.gogomaya.server.game.cell.Cell;
+import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.outcome.DrawOutcome;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
@@ -14,7 +16,7 @@ import com.gogomaya.server.player.PlayerAware;
 
 @JsonIgnoreProperties({ "activeUsers" })
 @JsonTypeName("ticTacToe")
-public class TicTacToeState extends AbstractGameState {
+public class TicTacToeState extends AbstractPicPacPoeGameState {
 
     /**
      * Generated 02/04/13
@@ -92,25 +94,32 @@ public class TicTacToeState extends AbstractGameState {
 
     private long hasWinner() {
         return owner(board[0][0], board[0][1], board[0][2]) // Checking rows
-                + owner(board[1][0], board[1][1], board[1][2]) + owner(board[2][0], board[2][1], board[2][2]) + owner(board[0][0], board[1][0], board[2][0]) // Checking
-                                                                                                                                                             // columns
-                + owner(board[0][1], board[1][1], board[2][1]) + owner(board[0][2], board[1][2], board[2][2]) // Checking diagonals
-                + owner(board[0][0], board[1][1], board[2][2]) + owner(board[0][2], board[1][1], board[2][0]);
+                + owner(board[1][0], board[1][1], board[1][2])
+                + owner(board[2][0], board[2][1], board[2][2])
+                + owner(board[0][0], board[1][0], board[2][0]) // Checking columns
+                + owner(board[0][1], board[1][1], board[2][1])
+                + owner(board[0][2], board[1][2], board[2][2]) // Checking diagonals
+                + owner(board[0][0], board[1][1], board[2][2])
+                + owner(board[0][2], board[1][1], board[2][0]);
     }
 
     private long owner(CellState firstCell, CellState secondCell, CellState therdCell) {
-        return (firstCell.getOwner() == secondCell.getOwner() && secondCell.getOwner() == therdCell.getOwner()) ? firstCell.getOwner()
+        return (firstCell.getOwner() == secondCell.getOwner() && secondCell.getOwner() == therdCell.getOwner())
+                ? firstCell.getOwner()
                 : PlayerAware.DEFAULT_PLAYER;
     }
 
     private boolean canHaveWinner() {
-        return canHaveSingleOwner(board[0][0], board[0][1], board[0][2]) || canHaveSingleOwner(board[1][0], board[1][1], board[1][2])
+        return canHaveSingleOwner(board[0][0], board[0][1], board[0][2])
+                || canHaveSingleOwner(board[1][0], board[1][1], board[1][2])
                 || canHaveSingleOwner(board[2][0], board[2][1], board[2][2])
                 // Checking columns
-                || canHaveSingleOwner(board[0][0], board[1][0], board[2][0]) || canHaveSingleOwner(board[0][1], board[1][1], board[2][1])
+                || canHaveSingleOwner(board[0][0], board[1][0], board[2][0])
+                || canHaveSingleOwner(board[0][1], board[1][1], board[2][1])
                 || canHaveSingleOwner(board[0][2], board[1][2], board[2][2])
                 // Checking diagonals
-                || canHaveSingleOwner(board[0][0], board[1][1], board[2][2]) || canHaveSingleOwner(board[0][2], board[1][1], board[2][0]);
+                || canHaveSingleOwner(board[0][0], board[1][1], board[2][2])
+                || canHaveSingleOwner(board[0][2], board[1][1], board[2][0]);
     }
 
     private boolean canHaveSingleOwner(CellState firstCell, CellState secondCell, CellState therdCell) {

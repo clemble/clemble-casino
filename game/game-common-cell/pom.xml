@@ -6,22 +6,11 @@
         <artifactId>game</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
-    <artifactId>game-tictactoe</artifactId>
+    <artifactId>game-common-cell</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>game-management</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>game-common-cell</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>test-utils</artifactId>
-            <scope>test</scope>
+            <artifactId>game-common</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -1,16 +1,13 @@
-package com.gogomaya.server.game.tictactoe.event.client;
+package com.gogomaya.server.game.event.client.generic;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.server.game.cell.Cell;
 import com.gogomaya.server.game.event.client.GameClientEvent;
-import com.gogomaya.server.game.tictactoe.Cell;
 
 @JsonTypeName("select")
-@JsonIgnoreProperties(value = { "row", "column" })
-public class TicTacToeSelectCellEvent extends GameClientEvent implements TicTacToeEvent {
+public class SelectCellEvent extends GameClientEvent {
 
     /**
      * Generated 02/04/13
@@ -19,28 +16,10 @@ public class TicTacToeSelectCellEvent extends GameClientEvent implements TicTacT
 
     final private Cell cell;
 
-    public TicTacToeSelectCellEvent(final long playerId) {
-        this(playerId, Byte.MIN_VALUE, Byte.MIN_VALUE);
-    }
-
-    public TicTacToeSelectCellEvent(final long playerId, final byte row, final byte column) {
-        this(playerId, Cell.create(row, column));
-    }
-
     @JsonCreator
-    public TicTacToeSelectCellEvent(@JsonProperty("playerId") final long playerId, @JsonProperty("cell") final Cell cell) {
+    public SelectCellEvent(@JsonProperty("playerId") final long playerId, @JsonProperty("cell") final Cell cell) {
         super(playerId);
         this.cell = cell;
-    }
-
-    @JsonIgnore
-    public byte getRow() {
-        return cell.getRow();
-    }
-
-    @JsonIgnore
-    public byte getColumn() {
-        return cell.getColumn();
     }
 
     public Cell getCell() {
@@ -49,7 +28,7 @@ public class TicTacToeSelectCellEvent extends GameClientEvent implements TicTacT
 
     @Override
     public String toString() {
-        return "SelectCell [cell=" + cell + ", player = " + getPlayerId() + "]";
+        return "{cell:" + cell + ", player: " + getPlayerId() + "}";
     }
 
     @Override
@@ -68,7 +47,7 @@ public class TicTacToeSelectCellEvent extends GameClientEvent implements TicTacT
             return false;
         if (getClass() != obj.getClass())
             return false;
-        TicTacToeSelectCellEvent other = (TicTacToeSelectCellEvent) obj;
+        SelectCellEvent other = (SelectCellEvent) obj;
         if (cell == null) {
             if (other.cell != null)
                 return false;

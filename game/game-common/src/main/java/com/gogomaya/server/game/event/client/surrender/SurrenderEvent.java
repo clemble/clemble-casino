@@ -1,5 +1,6 @@
-package com.gogomaya.server.game.event.client;
+package com.gogomaya.server.game.event.client.surrender;
 
+import com.gogomaya.server.game.event.client.GameClientEvent;
 
 abstract public class SurrenderEvent extends GameClientEvent {
 

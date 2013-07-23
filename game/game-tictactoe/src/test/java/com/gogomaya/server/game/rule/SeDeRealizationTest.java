@@ -17,9 +17,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaFailure;
+import com.gogomaya.server.game.cell.Cell;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.event.client.BetEvent;
-import com.gogomaya.server.game.event.client.GiveUpEvent;
+import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
+import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.bet.LimitedBetRule;
@@ -28,7 +30,6 @@ import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TimeBreachPunishment;
 import com.gogomaya.server.game.rule.time.TimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -105,11 +106,11 @@ public class SeDeRealizationTest {
 
     @Test
     public void testSelectCell() throws JsonGenerationException, JsonMappingException, IOException {
-        TicTacToeSelectCellEvent selectCellMove = new TicTacToeSelectCellEvent(1, (byte) 0, (byte) 0);
+        SelectCellEvent selectCellMove = new SelectCellEvent(1, Cell.create(0, 0));
 
         String value = objectMapper.writeValueAsString(selectCellMove);
 
-        TicTacToeSelectCellEvent parsedSelectCellMove = objectMapper.readValue(value, TicTacToeSelectCellEvent.class);
+        SelectCellEvent parsedSelectCellMove = objectMapper.readValue(value, SelectCellEvent.class);
         Assert.assertEquals(selectCellMove, parsedSelectCellMove);
 
         System.out.println(value);

@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.tictactoe;
+package com.gogomaya.server.game.cell;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,20 +7,20 @@ public class Cell {
 
     final public static Cell DEFAULT = new Cell(Byte.MIN_VALUE, Byte.MIN_VALUE);
 
-    final private byte row;
-    final private byte column;
+    final private int row;
+    final private int column;
 
     @JsonCreator
-    private Cell(@JsonProperty("row") byte row, @JsonProperty("column")byte column) {
+    private Cell(@JsonProperty("row") int row, @JsonProperty("column") int column) {
         this.row = row;
         this.column = column;
     }
 
-    public byte getRow() {
+    public int getRow() {
         return row;
     }
 
-    public byte getColumn() {
+    public int getColumn() {
         return column;
     }
 

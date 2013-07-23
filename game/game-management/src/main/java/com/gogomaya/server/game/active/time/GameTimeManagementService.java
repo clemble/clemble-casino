@@ -19,8 +19,8 @@ import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.action.GameSessionProcessor;
-import com.gogomaya.server.game.event.client.MoveTimeoutSurrenderEvent;
-import com.gogomaya.server.game.event.client.TotalTimeoutSurrenderEvent;
+import com.gogomaya.server.game.event.client.surrender.MoveTimeoutSurrenderEvent;
+import com.gogomaya.server.game.event.client.surrender.TotalTimeoutSurrenderEvent;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 
 public class GameTimeManagementService<State extends GameState> implements Serializable {

@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.event.client;
+package com.gogomaya.server.game.event.client.surrender;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

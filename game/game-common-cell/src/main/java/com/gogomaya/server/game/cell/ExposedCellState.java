@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.tictactoe;
+package com.gogomaya.server.game.cell;
 
 import java.util.Collection;
 

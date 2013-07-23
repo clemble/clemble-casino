@@ -1,8 +1,8 @@
 package com.gogomaya.server.game.active.time;
 
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.event.client.MoveTimeoutSurrenderEvent;
-import com.gogomaya.server.game.event.client.TotalTimeoutSurrenderEvent;
+import com.gogomaya.server.game.event.client.surrender.MoveTimeoutSurrenderEvent;
+import com.gogomaya.server.game.event.client.surrender.TotalTimeoutSurrenderEvent;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TimeRule;
 import com.gogomaya.server.player.PlayerAware;

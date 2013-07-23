@@ -12,7 +12,7 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.ServerResourse;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GameClientEvent;
-import com.gogomaya.server.game.event.client.GiveUpEvent;
+import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.specification.GameSpecification;

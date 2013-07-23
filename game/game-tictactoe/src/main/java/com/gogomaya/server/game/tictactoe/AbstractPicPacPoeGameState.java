@@ -16,13 +16,15 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GamePlayerIterator;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.cell.Cell;
+import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.event.client.BetEvent;
+import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.player.PlayerAwareUtils;
 
 @JsonIgnoreProperties(value = { "activeUsers" })
-abstract public class AbstractGameState implements GameState {
+abstract public class AbstractPicPacPoeGameState implements GameState {
 
     /**
      * Generated 02/04/13
@@ -36,6 +38,10 @@ abstract public class AbstractGameState implements GameState {
     private ActionLatch actionLatch;
 
     private GameOutcome outcome;
+
+    private CellState[][] board = new CellState[3][3];
+
+    private Cell selected;
 
     @JsonProperty("version")
     private int version;
@@ -82,7 +88,7 @@ abstract public class AbstractGameState implements GameState {
     }
 
     final public GameState setSelectNext() {
-        this.actionLatch = new ActionLatch(playerIterator.next(), "select", TicTacToeSelectCellEvent.class);
+        this.actionLatch = new ActionLatch(playerIterator.next(), "select", SelectCellEvent.class);
         this.version++;
         return this;
     }

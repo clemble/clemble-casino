@@ -2,7 +2,7 @@ package com.gogomaya.server.game.event.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.event.client.SurrenderEvent;
+import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.server.player.PlayerAware;
 
 @JsonTypeName("playerGaveUp")

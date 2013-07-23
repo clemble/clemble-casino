@@ -10,7 +10,7 @@ import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.client.BetEvent;
-import com.gogomaya.server.game.event.client.SurrenderEvent;
+import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class VerificationGameProcessorListener<State extends GameState> implements GameProcessorListener<State> {

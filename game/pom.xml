@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>game-common</module>
+        <module>game-common-cell</module>
         <module>game-management</module>
         <module>game-tictactoe</module>
         <module>game-web</module>
@@ -19,6 +20,11 @@
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>game-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>game-common-cell</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

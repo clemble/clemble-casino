@@ -9,7 +9,7 @@ import com.gogomaya.server.game.construct.AutomaticGameRequest;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameConstructionState;
 import com.gogomaya.server.game.event.client.BetEvent;
-import com.gogomaya.server.game.event.client.GiveUpEvent;
+import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.specification.GameSpecification;
