@@ -16,8 +16,8 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GamePlayerIterator;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.player.PlayerAwareUtils;
 
@@ -61,10 +61,6 @@ abstract public class AbstractGameState implements GameState {
         return this;
     }
 
-    final protected void updatePlayerState(GamePlayerState playerState) {
-        this.playersState.put(playerState.getPlayerId(), playerState);
-    }
-
     final public Set<Long> getOpponents(long playerId) {
         // Step 1. Calculating opponents from the original list
         Set<Long> opponents = new HashSet<Long>();
@@ -92,7 +88,7 @@ abstract public class AbstractGameState implements GameState {
     }
 
     final public GameState setBetNext() {
-        this.actionLatch = new ActionLatch(playersState.keySet(), "bet", TicTacToeBetOnCellEvent.class);
+        this.actionLatch = new ActionLatch(playersState.keySet(), "bet", BetEvent.class);
         this.version++;
         return this;
     }

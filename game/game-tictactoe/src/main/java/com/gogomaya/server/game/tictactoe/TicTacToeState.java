@@ -21,14 +21,14 @@ public class TicTacToeState extends AbstractGameState {
      */
     private static final long serialVersionUID = -3282042914639667829L;
 
-    private ExposedCellState[][] board = new ExposedCellState[3][3];
+    private CellState[][] board = new CellState[3][3];
 
     private Cell selected;
 
     public TicTacToeState() {
         // Step 0. Filling the board with empty cell value
-        for (ExposedCellState[] row : board) {
-            Arrays.fill(row, ExposedCellState.DEFAULT_CELL_STATE);
+        for (CellState[] row : board) {
+            Arrays.fill(row, CellState.DEFAULT);
         }
     }
 
@@ -49,16 +49,17 @@ public class TicTacToeState extends AbstractGameState {
         return this;
     }
 
-    public ExposedCellState[][] getBoard() {
+    public CellState[][] getBoard() {
         return board;
     }
 
-    public TicTacToeState setBoard(final Cell cell, final ExposedCellState cellState) {
-        this.board[cell.getRow()][cell.getColumn()] = cellState;
+    public TicTacToeState setSelectedState(final CellState cellState) {
+        this.board[selected.getRow()][selected.getColumn()] = cellState;
+        setSelected(Cell.DEFAULT);
         return this;
     }
 
-    public TicTacToeState setBoard(ExposedCellState[][] board) {
+    public TicTacToeState setBoard(CellState[][] board) {
         this.board = board;
         return this;
     }
@@ -97,7 +98,7 @@ public class TicTacToeState extends AbstractGameState {
                 + owner(board[0][0], board[1][1], board[2][2]) + owner(board[0][2], board[1][1], board[2][0]);
     }
 
-    private long owner(ExposedCellState firstCell, ExposedCellState secondCell, ExposedCellState therdCell) {
+    private long owner(CellState firstCell, CellState secondCell, CellState therdCell) {
         return (firstCell.getOwner() == secondCell.getOwner() && secondCell.getOwner() == therdCell.getOwner()) ? firstCell.getOwner()
                 : PlayerAware.DEFAULT_PLAYER;
     }
@@ -112,7 +113,7 @@ public class TicTacToeState extends AbstractGameState {
                 || canHaveSingleOwner(board[0][0], board[1][1], board[2][2]) || canHaveSingleOwner(board[0][2], board[1][1], board[2][0]);
     }
 
-    private boolean canHaveSingleOwner(ExposedCellState firstCell, ExposedCellState secondCell, ExposedCellState therdCell) {
+    private boolean canHaveSingleOwner(CellState firstCell, CellState secondCell, CellState therdCell) {
         // In arbitrary line XOX if X is free, it can be owned by O, if O is free it also can be owned by X
         return (firstCell.getOwner() == secondCell.getOwner() && (!firstCell.owned() || !therdCell.owned()))
                 || (secondCell.getOwner() == therdCell.getOwner() && (!secondCell.owned() || !firstCell.owned()))

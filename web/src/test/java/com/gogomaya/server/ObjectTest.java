@@ -8,12 +8,12 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.construct.AutomaticGameRequest;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameConstructionState;
+import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
@@ -53,11 +53,11 @@ public class ObjectTest {
                 return new GiveUpEvent(-1L);
             }
         });
-        ObjectGenerator.register(TicTacToeBetOnCellEvent.class, new AbstractValueGenerator<TicTacToeBetOnCellEvent>() {
+        ObjectGenerator.register(BetEvent.class, new AbstractValueGenerator<BetEvent>() {
 
             @Override
-            public TicTacToeBetOnCellEvent generate() {
-                return new TicTacToeBetOnCellEvent(-1L, 100);
+            public BetEvent generate() {
+                return new BetEvent(-1L, 100);
             }
 
         });

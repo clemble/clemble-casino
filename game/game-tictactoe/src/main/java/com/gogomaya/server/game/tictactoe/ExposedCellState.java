@@ -1,42 +1,42 @@
 package com.gogomaya.server.game.tictactoe;
 
+import java.util.Collection;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gogomaya.server.player.PlayerAware;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.server.game.event.client.BetEvent;
+import com.google.common.collect.ImmutableList;
 
+@JsonTypeName("open")
 public class ExposedCellState extends CellState {
 
-    final public static ExposedCellState DEFAULT_CELL_STATE = new ExposedCellState(PlayerAware.DEFAULT_PLAYER, 0, 0);
-
-    @JsonProperty("firstPlayerBet")
-    final private long firstPlayerBet;
-
-    @JsonProperty("secondPlayerBet")
-    final private long secondPlayerBet;
+    final private Collection<BetEvent> bets;
 
     @JsonCreator
-    public ExposedCellState(@JsonProperty("owner") long owner,
-            @JsonProperty("firstPlayerBet") long firstPlayerBet,
-            @JsonProperty("secondPlayerBet") long secondPlayerBet) {
+    public ExposedCellState(@JsonProperty("owner") long owner, @JsonProperty("bets") Collection<BetEvent> bets) {
         super(owner);
-        this.firstPlayerBet = firstPlayerBet;
-        this.secondPlayerBet = secondPlayerBet;
+        this.bets = ImmutableList.<BetEvent> copyOf(bets);
     }
 
-    public long getFirstPlayerBet() {
-        return firstPlayerBet;
+    public ExposedCellState(Collection<BetEvent> bets) {
+        this(bets.toArray(new BetEvent[0]));
     }
 
-    public long getSecondPlayerBet() {
-        return secondPlayerBet;
+    public ExposedCellState(BetEvent... bets) {
+        super(BetEvent.whoBetMore(bets));
+        this.bets = ImmutableList.<BetEvent> copyOf(bets);
+    }
+
+    public Collection<BetEvent> getBets() {
+        return bets;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (firstPlayerBet ^ (firstPlayerBet >>> 32));
-        result = prime * result + (int) (secondPlayerBet ^ (secondPlayerBet >>> 32));
+        result = prime * result + ((bets == null) ? 0 : bets.hashCode());
         return result;
     }
 
@@ -49,16 +49,12 @@ public class ExposedCellState extends CellState {
         if (getClass() != obj.getClass())
             return false;
         ExposedCellState other = (ExposedCellState) obj;
-        if (firstPlayerBet != other.firstPlayerBet)
-            return false;
-        if (secondPlayerBet != other.secondPlayerBet)
+        if (bets == null) {
+            if (other.bets != null)
+                return false;
+        } else if (!bets.equals(other.bets))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ExposedCellState [firstPlayerBet=" + firstPlayerBet + ", secondPlayerBet=" + secondPlayerBet + "]";
     }
 
 }

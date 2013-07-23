@@ -1,6 +1,13 @@
 package com.gogomaya.server.game.event.client;
 
+import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.server.player.PlayerAware;
+
+@JsonTypeName("bet")
 public class BetEvent extends GameClientEvent {
 
     /**
@@ -10,7 +17,8 @@ public class BetEvent extends GameClientEvent {
 
     final private long bet;
 
-    public BetEvent(long playerId, long bet) {
+    @JsonCreator
+    public BetEvent(@JsonProperty("playerId") long playerId, @JsonProperty("bet") long bet) {
         super(playerId);
         this.bet = bet;
         if (bet < 0)
@@ -20,6 +28,38 @@ public class BetEvent extends GameClientEvent {
 
     public long getBet() {
         return bet;
+    }
+
+    static public long whoBetMore(BetEvent[] bets) {
+        if (bets == null || bets.length == 0)
+            return PlayerAware.DEFAULT_PLAYER;
+
+        long maxBet = 0;
+        long playerWithMaxBet = 0;
+        for (BetEvent bet : bets) {
+            if (bet.getBet() > maxBet) {
+                maxBet = bet.getBet();
+                playerWithMaxBet = bet.getPlayerId();
+            }
+        }
+
+        return playerWithMaxBet;
+    }
+
+    static public long whoBetMore(Collection<BetEvent> bets) {
+        if (bets == null || bets.size() == 0)
+            return PlayerAware.DEFAULT_PLAYER;
+
+        long maxBet = 0;
+        long playerWithMaxBet = 0;
+        for (BetEvent bet : bets) {
+            if (bet.getBet() > maxBet) {
+                maxBet = bet.getBet();
+                playerWithMaxBet = bet.getPlayerId();
+            }
+        }
+
+        return playerWithMaxBet;
     }
 
     @Override

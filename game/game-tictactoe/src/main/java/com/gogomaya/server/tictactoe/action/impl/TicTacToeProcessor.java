@@ -9,6 +9,7 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.action.GameProcessor;
+import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameEndedEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
@@ -20,7 +21,6 @@ import com.gogomaya.server.game.outcome.PlayerWonOutcome;
 import com.gogomaya.server.game.tictactoe.Cell;
 import com.gogomaya.server.game.tictactoe.ExposedCellState;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.google.common.collect.ImmutableList;
 
@@ -34,8 +34,8 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
             return ImmutableList.<GameServerEvent<TicTacToeState>> of();
         } else if (clientEvent instanceof TicTacToeSelectCellEvent) {
             return ImmutableList.<GameServerEvent<TicTacToeState>> of(processSelectCellEvent(state, (TicTacToeSelectCellEvent) clientEvent));
-        } else if (clientEvent instanceof TicTacToeBetOnCellEvent) {
-            return ImmutableList.<GameServerEvent<TicTacToeState>> of(processBetOnCellEvent(state, (TicTacToeBetOnCellEvent) clientEvent));
+        } else if (clientEvent instanceof BetEvent) {
+            return ImmutableList.<GameServerEvent<TicTacToeState>> of(processBetOnCellEvent(state, (BetEvent) clientEvent));
         } else if (clientEvent instanceof SurrenderEvent) {
             return processSurrenderEvent(state, (SurrenderEvent) clientEvent);
         }
@@ -62,25 +62,21 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
         }
     }
 
-    private GameServerEvent<TicTacToeState> processBetOnCellEvent(final TicTacToeState state, final TicTacToeBetOnCellEvent betMove) {
+    private GameServerEvent<TicTacToeState> processBetOnCellEvent(final TicTacToeState state, final BetEvent betMove) {
         // Step 1. Populating made moves
         state.addMadeMove(betMove);
         // Step 2. Checking if everybody already made their bets
         ActionLatch actionLatch = state.getActionLatch();
         if (actionLatch.complete()) {
-            long[] players = state.getPlayerIterator().getPlayers();
-
-            long firstPlayerBet = ((TicTacToeBetOnCellEvent) actionLatch.fetchAction(players[0])).getBet();
-            state.getPlayerState(players[0]).subMoneyLeft(firstPlayerBet);
-
-            long secondPlayerBet = ((TicTacToeBetOnCellEvent) actionLatch.fetchAction(players[1])).getBet();
-            state.getPlayerState(players[1]).subMoneyLeft(secondPlayerBet);
-
-            ExposedCellState cellState = (firstPlayerBet == secondPlayerBet) ? new ExposedCellState(0L, firstPlayerBet, secondPlayerBet)
-                    : new ExposedCellState(firstPlayerBet > secondPlayerBet ? players[0] : players[1], firstPlayerBet, secondPlayerBet);
-            state.setBoard(state.getSelected(), cellState);
-            state.setSelected(Cell.DEFAULT);
-
+            // Step 1. Reducing account ammounts
+            Collection<BetEvent> bets = actionLatch.getActions();
+            for(BetEvent bet : bets) {
+                state.getPlayerState(bet.getPlayerId()).subMoneyLeft(bet.getBet());
+            }
+            // Step 2. Setting exposed cell state
+            ExposedCellState cellState = new ExposedCellState(bets);
+            state.setSelectedState(cellState);
+            // Step 3. 
             GameOutcome outcome = state.getOutcome();
             if (outcome != null && state.getOutcome() instanceof PlayerWonOutcome) {
                 specifyWinner(((PlayerWonOutcome) outcome).getWinner(), state);

@@ -29,14 +29,16 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
 import com.gogomaya.server.game.event.schedule.PlayerInvitedEvent;
 import com.gogomaya.server.game.event.server.GameEndedEvent;
 import com.gogomaya.server.game.event.server.PlayerLostEvent;
 import com.gogomaya.server.game.event.server.PlayerMovedEvent;
 import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.game.tictactoe.CellState;
+import com.gogomaya.server.game.tictactoe.ExposedCellState;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
 import com.gogomaya.server.utils.ReflectionUtils;
 import com.stresstest.random.ObjectGenerator;
@@ -54,6 +56,9 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void specialCase() {
+        checkSerialization(ExposedCellState.class, new ExposedCellState(new BetEvent(1, 10), new BetEvent(1, 10)));
+        checkSerialization(CellState.class, new CellState(1));
+
         ObjectGenerator.generate(GameSpecification.class);
         ObjectGenerator.generate(PlayerInvitedEvent.class);
         ObjectGenerator.generate(TicTacToeState.class);
@@ -64,7 +69,7 @@ public class ObjectMapperTest extends ObjectTest {
     public void testSpecialSerialization() {
         Assert.assertNull(checkSerialization(TicTacToeState.class));
         Assert.assertNull(checkSerialization(GameEndedEvent.class));
-        Assert.assertNull(checkSerialization(TicTacToeBetOnCellEvent.class));
+        Assert.assertNull(checkSerialization(BetEvent.class));
         Assert.assertNull(checkSerialization(PlayerMovedEvent.class));
         Assert.assertNull(checkSerialization(PlayerLostEvent.class));
     }
@@ -101,9 +106,12 @@ public class ObjectMapperTest extends ObjectTest {
     }
 
     private Throwable checkSerialization(Class<?> candidate) {
+        return checkSerialization(candidate, ObjectGenerator.generate(candidate));
+    }
+
+    private Throwable checkSerialization(Class<?> candidate, Object expected) {
         Throwable error = null;
         try {
-            Object expected = ObjectGenerator.generate(candidate);
             String stringPresentation = objectMapper.writeValueAsString(expected);
             Object actual = objectMapper.readValue(stringPresentation, candidate);
 

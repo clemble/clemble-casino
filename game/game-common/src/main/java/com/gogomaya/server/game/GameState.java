@@ -18,15 +18,26 @@ public interface GameState extends Serializable {
 
     public GameState setPlayerStates(Collection<GamePlayerState> playersStates);
 
+
+
+
     public GamePlayerIterator getPlayerIterator();
 
     public GameState setPlayerIterator(GamePlayerIterator playerIterator);
 
+
+
+
     public ActionLatch getActionLatch();
+
+
+
 
     public GameOutcome getOutcome();
 
     public GameState setOutcome(GameOutcome outcome);
+
+
 
     public boolean complete();
 

@@ -4,9 +4,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 
+import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.tictactoe.Cell;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.GenericGameSessionPlayer;
@@ -33,7 +33,7 @@ public class TicTacToeSessionPlayer extends GenericGameSessionPlayer<TicTacToeSt
 
     public void bet(int ammount) {
         int beforeBetting = this.getState().getVersion();
-        perform(new TicTacToeBetOnCellEvent(actualPlayer.getPlayerId(), ammount));
+        perform(new BetEvent(actualPlayer.getPlayerId(), ammount));
         Assert.assertNotSame(beforeBetting + " remained " + this.getState().getVersion(), beforeBetting, this.getState().getVersion());
         moneySpent.getAndAdd(-ammount);
     }

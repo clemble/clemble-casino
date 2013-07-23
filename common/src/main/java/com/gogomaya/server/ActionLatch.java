@@ -58,8 +58,9 @@ public class ActionLatch implements Serializable {
         return actions.keySet();
     }
 
-    public Collection<ClientEvent> getActions() {
-        return actions.values();
+    @SuppressWarnings("unchecked")
+    public <T extends ClientEvent> Collection<T> getActions() {
+        return (Collection<T>) actions.values();
     }
 
     public Map<Long, ClientEvent> fetchActionsMap() {

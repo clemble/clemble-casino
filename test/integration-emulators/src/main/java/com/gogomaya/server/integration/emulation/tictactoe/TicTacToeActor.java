@@ -3,10 +3,10 @@ package com.gogomaya.server.integration.emulation.tictactoe;
 import java.util.Random;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.event.client.BetEvent;
+import com.gogomaya.server.game.tictactoe.CellState;
 import com.gogomaya.server.game.tictactoe.TicTacToe;
-import com.gogomaya.server.game.tictactoe.ExposedCellState;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.integration.emulator.GameActor;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
@@ -33,7 +33,7 @@ public class TicTacToeActor implements GameActor<TicTacToeState> {
         ClientEvent nextMove = playerToMove.getNextMove();
         if (nextMove instanceof TicTacToeSelectCellEvent) {
             // Step 1.1 Select move to be made
-            ExposedCellState[][] board = playerToMove.getState().getBoard();
+            CellState[][] board = playerToMove.getState().getBoard();
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     if (!board[i][j].owned()) {
@@ -43,7 +43,7 @@ public class TicTacToeActor implements GameActor<TicTacToeState> {
                 }
             }
             throw new IllegalArgumentException("This action can't be performed");
-        } else if (nextMove instanceof TicTacToeBetOnCellEvent) {
+        } else if (nextMove instanceof BetEvent) {
             // Step 1.2 Bet move to be made
             if (player.getMoneySpent() > 0) {
                 player.bet(random.nextInt(player.getMoneySpent() + 1));

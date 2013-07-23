@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaFailure;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
+import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.GiveUpEvent;
 import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
@@ -27,7 +28,6 @@ import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TimeBreachPunishment;
 import com.gogomaya.server.game.rule.time.TimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
-import com.gogomaya.server.game.tictactoe.event.client.TicTacToeBetOnCellEvent;
 import com.gogomaya.server.game.tictactoe.event.client.TicTacToeSelectCellEvent;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 
@@ -117,11 +117,11 @@ public class SeDeRealizationTest {
 
     @Test
     public void testBetOnCell() throws JsonGenerationException, JsonMappingException, IOException {
-        TicTacToeBetOnCellEvent betOnCellMove = new TicTacToeBetOnCellEvent(1, 60);
+        BetEvent betOnCellMove = new BetEvent(1, 60);
 
         String value = objectMapper.writeValueAsString(betOnCellMove);
 
-        TicTacToeBetOnCellEvent parsedBetOnCellMove = objectMapper.readValue(value, TicTacToeBetOnCellEvent.class);
+        BetEvent parsedBetOnCellMove = objectMapper.readValue(value, BetEvent.class);
         Assert.assertEquals(betOnCellMove, parsedBetOnCellMove);
 
         System.out.println(value);
