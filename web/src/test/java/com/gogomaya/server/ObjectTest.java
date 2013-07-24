@@ -1,17 +1,28 @@
 package com.gogomaya.server;
 
+import java.util.Collections;
 import java.util.Date;
 
 import org.apache.commons.lang.RandomStringUtils;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.Game;
+import com.gogomaya.server.game.configuration.SelectRuleOptions;
 import com.gogomaya.server.game.construct.AutomaticGameRequest;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameConstructionState;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
+import com.gogomaya.server.game.rule.GameRule;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
+import com.gogomaya.server.game.rule.bet.LimitedBetRule;
+import com.gogomaya.server.game.rule.bet.UnlimitedBetRule;
+import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
+import com.gogomaya.server.game.rule.construction.PrivacyRule;
+import com.gogomaya.server.game.rule.giveup.GiveUpRule;
+import com.gogomaya.server.game.rule.time.MoveTimeRule;
+import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.money.Currency;
@@ -110,14 +121,35 @@ public class ObjectTest {
             }
 
         });
+        ObjectGenerator.register(GameRule.class, new AbstractValueGenerator<GameRule>() {
+
+            @Override
+            public GameRule generate() {
+                return UnlimitedBetRule.INSTANCE;
+            }
+        });
         ObjectGenerator.register(GameConstruction.class, new AbstractValueGenerator<GameConstruction>() {
 
             @Override
             public GameConstruction generate() {
-                return new GameConstruction()
-                    .setRequest(new AutomaticGameRequest(1, GameSpecification.DEFAULT))
-                    .setResponses(new ActionLatch(ImmutableList.<Long>of(1L, 2L),"response"))
-                    .setState(GameConstructionState.pending);
+                return new GameConstruction().setRequest(new AutomaticGameRequest(1, GameSpecification.DEFAULT))
+                        .setResponses(new ActionLatch(ImmutableList.<Long> of(1L, 2L), "response")).setState(GameConstructionState.pending);
+            }
+        });
+
+        ObjectGenerator.register(SelectRuleOptions.class, new AbstractValueGenerator<SelectRuleOptions>() {
+
+            @Override
+            public SelectRuleOptions generate() {
+                return new SelectRuleOptions(Game.pic, Collections.singleton(Currency.FakeMoney), FixedBetRule.DEFAULT_OPTIONS, GiveUpRule.DEFAULT_OPTIONS,
+                        PlayerNumberRule.DEFAULT_OPTIONS, PrivacyRule.DEFAULT_OPTIONS, MoveTimeRule.DEFAULT_OPTIONS, TotalTimeRule.DEFAULT_OPTIONS);
+            }
+        });
+        ObjectGenerator.register(LimitedBetRule.class, new AbstractValueGenerator<LimitedBetRule>() {
+
+            @Override
+            public LimitedBetRule generate() {
+                return LimitedBetRule.create(10, 200);
             }
         });
     }

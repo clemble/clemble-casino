@@ -5,9 +5,11 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
 
 @Embeddable
+@JsonTypeName("moveTime")
 public class MoveTimeRule implements TimeRule {
 
     /**
@@ -25,11 +27,11 @@ public class MoveTimeRule implements TimeRule {
 
     @Column(name = "MOVE_TIME_LIMIT")
     private int limit;
-    
+
     public TimeBreachPunishment getPunishment() {
         return punishment;
     }
-    
+
     public MoveTimeRule setPunishment(TimeBreachPunishment punishment) {
         this.punishment = punishment;
         return this;
@@ -68,6 +70,5 @@ public class MoveTimeRule implements TimeRule {
             return false;
         return true;
     }
-
 
 }

@@ -1,8 +1,10 @@
 package com.gogomaya.server.game.rule.construction;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
 import com.gogomaya.server.game.rule.GameRule;
 
+@JsonTypeName("participants")
 public enum PlayerNumberRule implements GameRule {
 
     two(2, 2),

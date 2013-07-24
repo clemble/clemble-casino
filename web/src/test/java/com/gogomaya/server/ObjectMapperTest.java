@@ -31,12 +31,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.cell.ExposedCellState;
+import com.gogomaya.server.game.configuration.SelectRuleOptions;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.server.game.event.schedule.PlayerInvitedEvent;
 import com.gogomaya.server.game.event.server.GameEndedEvent;
 import com.gogomaya.server.game.event.server.PlayerLostEvent;
 import com.gogomaya.server.game.event.server.PlayerMovedEvent;
+import com.gogomaya.server.game.rule.GameRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
@@ -56,6 +58,9 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void specialCase() {
+        checkSerialization(SelectRuleOptions.class);
+        ObjectGenerator.generate(GameRule.class);
+
         checkSerialization(ExposedCellState.class, new ExposedCellState(new BetEvent(1, 10), new BetEvent(1, 10)));
         checkSerialization(CellState.class, new CellState(1));
 

@@ -3,7 +3,9 @@ package com.gogomaya.server.game.rule.bet;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
+@JsonTypeName("unlimited")
 final public class UnlimitedBetRule implements BetRule {
 
     /**

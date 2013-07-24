@@ -5,9 +5,11 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
 
 @Embeddable
+@JsonTypeName("totalTime")
 public class TotalTimeRule implements TimeRule {
 
     /**

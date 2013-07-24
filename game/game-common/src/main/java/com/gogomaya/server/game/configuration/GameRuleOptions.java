@@ -1,29 +1,35 @@
 package com.gogomaya.server.game.configuration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gogomaya.server.game.rule.GameRule;
 import com.google.common.collect.ImmutableSet;
 
-public class GameRuleOptions<T> {
+public class GameRuleOptions<T extends GameRule> {
 
     final private T defaultOption;
 
     final private Collection<T> allOptions;
 
-    @JsonCreator
-    @SuppressWarnings("unchecked")
-    public GameRuleOptions(@JsonProperty("default") T defaultOption, @JsonProperty("options") T ... otherOptions) {
+    public GameRuleOptions(T defaultOption, Collection<T> otherOptions) {
         this.defaultOption = defaultOption;
-        if (otherOptions == null || otherOptions.length == 0) {
+        if (otherOptions == null || otherOptions.size() == 0) {
             this.allOptions = ImmutableSet.<T> of(defaultOption);
         } else {
-            otherOptions = Arrays.copyOf(otherOptions, otherOptions.length + 1);
-            otherOptions[otherOptions.length - 1] = defaultOption;
+            otherOptions = new ArrayList<>(otherOptions);
+            otherOptions.add(defaultOption);
             this.allOptions = ImmutableSet.<T> copyOf(otherOptions);
         }
+    }
+
+    @JsonCreator
+    @SuppressWarnings("unchecked")
+    public GameRuleOptions(@JsonProperty("default") T defaultOption, @JsonProperty("options") T... otherOptions) {
+        this(defaultOption, Arrays.asList(otherOptions));
     }
 
     public T getDefault() {

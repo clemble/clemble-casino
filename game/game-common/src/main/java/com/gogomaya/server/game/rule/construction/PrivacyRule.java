@@ -1,8 +1,10 @@
 package com.gogomaya.server.game.rule.construction;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
 import com.gogomaya.server.game.rule.GameRule;
 
+@JsonTypeName("privacy")
 public enum PrivacyRule implements GameRule {
 
     players,

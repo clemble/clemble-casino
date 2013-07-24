@@ -5,12 +5,14 @@ import java.util.concurrent.ExecutionException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+@JsonTypeName("limited")
 public class LimitedBetRule implements BetRule {
 
     /**
@@ -56,6 +58,31 @@ public class LimitedBetRule implements BetRule {
         } catch (ExecutionException e) {
             throw GogomayaException.fromError(GogomayaError.ServerCacheError);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + maxBet;
+        result = prime * result + minBet;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        LimitedBetRule other = (LimitedBetRule) obj;
+        if (maxBet != other.maxBet)
+            return false;
+        if (minBet != other.minBet)
+            return false;
+        return true;
     }
 
 }

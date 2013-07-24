@@ -3,11 +3,13 @@ package com.gogomaya.server.game.rule.bet;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
 
 @Embeddable
+@JsonTypeName("fixed")
 public class FixedBetRule implements BetRule {
 
     /**

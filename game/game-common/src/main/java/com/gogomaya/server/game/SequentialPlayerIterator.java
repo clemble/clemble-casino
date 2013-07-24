@@ -1,11 +1,14 @@
 package com.gogomaya.server.game;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.player.PlayerAware;
 
+@JsonTypeName("sequential")
 public class SequentialPlayerIterator implements GamePlayerIterator {
 
     /**
@@ -67,6 +70,31 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + index;
+        result = prime * result + Arrays.hashCode(players);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SequentialPlayerIterator other = (SequentialPlayerIterator) obj;
+        if (index != other.index)
+            return false;
+        if (!Arrays.equals(players, other.players))
+            return false;
+        return true;
     }
 
 }

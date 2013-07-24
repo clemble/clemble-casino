@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaFailure;
 import com.gogomaya.server.game.cell.Cell;
-import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
 import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
@@ -41,22 +40,22 @@ public class SeDeRealizationTest {
 
     @Test
     public void timeRule() throws JsonParseException, JsonMappingException, IOException {
-        TimeRule timeRule = objectMapper.readValue("{\"punishment\":\"loose\",\"limit\":1}", TotalTimeRule.class);
+        TimeRule timeRule = objectMapper.readValue("{\"rule\":\"totalTime\", \"punishment\":\"loose\",\"limit\":1}", TotalTimeRule.class);
         Assert.assertTrue(timeRule instanceof TotalTimeRule);
         Assert.assertEquals(timeRule.getPunishment(), TimeBreachPunishment.loose);
         Assert.assertEquals(((TotalTimeRule) timeRule).getLimit(), 1);
 
-        timeRule = objectMapper.readValue("{\"punishment\":\"loose\",\"limit\":1}", TotalTimeRule.class);
+        timeRule = objectMapper.readValue("{\"rule\":\"totalTime\", \"punishment\":\"loose\",\"limit\":1}", TotalTimeRule.class);
         Assert.assertTrue(timeRule instanceof TotalTimeRule);
         Assert.assertEquals(timeRule.getPunishment(), TimeBreachPunishment.loose);
         Assert.assertEquals(((TotalTimeRule) timeRule).getLimit(), 1);
 
-        timeRule = objectMapper.readValue("{\"punishment\":\"loose\",\"limit\":1}", MoveTimeRule.class);
+        timeRule = objectMapper.readValue("{\"rule\":\"moveTime\", \"punishment\":\"loose\",\"limit\":1}", MoveTimeRule.class);
         Assert.assertTrue(timeRule instanceof MoveTimeRule);
         Assert.assertEquals(timeRule.getPunishment(), TimeBreachPunishment.loose);
         Assert.assertEquals(((MoveTimeRule) timeRule).getLimit(), 1);
 
-        timeRule = objectMapper.readValue("{\"punishment\":\"loose\",\"limit\":1}", MoveTimeRule.class);
+        timeRule = objectMapper.readValue("{\"rule\":\"moveTime\", \"punishment\":\"loose\",\"limit\":1}", MoveTimeRule.class);
         Assert.assertTrue(timeRule instanceof MoveTimeRule);
         Assert.assertEquals(timeRule.getPunishment(), TimeBreachPunishment.loose);
         Assert.assertEquals(((MoveTimeRule) timeRule).getLimit(), 1);
@@ -86,22 +85,11 @@ public class SeDeRealizationTest {
 
     @Test
     public void giveUpRule() throws JsonGenerationException, JsonMappingException, IOException {
-        GiveUpRule giveUpRule = objectMapper.readValue("\"all\"", GiveUpRule.class);
+        GiveUpRule giveUpRule = objectMapper.readValue("{\"giveUp\": \"all\"}", GiveUpRule.class);
         Assert.assertEquals(giveUpRule, GiveUpRule.all);
 
-        giveUpRule = objectMapper.readValue("\"lost\"", GiveUpRule.class);
+        giveUpRule = objectMapper.readValue("{\"giveUp\": \"lost\"}", GiveUpRule.class);
         Assert.assertEquals(giveUpRule, GiveUpRule.lost);
-    }
-
-    @Test
-    public void testReadSpecificationOptions() throws JsonParseException, JsonMappingException, IOException {
-        SelectSpecificationOptions selectSpecificationOptions = objectMapper.readValue(
-                "{ \"type\":\"selectSpecification\", \"specifications\": [{\"name\":{\"game\": \"pic\",\"specificationName\": \"basic\"},"
-                        + "\"currency\": \"FakeMoney\",\"betRule\":{\"betType\": \"fixed\",\"price\": 50},"
-                        + "\"giveUpRule\": \"all\",\"moveTimeRule\": { \"punishment\": \"loose\", \"limit\": 0 },"
-                        + "\"totalTimeRule\": {\"punishment\": \"loose\",\"limit\": 0 }, "
-                        + "\"privacyRule\": \"everybody\", \"numberRule\": \"two\"}] }", SelectSpecificationOptions.class);
-        Assert.assertNotNull(selectSpecificationOptions);
     }
 
     @Test

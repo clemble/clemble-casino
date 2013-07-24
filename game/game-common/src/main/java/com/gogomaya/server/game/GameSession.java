@@ -22,8 +22,6 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.event.client.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
@@ -135,8 +133,6 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
         this.numMadeMoves = numMadeMoves;
     }
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-    @JsonSubTypes({ @com.fasterxml.jackson.annotation.JsonSubTypes.Type(value = GameState.class, name = "ticTacToe") })
     public State getState() {
         return state;
     }
