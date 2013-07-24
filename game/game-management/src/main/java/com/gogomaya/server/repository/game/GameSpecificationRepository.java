@@ -13,7 +13,7 @@ import com.gogomaya.server.game.specification.SpecificationName;
 @Repository
 public interface GameSpecificationRepository extends JpaRepository<GameSpecification, SpecificationName> {
 
-    @Query(value = "select specification from GameSpecification specification where specification.name.name = :name")
-    public List<GameSpecification> findByGame(@Param("name") String name);
+    @Query(value = "select specification from GameSpecification specification where specification.name.game = :game")
+    public List<GameSpecification> findByGame(@Param("game") String game);
 
 }

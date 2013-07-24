@@ -9,6 +9,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameConstruction;
@@ -29,17 +30,17 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
     final private RestTemplate restTemplate;
     final private String baseUrl;
 
-    public IntegrationGameConstructionOperations(final String name,
+    public IntegrationGameConstructionOperations(final Game game,
             final String baseUrl,
             final RestTemplate restTemplate,
             final GameSessionPlayerFactory<State> playerFactory) {
-        super(name, playerFactory);
+        super(game, playerFactory);
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
     }
 
     @Override
-    public GameSpecificationOptions getOptions(String name, Player player) {
+    public GameSpecificationOptions getOptions(Game game, Player player) {
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         if (player != null)
@@ -49,7 +50,7 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
         HttpEntity<GameSpecification> requestEntity = new HttpEntity<GameSpecification>(header);
         // Step 3. Rest template generation
         return restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SPECIFICATION_OPTIONS, HttpMethod.GET, requestEntity,
-                GameSpecificationOptions.class, name).getBody();
+                GameSpecificationOptions.class, game).getBody();
     }
 
     public GameConstruction request(Player player, GameRequest gameRequest) {
@@ -58,7 +59,7 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
         HttpEntity<GameRequest> requestEntity = player.<GameRequest> sign(gameRequest);
         // Step 2. Rest template generation
         return (GameConstruction) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SESSIONS, HttpMethod.POST, requestEntity,
-                GameConstruction.class, gameRequest.getSpecification().getName().getName()).getBody();
+                GameConstruction.class, gameRequest.getSpecification().getName().getGame()).getBody();
     }
 
     @Override

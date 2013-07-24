@@ -3,10 +3,10 @@ package com.gogomaya.server.integration.emulation.tictactoe;
 import java.util.Random;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.emulator.GameActor;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
@@ -22,8 +22,8 @@ public class TicTacToeActor implements GameActor<TicTacToeState> {
     final private Random random = new Random();
 
     @Override
-    public String getName() {
-        return TicTacToe.NAME;
+    public Game getGame() {
+        return Game.pic;
     }
 
     @Override

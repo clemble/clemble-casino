@@ -7,14 +7,15 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.gogomaya.server.game.Game;
 import com.google.common.collect.ImmutableMap;
 
 public class GameSpecificationRegistry implements ApplicationContextAware {
 
-    private Map<String, GameSpecificationConfiguration> gameToSpecifications = new HashMap<>();
+    private Map<Game, GameSpecificationConfiguration> gameToSpecifications = new HashMap<>();
 
-    public GameSpecificationOptions getSpecificationOptions(String name) {
-        return gameToSpecifications.get(name).getSpecificationOptions();
+    public GameSpecificationOptions getSpecificationOptions(Game game) {
+        return gameToSpecifications.get(game).getSpecificationOptions();
     }
 
     @Override
@@ -22,14 +23,14 @@ public class GameSpecificationRegistry implements ApplicationContextAware {
         // Step 1. Fetching specification configurations
         Map<String, GameSpecificationConfiguration> specificationConfigurations = applicationContext.getBeansOfType(GameSpecificationConfiguration.class);
         // Step 2. Checking validity
-        Map<String, GameSpecificationConfiguration> gameToSpec = new HashMap<>();
+        Map<Game, GameSpecificationConfiguration> gameToSpec = new HashMap<>();
         for (GameSpecificationConfiguration configuration : specificationConfigurations.values()) {
-            if (gameToSpec.containsKey(configuration.getName()))
+            if (gameToSpec.containsKey(configuration.getGame()))
                 throw new IllegalArgumentException("Can't have non unique configuration for SpecificationConfigurations " + configuration + " "
-                        + gameToSpec.get(configuration.getName()));
-            gameToSpec.put(configuration.getName(), configuration);
+                        + gameToSpec.get(configuration.getGame()));
+            gameToSpec.put(configuration.getGame(), configuration);
         }
         // Step 3. Updating specification references
-        gameToSpecifications = ImmutableMap.<String, GameSpecificationConfiguration> copyOf(gameToSpec);
+        gameToSpecifications = ImmutableMap.<Game, GameSpecificationConfiguration> copyOf(gameToSpec);
     }
 }

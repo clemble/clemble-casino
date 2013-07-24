@@ -15,7 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
@@ -34,7 +34,7 @@ public class TicTacToeTimeoutTest {
 
     @Test
     public void testMoveTimeout() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameOperations.constructGame(TicTacToe.NAME);
+        List<GameSessionPlayer<TicTacToeState>> players = gameOperations.constructGame(Game.pic);
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
         TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
         GogomayaException gogomayaException = null;
@@ -61,7 +61,7 @@ public class TicTacToeTimeoutTest {
 
     @Test
     public void testTotalTimeout() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameOperations.constructGame(TicTacToe.NAME);
+        List<GameSessionPlayer<TicTacToeState>> players = gameOperations.constructGame(Game.pic);
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
         TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
         GogomayaException gogomayaException = null;

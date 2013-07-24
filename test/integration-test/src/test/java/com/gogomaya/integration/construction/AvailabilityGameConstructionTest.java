@@ -13,9 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
@@ -48,12 +48,12 @@ public class AvailabilityGameConstructionTest {
         Player playerA = playerOperations.createPlayer();
         Player playerB = playerOperations.createPlayer();
 
-        PlayerGameConstructionOperations<?> constructionOperations = playerA.<TicTacToeState> getGameConstructor(TicTacToe.NAME);
+        PlayerGameConstructionOperations<?> constructionOperations = playerA.<TicTacToeState> getGameConstructor(Game.pic);
         GameSpecification specification = constructionOperations.selectSpecification();
 
         TicTacToeSessionPlayer sessionPlayer = (TicTacToeSessionPlayer) constructionOperations.constructAvailability(specification,
                 ImmutableList.<Long> of(playerA.getPlayerId(), playerB.getPlayerId()));
-        playerB.getGameConstructor(TicTacToe.NAME).acceptInvitation(sessionPlayer.getSession());
+        playerB.getGameConstructor(Game.pic).acceptInvitation(sessionPlayer.getSession());
 
         sessionPlayer.waitForStart();
         Assert.assertTrue(sessionPlayer.isAlive());
@@ -61,7 +61,7 @@ public class AvailabilityGameConstructionTest {
 
     @Test
     public void testScenarioCreation() {
-        List<GameSessionPlayer<TicTacToeState>> sessionPlayers = gameScenarios.constructGame(TicTacToe.NAME);
+        List<GameSessionPlayer<TicTacToeState>> sessionPlayers = gameScenarios.constructGame(Game.pic);
 
         Assert.assertTrue(sessionPlayers.get(0).isToMove());
     }
@@ -74,17 +74,17 @@ public class AvailabilityGameConstructionTest {
         Player playerC = playerOperations.createPlayer();
         try {
             // Step 2. Generating 2 instant game request A - B and A - C
-            TicTacToeSessionPlayer sessionABPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(TicTacToe.NAME)
+            TicTacToeSessionPlayer sessionABPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(Game.pic)
                     .constructAvailability(ImmutableList.<Long> of(playerA.getPlayerId(), playerB.getPlayerId()));
-            TicTacToeSessionPlayer sessionACPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(TicTacToe.NAME)
+            TicTacToeSessionPlayer sessionACPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(Game.pic)
                     .constructAvailability(ImmutableList.<Long> of(playerA.getPlayerId(), playerC.getPlayerId()));
             // Step 3. Accepting A - C game request to start A - C game
-            TicTacToeSessionPlayer sessionCAPlayer = (TicTacToeSessionPlayer) playerC.<TicTacToeState> getGameConstructor(TicTacToe.NAME).acceptInvitation(
+            TicTacToeSessionPlayer sessionCAPlayer = (TicTacToeSessionPlayer) playerC.<TicTacToeState> getGameConstructor(Game.pic).acceptInvitation(
                     sessionACPlayer.getSession());
             sessionACPlayer.waitForStart();
             sessionACPlayer.syncWith(sessionCAPlayer);
             // Step 4. Accepting A - B game request to start A - B game, it should not be started until A - C game finishes
-            TicTacToeSessionPlayer sessionBAPlayer = (TicTacToeSessionPlayer) playerB.<TicTacToeState> getGameConstructor(TicTacToe.NAME).acceptInvitation(
+            TicTacToeSessionPlayer sessionBAPlayer = (TicTacToeSessionPlayer) playerB.<TicTacToeState> getGameConstructor(Game.pic).acceptInvitation(
                     sessionABPlayer.getSession());
             // Step 4.1 Checking appropriate alive states for A - B game
             assertLivenes(sessionBAPlayer, false);

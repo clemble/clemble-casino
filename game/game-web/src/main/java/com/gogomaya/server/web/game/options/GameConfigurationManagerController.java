@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
+import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.server.web.mapping.GameWebMapping;
 
 @Controller
@@ -27,8 +28,8 @@ public class GameConfigurationManagerController {
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SPECIFICATION_OPTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     // Can be null
-    public @ResponseBody GameSpecificationOptions get(@RequestHeader(value = "playerId", required = false) final Long playerId, @PathVariable("name") String name) {
-        return configurationManager.getSpecificationOptions(name);
+    public @ResponseBody GameSpecificationOptions get(@RequestHeader(value = "playerId", required = false) final Long playerId, @PathVariable("name") Game game) {
+        return configurationManager.getSpecificationOptions(game);
     }
 
 }

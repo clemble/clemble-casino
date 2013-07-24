@@ -1,7 +1,7 @@
 package com.gogomaya.server.integration.game.tictactoe;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
@@ -21,8 +21,8 @@ public class TicTacToePlayerSessionFactory implements GameSessionPlayerFactory<T
     }
 
     @Override
-    public String getName() {
-        return TicTacToe.NAME;
+    public Game getGame() {
+        return Game.pic;
     }
 
     @Override

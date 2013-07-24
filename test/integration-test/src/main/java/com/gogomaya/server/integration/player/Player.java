@@ -9,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.integration.game.GameSessionListener;
@@ -42,7 +43,7 @@ public class Player implements PlayerAware {
     final private PlayerListenerManager playerListenersManager;
     final private PlayerCredential credential;
 
-    final private Map<String, PlayerGameConstructionOperations<?>> gameConstructors;
+    final private Map<Game, PlayerGameConstructionOperations<?>> gameConstructors;
 
     final private PlayerSessionOperations playerSessionOperations;
     final private PlayerAccountOperations playerWalletOperations;
@@ -65,11 +66,11 @@ public class Player implements PlayerAware {
         this.credential = checkNotNull(credential);
         this.playerListenersManager = new PlayerListenerManager(this, listenerOperations);
 
-        Map<String, PlayerGameConstructionOperations<?>> map = new HashMap<>();
+        Map<Game, PlayerGameConstructionOperations<?>> map = new HashMap<>();
         for (GameConstructionOperations<?> constructionOperation : playerConstructionOperations) {
-            map.put(constructionOperation.getName(), new PlayerGameConstructionOperations<>(constructionOperation, this));
+            map.put(constructionOperation.getGame(), new PlayerGameConstructionOperations<>(constructionOperation, this));
         }
-        this.gameConstructors = ImmutableMap.<String, PlayerGameConstructionOperations<?>> copyOf(map);
+        this.gameConstructors = ImmutableMap.<Game, PlayerGameConstructionOperations<?>> copyOf(map);
     }
 
     public PlayerSessionOperations getSessionOperations() {
@@ -110,11 +111,11 @@ public class Player implements PlayerAware {
         return session;
     }
 
-    public <State extends GameState> PlayerGameConstructionOperations<State> getGameConstructor(String name) {
-        return (PlayerGameConstructionOperations<State>) gameConstructors.get(name);
+    public <State extends GameState> PlayerGameConstructionOperations<State> getGameConstructor(Game game) {
+        return (PlayerGameConstructionOperations<State>) gameConstructors.get(game);
     }
 
-    public Map<String, PlayerGameConstructionOperations<?>> getGameConstructors() {
+    public Map<Game, PlayerGameConstructionOperations<?>> getGameConstructors() {
         return gameConstructors;
     }
 

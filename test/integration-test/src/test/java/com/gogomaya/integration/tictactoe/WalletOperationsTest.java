@@ -12,7 +12,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
 import com.gogomaya.server.integration.game.construction.PlayerGameConstructionOperations;
@@ -42,8 +42,8 @@ public class WalletOperationsTest {
 
         Collection<Long> participants = ImmutableList.of(playerA.getPlayerId(), playerB.getPlayerId());
 
-        PlayerGameConstructionOperations<TicTacToeState> playerAConstructionOp = playerA.getGameConstructor(TicTacToe.NAME);
-        PlayerGameConstructionOperations<TicTacToeState> playerBConstructionOp = playerB.getGameConstructor(TicTacToe.NAME);
+        PlayerGameConstructionOperations<TicTacToeState> playerAConstructionOp = playerA.getGameConstructor(Game.pic);
+        PlayerGameConstructionOperations<TicTacToeState> playerBConstructionOp = playerB.getGameConstructor(Game.pic);
 
         do {
             TicTacToeSessionPlayer sessionAPlayer = (TicTacToeSessionPlayer) playerAConstructionOp.constructAvailability(

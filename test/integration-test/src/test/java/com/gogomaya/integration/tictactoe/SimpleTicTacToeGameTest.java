@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -14,15 +15,15 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.ExpectedAction;
-import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
 import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
 import com.gogomaya.server.money.Currency;
+import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 
@@ -40,7 +41,7 @@ public class SimpleTicTacToeGameTest {
 
     @Test
     public void testMoneyAndMoveProcessing() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
         TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
         try {
@@ -66,7 +67,7 @@ public class SimpleTicTacToeGameTest {
 
     @Test
     public void testSimpleScenario() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
         TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
 
@@ -114,7 +115,7 @@ public class SimpleTicTacToeGameTest {
     @Test
     public void testScenarioRow() {
         for (int row = 0; row < 3; row++) {
-            List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+            List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
             TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
             TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
             try {
@@ -142,7 +143,7 @@ public class SimpleTicTacToeGameTest {
     @Test
     public void testScenarioColumn() {
         for (int column = 0; column < 3; column++) {
-            List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+            List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
             TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
             TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
             try {
@@ -169,7 +170,7 @@ public class SimpleTicTacToeGameTest {
 
     @Test
     public void scenario1() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
         TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
         try {

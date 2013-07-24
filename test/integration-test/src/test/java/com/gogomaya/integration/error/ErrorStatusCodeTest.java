@@ -14,8 +14,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
@@ -43,7 +43,7 @@ public class ErrorStatusCodeTest {
 
     @Test(expected = GogomayaException.class)
     public void testSelectTwiceError() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
 
         playerA.select(0, 0);
@@ -52,7 +52,7 @@ public class ErrorStatusCodeTest {
 
     @Test(expected = GogomayaException.class)
     public void testBetBig() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
 
         playerA.select(0, 0);

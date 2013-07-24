@@ -13,8 +13,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.ExpectedAction;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
@@ -41,7 +41,7 @@ public class InstantGameConstructionTest {
         Player A = playerOperations.createPlayer();
         Player B = playerOperations.createPlayer();
 
-        GameSessionPlayer<TicTacToeState> playerA = A.<TicTacToeState> getGameConstructor(TicTacToe.NAME).constructAvailability(A, B);
+        GameSessionPlayer<TicTacToeState> playerA = A.<TicTacToeState> getGameConstructor(Game.pic).constructAvailability(A, B);
         PlayerAware AtoAaction = constructionOperations.constructionResponse(A, A.getPlayerId(), playerA.getSession());
         PlayerAware AtoBaction = constructionOperations.constructionResponse(A, B.getPlayerId(), playerA.getSession());
 

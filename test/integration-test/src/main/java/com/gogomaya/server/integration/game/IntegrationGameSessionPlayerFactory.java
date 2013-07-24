@@ -4,6 +4,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.integration.player.Player;
@@ -25,7 +26,7 @@ public class IntegrationGameSessionPlayerFactory<State extends GameState> implem
     }
 
     @Override
-    public String getName() {
+    public Game getGame() {
         throw new UnsupportedOperationException();
     }
 

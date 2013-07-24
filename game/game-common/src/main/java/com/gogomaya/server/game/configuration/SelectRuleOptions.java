@@ -1,5 +1,6 @@
 package com.gogomaya.server.game.configuration;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
@@ -16,7 +17,7 @@ public class SelectRuleOptions implements GameSpecificationOptions {
      */
     private static final long serialVersionUID = -9099690454645343595L;
     
-    final private String name;
+    final private Game game;
 
     final private GameRuleOptions<Currency> currencyOptions;
 
@@ -32,7 +33,7 @@ public class SelectRuleOptions implements GameSpecificationOptions {
 
     final private GameRuleOptions<TotalTimeRule> totalTimeOptions;
 
-    public SelectRuleOptions(final String name,
+    public SelectRuleOptions(final Game game,
             final GameRuleOptions<BetRule> betOptions,
             final GameRuleOptions<Currency> currencyOptions,
             final GameRuleOptions<GiveUpRule> giveUpOptions,
@@ -40,7 +41,7 @@ public class SelectRuleOptions implements GameSpecificationOptions {
             final GameRuleOptions<PrivacyRule> privacyOptions,
             final GameRuleOptions<MoveTimeRule> moveTimeOptions,
             final GameRuleOptions<TotalTimeRule> totalTimeOptions) {
-        this.name = name;
+        this.game = game;
         this.betOptions = betOptions;
         this.currencyOptions = currencyOptions;
         this.giveUpOptions = giveUpOptions;
@@ -49,9 +50,9 @@ public class SelectRuleOptions implements GameSpecificationOptions {
         this.moveTimeOptions = moveTimeOptions;
         this.totalTimeOptions = totalTimeOptions;
     }
-    
-    public String getName() {
-        return name;
+
+    public Game getGame() {
+        return game;
     }
 
     public GameRuleOptions<Currency> getCurrencyOptions() {

@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 public interface GameAware extends Serializable{
 
-    public String getName();
+    public Game getGame();
 
 }

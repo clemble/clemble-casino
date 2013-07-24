@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
@@ -26,22 +27,22 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
      */
     private static final long serialVersionUID = 3499425460989980680L;
 
-    final private String name;
+    final private Game game;
     final private GameSessionPlayerFactory<State> playerFactory;
 
-    protected AbstractGameConstructionOperation(final String name, final GameSessionPlayerFactory<State> playerFactory) {
-        this.name = checkNotNull(name);
+    protected AbstractGameConstructionOperation(final Game name, final GameSessionPlayerFactory<State> playerFactory) {
+        this.game = checkNotNull(name);
         this.playerFactory = checkNotNull(playerFactory);
     }
 
     @Override
-    final public String getName() {
-        return name;
+    final public Game getGame() {
+        return game;
     }
 
     @Override
     final public GameSpecification selectSpecification(Player player) {
-        GameSpecificationOptions specificationOptions = getOptions(getName(), player);
+        GameSpecificationOptions specificationOptions = getOptions(getGame(), player);
         if (specificationOptions instanceof SelectSpecificationOptions) {
             return ((SelectSpecificationOptions) specificationOptions).getSpecifications().get(0);
         } else {
@@ -51,15 +52,15 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
 
     @Override
     final public GameSpecificationOptions getOptions() {
-        return getOptions(name, null);
+        return getOptions(game, null);
     }
 
     @Override
     final public GameSpecificationOptions getOptions(Player player) {
-        return getOptions(name, player);
+        return getOptions(game, player);
     }
 
-    abstract public GameSpecificationOptions getOptions(String name, Player player);
+    abstract public GameSpecificationOptions getOptions(Game game, Player player);
 
     @Override
     final public GameSessionPlayer<State> constructAutomatic(Player player) {

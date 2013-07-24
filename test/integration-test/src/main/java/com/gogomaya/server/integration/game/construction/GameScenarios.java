@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
@@ -21,20 +22,20 @@ public class GameScenarios {
         this.playerOperations = checkNotNull(playerOperations);
     }
 
-    public <State extends GameState> List<GameSessionPlayer<State>> constructGame(String name) {
-        if (name == null)
+    public <State extends GameState> List<GameSessionPlayer<State>> constructGame(Game game) {
+        if (game == null)
             throw new IllegalArgumentException("Name must not be null");
         Player randomPlayer = playerOperations.createPlayer();
         // Step 0. Sanity check
-        GameSpecification specification = randomPlayer.getGameConstructor(name).selectSpecification();
+        GameSpecification specification = randomPlayer.getGameConstructor(game).selectSpecification();
         // Step 1. Selecting specification for the game
         return constructGame(specification);
     }
 
     public <State extends GameState> List<GameSessionPlayer<State>> constructGame(GameSpecification specification) {
-        if (specification == null || specification.getName() == null || specification.getName().getName() == null)
+        if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
-        String gameName = specification.getName().getName();
+        Game gameName = specification.getName().getGame();
         List<GameSessionPlayer<State>> constructedGames = new ArrayList<>();
         // Step 0. Generating players
         int numPlayers = specification.getNumberRule().getMaxPlayers();

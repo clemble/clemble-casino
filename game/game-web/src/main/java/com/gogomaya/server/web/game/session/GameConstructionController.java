@@ -44,7 +44,7 @@ public class GameConstructionController<State extends GameState> {
     public @ResponseBody
     GameConstruction construct(@RequestHeader("playerId") final long playerId, @RequestBody final GameRequest gameRequest) {
         // Step 1. Checking that provided specification was valid
-        if (!configurationManager.getSpecificationOptions(gameRequest.getSpecification().getName().getName()).valid(gameRequest.getSpecification()))
+        if (!configurationManager.getSpecificationOptions(gameRequest.getSpecification().getName().getGame()).valid(gameRequest.getSpecification()))
             throw GogomayaException.fromError(GogomayaError.GameSpecificationInvalid);
         // Step 2. Invoking actual matching service
         return constructionService.construct(gameRequest);

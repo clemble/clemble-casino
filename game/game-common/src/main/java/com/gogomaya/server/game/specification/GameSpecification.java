@@ -15,6 +15,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
@@ -37,7 +38,7 @@ public class GameSpecification implements Serializable {
      */
     private static final long serialVersionUID = 6573909004152898162L;
 
-    final public static GameSpecification DEFAULT = new GameSpecification().setName(new SpecificationName("DEFAULT", "")).setBetRule(new FixedBetRule(50))
+    final public static GameSpecification DEFAULT = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT")).setBetRule(new FixedBetRule(50))
             .setCurrency(Currency.FakeMoney).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
             .setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);
 

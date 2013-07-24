@@ -13,7 +13,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.game.IntegrationGameSessionPlayerFactory;
@@ -152,7 +152,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public GameConstructionOperations<TicTacToeState> ticTacToeGameConstructionOperations() {
-            return new WebGameConstructionOperations<TicTacToeState>(TicTacToe.NAME, ticTacToeConfigurationManagerController, ticTacToeConstructionController,
+            return new WebGameConstructionOperations<TicTacToeState>(Game.pic, ticTacToeConfigurationManagerController, ticTacToeConstructionController,
                     ticTacToeSessionPlayerFactory());
         }
 
@@ -264,7 +264,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public GameConstructionOperations<TicTacToeState> ticTacToeGameConstructionOperations() {
-            return new IntegrationGameConstructionOperations<TicTacToeState>(TicTacToe.NAME, getBaseUrl(), restTemplate(), ticTacToeSessionPlayerFactory());
+            return new IntegrationGameConstructionOperations<TicTacToeState>(Game.pic, getBaseUrl(), restTemplate(), ticTacToeSessionPlayerFactory());
         }
 
         @Bean

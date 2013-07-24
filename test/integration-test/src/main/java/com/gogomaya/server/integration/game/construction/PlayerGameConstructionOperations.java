@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAware;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.construct.GameRequest;
@@ -28,8 +29,8 @@ public class PlayerGameConstructionOperations<State extends GameState> implement
     }
 
     @Override
-    public String getName() {
-        return gameOperations.getName();
+    public Game getGame() {
+        return gameOperations.getGame();
     }
 
     public GameSpecification selectSpecification() {

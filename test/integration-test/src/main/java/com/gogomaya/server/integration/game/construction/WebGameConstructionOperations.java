@@ -3,6 +3,7 @@ package com.gogomaya.server.integration.game.construction;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameConstruction;
@@ -25,18 +26,18 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
 
     final private GameConstructionController<TicTacToeState> constructionController;
 
-    public WebGameConstructionOperations(final String name,
+    public WebGameConstructionOperations(final Game game,
             final GameConfigurationManagerController configurationManagerController,
             final GameConstructionController<TicTacToeState> matchController,
             final GameSessionPlayerFactory<State> playerFactory) {
-        super(name, playerFactory);
+        super(game, playerFactory);
         this.configuartionManagerController = checkNotNull(configurationManagerController);
         this.constructionController = checkNotNull(matchController);
     }
 
     @Override
-    public GameSpecificationOptions getOptions(String name, Player player) {
-        return configuartionManagerController.get(player != null ? player.getPlayerId() : -1L, name);
+    public GameSpecificationOptions getOptions(Game game, Player player) {
+        return configuartionManagerController.get(player != null ? player.getPlayerId() : -1L, game);
     }
 
     @Override

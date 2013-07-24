@@ -19,9 +19,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.event.Event;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
-import com.gogomaya.server.game.tictactoe.TicTacToe;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionListener;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
@@ -69,7 +69,7 @@ public class MultipleNotificationsTest {
 
     @Test
     public void testMultipleNotificationOnTicTacToe() throws InterruptedException {
-        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(TicTacToe.NAME);
+        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
         TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
 

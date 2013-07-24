@@ -4,10 +4,13 @@ import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import org.cloudfoundry.org.codehaus.jackson.annotate.JsonCreator;
-import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAware;
 
 @Embeddable
@@ -18,10 +21,9 @@ public class SpecificationName implements GameAware {
      */
     private static final long serialVersionUID = -4223872939422173928L;
 
-    final public static SpecificationName DEFAULT = new SpecificationName("", "");
-
     @Column(name = "GAME_NAME")
-    private String name = "";
+    @Enumerated(EnumType.STRING)
+    private Game game;
 
     @Column(name = "SPECIFICATION_NAME")
     private String specificationName = "";
@@ -30,17 +32,18 @@ public class SpecificationName implements GameAware {
     }
 
     @JsonCreator
-    public SpecificationName(@JsonProperty("name") String name, @JsonProperty("group") String group) {
-        this.name = name;
+    public SpecificationName(@JsonProperty("game") Game game, @JsonProperty("group") String group) {
+        this.game = game;
         this.specificationName = group;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public Game getGame() {
+        return game;
     }
 
-    public SpecificationName setName(String name) {
-        this.name = name;
+    public SpecificationName setGame(Game game) {
+        this.game = game;
         return this;
     }
 
@@ -54,7 +57,7 @@ public class SpecificationName implements GameAware {
     }
 
     public byte[] toByteArray() {
-        byte[] nameBytes = name.getBytes();
+        byte[] nameBytes = new byte[]{(byte) game.ordinal()};
         byte[] groupBytes = specificationName.getBytes();
         byte[] results = Arrays.copyOf(nameBytes, nameBytes.length + groupBytes.length);
 
@@ -66,7 +69,7 @@ public class SpecificationName implements GameAware {
 
     @Override
     public String toString() {
-        return "[" + name + ", " + specificationName + "]";
+        return "[" + game + ", " + specificationName + "]";
     }
 
     @Override
@@ -74,7 +77,7 @@ public class SpecificationName implements GameAware {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((specificationName == null) ? 0 : specificationName.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((game == null) ? 0 : game.hashCode());
         return result;
     }
 
@@ -92,10 +95,10 @@ public class SpecificationName implements GameAware {
                 return false;
         } else if (!specificationName.equals(other.specificationName))
             return false;
-        if (name == null) {
-            if (other.name != null)
+        if (game == null) {
+            if (other.game != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!game.equals(other.game))
             return false;
         return true;
     }
