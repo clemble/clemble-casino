@@ -1,14 +1,9 @@
 package com.gogomaya.server.game.rule.bet;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.configuration.GameRuleOptions;
 
-@Embeddable
 @JsonTypeName("fixed")
 public class FixedBetRule implements BetRule {
 
@@ -18,27 +13,24 @@ public class FixedBetRule implements BetRule {
     private static final long serialVersionUID = 6656576325438885626L;
 
     final public static FixedBetRule DEFAULT = new FixedBetRule(50);
-    final public static GameRuleOptions<BetRule> DEFAULT_OPTIONS = new GameRuleOptions<BetRule>(new FixedBetRule(50), new FixedBetRule(100), new FixedBetRule(
-            200));
 
-    @Column(name = "PRICE")
-    private int price;
+    private int bet;
 
     public FixedBetRule() {
     }
 
-    public FixedBetRule(final int priceToUse) {
-        if (priceToUse < 0)
+    public FixedBetRule(final int betToUse) {
+        if (betToUse < 0)
             throw GogomayaException.fromError(GogomayaError.ClientJsonFormatError);
-        this.price = priceToUse;
+        this.bet = betToUse;
     }
 
-    public int getPrice() {
-        return price;
+    public int getBet() {
+        return bet;
     }
 
-    public FixedBetRule setPrice(int price) {
-        this.price = price;
+    public FixedBetRule setBet(int price) {
+        this.bet = price;
         return this;
     }
 
@@ -46,7 +38,7 @@ public class FixedBetRule implements BetRule {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + price;
+        result = prime * result + bet;
         return result;
     }
 
@@ -59,7 +51,7 @@ public class FixedBetRule implements BetRule {
         if (getClass() != obj.getClass())
             return false;
         FixedBetRule other = (FixedBetRule) obj;
-        if (price != other.price)
+        if (bet != other.bet)
             return false;
         return true;
     }

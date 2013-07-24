@@ -71,8 +71,8 @@ public class BetRuleFormat {
             st.setString(index++, betType.name());
             switch (betType) {
             case FIXED:
-                st.setLong(index++, ((FixedBetRule) value).getPrice());
-                st.setLong(index++, ((FixedBetRule) value).getPrice());
+                st.setLong(index++, ((FixedBetRule) value).getBet());
+                st.setLong(index++, ((FixedBetRule) value).getBet());
                 break;
             case LIMITED:
                 st.setLong(index++, ((LimitedBetRule) value).getMinBet());
@@ -99,7 +99,7 @@ public class BetRuleFormat {
 
             switch (betType) {
             case FIXED:
-                buffer.putInt(((FixedBetRule) betRule).getPrice());
+                buffer.putInt(((FixedBetRule) betRule).getBet());
                 break;
             case LIMITED:
                 buffer.putInt(((LimitedBetRule) betRule).getMinBet()).putInt(((LimitedBetRule) betRule).getMaxBet());

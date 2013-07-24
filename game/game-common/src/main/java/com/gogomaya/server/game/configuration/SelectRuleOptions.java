@@ -13,7 +13,7 @@ import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.money.Currency;
+import com.gogomaya.server.money.Money;
 
 @JsonTypeName("selectRule")
 public class SelectRuleOptions implements GameSpecificationOptions {
@@ -25,7 +25,7 @@ public class SelectRuleOptions implements GameSpecificationOptions {
     
     final private Game game;
 
-    final private Collection<Currency> currencyOptions;
+    final private Collection<Money> priceOptions;
 
     final private GameRuleOptions<BetRule> betOptions;
 
@@ -41,7 +41,7 @@ public class SelectRuleOptions implements GameSpecificationOptions {
 
     @JsonCreator
     public SelectRuleOptions(@JsonProperty("game") final Game game,
-            @JsonProperty("currencyOptions") final Collection<Currency> currencyOptions,
+            @JsonProperty("priceOptions") final Collection<Money> priceOptions,
             @JsonProperty("betOptions") final GameRuleOptions<BetRule> betOptions,
             @JsonProperty("giveUpOptions") final GameRuleOptions<GiveUpRule> giveUpOptions,
             @JsonProperty("numberOptions") final GameRuleOptions<PlayerNumberRule> numberOptions,
@@ -50,7 +50,7 @@ public class SelectRuleOptions implements GameSpecificationOptions {
             @JsonProperty("totalTimeOptions") final GameRuleOptions<TotalTimeRule> totalTimeOptions) {
         this.game = game;
         this.betOptions = betOptions;
-        this.currencyOptions = currencyOptions;
+        this.priceOptions = priceOptions;
         this.giveUpOptions = giveUpOptions;
         this.numberOptions = numberOptions;
         this.privacyOptions = privacyOptions;
@@ -62,8 +62,8 @@ public class SelectRuleOptions implements GameSpecificationOptions {
         return game;
     }
 
-    public Collection<Currency> getCurrencyOptions() {
-        return currencyOptions;
+    public Collection<Money> getPriceOptions() {
+        return priceOptions;
     }
 
     public GameRuleOptions<BetRule> getBetOptions() {
@@ -94,7 +94,7 @@ public class SelectRuleOptions implements GameSpecificationOptions {
     public boolean valid(GameSpecification specification) {
         return specification != null &&
               betOptions.contains(specification.getBetRule()) &&
-              currencyOptions.contains(specification.getCurrency()) &&
+              priceOptions.contains(specification.getPrice()) &&
               giveUpOptions.contains(specification.getGiveUpRule()) &&
               moveTimeOptions.contains(specification.getMoveTimeRule()) &&
               totalTimeOptions.contains(specification.getTotalTimeRule()) &&
@@ -107,7 +107,7 @@ public class SelectRuleOptions implements GameSpecificationOptions {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((betOptions == null) ? 0 : betOptions.hashCode());
-        result = prime * result + ((currencyOptions == null) ? 0 : currencyOptions.hashCode());
+        result = prime * result + ((priceOptions == null) ? 0 : priceOptions.hashCode());
         result = prime * result + ((game == null) ? 0 : game.hashCode());
         result = prime * result + ((giveUpOptions == null) ? 0 : giveUpOptions.hashCode());
         result = prime * result + ((moveTimeOptions == null) ? 0 : moveTimeOptions.hashCode());
@@ -131,10 +131,10 @@ public class SelectRuleOptions implements GameSpecificationOptions {
                 return false;
         } else if (!betOptions.equals(other.betOptions))
             return false;
-        if (currencyOptions == null) {
-            if (other.currencyOptions != null)
+        if (priceOptions == null) {
+            if (other.priceOptions != null)
                 return false;
-        } else if (!currencyOptions.containsAll(other.currencyOptions) || !other.currencyOptions.containsAll(currencyOptions))
+        } else if (!priceOptions.containsAll(other.priceOptions) || !other.priceOptions.containsAll(priceOptions))
             return false;
         if (game != other.game)
             return false;

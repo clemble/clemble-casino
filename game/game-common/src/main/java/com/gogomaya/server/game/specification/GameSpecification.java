@@ -3,7 +3,6 @@ package com.gogomaya.server.game.specification;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,6 +15,8 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.game.Game;
+import com.gogomaya.server.game.rule.bet.BetRule;
+import com.gogomaya.server.game.rule.bet.BetRuleFormat.BetRuleHibernateType;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construction.PrivacyRule;
@@ -26,11 +27,15 @@ import com.gogomaya.server.game.rule.time.TimeRuleFormat.TotalTimeRuleHibernateT
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
+import com.gogomaya.server.money.MoneyHibernate;
 
 @Entity
 @Table(name = "GAME_SPECIFICATION")
-@TypeDefs(value = { @TypeDef(name = "totalTime", typeClass = TotalTimeRuleHibernateType.class),
-        @TypeDef(name = "moveTime", typeClass = MoveTimeRuleHibernateType.class) })
+@TypeDefs(value = {
+        @TypeDef(name = "totalTime", typeClass = TotalTimeRuleHibernateType.class),
+        @TypeDef(name = "betRule", typeClass = BetRuleHibernateType.class),
+        @TypeDef(name = "moveTime", typeClass = MoveTimeRuleHibernateType.class),
+        @TypeDef(name = "money", typeClass = MoneyHibernate.class)})
 public class GameSpecification implements Serializable {
 
     /**
@@ -39,18 +44,19 @@ public class GameSpecification implements Serializable {
     private static final long serialVersionUID = 6573909004152898162L;
 
     final public static GameSpecification DEFAULT = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT")).setBetRule(new FixedBetRule(50))
-            .setCurrency(Currency.FakeMoney).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
+            .setPrice(Money.create(Currency.FakeMoney, 50)).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
             .setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);
 
     @EmbeddedId
     private SpecificationName name;
 
-    @Column(name = "CURRENCY")
-    @Enumerated(EnumType.STRING)
-    private Currency currency;
+    @Type(type = "money")
+    @Columns(columns = { @Column(name = "CURRENCY"), @Column(name = "PRICE") })
+    private Money price;
 
-    @Embedded
-    private FixedBetRule betRule;
+    @Type(type = "betRule")
+    @Columns(columns = { @Column(name = "BET_TYPE"), @Column(name = "BET_MIN"), @Column(name = "BET_MAX") })
+    private BetRule betRule;
 
     @Column(name = "GIVE_UP")
     @Enumerated(EnumType.STRING)
@@ -102,20 +108,20 @@ public class GameSpecification implements Serializable {
         return this;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    public Money getPrice() {
+        return price;
     }
 
-    public GameSpecification setCurrency(Currency currency) {
-        this.currency = currency;
+    public GameSpecification setPrice(Money price) {
+        this.price = price;
         return this;
     }
 
-    public FixedBetRule getBetRule() {
+    public BetRule getBetRule() {
         return betRule;
     }
 
-    public GameSpecification setBetRule(FixedBetRule betRule) {
+    public GameSpecification setBetRule(BetRule betRule) {
         this.betRule = betRule;
         return this;
     }
@@ -147,16 +153,12 @@ public class GameSpecification implements Serializable {
         return this;
     }
 
-    public Money extractMoneyNeeded() {
-        return new Money(currency, betRule.getPrice());
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((price == null) ? 0 : price.hashCode());
         result = prime * result + ((betRule == null) ? 0 : betRule.hashCode());
-        result = prime * result + ((currency == null) ? 0 : currency.hashCode());
         result = prime * result + ((giveUpRule == null) ? 0 : giveUpRule.hashCode());
         result = prime * result + ((moveTimeRule == null) ? 0 : moveTimeRule.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -180,7 +182,7 @@ public class GameSpecification implements Serializable {
                 return false;
         } else if (!betRule.equals(other.betRule))
             return false;
-        if (currency != other.currency)
+        if (!price.equals(other.price))
             return false;
         if (giveUpRule != other.giveUpRule)
             return false;

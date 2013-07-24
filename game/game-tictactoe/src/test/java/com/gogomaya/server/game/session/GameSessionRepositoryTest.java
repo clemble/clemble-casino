@@ -26,6 +26,7 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.money.Currency;
+import com.gogomaya.server.money.Money;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.repository.game.GameSpecificationRepository;
 import com.gogomaya.server.repository.game.GameTableRepository;
@@ -39,7 +40,7 @@ import com.gogomaya.server.tictactoe.action.impl.TicTacToeStateFactory;
 public class GameSessionRepositoryTest {
 
     GameSpecification DEFAULT_SPECIFICATION = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT")).setBetRule(new FixedBetRule(50))
-            .setCurrency(Currency.FakeMoney).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT)
+            .setPrice(Money.create(Currency.FakeMoney, 50)).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT)
             .setTotalTimeRule(TotalTimeRule.DEFAULT).setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);;
 
     @Inject

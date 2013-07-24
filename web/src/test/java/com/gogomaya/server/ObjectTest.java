@@ -7,6 +7,7 @@ import org.apache.commons.lang.RandomStringUtils;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
+import com.gogomaya.server.game.configuration.GameRuleOptions;
 import com.gogomaya.server.game.configuration.SelectRuleOptions;
 import com.gogomaya.server.game.construct.AutomaticGameRequest;
 import com.gogomaya.server.game.construct.GameConstruction;
@@ -15,6 +16,7 @@ import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.rule.GameRule;
+import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.bet.LimitedBetRule;
 import com.gogomaya.server.game.rule.bet.UnlimitedBetRule;
@@ -141,8 +143,9 @@ public class ObjectTest {
 
             @Override
             public SelectRuleOptions generate() {
-                return new SelectRuleOptions(Game.pic, Collections.singleton(Currency.FakeMoney), FixedBetRule.DEFAULT_OPTIONS, GiveUpRule.DEFAULT_OPTIONS,
-                        PlayerNumberRule.DEFAULT_OPTIONS, PrivacyRule.DEFAULT_OPTIONS, MoveTimeRule.DEFAULT_OPTIONS, TotalTimeRule.DEFAULT_OPTIONS);
+                return new SelectRuleOptions(Game.pic, Collections.singleton(Money.create(Currency.FakeMoney, 50)), new GameRuleOptions<BetRule>(
+                        new FixedBetRule(50), new FixedBetRule(100), new FixedBetRule(200)), GiveUpRule.DEFAULT_OPTIONS, PlayerNumberRule.DEFAULT_OPTIONS,
+                        PrivacyRule.DEFAULT_OPTIONS, MoveTimeRule.DEFAULT_OPTIONS, TotalTimeRule.DEFAULT_OPTIONS);
             }
         });
         ObjectGenerator.register(LimitedBetRule.class, new AbstractValueGenerator<LimitedBetRule>() {
@@ -151,6 +154,14 @@ public class ObjectTest {
             public LimitedBetRule generate() {
                 return LimitedBetRule.create(10, 200);
             }
+        });
+        ObjectGenerator.register(GameSpecification.class, new AbstractValueGenerator<GameSpecification>() {
+
+            @Override
+            public GameSpecification generate() {
+                return GameSpecification.DEFAULT;
+            }
+
         });
     }
 

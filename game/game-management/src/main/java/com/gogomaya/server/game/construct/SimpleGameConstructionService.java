@@ -51,14 +51,14 @@ public class SimpleGameConstructionService implements GameConstructionService {
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidRequest);
         // Step 2. Checking players can afford operations
         // Step 2.1. Checking initiator
-        Money ammountNeeded = request.getSpecification().extractMoneyNeeded();
-        if (!playerAccounttService.canAfford(request.getPlayerId(), ammountNeeded))
+        Money price = request.getSpecification().getPrice();
+        if (!playerAccounttService.canAfford(request.getPlayerId(), price))
             throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         if (request instanceof AutomaticGameRequest) {
             return automaticGameInitiatorManager.register((AutomaticGameRequest) request);
         }
         // Step 2.2. Checking opponents
-        if (!playerAccounttService.canAfford(request.getParticipants(), ammountNeeded))
+        if (!playerAccounttService.canAfford(request.getParticipants(), price))
             throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(request);

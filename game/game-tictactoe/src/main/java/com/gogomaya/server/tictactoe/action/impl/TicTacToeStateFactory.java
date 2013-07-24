@@ -27,12 +27,10 @@ public class TicTacToeStateFactory extends AbstractGameStateFactory<TicTacToeSta
         // Step 0. Create initial state
         if (gameSpecification == null)
             throw new IllegalArgumentException("Game specification can't be null");
-        // Step 1. Generating initial specification
-        if (!(gameSpecification.getBetRule() instanceof FixedBetRule))
-            throw new IllegalArgumentException("BetRule must be FixedBetRule");
+        if (gameSpecification.getPrice().getAmount() <= 0)
+            throw new IllegalArgumentException("Price must be fixed");
         // Step 2. Create fixed bet rule
-        FixedBetRule fixedBetRule = (FixedBetRule) gameSpecification.getBetRule();
-        long price = fixedBetRule.getPrice();
+        long price = gameSpecification.getPrice().getAmount();
         List<GamePlayerState> playerStates = new ArrayList<GamePlayerState>();
         for (Long playerId : playerIds) {
             playerStates.add(new GamePlayerState(playerId, price));

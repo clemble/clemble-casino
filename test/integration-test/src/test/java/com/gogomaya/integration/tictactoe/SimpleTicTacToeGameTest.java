@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,7 +22,6 @@ import com.gogomaya.server.integration.game.construction.GameConstructionOperati
 import com.gogomaya.server.integration.game.construction.GameScenarios;
 import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
 import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 
@@ -45,7 +43,7 @@ public class SimpleTicTacToeGameTest {
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
         TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
         try {
-            int gamePrice = playerA.getSpecification().getBetRule().getPrice();
+            long gamePrice = playerA.getSpecification().getPrice().getAmount();
 
             playerA.select(0, 0);
 
@@ -71,9 +69,9 @@ public class SimpleTicTacToeGameTest {
         TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
         TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
 
-        Currency currency = playerA.getSpecification().getCurrency();
-        Assert.assertEquals(playerA.getSpecification().getCurrency(), playerB.getSpecification().getCurrency());
-        int gamePrice = playerA.getSpecification().getBetRule().getPrice();
+        Currency currency = playerA.getSpecification().getPrice().getCurrency();
+        Assert.assertEquals(playerA.getSpecification().getPrice(), playerB.getSpecification().getPrice());
+        long gamePrice = playerA.getSpecification().getPrice().getAmount();
         long originalAmount = playerA.getPlayer().getWalletOperations().getAccount().getMoney(currency).getAmount();
 
         try {

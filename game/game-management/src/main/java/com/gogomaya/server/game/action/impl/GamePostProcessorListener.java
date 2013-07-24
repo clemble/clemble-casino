@@ -13,7 +13,6 @@ import com.gogomaya.server.game.action.GameProcessorListener;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
-import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
@@ -59,20 +58,17 @@ public class GamePostProcessorListener<State extends GameState> implements GameP
 
     private void winnerOutcome(final PlayerWonOutcome outcome, final GameSession<State> session) {
         long winnerId = outcome.getWinner();
-        Currency currency = session.getSpecification().getCurrency();
+        Money price = session.getSpecification().getPrice();
         // Step 2. Generating payment transaction
-        long totalWinning = 0;
         PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(session.getSession());
         PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionId(transactionId);
         for (GamePlayerState playerState : session.getState().getPlayerStates()) {
             if (playerState.getPlayerId() != winnerId) {
-                totalWinning = playerState.getMoneySpent();
-                paymentTransaction.addPaymentOperation(new PaymentOperation().setAmmount(Money.create(currency, playerState.getMoneySpent()))
-                        .setOperation(Operation.Credit).setPlayerId(playerState.getPlayerId()));
+                paymentTransaction
+                    .addPaymentOperation(new PaymentOperation().setAmmount(price).setOperation(Operation.Credit).setPlayerId(playerState.getPlayerId()))
+                    .addPaymentOperation(new PaymentOperation().setAmmount(price).setOperation(Operation.Debit).setPlayerId(winnerId));
             }
         }
-        paymentTransaction.addPaymentOperation(new PaymentOperation().setAmmount(Money.create(currency, totalWinning)).setOperation(Operation.Debit)
-                .setPlayerId(winnerId));
         // Step 3. Processing payment transaction
         paymentTransactionService.process(paymentTransaction);
     }
