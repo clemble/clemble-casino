@@ -1,31 +1,28 @@
-package com.gogomaya.server.game.active.time;
+package com.gogomaya.server.game.aspect.time;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.HashMap;
 
-import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 
-public class MoveAndTotalTimeTracker extends TimeTracker {
+public class TotalTimeTracker extends TimeTracker {
 
     /**
      * Generated 20/07/13
      */
-    private static final long serialVersionUID = -7681063590268707575L;
+    private static final long serialVersionUID = -5174948343979628680L;
 
     final private TotalTimeRule totalTimeRule;
-    final private MoveTimeRule moveTimeRule;
-
     final private HashMap<Long, Long> totalTime = new HashMap<Long, Long>();
 
-    public MoveAndTotalTimeTracker(long session, TotalTimeRule totalTimeRule, MoveTimeRule moveTimeRule) {
+    public TotalTimeTracker(long session, TotalTimeRule totalTimeRule) {
         super(session);
-        this.totalTimeRule = totalTimeRule;
-        this.moveTimeRule = moveTimeRule;
+        this.totalTimeRule = checkNotNull(totalTimeRule);
     }
 
     @Override
     public void startTracking(long player) {
-        add(new GameTimeBreach(player, System.currentTimeMillis() + moveTimeRule.getLimit(), moveTimeRule));
         add(new GameTimeBreach(player, System.currentTimeMillis() + (totalTimeRule.getLimit() - getTotalTime(player)), totalTimeRule));
     }
 
@@ -38,4 +35,5 @@ public class MoveAndTotalTimeTracker extends TimeTracker {
         Long totalTimeValue = totalTime.get(player);
         return (totalTimeValue == null ? 0 : totalTimeValue) + getMoveTime(player);
     }
+
 }

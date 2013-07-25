@@ -17,8 +17,8 @@ import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
-import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
-import com.gogomaya.server.game.rule.construction.PrivacyRule;
+import com.gogomaya.server.game.rule.construct.PlayerNumberRule;
+import com.gogomaya.server.game.rule.construct.PrivacyRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
@@ -39,7 +39,7 @@ import com.gogomaya.server.tictactoe.action.impl.TicTacToeStateFactory;
 @ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
 public class GameSessionRepositoryTest {
 
-    GameSpecification DEFAULT_SPECIFICATION = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT")).setBetRule(new FixedBetRule(50))
+    GameSpecification DEFAULT_SPECIFICATION = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT")).setBetRule(FixedBetRule.DEFAULT)
             .setPrice(Money.create(Currency.FakeMoney, 50)).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT)
             .setTotalTimeRule(TotalTimeRule.DEFAULT).setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);;
 

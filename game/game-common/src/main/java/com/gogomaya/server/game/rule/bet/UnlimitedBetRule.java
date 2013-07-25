@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.server.game.event.client.BetEvent;
 
 @JsonTypeName("unlimited")
 final public class UnlimitedBetRule implements BetRule {
@@ -18,6 +19,11 @@ final public class UnlimitedBetRule implements BetRule {
     }
 
     public static UnlimitedBetRule INSTANCE = new UnlimitedBetRule();
+
+    @Override
+    public boolean isValid(BetEvent betEvent) {
+        return true;
+    }
 
     @JsonCreator
     // This constructor is a workaround for Jackson deserializer

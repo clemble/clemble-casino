@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.event.client.BetEvent;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -58,6 +59,11 @@ public class LimitedBetRule implements BetRule {
         } catch (ExecutionException e) {
             throw GogomayaException.fromError(GogomayaError.ServerCacheError);
         }
+    }
+
+    @Override
+    public boolean isValid(BetEvent betEvent) {
+        return minBet <= betEvent.getBet() && betEvent.getBet() <= maxBet;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.active.time;
+package com.gogomaya.server.game.aspect.time;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.event.client.surrender.MoveTimeoutSurrenderEvent;

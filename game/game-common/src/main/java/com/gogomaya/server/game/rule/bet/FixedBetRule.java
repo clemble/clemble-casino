@@ -1,8 +1,13 @@
 package com.gogomaya.server.game.rule.bet;
 
+import java.util.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.game.event.client.BetEvent;
 
 @JsonTypeName("fixed")
 public class FixedBetRule implements BetRule {
@@ -12,33 +17,47 @@ public class FixedBetRule implements BetRule {
      */
     private static final long serialVersionUID = 6656576325438885626L;
 
-    final public static FixedBetRule DEFAULT = new FixedBetRule(50);
+    final public static FixedBetRule DEFAULT = new FixedBetRule(new long[] { 1, 2, 5, 10, 20 });
 
-    private int bet;
+    private long[] bets;
 
     public FixedBetRule() {
     }
 
-    public FixedBetRule(final int betToUse) {
-        if (betToUse < 0)
+    @JsonCreator
+    public FixedBetRule(@JsonProperty("bets") final long[] useBets) {
+        this.bets = useBets;
+    }
+
+    public long[] getBets() {
+        return bets;
+    }
+
+    @Override
+    public boolean isValid(BetEvent betEvent) {
+        for (long allowedBet : bets)
+            if (betEvent.getBet() == allowedBet)
+                return true;
+        return true;
+    }
+
+    public static FixedBetRule create(long[] useBets) {
+        if (useBets == null || useBets.length == 0)
             throw GogomayaException.fromError(GogomayaError.ClientJsonFormatError);
-        this.bet = betToUse;
-    }
-
-    public int getBet() {
-        return bet;
-    }
-
-    public FixedBetRule setBet(int price) {
-        this.bet = price;
-        return this;
+        long[] bets = new long[useBets.length];
+        for (int i = 0; i < useBets.length; i++) {
+            if (useBets[i] <= 0)
+                throw GogomayaException.fromError(GogomayaError.ClientJsonFormatError);
+            bets[i] = useBets[i];
+        }
+        return new FixedBetRule(bets);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + bet;
+        result = prime * result + Arrays.hashCode(bets);
         return result;
     }
 
@@ -51,9 +70,8 @@ public class FixedBetRule implements BetRule {
         if (getClass() != obj.getClass())
             return false;
         FixedBetRule other = (FixedBetRule) obj;
-        if (bet != other.bet)
+        if (!Arrays.equals(bets, other.bets))
             return false;
         return true;
     }
-
 }

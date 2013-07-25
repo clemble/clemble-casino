@@ -20,8 +20,8 @@ import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.bet.LimitedBetRule;
 import com.gogomaya.server.game.rule.bet.UnlimitedBetRule;
-import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
-import com.gogomaya.server.game.rule.construction.PrivacyRule;
+import com.gogomaya.server.game.rule.construct.PlayerNumberRule;
+import com.gogomaya.server.game.rule.construct.PrivacyRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
@@ -49,7 +49,7 @@ public class ObjectTest {
         ObjectGenerator.register(FixedBetRule.class, new AbstractValueGenerator<FixedBetRule>() {
             @Override
             public FixedBetRule generate() {
-                return new FixedBetRule(100);
+                return FixedBetRule.create(new long[] { 10 });
             }
 
         });
@@ -144,8 +144,8 @@ public class ObjectTest {
             @Override
             public SelectRuleOptions generate() {
                 return new SelectRuleOptions(Game.pic, Collections.singleton(Money.create(Currency.FakeMoney, 50)), new GameRuleOptions<BetRule>(
-                        new FixedBetRule(50), new FixedBetRule(100), new FixedBetRule(200)), GiveUpRule.DEFAULT_OPTIONS, PlayerNumberRule.DEFAULT_OPTIONS,
-                        PrivacyRule.DEFAULT_OPTIONS, MoveTimeRule.DEFAULT_OPTIONS, TotalTimeRule.DEFAULT_OPTIONS);
+                        FixedBetRule.DEFAULT), GiveUpRule.DEFAULT_OPTIONS, PlayerNumberRule.DEFAULT_OPTIONS, PrivacyRule.DEFAULT_OPTIONS,
+                        MoveTimeRule.DEFAULT_OPTIONS, TotalTimeRule.DEFAULT_OPTIONS);
             }
         });
         ObjectGenerator.register(LimitedBetRule.class, new AbstractValueGenerator<LimitedBetRule>() {

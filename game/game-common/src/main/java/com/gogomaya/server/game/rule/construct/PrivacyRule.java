@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.rule.construction;
+package com.gogomaya.server.game.rule.construct;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.configuration.GameRuleOptions;

@@ -81,9 +81,7 @@
     create table GAME_SPECIFICATION (
         GAME_NAME varchar(255) not null,
         SPECIFICATION_NAME varchar(255) not null,
-        BET_TYPE varchar(255),
-        BET_MIN integer,
-        BET_MAX integer,
+        BET_RULE varchar(255),
         GIVE_UP varchar(255),
         MOVE_TIME_LIMIT integer,
         MOVE_TIME_PUNISHMENT varchar(255),

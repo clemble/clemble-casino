@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.active.time;
+package com.gogomaya.server.game.aspect.time;
 
 import java.util.HashMap;
 import java.util.Iterator;

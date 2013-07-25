@@ -79,6 +79,7 @@ public enum GogomayaError {
     GamePlayWrongMoveType(Code.GAMEPLAY_WRONG_MOVE_TYPE_CODE, "Wrong move type"),
     GamePlayMoveNotSupported(Code.GAMEPLAY_MOVE_NOT_SUPPORTED_CODE, "Game does not support this move"),
     GamePlayBetOverflow(Code.GAMEPLAY_BET_OVERFLOW_CODE, "Bet ammount overflow"),
+    GamePlayBetInvalid(Code.GAMEPLAY_BET_INVALID_CODE, "Bet invalid event"),
 
     TicTacToeCellOwned(Code.TIC_TAC_TOE_CELL_OWNED_CODE, "Cell already Owned"),
 
@@ -232,6 +233,7 @@ public enum GogomayaError {
         final public static String GAMEPLAY_GAME_NOT_STARTED_CODE = "0F7";
         final public static String GAMEPLAY_GAME_ENDED_CODE = "0F8";
         final public static String GAMEPLAY_BET_OVERFLOW_CODE = "0F9";
+        final public static String GAMEPLAY_BET_INVALID_CODE = "0FA";
         // Errors specific for TicTacToe
         final public static String TIC_TAC_TOE_CELL_OWNED_CODE = "0G0";
         // Session recreation failure

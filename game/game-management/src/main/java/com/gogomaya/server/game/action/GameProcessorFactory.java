@@ -8,7 +8,7 @@ import java.util.Collection;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.active.time.GameTimeProcessorListenerFactory;
+import com.gogomaya.server.game.aspect.time.GameTimeProcessorListenerFactory;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class GameProcessorFactory<State extends GameState> {

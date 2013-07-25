@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.active.time;
+package com.gogomaya.server.game.aspect.time;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

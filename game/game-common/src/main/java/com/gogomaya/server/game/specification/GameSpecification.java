@@ -10,21 +10,22 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.rule.bet.BetRule;
-import com.gogomaya.server.game.rule.bet.BetRuleFormat.BetRuleHibernateType;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
-import com.gogomaya.server.game.rule.construction.PlayerNumberRule;
-import com.gogomaya.server.game.rule.construction.PrivacyRule;
+import com.gogomaya.server.game.rule.construct.PlayerNumberRule;
+import com.gogomaya.server.game.rule.construct.PrivacyRule;
 import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.MoveTimeRuleHibernateType;
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.TotalTimeRuleHibernateType;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
+import com.gogomaya.server.hibernate.JsonHibernateType;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneyHibernate;
@@ -33,9 +34,11 @@ import com.gogomaya.server.money.MoneyHibernate;
 @Table(name = "GAME_SPECIFICATION")
 @TypeDefs(value = {
         @TypeDef(name = "totalTime", typeClass = TotalTimeRuleHibernateType.class),
-        @TypeDef(name = "betRule", typeClass = BetRuleHibernateType.class),
         @TypeDef(name = "moveTime", typeClass = MoveTimeRuleHibernateType.class),
-        @TypeDef(name = "money", typeClass = MoneyHibernate.class)})
+        @TypeDef(name = "money", typeClass = MoneyHibernate.class),
+        @TypeDef(name = "betRule", typeClass = JsonHibernateType.class, defaultForType = BetRule.class,
+            parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER,value = "com.gogomaya.server.game.rule.bet.BetRule") })
+})
 public class GameSpecification implements Serializable {
 
     /**
@@ -43,7 +46,7 @@ public class GameSpecification implements Serializable {
      */
     private static final long serialVersionUID = 6573909004152898162L;
 
-    final public static GameSpecification DEFAULT = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT")).setBetRule(new FixedBetRule(50))
+    final public static GameSpecification DEFAULT = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT")).setBetRule(FixedBetRule.DEFAULT)
             .setPrice(Money.create(Currency.FakeMoney, 50)).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
             .setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);
 
@@ -55,7 +58,7 @@ public class GameSpecification implements Serializable {
     private Money price;
 
     @Type(type = "betRule")
-    @Columns(columns = { @Column(name = "BET_TYPE"), @Column(name = "BET_MIN"), @Column(name = "BET_MAX") })
+    @Columns(columns = { @Column(name = "BET_RULE")})
     private BetRule betRule;
 
     @Column(name = "GIVE_UP")
