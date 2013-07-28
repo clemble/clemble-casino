@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.action.impl;
+package com.gogomaya.server.game.aspect.price;
 
 import java.util.Collection;
 
@@ -8,12 +8,12 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.action.GameProcessorListener;
+import com.gogomaya.server.game.aspect.GameAspect;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 
-public class VerificationGameProcessorListener<State extends GameState> implements GameProcessorListener<State> {
+public class GamePriceAspect<State extends GameState> implements GameAspect<State> {
 
     @Override
     public void beforeMove(final GameSession<State> session, final ClientEvent move) {
@@ -22,10 +22,6 @@ public class VerificationGameProcessorListener<State extends GameState> implemen
             throw GogomayaException.fromError(GogomayaError.GamePlayMoveUndefined);
         State state = session.getState();
         // Step 2. Checking player participate in the game
-        final long playerId = move.getPlayerId();
-        if (!state.getPlayerIterator().contains(playerId)) {
-            throw GogomayaException.fromError(GogomayaError.GamePlayPlayerNotParticipate);
-        }
         if (!(move instanceof SurrenderEvent)) {
             // Step 3. Checking that move
             if (move instanceof BetEvent) {

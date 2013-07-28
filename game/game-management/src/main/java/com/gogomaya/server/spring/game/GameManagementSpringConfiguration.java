@@ -12,8 +12,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.gogomaya.server.ServerRegistry;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.action.impl.GamePostProcessorListener;
-import com.gogomaya.server.game.action.impl.VerificationGameProcessorListener;
+import com.gogomaya.server.game.aspect.outcome.GameOutcomeAspect;
+import com.gogomaya.server.game.aspect.price.GamePriceAspect;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameConstructionService;
@@ -47,14 +47,14 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Singleton
-    public <State extends GameState> VerificationGameProcessorListener<State> verificationGameProcessorListener() {
-        return new VerificationGameProcessorListener<State>();
+    public <State extends GameState> GamePriceAspect<State> verificationGameProcessorListener() {
+        return new GamePriceAspect<State>();
     }
 
     @Bean
     @Singleton
-    public <State extends GameState> GamePostProcessorListener<State> gamePostProcessorListener() {
-        return new GamePostProcessorListener<State>(playerStateManager, paymentTransactionService);
+    public <State extends GameState> GameOutcomeAspect<State> gamePostProcessorListener() {
+        return new GameOutcomeAspect<State>(playerStateManager, paymentTransactionService);
     }
 
     @Bean

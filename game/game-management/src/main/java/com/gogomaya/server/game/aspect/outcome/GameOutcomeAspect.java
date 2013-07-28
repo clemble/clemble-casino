@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.action.impl;
+package com.gogomaya.server.game.aspect.outcome;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -9,7 +9,7 @@ import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameSessionState;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.action.GameProcessorListener;
+import com.gogomaya.server.game.aspect.GameAspect;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
@@ -22,12 +22,12 @@ import com.gogomaya.server.payment.PaymentTransactionId;
 import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 
-public class GamePostProcessorListener<State extends GameState> implements GameProcessorListener<State> {
+public class GameOutcomeAspect<State extends GameState> implements GameAspect<State> {
 
     final private PlayerStateManager activePlayerQueue;
     final private PaymentTransactionService paymentTransactionService;
 
-    public GamePostProcessorListener(final PlayerStateManager activePlayerQueue, final PaymentTransactionService paymentTransactionService) {
+    public GameOutcomeAspect(final PlayerStateManager activePlayerQueue, final PaymentTransactionService paymentTransactionService) {
         this.activePlayerQueue = checkNotNull(activePlayerQueue);
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
     }

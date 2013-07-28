@@ -38,7 +38,7 @@ public class TimeRuleFormat {
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
             MoveTimeRule timeRule = (MoveTimeRule) value;
             st.setString(index++, timeRule.getPunishment().name());
-            st.setInt(index++, ((MoveTimeRule) timeRule).getLimit());
+            st.setLong(index++, ((MoveTimeRule) timeRule).getLimit());
         }
 
     }
@@ -67,7 +67,7 @@ public class TimeRuleFormat {
         public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
             TotalTimeRule timeRule = (TotalTimeRule) value;
             st.setString(index++, timeRule.getPunishment().name());
-            st.setInt(index++, ((TotalTimeRule) timeRule).getLimit());
+            st.setLong(index++, ((TotalTimeRule) timeRule).getLimit());
         }
 
     }
@@ -77,7 +77,7 @@ public class TimeRuleFormat {
         @Override
         public ByteBuffer write(MoveTimeRule timeRule, ByteBuffer writeBuffer) {
             writeBuffer.put((byte) timeRule.getPunishment().ordinal());
-            writeBuffer.putInt(((MoveTimeRule) timeRule).getLimit());
+            writeBuffer.putLong(((MoveTimeRule) timeRule).getLimit());
             return writeBuffer;
         }
 
@@ -94,7 +94,7 @@ public class TimeRuleFormat {
         @Override
         public ByteBuffer write(TotalTimeRule totalTimeRule, ByteBuffer writeBuffer) {
             writeBuffer.put((byte) totalTimeRule.getPunishment().ordinal());
-            writeBuffer.putInt(totalTimeRule.getLimit());
+            writeBuffer.putLong(totalTimeRule.getLimit());
             return writeBuffer;
         }
 

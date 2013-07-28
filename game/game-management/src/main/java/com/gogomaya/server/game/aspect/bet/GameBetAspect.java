@@ -7,16 +7,16 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.action.GameProcessorListener;
+import com.gogomaya.server.game.aspect.GameAspect;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.rule.bet.BetRule;
 
-public class GameBetProcessorListener<State extends GameState> implements GameProcessorListener<State> {
+public class GameBetAspect<State extends GameState> implements GameAspect<State> {
 
     final private BetRule betRule;
 
-    public GameBetProcessorListener(BetRule betRule) {
+    public GameBetAspect(BetRule betRule) {
         this.betRule = betRule;
     }
 

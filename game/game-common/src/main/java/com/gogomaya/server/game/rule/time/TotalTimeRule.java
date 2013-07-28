@@ -6,7 +6,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
+import com.gogomaya.server.game.event.client.surrender.TotalTimeoutSurrenderEvent;
 
 @Embeddable
 @JsonTypeName("totalTime")
@@ -25,7 +27,7 @@ public class TotalTimeRule implements TimeRule {
     private TimeBreachPunishment punishment;
 
     @Column(name = "TOTAL_TIME_LIMIT")
-    private int limit;
+    private long limit;
 
     public TotalTimeRule() {
     }
@@ -39,8 +41,19 @@ public class TotalTimeRule implements TimeRule {
         return this;
     }
 
-    public int getLimit() {
+    @Override
+    public long getLimit() {
         return limit;
+    }
+
+    @Override
+    public long getBreachTime(long totalTimeSpent) {
+        return limit - totalTimeSpent;
+    }
+
+    @Override
+    public ClientEvent toTimeBreachedEvent(long player) {
+        return new TotalTimeoutSurrenderEvent(player);
     }
 
     public TotalTimeRule setLimit(int limit) {
@@ -52,7 +65,7 @@ public class TotalTimeRule implements TimeRule {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + limit;
+        result = prime * result + (int) (limit ^ (limit >>> 32));
         result = prime * result + ((punishment == null) ? 0 : punishment.hashCode());
         return result;
     }

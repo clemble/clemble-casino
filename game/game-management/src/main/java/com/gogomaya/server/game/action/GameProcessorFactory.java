@@ -8,17 +8,18 @@ import java.util.Collection;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.aspect.GameAspect;
 import com.gogomaya.server.game.aspect.time.GameTimeProcessorListenerFactory;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class GameProcessorFactory<State extends GameState> {
 
     final private GameProcessor<State> coreProcessor;
-    final private GameProcessorListener<State>[] registeredListeners;
+    final private GameAspect<State>[] registeredListeners;
     private GameTimeProcessorListenerFactory<State> timeListenerFactory;
 
     @SafeVarargs
-    public GameProcessorFactory(final GameProcessor<State> coreProcessor, final GameProcessorListener<State>... listeners) {
+    public GameProcessorFactory(final GameProcessor<State> coreProcessor, final GameAspect<State>... listeners) {
         this.coreProcessor = checkNotNull(coreProcessor);
         this.registeredListeners = Arrays.copyOf(listeners, listeners.length);
     }
@@ -28,11 +29,11 @@ public class GameProcessorFactory<State extends GameState> {
     }
 
     public GameProcessor<State> create(GameSession<State> session) {
-        GameProcessorListener<State> timeListener = timeListenerFactory.construct(session);
+        GameAspect<State> timeListener = timeListenerFactory.construct(session);
         if(timeListener == null) {
             return new AggregatedGameProcessor<State>(coreProcessor, registeredListeners);
         } else {
-            GameProcessorListener<State>[] extendedListeners = Arrays.copyOf(registeredListeners, registeredListeners.length + 1);
+            GameAspect<State>[] extendedListeners = Arrays.copyOf(registeredListeners, registeredListeners.length + 1);
             extendedListeners[registeredListeners.length] = timeListener;
             return new AggregatedGameProcessor<State>(coreProcessor, extendedListeners);
         }
@@ -40,9 +41,9 @@ public class GameProcessorFactory<State extends GameState> {
 
     public static class AggregatedGameProcessor<State extends GameState> implements GameProcessor<State> {
         final private GameProcessor<State> coreProcessor;
-        final private GameProcessorListener<State>[] listeners;
+        final private GameAspect<State>[] listeners;
 
-        public AggregatedGameProcessor(GameProcessor<State> coreProcessor, GameProcessorListener<State>[] listeners) {
+        public AggregatedGameProcessor(GameProcessor<State> coreProcessor, GameAspect<State>[] listeners) {
             this.coreProcessor = coreProcessor;
             this.listeners = listeners;
         }
@@ -50,13 +51,13 @@ public class GameProcessorFactory<State extends GameState> {
         @Override
         public Collection<GameServerEvent<State>> process(GameSession<State> session, ClientEvent move) {
             // Step 1. Before move notification
-            for (GameProcessorListener<State> listener : listeners) {
+            for (GameAspect<State> listener : listeners) {
                 listener.beforeMove(session, move);
             }
             // Step 2. Processing in core
             Collection<GameServerEvent<State>> events = coreProcessor.process(session, move);
             // Step 3. After move notification
-            for (GameProcessorListener<State> listener : listeners) {
+            for (GameAspect<State> listener : listeners) {
                 listener.afterMove(session, events);
             }
             return events;

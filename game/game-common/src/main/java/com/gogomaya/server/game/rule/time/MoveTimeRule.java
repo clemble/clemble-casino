@@ -6,7 +6,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
+import com.gogomaya.server.game.event.client.surrender.MoveTimeoutSurrenderEvent;
 
 @Embeddable
 @JsonTypeName("moveTime")
@@ -26,7 +28,7 @@ public class MoveTimeRule implements TimeRule {
     private TimeBreachPunishment punishment;
 
     @Column(name = "MOVE_TIME_LIMIT")
-    private int limit;
+    private long limit;
 
     public TimeBreachPunishment getPunishment() {
         return punishment;
@@ -37,7 +39,18 @@ public class MoveTimeRule implements TimeRule {
         return this;
     }
 
-    public int getLimit() {
+    @Override
+    public long getBreachTime(long totalTimeSpent) {
+        return limit;
+    }
+
+    @Override
+    public ClientEvent toTimeBreachedEvent(long player) {
+        return new MoveTimeoutSurrenderEvent(player);
+    }
+
+    @Override
+    public long getLimit() {
         return limit;
     }
 
@@ -50,7 +63,7 @@ public class MoveTimeRule implements TimeRule {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + limit;
+        result = prime * result + (int) (limit ^ (limit >>> 32));
         result = prime * result + ((punishment == null) ? 0 : punishment.hashCode());
         return result;
     }

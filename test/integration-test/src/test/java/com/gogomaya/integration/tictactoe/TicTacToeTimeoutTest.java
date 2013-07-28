@@ -70,7 +70,7 @@ public class TicTacToeTimeoutTest {
         Assert.assertTrue(playerA.getSpecification().getMoveTimeRule().getLimit() > 0);
 
         int step = 0;
-        int stepWaitTimeout = 300 + playerA.getSpecification().getTotalTimeRule().getLimit() / 4;
+        long stepWaitTimeout = 300 + playerA.getSpecification().getTotalTimeRule().getLimit() / 4;
 
         try {
 

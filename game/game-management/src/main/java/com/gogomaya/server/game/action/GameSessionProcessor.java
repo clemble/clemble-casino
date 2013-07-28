@@ -8,6 +8,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.Game;
+import com.gogomaya.server.game.GameAware;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.cache.GameCache;
@@ -18,17 +20,32 @@ import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 
-public class GameSessionProcessor<State extends GameState> {
+public class GameSessionProcessor<State extends GameState> implements GameAware {
+
+    /**
+     * Generated 27/07/13
+     */
+    private static final long serialVersionUID = 1688637028016268305L;
+
+    final private Game game;
 
     final private GameCacheService<State> cacheService;
     final private GameTableFactory<State> tableFactory;
     final private PlayerNotificationService notificationService;
 
-    public GameSessionProcessor(final GameTableFactory<State> tableFactory, final GameCacheService<State> cacheService,
+    public GameSessionProcessor(final Game game,
+            final GameTableFactory<State> tableFactory,
+            final GameCacheService<State> cacheService,
             final PlayerNotificationService notificationService) {
+        this.game = game;
         this.notificationService = checkNotNull(notificationService);
         this.tableFactory = checkNotNull(tableFactory);
         this.cacheService = checkNotNull(cacheService);
+    }
+
+    @Override
+    public Game getGame() {
+        return game;
     }
 
     public GameTable<State> start(GameInitiation initiation) {

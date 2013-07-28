@@ -11,11 +11,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.game.action.GameTableFactory;
-import com.gogomaya.server.game.action.impl.GamePostProcessorListener;
-import com.gogomaya.server.game.action.impl.VerificationGameProcessorListener;
+import com.gogomaya.server.game.aspect.outcome.GameOutcomeAspect;
+import com.gogomaya.server.game.aspect.price.GamePriceAspect;
 import com.gogomaya.server.game.aspect.time.GameTimeManagementService;
 import com.gogomaya.server.game.aspect.time.GameTimeProcessorListenerFactory;
 import com.gogomaya.server.game.cache.GameCacheService;
@@ -66,11 +67,11 @@ public class TicTacToeSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("verificationGameProcessorListener")
-    public VerificationGameProcessorListener<TicTacToeState> verificationGameProcessorListener;
+    public GamePriceAspect<TicTacToeState> verificationGameProcessorListener;
 
     @Autowired
     @Qualifier("gamePostProcessorListener")
-    public GamePostProcessorListener<TicTacToeState> gamePostProcessorListener;
+    public GameOutcomeAspect<TicTacToeState> gamePostProcessorListener;
 
     @Autowired
     @Qualifier("playerStateManager")
@@ -134,7 +135,7 @@ public class TicTacToeSpringConfiguration implements SpringConfiguration {
     @Bean
     @Singleton
     public GameSessionProcessor<TicTacToeState> ticTacToeSessionProcessor() {
-        return new GameSessionProcessor<TicTacToeState>(ticTacToeTableFactory(), ticTacToeCacheService(), playerNotificationService);
+        return new GameSessionProcessor<TicTacToeState>(Game.pic, ticTacToeTableFactory(), ticTacToeCacheService(), playerNotificationService);
     }
 
     @Bean

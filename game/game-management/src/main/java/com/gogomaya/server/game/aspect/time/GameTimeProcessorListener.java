@@ -7,10 +7,10 @@ import java.util.Collection;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.action.GameProcessorListener;
+import com.gogomaya.server.game.aspect.GameAspect;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 
-public class GameTimeProcessorListener<State extends GameState> implements GameProcessorListener<State> {
+public class GameTimeProcessorListener<State extends GameState> implements GameAspect<State> {
 
     final GameTimeManagementService<State> timeScheduler;
 
