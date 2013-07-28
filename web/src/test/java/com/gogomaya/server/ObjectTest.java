@@ -3,7 +3,7 @@ package com.gogomaya.server;
 import java.util.Collections;
 import java.util.Date;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
@@ -110,7 +110,7 @@ public class ObjectTest {
 
             @Override
             public PlayerCredential generate() {
-                return new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.random(10));
+                return new PlayerCredential().setEmail(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.random(10));
             }
 
         });

@@ -1,9 +1,10 @@
 package com.gogomaya.server.payment;
 
+import java.util.Random;
+
 import javax.inject.Inject;
 
 import org.junit.Assert;
-import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,10 +16,6 @@ import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
-import com.gogomaya.server.payment.PaymentOperation;
-import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.payment.PaymentTransactionId;
-import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
@@ -28,6 +25,8 @@ import com.gogomaya.server.spring.payment.PaymentManagementSpringConfiguration;
 @ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @ContextConfiguration(classes = PaymentManagementSpringConfiguration.class)
 public class PaymentTransactionServiceTest {
+    
+    final private Random RANDOM = new Random();
 
     @Inject
     public PlayerAccountRepository playerAccountRepository;
@@ -35,8 +34,8 @@ public class PaymentTransactionServiceTest {
     @Inject
     public PaymentTransactionService paymentTransactionService;
 
-    private long playerFrom = RandomUtils.nextLong();
-    private long playerTo = RandomUtils.nextLong();
+    private long playerFrom = RANDOM.nextLong();
+    private long playerTo = RANDOM.nextLong();
 
     @Before
     public void initialize() {
@@ -50,7 +49,7 @@ public class PaymentTransactionServiceTest {
 
     @Test
     public void testWalletUpdate() {
-        Money ammount = Money.create(Currency.FakeMoney, RandomUtils.nextInt(100));
+        Money ammount = Money.create(Currency.FakeMoney, RANDOM.nextInt(100));
 
         PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(1L);
 
