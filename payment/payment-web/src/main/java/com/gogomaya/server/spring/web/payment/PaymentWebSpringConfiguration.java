@@ -27,16 +27,16 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
     public PlayerAccountService playerWalletService;
 
     @Autowired
-    @Qualifier("playerAccountRepository")
-    public PlayerAccountRepository playerAccountRepository;
-
-    @Autowired
     @Qualifier("paymentTransactionRepository")
     public PaymentTransactionRepository paymentTransactionRepository;
 
     @Autowired
     @Qualifier("paymentTransactionService")
     public PaymentTransactionService paymentTransactionService;
+
+    @Autowired
+    @Qualifier("playerAccountRepository")
+    public PlayerAccountRepository playerAccountRepository;
 
     @Bean
     @Singleton

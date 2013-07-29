@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.aspect.GameAspect;
 import com.gogomaya.server.game.aspect.GameAspectFactory;
-import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 
@@ -20,8 +20,8 @@ public class GameOutcomeAspectFactory implements GameAspectFactory {
     }
 
     @Override
-    public <T extends GameState> GameAspect<T> construct(GameSpecification gameSpecification) {
-        return new GameOutcomeAspect<T>(playerStateManager, paymentTransactionService);
+    public <T extends GameState> GameAspect<T> construct(GameInitiation initiation) {
+        return new GameOutcomeAspect<T>(initiation.getSpecification().getName().getGame(), playerStateManager, paymentTransactionService);
     }
 
 }

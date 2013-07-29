@@ -9,8 +9,6 @@ import com.gogomaya.server.game.specification.GameSpecification;
 
 public interface GameStateFactory<State extends GameState> {
 
-    public State emptyState();
-
     public State constructState(final GameInitiation initiation);
 
     public State constructState(final GameSession<State> gameSession);

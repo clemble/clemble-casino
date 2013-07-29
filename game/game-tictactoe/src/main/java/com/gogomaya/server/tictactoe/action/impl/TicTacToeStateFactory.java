@@ -7,19 +7,14 @@ import java.util.List;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.impl.AbstractGameStateFactory;
-import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
 
 public class TicTacToeStateFactory extends AbstractGameStateFactory<TicTacToeState> {
 
-    public TicTacToeStateFactory(GameProcessorFactory<TicTacToeState> processorFactory) {
-        super(processorFactory);
-    }
-
-    @Override
-    public TicTacToeState emptyState() {
-        return new TicTacToeState();
+    public TicTacToeStateFactory(GameConstructionRepository constructionRepository, GameProcessorFactory<TicTacToeState> processorFactory) {
+        super(constructionRepository, processorFactory);
     }
 
     @Override

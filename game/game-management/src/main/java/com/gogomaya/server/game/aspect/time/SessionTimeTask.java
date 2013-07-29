@@ -8,12 +8,12 @@ import org.springframework.scheduling.TriggerContext;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.action.GameEventTask;
-import com.gogomaya.server.game.rule.time.TimeRule;
+import com.gogomaya.server.game.construct.GameInitiation;
+import com.gogomaya.server.game.specification.GameSpecification;
 
-public class SessionTimerTask implements GameEventTask, SessionAware {
+public class SessionTimeTask implements GameEventTask, SessionAware {
 
     /**
      * Generated
@@ -24,12 +24,19 @@ public class SessionTimerTask implements GameEventTask, SessionAware {
     final private long session;
     final private PlayerTimeTracker[] playerTimeTrackers;
 
-    public SessionTimerTask(GameSession<?> session, TimeRule timeRule) {
-        this.game = session.getSpecification().getName().getGame();
-        this.session = session.getSession();
-        this.playerTimeTrackers = new PlayerTimeTracker[session.getPlayers().size()];
-        for (int i = 0; i < session.getPlayers().size(); i++) {
-            playerTimeTrackers[i] = new PlayerTimeTracker(session.getPlayers().get(i), timeRule);
+    public SessionTimeTask(GameInitiation initiation) {
+        this.game = initiation.getGame();
+        this.session = initiation.getSession();
+
+        final GameSpecification specification = initiation.getSpecification();
+
+        final Collection<Long> participants = initiation.getParticipants();
+        this.playerTimeTrackers = new PlayerTimeTracker[participants.size() * 2];
+
+        int pointer = 0;
+        for (Long participant : participants) {
+            playerTimeTrackers[pointer++] = new PlayerTimeTracker(participant, specification.getTotalTimeRule());
+            playerTimeTrackers[pointer++] = new PlayerTimeTracker(participant, specification.getMoveTimeRule());
         }
     }
 
@@ -43,30 +50,20 @@ public class SessionTimerTask implements GameEventTask, SessionAware {
         return session;
     }
 
-    public boolean markMoved(ClientEvent move) {
-        long beforeMove = getBreachTime();
-
+    public void markMoved(ClientEvent move) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
             if (playerTimeTracker.getPlayerId() == move.getPlayerId()) {
                 playerTimeTracker.markMoved();
-                break;
             }
         }
-
-        return getBreachTime() == beforeMove;
     }
 
-    public boolean markToMove(ClientEvent nextMove) {
-        long beforeMove = getBreachTime();
-
+    public void markToMove(ClientEvent nextMove) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
             if (playerTimeTracker.getPlayerId() == nextMove.getPlayerId()) {
                 playerTimeTracker.markToMove();
-                break;
             }
         }
-
-        return getBreachTime() == beforeMove;
     }
 
     public long getBreachTime() {

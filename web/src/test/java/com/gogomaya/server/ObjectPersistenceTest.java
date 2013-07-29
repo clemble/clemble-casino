@@ -16,7 +16,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.DefaultRepositoryMetadata;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -25,12 +24,10 @@ import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.ScheduledGame;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameScheduleRepository;
-import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
 import com.stresstest.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @WebAppConfiguration
 @ContextConfiguration(classes = { WebMvcSpiSpringConfiguration.class })
 public class ObjectPersistenceTest extends ObjectTest implements ApplicationContextAware {

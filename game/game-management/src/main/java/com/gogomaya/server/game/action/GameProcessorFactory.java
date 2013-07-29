@@ -2,6 +2,7 @@ package com.gogomaya.server.game.action;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -9,55 +10,55 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.aspect.GameAspect;
-import com.gogomaya.server.game.aspect.time.GameTimeProcessorListenerFactory;
+import com.gogomaya.server.game.aspect.GameAspectFactory;
+import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class GameProcessorFactory<State extends GameState> {
 
     final private GameProcessor<State> coreProcessor;
-    final private GameAspect<State>[] registeredListeners;
-    private GameTimeProcessorListenerFactory<State> timeListenerFactory;
+    final private GameAspectFactory[] aspectFactories;
 
     @SafeVarargs
-    public GameProcessorFactory(final GameProcessor<State> coreProcessor, final GameAspect<State>... listeners) {
+    public GameProcessorFactory(final GameProcessor<State> coreProcessor, final GameAspectFactory... listeners) {
         this.coreProcessor = checkNotNull(coreProcessor);
-        this.registeredListeners = Arrays.copyOf(listeners, listeners.length);
+        for (GameAspectFactory listener : listeners)
+            checkNotNull(listener);
+        this.aspectFactories = Arrays.copyOf(listeners, listeners.length);
     }
 
-    public void setTimeListenerFactory(GameTimeProcessorListenerFactory<State> timeListenerFactory) {
-        this.timeListenerFactory = timeListenerFactory;
-    }
-
-    public GameProcessor<State> create(GameSession<State> session) {
-        GameAspect<State> timeListener = timeListenerFactory.construct(session);
-        if(timeListener == null) {
-            return new AggregatedGameProcessor<State>(coreProcessor, registeredListeners);
-        } else {
-            GameAspect<State>[] extendedListeners = Arrays.copyOf(registeredListeners, registeredListeners.length + 1);
-            extendedListeners[registeredListeners.length] = timeListener;
-            return new AggregatedGameProcessor<State>(coreProcessor, extendedListeners);
+    public GameProcessor<State> create(GameInitiation initiation) {
+        Collection<GameAspect<State>> gameAspects = new ArrayList<>(aspectFactories.length);
+        for (GameAspectFactory aspectFactory : aspectFactories) {
+            gameAspects.add(aspectFactory.<State> construct(initiation));
         }
+        return new AggregatedGameProcessor<State>(coreProcessor, gameAspects);
     }
 
     public static class AggregatedGameProcessor<State extends GameState> implements GameProcessor<State> {
         final private GameProcessor<State> coreProcessor;
-        final private GameAspect<State>[] listeners;
+        final private GameAspect<State>[] listenerArray;
 
-        public AggregatedGameProcessor(GameProcessor<State> coreProcessor, GameAspect<State>[] listeners) {
+        @SuppressWarnings("unchecked")
+        public AggregatedGameProcessor(GameProcessor<State> coreProcessor, Collection<GameAspect<State>> listeners) {
             this.coreProcessor = coreProcessor;
-            this.listeners = listeners;
+            this.listenerArray = new GameAspect[listeners.size()];
+
+            int i = 0;
+            for (GameAspect<State> aspect : listeners)
+                this.listenerArray[i++] = aspect;
         }
 
         @Override
         public Collection<GameServerEvent<State>> process(GameSession<State> session, ClientEvent move) {
             // Step 1. Before move notification
-            for (GameAspect<State> listener : listeners) {
+            for (GameAspect<State> listener : listenerArray) {
                 listener.beforeMove(session, move);
             }
             // Step 2. Processing in core
             Collection<GameServerEvent<State>> events = coreProcessor.process(session, move);
             // Step 3. After move notification
-            for (GameAspect<State> listener : listeners) {
+            for (GameAspect<State> listener : listenerArray) {
                 listener.afterMove(session, events);
             }
             return events;

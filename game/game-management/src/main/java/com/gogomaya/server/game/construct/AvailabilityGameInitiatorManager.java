@@ -20,7 +20,7 @@ public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
         // Step 1. Checking all users are active
         final Collection<Long> participants = availabilityRequest.fetchAcceptedParticipants();
         // Step 2. Checking all participants are available
-        final GameInitiation initiation = new GameInitiation(availabilityRequest.getSession(), participants, availabilityRequest.getRequest()
+        final GameInitiation initiation = new GameInitiation(availabilityRequest.getRequest().getSpecification().getName().getGame(), availabilityRequest.getSession(), participants, availabilityRequest.getRequest()
                 .getSpecification());
         if (!initiatorService.initiate(initiation)) {
             // Step 2.1 Pretty naive implementation of MessageListener functionality

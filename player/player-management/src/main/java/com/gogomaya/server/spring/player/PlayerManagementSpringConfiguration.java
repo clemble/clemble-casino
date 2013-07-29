@@ -15,10 +15,10 @@ import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.payment.CommonPaymentSpringConfiguration;
+import com.gogomaya.server.spring.payment.PaymentCommonSpringConfiguration;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, CommonPaymentSpringConfiguration.class, PlayerCommonSpringConfiguration.class })
+@Import(value = { CommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class })
 public class PlayerManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired

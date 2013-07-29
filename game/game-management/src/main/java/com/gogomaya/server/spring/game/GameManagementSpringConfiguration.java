@@ -1,5 +1,8 @@
 package com.gogomaya.server.spring.game;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +14,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.gogomaya.server.ServerRegistry;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.aspect.outcome.GameOutcomeAspect;
-import com.gogomaya.server.game.aspect.price.GamePriceAspect;
+import com.gogomaya.server.game.action.GameEventTaskExecutor;
+import com.gogomaya.server.game.aspect.bet.GameBetAspectFactory;
+import com.gogomaya.server.game.aspect.outcome.GameOutcomeAspectFactory;
+import com.gogomaya.server.game.aspect.price.GamePriceAspectFactory;
+import com.gogomaya.server.game.aspect.security.GameSecurityAspectFactory;
+import com.gogomaya.server.game.aspect.time.GameTimeAspectFactory;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameConstructionService;
@@ -29,12 +35,13 @@ import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.payment.CommonPaymentSpringConfiguration;
+import com.gogomaya.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, CommonPaymentSpringConfiguration.class, PlayerCommonSpringConfiguration.class,
-        GameManagementSpringConfiguration.DefaultAndTest.class, GameManagementSpringConfiguration.Cloud.class, GameManagementSpringConfiguration.Test.class })
+@Import(value = { CommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class,
+        GameManagementSpringConfiguration.GameTimeAspectConfiguration.class, GameManagementSpringConfiguration.DefaultAndTest.class, GameManagementSpringConfiguration.Cloud.class, GameManagementSpringConfiguration.Test.class })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -47,14 +54,26 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Singleton
-    public <State extends GameState> GamePriceAspect<State> verificationGameProcessorListener() {
-        return new GamePriceAspect<State>();
+    public GamePriceAspectFactory gamePriceAspectFactory() {
+        return new GamePriceAspectFactory();
     }
 
     @Bean
     @Singleton
-    public <State extends GameState> GameOutcomeAspect<State> gamePostProcessorListener() {
-        return new GameOutcomeAspect<State>(playerStateManager, paymentTransactionService);
+    public GameBetAspectFactory gameBetAspectFactory() {
+        return new GameBetAspectFactory();
+    }
+
+    @Bean
+    @Singleton
+    public GameSecurityAspectFactory gameSecurityAspectFactory() {
+        return new GameSecurityAspectFactory();
+    }
+
+    @Bean
+    @Singleton
+    public GameOutcomeAspectFactory gameOutcomeAspectFactory() {
+        return new GameOutcomeAspectFactory(paymentTransactionService, playerStateManager);
     }
 
     @Bean
@@ -63,6 +82,32 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         return new GameSpecificationRegistry();
     }
 
+    /**
+     * Needed to separate this way, since BeanPostProcessor is loaded prior to any other configuration,
+     * Spring tries to load whole configuration, but some dependencies are naturally missing - like Repositories
+     * 
+     * @author mavarazy
+     *
+     */
+    @Configuration
+    public static class GameTimeAspectConfiguration {
+
+        @Bean
+        @Singleton
+        public GameTimeAspectFactory gameTimeAspectFactory() {
+            return new GameTimeAspectFactory(eventTaskExecutor());
+        }
+
+        @Bean
+        @Singleton
+        public GameEventTaskExecutor eventTaskExecutor() {
+            ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("[GETE] task-executor - %d");
+            ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
+            return new GameEventTaskExecutor(executorService);
+        }
+    }
+
+    @Configuration
     @Profile(value = { PROFILE_DEFAULT, PROFILE_TEST })
     public static class DefaultAndTest {
 
@@ -119,6 +164,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     }
 
+    @Configuration
     @Profile(value = { PROFILE_CLOUD })
     public static class Cloud {
 

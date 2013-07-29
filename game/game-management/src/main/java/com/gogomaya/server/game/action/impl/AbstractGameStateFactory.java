@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.action.impl;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.GameSession;
@@ -7,15 +9,19 @@ import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.GameStateFactory;
+import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.event.client.MadeMove;
+import com.gogomaya.server.repository.game.GameConstructionRepository;
 
 abstract public class AbstractGameStateFactory<State extends GameState> implements GameStateFactory<State> {
 
     final private GameProcessorFactory<State> processorFactory;
+    final private GameConstructionRepository constructionRepository;
 
-    protected AbstractGameStateFactory(GameProcessorFactory<State> processorFactory) {
-        this.processorFactory = processorFactory;
+    protected AbstractGameStateFactory(GameConstructionRepository constructionRepository, GameProcessorFactory<State> processorFactory) {
+        this.constructionRepository = checkNotNull(constructionRepository);
+        this.processorFactory = checkNotNull(processorFactory);
     }
 
     @Override
@@ -29,9 +35,10 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
         if (session == null || session.getSpecification() == null) {
             throw GogomayaException.fromError(GogomayaError.GameStateReCreationFailure);
         }
+        GameConstruction construction = constructionRepository.findOne(session.getSession());
         // Step 2. Re creating state
         State restoredState = constructState(session.getSpecification(), session.getPlayers());
-        GameProcessor<State> processor = processorFactory.create(session);
+        GameProcessor<State> processor = processorFactory.create(new GameInitiation(construction));
         // Step 2.1 To prevent population of original session with duplicated events
         GameSession<State> tmpSession = new GameSession<State>();
         tmpSession.setState(restoredState);

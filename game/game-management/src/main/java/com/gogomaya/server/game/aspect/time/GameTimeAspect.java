@@ -13,22 +13,27 @@ import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class GameTimeAspect<State extends GameState> implements GameAspect<State> {
 
-    final private SessionTimerTask sessionTimeTracker;
+    final private SessionTimeTask sessionTimeTracker;
     final private GameEventTaskExecutor gameEventTaskExecutor;
 
-    public GameTimeAspect(SessionTimerTask sessionTimeTracker, GameEventTaskExecutor gameEventTaskExecutor) {
+    public GameTimeAspect(SessionTimeTask sessionTimeTracker, GameEventTaskExecutor gameEventTaskExecutor) {
         this.sessionTimeTracker = checkNotNull(sessionTimeTracker);
         this.gameEventTaskExecutor = checkNotNull(gameEventTaskExecutor);
 
     }
 
-    public SessionTimerTask getSessionTimeTracker() {
+    public SessionTimeTask getSessionTimeTracker() {
         return sessionTimeTracker;
     }
 
     @Override
     public void beforeMove(GameSession<State> session, ClientEvent move) {
-        if (sessionTimeTracker.markMoved(move)) {
+        // Step 1. To check if we need rescheduling, first calculate time before
+        long breachTimeBeforeMove = sessionTimeTracker.getBreachTime();
+        // Step 2. Updating sessionTimeTracker
+        sessionTimeTracker.markMoved(move);
+        // Step 3. Re scheduling if needed
+        if (sessionTimeTracker.getBreachTime() != breachTimeBeforeMove) {
             gameEventTaskExecutor.reschedule(sessionTimeTracker);
         }
     }
@@ -38,10 +43,16 @@ public class GameTimeAspect<State extends GameState> implements GameAspect<State
         if (session.getState().complete()) {
             gameEventTaskExecutor.cancel(sessionTimeTracker);
         } else {
+            // Step 1. To check if we need rescheduling, first calculate time before
+            long breachTimeBeforeMove = sessionTimeTracker.getBreachTime();
+            // Step 2. Updating sessionTimeTracker
             for (ClientEvent nextMove : session.getState().getActionLatch().getActions()) {
                 sessionTimeTracker.markToMove(nextMove);
             }
-            gameEventTaskExecutor.reschedule(sessionTimeTracker);
+            // Step 3. Re scheduling if needed
+            if (sessionTimeTracker.getBreachTime() != breachTimeBeforeMove) {
+                gameEventTaskExecutor.reschedule(sessionTimeTracker);
+            }
         }
         return events;
     }

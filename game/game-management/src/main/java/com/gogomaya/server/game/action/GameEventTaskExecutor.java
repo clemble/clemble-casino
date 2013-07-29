@@ -11,13 +11,12 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
 
-public class GameEventTaskExecutor implements ApplicationContextAware {
+public class GameEventTaskExecutor implements BeanPostProcessor {
 
     final private Map<Game, GameSessionProcessor<?>> gameToProcessor = new HashMap<>();
     final private ConcurrentHashMap<GameEventTask, ScheduledFuture<?>> concurrentHashMap = new ConcurrentHashMap<>();
@@ -26,18 +25,6 @@ public class GameEventTaskExecutor implements ApplicationContextAware {
 
     public GameEventTaskExecutor(ScheduledExecutorService scheduledExecutorService) {
         this.scheduledExecutorService = checkNotNull(scheduledExecutorService);
-    }
-
-    @Override
-    @SuppressWarnings("rawtypes")
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        Map<String, GameSessionProcessor> processors = applicationContext.getBeansOfType(GameSessionProcessor.class);
-        for (String sessionProcessor : processors.keySet()) {
-            GameSessionProcessor processor = processors.get(sessionProcessor);
-            if (gameToProcessor.containsKey(processor.getGame()))
-                throw new IllegalArgumentException("Can't be 2 processors for the same game " + processor.getGame() + " / " + processor);
-            gameToProcessor.put(processor.getGame(), processor);
-        }
     }
 
     public void schedule(GameEventTask eventTask) {
@@ -76,6 +63,22 @@ public class GameEventTaskExecutor implements ApplicationContextAware {
             }
             reschedule(eventTask);
         }
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if (bean instanceof GameSessionProcessor) {
+            GameSessionProcessor<?> processor = (GameSessionProcessor<?>) bean;
+            if (gameToProcessor.containsKey(processor.getGame()))
+                throw new IllegalArgumentException("Can't be 2 processors for the same game " + processor.getGame() + " / " + processor);
+            gameToProcessor.put(processor.getGame(), processor);
+        }
+        return bean;
     }
 
 }

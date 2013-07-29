@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 import com.gogomaya.server.money.Money;
@@ -17,7 +18,8 @@ import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 
 @Configuration
-public class CommonPaymentSpringConfiguration implements SpringConfiguration {
+@Import(PaymentCommonSpringConfiguration.Test.class)
+public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
     @Configuration
     @Profile(SpringConfiguration.PROFILE_TEST)
