@@ -11,8 +11,8 @@
 
         <module>test-utils</module>
 
-        <module>player</module>
         <module>payment</module>
+        <module>player</module>
         <module>game</module>
 
         <module>web</module>
@@ -57,6 +57,7 @@
         <spring.social.twitter.version>1.0.5.RELEASE</spring.social.twitter.version>
         <spring.social.vkontakte.version>1.0.4</spring.social.vkontakte.version>
         <spring.social.google.version>0.0.1-SNAPSHOT</spring.social.google.version>
+        <swagger-springmvc.vesion>0.5.3</swagger-springmvc.vesion>
         <!-- Generic dependencies -->
         <logback.version>1.0.6</logback.version>
         <jackson.version>2.2.1</jackson.version>
@@ -257,6 +258,12 @@
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-redis</artifactId>
                 <version>${spring-data-redis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.mangofactory</groupId>
+                <artifactId>swagger-springmvc</artifactId>
+                <version>${swagger-springmvc.vesion}</version>
             </dependency>
 
             <!-- Social Dependencies -->

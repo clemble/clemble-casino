@@ -83,8 +83,8 @@ public class TicTacToeSpringConfiguration implements SpringConfiguration {
     public GameTimeAspectFactory gameTimeAspectFactory;
 
     @Autowired
-    @Qualifier("playerWalletService")
-    public PlayerAccountService playerWalletService;
+    @Qualifier("playerAccountService")
+    public PlayerAccountService playerAccountService;
 
     @Autowired
     @Qualifier("tableServerRegistry")
@@ -107,7 +107,7 @@ public class TicTacToeSpringConfiguration implements SpringConfiguration {
     @Bean
     @Singleton
     public GameConstructionService ticTacToeConstructionService() {
-        return new SimpleGameConstructionService(playerWalletService, playerNotificationService, gameConstructionRepository, ticTacToeInitiatorService(),
+        return new SimpleGameConstructionService(playerAccountService, playerNotificationService, gameConstructionRepository, ticTacToeInitiatorService(),
                 playerLockService, playerStateManager);
     }
 

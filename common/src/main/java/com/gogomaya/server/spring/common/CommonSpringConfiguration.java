@@ -14,7 +14,7 @@ import com.gogomaya.server.player.lock.JavaPlayerLockService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 
 @Configuration
-@Import({ CommonSpringConfiguration.Cloud.class, RabbitSpringConfiguration.class, JPASpringConfiguration.class, RedisSpringConfiguration.class })
+@Import({ PropertiesSpringConfiguration.class, CommonSpringConfiguration.Cloud.class, RabbitSpringConfiguration.class, JPASpringConfiguration.class, RedisSpringConfiguration.class })
 public class CommonSpringConfiguration implements SpringConfiguration {
 
     @Bean

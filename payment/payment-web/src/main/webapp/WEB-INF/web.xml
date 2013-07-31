@@ -3,6 +3,10 @@
     xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     version="2.5">
+    <context-param>
+        <param-name></param-name>
+        <param-value></param-value>
+    </context-param>
     <filter>
         <filter-name>CORS</filter-name>
         <filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
@@ -36,6 +40,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>payment-exporter</servlet-name>
-        <url-pattern>/payment/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 </web-app>

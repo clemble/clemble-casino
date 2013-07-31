@@ -20,7 +20,7 @@ import com.gogomaya.server.web.error.GogomayaHandlerExceptionResolver;
 import com.google.common.collect.ImmutableList;
 
 @Configuration
-@Import(JsonSpringConfiguration.class)
+@Import({ JsonSpringConfiguration.class })
 public class CommonWebSpringConfiguration extends WebMvcConfigurationSupport implements SpringConfiguration {
 
     @Autowired
@@ -37,12 +37,6 @@ public class CommonWebSpringConfiguration extends WebMvcConfigurationSupport imp
 
     @Bean
     @Singleton
-    public HandlerExceptionResolver handlerExceptionResolver() {
-        return new GogomayaHandlerExceptionResolver(objectMapper);
-    }
-
-    @Bean
-    @Singleton
     @Override
     public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
 
@@ -50,6 +44,12 @@ public class CommonWebSpringConfiguration extends WebMvcConfigurationSupport imp
         handlerAdapter.setMessageConverters(ImmutableList.<HttpMessageConverter<?>> of(jacksonHttpMessageConverter()));
 
         return handlerAdapter;
+    }
+
+    @Bean
+    @Singleton
+    public HandlerExceptionResolver handlerExceptionResolver() {
+        return new GogomayaHandlerExceptionResolver(objectMapper);
     }
 
 }

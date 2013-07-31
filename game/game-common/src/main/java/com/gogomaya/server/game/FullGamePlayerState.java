@@ -46,7 +46,7 @@ public class FullGamePlayerState extends GamePlayerState {
         return moneySpent;
     }
 
-    public long getMoneyTotal() {
+    public long fetchMoneyTotal() {
         return moneySpent + moneyLeft;
     }
 

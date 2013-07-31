@@ -55,7 +55,7 @@ public class GamePlayerState implements PlayerAware {
     }
 
     @JsonIgnore
-    public long getMoneyTotal() {
+    public long fetchMoneyTotal() {
         return moneySpent + moneyLeft;
     }
 

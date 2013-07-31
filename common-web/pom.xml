@@ -29,5 +29,10 @@
             <artifactId>cors-filter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.mangofactory</groupId>
+            <artifactId>swagger-springmvc</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

@@ -14,6 +14,7 @@ import com.gogomaya.server.payment.PaymentOperation;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 
@@ -27,8 +28,14 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public PlayerAccountService playerWalletService() {
+        public PlayerAccountService playerAccountService() {
             return new PlayerAccountService() {
+
+                @Override
+                public PlayerAccount register(PlayerProfile playerProfile) {
+                    return new PlayerAccount();
+                }
+
                 @Override
                 public boolean canAfford(PaymentOperation paymentOperation) {
                     return true;
@@ -50,11 +57,6 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
         @Singleton
         public PaymentTransactionService paymentTransactionService() {
             return new PaymentTransactionService() {
-
-                @Override
-                public PaymentTransaction register(PlayerProfile playerProfile) {
-                    return new PaymentTransaction();
-                }
 
                 @Override
                 public PaymentTransaction process(PaymentTransaction paymentTransaction) {

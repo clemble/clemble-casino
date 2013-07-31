@@ -30,12 +30,12 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>com.gogomaya.server.spring.web.payment.PlayerWebSpringConfiguration</param-value>
+            <param-value>com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration</param-value>
         </init-param>
         <load-on-startup>3</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>player-exporter</servlet-name>
-        <url-pattern>/spi/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 </web-app>

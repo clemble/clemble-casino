@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.rest.webmvc.BaseUriMethodArgumentResolver;
 
 import com.gogomaya.server.error.GogomayaValidationService;
@@ -21,14 +22,21 @@ import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
+import com.gogomaya.server.spring.web.SwaggerSpringConfiguration;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.registration.RegistrationLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.player.registration.RegistrationSocialConnectionController;
+import com.mangofactory.swagger.SwaggerConfiguration;
+import com.mangofactory.swagger.configuration.DefaultConfigurationModule;
+import com.mangofactory.swagger.configuration.ExtensibilityModule;
 
 @Configuration
-@Import(value = { SocialModuleSpringConfiguration.class, CommonWebSpringConfiguration.class })
+@Import(value = {
+        PlayerWebSpringConfiguration.PlayerDefaultAndTest.class,
+        SocialModuleSpringConfiguration.class,
+        CommonWebSpringConfiguration.class })
 public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -101,6 +109,18 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     @Singleton
     public BaseUriMethodArgumentResolver baseUriMethodArgumentResolver() {
         return new BaseUriMethodArgumentResolver();
+    }
+    
+    @Configuration
+    @Profile(value = { SpringConfiguration.PROFILE_DEFAULT, SpringConfiguration.PROFILE_TEST })
+    public static class PlayerDefaultAndTest extends SwaggerSpringConfiguration {
+
+        @Override
+        public SwaggerConfiguration swaggerConfiguration(DefaultConfigurationModule defaultConfig, ExtensibilityModule extensibility) {
+            SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration("1.0", "http://localhost:8080/player-web/");
+            return extensibility.apply(defaultConfig.apply(swaggerConfiguration));
+        }
+
     }
 
 }

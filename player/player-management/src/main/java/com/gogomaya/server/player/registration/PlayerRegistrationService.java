@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.web.RegistrationRequest;
@@ -15,22 +15,19 @@ import com.gogomaya.server.repository.player.PlayerProfileRepository;
 
 public class PlayerRegistrationService {
 
+    final private PlayerAccountService playerAccountService;
     final private PlayerProfileRepository playerProfileRepository;
-
     final private PlayerIdentityRepository playerIdentityRepository;
-
     final private PlayerCredentialRepository playerCredentialRepository;
-    
-    final private PaymentTransactionService paymentTransactionService;
 
     public PlayerRegistrationService(final PlayerProfileRepository playerProfileRepository,
             final PlayerIdentityRepository playerIdentityRepository,
             final PlayerCredentialRepository playerCredentialRepository,
-            final PaymentTransactionService paymentTransactionService) {
+            final PlayerAccountService playerAccountService) {
         this.playerCredentialRepository = playerCredentialRepository;
         this.playerIdentityRepository = playerIdentityRepository;
         this.playerProfileRepository = playerProfileRepository;
-        this.paymentTransactionService = paymentTransactionService;
+        this.playerAccountService = playerAccountService;
     }
 
     public PlayerIdentity register(final RegistrationRequest registrationRequest) {
@@ -57,7 +54,7 @@ public class PlayerRegistrationService {
         PlayerIdentity playerIdentity = new PlayerIdentity().setPlayerId(playerProfile.getPlayerId()).setSecret(UUID.randomUUID().toString());
         playerIdentity = playerIdentityRepository.saveAndFlush(playerIdentity);
         // Step 6. Registering in a Wallet registrar
-        paymentTransactionService.register(playerProfile);
+        playerAccountService.register(playerProfile);
         // Step 7. Sending player identity
         return playerIdentity;
     }

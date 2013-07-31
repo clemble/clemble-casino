@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +18,9 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionId;
+import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccount;
+import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.web.mapping.PaymentWebMapping;
@@ -25,17 +28,29 @@ import com.gogomaya.server.web.mapping.PaymentWebMapping;
 @Controller
 public class PlayerAccountController {
 
+    final private PlayerAccountService playerAccountService;
     final private PlayerAccountRepository playerAccountRepository;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PlayerAccountController(PlayerAccountRepository playerAccountRepository, PaymentTransactionRepository paymentTransactionRepository) {
+    public PlayerAccountController(PlayerAccountService playerAccountService,
+            PlayerAccountRepository playerAccountRepository,
+            PaymentTransactionRepository paymentTransactionRepository) {
+        this.playerAccountService = checkNotNull(playerAccountService);
         this.playerAccountRepository = checkNotNull(playerAccountRepository);
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public @ResponseBody
+    PlayerAccount register(@RequestBody PlayerProfile playerProfile) {
+        return playerAccountService.register(playerProfile);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerAccount get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
+    public @ResponseBody
+    PlayerAccount get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
         // Step 1. Wallet can't be accessed someone other, then owner
         if (playerId != playerWalletId)
             throw GogomayaException.fromError(GogomayaError.PlayerAccountAccessDenied);
@@ -45,7 +60,8 @@ public class PlayerAccountController {
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PaymentTransaction> listPlayerTransaction(@RequestHeader("playerId") long requesterId, @PathVariable("playerId") long playerId) {
+    public @ResponseBody
+    List<PaymentTransaction> listPlayerTransaction(@RequestHeader("playerId") long requesterId, @PathVariable("playerId") long playerId) {
         // Step 1. Checking request/player identifier matches
         if (requesterId != playerId)
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionAccessDenied);
@@ -55,7 +71,8 @@ public class PlayerAccountController {
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS_TRANSACTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PaymentTransaction getPlayerTransaction(
+    public @ResponseBody
+    PaymentTransaction getPlayerTransaction(
             @RequestHeader("playerId") long requesterId,
             @PathVariable("playerId") long playerId,
             @PathVariable("source") String source,

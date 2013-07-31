@@ -10,39 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
-import com.gogomaya.server.player.PlayerAware;
-import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 
 public class PaymentTransactionServiceImpl implements PaymentTransactionService {
 
-    final private PaymentTransactionRepository paymentTransactionRepository;
     final private PlayerAccountRepository playerAccountRepository;
+    final private PaymentTransactionRepository paymentTransactionRepository;
 
     public PaymentTransactionServiceImpl(PaymentTransactionRepository paymentTransactionRepository, PlayerAccountRepository playerWalletRepository) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
         this.playerAccountRepository = checkNotNull(playerWalletRepository);
-    }
-
-    @Override
-    public PaymentTransaction register(PlayerProfile player) {
-        // Step 1. Creating initial empty account
-        PlayerAccount initialWallet = new PlayerAccount().setPlayerId(player.getPlayerId());
-        initialWallet = playerAccountRepository.save(initialWallet);
-        // Step 2. Creating initial empty
-        Money initialBalance = Money.create(Currency.FakeMoney, 500);
-        PaymentTransaction initialTransaction = new PaymentTransaction()
-                .setTransactionId(new PaymentTransactionId(MoneySource.Registration, player.getPlayerId()))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setAmmount(initialBalance).setPlayerId(player.getPlayerId()))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setAmmount(initialBalance).setPlayerId(PlayerAware.DEFAULT_PLAYER));
-        // Step 3. Returning PaymentTransaction
-        return processTransaction(initialTransaction);
     }
 
     @Override

@@ -17,7 +17,6 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionId;
 import com.gogomaya.server.payment.PaymentTransactionService;
-import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.web.mapping.PaymentWebMapping;
 
@@ -31,13 +30,6 @@ public class PaymentTransactionController {
             final PaymentTransactionService paymentTransactionService) {
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PaymentTransaction register(@RequestBody PlayerProfile playerProfile) {
-        return paymentTransactionService.register(playerProfile);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_TRANSACTIONS, produces = "application/json")
