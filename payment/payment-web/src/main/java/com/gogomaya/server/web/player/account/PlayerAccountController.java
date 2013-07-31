@@ -11,19 +11,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.server.money.Currency;
+import com.gogomaya.server.money.Money;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionId;
+import com.gogomaya.server.payment.web.mapping.PaymentWebMapping;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
-import com.gogomaya.server.web.mapping.PaymentWebMapping;
 
 @Controller
 public class PlayerAccountController {
@@ -42,15 +45,13 @@ public class PlayerAccountController {
 
     @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PlayerAccount register(@RequestBody PlayerProfile playerProfile) {
+    public @ResponseBody PlayerAccount register(@RequestBody PlayerProfile playerProfile) {
         return playerAccountService.register(playerProfile);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    PlayerAccount get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
+    public @ResponseBody PlayerAccount get(@RequestHeader("playerId") long playerId, @PathVariable("playerId") long playerWalletId) {
         // Step 1. Wallet can't be accessed someone other, then owner
         if (playerId != playerWalletId)
             throw GogomayaException.fromError(GogomayaError.PlayerAccountAccessDenied);
@@ -71,8 +72,7 @@ public class PlayerAccountController {
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS_TRANSACTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    PaymentTransaction getPlayerTransaction(
+    public @ResponseBody PaymentTransaction getPlayerTransaction(
             @RequestHeader("playerId") long requesterId,
             @PathVariable("playerId") long playerId,
             @PathVariable("source") String source,
@@ -89,6 +89,13 @@ public class PlayerAccountController {
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionAccessDenied);
         // Step 4. Everything is fine returning transaction
         return transaction;
+    }
+    
+
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody boolean canAfford(@RequestBody PaymentTransaction paymentTransaction, @RequestParam("player") List<Long> players, @RequestParam("currency") Currency currency, @RequestParam("currency") Long ammount) {
+        return playerAccountService.canAfford(players, Money.create(currency, ammount));
     }
 
 }

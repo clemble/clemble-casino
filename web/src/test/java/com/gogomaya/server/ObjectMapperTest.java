@@ -41,13 +41,13 @@ import com.gogomaya.server.game.event.server.PlayerMovedEvent;
 import com.gogomaya.server.game.rule.GameRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.tictactoe.TicTacToeState;
-import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
+import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.utils.ReflectionUtils;
 import com.stresstest.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = { CommonWebSpringConfiguration.class })
+@ContextConfiguration(classes = { WebCommonSpringConfiguration.class })
 public class ObjectMapperTest extends ObjectTest {
 
     @Inject

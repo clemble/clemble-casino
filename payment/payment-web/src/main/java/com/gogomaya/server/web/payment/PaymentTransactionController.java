@@ -17,8 +17,8 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionId;
 import com.gogomaya.server.payment.PaymentTransactionService;
+import com.gogomaya.server.payment.web.mapping.PaymentWebMapping;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
-import com.gogomaya.server.web.mapping.PaymentWebMapping;
 
 @Controller
 public class PaymentTransactionController {
@@ -34,8 +34,7 @@ public class PaymentTransactionController {
 
     @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_TRANSACTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PaymentTransaction perform(@RequestBody PaymentTransaction paymentTransaction) {
+    public @ResponseBody PaymentTransaction perform(@RequestBody PaymentTransaction paymentTransaction) {
         return paymentTransactionService.process(paymentTransaction);
     }
 

@@ -40,10 +40,11 @@ import com.gogomaya.server.integration.player.profile.WebProfileOperations;
 import com.gogomaya.server.integration.player.session.IntegrationSessionOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.integration.player.session.WebSessionOperations;
-import com.gogomaya.server.integration.util.GogomayaHTTPErrorHandler;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
+import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
+import com.gogomaya.server.web.error.GogomayaRESTErrorHandler;
 import com.gogomaya.server.web.game.options.GameConfigurationManagerController;
 import com.gogomaya.server.web.game.session.GameActionController;
 import com.gogomaya.server.web.game.session.GameConstructionController;
@@ -199,6 +200,7 @@ public class TestConfiguration {
 
     }
 
+    @Import(ClientRestCommonSpringConfiguration.class)
     public static class IntegrationTestConfiguration {
 
         @Autowired
@@ -226,7 +228,7 @@ public class TestConfiguration {
                 }
             }
 
-            restTemplate.setErrorHandler(new GogomayaHTTPErrorHandler(objectMapper));
+            restTemplate.setErrorHandler(new GogomayaRESTErrorHandler(objectMapper));
             return restTemplate;
         }
 

@@ -23,7 +23,7 @@ import com.gogomaya.server.web.game.session.GameActionController;
 import com.gogomaya.server.web.game.session.GameConstructionController;
 
 @Configuration
-@Import(value = { TicTacToeSpringConfiguration.class, CommonWebSpringConfiguration.class })
+@Import(value = { TicTacToeSpringConfiguration.class, WebCommonSpringConfiguration.class })
 public class TicTacToeWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired

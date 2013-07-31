@@ -22,7 +22,7 @@ import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 import com.gogomaya.server.web.GenericSchemaController;
 
 @Configuration
-@Import({ CommonWebSpringConfiguration.class, TicTacToeWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, PaymentWebSpringConfiguration.class })
+@Import({ WebCommonSpringConfiguration.class, TicTacToeWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, PaymentWebSpringConfiguration.class })
 public class WebMvcSpiSpringConfiguration implements SpringConfiguration {
 
     @Autowired

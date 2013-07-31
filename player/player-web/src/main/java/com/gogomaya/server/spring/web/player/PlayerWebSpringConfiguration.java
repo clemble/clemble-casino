@@ -21,7 +21,7 @@ import com.gogomaya.server.repository.player.PlayerSessionRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
-import com.gogomaya.server.spring.web.CommonWebSpringConfiguration;
+import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.spring.web.SwaggerSpringConfiguration;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
@@ -36,7 +36,7 @@ import com.mangofactory.swagger.configuration.ExtensibilityModule;
 @Import(value = {
         PlayerWebSpringConfiguration.PlayerDefaultAndTest.class,
         SocialModuleSpringConfiguration.class,
-        CommonWebSpringConfiguration.class })
+        WebCommonSpringConfiguration.class })
 public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired

@@ -16,8 +16,6 @@ import com.gogomaya.server.payment.PaymentTransactionId;
 import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.PlayerAware;
 import com.gogomaya.server.player.PlayerProfile;
-import com.gogomaya.server.player.account.PlayerAccount;
-import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 
 public class PlayerAccountServiceImpl implements PlayerAccountService {
@@ -63,19 +61,6 @@ public class PlayerAccountServiceImpl implements PlayerAccountService {
                 return false;
         }
         return true;
-    }
-
-    @Override
-    public boolean canAfford(PaymentOperation paymentOperation) {
-        // Step 1. Checking positive operation
-        if (paymentOperation == null)
-            return true;
-        if (paymentOperation.getOperation() == Operation.Debit && paymentOperation.getAmmount().isPositive())
-            return true;
-        if (paymentOperation.getOperation() == Operation.Credit && paymentOperation.getAmmount().isNegative())
-            return true;
-        // Step 2. Checking if player can afford this
-        return canAfford(paymentOperation.getPlayerId(), paymentOperation.getAmmount());
     }
 
 }

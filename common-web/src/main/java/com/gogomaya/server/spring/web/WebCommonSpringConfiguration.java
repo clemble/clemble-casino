@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableList;
 
 @Configuration
 @Import({ JsonSpringConfiguration.class })
-public class CommonWebSpringConfiguration extends WebMvcConfigurationSupport implements SpringConfiguration {
+public class WebCommonSpringConfiguration extends WebMvcConfigurationSupport implements SpringConfiguration {
 
     @Autowired
     @Qualifier("objectMapper")

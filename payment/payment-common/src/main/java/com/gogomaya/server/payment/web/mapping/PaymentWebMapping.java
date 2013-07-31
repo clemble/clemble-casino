@@ -1,4 +1,6 @@
-package com.gogomaya.server.web.mapping;
+package com.gogomaya.server.payment.web.mapping;
+
+import com.gogomaya.server.web.mapping.WebMapping;
 
 public interface PaymentWebMapping extends WebMapping {
 
