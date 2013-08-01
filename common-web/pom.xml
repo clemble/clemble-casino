@@ -34,5 +34,10 @@
             <artifactId>swagger-springmvc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jsonSchema</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

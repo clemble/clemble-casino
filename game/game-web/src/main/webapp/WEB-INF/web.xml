@@ -36,6 +36,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>game-exporter</servlet-name>
-        <url-pattern>/tictactoe/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 </web-app>
