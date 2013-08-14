@@ -6,19 +6,13 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
 import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.ScheduledGame;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CommonSpringConfiguration.class })
 public class GameSchemaGenerator {
 
     @Test
@@ -32,7 +26,7 @@ public class GameSchemaGenerator {
         new SchemaExport(configuration)
             .setDelimiter(";")
             .setFormat(true)
-            .setOutputFile("../../sql/schema/mysql/game-schema.sql")
+            .setOutputFile("src/main/resources/sql/schema/mysql/game-schema.sql")
             .create(true, false);
     }
 
@@ -41,15 +35,15 @@ public class GameSchemaGenerator {
         Configuration configuration = new org.hibernate.cfg.Configuration();
 
         addAnnotatedClasses(configuration)
-            .setProperty(Environment.DIALECT, "org.hibernate.dialect.H2Dialect")
+            .setProperty(Environment.DIALECT, "com.gogomaya.server.spring.common.ImprovedH2Dialect")
             .setProperty(Environment.DRIVER, "org.h2.Driver")
             ;
 
         new SchemaExport(configuration)
             .setDelimiter(";")
             .setFormat(true)
-            .setOutputFile("../../sql/schema/h2/game-schema.sql")
-            .execute(Target.interpret(true, false), Type.CREATE);
+            .setOutputFile("src/main/resources/sql/schema/h2/game-schema.sql")
+            .execute(Target.interpret(true, false), Type.BOTH);
     }
 
     private Configuration addAnnotatedClasses(Configuration configuration){

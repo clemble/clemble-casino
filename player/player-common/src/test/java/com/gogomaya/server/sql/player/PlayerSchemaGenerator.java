@@ -5,18 +5,12 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
 import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.security.PlayerSession;
-import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CommonSpringConfiguration.class })
 public class PlayerSchemaGenerator {
 
     @Test
@@ -34,7 +28,7 @@ public class PlayerSchemaGenerator {
         new SchemaExport(configuration)
             .setDelimiter(";")
             .setFormat(true)
-            .setOutputFile("../../sql/schema/mysql/player-schema.sql")
+            .setOutputFile("src/main/resources/sql/schema/mysql/player-schema.sql")
             .create(true, false);
     }
 
@@ -47,15 +41,16 @@ public class PlayerSchemaGenerator {
             .addAnnotatedClass(PlayerCredential.class)
             .addAnnotatedClass(PlayerIdentity.class)
             .addAnnotatedClass(PlayerSession.class)
-            .setProperty(Environment.DIALECT, "org.hibernate.dialect.H2Dialect")
+            //.setProperty(Environment.DIALECT, "org.hibernate.dialect.H2Dialect")
+            .setProperty(Environment.DIALECT, "com.gogomaya.server.spring.common.ImprovedH2Dialect")
             .setProperty(Environment.DRIVER, "org.h2.Driver")
             ;
 
         new SchemaExport(configuration)
             .setDelimiter(";")
             .setFormat(true)
-            .setOutputFile("../../sql/schema/h2/player-schema.sql")
-            .execute(Target.interpret(true, false), Type.CREATE);
+            .setOutputFile("src/main/resources/sql/schema/h2/player-schema.sql")
+            .execute(Target.interpret(true, false), Type.BOTH);
     }
 
 }

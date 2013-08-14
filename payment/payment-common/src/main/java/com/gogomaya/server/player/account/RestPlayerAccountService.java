@@ -3,7 +3,9 @@ package com.gogomaya.server.player.account;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,7 +25,9 @@ public class RestPlayerAccountService implements PlayerAccountService {
 
     @Override
     public PlayerAccount register(PlayerProfile playerProfile) {
-        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS, HttpMethod.POST, PlayerAccount.class).getBody();
+        HttpEntity<PlayerProfile> request = sign(playerProfile);
+        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS, request, PlayerAccount.class)
+                .getBody();
     }
 
     @Override
@@ -33,9 +37,16 @@ public class RestPlayerAccountService implements PlayerAccountService {
 
     @Override
     public boolean canAfford(Collection<Long> playerId, Money ammount) {
-        String urlPostfix = StringUtils.collectionToDelimitedString(playerId, "&player=", "?player=", "&currency=") + ammount.getCurrency() + "&ammount=" + ammount.getAmount();
-        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS + urlPostfix, HttpMethod.GET, Boolean.class).getBody();
+        String urlPostfix = "?player=" + StringUtils.collectionToCommaDelimitedString(playerId) + "&currency=" + ammount.getCurrency() + "&ammount=" + ammount.getAmount();
+        return restTemplate.getForEntity(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS + urlPostfix, Boolean.class)
+                .getBody();
     }
 
+    private <T> HttpEntity<T> sign(T value) {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>(1);
+        headers.add("Content-Type", "application/json");
+        HttpEntity<T> request = new HttpEntity<T>(value, headers);
+        return request;
+    }
 
 }

@@ -1,6 +1,6 @@
 package com.gogomaya.server.spring.common;
 
-import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
@@ -10,13 +10,16 @@ import org.cloudfoundry.runtime.env.CloudEnvironment;
 import org.cloudfoundry.runtime.env.RdbmsServiceInfo;
 import org.cloudfoundry.runtime.service.relational.RdbmsServiceCreator;
 import org.hibernate.ejb.HibernatePersistence;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
@@ -115,7 +118,9 @@ public class JPASpringConfiguration implements SpringConfiguration {
 
     @Configuration
     @Profile(value = { PROFILE_DEFAULT, PROFILE_TEST })
-    public static class DefaultAndTest {
+    public static class DefaultAndTest implements ApplicationContextAware {
+
+        private ApplicationContext applicationContext;
 
         @Bean
         @Singleton
@@ -129,7 +134,7 @@ public class JPASpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public EmbeddedDatabaseFactory dataSourceFactory() {
+        public EmbeddedDatabaseFactory dataSourceFactory() throws IOException {
             EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
             factory.setDatabaseName("gogomaya");
             factory.setDatabaseType(EmbeddedDatabaseType.H2);
@@ -139,29 +144,29 @@ public class JPASpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public DataSource dataSource() {
+        public DataSource dataSource() throws IOException {
             return dataSourceFactory().getDatabase();
         }
 
         @Bean
         @Singleton
-        public ResourceDatabasePopulator databasePopulator() {
+        public ResourceDatabasePopulator databasePopulator() throws IOException {
             ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
-            // Step 1. Searching for data script folder
-            File dataScripts = new File("sql/data/");
-            while (!dataScripts.exists()) {
-                dataScripts = new File("../" + dataScripts.getPath());
+            // Step 1. Searching for schema script files
+            for(Resource schema: applicationContext.getResources("classpath*:/sql/schema/h2/*.sql")) {
+                databasePopulator.addScript(schema);
             }
-            // Step 2. Inserting schema files
-            for (File schemaFile : new File(dataScripts.getAbsolutePath() + "/../schema/h2").listFiles()) {
-                databasePopulator.addScript(new FileSystemResource(schemaFile));
+            // Step 2. Searching for data script files
+            for(Resource schema: applicationContext.getResources("classpath*:/sql/data/*.sql")) {
+                databasePopulator.addScript(schema);
             }
-            // Step 3. Inserting data files
-            for (File schemaFile : dataScripts.listFiles()) {
-                databasePopulator.addScript(new FileSystemResource(schemaFile));
-            }
-            // Step 4. Returning aggregated script
+            // Step 3. Returning aggregated script
             return databasePopulator;
+        }
+
+        @Override
+        public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+            this.applicationContext = applicationContext;
         }
     }
 

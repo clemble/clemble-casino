@@ -189,7 +189,7 @@ public class TestConfiguration {
 
         @Override
         public String getBaseUrl() {
-            return "http://localhost:9999";
+            return "http://localhost:9999/";
         }
 
     }
@@ -208,7 +208,7 @@ public class TestConfiguration {
         public ObjectMapper objectMapper;
 
         public String getBaseUrl() {
-            return "http://localhost:8080/gogomaya-server-web";
+            return "http://localhost:8080/";
         }
 
         @Bean

@@ -2,6 +2,8 @@ package com.gogomaya.server.web.player.account;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -94,8 +96,12 @@ public class PlayerAccountController {
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody boolean canAfford(@RequestBody PaymentTransaction paymentTransaction, @RequestParam("player") List<Long> players, @RequestParam("currency") Currency currency, @RequestParam("currency") Long ammount) {
-        return playerAccountService.canAfford(players, Money.create(currency, ammount));
+    public @ResponseBody boolean canAfford(@RequestParam("player") String players, @RequestParam("currency") Currency currency, @RequestParam("ammount") Long ammount) {
+        String[] splitPlayers = players.split(",");
+        Collection<Long> parsedPlayers = new ArrayList<>(splitPlayers.length);
+        for(String splitedPlayer: splitPlayers)
+            parsedPlayers.add(Long.valueOf(splitedPlayer));
+        return playerAccountService.canAfford(parsedPlayers, Money.create(currency, ammount));
     }
 
 }

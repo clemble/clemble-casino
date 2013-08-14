@@ -2,7 +2,7 @@ package com.gogomaya.server.web.mapping;
 
 public interface GameWebMapping extends WebMapping {
 
-    final public static String GAME_PREFIX = "/spi";
+    final public static String GAME_PREFIX = "/game-web";
 
     final public static String GAME_SPECIFICATION_OPTIONS = "/options/{name}";
 

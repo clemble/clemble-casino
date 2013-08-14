@@ -4,7 +4,7 @@ import com.gogomaya.server.web.mapping.WebMapping;
 
 public interface PaymentWebMapping extends WebMapping {
 
-    final public static String ACCOUNT_PREFIX = "/spi";
+    final public static String ACCOUNT_PREFIX = "/payment-web";
 
     /**
      * Supports POST, that can only be used by the server

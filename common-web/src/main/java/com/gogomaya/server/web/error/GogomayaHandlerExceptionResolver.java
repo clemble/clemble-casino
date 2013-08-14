@@ -9,6 +9,8 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -23,6 +25,8 @@ import com.gogomaya.server.error.GogomayaFailureDescription;
 
 @Controller
 public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolver {
+    
+    final private Logger LOGGER = LoggerFactory.getLogger(GogomayaHandlerExceptionResolver.class);
 
     final private ObjectMapper objectMapper;
 
@@ -33,6 +37,8 @@ public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolve
     @Override
     @ExceptionHandler(value = Exception.class)
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        LOGGER.error("Error while processing {} with {}", request, handler);
+        LOGGER.error("Log trace ", ex);
         GogomayaFailureDescription gogomayaFailure = null;
         if (ex instanceof GogomayaException) {
             gogomayaFailure = ((GogomayaException) ex).getFailureDescription();

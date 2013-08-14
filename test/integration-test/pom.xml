@@ -91,7 +91,19 @@
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>com.gogomaya.server</groupId>
-                                            <artifactId>web</artifactId>
+                                            <artifactId>player-web</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.gogomaya.server</groupId>
+                                            <artifactId>game-web</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.gogomaya.server</groupId>
+                                            <artifactId>payment-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
                                         </artifactItem>
@@ -111,11 +123,21 @@
                                     <goal>run-war</goal>
                                 </goals>
                                 <configuration>
-                                    <contextPath>/gogomaya-web</contextPath>
                                     <daemon>true</daemon>
-                                    <war>
-                                        ${project.build.directory}/wars-to-be-tested/web.war
-                                    </war>
+                                    <contextHandlers>
+                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/game-web.war</war>
+                                            <contextPath>/game-web</contextPath>
+                                        </contextHandler>
+                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/player-web.war</war>
+                                            <contextPath>/player-web</contextPath>
+                                        </contextHandler>
+                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/payment-web.war</war>
+                                            <contextPath>/payment-web</contextPath>
+                                        </contextHandler>
+                                    </contextHandlers>
                                 </configuration>
                             </execution>
                             <execution>
@@ -132,6 +154,10 @@
                                 <systemProperty>
                                     <name>jetty.port</name>
                                     <value>9999</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>logback.configurationFile</name>
+                                    <value>./src/test/resources/logback.xml</value>
                                 </systemProperty>
                             </systemProperties>
                             <stopPort>9991</stopPort>

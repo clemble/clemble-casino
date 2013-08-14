@@ -23,24 +23,55 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 
 @Configuration
-@Import({ PaymentCommonSpringConfiguration.Test.class, PaymentCommonSpringConfiguration.Default.class })
+@Import({ PaymentCommonSpringConfiguration.Test.class, PaymentCommonSpringConfiguration.RemoteIntegrationPaymentConfiguration.class,
+        PaymentCommonSpringConfiguration.LocalIntegrationPaymentConfiguration.class,
+        PaymentCommonSpringConfiguration.DefaultIntegrationPaymentConfiguration.class })
 public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
     @Configuration
+    @Profile(value = SpringConfiguration.PROFILE_INTEGRATION_CLOUD)
+    public static class RemoteIntegrationPaymentConfiguration extends IntegrationPaymentConfiguration {
+
+        @Override
+        public String getBaseUrl() {
+            return "http://ec2-50-16-93-157.compute-1.amazonaws.com/gogomaya/";
+        }
+
+    }
+
+    @Configuration
+    @Profile(value = { SpringConfiguration.PROFILE_INTEGRATION_LOCAL_TEST, SpringConfiguration.PROFILE_DEFAULT })
+    public static class LocalIntegrationPaymentConfiguration extends IntegrationPaymentConfiguration {
+
+        @Override
+        public String getBaseUrl() {
+            return "http://localhost:9999/";
+        }
+
+    }
+
+    @Configuration
+    @Profile(value = { SpringConfiguration.PROFILE_INTEGRATION_LOCAL_SERVER })
+    public static class DefaultIntegrationPaymentConfiguration extends IntegrationPaymentConfiguration {
+    }
+
     @Import(ClientRestCommonSpringConfiguration.class)
-    @Profile(SpringConfiguration.PROFILE_DEFAULT)
-    public static class Default {
+    public static class IntegrationPaymentConfiguration {
+
+        public String getBaseUrl() {
+            return "http://localhost:8080/";
+        }
 
         @Bean
         @Autowired
         public PaymentTransactionService paymentTransactionService(RestTemplate restTemplate) {
-            return new RestPaymentTransactionService("http://localhost:8080/payment-web", restTemplate);
+            return new RestPaymentTransactionService(getBaseUrl(), restTemplate);
         }
 
         @Bean
         @Autowired
         public PlayerAccountService playerAccountService(RestTemplate restTemplate) {
-            return new RestPlayerAccountService("http://localhost:8080/payment-web", restTemplate);
+            return new RestPlayerAccountService(getBaseUrl(), restTemplate);
         }
     }
 

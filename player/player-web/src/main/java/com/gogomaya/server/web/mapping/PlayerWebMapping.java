@@ -2,7 +2,7 @@ package com.gogomaya.server.web.mapping;
 
 public interface PlayerWebMapping extends WebMapping {
 
-    final public static String PLAYER_PREFIX = "/spi";
+    final public static String PLAYER_PREFIX = "/player-web";
 
     // TODO Change to single entry point
     final public static String PLAYER_REGISTRATION_LOGIN = "/registration/login";
