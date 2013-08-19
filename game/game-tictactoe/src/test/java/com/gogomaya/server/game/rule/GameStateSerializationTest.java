@@ -16,8 +16,8 @@ import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.cell.Cell;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @Ignore
 public class GameStateSerializationTest {

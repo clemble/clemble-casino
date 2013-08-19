@@ -37,4 +37,9 @@ public class GamePriceAspect<State extends GameState> implements GameAspect<Stat
         return madeMoves;
     }
 
+    @Override
+    public Collection<GameServerEvent<State>> afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+        return events;
+    }
+
 }

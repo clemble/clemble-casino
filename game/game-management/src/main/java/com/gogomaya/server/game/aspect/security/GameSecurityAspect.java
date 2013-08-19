@@ -30,4 +30,9 @@ public class GameSecurityAspect<State extends GameState> implements GameAspect<S
         return madeMoves;
     }
 
+    @Override
+    public Collection<GameServerEvent<State>> afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+        return events;
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.tictactoe;
+package com.gogomaya.server.tictactoe;
 
 import java.io.Serializable;
 import java.util.Arrays;

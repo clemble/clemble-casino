@@ -21,7 +21,7 @@ import com.gogomaya.server.game.event.server.PlayerMovedEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.NoOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 import com.google.common.collect.ImmutableList;
 
 public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {

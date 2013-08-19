@@ -111,6 +111,7 @@ public class Player implements PlayerAware {
         return session;
     }
 
+    @SuppressWarnings("unchecked")
     public <State extends GameState> PlayerGameConstructionOperations<State> getGameConstructor(Game game) {
         return (PlayerGameConstructionOperations<State>) gameConstructors.get(game);
     }

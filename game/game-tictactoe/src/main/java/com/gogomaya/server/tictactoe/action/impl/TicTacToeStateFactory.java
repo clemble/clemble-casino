@@ -8,8 +8,8 @@ import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.impl.AbstractGameStateFactory;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 public class TicTacToeStateFactory extends AbstractGameStateFactory<TicTacToeState> {
 

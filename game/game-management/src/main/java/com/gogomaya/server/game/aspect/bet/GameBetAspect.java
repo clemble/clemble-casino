@@ -34,4 +34,9 @@ public class GameBetAspect<State extends GameState> implements GameAspect<State>
         return events;
     }
 
+    @Override
+    public Collection<GameServerEvent<State>> afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+        return events;
+    }
+
 }

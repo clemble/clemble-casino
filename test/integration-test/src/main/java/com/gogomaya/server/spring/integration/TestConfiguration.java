@@ -14,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.game.IntegrationGameSessionPlayerFactory;
 import com.gogomaya.server.integration.game.WebGameSessionPlayerFactory;
@@ -44,6 +43,7 @@ import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 import com.gogomaya.server.web.error.GogomayaRESTErrorHandler;
 import com.gogomaya.server.web.game.options.GameConfigurationManagerController;
 import com.gogomaya.server.web.game.session.GameActionController;

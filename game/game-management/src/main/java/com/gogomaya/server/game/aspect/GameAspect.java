@@ -13,4 +13,6 @@ public interface GameAspect<State extends GameState> {
 
     public Collection<GameServerEvent<State>> afterMove(final GameSession<State> session, final Collection<GameServerEvent<State>> events);
 
+    public Collection<GameServerEvent<State>> afterGame(final GameSession<State> session, final Collection<GameServerEvent<State>> events);
+
 }

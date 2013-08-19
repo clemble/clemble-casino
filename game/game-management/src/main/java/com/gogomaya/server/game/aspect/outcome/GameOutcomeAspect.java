@@ -52,21 +52,20 @@ public class GameOutcomeAspect<State extends GameState> implements GameAspect<St
 
     @Override
     public Collection<GameServerEvent<State>> afterMove(final GameSession<State> session, final Collection<GameServerEvent<State>> madeMoves) {
-        // Step 0. Sanity check
-        if (madeMoves == null)
-            return madeMoves;
-        // Step 1. Processing each step by step
-        if (session.getState().complete()) {
-            session.setSessionState(GameSessionState.finished);
-            for (long player : session.getState().getPlayerIterator().getPlayers())
-                activePlayerQueue.markAvailable(player);
+        return madeMoves;
+    }
 
-            GameOutcome outcome = session.getState().getOutcome();
-            if (outcome instanceof PlayerWonOutcome) {
-                winnerOutcome((PlayerWonOutcome) outcome, session);
-            }
+    @Override
+    public Collection<GameServerEvent<State>> afterGame(GameSession<State> session, Collection<GameServerEvent<State>> madeMoves) {
+        session.setSessionState(GameSessionState.finished);
+        for (long player : session.getState().getPlayerIterator().getPlayers())
+            activePlayerQueue.markAvailable(player);
 
+        GameOutcome outcome = session.getState().getOutcome();
+        if (outcome instanceof PlayerWonOutcome) {
+            winnerOutcome((PlayerWonOutcome) outcome, session);
         }
+
         return madeMoves;
     }
 

@@ -7,11 +7,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.emulator.GameplayEmulator;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 public class TicTacToeMain {
 

@@ -24,7 +24,6 @@ import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.SpecificationName;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.repository.game.GameSessionRepository;
@@ -32,6 +31,7 @@ import com.gogomaya.server.repository.game.GameSpecificationRepository;
 import com.gogomaya.server.repository.game.GameTableRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 import com.gogomaya.server.tictactoe.action.impl.TicTacToeStateFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)

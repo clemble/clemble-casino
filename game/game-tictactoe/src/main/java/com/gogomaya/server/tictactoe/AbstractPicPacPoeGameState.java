@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.tictactoe;
+package com.gogomaya.server.tictactoe;
 
 import java.util.Collection;
 import java.util.HashMap;

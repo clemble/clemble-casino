@@ -16,7 +16,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
@@ -26,6 +25,7 @@ import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)

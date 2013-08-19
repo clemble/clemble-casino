@@ -16,7 +16,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.gogomaya.server.ExpectedAction;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
@@ -24,6 +23,7 @@ import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

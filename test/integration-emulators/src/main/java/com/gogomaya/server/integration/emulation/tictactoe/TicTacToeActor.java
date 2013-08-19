@@ -7,10 +7,10 @@ import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.emulator.GameActor;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 public class TicTacToeActor implements GameActor<TicTacToeState> {
 

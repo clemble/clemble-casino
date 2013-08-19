@@ -2,10 +2,10 @@ package com.gogomaya.server.integration.game.tictactoe;
 
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.player.Player;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 
 public class TicTacToePlayerSessionFactory implements GameSessionPlayerFactory<TicTacToeState> {
 

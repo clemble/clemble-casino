@@ -9,9 +9,9 @@ import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameRequest;
 import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
-import com.gogomaya.server.game.tictactoe.TicTacToeState;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.player.Player;
+import com.gogomaya.server.tictactoe.TicTacToeState;
 import com.gogomaya.server.web.game.options.GameConfigurationManagerController;
 import com.gogomaya.server.web.game.session.GameConstructionController;
 
