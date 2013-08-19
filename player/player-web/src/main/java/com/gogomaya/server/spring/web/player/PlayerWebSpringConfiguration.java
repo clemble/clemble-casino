@@ -25,7 +25,7 @@ import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.spring.web.SwaggerSpringConfiguration;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
-import com.gogomaya.server.web.player.registration.RegistrationLoginController;
+import com.gogomaya.server.web.player.registration.PlayerLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 import com.gogomaya.server.web.player.registration.RegistrationSocialConnectionController;
 import com.mangofactory.swagger.SwaggerConfiguration;
@@ -95,8 +95,8 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Singleton
-    public RegistrationLoginController registrationLoginController() {
-        return new RegistrationLoginController(playerCredentialRepository, playerIdentityRepository);
+    public PlayerLoginController registrationLoginController() {
+        return new PlayerLoginController(playerCredentialRepository, playerIdentityRepository);
     }
 
     @Bean

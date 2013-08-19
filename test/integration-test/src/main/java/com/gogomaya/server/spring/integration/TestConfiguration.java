@@ -52,7 +52,7 @@ import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.account.PlayerAccountController;
-import com.gogomaya.server.web.player.registration.RegistrationLoginController;
+import com.gogomaya.server.web.player.registration.PlayerLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 
 @Configuration
@@ -85,7 +85,7 @@ public class TestConfiguration {
 
         @Autowired
         @Qualifier("registrationLoginController")
-        public RegistrationLoginController registrationLoginController;
+        public PlayerLoginController registrationLoginController;
 
         @Autowired
         @Qualifier("playerSessionController")

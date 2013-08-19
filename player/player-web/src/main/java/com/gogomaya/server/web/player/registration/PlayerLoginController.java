@@ -19,19 +19,19 @@ import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.web.mapping.PlayerWebMapping;
 
 @Controller
-public class RegistrationLoginController {
+public class PlayerLoginController {
 
     final private PlayerCredentialRepository playerCredentialRepository;
 
     final private PlayerIdentityRepository playerIdentityRepository;
 
-    public RegistrationLoginController(final PlayerCredentialRepository playerCredentialRepository, final PlayerIdentityRepository playerIdentityRepository) {
+    public PlayerLoginController(final PlayerCredentialRepository playerCredentialRepository, final PlayerIdentityRepository playerIdentityRepository) {
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
         this.playerIdentityRepository = checkNotNull(playerIdentityRepository);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_REGISTRATION_LOGIN, produces = "application/json")
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerIdentity createUser(@RequestBody PlayerCredential playerCredentials) {
         // Step 1. Fetch saved player credentials
         PlayerCredential fetchedCredentials = playerCredentialRepository.findByEmail(playerCredentials.getEmail());

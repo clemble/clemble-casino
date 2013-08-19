@@ -10,16 +10,16 @@ import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.web.RegistrationRequest;
-import com.gogomaya.server.web.player.registration.RegistrationLoginController;
+import com.gogomaya.server.web.player.registration.PlayerLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 
 public class WebPlayerOperations extends AbstractPlayerOperations {
 
     final private RegistrationSignInContoller signInContoller;
-    final private RegistrationLoginController loginController;
+    final private PlayerLoginController loginController;
 
     public WebPlayerOperations(RegistrationSignInContoller signInContoller,
-            RegistrationLoginController loginController,
+            PlayerLoginController loginController,
             SessionOperations playerSessionOperations,
             AccountOperations accountOperations,
             PlayerListenerOperations listenerOperations,
