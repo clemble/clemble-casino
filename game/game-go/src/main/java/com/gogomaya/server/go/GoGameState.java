@@ -1,37 +1,27 @@
 package com.gogomaya.server.go;
 
-import java.util.Collection;
-
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.game.GamePlayerIterator;
-import com.gogomaya.server.game.GamePlayerState;
+import com.gogomaya.server.game.GameAccount;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.outcome.GameOutcome;
 
-public class GoGameState implements GameState{
+public class GoGameState implements GameState {
 
-    @Override
-    public Collection<GamePlayerState> getPlayerStates() {
-        // TODO Auto-generated method stub
-        return null;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -8322660522348015422L;
+
+    final private GameAccount playerStateManager;
+
+    public GoGameState(GameAccount playerStateManager) {
+        this.playerStateManager = playerStateManager;
     }
 
     @Override
-    public GamePlayerState getPlayerState(long playerId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public GameState setPlayerState(GamePlayerState player) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public GameState setPlayerStates(Collection<GamePlayerState> playersStates) {
-        // TODO Auto-generated method stub
-        return null;
+    public GameAccount getAccount() {
+        return playerStateManager;
     }
 
     @Override
@@ -48,12 +38,6 @@ public class GoGameState implements GameState{
 
     @Override
     public GameOutcome getOutcome() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public GameState setOutcome(GameOutcome outcome) {
         // TODO Auto-generated method stub
         return null;
     }

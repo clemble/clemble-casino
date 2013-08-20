@@ -6,7 +6,7 @@ import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GamePlayerState;
+import com.gogomaya.server.game.GamePlayerAccount;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.cell.Cell;
@@ -71,7 +71,7 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
             // Step 1. Reducing account ammounts
             Collection<BetEvent> bets = actionLatch.getActions();
             for(BetEvent bet : bets) {
-                state.getPlayerState(bet.getPlayerId()).subMoneyLeft(bet.getBet());
+                state.getAccount().getPlayerAccount(bet.getPlayerId()).subMoneyLeft(bet.getBet());
             }
             // Step 2. Setting exposed cell state
             ExposedCellState cellState = new ExposedCellState(bets);
@@ -103,7 +103,7 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
     }
 
     private void specifyWinner(final long winner, final TicTacToeState state) {
-        for (GamePlayerState playerState : state.getPlayerStates()) {
+        for (GamePlayerAccount playerState : state.getAccount().getPlayerAccounts()) {
             if (playerState.getPlayerId() != winner) {
                 playerState.subMoneyLeft(playerState.getMoneyLeft());
             }

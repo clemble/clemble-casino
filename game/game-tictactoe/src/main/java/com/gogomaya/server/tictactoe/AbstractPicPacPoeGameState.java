@@ -1,9 +1,6 @@
 package com.gogomaya.server.tictactoe;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,13 +10,12 @@ import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.GameAccount;
 import com.gogomaya.server.game.GamePlayerIterator;
-import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
-import com.gogomaya.server.player.PlayerAwareUtils;
 
 @JsonIgnoreProperties(value = { "activeUsers" })
 abstract public class AbstractPicPacPoeGameState implements GameState {
@@ -29,7 +25,8 @@ abstract public class AbstractPicPacPoeGameState implements GameState {
      */
     private static final long serialVersionUID = -6468020813755923981L;
 
-    private Map<Long, GamePlayerState> playersState = new HashMap<Long, GamePlayerState>();
+    private GameAccount gameAccount;
+
     @JsonIgnore
     private GamePlayerIterator playerIterator;
 
@@ -41,24 +38,12 @@ abstract public class AbstractPicPacPoeGameState implements GameState {
     private int version;
 
     @Override
-    final public Collection<GamePlayerState> getPlayerStates() {
-        return playersState.values();
+    public GameAccount getAccount() {
+        return gameAccount;
     }
 
-    final public GameState setPlayerStates(Collection<GamePlayerState> playersStates) {
-        this.playersState = PlayerAwareUtils.toMap(playersStates);
-        return this;
-    }
-
-    @Override
-    final public GamePlayerState getPlayerState(long playerId) {
-        return playersState.get(playerId);
-    }
-
-    @Override
-    final public GameState setPlayerState(GamePlayerState newPlayerState) {
-        playersState.put(newPlayerState.getPlayerId(), newPlayerState);
-        return this;
+    public void setAccount(GameAccount gameAccount) {
+        this.gameAccount = gameAccount;
     }
 
     final public Set<Long> getOpponents(long playerId) {
@@ -88,7 +73,7 @@ abstract public class AbstractPicPacPoeGameState implements GameState {
     }
 
     final public GameState setBetNext() {
-        this.actionLatch = new ActionLatch(playersState.keySet(), "bet", BetEvent.class);
+        this.actionLatch = new ActionLatch(playerIterator.getPlayers(), "bet", BetEvent.class);
         this.version++;
         return this;
     }
@@ -123,7 +108,6 @@ abstract public class AbstractPicPacPoeGameState implements GameState {
         return outcome;
     }
 
-    @Override
     public GameState setOutcome(GameOutcome outcome) {
         if (this.outcome != null)
             throw GogomayaException.fromError(GogomayaError.ServerCriticalError);

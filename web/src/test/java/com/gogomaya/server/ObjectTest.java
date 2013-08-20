@@ -7,6 +7,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
+import com.gogomaya.server.game.GameAccount;
+import com.gogomaya.server.game.GamePlayerAccount;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
 import com.gogomaya.server.game.configuration.SelectRuleOptions;
 import com.gogomaya.server.game.construct.AutomaticGameRequest;
@@ -55,7 +57,9 @@ public class ObjectTest {
         });
         ObjectGenerator.register(TicTacToeState.class, new AbstractValueGenerator<TicTacToeState>() {
             public TicTacToeState generate() {
-                return new TicTacToeState();
+                TicTacToeState tacToeState = new TicTacToeState();
+                tacToeState.setAccount(new GameAccount(ImmutableList.<GamePlayerAccount> of(new GamePlayerAccount(1, 50), new GamePlayerAccount(2, 50))));
+                return tacToeState;
             }
 
         });
@@ -80,7 +84,7 @@ public class ObjectTest {
             public GameStartedEvent generate() {
                 GameStartedEvent<TicTacToeState> gameStartedEvent = new GameStartedEvent<>();
                 gameStartedEvent.setSession(10L);
-                gameStartedEvent.setState(new TicTacToeState());
+                gameStartedEvent.setState(ObjectGenerator.generate(TicTacToeState.class));
                 return gameStartedEvent;
             }
 

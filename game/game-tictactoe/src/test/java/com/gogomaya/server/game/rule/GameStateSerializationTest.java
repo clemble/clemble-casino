@@ -12,7 +12,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.game.GamePlayerState;
+import com.gogomaya.server.game.GamePlayerAccount;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.cell.Cell;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
@@ -35,9 +35,9 @@ public class GameStateSerializationTest {
     public void testSerialize() throws JsonGenerationException, JsonMappingException, IOException {
         TicTacToeState readState = null;
 
-        Collection<GamePlayerState> players = new ArrayList<GamePlayerState>();
-        players.add(new GamePlayerState(1L, 50L));
-        players.add(new GamePlayerState(2L, 50L));
+        Collection<GamePlayerAccount> players = new ArrayList<GamePlayerAccount>();
+        players.add(new GamePlayerAccount(1L, 50L));
+        players.add(new GamePlayerAccount(2L, 50L));
 
         TicTacToeState tacToeState = new TicTacToeState(players);
         tacToeState.addMadeMove(new SelectCellEvent(1L, Cell.create(0, 0)));

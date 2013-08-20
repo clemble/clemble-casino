@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 
-public class FullGamePlayerState extends GamePlayerState {
+public class FullGamePlayerState extends GamePlayerAccount {
 
     /**
      * Generated

@@ -39,7 +39,7 @@ public class TicTacToeSessionPlayer extends GenericGameSessionPlayer<TicTacToeSt
     }
     
     public long getMoneyLeft(){
-        return getState().getPlayerState(getPlayerId()).getMoneyLeft();
+        return getState().getAccount().getPlayerAccount(getPlayerId()).getMoneyLeft();
     }
 
     public int getMoneySpent() {

@@ -33,6 +33,13 @@ public class ActionLatch implements Serializable {
         }
     }
 
+    public ActionLatch(final long[] participants, final String action, final Class<?> expectedClass) {
+        this.expectedClass = expectedClass;
+        for (long participant : participants) {
+            actions.put(participant, new ExpectedAction(participant, action));
+        }
+    }
+
     public ActionLatch(final long player, String action, Class<?> expectedClass) {
         this.actions.put(player, new ExpectedAction(player, action));
         this.expectedClass = expectedClass;

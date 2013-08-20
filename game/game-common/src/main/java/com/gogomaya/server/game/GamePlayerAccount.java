@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.server.player.PlayerAware;
 
-public class GamePlayerState implements PlayerAware {
+public class GamePlayerAccount implements PlayerAware {
 
     /**
      * Generated
@@ -17,13 +17,13 @@ public class GamePlayerState implements PlayerAware {
     private long moneyLeft;
     private long moneySpent;
 
-    public GamePlayerState(final long playerId, final long moneyLeft) {
+    public GamePlayerAccount(final long playerId, final long moneyLeft) {
         this.playerId = playerId;
         this.moneyLeft = moneyLeft;
     }
 
     @JsonCreator
-    public GamePlayerState(@JsonProperty("playerId") final long playerId,
+    public GamePlayerAccount(@JsonProperty("playerId") final long playerId,
             @JsonProperty("moneyLeft") final long moneyLeft,
             @JsonProperty("moneySpent") final long moneySpent) {
         this.playerId = playerId;

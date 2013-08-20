@@ -7,7 +7,7 @@ import java.util.Collection;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAware;
-import com.gogomaya.server.game.GamePlayerState;
+import com.gogomaya.server.game.GamePlayerAccount;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameSessionState;
 import com.gogomaya.server.game.GameState;
@@ -75,7 +75,7 @@ public class GameOutcomeAspect<State extends GameState> implements GameAspect<St
         // Step 2. Generating payment transaction
         PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(session.getSession());
         PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionId(transactionId);
-        for (GamePlayerState playerState : session.getState().getPlayerStates()) {
+        for (GamePlayerAccount playerState : session.getState().getAccount().getPlayerAccounts()) {
             if (playerState.getPlayerId() != winnerId) {
                 paymentTransaction.addPaymentOperation(
                         new PaymentOperation().setAmmount(price).setOperation(Operation.Credit).setPlayerId(playerState.getPlayerId())).addPaymentOperation(

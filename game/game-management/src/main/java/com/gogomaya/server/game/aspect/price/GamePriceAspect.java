@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GamePlayerState;
+import com.gogomaya.server.game.GamePlayerAccount;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.aspect.GameAspect;
@@ -25,7 +25,7 @@ public class GamePriceAspect<State extends GameState> implements GameAspect<Stat
         if (!(move instanceof SurrenderEvent)) {
             // Step 3. Checking that move
             if (move instanceof BetEvent) {
-                GamePlayerState gamePlayerState = state.getPlayerState(move.getPlayerId());
+                GamePlayerAccount gamePlayerState = state.getAccount().getPlayerAccount(move.getPlayerId());
                 if (((BetEvent) move).getBet() > gamePlayerState.getMoneyLeft())
                     throw GogomayaException.fromError(GogomayaError.GamePlayBetOverflow);
             }
