@@ -1,19 +1,16 @@
 package com.gogomaya.server.game.aspect.price;
 
-import java.util.Collection;
-
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GamePlayerAccount;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.aspect.GameAspect;
+import com.gogomaya.server.game.aspect.BasicGameAspect;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
-import com.gogomaya.server.game.event.server.GameServerEvent;
 
-public class GamePriceAspect<State extends GameState> implements GameAspect<State> {
+public class GamePriceAspect<State extends GameState> extends BasicGameAspect<State> {
 
     @Override
     public void beforeMove(final GameSession<State> session, final ClientEvent move) {
@@ -30,16 +27,6 @@ public class GamePriceAspect<State extends GameState> implements GameAspect<Stat
                     throw GogomayaException.fromError(GogomayaError.GamePlayBetOverflow);
             }
         }
-    }
-
-    @Override
-    public Collection<GameServerEvent<State>> afterMove(final GameSession<State> session, final Collection<GameServerEvent<State>> madeMoves) {
-        return madeMoves;
-    }
-
-    @Override
-    public Collection<GameServerEvent<State>> afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
-        return events;
     }
 
 }

@@ -36,6 +36,10 @@ public class GameAccount implements Serializable {
         playerToAccount.put(newPlayerState.getPlayerId(), newPlayerState);
     }
 
+    final public void subMoneyLeft(long playerId, long ammount) {
+        playerToAccount.get(playerId).subMoneyLeft(ammount);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

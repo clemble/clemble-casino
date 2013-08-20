@@ -1,8 +1,8 @@
 package com.gogomaya.server.go;
 
 import com.gogomaya.server.ActionLatch;
-import com.gogomaya.server.game.GamePlayerIterator;
 import com.gogomaya.server.game.GameAccount;
+import com.gogomaya.server.game.GamePlayerIterator;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.outcome.GameOutcome;
 
@@ -26,12 +26,6 @@ public class GoGameState implements GameState {
 
     @Override
     public GamePlayerIterator getPlayerIterator() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public GameState setPlayerIterator(GamePlayerIterator playerIterator) {
         // TODO Auto-generated method stub
         return null;
     }

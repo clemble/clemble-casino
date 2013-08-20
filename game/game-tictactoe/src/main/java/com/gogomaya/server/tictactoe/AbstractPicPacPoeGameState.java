@@ -89,7 +89,6 @@ abstract public class AbstractPicPacPoeGameState implements GameState {
         return playerIterator;
     }
 
-    @Override
     final public GameState setPlayerIterator(GamePlayerIterator playerIterator) {
         this.playerIterator = playerIterator;
         return this;

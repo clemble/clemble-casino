@@ -45,11 +45,6 @@ public class GamePlayerAccount implements PlayerAware {
         this.moneySpent = moneySpent + money;
     }
 
-    @Override
-    public String toString() {
-        return "PlayerState [player=" + playerId + ", money=" + moneyLeft + "]";
-    }
-
     public long getMoneySpent() {
         return moneySpent;
     }
@@ -57,6 +52,11 @@ public class GamePlayerAccount implements PlayerAware {
     @JsonIgnore
     public long fetchMoneyTotal() {
         return moneySpent + moneyLeft;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerState [player=" + playerId + ", money=" + moneyLeft + "]";
     }
 
 }

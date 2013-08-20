@@ -1,7 +1,8 @@
 package com.gogomaya.server.game;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,47 +17,50 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
      */
     private static final long serialVersionUID = -4182637038671660855L;
 
-    final private long[] players;
+    final private List<Long> players;
 
     private int index;
 
     public SequentialPlayerIterator(Collection<? extends PlayerAware> playerAwares) {
         this.index = 0;
-        this.players = new long[playerAwares.size()];
+        this.players = new ArrayList<>(playerAwares.size());
         // Parsing player aware values
         for (PlayerAware playerAware : playerAwares) {
-            players[index++] = playerAware.getPlayerId();
+            players.add(playerAware.getPlayerId());
         }
     }
 
     @JsonCreator
-    public SequentialPlayerIterator(@JsonProperty("index") final int current, @JsonProperty("players") long[] players) {
+    public SequentialPlayerIterator(@JsonProperty("index") final int current, @JsonProperty("players") List<Long> players) {
         this.players = players;
         this.index = current;
     }
 
     public SequentialPlayerIterator(final int currentUser, Collection<? extends PlayerAware> playerAwares) {
+        this(playerAwares);
         this.index = currentUser;
-        this.players = new long[playerAwares.size()];
-
-        int i = 0;
-        for (PlayerAware playerAware : playerAwares)
-            getPlayers()[i++] = playerAware.getPlayerId();
     }
 
     @Override
     public long next() {
-        return getPlayers()[++index % getPlayers().length];
+        return players.get(++index % getPlayers().size());
     }
 
     @Override
     public long current() {
-        return getPlayers()[index % getPlayers().length];
+        return players.get(index % getPlayers().size());
     }
 
     @Override
-    public long[] getPlayers() {
+    public Collection<Long> getPlayers() {
         return players;
+    }
+
+    @Override
+    public Collection<Long> whoIsOpponents(long playerId) {
+        Collection<Long> playerIds = new ArrayList<Long>(players);
+        playerIds.remove(playerId);
+        return playerIds;
     }
 
     public int getIndex() {
@@ -77,7 +81,7 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
         final int prime = 31;
         int result = 1;
         result = prime * result + index;
-        result = prime * result + Arrays.hashCode(players);
+        result = prime * result + players.hashCode();
         return result;
     }
 
@@ -92,7 +96,7 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
         SequentialPlayerIterator other = (SequentialPlayerIterator) obj;
         if (index != other.index)
             return false;
-        if (!Arrays.equals(players, other.players))
+        if (!players.equals(other.players))
             return false;
         return true;
     }

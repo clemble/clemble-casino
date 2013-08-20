@@ -1,6 +1,7 @@
 package com.gogomaya.server.game;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -11,7 +12,9 @@ public interface GamePlayerIterator extends Serializable {
 
     public long current();
 
-    public long[] getPlayers();
+    public Collection<Long> getPlayers();
+
+    public Collection<Long> whoIsOpponents(long playerId);
 
     public boolean contains(long playerId);
 
