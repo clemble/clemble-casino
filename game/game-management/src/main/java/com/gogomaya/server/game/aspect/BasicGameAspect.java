@@ -10,17 +10,15 @@ import com.gogomaya.server.game.event.server.GameServerEvent;
 public class BasicGameAspect<State extends GameState> implements GameAspect<State>{
 
     @Override
-    public void beforeMove(GameSession<State> session, ClientEvent move) {
+    public void beforeMove(State session, ClientEvent move) {
     }
 
     @Override
-    public Collection<GameServerEvent<State>> afterMove(GameSession<State> session, Collection<GameServerEvent<State>> events) {
-        return events;
+    public void afterMove(GameSession<State> session, Collection<GameServerEvent<State>> events) {
     }
 
     @Override
-    public Collection<GameServerEvent<State>> afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
-        return events;
+    public void afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
     }
 
 }

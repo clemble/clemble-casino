@@ -9,10 +9,10 @@ import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public interface GameAspect<State extends GameState> {
 
-    public void beforeMove(final GameSession<State> session, final ClientEvent move);
+    public void beforeMove(final State session, final ClientEvent move);
 
-    public Collection<GameServerEvent<State>> afterMove(final GameSession<State> session, final Collection<GameServerEvent<State>> events);
+    public void afterMove(final GameSession<State> session, final Collection<GameServerEvent<State>> events);
 
-    public Collection<GameServerEvent<State>> afterGame(final GameSession<State> session, final Collection<GameServerEvent<State>> events);
+    public void afterGame(final GameSession<State> session, final Collection<GameServerEvent<State>> events);
 
 }

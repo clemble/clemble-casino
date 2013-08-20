@@ -3,7 +3,6 @@ package com.gogomaya.server.game.aspect.bet;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
 import com.gogomaya.server.game.event.client.BetEvent;
@@ -18,7 +17,7 @@ public class GameBetAspect<State extends GameState> extends BasicGameAspect<Stat
     }
 
     @Override
-    public void beforeMove(GameSession<State> session, ClientEvent move) {
+    public void beforeMove(State state, ClientEvent move) {
         if (move instanceof BetEvent) {
             if (!betRule.isValid((BetEvent) move)) {
                 throw GogomayaException.fromError(GogomayaError.GamePlayBetInvalid);

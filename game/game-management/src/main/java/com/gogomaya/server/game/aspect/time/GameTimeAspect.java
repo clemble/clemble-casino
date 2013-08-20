@@ -27,7 +27,7 @@ public class GameTimeAspect<State extends GameState> implements GameAspect<State
     }
 
     @Override
-    public void beforeMove(GameSession<State> session, ClientEvent move) {
+    public void beforeMove(State state, ClientEvent move) {
         // Step 1. To check if we need rescheduling, first calculate time before
         long breachTimeBeforeMove = sessionTimeTracker.getBreachTime();
         // Step 2. Updating sessionTimeTracker
@@ -39,7 +39,7 @@ public class GameTimeAspect<State extends GameState> implements GameAspect<State
     }
 
     @Override
-    public Collection<GameServerEvent<State>> afterMove(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+    public void afterMove(GameSession<State> session, Collection<GameServerEvent<State>> events) {
         // Step 1. To check if we need rescheduling, first calculate time before
         long breachTimeBeforeMove = sessionTimeTracker.getBreachTime();
         // Step 2. Updating sessionTimeTracker
@@ -50,13 +50,11 @@ public class GameTimeAspect<State extends GameState> implements GameAspect<State
         if (sessionTimeTracker.getBreachTime() != breachTimeBeforeMove) {
             gameEventTaskExecutor.reschedule(sessionTimeTracker);
         }
-        return events;
     }
 
     @Override
-    public Collection<GameServerEvent<State>> afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+    public void afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
         gameEventTaskExecutor.cancel(sessionTimeTracker);
-        return events;
     }
 
 }

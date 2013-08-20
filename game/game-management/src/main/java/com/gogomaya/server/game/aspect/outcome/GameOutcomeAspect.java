@@ -46,7 +46,7 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
     }
 
     @Override
-    public Collection<GameServerEvent<State>> afterGame(GameSession<State> session, Collection<GameServerEvent<State>> madeMoves) {
+    public void afterGame(GameSession<State> session, Collection<GameServerEvent<State>> madeMoves) {
         session.setSessionState(GameSessionState.finished);
         for (long player : session.getState().getPlayerIterator().getPlayers())
             activePlayerQueue.markAvailable(player);
@@ -68,8 +68,6 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
             // Step 3. Processing payment transaction
             paymentTransactionService.process(paymentTransaction);
         }
-
-        return madeMoves;
     }
 
 }
