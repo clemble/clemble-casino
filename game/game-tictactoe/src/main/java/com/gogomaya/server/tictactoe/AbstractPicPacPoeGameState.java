@@ -16,8 +16,6 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GamePlayerIterator;
 import com.gogomaya.server.game.GamePlayerState;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.cell.Cell;
-import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
@@ -38,10 +36,6 @@ abstract public class AbstractPicPacPoeGameState implements GameState {
     private ActionLatch actionLatch;
 
     private GameOutcome outcome;
-
-    private CellState[][] board = new CellState[3][3];
-
-    private Cell selected;
 
     @JsonProperty("version")
     private int version;

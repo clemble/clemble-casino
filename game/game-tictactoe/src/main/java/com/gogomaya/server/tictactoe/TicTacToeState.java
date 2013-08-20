@@ -66,12 +66,6 @@ public class TicTacToeState extends AbstractPicPacPoeGameState {
         return this;
     }
 
-    @Override
-    public boolean complete() {
-        // Step 1. Check vertical
-        return getOutcome() != null;
-    }
-
     public GameOutcome calculate() {
         // Step 1. Checking if there is a single winner
         long winner = hasWinner();

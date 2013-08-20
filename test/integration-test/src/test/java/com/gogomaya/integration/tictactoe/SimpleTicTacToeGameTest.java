@@ -102,7 +102,6 @@ public class SimpleTicTacToeGameTest {
 
             playerA.syncWith(playerB);
 
-            Assert.assertTrue(playerB.getState().complete());
             Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
         } finally {
             playerA.close();
@@ -129,7 +128,6 @@ public class SimpleTicTacToeGameTest {
                 playerA.bet(2);
                 playerB.bet(1);
 
-                Assert.assertTrue(playerB.getState().complete());
                 Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
             } finally {
                 playerA.close();
@@ -157,7 +155,6 @@ public class SimpleTicTacToeGameTest {
                 playerA.bet(2);
                 playerB.bet(1);
 
-                Assert.assertTrue(playerB.getState().complete());
                 Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
             } finally {
                 playerA.close();
@@ -176,7 +173,6 @@ public class SimpleTicTacToeGameTest {
             playerA.bet((int) playerA.getMoneyLeft());
             playerB.bet(1);
 
-            Assert.assertTrue(playerB.getState().complete());
             Assert.assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerB.getPlayer().getPlayerId());
         } finally {
             playerA.close();

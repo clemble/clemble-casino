@@ -141,7 +141,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     final public void waitForTurn() {
-        while (keepAlive.get() && !isToMove() && !currentState.get().complete())
+        while (keepAlive.get() && !isToMove() && currentState.get().getOutcome() == null)
             waitVersion(getState().getVersion() + 1);
     }
 

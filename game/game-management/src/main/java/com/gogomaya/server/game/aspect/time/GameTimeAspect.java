@@ -40,25 +40,22 @@ public class GameTimeAspect<State extends GameState> implements GameAspect<State
 
     @Override
     public Collection<GameServerEvent<State>> afterMove(GameSession<State> session, Collection<GameServerEvent<State>> events) {
-        if (session.getState().complete()) {
-            gameEventTaskExecutor.cancel(sessionTimeTracker);
-        } else {
-            // Step 1. To check if we need rescheduling, first calculate time before
-            long breachTimeBeforeMove = sessionTimeTracker.getBreachTime();
-            // Step 2. Updating sessionTimeTracker
-            for (ClientEvent nextMove : session.getState().getActionLatch().getActions()) {
-                sessionTimeTracker.markToMove(nextMove);
-            }
-            // Step 3. Re scheduling if needed
-            if (sessionTimeTracker.getBreachTime() != breachTimeBeforeMove) {
-                gameEventTaskExecutor.reschedule(sessionTimeTracker);
-            }
+        // Step 1. To check if we need rescheduling, first calculate time before
+        long breachTimeBeforeMove = sessionTimeTracker.getBreachTime();
+        // Step 2. Updating sessionTimeTracker
+        for (ClientEvent nextMove : session.getState().getActionLatch().getActions()) {
+            sessionTimeTracker.markToMove(nextMove);
+        }
+        // Step 3. Re scheduling if needed
+        if (sessionTimeTracker.getBreachTime() != breachTimeBeforeMove) {
+            gameEventTaskExecutor.reschedule(sessionTimeTracker);
         }
         return events;
     }
 
     @Override
     public Collection<GameServerEvent<State>> afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+        gameEventTaskExecutor.cancel(sessionTimeTracker);
         return events;
     }
 

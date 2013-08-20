@@ -101,9 +101,7 @@ public class MultipleNotificationsTest {
 
             playerA.syncWith(playerB);
 
-            assertTrue(playerB.getState().complete());
             assertEquals(((PlayerWonOutcome) playerB.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
-            assertTrue(playerA.getState().complete());
             assertEquals(((PlayerWonOutcome) playerA.getState().getOutcome()).getWinner(), playerA.getPlayer().getPlayerId());
         } finally {
             playerA.close();

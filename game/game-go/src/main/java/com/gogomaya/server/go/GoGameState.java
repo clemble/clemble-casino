@@ -59,12 +59,6 @@ public class GoGameState implements GameState{
     }
 
     @Override
-    public boolean complete() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
     public ActionLatch getActionLatch() {
         // TODO Auto-generated method stub
         return null;

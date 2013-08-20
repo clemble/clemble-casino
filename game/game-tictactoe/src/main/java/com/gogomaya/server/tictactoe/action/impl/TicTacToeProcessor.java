@@ -30,7 +30,7 @@ public class TicTacToeProcessor implements GameProcessor<TicTacToeState> {
     public Collection<GameServerEvent<TicTacToeState>> process(final GameSession<TicTacToeState> session, ClientEvent clientEvent) {
         TicTacToeState state = session.getState();
         // Step 1. Processing Select cell move
-        if (state.complete()) {
+        if (state.getOutcome() != null) {
             return ImmutableList.<GameServerEvent<TicTacToeState>> of();
         } else if (clientEvent instanceof SelectCellEvent) {
             return ImmutableList.<GameServerEvent<TicTacToeState>> of(processSelectCellEvent(state, (SelectCellEvent) clientEvent));
