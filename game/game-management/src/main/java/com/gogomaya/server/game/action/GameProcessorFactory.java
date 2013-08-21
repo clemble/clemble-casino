@@ -16,12 +16,10 @@ import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class GameProcessorFactory<State extends GameState> {
 
-    final private GameProcessor<State> coreProcessor;
     final private GameAspectFactory[] aspectFactories;
 
     @SafeVarargs
-    public GameProcessorFactory(final GameProcessor<State> coreProcessor, final GameAspectFactory... listeners) {
-        this.coreProcessor = checkNotNull(coreProcessor);
+    public GameProcessorFactory(final GameAspectFactory... listeners) {
         for (GameAspectFactory listener : listeners)
             checkNotNull(listener);
         this.aspectFactories = Arrays.copyOf(listeners, listeners.length);
@@ -32,16 +30,14 @@ public class GameProcessorFactory<State extends GameState> {
         for (GameAspectFactory aspectFactory : aspectFactories) {
             gameAspects.add(aspectFactory.<State> construct(initiation));
         }
-        return new AggregatedGameProcessor<State>(coreProcessor, gameAspects);
+        return new AggregatedGameProcessor<State>(gameAspects);
     }
 
     public static class AggregatedGameProcessor<State extends GameState> implements GameProcessor<State> {
-        final private GameProcessor<State> coreProcessor;
         final private GameAspect<State>[] listenerArray;
 
         @SuppressWarnings("unchecked")
-        public AggregatedGameProcessor(GameProcessor<State> coreProcessor, Collection<GameAspect<State>> listeners) {
-            this.coreProcessor = coreProcessor;
+        public AggregatedGameProcessor(Collection<GameAspect<State>> listeners) {
             this.listenerArray = new GameAspect[listeners.size()];
 
             int i = 0;
@@ -51,12 +47,13 @@ public class GameProcessorFactory<State extends GameState> {
 
         @Override
         public GameServerEvent<State> process(GameSession<State> session, ClientEvent move) {
+            State state = session.getState();
             // Step 1. Before move notification
             for (GameAspect<State> listener : listenerArray) {
-                listener.beforeMove(session.getState(), move);
+                listener.beforeMove(state, move);
             }
             // Step 2. Processing in core
-            GameServerEvent<State> events = coreProcessor.process(session, move);
+            GameServerEvent<State> events = state.process(move);
             // Step 3. After move notification
             if (session.getState().getOutcome() == null) {
                 for (GameAspect<State> listener : listenerArray) {

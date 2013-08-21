@@ -33,18 +33,17 @@ import com.gogomaya.server.repository.game.GameSpecificationRepository;
 import com.gogomaya.server.repository.game.GameTableRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
-import com.gogomaya.server.tictactoe.TicTacToeState;
-import com.gogomaya.server.tictactoe.action.impl.TicTacToeProcessor;
-import com.gogomaya.server.tictactoe.action.impl.TicTacToeStateFactory;
-import com.gogomaya.server.tictactoe.configuration.TicTacToeConfigurationManager;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
+import com.gogomaya.server.tictactoe.PicPacPoeStateFactory;
+import com.gogomaya.server.tictactoe.configuration.PicPacPoeConfigurationManager;
 
 @Configuration
 @Import(value = { GameManagementSpringConfiguration.class })
-public class TicTacToeSpringConfiguration implements SpringConfiguration {
+public class PicPacPoeSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("gameSessionRepository")
-    public GameSessionRepository<TicTacToeState> gameSessionRepository;
+    public GameSessionRepository<PicPacPoeState> gameSessionRepository;
 
     @Autowired
     @Qualifier("gameSpecificationRepository")
@@ -52,7 +51,7 @@ public class TicTacToeSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("gameTableRepository")
-    public GameTableRepository<TicTacToeState> gameTableRepository;
+    public GameTableRepository<PicPacPoeState> gameTableRepository;
 
     @Autowired(required = true)
     @Qualifier("gameConstructionRepository")
@@ -100,52 +99,52 @@ public class TicTacToeSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Singleton
-    public GameTableFactory<TicTacToeState> ticTacToeTableFactory() {
-        return new GameTableFactory<TicTacToeState>(ticTacToeStateFactory(), gameTableRepository, tableServerRegistry);
+    public GameTableFactory<PicPacPoeState> picPacPoeTableFactory() {
+        return new GameTableFactory<PicPacPoeState>(ticTacToeStateFactory(), gameTableRepository, tableServerRegistry);
     }
 
     @Bean
     @Singleton
-    public GameConstructionService ticTacToeConstructionService() {
-        return new SimpleGameConstructionService(playerAccountService, playerNotificationService, gameConstructionRepository, ticTacToeInitiatorService(),
+    public GameConstructionService picPacPoeConstructionService() {
+        return new SimpleGameConstructionService(playerAccountService, playerNotificationService, gameConstructionRepository, picPacPoeInitiatorService(),
                 playerLockService, playerStateManager);
     }
 
     @Bean
     @Singleton
-    public GameInitiatorService ticTacToeInitiatorService() {
-        return new SimpleGameInitiatorService(ticTacToeSessionProcessor(), playerStateManager);
+    public GameInitiatorService picPacPoeInitiatorService() {
+        return new SimpleGameInitiatorService(picPacPoeSessionProcessor(), playerStateManager);
     }
 
     @Bean
     @Singleton
-    public TicTacToeStateFactory ticTacToeStateFactory() {
-        return new TicTacToeStateFactory(gameConstructionRepository, ticTacToeProcessorFactory());
+    public PicPacPoeStateFactory ticTacToeStateFactory() {
+        return new PicPacPoeStateFactory(gameConstructionRepository, picPacPoeProcessorFactory());
     }
 
     @Bean
     @Singleton
-    public TicTacToeConfigurationManager ticTacToeConfigurationManager() {
-        return new TicTacToeConfigurationManager(gameSpecificationRepository);
+    public PicPacPoeConfigurationManager picPacPoeConfigurationManager() {
+        return new PicPacPoeConfigurationManager(gameSpecificationRepository);
     }
 
     @Bean
     @Singleton()
-    public GameProcessorFactory<TicTacToeState> ticTacToeProcessorFactory() {
-        return new GameProcessorFactory<TicTacToeState>(new TicTacToeProcessor(), gameSecurityAspectFactory, gameBetAspectFactory, gamePriceAspectFactory,
-                gameTimeAspectFactory, gameOutcomeAspectFactory);
+    public GameProcessorFactory<PicPacPoeState> picPacPoeProcessorFactory() {
+        return new GameProcessorFactory<PicPacPoeState>(gameSecurityAspectFactory, gameBetAspectFactory, gamePriceAspectFactory, gameTimeAspectFactory,
+                gameOutcomeAspectFactory);
     }
 
     @Bean
     @Singleton
-    public GameCacheService<TicTacToeState> ticTacToeCacheService() {
-        return new GameCacheService<TicTacToeState>(gameConstructionRepository, gameSessionRepository, ticTacToeProcessorFactory(), ticTacToeStateFactory());
+    public GameCacheService<PicPacPoeState> picPacPoeCacheService() {
+        return new GameCacheService<PicPacPoeState>(gameConstructionRepository, gameSessionRepository, picPacPoeProcessorFactory(), ticTacToeStateFactory());
     }
 
     @Bean
     @Singleton
-    public GameSessionProcessor<TicTacToeState> ticTacToeSessionProcessor() {
-        return new GameSessionProcessor<TicTacToeState>(Game.pic, ticTacToeTableFactory(), ticTacToeCacheService(), playerNotificationService);
+    public GameSessionProcessor<PicPacPoeState> picPacPoeSessionProcessor() {
+        return new GameSessionProcessor<PicPacPoeState>(Game.pic, picPacPoeTableFactory(), picPacPoeCacheService(), playerNotificationService);
     }
 
 }

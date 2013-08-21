@@ -8,7 +8,7 @@ import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.repository.game.GameSpecificationRepository;
 
-public class TicTacToeConfigurationManager implements GameSpecificationConfiguration {
+public class PicPacPoeConfigurationManager implements GameSpecificationConfiguration {
 
     /**
      * Generated 13/07/13
@@ -17,7 +17,7 @@ public class TicTacToeConfigurationManager implements GameSpecificationConfigura
 
     final GameSpecificationRepository specificationRepository;
 
-    public TicTacToeConfigurationManager(GameSpecificationRepository specificationRepository) {
+    public PicPacPoeConfigurationManager(GameSpecificationRepository specificationRepository) {
         this.specificationRepository = checkNotNull(specificationRepository);
     }
 

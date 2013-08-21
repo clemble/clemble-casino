@@ -21,7 +21,7 @@ import com.gogomaya.server.integration.game.construction.GameConstructionOperati
 import com.gogomaya.server.integration.game.construction.GameScenarios;
 import com.gogomaya.server.integration.game.construction.IntegrationGameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.WebGameConstructionOperations;
-import com.gogomaya.server.integration.game.tictactoe.TicTacToePlayerSessionFactory;
+import com.gogomaya.server.integration.game.tictactoe.PicPacPoePlayerSessionFactory;
 import com.gogomaya.server.integration.payment.IntegrationPaymentTransactionOperations;
 import com.gogomaya.server.integration.payment.PaymentTransactionOperations;
 import com.gogomaya.server.integration.payment.WebPaymentTransactionOperations;
@@ -43,7 +43,7 @@ import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 import com.gogomaya.server.web.error.GogomayaRESTErrorHandler;
 import com.gogomaya.server.web.game.options.GameConfigurationManagerController;
 import com.gogomaya.server.web.game.session.GameActionController;
@@ -96,16 +96,16 @@ public class TestConfiguration {
         public PlayerAccountController playerAccountController;
 
         @Autowired
-        @Qualifier("ticTacToeConfigurationManagerController")
+        @Qualifier("picPacPoeConfigurationManagerController")
         public GameConfigurationManagerController ticTacToeConfigurationManagerController;
 
         @Autowired
-        @Qualifier("ticTacToeConstructionController")
-        public GameConstructionController<TicTacToeState> ticTacToeConstructionController;
+        @Qualifier("picPacPoeConstructionController")
+        public GameConstructionController<PicPacPoeState> ticTacToeConstructionController;
 
         @Autowired
-        @Qualifier("ticTacToeEngineController")
-        public GameActionController<TicTacToeState> ticTacToeEngineController;
+        @Qualifier("picPacPoeEngineController")
+        public GameActionController<PicPacPoeState> ticTacToeEngineController;
 
         @Autowired
         public PlayerProfileController playerProfileController;
@@ -123,7 +123,7 @@ public class TestConfiguration {
         @Singleton
         public PlayerOperations playerOperations() {
             return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, sessionOperations(), accountOperations(),
-                    playerListenerOperations(), playerProfileOperations(), ticTacToeGameConstructionOperations());
+                    playerListenerOperations(), playerProfileOperations(), picPacPoeGameConstructionOperations());
         }
 
         @Bean
@@ -146,21 +146,21 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionFactory() {
-            return new WebGameSessionPlayerFactory<TicTacToeState>(ticTacToeEngineController, ticTacToeConstructionController);
+        public GameSessionPlayerFactory<PicPacPoeState> picPacPoeSessionFactory() {
+            return new WebGameSessionPlayerFactory<PicPacPoeState>(ticTacToeEngineController, ticTacToeConstructionController);
         }
 
         @Bean
         @Singleton
-        public GameConstructionOperations<TicTacToeState> ticTacToeGameConstructionOperations() {
-            return new WebGameConstructionOperations<TicTacToeState>(Game.pic, ticTacToeConfigurationManagerController, ticTacToeConstructionController,
-                    ticTacToeSessionPlayerFactory());
+        public GameConstructionOperations<PicPacPoeState> picPacPoeGameConstructionOperations() {
+            return new WebGameConstructionOperations<PicPacPoeState>(Game.pic, ticTacToeConfigurationManagerController, ticTacToeConstructionController,
+                    picPacPoeSessionPlayerFactory());
         }
 
         @Bean
         @Singleton
-        public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionPlayerFactory() {
-            return new TicTacToePlayerSessionFactory(ticTacToeSessionFactory());
+        public GameSessionPlayerFactory<PicPacPoeState> picPacPoeSessionPlayerFactory() {
+            return new PicPacPoePlayerSessionFactory(picPacPoeSessionFactory());
         }
 
         @Bean
@@ -242,7 +242,7 @@ public class TestConfiguration {
         @Singleton
         public PlayerOperations playerOperations() {
             return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
-                    accountOperations(), ticTacToeGameConstructionOperations());
+                    accountOperations(), picPacPoeGameConstructionOperations());
         }
 
         @Bean
@@ -265,15 +265,15 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameConstructionOperations<TicTacToeState> ticTacToeGameConstructionOperations() {
-            return new IntegrationGameConstructionOperations<TicTacToeState>(Game.pic, getBaseUrl(), restTemplate(), ticTacToeSessionPlayerFactory());
+        public GameConstructionOperations<PicPacPoeState> picPacPoeGameConstructionOperations() {
+            return new IntegrationGameConstructionOperations<PicPacPoeState>(Game.pic, getBaseUrl(), restTemplate(), picPacPoeSessionPlayerFactory());
         }
 
         @Bean
         @Singleton
         @SuppressWarnings("unchecked")
-        public GameSessionPlayerFactory<TicTacToeState> ticTacToeSessionPlayerFactory() {
-            return new TicTacToePlayerSessionFactory((GameSessionPlayerFactory<TicTacToeState>) genericGameSessionFactory());
+        public GameSessionPlayerFactory<PicPacPoeState> picPacPoeSessionPlayerFactory() {
+            return new PicPacPoePlayerSessionFactory((GameSessionPlayerFactory<PicPacPoeState>) genericGameSessionFactory());
         }
 
         @Bean

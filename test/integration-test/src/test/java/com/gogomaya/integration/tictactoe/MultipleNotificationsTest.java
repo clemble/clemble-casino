@@ -26,10 +26,10 @@ import com.gogomaya.server.integration.game.GameSessionListener;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
-import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
+import com.gogomaya.server.integration.game.tictactoe.PicPacPoeSessionPlayer;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -41,7 +41,7 @@ public class MultipleNotificationsTest {
     public GameScenarios gameScenarios;
 
     @Autowired
-    public GameConstructionOperations<TicTacToeState> gameOperations;
+    public GameConstructionOperations<PicPacPoeState> gameOperations;
 
     public class NotificationsCounter extends GameSessionListener {
 
@@ -54,7 +54,7 @@ public class MultipleNotificationsTest {
             synchronized (sync) {
                 if (event instanceof GameServerEvent) {
                     @SuppressWarnings("unchecked")
-                    GameServerEvent<TicTacToeState> serverEvent = (GameServerEvent<TicTacToeState>) event;
+                    GameServerEvent<PicPacPoeState> serverEvent = (GameServerEvent<PicPacPoeState>) event;
                     Integer currentCounter = notifications.get(serverEvent.getState().getVersion());
                     if (currentCounter == null) {
                         notifications.put(serverEvent.getState().getVersion(), 1);
@@ -69,9 +69,9 @@ public class MultipleNotificationsTest {
 
     @Test
     public void testMultipleNotificationOnTicTacToe() throws InterruptedException {
-        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
-        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
-        TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
+        List<GameSessionPlayer<PicPacPoeState>> players = gameScenarios.constructGame(Game.pic);
+        PicPacPoeSessionPlayer playerA = (PicPacPoeSessionPlayer) players.get(0);
+        PicPacPoeSessionPlayer playerB = (PicPacPoeSessionPlayer) players.get(1);
 
         final AtomicBoolean notifiedTwice = new AtomicBoolean(false);
 

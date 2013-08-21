@@ -23,6 +23,7 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.event.client.MadeMove;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
@@ -140,6 +141,10 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     public GameSession<State> setState(State state) {
         this.state = state;
         return this;
+    }
+
+    public GameInitiation toInitiation() {
+        return new GameInitiation(specification.getName().getGame(), session, players, specification);
     }
 
     @Override

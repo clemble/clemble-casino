@@ -1,9 +1,11 @@
 package com.gogomaya.server.go;
 
 import com.gogomaya.server.ActionLatch;
+import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameAccount;
 import com.gogomaya.server.game.GamePlayerIterator;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 
 public class GoGameState implements GameState {
@@ -46,6 +48,12 @@ public class GoGameState implements GameState {
     public int getVersion() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public <State extends GameState> GameServerEvent<State> process(ClientEvent move) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

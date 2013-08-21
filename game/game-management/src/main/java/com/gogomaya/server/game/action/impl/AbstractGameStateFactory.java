@@ -25,11 +25,6 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
     }
 
     @Override
-    final public State constructState(final GameInitiation initiation) {
-        return constructState(initiation.getSpecification(), initiation.getParticipants());
-    }
-
-    @Override
     public State constructState(final GameSession<State> session) {
         // Step 1. Sanity check
         if (session == null || session.getSpecification() == null) {
@@ -37,7 +32,7 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
         }
         GameConstruction construction = constructionRepository.findOne(session.getSession());
         // Step 2. Re creating state
-        State restoredState = constructState(session.getSpecification(), session.getPlayers());
+        State restoredState = constructState(session.toInitiation());
         GameProcessor<State> processor = processorFactory.create(new GameInitiation(construction));
         // Step 2.1 To prevent population of original session with duplicated events
         GameSession<State> tmpSession = new GameSession<State>();

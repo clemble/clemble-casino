@@ -18,25 +18,25 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
-import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
+import com.gogomaya.server.integration.game.tictactoe.PicPacPoeSessionPlayer;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
-public class TicTacToeTimeoutTest {
+public class PicPacPoeTimeoutTest {
 
     @Inject
     public GameScenarios gameOperations;
 
     @Test
     public void testMoveTimeout() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameOperations.constructGame(Game.pic);
-        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
-        TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
+        List<GameSessionPlayer<PicPacPoeState>> players = gameOperations.constructGame(Game.pic);
+        PicPacPoeSessionPlayer playerA = (PicPacPoeSessionPlayer) players.get(0);
+        PicPacPoeSessionPlayer playerB = (PicPacPoeSessionPlayer) players.get(1);
         GogomayaException gogomayaException = null;
         try {
 
@@ -61,9 +61,9 @@ public class TicTacToeTimeoutTest {
 
     @Test
     public void testTotalTimeout() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameOperations.constructGame(Game.pic);
-        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
-        TicTacToeSessionPlayer playerB = (TicTacToeSessionPlayer) players.get(1);
+        List<GameSessionPlayer<PicPacPoeState>> players = gameOperations.constructGame(Game.pic);
+        PicPacPoeSessionPlayer playerA = (PicPacPoeSessionPlayer) players.get(0);
+        PicPacPoeSessionPlayer playerB = (PicPacPoeSessionPlayer) players.get(1);
         GogomayaException gogomayaException = null;
 
         Assert.assertTrue(playerA.getSpecification().getTotalTimeRule().getLimit() > 0);

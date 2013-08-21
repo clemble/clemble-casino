@@ -23,7 +23,8 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 
 @Configuration
-@Import({ PaymentCommonSpringConfiguration.Test.class, PaymentCommonSpringConfiguration.RemoteIntegrationPaymentConfiguration.class,
+@Import({ PaymentCommonSpringConfiguration.Test.class,
+        PaymentCommonSpringConfiguration.RemoteIntegrationPaymentConfiguration.class,
         PaymentCommonSpringConfiguration.LocalIntegrationPaymentConfiguration.class,
         PaymentCommonSpringConfiguration.DefaultIntegrationPaymentConfiguration.class })
 public class PaymentCommonSpringConfiguration implements SpringConfiguration {

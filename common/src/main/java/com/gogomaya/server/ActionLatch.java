@@ -2,6 +2,7 @@ package com.gogomaya.server;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +22,10 @@ public class ActionLatch implements Serializable {
 
     final private Map<Long, ClientEvent> actions = new HashMap<Long, ClientEvent>();
     final private Class<?> expectedClass;
+
+    public ActionLatch(final Long participant, final String action) {
+        this(Collections.singleton(participant), action);
+    }
 
     public ActionLatch(final Collection<Long> participants, final String action) {
         this(participants, action, null);

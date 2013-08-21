@@ -59,4 +59,32 @@ public class GamePlayerAccount implements PlayerAware {
         return "PlayerState [player=" + playerId + ", money=" + moneyLeft + "]";
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (moneyLeft ^ (moneyLeft >>> 32));
+        result = prime * result + (int) (moneySpent ^ (moneySpent >>> 32));
+        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GamePlayerAccount other = (GamePlayerAccount) obj;
+        if (moneyLeft != other.moneyLeft)
+            return false;
+        if (moneySpent != other.moneySpent)
+            return false;
+        if (playerId != other.playerId)
+            return false;
+        return true;
+    }
+
 }

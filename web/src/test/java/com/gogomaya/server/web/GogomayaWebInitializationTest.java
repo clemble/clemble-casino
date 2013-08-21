@@ -11,7 +11,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -19,7 +19,7 @@ import com.gogomaya.server.tictactoe.TicTacToeState;
 public class GogomayaWebInitializationTest {
 
     @Inject
-    GameSessionRepository<TicTacToeState> gameSessionRepository;
+    GameSessionRepository<PicPacPoeState> gameSessionRepository;
 
     @Test
     public void testInitialized() {

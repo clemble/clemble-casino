@@ -9,9 +9,9 @@ import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.GenericGameSessionPlayer;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
-public class TicTacToeSessionPlayer extends GenericGameSessionPlayer<TicTacToeState> {
+public class PicPacPoeSessionPlayer extends GenericGameSessionPlayer<PicPacPoeState> {
 
     /**
      * Generated 04/07/13
@@ -20,7 +20,7 @@ public class TicTacToeSessionPlayer extends GenericGameSessionPlayer<TicTacToeSt
 
     final private AtomicInteger moneySpent = new AtomicInteger();
 
-    public TicTacToeSessionPlayer(final GameSessionPlayer<TicTacToeState> delegate) {
+    public PicPacPoeSessionPlayer(final GameSessionPlayer<PicPacPoeState> delegate) {
         super(delegate);
     }
 

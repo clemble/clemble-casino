@@ -1,10 +1,11 @@
 package com.gogomaya.integration.error;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -19,12 +20,12 @@ import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
-import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
+import com.gogomaya.server.integration.game.tictactoe.PicPacPoeSessionPlayer;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -33,7 +34,7 @@ import com.gogomaya.server.tictactoe.TicTacToeState;
 public class ErrorStatusCodeTest {
 
     @Inject
-    GameConstructionOperations<TicTacToeState> gameOperations;
+    GameConstructionOperations<PicPacPoeState> gameOperations;
 
     @Inject
     PlayerOperations playerOperations;
@@ -43,8 +44,8 @@ public class ErrorStatusCodeTest {
 
     @Test(expected = GogomayaException.class)
     public void testSelectTwiceError() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
-        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+        List<GameSessionPlayer<PicPacPoeState>> players = gameScenarios.constructGame(Game.pic);
+        PicPacPoeSessionPlayer playerA = (PicPacPoeSessionPlayer) players.get(0);
 
         playerA.select(0, 0);
         playerA.select(1, 1);
@@ -52,8 +53,8 @@ public class ErrorStatusCodeTest {
 
     @Test(expected = GogomayaException.class)
     public void testBetBig() {
-        List<GameSessionPlayer<TicTacToeState>> players = gameScenarios.constructGame(Game.pic);
-        TicTacToeSessionPlayer playerA = (TicTacToeSessionPlayer) players.get(0);
+        List<GameSessionPlayer<PicPacPoeState>> players = gameScenarios.constructGame(Game.pic);
+        PicPacPoeSessionPlayer playerA = (PicPacPoeSessionPlayer) players.get(0);
 
         playerA.select(0, 0);
         playerA.bet(1000);
@@ -65,9 +66,9 @@ public class ErrorStatusCodeTest {
 
         GameSpecification specification = gameOperations.selectSpecification(playerA);
 
-        GameSessionPlayer<TicTacToeState> gamePlayer = gameOperations.constructAutomatic(playerA, specification);
-        GameSessionPlayer<TicTacToeState> anotherGamePlayer = gameOperations.constructAutomatic(playerA, specification);
-        Assert.assertEquals(gamePlayer.getSession(), anotherGamePlayer.getSession());
+        GameSessionPlayer<PicPacPoeState> gamePlayer = gameOperations.constructAutomatic(playerA, specification);
+        GameSessionPlayer<PicPacPoeState> anotherGamePlayer = gameOperations.constructAutomatic(playerA, specification);
+        assertEquals(gamePlayer.getSession(), anotherGamePlayer.getSession());
 
         gamePlayer.close();
     }

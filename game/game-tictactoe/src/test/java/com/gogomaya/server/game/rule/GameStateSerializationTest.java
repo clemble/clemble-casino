@@ -12,12 +12,14 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.server.game.GameAccount;
 import com.gogomaya.server.game.GamePlayerAccount;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.SequentialPlayerIterator;
 import com.gogomaya.server.game.cell.Cell;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
 @Ignore
 public class GameStateSerializationTest {
@@ -33,24 +35,24 @@ public class GameStateSerializationTest {
 
     @Test
     public void testSerialize() throws JsonGenerationException, JsonMappingException, IOException {
-        TicTacToeState readState = null;
+        PicPacPoeState readState = null;
 
         Collection<GamePlayerAccount> players = new ArrayList<GamePlayerAccount>();
         players.add(new GamePlayerAccount(1L, 50L));
         players.add(new GamePlayerAccount(2L, 50L));
 
-        TicTacToeState tacToeState = new TicTacToeState(players);
-        tacToeState.addMadeMove(new SelectCellEvent(1L, Cell.create(0, 0)));
+        PicPacPoeState tacToeState = new PicPacPoeState(new GameAccount(players), new SequentialPlayerIterator(players));
+        tacToeState.process(new SelectCellEvent(1L, Cell.create(0, 0)));
         Assert.assertNotNull(tacToeState.getActionLatch().fetchAction(1L));
 
         String jsonPresentation = objectMapper.writeValueAsString(tacToeState);
         System.out.println(jsonPresentation);
-        readState = (TicTacToeState) objectMapper.readValue(jsonPresentation, GameState.class);
+        readState = (PicPacPoeState) objectMapper.readValue(jsonPresentation, GameState.class);
         Assert.assertFalse(readState.getActionLatch().acted(1L));
 
         jsonPresentation = anotherObjectMapper.writeValueAsString(tacToeState);
         System.out.println(jsonPresentation);
-        readState = (TicTacToeState) anotherObjectMapper.readValue(jsonPresentation, GameState.class);
+        readState = (PicPacPoeState) anotherObjectMapper.readValue(jsonPresentation, GameState.class);
 
         Assert.assertTrue(readState.getActionLatch().acted(1L));
 
@@ -58,7 +60,7 @@ public class GameStateSerializationTest {
 
     @Test
     public void testState() throws JsonParseException, JsonMappingException, IOException {
-        TicTacToeState state = (TicTacToeState) anotherObjectMapper.readValue(presentation, GameState.class);
+        PicPacPoeState state = (PicPacPoeState) anotherObjectMapper.readValue(presentation, GameState.class);
 
         String jsonPresentation = anotherObjectMapper.writeValueAsString(state);
         System.out.println(jsonPresentation);

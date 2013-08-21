@@ -15,12 +15,12 @@ import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
 import com.gogomaya.server.integration.game.construction.PlayerGameConstructionOperations;
-import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
+import com.gogomaya.server.integration.game.tictactoe.PicPacPoeSessionPlayer;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,13 +42,13 @@ public class WalletOperationsTest {
 
         Collection<Long> participants = ImmutableList.of(playerA.getPlayerId(), playerB.getPlayerId());
 
-        PlayerGameConstructionOperations<TicTacToeState> playerAConstructionOp = playerA.getGameConstructor(Game.pic);
-        PlayerGameConstructionOperations<TicTacToeState> playerBConstructionOp = playerB.getGameConstructor(Game.pic);
+        PlayerGameConstructionOperations<PicPacPoeState> playerAConstructionOp = playerA.getGameConstructor(Game.pic);
+        PlayerGameConstructionOperations<PicPacPoeState> playerBConstructionOp = playerB.getGameConstructor(Game.pic);
 
         do {
-            TicTacToeSessionPlayer sessionAPlayer = (TicTacToeSessionPlayer) playerAConstructionOp.constructAvailability(
+            PicPacPoeSessionPlayer sessionAPlayer = (PicPacPoeSessionPlayer) playerAConstructionOp.constructAvailability(
                     playerAConstructionOp.selectSpecification(), participants);
-            TicTacToeSessionPlayer sessionBPlayer = (TicTacToeSessionPlayer) playerBConstructionOp.acceptInvitation(sessionAPlayer.getSession());
+            PicPacPoeSessionPlayer sessionBPlayer = (PicPacPoeSessionPlayer) playerBConstructionOp.acceptInvitation(sessionAPlayer.getSession());
 
             sessionAPlayer.waitForStart();
             sessionBPlayer.waitForStart();

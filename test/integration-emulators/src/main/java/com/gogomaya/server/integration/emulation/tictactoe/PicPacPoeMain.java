@@ -11,9 +11,9 @@ import com.gogomaya.server.integration.emulator.GameplayEmulator;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
-public class TicTacToeMain {
+public class PicPacPoeMain {
 
     @SuppressWarnings({ "resource", "unchecked" })
     public static void main(String[] arguments) {
@@ -26,7 +26,7 @@ public class TicTacToeMain {
         applicationContext.start();
 
         // Step 2. Starting game emulator
-        GameplayEmulator<TicTacToeState> emulator = applicationContext.getBean(GameplayEmulator.class);
+        GameplayEmulator<PicPacPoeState> emulator = applicationContext.getBean(GameplayEmulator.class);
         emulator.emulate();
 
         // Step 3. To guarantee proper resource release, registering shutdown hook
@@ -37,20 +37,20 @@ public class TicTacToeMain {
     public static class MainConfiguration {
 
         @Inject
-        public GameConstructionOperations<TicTacToeState> gameOperations;
+        public GameConstructionOperations<PicPacPoeState> gameOperations;
 
         @Inject
         public PlayerOperations playerOperations;
 
         @Bean
         @Singleton
-        public TicTacToeActor actor() {
-            return new TicTacToeActor();
+        public PicPacPoeActor actor() {
+            return new PicPacPoeActor();
         }
 
         @Bean
         @Singleton
-        public GameplayEmulator<TicTacToeState> emulator() {
+        public GameplayEmulator<PicPacPoeState> emulator() {
             return new GameplayEmulator<>(playerOperations, gameOperations, actor());
         }
 

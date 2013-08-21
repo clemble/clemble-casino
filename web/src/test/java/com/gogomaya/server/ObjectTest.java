@@ -1,5 +1,6 @@
 package com.gogomaya.server;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
@@ -9,6 +10,7 @@ import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAccount;
 import com.gogomaya.server.game.GamePlayerAccount;
+import com.gogomaya.server.game.SequentialPlayerIterator;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
 import com.gogomaya.server.game.configuration.SelectRuleOptions;
 import com.gogomaya.server.game.construct.AutomaticGameRequest;
@@ -40,7 +42,7 @@ import com.gogomaya.server.player.PlayerGender;
 import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 import com.google.common.collect.ImmutableList;
 import com.stresstest.random.AbstractValueGenerator;
 import com.stresstest.random.ObjectGenerator;
@@ -55,11 +57,10 @@ public class ObjectTest {
             }
 
         });
-        ObjectGenerator.register(TicTacToeState.class, new AbstractValueGenerator<TicTacToeState>() {
-            public TicTacToeState generate() {
-                TicTacToeState tacToeState = new TicTacToeState();
-                tacToeState.setAccount(new GameAccount(ImmutableList.<GamePlayerAccount> of(new GamePlayerAccount(1, 50), new GamePlayerAccount(2, 50))));
-                return tacToeState;
+        ObjectGenerator.register(PicPacPoeState.class, new AbstractValueGenerator<PicPacPoeState>() {
+            public PicPacPoeState generate() {
+                Collection<GamePlayerAccount> playerAccounts = ImmutableList.<GamePlayerAccount> of(new GamePlayerAccount(1, 50), new GamePlayerAccount(2, 50));
+                return new PicPacPoeState(new GameAccount(playerAccounts), new SequentialPlayerIterator(playerAccounts));
             }
 
         });
@@ -82,9 +83,9 @@ public class ObjectTest {
 
             @Override
             public GameStartedEvent generate() {
-                GameStartedEvent<TicTacToeState> gameStartedEvent = new GameStartedEvent<>();
+                GameStartedEvent<PicPacPoeState> gameStartedEvent = new GameStartedEvent<>();
                 gameStartedEvent.setSession(10L);
-                gameStartedEvent.setState(ObjectGenerator.generate(TicTacToeState.class));
+                gameStartedEvent.setState(ObjectGenerator.generate(PicPacPoeState.class));
                 return gameStartedEvent;
             }
 

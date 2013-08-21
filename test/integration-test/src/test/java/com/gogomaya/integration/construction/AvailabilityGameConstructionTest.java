@@ -20,12 +20,12 @@ import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
 import com.gogomaya.server.integration.game.construction.PlayerGameConstructionOperations;
-import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
+import com.gogomaya.server.integration.game.tictactoe.PicPacPoeSessionPlayer;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,10 +48,10 @@ public class AvailabilityGameConstructionTest {
         Player playerA = playerOperations.createPlayer();
         Player playerB = playerOperations.createPlayer();
 
-        PlayerGameConstructionOperations<?> constructionOperations = playerA.<TicTacToeState> getGameConstructor(Game.pic);
+        PlayerGameConstructionOperations<?> constructionOperations = playerA.<PicPacPoeState> getGameConstructor(Game.pic);
         GameSpecification specification = constructionOperations.selectSpecification();
 
-        TicTacToeSessionPlayer sessionPlayer = (TicTacToeSessionPlayer) constructionOperations.constructAvailability(specification,
+        PicPacPoeSessionPlayer sessionPlayer = (PicPacPoeSessionPlayer) constructionOperations.constructAvailability(specification,
                 ImmutableList.<Long> of(playerA.getPlayerId(), playerB.getPlayerId()));
         playerB.getGameConstructor(Game.pic).acceptInvitation(sessionPlayer.getSession());
 
@@ -61,7 +61,7 @@ public class AvailabilityGameConstructionTest {
 
     @Test
     public void testScenarioCreation() {
-        List<GameSessionPlayer<TicTacToeState>> sessionPlayers = gameScenarios.constructGame(Game.pic);
+        List<GameSessionPlayer<PicPacPoeState>> sessionPlayers = gameScenarios.constructGame(Game.pic);
 
         Assert.assertTrue(sessionPlayers.get(0).isToMove());
     }
@@ -74,17 +74,17 @@ public class AvailabilityGameConstructionTest {
         Player playerC = playerOperations.createPlayer();
         try {
             // Step 2. Generating 2 instant game request A - B and A - C
-            TicTacToeSessionPlayer sessionABPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(Game.pic)
+            PicPacPoeSessionPlayer sessionABPlayer = (PicPacPoeSessionPlayer) playerA.<PicPacPoeState> getGameConstructor(Game.pic)
                     .constructAvailability(ImmutableList.<Long> of(playerA.getPlayerId(), playerB.getPlayerId()));
-            TicTacToeSessionPlayer sessionACPlayer = (TicTacToeSessionPlayer) playerA.<TicTacToeState> getGameConstructor(Game.pic)
+            PicPacPoeSessionPlayer sessionACPlayer = (PicPacPoeSessionPlayer) playerA.<PicPacPoeState> getGameConstructor(Game.pic)
                     .constructAvailability(ImmutableList.<Long> of(playerA.getPlayerId(), playerC.getPlayerId()));
             // Step 3. Accepting A - C game request to start A - C game
-            TicTacToeSessionPlayer sessionCAPlayer = (TicTacToeSessionPlayer) playerC.<TicTacToeState> getGameConstructor(Game.pic).acceptInvitation(
+            PicPacPoeSessionPlayer sessionCAPlayer = (PicPacPoeSessionPlayer) playerC.<PicPacPoeState> getGameConstructor(Game.pic).acceptInvitation(
                     sessionACPlayer.getSession());
             sessionACPlayer.waitForStart();
             sessionACPlayer.syncWith(sessionCAPlayer);
             // Step 4. Accepting A - B game request to start A - B game, it should not be started until A - C game finishes
-            TicTacToeSessionPlayer sessionBAPlayer = (TicTacToeSessionPlayer) playerB.<TicTacToeState> getGameConstructor(Game.pic).acceptInvitation(
+            PicPacPoeSessionPlayer sessionBAPlayer = (PicPacPoeSessionPlayer) playerB.<PicPacPoeState> getGameConstructor(Game.pic).acceptInvitation(
                     sessionABPlayer.getSession());
             // Step 4.1 Checking appropriate alive states for A - B game
             assertLivenes(sessionBAPlayer, false);

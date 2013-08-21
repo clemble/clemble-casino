@@ -10,11 +10,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.web.TicTacToeWebSpringConfiguration;
+import com.gogomaya.server.spring.web.PicPacPoeWebSpringConfiguration;
 import com.gogomaya.server.web.game.session.GameConstructionController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TicTacToeWebSpringConfiguration.class)
+@ContextConfiguration(classes = PicPacPoeWebSpringConfiguration.class)
 @ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @WebAppConfiguration
 public class GameWebContextInitiationTest {

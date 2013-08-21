@@ -15,7 +15,7 @@ import com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 
 @Configuration
-@Import({ WebCommonSpringConfiguration.class, TicTacToeWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, PaymentWebSpringConfiguration.class })
+@Import({ WebCommonSpringConfiguration.class, PicPacPoeWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, PaymentWebSpringConfiguration.class })
 public class WebMvcSpiSpringConfiguration implements SpringConfiguration {
 
     @Autowired

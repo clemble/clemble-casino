@@ -22,7 +22,7 @@ import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -34,7 +34,7 @@ public class GameOperationsTest {
     PlayerOperations playerOperations;
 
     @Inject
-    GameConstructionOperations<TicTacToeState> gameOperations;
+    GameConstructionOperations<PicPacPoeState> gameOperations;
 
     @Inject
     PlayerListenerOperations gameListenerOperations;
@@ -45,7 +45,7 @@ public class GameOperationsTest {
         Player player = playerOperations.createPlayer(DataGenerator.randomProfile());
         GameSpecification specification = selectSpecification(player, 0);
         // Step 2. Creating game table
-        GameSessionPlayer<TicTacToeState> gameTable = gameOperations.constructAutomatic(player, specification);
+        GameSessionPlayer<PicPacPoeState> gameTable = gameOperations.constructAutomatic(player, specification);
         Assert.assertNotNull(gameTable);
     }
 

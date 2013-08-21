@@ -16,10 +16,10 @@ import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.repository.game.GameTableRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
-import com.gogomaya.server.spring.web.TicTacToeWebSpringConfiguration.GameDefaultAndTest;
-import com.gogomaya.server.tictactoe.TicTacToeState;
-import com.gogomaya.server.tictactoe.configuration.TicTacToeConfigurationManager;
+import com.gogomaya.server.spring.tictactoe.PicPacPoeSpringConfiguration;
+import com.gogomaya.server.spring.web.PicPacPoeWebSpringConfiguration.GameDefaultAndTest;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
+import com.gogomaya.server.tictactoe.configuration.PicPacPoeConfigurationManager;
 import com.gogomaya.server.web.game.options.GameConfigurationManagerController;
 import com.gogomaya.server.web.game.session.GameActionController;
 import com.gogomaya.server.web.game.session.GameConstructionController;
@@ -28,52 +28,52 @@ import com.mangofactory.swagger.configuration.DefaultConfigurationModule;
 import com.mangofactory.swagger.configuration.ExtensibilityModule;
 
 @Configuration
-@Import(value = { TicTacToeSpringConfiguration.class, WebCommonSpringConfiguration.class, GameDefaultAndTest.class })
-public class TicTacToeWebSpringConfiguration implements SpringConfiguration {
+@Import(value = { PicPacPoeSpringConfiguration.class, WebCommonSpringConfiguration.class, GameDefaultAndTest.class })
+public class PicPacPoeWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("gameSessionRepository")
-    public GameSessionRepository<TicTacToeState> gameSessionRepository;
+    public GameSessionRepository<PicPacPoeState> gameSessionRepository;
 
     @Autowired
     @Qualifier("gameTableRepository")
-    public GameTableRepository<TicTacToeState> tableRepository;
+    public GameTableRepository<PicPacPoeState> tableRepository;
 
     @Autowired
     @Qualifier("gameConstructionRepository")
     public GameConstructionRepository constructionRepository;
 
     @Autowired
-    @Qualifier("ticTacToeConstructionService")
+    @Qualifier("picPacPoeConstructionService")
     public GameConstructionService constructionService;
 
     @Autowired
-    @Qualifier("ticTacToeConfigurationManager")
-    public TicTacToeConfigurationManager ticTacToeConfigurationManager;
+    @Qualifier("picPacPoeConfigurationManager")
+    public PicPacPoeConfigurationManager picPacPoeConfigurationManager;
 
     @Autowired
-    @Qualifier("ticTacToeSessionProcessor")
-    public GameSessionProcessor<TicTacToeState> ticTacToeSessionProcessor;
+    @Qualifier("picPacPoeSessionProcessor")
+    public GameSessionProcessor<PicPacPoeState> picPacPoeSessionProcessor;
 
     @Autowired
     public GameSpecificationRegistry gameSpecificationRegistry;
 
     @Bean
     @Singleton
-    public GameConstructionController<TicTacToeState> ticTacToeConstructionController() {
-        return new GameConstructionController<TicTacToeState>(constructionRepository, constructionService, gameSpecificationRegistry);
+    public GameConstructionController<PicPacPoeState> picPacPoeConstructionController() {
+        return new GameConstructionController<PicPacPoeState>(constructionRepository, constructionService, gameSpecificationRegistry);
     }
 
     @Bean
     @Singleton
-    public GameConfigurationManagerController ticTacToeConfigurationManagerController() {
+    public GameConfigurationManagerController picPacPoeConfigurationManagerController() {
         return new GameConfigurationManagerController(gameSpecificationRegistry);
     }
 
     @Bean
     @Singleton
-    public GameActionController<TicTacToeState> ticTacToeEngineController() {
-        return new GameActionController<TicTacToeState>(gameSessionRepository, ticTacToeSessionProcessor);
+    public GameActionController<PicPacPoeState> picPacPoeEngineController() {
+        return new GameActionController<PicPacPoeState>(gameSessionRepository, picPacPoeSessionProcessor);
     }
 
     @Configuration

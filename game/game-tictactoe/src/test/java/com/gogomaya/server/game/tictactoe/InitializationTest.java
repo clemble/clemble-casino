@@ -7,11 +7,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
+import com.gogomaya.server.spring.tictactoe.PicPacPoeSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.PROFILE_TEST)
-@ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
+@ContextConfiguration(classes = { PicPacPoeSpringConfiguration.class })
 public class InitializationTest {
 
     @Test

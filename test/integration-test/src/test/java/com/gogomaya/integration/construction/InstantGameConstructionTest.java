@@ -22,7 +22,7 @@ import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.player.PlayerAware;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -31,7 +31,7 @@ import com.gogomaya.server.tictactoe.TicTacToeState;
 public class InstantGameConstructionTest {
 
     @Autowired
-    public GameConstructionOperations<TicTacToeState> constructionOperations;
+    public GameConstructionOperations<PicPacPoeState> constructionOperations;
 
     @Autowired
     public PlayerOperations playerOperations;
@@ -41,7 +41,7 @@ public class InstantGameConstructionTest {
         Player A = playerOperations.createPlayer();
         Player B = playerOperations.createPlayer();
 
-        GameSessionPlayer<TicTacToeState> playerA = A.<TicTacToeState> getGameConstructor(Game.pic).constructAvailability(A, B);
+        GameSessionPlayer<PicPacPoeState> playerA = A.<PicPacPoeState> getGameConstructor(Game.pic).constructAvailability(A, B);
         PlayerAware AtoAaction = constructionOperations.constructionResponse(A, A.getPlayerId(), playerA.getSession());
         PlayerAware AtoBaction = constructionOperations.constructionResponse(A, B.getPlayerId(), playerA.getSession());
 

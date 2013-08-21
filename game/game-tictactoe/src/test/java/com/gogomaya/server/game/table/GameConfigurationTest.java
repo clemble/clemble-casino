@@ -13,17 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
-import com.gogomaya.server.tictactoe.configuration.TicTacToeConfigurationManager;
+import com.gogomaya.server.spring.tictactoe.PicPacPoeSpringConfiguration;
+import com.gogomaya.server.tictactoe.configuration.PicPacPoeConfigurationManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.PROFILE_TEST)
-@ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
+@ContextConfiguration(classes = { PicPacPoeSpringConfiguration.class })
 @Transactional
 public class GameConfigurationTest {
 
     @Inject
-    TicTacToeConfigurationManager ticTacToeConfigurationManager;
+    PicPacPoeConfigurationManager ticTacToeConfigurationManager;
 
     @Test
     public void testOptions() {

@@ -10,12 +10,12 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
+import com.gogomaya.server.spring.tictactoe.PicPacPoeSpringConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.PROFILE_TEST)
-@ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
+@ContextConfiguration(classes = { PicPacPoeSpringConfiguration.class })
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class GameTableManagerTest {
     

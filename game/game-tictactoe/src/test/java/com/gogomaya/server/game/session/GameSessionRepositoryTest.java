@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameTable;
+import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
 import com.gogomaya.server.game.rule.construct.PlayerNumberRule;
 import com.gogomaya.server.game.rule.construct.PrivacyRule;
@@ -30,13 +31,13 @@ import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.repository.game.GameSpecificationRepository;
 import com.gogomaya.server.repository.game.GameTableRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.tictactoe.TicTacToeSpringConfiguration;
-import com.gogomaya.server.tictactoe.TicTacToeState;
-import com.gogomaya.server.tictactoe.action.impl.TicTacToeStateFactory;
+import com.gogomaya.server.spring.tictactoe.PicPacPoeSpringConfiguration;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
+import com.gogomaya.server.tictactoe.PicPacPoeStateFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.PROFILE_TEST)
-@ContextConfiguration(classes = { TicTacToeSpringConfiguration.class })
+@ContextConfiguration(classes = { PicPacPoeSpringConfiguration.class })
 public class GameSessionRepositoryTest {
 
     GameSpecification DEFAULT_SPECIFICATION = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT")).setBetRule(FixedBetRule.DEFAULT)
@@ -44,13 +45,13 @@ public class GameSessionRepositoryTest {
             .setTotalTimeRule(TotalTimeRule.DEFAULT).setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);;
 
     @Inject
-    GameSessionRepository<TicTacToeState> sessionRepository;
+    GameSessionRepository<PicPacPoeState> sessionRepository;
 
     @Inject
-    GameTableRepository<TicTacToeState> tableRepository;
+    GameTableRepository<PicPacPoeState> tableRepository;
 
     @Inject
-    TicTacToeStateFactory stateFactory;
+    PicPacPoeStateFactory stateFactory;
 
     @Inject
     GameSpecificationRepository specificationRepository;
@@ -65,21 +66,21 @@ public class GameSessionRepositoryTest {
         List<Long> players = new ArrayList<Long>();
         players.add(1L);
         players.add(2L);
+        GameInitiation initiation = new GameInitiation(Game.pic, 0, players, DEFAULT_SPECIFICATION);
+        PicPacPoeState gameState = stateFactory.constructState(initiation);
 
-        TicTacToeState gameState = stateFactory.constructState(DEFAULT_SPECIFICATION, players);
-
-        GameTable<TicTacToeState> gameTable = new GameTable<TicTacToeState>();
+        GameTable<PicPacPoeState> gameTable = new GameTable<PicPacPoeState>();
         gameTable.setSpecification(DEFAULT_SPECIFICATION);
         gameTable.setPlayers(players);
 
-        gameTable.setCurrentSession(new GameSession<TicTacToeState>());
-        
+        gameTable.setCurrentSession(new GameSession<PicPacPoeState>());
+
         gameTable = tableRepository.save(gameTable);
 
         Assert.assertNotNull(gameTable.getCurrentSession());
         gameTable.getCurrentSession().setState(gameState);
 
-        GameSession<TicTacToeState> gameSession = new GameSession<TicTacToeState>();
+        GameSession<PicPacPoeState> gameSession = new GameSession<PicPacPoeState>();
         gameSession.setPlayers(players);
         gameSession.setSpecification(DEFAULT_SPECIFICATION);
 

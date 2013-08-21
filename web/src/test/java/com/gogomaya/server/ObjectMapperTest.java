@@ -36,12 +36,12 @@ import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.server.game.event.schedule.PlayerInvitedEvent;
 import com.gogomaya.server.game.event.server.GameEndedEvent;
-import com.gogomaya.server.game.event.server.PlayerSurrenderedEvent;
 import com.gogomaya.server.game.event.server.PlayerMovedEvent;
+import com.gogomaya.server.game.event.server.PlayerSurrenderedEvent;
 import com.gogomaya.server.game.rule.GameRule;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 import com.gogomaya.server.utils.ReflectionUtils;
 import com.stresstest.random.ObjectGenerator;
 
@@ -66,13 +66,13 @@ public class ObjectMapperTest extends ObjectTest {
 
         ObjectGenerator.generate(GameSpecification.class);
         ObjectGenerator.generate(PlayerInvitedEvent.class);
-        ObjectGenerator.generate(TicTacToeState.class);
+        ObjectGenerator.generate(PicPacPoeState.class);
         ObjectGenerator.generate(GameEndedEvent.class);
     }
 
     @Test
     public void testSpecialSerialization() {
-        Assert.assertNull(checkSerialization(TicTacToeState.class));
+        Assert.assertNull(checkSerialization(PicPacPoeState.class));
         Assert.assertNull(checkSerialization(BetEvent.class));
         Assert.assertNull(checkSerialization(PlayerMovedEvent.class));
         Assert.assertNull(checkSerialization(PlayerSurrenderedEvent.class));

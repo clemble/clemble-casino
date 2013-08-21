@@ -4,15 +4,15 @@ import java.util.Random;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
 import com.gogomaya.server.integration.emulator.GameActor;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
-import com.gogomaya.server.integration.game.tictactoe.TicTacToeSessionPlayer;
-import com.gogomaya.server.tictactoe.TicTacToeState;
+import com.gogomaya.server.integration.game.tictactoe.PicPacPoeSessionPlayer;
+import com.gogomaya.server.tictactoe.PicPacPoeBoard;
+import com.gogomaya.server.tictactoe.PicPacPoeState;
 
-public class TicTacToeActor implements GameActor<TicTacToeState> {
+public class PicPacPoeActor implements GameActor<PicPacPoeState> {
 
     /**
      * Generated 13/07/13
@@ -27,16 +27,16 @@ public class TicTacToeActor implements GameActor<TicTacToeState> {
     }
 
     @Override
-    public void move(GameSessionPlayer<TicTacToeState> playerToMove) {
-        TicTacToeSessionPlayer player = (TicTacToeSessionPlayer) playerToMove;
+    public void move(GameSessionPlayer<PicPacPoeState> playerToMove) {
+        PicPacPoeSessionPlayer player = (PicPacPoeSessionPlayer) playerToMove;
         // Step 1. Checking next move
         ClientEvent nextMove = playerToMove.getNextMove();
         if (nextMove instanceof SelectCellEvent) {
             // Step 1.1 Select move to be made
-            CellState[][] board = playerToMove.getState().getBoard();
+            PicPacPoeBoard board = playerToMove.getState().getBoard();
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    if (!board[i][j].owned()) {
+                    if (!board.owned(i, j)) {
                         player.select(i, j);
                         return;
                     }
