@@ -81,7 +81,7 @@ public enum GogomayaError {
     GamePlayBetOverflow(Code.GAMEPLAY_BET_OVERFLOW_CODE, "Bet ammount overflow"),
     GamePlayBetInvalid(Code.GAMEPLAY_BET_INVALID_CODE, "Bet invalid event"),
 
-    TicTacToeCellOwned(Code.TIC_TAC_TOE_CELL_OWNED_CODE, "Cell already Owned"),
+    CellOwned(Code.TIC_TAC_TOE_CELL_OWNED_CODE, "Cell already Owned"),
 
     GameStateReCreationFailure(Code.GAME_STATE_RECREATION_FAILURE_CODE, "Can't create state from provided session"),
 

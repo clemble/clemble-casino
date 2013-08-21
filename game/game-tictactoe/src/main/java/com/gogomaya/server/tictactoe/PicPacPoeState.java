@@ -73,7 +73,7 @@ public class PicPacPoeState implements GameState {
             Cell cellToSelect = ((SelectCellEvent) clientEvent).getCell();
             // Step 1. Sanity check
             if (board.getBoard()[cellToSelect.getRow()][cellToSelect.getColumn()].owned()) {
-                throw GogomayaException.fromError(GogomayaError.TicTacToeCellOwned);
+                throw GogomayaException.fromError(GogomayaError.CellOwned);
             }
             // Step 2. Generating next moves
             board.setSelected(cellToSelect);

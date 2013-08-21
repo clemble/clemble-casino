@@ -1,18 +1,18 @@
 package com.gogomaya.server.tictactoe;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.server.game.cell.Cell;
+import com.gogomaya.server.game.cell.CellBoard;
 import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.outcome.DrawOutcome;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
 import com.gogomaya.server.player.PlayerAware;
 
-public class PicPacPoeBoard implements Serializable {
+public class PicPacPoeBoard implements CellBoard {
 
     private static final long serialVersionUID = -3282042914639667829L;
 
@@ -34,8 +34,14 @@ public class PicPacPoeBoard implements Serializable {
         this.board = board;
     }
 
+    @Override
     public CellState[][] getBoard() {
         return board;
+    }
+
+    @Override
+    public boolean owned(int row, int column) {
+        return board[row][column].owned();
     }
 
     public Cell getSelected() {
@@ -49,10 +55,6 @@ public class PicPacPoeBoard implements Serializable {
     public void setSelectedState(CellState cellState) {
         if (selected != null)
             board[selected.getRow()][selected.getColumn()] = cellState;
-    }
-    
-    public boolean owned(int row, int column) {
-        return board[row][column].owned();
     }
 
     @Override

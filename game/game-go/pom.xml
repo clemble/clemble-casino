@@ -12,5 +12,9 @@
             <groupId>com.gogomaya.server</groupId>
             <artifactId>game-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gogomaya.server</groupId>
+            <artifactId>game-common-cell</artifactId>
+        </dependency>
     </dependencies>
 </project>
