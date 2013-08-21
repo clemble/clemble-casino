@@ -2,7 +2,6 @@ package com.gogomaya.server.game.action;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Collection;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.gogomaya.server.error.GogomayaError;
@@ -80,11 +79,10 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
             // Step 4. Retrieving game processor based on session identifier
             GameProcessor<State> processor = cache.getProcessor();
             // Step 5. Processing movement
-            Collection<GameServerEvent<State>> events = processor.process(cache.getSession(), move);
-            for (GameServerEvent<State> event : events)
-                event.setSession(sessionId);
+            GameServerEvent<State> event = processor.process(cache.getSession(), move);
+            event.setSession(sessionId);
             // Step 6. Invoking appropriate notification
-            notificationService.notify(cache.getPlayerIds(), events);
+            notificationService.notify(cache.getPlayerIds(), event);
             // Step 7. Returning state of the game
             return cache.getSession().getState();
         } finally {

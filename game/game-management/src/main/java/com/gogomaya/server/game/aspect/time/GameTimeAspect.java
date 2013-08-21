@@ -2,8 +2,6 @@ package com.gogomaya.server.game.aspect.time;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Collection;
-
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
@@ -39,11 +37,11 @@ public class GameTimeAspect<State extends GameState> implements GameAspect<State
     }
 
     @Override
-    public void afterMove(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+    public void afterMove(State state, GameServerEvent<State> events) {
         // Step 1. To check if we need rescheduling, first calculate time before
         long breachTimeBeforeMove = sessionTimeTracker.getBreachTime();
         // Step 2. Updating sessionTimeTracker
-        for (ClientEvent nextMove : session.getState().getActionLatch().getActions()) {
+        for (ClientEvent nextMove : state.getActionLatch().getActions()) {
             sessionTimeTracker.markToMove(nextMove);
         }
         // Step 3. Re scheduling if needed
@@ -53,7 +51,7 @@ public class GameTimeAspect<State extends GameState> implements GameAspect<State
     }
 
     @Override
-    public void afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+    public void afterGame(GameSession<State> state, GameServerEvent<State> events) {
         gameEventTaskExecutor.cancel(sessionTimeTracker);
     }
 

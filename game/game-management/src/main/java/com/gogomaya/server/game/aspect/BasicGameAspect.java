@@ -1,7 +1,5 @@
 package com.gogomaya.server.game.aspect;
 
-import java.util.Collection;
-
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
@@ -14,11 +12,11 @@ public class BasicGameAspect<State extends GameState> implements GameAspect<Stat
     }
 
     @Override
-    public void afterMove(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+    public void afterMove(State state, GameServerEvent<State> events) {
     }
 
     @Override
-    public void afterGame(GameSession<State> session, Collection<GameServerEvent<State>> events) {
+    public void afterGame(GameSession<State> session, GameServerEvent<State> events) {
     }
 
 }

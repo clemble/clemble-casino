@@ -16,7 +16,7 @@ import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
 import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameEndedEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
-import com.gogomaya.server.game.event.server.PlayerLostEvent;
+import com.gogomaya.server.game.event.server.PlayerSurrenderedEvent;
 import com.gogomaya.server.game.event.server.PlayerMovedEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.NoOutcome;
@@ -97,14 +97,13 @@ public class PicPacPoeProcessor implements GameState {
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
                 outcome = new NoOutcome();
-                return ImmutableList.<GameServerEvent<PicPacPoeProcessor>> of(new PlayerLostEvent<PicPacPoeProcessor>().setPlayerId(looser).setState(this),
+                return ImmutableList.<GameServerEvent<PicPacPoeProcessor>> of(new PlayerSurrenderedEvent<PicPacPoeProcessor>().setPlayerId(looser).setState(this),
                         new GameEndedEvent<PicPacPoeProcessor>().setOutcome(new NoOutcome()).setState(this));
             } else {
                 long winner = opponents.iterator().next();
                 outcome = new PlayerWonOutcome(winner);
                 // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
-                return ImmutableList.<GameServerEvent<PicPacPoeProcessor>> of(new PlayerLostEvent<PicPacPoeProcessor>().setReason((SurrenderEvent) clientEvent)
-                        .setPlayerId(looser).setState(this), new GameEndedEvent<PicPacPoeProcessor>(this));
+                return ImmutableList.<GameServerEvent<PicPacPoeProcessor>> of(new GameEndedEvent<PicPacPoeProcessor>(this).setOutcome(outcome));
             }
         }
         // Step 2. Returning default state

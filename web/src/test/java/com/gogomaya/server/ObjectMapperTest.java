@@ -36,7 +36,7 @@ import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.server.game.event.schedule.PlayerInvitedEvent;
 import com.gogomaya.server.game.event.server.GameEndedEvent;
-import com.gogomaya.server.game.event.server.PlayerLostEvent;
+import com.gogomaya.server.game.event.server.PlayerSurrenderedEvent;
 import com.gogomaya.server.game.event.server.PlayerMovedEvent;
 import com.gogomaya.server.game.rule.GameRule;
 import com.gogomaya.server.game.specification.GameSpecification;
@@ -75,7 +75,7 @@ public class ObjectMapperTest extends ObjectTest {
         Assert.assertNull(checkSerialization(TicTacToeState.class));
         Assert.assertNull(checkSerialization(BetEvent.class));
         Assert.assertNull(checkSerialization(PlayerMovedEvent.class));
-        Assert.assertNull(checkSerialization(PlayerLostEvent.class));
+        Assert.assertNull(checkSerialization(PlayerSurrenderedEvent.class));
         Assert.assertNull(checkSerialization(GameEndedEvent.class));
     }
 

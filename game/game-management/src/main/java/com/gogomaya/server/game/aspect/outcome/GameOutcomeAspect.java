@@ -2,8 +2,6 @@ package com.gogomaya.server.game.aspect.outcome;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Collection;
-
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAware;
 import com.gogomaya.server.game.GamePlayerAccount;
@@ -46,7 +44,7 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
     }
 
     @Override
-    public void afterGame(GameSession<State> session, Collection<GameServerEvent<State>> madeMoves) {
+    public void afterGame(GameSession<State> session, GameServerEvent<State> madeMoves) {
         session.setSessionState(GameSessionState.finished);
         for (long player : session.getState().getPlayerIterator().getPlayers())
             activePlayerQueue.markAvailable(player);

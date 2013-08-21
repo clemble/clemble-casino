@@ -50,17 +50,17 @@ public class GameProcessorFactory<State extends GameState> {
         }
 
         @Override
-        public Collection<GameServerEvent<State>> process(GameSession<State> session, ClientEvent move) {
+        public GameServerEvent<State> process(GameSession<State> session, ClientEvent move) {
             // Step 1. Before move notification
             for (GameAspect<State> listener : listenerArray) {
                 listener.beforeMove(session.getState(), move);
             }
             // Step 2. Processing in core
-            Collection<GameServerEvent<State>> events = coreProcessor.process(session, move);
+            GameServerEvent<State> events = coreProcessor.process(session, move);
             // Step 3. After move notification
             if (session.getState().getOutcome() == null) {
                 for (GameAspect<State> listener : listenerArray) {
-                    listener.afterMove(session, events);
+                    listener.afterMove(session.getState(), events);
                 }
             } else {
                 // Step 4. After game notification

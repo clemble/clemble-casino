@@ -6,7 +6,7 @@ import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.server.player.PlayerAware;
 
 @JsonTypeName("playerGaveUp")
-public class PlayerLostEvent<State extends GameState> extends GameServerEvent<State> implements PlayerAware {
+public class PlayerSurrenderedEvent<State extends GameState> extends GameServerEvent<State> implements PlayerAware {
 
     /**
      * Generated 07/05/13
@@ -17,10 +17,10 @@ public class PlayerLostEvent<State extends GameState> extends GameServerEvent<St
 
     private SurrenderEvent reason;
 
-    public PlayerLostEvent() {
+    public PlayerSurrenderedEvent() {
     }
 
-    public PlayerLostEvent(State state) {
+    public PlayerSurrenderedEvent(State state) {
         this.setState(state);
     }
 
@@ -29,7 +29,7 @@ public class PlayerLostEvent<State extends GameState> extends GameServerEvent<St
         return playerId;
     }
 
-    public PlayerLostEvent<State> setPlayerId(long newPlayerId) {
+    public PlayerSurrenderedEvent<State> setPlayerId(long newPlayerId) {
         this.playerId = newPlayerId;
         return this;
     }
@@ -38,7 +38,7 @@ public class PlayerLostEvent<State extends GameState> extends GameServerEvent<St
         return reason;
     }
 
-    public PlayerLostEvent<State> setReason(SurrenderEvent reason) {
+    public PlayerSurrenderedEvent<State> setReason(SurrenderEvent reason) {
         this.reason = reason;
         return this;
     }
@@ -60,7 +60,7 @@ public class PlayerLostEvent<State extends GameState> extends GameServerEvent<St
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerLostEvent<State> other = (PlayerLostEvent<State>) obj;
+        PlayerSurrenderedEvent<State> other = (PlayerSurrenderedEvent<State>) obj;
         if (playerId != other.playerId)
             return false;
         if (reason == null) {
