@@ -18,6 +18,7 @@ import com.gogomaya.server.game.aspect.price.GamePriceAspectFactory;
 import com.gogomaya.server.game.aspect.security.GameSecurityAspectFactory;
 import com.gogomaya.server.game.aspect.time.GameTimeAspectFactory;
 import com.gogomaya.server.game.cache.GameCacheService;
+import com.gogomaya.server.game.configuration.GameSpecificationConfigurationManager;
 import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.game.construct.GameInitiatorService;
 import com.gogomaya.server.game.construct.SimpleGameConstructionService;
@@ -35,7 +36,6 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 import com.gogomaya.server.tictactoe.PicPacPoeState;
 import com.gogomaya.server.tictactoe.PicPacPoeStateFactory;
-import com.gogomaya.server.tictactoe.configuration.PicPacPoeConfigurationManager;
 
 @Configuration
 @Import(value = { GameManagementSpringConfiguration.class })
@@ -124,8 +124,8 @@ public class PicPacPoeSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Singleton
-    public PicPacPoeConfigurationManager picPacPoeConfigurationManager() {
-        return new PicPacPoeConfigurationManager(gameSpecificationRepository);
+    public GameSpecificationConfigurationManager picPacPoeConfigurationManager() {
+        return new GameSpecificationConfigurationManager(Game.pic, gameSpecificationRepository);
     }
 
     @Bean

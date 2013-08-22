@@ -10,11 +10,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gogomaya.server.game.configuration.GameSpecificationConfigurationManager;
 import com.gogomaya.server.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.tictactoe.PicPacPoeSpringConfiguration;
-import com.gogomaya.server.tictactoe.configuration.PicPacPoeConfigurationManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.PROFILE_TEST)
@@ -23,7 +23,7 @@ import com.gogomaya.server.tictactoe.configuration.PicPacPoeConfigurationManager
 public class GameConfigurationTest {
 
     @Inject
-    PicPacPoeConfigurationManager ticTacToeConfigurationManager;
+    GameSpecificationConfigurationManager ticTacToeConfigurationManager;
 
     @Test
     public void testOptions() {

@@ -19,7 +19,6 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.tictactoe.PicPacPoeSpringConfiguration;
 import com.gogomaya.server.spring.web.PicPacPoeWebSpringConfiguration.GameDefaultAndTest;
 import com.gogomaya.server.tictactoe.PicPacPoeState;
-import com.gogomaya.server.tictactoe.configuration.PicPacPoeConfigurationManager;
 import com.gogomaya.server.web.game.options.GameConfigurationManagerController;
 import com.gogomaya.server.web.game.session.GameActionController;
 import com.gogomaya.server.web.game.session.GameConstructionController;
@@ -46,10 +45,6 @@ public class PicPacPoeWebSpringConfiguration implements SpringConfiguration {
     @Autowired
     @Qualifier("picPacPoeConstructionService")
     public GameConstructionService constructionService;
-
-    @Autowired
-    @Qualifier("picPacPoeConfigurationManager")
-    public PicPacPoeConfigurationManager picPacPoeConfigurationManager;
 
     @Autowired
     @Qualifier("picPacPoeSessionProcessor")
