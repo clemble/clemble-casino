@@ -8,10 +8,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.SequentialPlayerIterator;
-import com.gogomaya.server.game.bank.GameBank;
-import com.gogomaya.server.game.bank.GamePlayerAccount;
-import com.gogomaya.server.game.bank.VisibleGameBank;
+import com.gogomaya.server.game.account.GamePlayerAccount;
+import com.gogomaya.server.game.account.VisibleGameAccount;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
 import com.gogomaya.server.game.configuration.SelectRuleOptions;
 import com.gogomaya.server.game.construct.AutomaticGameRequest;
@@ -20,6 +18,7 @@ import com.gogomaya.server.game.construct.GameConstructionState;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.server.game.event.server.GameStartedEvent;
+import com.gogomaya.server.game.iterator.SequentialPlayerIterator;
 import com.gogomaya.server.game.rule.GameRule;
 import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
@@ -61,8 +60,7 @@ public class ObjectTest {
         ObjectGenerator.register(PicPacPoeState.class, new AbstractValueGenerator<PicPacPoeState>() {
             public PicPacPoeState generate() {
                 Collection<GamePlayerAccount> playerAccounts = ImmutableList.<GamePlayerAccount> of(new GamePlayerAccount(1, 50), new GamePlayerAccount(2, 50));
-                return new PicPacPoeState(new VisibleGameBank(Money.create(Currency.FakeMoney, 50), playerAccounts), new SequentialPlayerIterator(
-                        playerAccounts));
+                return new PicPacPoeState(new VisibleGameAccount(Money.create(Currency.FakeMoney, 50), playerAccounts), SequentialPlayerIterator.create(playerAccounts));
             }
 
         });

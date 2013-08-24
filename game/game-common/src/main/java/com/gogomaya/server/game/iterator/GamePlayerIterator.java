@@ -1,4 +1,4 @@
-package com.gogomaya.server.game;
+package com.gogomaya.server.game.iterator;
 
 import java.io.Serializable;
 import java.util.Collection;

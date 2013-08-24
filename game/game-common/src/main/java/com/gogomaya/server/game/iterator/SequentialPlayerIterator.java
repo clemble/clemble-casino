@@ -1,4 +1,4 @@
-package com.gogomaya.server.game;
+package com.gogomaya.server.game.iterator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,24 +21,15 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
 
     private int index;
 
-    public SequentialPlayerIterator(Collection<? extends PlayerAware> playerAwares) {
+    public SequentialPlayerIterator(Collection<Long> playerIds) {
         this.index = 0;
-        this.players = new ArrayList<>(playerAwares.size());
-        // Parsing player aware values
-        for (PlayerAware playerAware : playerAwares) {
-            players.add(playerAware.getPlayerId());
-        }
+        this.players = new ArrayList<>(playerIds);
     }
 
     @JsonCreator
     public SequentialPlayerIterator(@JsonProperty("index") final int current, @JsonProperty("players") List<Long> players) {
         this.players = players;
         this.index = current;
-    }
-
-    public SequentialPlayerIterator(final int currentUser, Collection<? extends PlayerAware> playerAwares) {
-        this(playerAwares);
-        this.index = currentUser;
     }
 
     @Override
@@ -99,6 +90,15 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
         if (!players.equals(other.players))
             return false;
         return true;
+    }
+    
+    public static SequentialPlayerIterator create(Collection<? extends PlayerAware> playerAwares) {
+        List<Long> playerIds = new ArrayList<>(playerAwares.size());
+        // Parsing player aware values
+        for (PlayerAware playerAware : playerAwares) {
+            playerIds.add(playerAware.getPlayerId());
+        }
+        return new SequentialPlayerIterator(playerIds);
     }
 
 }

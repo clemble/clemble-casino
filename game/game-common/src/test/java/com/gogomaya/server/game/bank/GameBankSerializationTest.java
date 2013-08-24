@@ -13,6 +13,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.server.game.account.GameAccount;
+import com.gogomaya.server.game.account.GamePlayerAccount;
+import com.gogomaya.server.game.account.InvisibleGameAccount;
+import com.gogomaya.server.game.account.VisibleGameAccount;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
@@ -31,11 +35,11 @@ public class GameBankSerializationTest {
         GamePlayerAccount firstAccount = new GamePlayerAccount(1, 50);
         GamePlayerAccount secondAccount = new GamePlayerAccount(2, 50);
 
-        GameBank savedBank = new VisibleGameBank(money, ImmutableList.<GamePlayerAccount> of(firstAccount, secondAccount));
+        GameAccount savedBank = new VisibleGameAccount(money, ImmutableList.<GamePlayerAccount> of(firstAccount, secondAccount));
 
         String visibleBankPresentation = objectMapper.writeValueAsString(savedBank);
 
-        GameBank readBank = objectMapper.readValue(visibleBankPresentation, GameBank.class);
+        GameAccount readBank = objectMapper.readValue(visibleBankPresentation, GameAccount.class);
 
         assertEquals(savedBank, readBank);
     }
@@ -46,11 +50,11 @@ public class GameBankSerializationTest {
         GamePlayerAccount firstAccount = new GamePlayerAccount(1, 50);
         GamePlayerAccount secondAccount = new GamePlayerAccount(2, 50);
 
-        GameBank savedBank = new InvisibleGameBank(money, ImmutableList.<GamePlayerAccount> of(firstAccount, secondAccount));
+        GameAccount savedBank = new InvisibleGameAccount(money, ImmutableList.<GamePlayerAccount> of(firstAccount, secondAccount));
 
         String inVisibleBankPresentation = objectMapper.writeValueAsString(savedBank);
 
-        GameBank readBank = objectMapper.readValue(inVisibleBankPresentation, GameBank.class);
+        GameAccount readBank = objectMapper.readValue(inVisibleBankPresentation, GameAccount.class);
 
         assertNotEquals(savedBank, readBank);
         assertEquals(savedBank.getBank(), readBank.getBank());

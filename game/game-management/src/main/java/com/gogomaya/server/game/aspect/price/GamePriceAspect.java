@@ -4,8 +4,8 @@ import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.account.GamePlayerAccount;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
-import com.gogomaya.server.game.bank.GamePlayerAccount;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 

@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.bank;
+package com.gogomaya.server.game.account;
 
 import java.util.Collection;
 
@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableMap;
 
 @JsonTypeName("invisible")
 @JsonIgnoreProperties("playerAccounts")
-public class InvisibleGameBank implements GameBank {
+public class InvisibleGameAccount implements GameAccount {
 
     private static final long serialVersionUID = -6227399075601837719L;
 
@@ -20,7 +20,7 @@ public class InvisibleGameBank implements GameBank {
     final private ImmutableMap<Long, GamePlayerAccount> playerToAccount;
 
     @JsonCreator
-    public InvisibleGameBank(@JsonProperty("bank") Money bank, @JsonProperty("playerAccounts") Collection<GamePlayerAccount> playerAccounts) {
+    public InvisibleGameAccount(@JsonProperty("bank") Money bank, @JsonProperty("playerAccounts") Collection<GamePlayerAccount> playerAccounts) {
         this.bank = bank;
         this.playerToAccount = PlayerAwareUtils.toImmutableMap(playerAccounts);
     }
@@ -62,7 +62,7 @@ public class InvisibleGameBank implements GameBank {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        InvisibleGameBank other = (InvisibleGameBank) obj;
+        InvisibleGameAccount other = (InvisibleGameAccount) obj;
         if (bank == null) {
             if (other.bank != null)
                 return false;

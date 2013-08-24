@@ -31,9 +31,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.bank.GameBank;
-import com.gogomaya.server.game.bank.InvisibleGameBank;
-import com.gogomaya.server.game.bank.VisibleGameBank;
+import com.gogomaya.server.game.account.GameAccount;
+import com.gogomaya.server.game.account.InvisibleGameAccount;
+import com.gogomaya.server.game.account.VisibleGameAccount;
 import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.cell.ExposedCellState;
 import com.gogomaya.server.game.configuration.SelectRuleOptions;
@@ -77,9 +77,9 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void testSpecialSerialization() {
-        Assert.assertNull(checkSerialization(GameBank.class));
-        Assert.assertNull(checkSerialization(VisibleGameBank.class));
-        Assert.assertNull(checkSerialization(InvisibleGameBank.class));
+        Assert.assertNull(checkSerialization(GameAccount.class));
+        Assert.assertNull(checkSerialization(VisibleGameAccount.class));
+        Assert.assertNull(checkSerialization(InvisibleGameAccount.class));
         Assert.assertNull(checkSerialization(PicPacPoeState.class));
         Assert.assertNull(checkSerialization(BetEvent.class));
         Assert.assertNull(checkSerialization(PlayerMovedEvent.class));

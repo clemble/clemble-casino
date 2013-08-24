@@ -13,11 +13,11 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.SequentialPlayerIterator;
-import com.gogomaya.server.game.bank.GamePlayerAccount;
-import com.gogomaya.server.game.bank.VisibleGameBank;
+import com.gogomaya.server.game.account.GamePlayerAccount;
+import com.gogomaya.server.game.account.VisibleGameAccount;
 import com.gogomaya.server.game.cell.Cell;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
+import com.gogomaya.server.game.iterator.SequentialPlayerIterator;
 import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
@@ -43,8 +43,7 @@ public class GameStateSerializationTest {
         players.add(new GamePlayerAccount(1L, 50L));
         players.add(new GamePlayerAccount(2L, 50L));
 
-        PicPacPoeState tacToeState = new PicPacPoeState(new VisibleGameBank(Money.create(Currency.FakeMoney, 50), players), new SequentialPlayerIterator(
-                players));
+        PicPacPoeState tacToeState = new PicPacPoeState(new VisibleGameAccount(Money.create(Currency.FakeMoney, 50), players), SequentialPlayerIterator.create(players));
         tacToeState.process(new SelectCellEvent(1L, Cell.create(0, 0)));
         Assert.assertNotNull(tacToeState.getActionLatch().fetchAction(1L));
 

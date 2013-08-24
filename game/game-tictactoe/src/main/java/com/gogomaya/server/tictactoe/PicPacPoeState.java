@@ -9,9 +9,8 @@ import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GamePlayerIterator;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.bank.GameBank;
+import com.gogomaya.server.game.account.GameAccount;
 import com.gogomaya.server.game.cell.Cell;
 import com.gogomaya.server.game.cell.ExposedCellState;
 import com.gogomaya.server.game.event.client.BetEvent;
@@ -20,6 +19,7 @@ import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.server.game.event.server.GameEndedEvent;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.event.server.PlayerMovedEvent;
+import com.gogomaya.server.game.iterator.GamePlayerIterator;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.NoOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
@@ -32,7 +32,7 @@ public class PicPacPoeState implements GameState {
      */
     private static final long serialVersionUID = -755717572685487667L;
 
-    private GameBank account;
+    private GameAccount account;
     private GamePlayerIterator playerIterator;
     private ActionLatch actionLatch;
     private GameOutcome outcome;
@@ -40,12 +40,12 @@ public class PicPacPoeState implements GameState {
 
     private PicPacPoeBoard board;
 
-    public PicPacPoeState(GameBank account, GamePlayerIterator playerIterator) {
+    public PicPacPoeState(GameAccount account, GamePlayerIterator playerIterator) {
         this(account, new PicPacPoeBoard(), playerIterator, new ActionLatch(playerIterator.current(), "select"), null, 0);
     }
 
     @JsonCreator
-    public PicPacPoeState(@JsonProperty("account") GameBank account,
+    public PicPacPoeState(@JsonProperty("account") GameAccount account,
             @JsonProperty("board") PicPacPoeBoard picPacPoeState,
             @JsonProperty("iterator") GamePlayerIterator playerIterator,
             @JsonProperty("actionLatch") ActionLatch actionLatch,
@@ -130,7 +130,7 @@ public class PicPacPoeState implements GameState {
     }
 
     @Override
-    public GameBank getAccount() {
+    public GameAccount getAccount() {
         return account;
     }
 

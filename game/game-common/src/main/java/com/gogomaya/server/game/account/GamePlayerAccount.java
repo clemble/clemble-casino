@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.bank;
+package com.gogomaya.server.game.account;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
