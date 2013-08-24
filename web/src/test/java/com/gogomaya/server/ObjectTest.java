@@ -8,9 +8,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.GameAccount;
-import com.gogomaya.server.game.GamePlayerAccount;
 import com.gogomaya.server.game.SequentialPlayerIterator;
+import com.gogomaya.server.game.bank.GameBank;
+import com.gogomaya.server.game.bank.GamePlayerAccount;
+import com.gogomaya.server.game.bank.VisibleGameBank;
 import com.gogomaya.server.game.configuration.GameRuleOptions;
 import com.gogomaya.server.game.configuration.SelectRuleOptions;
 import com.gogomaya.server.game.construct.AutomaticGameRequest;
@@ -60,7 +61,8 @@ public class ObjectTest {
         ObjectGenerator.register(PicPacPoeState.class, new AbstractValueGenerator<PicPacPoeState>() {
             public PicPacPoeState generate() {
                 Collection<GamePlayerAccount> playerAccounts = ImmutableList.<GamePlayerAccount> of(new GamePlayerAccount(1, 50), new GamePlayerAccount(2, 50));
-                return new PicPacPoeState(new GameAccount(playerAccounts), new SequentialPlayerIterator(playerAccounts));
+                return new PicPacPoeState(new VisibleGameBank(Money.create(Currency.FakeMoney, 50), playerAccounts), new SequentialPlayerIterator(
+                        playerAccounts));
             }
 
         });
@@ -105,9 +107,9 @@ public class ObjectTest {
                 return new PaymentTransaction()
                         .setTransactionId(new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(0))
                         .addPaymentOperation(
-                                new PaymentOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayerId(0))
+                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayerId(0))
                         .addPaymentOperation(
-                                new PaymentOperation().setAmmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit).setPlayerId(1));
+                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit).setPlayerId(1));
             }
 
         });
@@ -115,7 +117,8 @@ public class ObjectTest {
 
             @Override
             public PlayerCredential generate() {
-                return new PlayerCredential().setEmail(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.random(10));
+                return new PlayerCredential().setEmail(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
+                        RandomStringUtils.random(10));
             }
 
         });

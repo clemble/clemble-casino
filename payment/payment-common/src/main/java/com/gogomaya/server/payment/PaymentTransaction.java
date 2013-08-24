@@ -85,39 +85,39 @@ public class PaymentTransaction implements Serializable {
         Currency currency = null;
         for (PaymentOperation paymentOperation : paymentOperations) {
             if (currency == null) {
-                currency = paymentOperation.getAmmount().getCurrency();
-            } else if (currency != paymentOperation.getAmmount().getCurrency()) {
+                currency = paymentOperation.getAmount().getCurrency();
+            } else if (currency != paymentOperation.getAmount().getCurrency()) {
                 return false;
             }
         }
-        // Step 2. Checking credit and debit ammount match up
-        Money creditAmmount = null;
-        Money debitAmmount = null;
+        // Step 2. Checking credit and debit amount match up
+        Money creditAmount = null;
+        Money debitAmount = null;
         for (PaymentOperation paymentOperation : paymentOperations) {
-            Money ammount = paymentOperation.getAmmount();
-            if (ammount.getAmount() > 0) {
+            Money amount = paymentOperation.getAmount();
+            if (amount.getAmount() > 0) {
                 switch (paymentOperation.getOperation()) {
                 case Credit:
-                    creditAmmount = creditAmmount == null ? paymentOperation.getAmmount() : creditAmmount.add(ammount);
+                    creditAmount = creditAmount == null ? paymentOperation.getAmount() : creditAmount.add(amount);
                     break;
                 case Debit:
-                    debitAmmount = debitAmmount == null ? paymentOperation.getAmmount() : debitAmmount.add(paymentOperation.getAmmount());
+                    debitAmount = debitAmount == null ? paymentOperation.getAmount() : debitAmount.add(paymentOperation.getAmount());
                     break;
                 }
             } else {
-                ammount = ammount.negate();
+                amount = amount.negate();
                 switch (paymentOperation.getOperation()) {
                 case Credit:
-                    debitAmmount = debitAmmount == null ? paymentOperation.getAmmount() : debitAmmount.add(paymentOperation.getAmmount());
+                    debitAmount = debitAmount == null ? paymentOperation.getAmount() : debitAmount.add(paymentOperation.getAmount());
                     break;
                 case Debit:
-                    creditAmmount = creditAmmount == null ? paymentOperation.getAmmount() : creditAmmount.add(ammount);
+                    creditAmount = creditAmount == null ? paymentOperation.getAmount() : creditAmount.add(amount);
                     break;
                 }
             }
         }
-        return (creditAmmount != null && debitAmmount != null) && creditAmmount.getAmount() == debitAmmount.getAmount()
-                && creditAmmount.getCurrency() == debitAmmount.getCurrency();
+        return (creditAmount != null && debitAmount != null) && creditAmount.getAmount() == debitAmount.getAmount()
+                && creditAmount.getCurrency() == debitAmount.getCurrency();
     }
 
     @Override

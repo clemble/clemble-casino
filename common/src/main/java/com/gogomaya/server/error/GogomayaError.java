@@ -78,7 +78,7 @@ public enum GogomayaError {
     GamePlayPlayerNotParticipate(Code.GAMEPLAY_PLAYER_NOT_PARTICIPATING, "Player is not part of the current game"),
     GamePlayWrongMoveType(Code.GAMEPLAY_WRONG_MOVE_TYPE_CODE, "Wrong move type"),
     GamePlayMoveNotSupported(Code.GAMEPLAY_MOVE_NOT_SUPPORTED_CODE, "Game does not support this move"),
-    GamePlayBetOverflow(Code.GAMEPLAY_BET_OVERFLOW_CODE, "Bet ammount overflow"),
+    GamePlayBetOverflow(Code.GAMEPLAY_BET_OVERFLOW_CODE, "Bet amount overflow"),
     GamePlayBetInvalid(Code.GAMEPLAY_BET_INVALID_CODE, "Bet invalid event"),
 
     CellOwned(Code.TIC_TAC_TOE_CELL_OWNED_CODE, "Cell already Owned"),

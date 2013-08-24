@@ -1,11 +1,16 @@
 package com.gogomaya.server.game.cell;
 
+import java.util.Collection;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.server.game.event.client.BetEvent;
 import com.gogomaya.server.player.PlayerAware;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "cell")
+@JsonTypeName("simple")
 public class CellState {
 
     final static public CellState DEFAULT = new CellState(PlayerAware.DEFAULT_PLAYER);
@@ -15,6 +20,14 @@ public class CellState {
     @JsonCreator
     public CellState(@JsonProperty("owner") long owner) {
         this.owner = owner;
+    }
+
+    public CellState(Collection<BetEvent> bets) {
+        this(bets.toArray(new BetEvent[0]));
+    }
+
+    public CellState(BetEvent... bets) {
+        this(BetEvent.whoBetMore(bets));
     }
 
     public long getOwner() {

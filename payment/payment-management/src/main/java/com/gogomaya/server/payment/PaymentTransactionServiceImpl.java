@@ -45,9 +45,9 @@ public class PaymentTransactionServiceImpl implements PaymentTransactionService 
             if (associatedWallet == null) {
                 throw GogomayaException.fromError(GogomayaError.PaymentTransactionUnknownPlayers);
             } else if (paymentOperation.getOperation() == Operation.Credit) {
-                associatedWallet.subtract(paymentOperation.getAmmount());
+                associatedWallet.subtract(paymentOperation.getAmount());
             } else if (paymentOperation.getOperation() == Operation.Debit) {
-                associatedWallet.add(paymentOperation.getAmmount());
+                associatedWallet.add(paymentOperation.getAmount());
             } else {
                 throw GogomayaException.fromError(GogomayaError.PaymentTransactionInvalid);
             }

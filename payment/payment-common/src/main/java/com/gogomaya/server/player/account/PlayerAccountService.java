@@ -9,8 +9,8 @@ public interface PlayerAccountService {
 
     public PlayerAccount register(PlayerProfile playerProfile);
 
-    public boolean canAfford(long playerId, Money ammount);
+    public boolean canAfford(long playerId, Money amount);
 
-    public boolean canAfford(Collection<Long> playerId, Money ammount);
+    public boolean canAfford(Collection<Long> playerId, Money amount);
 
 }

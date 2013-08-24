@@ -21,7 +21,7 @@ public class Money implements Serializable {
     private final long amount;
 
     @JsonCreator
-    public Money(@JsonProperty("currency") final Currency currency, @JsonProperty("ammount") final long amount) {
+    public Money(@JsonProperty("currency") final Currency currency, @JsonProperty("amount") final long amount) {
         this.currency = checkNotNull(currency);
         this.amount = amount;
     }
@@ -51,6 +51,10 @@ public class Money implements Serializable {
         return Money.create(currency, amount + more.amount);
     }
 
+    public Money add(long amount) {
+        return Money.create(currency, amount + amount);
+    }
+
     public Money subtract(Money minus) {
         if (minus == null || minus.amount == 0)
             return this;
@@ -74,8 +78,8 @@ public class Money implements Serializable {
         throw new IllegalArgumentException("We do not support money change yet");
     }
 
-    public static Money create(final Currency currency, final long ammount) {
-        return new Money(currency, ammount);
+    public static Money create(final Currency currency, final long amount) {
+        return new Money(currency, amount);
     }
 
     @Override

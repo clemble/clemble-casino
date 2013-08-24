@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.event.client.BetEvent;
 import com.google.common.collect.ImmutableList;
 
-@JsonTypeName("open")
+@JsonTypeName("exposed")
 public class ExposedCellState extends CellState {
 
     final private Collection<BetEvent> bets;

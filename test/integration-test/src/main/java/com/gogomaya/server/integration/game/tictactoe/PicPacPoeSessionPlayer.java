@@ -31,11 +31,11 @@ public class PicPacPoeSessionPlayer extends GenericGameSessionPlayer<PicPacPoeSt
         Assert.assertNotSame(beforeSelecting + " remained " + this.getState().getVersion(), this.getState().getVersion());
     }
 
-    public void bet(int ammount) {
+    public void bet(int amount) {
         int beforeBetting = this.getState().getVersion();
-        perform(new BetEvent(actualPlayer.getPlayerId(), ammount));
+        perform(new BetEvent(actualPlayer.getPlayerId(), amount));
         Assert.assertNotSame(beforeBetting + " remained " + this.getState().getVersion(), beforeBetting, this.getState().getVersion());
-        moneySpent.getAndAdd(-ammount);
+        moneySpent.getAndAdd(-amount);
     }
     
     public long getMoneyLeft(){

@@ -67,6 +67,7 @@
         PRIVACY_RULE varchar(255),
         TOTAL_TIME_LIMIT bigint,
         TOTAL_TIME_PUNISHMENT varchar(255),
+        VISIBILITY varchar(255),
         primary key (GAME_NAME, SPECIFICATION_NAME)
     );
 

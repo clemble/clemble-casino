@@ -25,5 +25,9 @@ public class PlayerAwareUtils {
         // Step 2. Creating immutable map from tmp map
         return tmpMap;
     }
+    
+    public static <M extends PlayerAware> ImmutableMap<Long, M> toImmutableMap(Collection<? extends M> sourceCollection) {
+        return ImmutableMap.<Long, M>copyOf(toMap(sourceCollection));
+    }
 
 }

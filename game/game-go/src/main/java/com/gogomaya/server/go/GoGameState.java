@@ -8,9 +8,9 @@ import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.error.GogomayaError;
 import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameAccount;
 import com.gogomaya.server.game.GamePlayerIterator;
 import com.gogomaya.server.game.GameState;
+import com.gogomaya.server.game.bank.GameBank;
 import com.gogomaya.server.game.cell.Cell;
 import com.gogomaya.server.game.event.client.generic.SelectCellEvent;
 import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
@@ -28,7 +28,7 @@ public class GoGameState implements GameState {
      */
     private static final long serialVersionUID = -8322660522348015422L;
 
-    private GameAccount account;
+    private GameBank account;
     private GamePlayerIterator playerIterator;
     private ActionLatch actionLatch;
     private GameOutcome outcome;
@@ -36,12 +36,12 @@ public class GoGameState implements GameState {
 
     private GoBoard board;
 
-    public GoGameState(GameAccount account, GamePlayerIterator playerIterator) {
+    public GoGameState(GameBank account, GamePlayerIterator playerIterator) {
         this(account, new GoBoard(10), playerIterator, new ActionLatch(playerIterator.current(), "select"), null, 0);
     }
 
     @JsonCreator
-    public GoGameState(@JsonProperty("account") GameAccount account,
+    public GoGameState(@JsonProperty("account") GameBank account,
             @JsonProperty("board") GoBoard goBoard,
             @JsonProperty("iterator") GamePlayerIterator playerIterator,
             @JsonProperty("actionLatch") ActionLatch actionLatch,
@@ -56,7 +56,7 @@ public class GoGameState implements GameState {
     }
 
     @Override
-    public GameAccount getAccount() {
+    public GameBank getAccount() {
         return account;
     }
 

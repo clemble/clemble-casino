@@ -50,8 +50,8 @@ public class PaymentTransactionOperationsTest {
     @Test
     public void testFakePaymentTransaction() {
         PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionId(new PaymentTransactionId(MoneySource.TicTacToe.name(), 2432))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(-1).setAmmount(Money.create(Currency.FakeMoney, 50)))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(-2).setAmmount(Money.create(Currency.FakeMoney, 50)));
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(-1).setAmount(Money.create(Currency.FakeMoney, 50)))
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(-2).setAmount(Money.create(Currency.FakeMoney, 50)));
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionUnknownPlayers));
 
@@ -67,10 +67,10 @@ public class PaymentTransactionOperationsTest {
                 .setTransactionId(new PaymentTransactionId(MoneySource.TicTacToe.name(), 2432))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
-                                .setAmmount(Money.create(Currency.FakeMoney, 60)))
+                                .setAmount(Money.create(Currency.FakeMoney, 60)))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Debit).setPlayerId(anotherPlayer.getPlayerId())
-                                .setAmmount(Money.create(Currency.FakeMoney, 50)));
+                                .setAmount(Money.create(Currency.FakeMoney, 50)));
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionInvalid));
 
@@ -86,10 +86,10 @@ public class PaymentTransactionOperationsTest {
                 .setTransactionId(new PaymentTransactionId(MoneySource.TicTacToe.name(), 2432))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
-                                .setAmmount(Money.create(Currency.FakeMoney, 50)))
+                                .setAmount(Money.create(Currency.FakeMoney, 50)))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Debit).setPlayerId(anotherPlayer.getPlayerId())
-                                .setAmmount(Money.create(Currency.FakeMoney, 50)));
+                                .setAmount(Money.create(Currency.FakeMoney, 50)));
 
         PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
 
@@ -108,10 +108,10 @@ public class PaymentTransactionOperationsTest {
                 .setTransactionId(new PaymentTransactionId(source, transactionId))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
-                                .setAmmount(Money.create(Currency.FakeMoney, 50)))
+                                .setAmount(Money.create(Currency.FakeMoney, 50)))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Debit).setPlayerId(anotherPlayer.getPlayerId())
-                                .setAmmount(Money.create(Currency.FakeMoney, 50)));
+                                .setAmount(Money.create(Currency.FakeMoney, 50)));
 
         PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
 
@@ -133,10 +133,10 @@ public class PaymentTransactionOperationsTest {
                 .setTransactionId(new PaymentTransactionId(source, transactionId))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
-                                .setAmmount(Money.create(Currency.FakeMoney, 50)))
+                                .setAmount(Money.create(Currency.FakeMoney, 50)))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Debit).setPlayerId(anotherPlayer.getPlayerId())
-                                .setAmmount(Money.create(Currency.FakeMoney, 50)));
+                                .setAmount(Money.create(Currency.FakeMoney, 50)));
 
         PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
 
@@ -163,7 +163,7 @@ public class PaymentTransactionOperationsTest {
         // Step 3. Checking there is at list one operation available
         Assert.assertTrue(associatedOperation.size() > 0);
         for (PaymentOperation operation : associatedOperation)
-            assertEquals(player.getWalletOperations().getAccount().getMoney(operation.getAmmount().getCurrency()), operation.getAmmount());
+            assertEquals(player.getWalletOperations().getAccount().getMoney(operation.getAmount().getCurrency()), operation.getAmount());
     }
 
 }

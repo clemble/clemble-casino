@@ -4,11 +4,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAware;
-import com.gogomaya.server.game.GamePlayerAccount;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameSessionState;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
+import com.gogomaya.server.game.bank.GamePlayerAccount;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
@@ -59,8 +59,8 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
             for (GamePlayerAccount playerState : session.getState().getAccount().getPlayerAccounts()) {
                 if (playerState.getPlayerId() != winnerId) {
                     paymentTransaction.addPaymentOperation(
-                            new PaymentOperation().setAmmount(price).setOperation(Operation.Credit).setPlayerId(playerState.getPlayerId())).addPaymentOperation(
-                                    new PaymentOperation().setAmmount(price).setOperation(Operation.Debit).setPlayerId(winnerId));
+                            new PaymentOperation().setAmount(price).setOperation(Operation.Credit).setPlayerId(playerState.getPlayerId())).addPaymentOperation(
+                                    new PaymentOperation().setAmount(price).setOperation(Operation.Debit).setPlayerId(winnerId));
                 }
             }
             // Step 3. Processing payment transaction

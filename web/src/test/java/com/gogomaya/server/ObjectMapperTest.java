@@ -1,5 +1,7 @@
 package com.gogomaya.server;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,6 +31,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.server.game.bank.GameBank;
+import com.gogomaya.server.game.bank.InvisibleGameBank;
+import com.gogomaya.server.game.bank.VisibleGameBank;
 import com.gogomaya.server.game.cell.CellState;
 import com.gogomaya.server.game.cell.ExposedCellState;
 import com.gogomaya.server.game.configuration.SelectRuleOptions;
@@ -72,6 +77,9 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void testSpecialSerialization() {
+        Assert.assertNull(checkSerialization(GameBank.class));
+        Assert.assertNull(checkSerialization(VisibleGameBank.class));
+        Assert.assertNull(checkSerialization(InvisibleGameBank.class));
         Assert.assertNull(checkSerialization(PicPacPoeState.class));
         Assert.assertNull(checkSerialization(BetEvent.class));
         Assert.assertNull(checkSerialization(PlayerMovedEvent.class));
@@ -120,7 +128,7 @@ public class ObjectMapperTest extends ObjectTest {
             String stringPresentation = objectMapper.writeValueAsString(expected);
             Object actual = objectMapper.readValue(stringPresentation, candidate);
 
-            Assert.assertEquals(stringPresentation, expected, actual);
+            assertEquals(stringPresentation, expected, actual);
 
             Class<?> originalClass = getOriginal(candidate);
             Assert.assertNotNull(originalClass);

@@ -31,13 +31,13 @@ public class RestPlayerAccountService implements PlayerAccountService {
     }
 
     @Override
-    public boolean canAfford(long playerId, Money ammount) {
-        return canAfford(Collections.singleton(playerId), ammount);
+    public boolean canAfford(long playerId, Money amount) {
+        return canAfford(Collections.singleton(playerId), amount);
     }
 
     @Override
-    public boolean canAfford(Collection<Long> playerId, Money ammount) {
-        String urlPostfix = "?player=" + StringUtils.collectionToCommaDelimitedString(playerId) + "&currency=" + ammount.getCurrency() + "&ammount=" + ammount.getAmount();
+    public boolean canAfford(Collection<Long> playerId, Money amount) {
+        String urlPostfix = "?player=" + StringUtils.collectionToCommaDelimitedString(playerId) + "&currency=" + amount.getCurrency() + "&amount=" + amount.getAmount();
         return restTemplate.getForEntity(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS + urlPostfix, Boolean.class)
                 .getBody();
     }

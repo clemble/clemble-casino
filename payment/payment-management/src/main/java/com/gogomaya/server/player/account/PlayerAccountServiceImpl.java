@@ -38,26 +38,26 @@ public class PlayerAccountServiceImpl implements PlayerAccountService {
         Money initialBalance = Money.create(Currency.FakeMoney, 500);
         PaymentTransaction initialTransaction = new PaymentTransaction()
                 .setTransactionId(new PaymentTransactionId(MoneySource.Registration, player.getPlayerId()))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setAmmount(initialBalance).setPlayerId(player.getPlayerId()))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setAmmount(initialBalance).setPlayerId(PlayerAware.DEFAULT_PLAYER));
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setAmount(initialBalance).setPlayerId(player.getPlayerId()))
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setAmount(initialBalance).setPlayerId(PlayerAware.DEFAULT_PLAYER));
         // Step 3. Returning PaymentTransaction
         paymentTransactionService.process(initialTransaction);
         return playerAccountRepository.findOne(player.getPlayerId());
     }
 
     @Override
-    public boolean canAfford(long playerId, Money ammount) {
+    public boolean canAfford(long playerId, Money amount) {
         // Step 1. Retrieving players account
         PlayerAccount playerAccount = playerAccountRepository.findOne(playerId);
-        Money existingAmmount = playerAccount.getMoney(ammount.getCurrency());
-        // Step 2. If exising ammount is not enough player can't afford it
-        return existingAmmount.getAmount() >= ammount.getAmount();
+        Money existingAmmount = playerAccount.getMoney(amount.getCurrency());
+        // Step 2. If existing amount is not enough player can't afford it
+        return existingAmmount.getAmount() >= amount.getAmount();
     }
 
     @Override
-    public boolean canAfford(Collection<Long> players, Money ammount) {
+    public boolean canAfford(Collection<Long> players, Money amount) {
         for (Long player : players) {
-            if (!canAfford(player, ammount))
+            if (!canAfford(player, amount))
                 return false;
         }
         return true;

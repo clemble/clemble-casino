@@ -25,6 +25,7 @@ import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.MoveTimeRuleHibernateType;
 import com.gogomaya.server.game.rule.time.TimeRuleFormat.TotalTimeRuleHibernateType;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
+import com.gogomaya.server.game.rule.visibility.VisibilityRule;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
@@ -36,9 +37,9 @@ import com.gogomaya.server.money.MoneyHibernate;
         @TypeDef(name = "totalTime", typeClass = TotalTimeRuleHibernateType.class),
         @TypeDef(name = "moveTime", typeClass = MoveTimeRuleHibernateType.class),
         @TypeDef(name = "money", typeClass = MoneyHibernate.class),
-        @TypeDef(name = "betRule", typeClass = JsonHibernateType.class, defaultForType = BetRule.class,
-            parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER,value = "com.gogomaya.server.game.rule.bet.BetRule") })
-})
+        @TypeDef(name = "betRule", typeClass = JsonHibernateType.class, defaultForType = BetRule.class, parameters = { @Parameter(
+                name = JsonHibernateType.CLASS_NAME_PARAMETER,
+                value = "com.gogomaya.server.game.rule.bet.BetRule") }) })
 public class GameSpecification implements Serializable {
 
     /**
@@ -46,9 +47,10 @@ public class GameSpecification implements Serializable {
      */
     private static final long serialVersionUID = 6573909004152898162L;
 
-    final public static GameSpecification DEFAULT = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT")).setBetRule(FixedBetRule.DEFAULT)
-            .setPrice(Money.create(Currency.FakeMoney, 50)).setGiveUpRule(GiveUpRule.lost).setMoveTimeRule(MoveTimeRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT)
-            .setNumberRule(PlayerNumberRule.two).setPrivacayRule(PrivacyRule.everybody);
+    final public static GameSpecification DEFAULT = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT"))
+            .setBetRule(FixedBetRule.DEFAULT).setPrice(Money.create(Currency.FakeMoney, 50)).setGiveUpRule(GiveUpRule.lost)
+            .setMoveTimeRule(MoveTimeRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT).setNumberRule(PlayerNumberRule.two)
+            .setPrivacayRule(PrivacyRule.everybody);
 
     @EmbeddedId
     private SpecificationName name;
@@ -58,7 +60,7 @@ public class GameSpecification implements Serializable {
     private Money price;
 
     @Type(type = "betRule")
-    @Columns(columns = { @Column(name = "BET_RULE")})
+    @Columns(columns = { @Column(name = "BET_RULE") })
     private BetRule betRule;
 
     @Column(name = "GIVE_UP")
@@ -80,6 +82,10 @@ public class GameSpecification implements Serializable {
     @Column(name = "PLAYER_NUMBER")
     @Enumerated(EnumType.STRING)
     private PlayerNumberRule numberRule;
+
+    @Column(name = "VISIBILITY")
+    @Enumerated(EnumType.STRING)
+    private VisibilityRule visibilityRule;
 
     public GameSpecification() {
     }
@@ -156,18 +162,27 @@ public class GameSpecification implements Serializable {
         return this;
     }
 
+    public VisibilityRule getVisibilityRule() {
+        return visibilityRule;
+    }
+
+    public void setVisibilityRule(VisibilityRule visibilityRule) {
+        this.visibilityRule = visibilityRule;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((price == null) ? 0 : price.hashCode());
         result = prime * result + ((betRule == null) ? 0 : betRule.hashCode());
         result = prime * result + ((giveUpRule == null) ? 0 : giveUpRule.hashCode());
         result = prime * result + ((moveTimeRule == null) ? 0 : moveTimeRule.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((numberRule == null) ? 0 : numberRule.hashCode());
+        result = prime * result + ((price == null) ? 0 : price.hashCode());
         result = prime * result + ((privacyRule == null) ? 0 : privacyRule.hashCode());
         result = prime * result + ((totalTimeRule == null) ? 0 : totalTimeRule.hashCode());
+        result = prime * result + ((visibilityRule == null) ? 0 : visibilityRule.hashCode());
         return result;
     }
 
@@ -185,8 +200,6 @@ public class GameSpecification implements Serializable {
                 return false;
         } else if (!betRule.equals(other.betRule))
             return false;
-        if (!price.equals(other.price))
-            return false;
         if (giveUpRule != other.giveUpRule)
             return false;
         if (moveTimeRule == null) {
@@ -201,6 +214,11 @@ public class GameSpecification implements Serializable {
             return false;
         if (numberRule != other.numberRule)
             return false;
+        if (price == null) {
+            if (other.price != null)
+                return false;
+        } else if (!price.equals(other.price))
+            return false;
         if (privacyRule != other.privacyRule)
             return false;
         if (totalTimeRule == null) {
@@ -208,6 +226,9 @@ public class GameSpecification implements Serializable {
                 return false;
         } else if (!totalTimeRule.equals(other.totalTimeRule))
             return false;
+        if (visibilityRule != other.visibilityRule)
+            return false;
         return true;
     }
+
 }

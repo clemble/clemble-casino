@@ -96,12 +96,12 @@ public class PlayerAccountController {
 
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody boolean canAfford(@RequestParam("player") String players, @RequestParam("currency") Currency currency, @RequestParam("ammount") Long ammount) {
+    public @ResponseBody boolean canAfford(@RequestParam("player") String players, @RequestParam("currency") Currency currency, @RequestParam("amount") Long amount) {
         String[] splitPlayers = players.split(",");
         Collection<Long> parsedPlayers = new ArrayList<>(splitPlayers.length);
         for(String splitedPlayer: splitPlayers)
             parsedPlayers.add(Long.valueOf(splitedPlayer));
-        return playerAccountService.canAfford(parsedPlayers, Money.create(currency, ammount));
+        return playerAccountService.canAfford(parsedPlayers, Money.create(currency, amount));
     }
 
 }

@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -18,14 +17,12 @@ import com.gogomaya.server.money.MoneySource;
 import com.gogomaya.server.money.Operation;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
-import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.payment.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
 @ContextConfiguration(classes = PaymentManagementSpringConfiguration.class)
 public class PaymentTransactionServiceTest {
-    
+
     final private Random RANDOM = new Random();
 
     @Inject
@@ -49,18 +46,18 @@ public class PaymentTransactionServiceTest {
 
     @Test
     public void testWalletUpdate() {
-        Money ammount = Money.create(Currency.FakeMoney, RANDOM.nextInt(100));
+        Money amount = Money.create(Currency.FakeMoney, RANDOM.nextInt(100));
 
         PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(1L);
 
         PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionId(transactionId)
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmmount(ammount))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmmount(ammount));
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmount(amount))
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmount(amount));
 
         paymentTransactionService.process(paymentTransaction);
 
-        Assert.assertEquals(playerAccountRepository.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + ammount.getAmount());
-        Assert.assertEquals(playerAccountRepository.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - ammount.getAmount());
+        Assert.assertEquals(playerAccountRepository.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + amount.getAmount());
+        Assert.assertEquals(playerAccountRepository.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - amount.getAmount());
     }
 
 }
