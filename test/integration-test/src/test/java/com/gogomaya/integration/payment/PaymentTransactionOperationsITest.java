@@ -36,7 +36,7 @@ import com.gogomaya.server.test.RedisCleaner;
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
-public class PaymentTransactionOperationsTest {
+public class PaymentTransactionOperationsITest {
 
     @Autowired
     public PaymentTransactionOperations paymentTransactionOperations;

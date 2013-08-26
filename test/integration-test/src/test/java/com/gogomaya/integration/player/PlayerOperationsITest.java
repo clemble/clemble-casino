@@ -28,7 +28,7 @@ import com.gogomaya.server.test.RedisCleaner;
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
-public class PlayerOperationsTest {
+public class PlayerOperationsITest {
 
     @Inject
     PlayerOperations playerOperations;

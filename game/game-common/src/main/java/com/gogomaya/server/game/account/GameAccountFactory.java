@@ -20,8 +20,8 @@ public class GameAccountFactory {
         for (Long player : players) {
             playerAccounts.add(new GamePlayerAccount(player, amount));
         }
-        return specification.getVisibilityRule() == VisibilityRule.visible ? new VisibleGameAccount(Money.create(Currency.FakeMoney, 0), playerAccounts)
-                : new InvisibleGameAccount(Money.create(Currency.FakeMoney, 0), playerAccounts);
+        return specification.getVisibilityRule() == VisibilityRule.hidden ? new InvisibleGameAccount(Money.create(Currency.FakeMoney, 0), playerAccounts)
+                : new VisibleGameAccount(Money.create(Currency.FakeMoney, 0), playerAccounts);
     }
 
 }

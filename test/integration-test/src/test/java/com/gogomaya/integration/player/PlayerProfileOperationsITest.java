@@ -28,7 +28,7 @@ import com.stresstest.random.ObjectGenerator;
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
-public class PlayerProfileOperationsTest {
+public class PlayerProfileOperationsITest {
 
     @Autowired
     public ProfileOperations playerProfileOperations;
@@ -130,7 +130,7 @@ public class PlayerProfileOperationsTest {
         Assert.assertEquals(playerProfile, player.getProfile());
 
         PlayerProfile newProfile = randomProfile();
-        newProfile.setPlayerId(player.getPlayerId() + newProfile.getPlayerId());
+        newProfile.setPlayerId(player.getPlayerId() + 10);
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotProfileOwner));
 

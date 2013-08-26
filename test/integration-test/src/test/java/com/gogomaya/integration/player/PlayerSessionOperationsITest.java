@@ -30,7 +30,7 @@ import com.stresstest.util.CollectionAssert;
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
-public class PlayerSessionOperationsTest {
+public class PlayerSessionOperationsITest {
 
     @Autowired
     public SessionOperations sessionOperations;
