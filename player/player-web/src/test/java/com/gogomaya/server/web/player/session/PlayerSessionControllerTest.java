@@ -19,7 +19,7 @@ import com.gogomaya.server.web.player.PlayerSessionController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
+@ActiveProfiles(SpringConfiguration.UNIT_TEST)
 @ContextConfiguration(classes = { PlayerWebSpringConfiguration.class })
 public class PlayerSessionControllerTest {
 

@@ -21,8 +21,8 @@ import com.gogomaya.server.repository.player.PlayerSessionRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
-import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.spring.web.SwaggerSpringConfiguration;
+import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.registration.PlayerLoginController;
@@ -112,7 +112,7 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     }
     
     @Configuration
-    @Profile(value = { SpringConfiguration.PROFILE_DEFAULT, SpringConfiguration.PROFILE_TEST })
+    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
     public static class PlayerDefaultAndTest extends SwaggerSpringConfiguration {
 
         @Override

@@ -18,7 +18,15 @@
         </dependency>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>web</artifactId>
+            <artifactId>payment-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gogomaya.server</groupId>
+            <artifactId>player-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gogomaya.server</groupId>
+            <artifactId>game-web</artifactId>
         </dependency>
 
         <dependency>
@@ -42,7 +50,7 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/weberknecht-0.1.1.jar</systemPath>
         </dependency>
-        
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -72,7 +80,7 @@
                             <includes>
                                 <include>**/*Test.java</include>
                             </includes>
-                            <argLine>-Dspring.profiles.active=localIntegration</argLine>
+                            <argLine>-Dspring.profiles.active=int_test</argLine>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -97,7 +105,7 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.gogomaya.server</groupId>
-                                            <artifactId>game-web</artifactId>
+                                            <artifactId>game-tictactoe</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
                                         </artifactItem>
@@ -125,15 +133,18 @@
                                 <configuration>
                                     <daemon>true</daemon>
                                     <contextHandlers>
-                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
-                                            <war>${project.build.directory}/wars-to-be-tested/game-web.war</war>
+                                        <contextHandler
+                                            implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/game-tictactoe.war</war>
                                             <contextPath>/game-web</contextPath>
                                         </contextHandler>
-                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                        <contextHandler
+                                            implementation="org.eclipse.jetty.webapp.WebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/player-web.war</war>
                                             <contextPath>/player-web</contextPath>
                                         </contextHandler>
-                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                        <contextHandler
+                                            implementation="org.eclipse.jetty.webapp.WebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/payment-web.war</war>
                                             <contextPath>/payment-web</contextPath>
                                         </contextHandler>
@@ -154,6 +165,10 @@
                                 <systemProperty>
                                     <name>jetty.port</name>
                                     <value>9999</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>spring.profiles.active</name>
+                                    <value>int_test</value>
                                 </systemProperty>
                                 <systemProperty>
                                     <name>logback.configurationFile</name>

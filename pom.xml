@@ -15,8 +15,6 @@
         <module>player</module>
         <module>game</module>
 
-        <module>web</module>
-
         <module>test</module>
     </modules>
     <properties>
@@ -140,6 +138,11 @@
             </dependency>
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
+                <artifactId>game-tictactoe</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
                 <artifactId>player-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -156,11 +159,6 @@
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>payment-web</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gogomaya.server</groupId>
-                <artifactId>web</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

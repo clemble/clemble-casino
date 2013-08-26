@@ -84,7 +84,7 @@ public class JPASpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = PROFILE_CLOUD)
+    @Profile(value = CLOUD)
     public static class Cloud {
 
         @Autowired
@@ -117,7 +117,7 @@ public class JPASpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { PROFILE_DEFAULT, PROFILE_TEST })
+    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
     public static class DefaultAndTest implements ApplicationContextAware {
 
         private ApplicationContext applicationContext;

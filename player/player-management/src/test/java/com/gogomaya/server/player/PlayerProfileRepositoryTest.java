@@ -15,7 +15,7 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
+@ActiveProfiles(SpringConfiguration.UNIT_TEST)
 @ContextConfiguration(classes = PlayerManagementSpringConfiguration.class)
 public class PlayerProfileRepositoryTest {
 

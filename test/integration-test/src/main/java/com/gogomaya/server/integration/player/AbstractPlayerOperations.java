@@ -2,9 +2,15 @@ package com.gogomaya.server.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.account.AccountOperations;
@@ -16,24 +22,27 @@ import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.web.RegistrationRequest;
 
-abstract public class AbstractPlayerOperations implements PlayerOperations {
+abstract public class AbstractPlayerOperations implements PlayerOperations, ApplicationContextAware {
 
     final private ProfileOperations profileOperations;
     final private SessionOperations sessionOperations;
     final private AccountOperations accountOperations;
     final private PlayerListenerOperations listenerOperations;
-    final private GameConstructionOperations<?>[] gameConstructionOperations;
+    final private Set<GameConstructionOperations<?>> gameConstructionOperations = new HashSet<>();
 
     protected AbstractPlayerOperations(PlayerListenerOperations listenerOperations,
             ProfileOperations profileOperations,
             SessionOperations sessionOperations,
-            AccountOperations accountOperations,
-            GameConstructionOperations<?>[] gameConstructionOprations) {
+            AccountOperations accountOperations) {
         this.listenerOperations = checkNotNull(listenerOperations);
-        this.gameConstructionOperations = checkNotNull(gameConstructionOprations);
         this.sessionOperations = checkNotNull(sessionOperations);
         this.profileOperations = checkNotNull(profileOperations);
         this.accountOperations = checkNotNull(accountOperations);
+    }
+
+    @Override
+    final public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        gameConstructionOperations.addAll((Collection<? extends GameConstructionOperations<?>>) applicationContext.getBeansOfType(GameConstructionOperations.class).values());
     }
 
     @Override

@@ -12,7 +12,7 @@ import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
+@ActiveProfiles(SpringConfiguration.UNIT_TEST)
 @ContextConfiguration(classes = { PlayerWebSpringConfiguration.class })
 public class PlayerWebInitializationTest {
 

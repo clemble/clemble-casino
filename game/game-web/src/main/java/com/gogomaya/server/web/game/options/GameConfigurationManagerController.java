@@ -19,7 +19,7 @@ import com.gogomaya.server.web.mapping.GameWebMapping;
 @Controller
 public class GameConfigurationManagerController {
 
-    final GameSpecificationRegistry configurationManager;
+    final private GameSpecificationRegistry configurationManager;
 
     public GameConfigurationManagerController(GameSpecificationRegistry configurationManager) {
         this.configurationManager = checkNotNull(configurationManager);

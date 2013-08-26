@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.web.client.RestTemplate;
 
-import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
@@ -24,9 +23,8 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
             final PlayerListenerOperations listenerOperations,
             final ProfileOperations playerProfileOperations,
             final SessionOperations playerSessionOperations,
-            final AccountOperations accountOperations,
-            final GameConstructionOperations<?>... factories) {
-        super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations, factories);
+            final AccountOperations accountOperations) {
+        super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);
     }

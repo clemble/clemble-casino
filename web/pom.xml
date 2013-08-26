@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>game-web</artifactId>
+            <artifactId>game-tictactoe</artifactId>
         </dependency>
         <dependency>
             <groupId>com.gogomaya.server</groupId>

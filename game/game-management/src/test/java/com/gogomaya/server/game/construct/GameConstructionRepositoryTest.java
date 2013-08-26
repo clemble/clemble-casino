@@ -22,7 +22,7 @@ import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(profiles = SpringConfiguration.PROFILE_TEST)
+@ActiveProfiles(profiles = SpringConfiguration.UNIT_TEST)
 @ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
 public class GameConstructionRepositoryTest {
 

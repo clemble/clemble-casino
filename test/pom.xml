@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>integration-test</module>
-        <module>integration-emulators</module>
+        <module>integration-tictactoe</module>
     </modules>
     <dependencyManagement>
         <dependencies>

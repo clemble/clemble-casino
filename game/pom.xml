@@ -12,8 +12,8 @@
         <module>game-common</module>
         <module>game-common-cell</module>
         <module>game-management</module>
-        <module>game-tictactoe</module>
         <module>game-web</module>
+        <module>game-tictactoe</module>
         <module>game-go</module>
     </modules>
     <dependencyManagement>
@@ -35,12 +35,12 @@
             </dependency>
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
-                <artifactId>game-tictactoe</artifactId>
+                <artifactId>game-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
-                <artifactId>game-web</artifactId>
+                <artifactId>game-tictactoe</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -30,14 +30,14 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
     public PaymentTransactionRepository paymentTransactionRepository;
 
     @Bean
-    @Autowired
-    public PlayerAccountService playerAccountService(PaymentTransactionService paymentTransactionService) {
-        return new PlayerAccountServiceImpl(playerAccountRepository, paymentTransactionService);
+    @Singleton
+    public PlayerAccountService realPlayerAccountService() {
+        return new PlayerAccountServiceImpl(playerAccountRepository, realPaymentTransactionService());
     }
 
     @Bean
     @Singleton
-    public PaymentTransactionService paymentTransactionService() {
+    public PaymentTransactionService realPaymentTransactionService() {
         return new PaymentTransactionServiceImpl(paymentTransactionRepository, playerAccountRepository);
     }
 

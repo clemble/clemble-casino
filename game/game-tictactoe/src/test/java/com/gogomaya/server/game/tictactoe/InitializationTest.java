@@ -10,7 +10,7 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.tictactoe.PicPacPoeSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
+@ActiveProfiles(SpringConfiguration.UNIT_TEST)
 @ContextConfiguration(classes = { PicPacPoeSpringConfiguration.class })
 public class InitializationTest {
 

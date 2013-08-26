@@ -108,7 +108,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { PROFILE_DEFAULT, PROFILE_TEST })
+    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
     public static class DefaultAndTest {
 
         @Bean
@@ -122,7 +122,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { PROFILE_TEST })
+    @Profile(value = { UNIT_TEST })
     public static class Test {
 
         @Autowired
@@ -165,7 +165,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { PROFILE_CLOUD })
+    @Profile(value = { CLOUD })
     public static class Cloud {
 
         @Autowired

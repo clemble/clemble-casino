@@ -14,7 +14,7 @@ import com.gogomaya.server.spring.tictactoe.PicPacPoeSpringConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
+@ActiveProfiles(SpringConfiguration.UNIT_TEST)
 @ContextConfiguration(classes = { PicPacPoeSpringConfiguration.class })
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class GameTableManagerTest {

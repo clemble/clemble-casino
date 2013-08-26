@@ -15,8 +15,8 @@ import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.payment.PaymentManagementSpringConfiguration;
-import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.spring.web.SwaggerSpringConfiguration;
+import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.account.PlayerAccountController;
 import com.mangofactory.swagger.SwaggerConfiguration;
@@ -31,7 +31,7 @@ import com.mangofactory.swagger.configuration.ExtensibilityModule;
 public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
-    @Qualifier("playerAccountService")
+    @Qualifier("realPlayerAccountService")
     public PlayerAccountService playerAccountService;
 
     @Autowired
@@ -39,7 +39,7 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
     public PaymentTransactionRepository paymentTransactionRepository;
 
     @Autowired
-    @Qualifier("paymentTransactionService")
+    @Qualifier("realPaymentTransactionService")
     public PaymentTransactionService paymentTransactionService;
 
     @Autowired
@@ -59,7 +59,7 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { SpringConfiguration.PROFILE_DEFAULT, SpringConfiguration.PROFILE_TEST })
+    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
     public static class PaymentDefaultAndTest extends SwaggerSpringConfiguration {
 
         @Override

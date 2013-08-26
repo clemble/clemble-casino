@@ -2,6 +2,7 @@ package com.gogomaya.server.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class Player implements PlayerAware {
             final SessionOperations sessionOperations,
             final AccountOperations accountOperations,
             final PlayerListenerOperations listenerOperations,
-            final GameConstructionOperations<?>... playerConstructionOperations) {
+            final Collection<GameConstructionOperations<?>> playerConstructionOperations) {
         this.profileOperations = new PlayerProfileOperations(this, playerProfileOperations);
         this.playerSessionOperations = new PlayerSessionOperations(this, sessionOperations);
         this.playerWalletOperations = new PlayerAccountOperations(this, accountOperations);

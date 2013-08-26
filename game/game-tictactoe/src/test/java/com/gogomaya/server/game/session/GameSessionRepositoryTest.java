@@ -36,7 +36,7 @@ import com.gogomaya.server.tictactoe.PicPacPoeState;
 import com.gogomaya.server.tictactoe.PicPacPoeStateFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.PROFILE_TEST)
+@ActiveProfiles(SpringConfiguration.UNIT_TEST)
 @ContextConfiguration(classes = { PicPacPoeSpringConfiguration.class })
 public class GameSessionRepositoryTest {
 

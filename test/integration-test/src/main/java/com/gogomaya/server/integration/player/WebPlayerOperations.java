@@ -2,7 +2,6 @@ package com.gogomaya.server.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
@@ -23,9 +22,8 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
             SessionOperations playerSessionOperations,
             AccountOperations accountOperations,
             PlayerListenerOperations listenerOperations,
-            ProfileOperations playerProfileOperations,
-            GameConstructionOperations<?>... gameConstructionOperations) {
-        super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations, gameConstructionOperations);
+            ProfileOperations playerProfileOperations) {
+        super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);
         this.signInContoller = checkNotNull(signInContoller);
         this.loginController = checkNotNull(loginController);
     }

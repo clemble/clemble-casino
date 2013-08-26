@@ -13,15 +13,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.game.Game;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.game.IntegrationGameSessionPlayerFactory;
-import com.gogomaya.server.integration.game.WebGameSessionPlayerFactory;
-import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.game.construction.GameScenarios;
-import com.gogomaya.server.integration.game.construction.IntegrationGameConstructionOperations;
-import com.gogomaya.server.integration.game.construction.WebGameConstructionOperations;
-import com.gogomaya.server.integration.game.tictactoe.PicPacPoePlayerSessionFactory;
 import com.gogomaya.server.integration.payment.IntegrationPaymentTransactionOperations;
 import com.gogomaya.server.integration.payment.PaymentTransactionOperations;
 import com.gogomaya.server.integration.payment.WebPaymentTransactionOperations;
@@ -42,12 +36,9 @@ import com.gogomaya.server.integration.player.session.WebSessionOperations;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
-import com.gogomaya.server.spring.web.WebMvcSpiSpringConfiguration;
-import com.gogomaya.server.tictactoe.PicPacPoeState;
+import com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration;
+import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 import com.gogomaya.server.web.error.GogomayaRESTErrorHandler;
-import com.gogomaya.server.web.game.options.GameConfigurationManagerController;
-import com.gogomaya.server.web.game.session.GameActionController;
-import com.gogomaya.server.web.game.session.GameConstructionController;
 import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
@@ -71,8 +62,8 @@ public class TestConfiguration {
     }
 
     @Configuration
-    @Profile(value = SpringConfiguration.PROFILE_DEFAULT)
-    @Import(value = { WebMvcSpiSpringConfiguration.class })
+    @Profile(value = SpringConfiguration.DEFAULT)
+    @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
         @Autowired
@@ -96,18 +87,6 @@ public class TestConfiguration {
         public PlayerAccountController playerAccountController;
 
         @Autowired
-        @Qualifier("picPacPoeConfigurationManagerController")
-        public GameConfigurationManagerController ticTacToeConfigurationManagerController;
-
-        @Autowired
-        @Qualifier("picPacPoeConstructionController")
-        public GameConstructionController<PicPacPoeState> ticTacToeConstructionController;
-
-        @Autowired
-        @Qualifier("picPacPoeEngineController")
-        public GameActionController<PicPacPoeState> ticTacToeEngineController;
-
-        @Autowired
         public PlayerProfileController playerProfileController;
 
         @Autowired
@@ -123,7 +102,7 @@ public class TestConfiguration {
         @Singleton
         public PlayerOperations playerOperations() {
             return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, sessionOperations(), accountOperations(),
-                    playerListenerOperations(), playerProfileOperations(), picPacPoeGameConstructionOperations());
+                    playerListenerOperations(), playerProfileOperations());
         }
 
         @Bean
@@ -146,25 +125,6 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameSessionPlayerFactory<PicPacPoeState> picPacPoeSessionFactory() {
-            return new WebGameSessionPlayerFactory<PicPacPoeState>(ticTacToeEngineController, ticTacToeConstructionController);
-        }
-
-        @Bean
-        @Singleton
-        public GameConstructionOperations<PicPacPoeState> picPacPoeGameConstructionOperations() {
-            return new WebGameConstructionOperations<PicPacPoeState>(Game.pic, ticTacToeConfigurationManagerController, ticTacToeConstructionController,
-                    picPacPoeSessionPlayerFactory());
-        }
-
-        @Bean
-        @Singleton
-        public GameSessionPlayerFactory<PicPacPoeState> picPacPoeSessionPlayerFactory() {
-            return new PicPacPoePlayerSessionFactory(picPacPoeSessionFactory());
-        }
-
-        @Bean
-        @Singleton
         public PaymentTransactionOperations paymentTransactionOperations() {
             return new WebPaymentTransactionOperations(paymentTransactionController);
         }
@@ -172,19 +132,18 @@ public class TestConfiguration {
     }
 
     @Configuration
-    @Profile(value = SpringConfiguration.PROFILE_INTEGRATION_CLOUD)
+    @Profile(value = SpringConfiguration.INTEGRATION_CLOUD)
     public static class RemoteIntegrationTestConfiguration extends IntegrationTestConfiguration {
 
         @Override
         public String getBaseUrl() {
-            // return "http://gogomaya.cfapps.io/";
             return "http://ec2-50-16-93-157.compute-1.amazonaws.com/gogomaya/";
         }
 
     }
 
     @Configuration
-    @Profile(value = SpringConfiguration.PROFILE_INTEGRATION_LOCAL_TEST)
+    @Profile(value = SpringConfiguration.INTEGRATION_TEST)
     public static class LocalIntegrationTestConfiguration extends IntegrationTestConfiguration {
 
         @Override
@@ -195,7 +154,7 @@ public class TestConfiguration {
     }
 
     @Configuration
-    @Profile(value = SpringConfiguration.PROFILE_INTEGRATION_LOCAL_SERVER)
+    @Profile(value = SpringConfiguration.INTEGRATION_DEFAULT)
     public static class LocalServerIntegrationTestConfiguration extends IntegrationTestConfiguration {
 
     }
@@ -242,7 +201,7 @@ public class TestConfiguration {
         @Singleton
         public PlayerOperations playerOperations() {
             return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
-                    accountOperations(), picPacPoeGameConstructionOperations());
+                    accountOperations());
         }
 
         @Bean
@@ -261,19 +220,6 @@ public class TestConfiguration {
         @Singleton
         public GameSessionPlayerFactory<?> genericGameSessionFactory() {
             return new IntegrationGameSessionPlayerFactory<>(restTemplate(), getBaseUrl());
-        }
-
-        @Bean
-        @Singleton
-        public GameConstructionOperations<PicPacPoeState> picPacPoeGameConstructionOperations() {
-            return new IntegrationGameConstructionOperations<PicPacPoeState>(Game.pic, getBaseUrl(), restTemplate(), picPacPoeSessionPlayerFactory());
-        }
-
-        @Bean
-        @Singleton
-        @SuppressWarnings("unchecked")
-        public GameSessionPlayerFactory<PicPacPoeState> picPacPoeSessionPlayerFactory() {
-            return new PicPacPoePlayerSessionFactory((GameSessionPlayerFactory<PicPacPoeState>) genericGameSessionFactory());
         }
 
         @Bean

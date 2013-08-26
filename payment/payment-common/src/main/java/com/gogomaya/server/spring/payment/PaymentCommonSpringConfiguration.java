@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -23,15 +24,14 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 
 @Configuration
-@Import({ PaymentCommonSpringConfiguration.Test.class,
-        PaymentCommonSpringConfiguration.RemoteIntegrationPaymentConfiguration.class,
-        PaymentCommonSpringConfiguration.LocalIntegrationPaymentConfiguration.class,
-        PaymentCommonSpringConfiguration.DefaultIntegrationPaymentConfiguration.class })
+@Import({ PaymentCommonSpringConfiguration.Test.class, PaymentCommonSpringConfiguration.IntegrationCloudPaymentConfiguration.class,
+        PaymentCommonSpringConfiguration.IntegrationTestPaymentConfiguration.class,
+        PaymentCommonSpringConfiguration.IntegrationDefaultPaymentConfiguration.class })
 public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
     @Configuration
-    @Profile(value = SpringConfiguration.PROFILE_INTEGRATION_CLOUD)
-    public static class RemoteIntegrationPaymentConfiguration extends IntegrationPaymentConfiguration {
+    @Profile(value = SpringConfiguration.INTEGRATION_CLOUD)
+    public static class IntegrationCloudPaymentConfiguration extends IntegrationPaymentConfiguration {
 
         @Override
         public String getBaseUrl() {
@@ -41,8 +41,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { SpringConfiguration.PROFILE_INTEGRATION_LOCAL_TEST, SpringConfiguration.PROFILE_DEFAULT })
-    public static class LocalIntegrationPaymentConfiguration extends IntegrationPaymentConfiguration {
+    @Profile(value = { SpringConfiguration.INTEGRATION_TEST })
+    public static class IntegrationTestPaymentConfiguration extends IntegrationPaymentConfiguration {
 
         @Override
         public String getBaseUrl() {
@@ -52,12 +52,21 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { SpringConfiguration.PROFILE_INTEGRATION_LOCAL_SERVER })
-    public static class DefaultIntegrationPaymentConfiguration extends IntegrationPaymentConfiguration {
+    @Profile(value = { DEFAULT })
+    public static class IntegrationDefaultPaymentConfiguration extends IntegrationPaymentConfiguration {
+
     }
 
     @Import(ClientRestCommonSpringConfiguration.class)
     public static class IntegrationPaymentConfiguration {
+
+        @Autowired(required = false)
+        @Qualifier("realPaymentTransactionService")
+        public PaymentTransactionService realPaymentTransactionService;
+
+        @Autowired(required = false)
+        @Qualifier("realPlayerAccountService")
+        public PlayerAccountService realPlayerAccountService;
 
         public String getBaseUrl() {
             return "http://localhost:8080/";
@@ -66,18 +75,18 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
         @Bean
         @Autowired
         public PaymentTransactionService paymentTransactionService(RestTemplate restTemplate) {
-            return new RestPaymentTransactionService(getBaseUrl(), restTemplate);
+            return realPaymentTransactionService == null ? new RestPaymentTransactionService(getBaseUrl(), restTemplate) : realPaymentTransactionService;
         }
 
         @Bean
         @Autowired
         public PlayerAccountService playerAccountService(RestTemplate restTemplate) {
-            return new RestPlayerAccountService(getBaseUrl(), restTemplate);
+            return realPlayerAccountService == null ? new RestPlayerAccountService(getBaseUrl(), restTemplate) : realPlayerAccountService;
         }
     }
 
     @Configuration
-    @Profile(SpringConfiguration.PROFILE_TEST)
+    @Profile(SpringConfiguration.UNIT_TEST)
     public static class Test {
 
         @Bean
