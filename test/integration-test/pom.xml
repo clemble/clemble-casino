@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.gogomaya.server</groupId>
         <artifactId>test</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.3.0</version>
     </parent>
     <artifactId>integration-test</artifactId>
     <dependencies>
@@ -105,12 +105,6 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.gogomaya.server</groupId>
-                                            <artifactId>game-tictactoe</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>war</type>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>com.gogomaya.server</groupId>
                                             <artifactId>payment-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
@@ -133,11 +127,6 @@
                                 <configuration>
                                     <daemon>true</daemon>
                                     <contextHandlers>
-                                        <contextHandler
-                                            implementation="org.eclipse.jetty.webapp.WebAppContext">
-                                            <war>${project.build.directory}/wars-to-be-tested/game-tictactoe.war</war>
-                                            <contextPath>/game-web</contextPath>
-                                        </contextHandler>
                                         <contextHandler
                                             implementation="org.eclipse.jetty.webapp.WebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/player-web.war</war>

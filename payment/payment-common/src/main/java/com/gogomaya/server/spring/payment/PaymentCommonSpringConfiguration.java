@@ -24,9 +24,10 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 
 @Configuration
-@Import({ PaymentCommonSpringConfiguration.Test.class, PaymentCommonSpringConfiguration.IntegrationCloudPaymentConfiguration.class,
+@Import({ PaymentCommonSpringConfiguration.Test.class,
+        PaymentCommonSpringConfiguration.IntegrationCloudPaymentConfiguration.class,
         PaymentCommonSpringConfiguration.IntegrationTestPaymentConfiguration.class,
-        PaymentCommonSpringConfiguration.IntegrationDefaultPaymentConfiguration.class })
+        PaymentCommonSpringConfiguration.IntegrationPaymentConfiguration.class })
 public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
     @Configuration
@@ -51,13 +52,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
     }
 
-    @Configuration
-    @Profile(value = { DEFAULT })
-    public static class IntegrationDefaultPaymentConfiguration extends IntegrationPaymentConfiguration {
-
-    }
-
     @Import(ClientRestCommonSpringConfiguration.class)
+    @Profile(value = { DEFAULT })
     public static class IntegrationPaymentConfiguration {
 
         @Autowired(required = false)

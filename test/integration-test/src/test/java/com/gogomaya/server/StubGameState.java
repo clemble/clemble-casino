@@ -2,6 +2,7 @@ package com.gogomaya.server;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.event.ClientEvent;
@@ -14,6 +15,7 @@ import com.gogomaya.server.game.outcome.GameOutcome;
 import com.google.common.collect.ImmutableList;
 
 @JsonTypeName("stub")
+@JsonIgnoreProperties("playerIterator")
 public class StubGameState implements GameState {
 
     /**
