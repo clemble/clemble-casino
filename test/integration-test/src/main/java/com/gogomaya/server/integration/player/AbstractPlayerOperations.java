@@ -42,7 +42,7 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
 
     @Override
     final public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        gameConstructionOperations.addAll((Collection<? extends GameConstructionOperations<?>>) applicationContext.getBeansOfType(GameConstructionOperations.class).values());
+        gameConstructionOperations.addAll((Collection<? extends GameConstructionOperations<?>>)(Collection<?>) applicationContext.getBeansOfType(GameConstructionOperations.class).values());
     }
 
     @Override

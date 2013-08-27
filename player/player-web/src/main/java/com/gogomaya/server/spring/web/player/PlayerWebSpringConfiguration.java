@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.rest.webmvc.BaseUriMethodArgumentResolver;
 
 import com.gogomaya.server.error.GogomayaValidationService;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
@@ -105,12 +104,6 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
         return new PlayerSessionController(playerNotificationRegistry, playerSessionRepository, playerStateManager);
     }
 
-    @Bean
-    @Singleton
-    public BaseUriMethodArgumentResolver baseUriMethodArgumentResolver() {
-        return new BaseUriMethodArgumentResolver();
-    }
-    
     @Configuration
     @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
     public static class PlayerDefaultAndTest extends SwaggerSpringConfiguration {

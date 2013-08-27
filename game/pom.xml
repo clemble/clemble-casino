@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.gogomaya.server</groupId>
         <artifactId>parent</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
     </parent>
     <artifactId>game</artifactId>
     <packaging>pom</packaging>

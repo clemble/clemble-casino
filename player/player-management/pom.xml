@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.gogomaya.server</groupId>
         <artifactId>player</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
     </parent>
     <artifactId>player-management</artifactId>
     <dependencies>
@@ -20,11 +20,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-rest-repository</artifactId>
         </dependency>
 
         <dependency>

@@ -47,7 +47,9 @@ import com.gogomaya.server.web.player.registration.PlayerLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 
 @Configuration
-@Import(value = { JsonSpringConfiguration.class, TestConfiguration.LocalTestConfiguration.class, TestConfiguration.LocalIntegrationTestConfiguration.class,
+@Import(value = { JsonSpringConfiguration.class,
+        TestConfiguration.LocalTestConfiguration.class,
+        TestConfiguration.LocalIntegrationTestConfiguration.class,
         TestConfiguration.RemoteIntegrationTestConfiguration.class })
 public class TestConfiguration {
 
