@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import com.gogomaya.server.error.GogomayaValidationService;
+import com.gogomaya.error.GogomayaValidationService;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.player.state.PlayerStateManager;

@@ -1,8 +1,8 @@
 package com.gogomaya.server.game.cache;
 
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.GameStateFactory;

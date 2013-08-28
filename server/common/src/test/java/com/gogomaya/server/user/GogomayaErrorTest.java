@@ -3,8 +3,8 @@ package com.gogomaya.server.user;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaError.Code;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaError.Code;
 
 public class GogomayaErrorTest {
 

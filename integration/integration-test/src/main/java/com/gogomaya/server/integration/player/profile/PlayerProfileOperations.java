@@ -2,8 +2,8 @@ package com.gogomaya.server.integration.player.profile;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.player.PlayerProfile;
 
 public class PlayerProfileOperations {
 

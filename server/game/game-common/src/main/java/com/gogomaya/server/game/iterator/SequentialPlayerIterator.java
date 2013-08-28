@@ -7,7 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.server.player.PlayerAware;
+import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("sequential")
 public class SequentialPlayerIterator implements GamePlayerIterator {

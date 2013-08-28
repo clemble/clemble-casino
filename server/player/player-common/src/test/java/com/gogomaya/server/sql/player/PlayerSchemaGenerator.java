@@ -6,7 +6,7 @@ import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
 import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Test;
 
-import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.security.PlayerSession;

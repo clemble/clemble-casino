@@ -1,8 +1,8 @@
 package com.gogomaya.server.game.event.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.outcome.GameOutcome;
 
 @JsonTypeName("ended")

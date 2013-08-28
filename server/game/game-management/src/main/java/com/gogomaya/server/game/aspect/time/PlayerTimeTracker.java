@@ -4,9 +4,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.gogomaya.player.PlayerAware;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.rule.time.TimeRule;
-import com.gogomaya.server.player.PlayerAware;
 
 public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTracker> {
 

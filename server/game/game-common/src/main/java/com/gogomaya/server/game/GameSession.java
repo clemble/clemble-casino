@@ -22,6 +22,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.event.client.MadeMove;

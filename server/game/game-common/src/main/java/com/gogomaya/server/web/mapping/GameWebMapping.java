@@ -1,5 +1,7 @@
 package com.gogomaya.server.web.mapping;
 
+import com.gogomaya.web.mapping.WebMapping;
+
 public interface GameWebMapping extends WebMapping {
 
     final public static String GAME_PREFIX = "/game-web";

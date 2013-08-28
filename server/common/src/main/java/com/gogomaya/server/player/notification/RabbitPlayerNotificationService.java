@@ -13,8 +13,8 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
 import com.gogomaya.server.event.Event;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

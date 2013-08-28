@@ -5,9 +5,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAware;
-import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
 

@@ -3,8 +3,8 @@ package com.gogomaya.server.game.event.schedule;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.player.PlayerAware;
 import com.gogomaya.server.event.GameConstructionEvent;
-import com.gogomaya.server.player.PlayerAware;
 
 @JsonTypeName("added")
 public class PlayerAddedEvent implements GameConstructionEvent, PlayerAware {

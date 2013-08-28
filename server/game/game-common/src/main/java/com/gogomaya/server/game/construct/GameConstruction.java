@@ -19,9 +19,9 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.hibernate.JsonHibernateType;
 

@@ -7,8 +7,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gogomaya.server.game.SessionAware;
-import com.gogomaya.server.player.PlayerAware;
+import com.gogomaya.game.SessionAware;
+import com.gogomaya.player.PlayerAware;
 
 @Entity
 @Table(name = "PLAYER_SCHEDULED_EVENT")

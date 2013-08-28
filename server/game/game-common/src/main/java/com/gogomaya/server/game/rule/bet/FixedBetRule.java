@@ -5,8 +5,8 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
 import com.gogomaya.server.game.event.client.BetEvent;
 
 @JsonTypeName("fixed")

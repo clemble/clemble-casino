@@ -5,6 +5,9 @@ import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import com.gogomaya.player.PlayerCategory;
+import com.gogomaya.player.PlayerGender;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.account.GameAccount;
@@ -37,9 +40,6 @@ import com.gogomaya.server.money.Operation;
 import com.gogomaya.server.payment.PaymentOperation;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionId;
-import com.gogomaya.server.player.PlayerCategory;
-import com.gogomaya.server.player.PlayerGender;
-import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.google.common.collect.ImmutableList;

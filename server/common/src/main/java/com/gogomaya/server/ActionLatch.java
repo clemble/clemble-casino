@@ -9,8 +9,8 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
 
 public class ActionLatch implements Serializable {

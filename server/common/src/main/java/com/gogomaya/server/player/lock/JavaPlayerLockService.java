@@ -6,8 +6,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

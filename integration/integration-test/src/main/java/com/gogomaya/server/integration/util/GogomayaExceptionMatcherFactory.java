@@ -7,10 +7,10 @@ import java.util.Collection;
 import org.hamcrest.CustomMatcher;
 import org.hamcrest.Matcher;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.error.GogomayaFailure;
-import com.gogomaya.server.error.GogomayaFailureDescription;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
+import com.gogomaya.error.GogomayaFailure;
+import com.gogomaya.error.GogomayaFailureDescription;
 import com.google.common.collect.ImmutableList;
 
 public class GogomayaExceptionMatcherFactory {

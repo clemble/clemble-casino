@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.social.connect.ConnectionData;
 
-import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.player.SocialConnectionData;
 
 public abstract class SocialConnectionAdapter<A> {

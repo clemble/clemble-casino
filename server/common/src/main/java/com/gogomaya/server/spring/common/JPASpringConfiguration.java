@@ -66,7 +66,7 @@ public class JPASpringConfiguration implements SpringConfiguration {
     public EntityManagerFactory entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
-        entityManagerFactory.setPackagesToScan(new String[] { "com.gogomaya.server" });
+        entityManagerFactory.setPackagesToScan(new String[] { "com.gogomaya" });
         entityManagerFactory.setPersistenceProvider(new HibernatePersistence());
         entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter);
         entityManagerFactory.setPersistenceUnitName("entityManager");

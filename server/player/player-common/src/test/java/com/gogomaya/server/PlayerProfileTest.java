@@ -16,9 +16,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.error.GogomayaValidationService;
-import com.gogomaya.server.player.PlayerGender;
-import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.error.GogomayaValidationService;
+import com.gogomaya.player.PlayerGender;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.server.player.PlayerAware;
+import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("bet")
 public class BetEvent extends GameClientEvent {

@@ -1,10 +1,10 @@
 package com.gogomaya.server.game.event.server;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.GameTable;
 import com.gogomaya.server.game.ServerResourse;
-import com.gogomaya.server.game.SessionAware;
 
 @JsonTypeName("started")
 public class GameStartedEvent<State extends GameState> extends GameServerEvent<State> implements SessionAware {

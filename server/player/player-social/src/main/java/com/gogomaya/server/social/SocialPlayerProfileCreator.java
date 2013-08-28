@@ -10,7 +10,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionSignUp;
 
-import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;

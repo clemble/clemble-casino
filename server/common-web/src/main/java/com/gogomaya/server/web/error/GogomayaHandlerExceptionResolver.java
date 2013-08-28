@@ -19,9 +19,9 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.error.GogomayaFailureDescription;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
+import com.gogomaya.error.GogomayaFailureDescription;
 
 @Controller
 public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolver {

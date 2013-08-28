@@ -3,7 +3,7 @@ package com.gogomaya.server.game.account;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gogomaya.server.player.PlayerAware;
+import com.gogomaya.player.PlayerAware;
 
 public class GamePlayerAccount implements PlayerAware {
 

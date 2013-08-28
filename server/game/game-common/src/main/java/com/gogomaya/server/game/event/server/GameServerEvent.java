@@ -2,10 +2,10 @@ package com.gogomaya.server.game.event.server;
 
 import java.io.Serializable;
 
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.event.ServerEvent;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.SessionAware;
 
 abstract public class GameServerEvent<State extends GameState> implements SessionAware, ServerEvent, Serializable {
 

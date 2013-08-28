@@ -9,9 +9,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.SessionAware;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.SpecificationName;
 import com.gogomaya.server.player.lock.PlayerLockService;

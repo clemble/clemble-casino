@@ -1,7 +1,7 @@
 package com.gogomaya.server.integration.player.profile;
 
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.player.PlayerProfile;
 
 public interface ProfileOperations {
 

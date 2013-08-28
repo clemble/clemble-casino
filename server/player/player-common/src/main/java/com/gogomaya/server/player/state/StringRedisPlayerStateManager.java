@@ -22,9 +22,9 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.Topic;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.game.SessionAware;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.player.PlayerState;
 
 public class StringRedisPlayerStateManager implements PlayerStateManager {

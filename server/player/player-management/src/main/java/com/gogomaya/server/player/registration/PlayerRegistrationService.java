@@ -2,9 +2,9 @@ package com.gogomaya.server.player.registration;
 
 import java.util.UUID;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;

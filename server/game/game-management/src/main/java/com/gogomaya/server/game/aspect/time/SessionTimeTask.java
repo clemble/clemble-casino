@@ -6,9 +6,9 @@ import java.util.Date;
 
 import org.springframework.scheduling.TriggerContext;
 
+import com.gogomaya.game.SessionAware;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.action.GameEventTask;
 import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.specification.GameSpecification;

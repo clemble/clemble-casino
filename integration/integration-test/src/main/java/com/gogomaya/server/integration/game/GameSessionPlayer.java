@@ -2,14 +2,14 @@ package com.gogomaya.server.integration.game;
 
 import java.io.Closeable;
 
+import com.gogomaya.game.SessionAware;
+import com.gogomaya.player.PlayerAware;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.SessionAware;
 import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.event.client.GameClientEvent;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.player.PlayerAware;
 
 public interface GameSessionPlayer<State extends GameState> extends SessionAware, PlayerAware, Closeable, GameSpecificationAware {
 

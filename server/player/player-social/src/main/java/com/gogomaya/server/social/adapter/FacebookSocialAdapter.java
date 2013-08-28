@@ -9,8 +9,8 @@ import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
 
-import com.gogomaya.server.player.PlayerGender;
-import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.player.PlayerGender;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.player.SocialConnectionData;
 import com.gogomaya.server.social.SocialConnectionAdapter;
 

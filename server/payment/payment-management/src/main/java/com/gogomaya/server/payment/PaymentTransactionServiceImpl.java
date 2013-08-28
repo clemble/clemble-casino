@@ -8,8 +8,8 @@ import java.util.Collection;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
 import com.gogomaya.server.money.Operation;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;

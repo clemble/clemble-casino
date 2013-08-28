@@ -2,9 +2,9 @@ package com.gogomaya.server.game.event.server;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.player.PlayerAware;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.player.PlayerAware;
 
 @JsonTypeName("playerMoved")
 public class PlayerMovedEvent<State extends GameState> extends GameServerEvent<State> implements PlayerAware {

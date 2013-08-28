@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.payment.PaymentTransactionId;
 import com.gogomaya.server.payment.web.mapping.PaymentWebMapping;
-import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;

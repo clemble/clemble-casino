@@ -16,10 +16,10 @@ import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import com.gogomaya.player.PlayerAware;
 import com.gogomaya.server.money.Currency;
 import com.gogomaya.server.money.Money;
 import com.gogomaya.server.money.MoneyHibernate;
-import com.gogomaya.server.player.PlayerAware;
 
 @Entity
 @Table(name = "PLAYER_ACCOUNT")

@@ -5,9 +5,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
 import com.gogomaya.server.ActionLatch;
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
 import com.gogomaya.server.game.event.schedule.GameConstructedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationDeclinedEvent;

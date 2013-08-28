@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.error.GogomayaException;
 import com.gogomaya.server.player.PlayerState;
 import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
 import com.google.common.collect.ImmutableList;

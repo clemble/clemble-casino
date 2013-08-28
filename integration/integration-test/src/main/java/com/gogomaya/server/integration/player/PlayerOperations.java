@@ -1,6 +1,6 @@
 package com.gogomaya.server.integration.player;
 
-import com.gogomaya.server.player.PlayerProfile;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.web.RegistrationRequest;
 

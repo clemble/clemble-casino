@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gogomaya.player.PlayerAware;
 import com.google.common.collect.ImmutableMap;
 
 public class PlayerAwareUtils {

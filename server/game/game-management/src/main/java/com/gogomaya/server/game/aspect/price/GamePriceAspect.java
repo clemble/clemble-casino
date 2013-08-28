@@ -1,7 +1,7 @@
 package com.gogomaya.server.game.aspect.price;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
 import com.gogomaya.server.event.ClientEvent;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.account.GamePlayerAccount;

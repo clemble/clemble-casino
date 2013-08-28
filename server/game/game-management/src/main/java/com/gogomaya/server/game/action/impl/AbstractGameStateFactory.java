@@ -2,8 +2,8 @@ package com.gogomaya.server.game.action.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.error.GogomayaError;
-import com.gogomaya.server.error.GogomayaException;
+import com.gogomaya.error.GogomayaError;
+import com.gogomaya.error.GogomayaException;
 import com.gogomaya.server.game.GameSession;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.action.GameProcessor;

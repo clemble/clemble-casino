@@ -10,6 +10,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.gogomaya.player.PlayerAware;
+import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.construct.GameConstruction;
@@ -24,8 +26,6 @@ import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.PlayerSessionOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.server.player.PlayerAware;
-import com.gogomaya.server.player.PlayerProfile;
 import com.gogomaya.server.player.security.PlayerCredential;
 import com.gogomaya.server.player.security.PlayerIdentity;
 import com.gogomaya.server.player.security.PlayerSession;

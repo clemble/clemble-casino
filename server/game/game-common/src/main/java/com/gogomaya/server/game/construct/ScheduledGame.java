@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.gogomaya.server.game.SessionAware;
+import com.gogomaya.game.SessionAware;
 
 @Entity
 @Table(name = "GAME_SCHEDULE")

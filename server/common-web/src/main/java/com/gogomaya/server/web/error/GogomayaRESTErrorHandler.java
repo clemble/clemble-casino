@@ -7,8 +7,8 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.error.GogomayaException;
-import com.gogomaya.server.error.GogomayaFailureDescription;
+import com.gogomaya.error.GogomayaException;
+import com.gogomaya.error.GogomayaFailureDescription;
 
 public class GogomayaRESTErrorHandler implements ResponseErrorHandler {
 

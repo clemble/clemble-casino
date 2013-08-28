@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import com.gogomaya.server.error.GogomayaValidationService;
+import com.gogomaya.error.GogomayaValidationService;
 import com.gogomaya.server.player.lock.JavaPlayerLockService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 
