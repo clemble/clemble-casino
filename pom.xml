@@ -14,10 +14,6 @@
 
         <module>test-utils</module>
 
-        <module>payment</module>
-        <module>player</module>
-        <module>game</module>
-
         <module>test</module>
     </modules>
     <properties>
