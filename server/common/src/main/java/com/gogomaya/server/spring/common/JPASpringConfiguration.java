@@ -6,9 +6,6 @@ import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.env.RdbmsServiceInfo;
-import org.cloudfoundry.runtime.service.relational.RdbmsServiceCreator;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +34,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.gogomaya.server.repository", entityManagerFactoryRef = "entityManagerFactory")
-@Import(value = { JPASpringConfiguration.Cloud.class, JPASpringConfiguration.DefaultAndTest.class })
+@Import(value = { JPASpringConfiguration.DefaultAndTest.class })
 public class JPASpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -84,39 +81,6 @@ public class JPASpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = CLOUD)
-    public static class Cloud {
-
-        @Autowired
-        public CloudEnvironment cloudEnvironment;
-
-        @Bean
-        @Singleton
-        public JpaVendorAdapter jpaVendorAdapter() {
-            HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-            hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
-            hibernateJpaVendorAdapter.setShowSql(false);
-            return hibernateJpaVendorAdapter;
-        }
-
-        @Bean
-        @Singleton
-        public DataSource dataSource() {
-            try {
-                RdbmsServiceInfo serviceInfo = cloudEnvironment.getServiceInfo("gogomaya-mysql", RdbmsServiceInfo.class);
-                RdbmsServiceCreator serviceCreator = new RdbmsServiceCreator();
-                DataSource dataSource = serviceCreator.createService(serviceInfo);
-                if (dataSource == null)
-                    throw new NullPointerException("Data source can't be created");
-                return dataSource;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-
-    @Configuration
     @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
     public static class DefaultAndTest implements ApplicationContextAware {
 
@@ -153,11 +117,11 @@ public class JPASpringConfiguration implements SpringConfiguration {
         public ResourceDatabasePopulator databasePopulator() throws IOException {
             ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
             // Step 1. Searching for schema script files
-            for(Resource schema: applicationContext.getResources("classpath*:/sql/schema/h2/*.sql")) {
+            for (Resource schema : applicationContext.getResources("classpath*:/sql/schema/h2/*.sql")) {
                 databasePopulator.addScript(schema);
             }
             // Step 2. Searching for data script files
-            for(Resource schema: applicationContext.getResources("classpath*:/sql/data/*.sql")) {
+            for (Resource schema : applicationContext.getResources("classpath*:/sql/data/*.sql")) {
                 databasePopulator.addScript(schema);
             }
             // Step 3. Returning aggregated script

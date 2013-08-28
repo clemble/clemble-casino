@@ -7,8 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import org.cloudfoundry.org.codehaus.jackson.annotate.JsonCreator;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAware;

@@ -9,8 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gogomaya.server.error.GogomayaErrorFormat.GogomayaErrorDeserializer;

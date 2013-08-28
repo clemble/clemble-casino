@@ -6,9 +6,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.cloudfoundry.org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.validator.constraints.Email;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.server.error.GogomayaError.Code;
 import com.gogomaya.server.error.validation.MaxSize;
 import com.gogomaya.server.error.validation.MinSize;

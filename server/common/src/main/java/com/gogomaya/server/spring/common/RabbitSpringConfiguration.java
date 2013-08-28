@@ -2,9 +2,6 @@ package com.gogomaya.server.spring.common;
 
 import javax.inject.Singleton;
 
-import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.env.RabbitServiceInfo;
-import org.cloudfoundry.runtime.service.messaging.RabbitServiceCreator;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -26,7 +23,7 @@ import com.gogomaya.server.player.notification.RabbitPlayerNotificationService;
 import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
 
 @Configuration
-@Import({ RabbitSpringConfiguration.Cloud.class, RabbitSpringConfiguration.DefaultAndTest.class, JsonSpringConfiguration.class })
+@Import({ RabbitSpringConfiguration.DefaultAndTest.class, JsonSpringConfiguration.class })
 public class RabbitSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -65,30 +62,6 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     @Singleton
     public PlayerNotificationService playerNotificationService() {
         return new RabbitPlayerNotificationService(jsonMessageConverter(), playerNotificationRegistry);
-    }
-
-    @Configuration
-    @Profile(value = CLOUD)
-    public static class Cloud {
-
-        @Autowired
-        public CloudEnvironment cloudEnvironment;
-
-        @Bean
-        @Singleton
-        public ConnectionFactory connectionFactory() {
-            try {
-                RabbitServiceInfo serviceInfo = cloudEnvironment.getServiceInfo("gogomaya-rabbit", RabbitServiceInfo.class);
-                RabbitServiceCreator serviceCreator = new RabbitServiceCreator();
-                ConnectionFactory connectionFactory = serviceCreator.createService(serviceInfo);
-                if (connectionFactory == null)
-                    throw new NullPointerException("Rabbit Connection factory can't be created");
-                return connectionFactory;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
     }
 
     @Configuration

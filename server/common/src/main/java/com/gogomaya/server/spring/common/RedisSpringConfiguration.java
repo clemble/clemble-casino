@@ -4,9 +4,6 @@ import java.nio.ByteBuffer;
 
 import javax.inject.Singleton;
 
-import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.env.RedisServiceInfo;
-import org.cloudfoundry.runtime.service.keyvalue.RedisServiceCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +17,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
 @Configuration
-@Import(value = { RedisSpringConfiguration.Cloud.class, RedisSpringConfiguration.DefaultAndTest.class })
+@Import(value = { RedisSpringConfiguration.DefaultAndTest.class })
 public class RedisSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -57,40 +54,6 @@ public class RedisSpringConfiguration implements SpringConfiguration {
         StringRedisTemplate redisTemplate = new StringRedisTemplate();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
-    }
-
-    /**
-     * @Bean
-     * @Singleton
-     *            public RedisTemplate<String, Long> playerQueueTemplate() {
-     *            RedisTemplate<String, Long> redisTemplate = new RedisTemplate<String, Long>();
-     *            redisTemplate.setConnectionFactory(redisConnectionFactory);
-     *            return redisTemplate;
-     *            }
-     */
-
-    @Configuration
-    @Profile(value = CLOUD)
-    public static class Cloud {
-
-        @Autowired
-        CloudEnvironment cloudEnvironment;
-
-        @Bean
-        @Singleton
-        public RedisConnectionFactory redisConnectionFactory() {
-            try {
-                RedisServiceInfo serviceInfo = cloudEnvironment.getServiceInfo("gogomaya-redis", RedisServiceInfo.class);
-                RedisServiceCreator serviceCreator = new RedisServiceCreator();
-                RedisConnectionFactory connectionFactory = serviceCreator.createService(serviceInfo);
-                if (connectionFactory == null)
-                    throw new NullPointerException("Redis Connection factory can't be created");
-                return connectionFactory;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
     }
 
     @Configuration

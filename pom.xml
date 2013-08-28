@@ -16,8 +16,6 @@
         <!-- Sources encoding for the maven generated jars -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- Cloud foundry dependencies -->
-        <cloudfoundry.runtime.version>0.8.4</cloudfoundry.runtime.version>
         <!-- Generic dependencies -->
         <java.serlet-api.version>3.0.1</java.serlet-api.version>
         <commons-lang.version>3.1</commons-lang.version>
@@ -137,11 +135,6 @@
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>game-web</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gogomaya.server</groupId>
-                <artifactId>game-tictactoe</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -412,14 +405,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-oxm</artifactId>
             <version>${spring.version}</version>
-        </dependency>
-
-        <!-- Environment dependencies -->
-
-        <dependency>
-            <groupId>org.cloudfoundry</groupId>
-            <artifactId>cloudfoundry-runtime</artifactId>
-            <version>${cloudfoundry.runtime.version}</version>
         </dependency>
 
         <!-- Common dependencies -->
