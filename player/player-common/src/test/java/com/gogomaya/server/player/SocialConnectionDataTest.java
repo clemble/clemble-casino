@@ -1,4 +1,4 @@
-package com.gogomaya.server;
+package com.gogomaya.server.player;
 
 import static org.junit.Assert.assertEquals;
 

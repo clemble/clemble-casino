@@ -9,6 +9,7 @@
     <artifactId>player</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>player-base</module>
         <module>player-common</module>
         <module>player-management</module>
         <module>player-social</module>
@@ -16,6 +17,11 @@
     </modules>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>player-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>player-common</artifactId>
