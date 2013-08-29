@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.error.GogomayaValidationService;
+import com.gogomaya.player.security.PlayerIdentity;
+import com.gogomaya.player.web.RegistrationRequest;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
-import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.web.RegistrationRequest;
-import com.gogomaya.server.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.mapping.PlayerWebMapping;
 
 @Controller
 public class RegistrationSignInContoller {

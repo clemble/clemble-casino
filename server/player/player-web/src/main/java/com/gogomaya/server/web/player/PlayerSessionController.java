@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
+import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
-import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.player.PlayerSessionRepository;
-import com.gogomaya.server.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.mapping.PlayerWebMapping;
 
 @Controller
 public class PlayerSessionController {
@@ -39,8 +39,7 @@ public class PlayerSessionController {
 
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_SESSIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PlayerSession post(@RequestHeader("playerId") long requesterId, @PathVariable("playerId") long playerId) {
+    public @ResponseBody PlayerSession post(@RequestHeader("playerId") long requesterId, @PathVariable("playerId") long playerId) {
         // Step 0. Checking player is the one who trying to modify it
         if (requesterId != playerId)
             throw GogomayaException.fromError(GogomayaError.PlayerNotSessionOwner);
@@ -56,8 +55,7 @@ public class PlayerSessionController {
 
     @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_SESSIONS_SESSION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public @ResponseBody
-    PlayerSession refresh(@RequestHeader("playerId") long requesterId, @PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
+    public @ResponseBody PlayerSession refresh(@RequestHeader("playerId") long requesterId, @PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
         // Step 1. Fetching session
         PlayerSession playerSession = get(requesterId, playerId, sessionId);
         // Step 2. Sanity check

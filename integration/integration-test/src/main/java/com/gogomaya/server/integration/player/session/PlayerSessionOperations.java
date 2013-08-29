@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
+import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.player.security.PlayerSession;
 
 public class PlayerSessionOperations{
     

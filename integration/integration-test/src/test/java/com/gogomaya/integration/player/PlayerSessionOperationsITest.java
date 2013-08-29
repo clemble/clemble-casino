@@ -17,11 +17,11 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.error.GogomayaError;
+import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.integration.util.GogomayaExceptionMatcherFactory;
-import com.gogomaya.server.player.security.PlayerSession;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 import com.stresstest.util.CollectionAssert;

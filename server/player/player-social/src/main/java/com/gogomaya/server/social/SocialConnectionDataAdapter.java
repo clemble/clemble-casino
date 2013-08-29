@@ -14,7 +14,7 @@ import org.springframework.social.connect.UsersConnectionRepository;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.player.SocialConnectionData;
+import com.gogomaya.player.SocialConnectionData;
 import com.google.common.collect.ImmutableSet;
 
 public class SocialConnectionDataAdapter {

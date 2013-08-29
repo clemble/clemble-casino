@@ -11,10 +11,10 @@ import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionSignUp;
 
 import com.gogomaya.player.PlayerProfile;
+import com.gogomaya.player.security.PlayerCredential;
+import com.gogomaya.player.security.PlayerIdentity;
+import com.gogomaya.player.web.RegistrationRequest;
 import com.gogomaya.server.player.registration.PlayerRegistrationService;
-import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.web.RegistrationRequest;
 
 public class SocialPlayerProfileCreator implements ConnectionSignUp {
 

@@ -1,4 +1,4 @@
-package com.gogomaya.server.player;
+package com.gogomaya.player;
 
 import java.io.Serializable;
 

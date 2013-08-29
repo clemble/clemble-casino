@@ -11,7 +11,7 @@ import org.springframework.social.facebook.api.FacebookProfile;
 
 import com.gogomaya.player.PlayerGender;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.player.SocialConnectionData;
+import com.gogomaya.player.SocialConnectionData;
 import com.gogomaya.server.social.SocialConnectionAdapter;
 
 public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {

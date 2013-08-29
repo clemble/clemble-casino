@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.mapping.PlayerWebMapping;
 
 public class IntegrationProfileOperations implements ProfileOperations {
 

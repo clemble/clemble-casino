@@ -1,4 +1,4 @@
-package com.gogomaya.server.web.mapping;
+package com.gogomaya.web.mapping;
 
 import com.gogomaya.web.mapping.WebMapping;
 

@@ -2,13 +2,13 @@ package com.gogomaya.server.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.player.security.PlayerCredential;
+import com.gogomaya.player.security.PlayerIdentity;
+import com.gogomaya.player.web.RegistrationRequest;
 import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.web.RegistrationRequest;
 import com.gogomaya.server.web.player.registration.PlayerLoginController;
 import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
 

@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.error.GogomayaValidationService;
-import com.gogomaya.server.player.SocialConnectionData;
-import com.gogomaya.server.player.security.PlayerIdentity;
+import com.gogomaya.player.SocialConnectionData;
+import com.gogomaya.player.security.PlayerIdentity;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
-import com.gogomaya.server.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.mapping.PlayerWebMapping;
 
 @Controller
 public class RegistrationSocialConnectionController {

@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.security;
+package com.gogomaya.player.security;
 
 import java.util.Date;
 

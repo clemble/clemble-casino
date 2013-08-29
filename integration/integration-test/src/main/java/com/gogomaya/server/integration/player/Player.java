@@ -12,6 +12,9 @@ import org.springframework.util.MultiValueMap;
 
 import com.gogomaya.player.PlayerAware;
 import com.gogomaya.player.PlayerProfile;
+import com.gogomaya.player.security.PlayerCredential;
+import com.gogomaya.player.security.PlayerIdentity;
+import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameState;
 import com.gogomaya.server.game.construct.GameConstruction;
@@ -26,9 +29,6 @@ import com.gogomaya.server.integration.player.profile.PlayerProfileOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.PlayerSessionOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.security.PlayerSession;
 import com.google.common.collect.ImmutableMap;
 
 public class Player implements PlayerAware {

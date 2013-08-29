@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.player.security.PlayerSession;
+import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;

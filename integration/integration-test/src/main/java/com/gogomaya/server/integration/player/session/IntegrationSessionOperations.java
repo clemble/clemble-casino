@@ -11,9 +11,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.player.security.PlayerSession;
-import com.gogomaya.server.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.mapping.PlayerWebMapping;
 
 public class IntegrationSessionOperations extends AbstractSessionOperations {
 

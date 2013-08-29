@@ -1,7 +1,7 @@
-package com.gogomaya.server.player.web;
+package com.gogomaya.player.web;
 
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.player.security.PlayerCredential;
+import com.gogomaya.player.security.PlayerCredential;
 
 public class RegistrationRequest {
 

@@ -15,7 +15,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.player.SocialConnectionData;
+import com.gogomaya.player.SocialConnectionData;
 import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)

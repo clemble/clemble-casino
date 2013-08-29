@@ -1,6 +1,6 @@
 package com.gogomaya.server.integration.player.listener;
 
-import com.gogomaya.server.player.security.PlayerSession;
+import com.gogomaya.player.security.PlayerSession;
 
 public interface PlayerListenerOperations {
 

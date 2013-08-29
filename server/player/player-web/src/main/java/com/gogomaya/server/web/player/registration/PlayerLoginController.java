@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.security.PlayerIdentity;
+import com.gogomaya.player.security.PlayerCredential;
+import com.gogomaya.player.security.PlayerIdentity;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
-import com.gogomaya.server.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.mapping.PlayerWebMapping;
 
 @Controller
 public class PlayerLoginController {

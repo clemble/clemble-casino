@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.security;
+package com.gogomaya.player.security;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

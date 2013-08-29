@@ -1,7 +1,7 @@
 package com.gogomaya.server.integration.player.session;
 
+import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.player.security.PlayerSession;
 
 public abstract class AbstractSessionOperations implements SessionOperations {
 

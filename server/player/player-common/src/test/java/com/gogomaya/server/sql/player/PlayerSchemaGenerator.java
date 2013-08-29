@@ -7,9 +7,9 @@ import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Test;
 
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.player.security.PlayerCredential;
-import com.gogomaya.server.player.security.PlayerIdentity;
-import com.gogomaya.server.player.security.PlayerSession;
+import com.gogomaya.player.security.PlayerCredential;
+import com.gogomaya.player.security.PlayerIdentity;
+import com.gogomaya.player.security.PlayerSession;
 
 public class PlayerSchemaGenerator {
 
