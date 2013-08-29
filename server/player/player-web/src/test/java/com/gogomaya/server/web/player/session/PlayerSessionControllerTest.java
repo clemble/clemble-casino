@@ -31,7 +31,7 @@ public class PlayerSessionControllerTest {
 
     @Test
     public void testPlayerAvailable() {
-        PlayerSession playerSession = playerSessionController.post(9, 9);
+        PlayerSession playerSession = playerSessionController.create(9);
         Assert.assertNotNull(playerSession);
         Assert.assertEquals(playerSession.getPlayerId(), 9);
         Assert.assertTrue(playerStateManager.isAvailable(9));
