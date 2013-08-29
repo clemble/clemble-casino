@@ -9,23 +9,19 @@ import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.server.web.player.registration.PlayerLoginController;
-import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.registration.PlayerRegistrationController;
 
 public class WebPlayerOperations extends AbstractPlayerOperations {
 
-    final private RegistrationSignInContoller signInContoller;
-    final private PlayerLoginController loginController;
+    final private PlayerRegistrationController registrationController;
 
-    public WebPlayerOperations(RegistrationSignInContoller signInContoller,
-            PlayerLoginController loginController,
+    public WebPlayerOperations(PlayerRegistrationController registrationController,
             SessionOperations playerSessionOperations,
             AccountOperations accountOperations,
             PlayerListenerOperations listenerOperations,
             ProfileOperations playerProfileOperations) {
         super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);
-        this.signInContoller = checkNotNull(signInContoller);
-        this.loginController = checkNotNull(loginController);
+        this.registrationController = checkNotNull(registrationController);
     }
 
     @Override
@@ -33,7 +29,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(registrationRequest);
         // Step 1. Performing actual player creation
-        PlayerIdentity playerIdentity = signInContoller.createUser(registrationRequest);
+        PlayerIdentity playerIdentity = registrationController.createPlayer(registrationRequest);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
         Player player = super.create(playerIdentity, registrationRequest.getPlayerCredential());
@@ -47,7 +43,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(credential);
         // Step 1. Performing actual player login
-        PlayerIdentity playerIdentity = loginController.createUser(credential);
+        PlayerIdentity playerIdentity = registrationController.login(credential);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
         Player player = super.create(playerIdentity, credential);

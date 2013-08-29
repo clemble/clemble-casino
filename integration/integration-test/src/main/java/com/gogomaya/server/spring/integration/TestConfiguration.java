@@ -43,8 +43,7 @@ import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.account.PlayerAccountController;
-import com.gogomaya.server.web.player.registration.PlayerLoginController;
-import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
+import com.gogomaya.server.web.player.registration.PlayerRegistrationController;
 
 @Configuration
 @Import(value = { JsonSpringConfiguration.class,
@@ -73,12 +72,8 @@ public class TestConfiguration {
         public ObjectMapper objectMapper;
 
         @Autowired
-        @Qualifier("registrationSignInContoller")
-        public RegistrationSignInContoller registrationSignInContoller;
-
-        @Autowired
         @Qualifier("registrationLoginController")
-        public PlayerLoginController registrationLoginController;
+        public PlayerRegistrationController registrationLoginController;
 
         @Autowired
         @Qualifier("playerSessionController")
@@ -103,7 +98,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(registrationSignInContoller, registrationLoginController, sessionOperations(), accountOperations(),
+            return new WebPlayerOperations(registrationLoginController, sessionOperations(), accountOperations(),
                     playerListenerOperations(), playerProfileOperations());
         }
 

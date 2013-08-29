@@ -25,6 +25,7 @@ public class PlayerProfileController implements PlayerProfileService {
         this.profileRepository = checkNotNull(playerProfileRepository);
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILE, produces = "application/json")
     public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("playerId") long playerId) {
         // Step 1. Fetching playerProfile
@@ -36,6 +37,7 @@ public class PlayerProfileController implements PlayerProfileService {
         return playerProfile;
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_PROFILE, produces = "application/json")
     public @ResponseBody PlayerProfile updatePlayerProfile(@PathVariable("playerId") long playerId, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check

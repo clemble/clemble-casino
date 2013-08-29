@@ -24,18 +24,13 @@ import com.gogomaya.server.spring.web.SwaggerSpringConfiguration;
 import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
-import com.gogomaya.server.web.player.registration.PlayerLoginController;
-import com.gogomaya.server.web.player.registration.RegistrationSignInContoller;
-import com.gogomaya.server.web.player.registration.RegistrationSocialConnectionController;
+import com.gogomaya.server.web.player.registration.PlayerRegistrationController;
 import com.mangofactory.swagger.SwaggerConfiguration;
 import com.mangofactory.swagger.configuration.DefaultConfigurationModule;
 import com.mangofactory.swagger.configuration.ExtensibilityModule;
 
 @Configuration
-@Import(value = {
-        PlayerWebSpringConfiguration.PlayerDefaultAndTest.class,
-        SocialModuleSpringConfiguration.class,
-        WebCommonSpringConfiguration.class })
+@Import(value = { PlayerWebSpringConfiguration.PlayerDefaultAndTest.class, SocialModuleSpringConfiguration.class, WebCommonSpringConfiguration.class })
 public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -82,20 +77,9 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Singleton
-    public RegistrationSocialConnectionController registrationSocialConnectionController() {
-        return new RegistrationSocialConnectionController(socialConnectionDataAdapter, playerIdentityRepository, gogomayaValidationService);
-    }
-
-    @Bean
-    @Singleton
-    public RegistrationSignInContoller registrationSignInContoller() {
-        return new RegistrationSignInContoller(playerRegistrationService, gogomayaValidationService);
-    }
-
-    @Bean
-    @Singleton
-    public PlayerLoginController registrationLoginController() {
-        return new PlayerLoginController(playerCredentialRepository, playerIdentityRepository);
+    public PlayerRegistrationController registrationLoginController() {
+        return new PlayerRegistrationController(playerCredentialRepository, playerIdentityRepository, gogomayaValidationService, playerRegistrationService,
+                socialConnectionDataAdapter);
     }
 
     @Bean
