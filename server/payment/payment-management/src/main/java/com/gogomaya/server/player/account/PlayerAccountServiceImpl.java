@@ -6,16 +6,17 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
+import com.gogomaya.money.Currency;
+import com.gogomaya.money.Money;
+import com.gogomaya.money.MoneySource;
+import com.gogomaya.money.Operation;
+import com.gogomaya.payment.PaymentOperation;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionService;
+import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerAware;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.money.MoneySource;
-import com.gogomaya.server.money.Operation;
-import com.gogomaya.server.payment.PaymentOperation;
-import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.payment.PaymentTransactionId;
-import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 
 public class PlayerAccountServiceImpl implements PlayerAccountService {

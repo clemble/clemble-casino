@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.server.payment.web.mapping.PaymentWebMapping;
 
 public class RestPaymentTransactionService implements PaymentTransactionService {

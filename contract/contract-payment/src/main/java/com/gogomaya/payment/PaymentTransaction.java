@@ -1,4 +1,4 @@
-package com.gogomaya.server.payment;
+package com.gogomaya.payment;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,9 +16,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.TypeDef;
 
-import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.money.MoneyHibernate;
+import com.gogomaya.money.Currency;
+import com.gogomaya.money.Money;
+import com.gogomaya.money.MoneyHibernate;
 
 @Entity
 @Table(name = "PAYMENT_TRANSACTION")

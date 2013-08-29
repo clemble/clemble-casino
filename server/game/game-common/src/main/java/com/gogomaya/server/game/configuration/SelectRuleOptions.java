@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.money.Money;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.construct.PlayerNumberRule;
@@ -13,7 +14,6 @@ import com.gogomaya.server.game.rule.giveup.GiveUpRule;
 import com.gogomaya.server.game.rule.time.MoveTimeRule;
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.money.Money;
 
 @JsonTypeName("selectRule")
 public class SelectRuleOptions implements GameSpecificationOptions {

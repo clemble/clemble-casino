@@ -4,10 +4,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
+import com.gogomaya.money.MoneySource;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.money.MoneySource;
-import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.player.account.PlayerAccount;
 
 public class PlayerAccountOperations {
 

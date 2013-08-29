@@ -2,8 +2,9 @@ package com.gogomaya.server.player.account;
 
 import java.util.Collection;
 
+import com.gogomaya.money.Money;
+import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.money.Money;
 
 public interface PlayerAccountService {
 

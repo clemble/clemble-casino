@@ -3,11 +3,11 @@ package com.gogomaya.server.game.account;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gogomaya.money.Currency;
+import com.gogomaya.money.Money;
 import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.rule.visibility.VisibilityRule;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.money.Money;
 
 public class GameAccountFactory {
 

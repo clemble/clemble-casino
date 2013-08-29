@@ -12,12 +12,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.money.Money;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PaymentTransactionService;
+import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.payment.RestPaymentTransactionService;
-import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.account.RestPlayerAccountService;
 import com.gogomaya.server.spring.common.SpringConfiguration;

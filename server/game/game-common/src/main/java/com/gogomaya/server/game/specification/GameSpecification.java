@@ -15,6 +15,9 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
+import com.gogomaya.money.Currency;
+import com.gogomaya.money.Money;
+import com.gogomaya.money.MoneyHibernate;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.rule.bet.BetRule;
 import com.gogomaya.server.game.rule.bet.FixedBetRule;
@@ -27,9 +30,6 @@ import com.gogomaya.server.game.rule.time.TimeRuleFormat.TotalTimeRuleHibernateT
 import com.gogomaya.server.game.rule.time.TotalTimeRule;
 import com.gogomaya.server.game.rule.visibility.VisibilityRule;
 import com.gogomaya.server.hibernate.JsonHibernateType;
-import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.money.MoneyHibernate;
 
 @Entity
 @Table(name = "GAME_SPECIFICATION")

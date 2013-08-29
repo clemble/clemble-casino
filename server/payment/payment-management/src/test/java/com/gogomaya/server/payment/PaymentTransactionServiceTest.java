@@ -11,11 +11,15 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.money.MoneySource;
-import com.gogomaya.server.money.Operation;
-import com.gogomaya.server.player.account.PlayerAccount;
+import com.gogomaya.money.Currency;
+import com.gogomaya.money.Money;
+import com.gogomaya.money.MoneySource;
+import com.gogomaya.money.Operation;
+import com.gogomaya.payment.PaymentOperation;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionService;
+import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.spring.payment.PaymentManagementSpringConfiguration;
 

@@ -9,8 +9,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.money.Money;
+import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.money.Money;
 import com.gogomaya.server.payment.web.mapping.PaymentWebMapping;
 
 public class RestPlayerAccountService implements PlayerAccountService {

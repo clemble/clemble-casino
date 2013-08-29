@@ -1,4 +1,4 @@
-package com.gogomaya.server.payment;
+package com.gogomaya.payment;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.gogomaya.server.money.MoneySource;
+import com.gogomaya.money.MoneySource;
 
 @Embeddable
 public class PaymentTransactionId implements Serializable {

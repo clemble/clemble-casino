@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import com.gogomaya.server.payment.PaymentTransactionService;
+import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;

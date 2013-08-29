@@ -10,8 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.money.Operation;
-import com.gogomaya.server.player.account.PlayerAccount;
+import com.gogomaya.money.Operation;
+import com.gogomaya.payment.PaymentOperation;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PaymentTransactionService;
+import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 

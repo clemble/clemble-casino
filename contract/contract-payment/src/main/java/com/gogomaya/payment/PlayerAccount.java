@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.account;
+package com.gogomaya.payment;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,10 +16,10 @@ import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import com.gogomaya.money.Currency;
+import com.gogomaya.money.Money;
+import com.gogomaya.money.MoneyHibernate;
 import com.gogomaya.player.PlayerAware;
-import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.money.MoneyHibernate;
 
 @Entity
 @Table(name = "PLAYER_ACCOUNT")

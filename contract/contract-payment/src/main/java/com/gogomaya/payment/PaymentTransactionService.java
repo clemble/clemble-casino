@@ -1,4 +1,4 @@
-package com.gogomaya.server.payment;
+package com.gogomaya.payment;
 
 
 public interface PaymentTransactionService {

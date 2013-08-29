@@ -2,10 +2,10 @@ package com.gogomaya.server.integration.player.account;
 
 import java.util.List;
 
+import com.gogomaya.money.MoneySource;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.money.MoneySource;
-import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.player.account.PlayerAccount;
 
 abstract public class AbstractAccountOperations implements AccountOperations {
 

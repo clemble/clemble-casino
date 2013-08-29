@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.payment.PaymentTransactionId;
-import com.gogomaya.server.payment.PaymentTransactionService;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.server.payment.web.mapping.PaymentWebMapping;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 

@@ -2,8 +2,8 @@ package com.gogomaya.server.integration.payment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.payment.PaymentTransaction;
 import com.gogomaya.server.web.payment.PaymentTransactionController;
 
 public class WebPaymentTransactionOperations  extends AbstractPaymentTransactionOperations {

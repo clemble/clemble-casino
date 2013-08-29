@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.server.ServerRegistry;
 import com.gogomaya.server.game.action.GameEventTaskExecutor;
 import com.gogomaya.server.game.aspect.bet.GameBetAspectFactory;
@@ -27,7 +28,6 @@ import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.game.construct.GameInitiatorService;
 import com.gogomaya.server.game.construct.SimpleGameConstructionService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
-import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;

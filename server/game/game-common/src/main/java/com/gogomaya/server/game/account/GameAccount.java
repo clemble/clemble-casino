@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.gogomaya.server.money.Money;
+import com.gogomaya.money.Money;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public interface GameAccount extends Serializable {

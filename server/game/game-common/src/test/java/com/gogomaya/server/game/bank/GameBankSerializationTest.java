@@ -13,12 +13,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.money.Currency;
+import com.gogomaya.money.Money;
 import com.gogomaya.server.game.account.GameAccount;
 import com.gogomaya.server.game.account.GamePlayerAccount;
 import com.gogomaya.server.game.account.InvisibleGameAccount;
 import com.gogomaya.server.game.account.VisibleGameAccount;
-import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.money.Money;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.google.common.collect.ImmutableList;
 

@@ -1,8 +1,8 @@
 package com.gogomaya.server.integration.payment;
 
+import com.gogomaya.money.MoneySource;
+import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.money.MoneySource;
-import com.gogomaya.server.payment.PaymentTransaction;
 
 abstract public class AbstractPaymentTransactionOperations implements PaymentTransactionOperations {
 

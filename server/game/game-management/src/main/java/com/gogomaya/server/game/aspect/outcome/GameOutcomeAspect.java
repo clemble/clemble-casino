@@ -2,6 +2,13 @@ package com.gogomaya.server.game.aspect.outcome;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.money.Money;
+import com.gogomaya.money.MoneySource;
+import com.gogomaya.money.Operation;
+import com.gogomaya.payment.PaymentOperation;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAware;
 import com.gogomaya.server.game.GameSession;
@@ -12,13 +19,6 @@ import com.gogomaya.server.game.aspect.BasicGameAspect;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.money.MoneySource;
-import com.gogomaya.server.money.Operation;
-import com.gogomaya.server.payment.PaymentOperation;
-import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.payment.PaymentTransactionId;
-import com.gogomaya.server.payment.PaymentTransactionService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 
 public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<State> implements GameAware {

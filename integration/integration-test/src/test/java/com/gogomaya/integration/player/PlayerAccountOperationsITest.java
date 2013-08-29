@@ -19,14 +19,14 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gogomaya.error.GogomayaError;
+import com.gogomaya.money.Currency;
+import com.gogomaya.money.MoneySource;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.util.GogomayaExceptionMatcherFactory;
-import com.gogomaya.server.money.Currency;
-import com.gogomaya.server.money.MoneySource;
-import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.player.account.PlayerAccount;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
 

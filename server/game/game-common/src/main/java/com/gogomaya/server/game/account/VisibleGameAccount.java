@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.server.money.Money;
+import com.gogomaya.money.Money;
 import com.gogomaya.server.player.PlayerAwareUtils;
 import com.google.common.collect.ImmutableMap;
 

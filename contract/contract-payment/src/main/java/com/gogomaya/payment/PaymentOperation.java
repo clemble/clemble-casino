@@ -1,4 +1,4 @@
-package com.gogomaya.server.payment;
+package com.gogomaya.payment;
 
 import java.io.Serializable;
 
@@ -10,8 +10,8 @@ import javax.persistence.Enumerated;
 import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
 
-import com.gogomaya.server.money.Money;
-import com.gogomaya.server.money.Operation;
+import com.gogomaya.money.Money;
+import com.gogomaya.money.Operation;
 
 @Embeddable
 public class PaymentOperation implements Serializable {

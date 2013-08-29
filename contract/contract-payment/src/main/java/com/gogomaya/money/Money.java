@@ -1,4 +1,4 @@
-package com.gogomaya.server.money;
+package com.gogomaya.money;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

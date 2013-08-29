@@ -6,8 +6,8 @@ import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
 import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Test;
 
-import com.gogomaya.server.payment.PaymentTransaction;
-import com.gogomaya.server.player.account.PlayerAccount;
+import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.PlayerAccount;
 
 public class PaymentSchemaGenerator {
 

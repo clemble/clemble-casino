@@ -7,13 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
+import com.gogomaya.money.Money;
 import com.gogomaya.server.ActionLatch;
 import com.gogomaya.server.game.event.schedule.GameConstructedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationDeclinedEvent;
 import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.game.event.schedule.PlayerInvitedEvent;
-import com.gogomaya.server.money.Money;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;

@@ -1,4 +1,4 @@
-package com.gogomaya.server.money;
+package com.gogomaya.money;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
