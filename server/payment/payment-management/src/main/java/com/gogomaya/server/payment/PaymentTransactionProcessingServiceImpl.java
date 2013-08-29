@@ -13,17 +13,16 @@ import com.gogomaya.error.GogomayaException;
 import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 
-public class PaymentTransactionServiceImpl implements PaymentTransactionService {
+public class PaymentTransactionProcessingServiceImpl implements PaymentTransactionProcessingService {
 
     final private PlayerAccountRepository playerAccountRepository;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PaymentTransactionServiceImpl(PaymentTransactionRepository paymentTransactionRepository, PlayerAccountRepository playerWalletRepository) {
+    public PaymentTransactionProcessingServiceImpl(PaymentTransactionRepository paymentTransactionRepository, PlayerAccountRepository playerWalletRepository) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
         this.playerAccountRepository = checkNotNull(playerWalletRepository);
     }

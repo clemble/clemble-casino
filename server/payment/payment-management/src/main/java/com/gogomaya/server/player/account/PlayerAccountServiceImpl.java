@@ -13,19 +13,19 @@ import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PaymentTransactionId;
-import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerAware;
 import com.gogomaya.player.PlayerProfile;
+import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 
 public class PlayerAccountServiceImpl implements PlayerAccountService {
 
     final private PlayerAccountRepository playerAccountRepository;
-    final private PaymentTransactionService paymentTransactionService;
+    final private PaymentTransactionProcessingService paymentTransactionService;
 
     @Inject
-    public PlayerAccountServiceImpl(final PlayerAccountRepository playerWalletRepository, final PaymentTransactionService paymentTransactionService) {
+    public PlayerAccountServiceImpl(final PlayerAccountRepository playerWalletRepository, final PaymentTransactionProcessingService paymentTransactionService) {
         this.playerAccountRepository = checkNotNull(playerWalletRepository);
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
     }

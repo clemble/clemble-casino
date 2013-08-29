@@ -8,7 +8,6 @@ import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PaymentTransactionId;
-import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.GameAware;
 import com.gogomaya.server.game.GameSession;
@@ -19,6 +18,7 @@ import com.gogomaya.server.game.aspect.BasicGameAspect;
 import com.gogomaya.server.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.outcome.GameOutcome;
 import com.gogomaya.server.game.outcome.PlayerWonOutcome;
+import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 
 public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<State> implements GameAware {
@@ -30,9 +30,9 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
 
     final private Game game;
     final private PlayerStateManager activePlayerQueue;
-    final private PaymentTransactionService paymentTransactionService;
+    final private PaymentTransactionProcessingService paymentTransactionService;
 
-    public GameOutcomeAspect(final Game game, final PlayerStateManager activePlayerQueue, final PaymentTransactionService paymentTransactionService) {
+    public GameOutcomeAspect(final Game game, final PlayerStateManager activePlayerQueue, final PaymentTransactionProcessingService paymentTransactionService) {
         this.game = game;
         this.activePlayerQueue = checkNotNull(activePlayerQueue);
         this.paymentTransactionService = checkNotNull(paymentTransactionService);

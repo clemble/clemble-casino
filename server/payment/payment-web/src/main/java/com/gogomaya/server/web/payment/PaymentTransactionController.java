@@ -17,17 +17,18 @@ import com.gogomaya.error.GogomayaException;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PaymentTransactionId;
 import com.gogomaya.payment.PaymentTransactionService;
+import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.payment.web.mapping.PaymentWebMapping;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 
 @Controller
-public class PaymentTransactionController {
+public class PaymentTransactionController implements PaymentTransactionService {
 
-    final private PaymentTransactionService paymentTransactionService;
+    final private PaymentTransactionProcessingService paymentTransactionService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
     public PaymentTransactionController(final PaymentTransactionRepository paymentTransactionRepository,
-            final PaymentTransactionService paymentTransactionService) {
+            final PaymentTransactionProcessingService paymentTransactionService) {
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
     }
@@ -38,9 +39,12 @@ public class PaymentTransactionController {
         return paymentTransactionService.process(paymentTransaction);
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, produces = "application/json")
-    public @ResponseBody
-    PaymentTransaction get(@RequestHeader("playerId") long requesterId, @PathVariable("source") String source, @PathVariable("transactionId") long transactionId) {
+    public @ResponseBody PaymentTransaction getPaymentTransaction(
+            @RequestHeader("playerId") long requesterId,
+            @PathVariable("source") String source,
+            @PathVariable("transactionId") long transactionId) {
         // Step 1. Checking payment transaction exists
         PaymentTransactionId paymentTransactionId = new PaymentTransactionId(source, transactionId);
         PaymentTransaction paymentTransaction = paymentTransactionRepository.findOne(paymentTransactionId);

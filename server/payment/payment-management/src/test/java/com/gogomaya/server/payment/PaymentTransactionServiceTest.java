@@ -18,7 +18,6 @@ import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PaymentTransactionId;
-import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.spring.payment.PaymentManagementSpringConfiguration;
@@ -33,7 +32,7 @@ public class PaymentTransactionServiceTest {
     public PlayerAccountRepository playerAccountRepository;
 
     @Inject
-    public PaymentTransactionService paymentTransactionService;
+    public PaymentTransactionProcessingService paymentTransactionService;
 
     private long playerFrom = RANDOM.nextLong();
     private long playerTo = RANDOM.nextLong();

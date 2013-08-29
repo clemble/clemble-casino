@@ -14,9 +14,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.money.Money;
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
+import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.payment.RestPaymentTransactionService;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.player.account.RestPlayerAccountService;
@@ -58,7 +58,7 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Autowired(required = false)
         @Qualifier("realPaymentTransactionService")
-        public PaymentTransactionService realPaymentTransactionService;
+        public PaymentTransactionProcessingService realPaymentTransactionService;
 
         @Autowired(required = false)
         @Qualifier("realPlayerAccountService")
@@ -70,7 +70,7 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Autowired
-        public PaymentTransactionService paymentTransactionService(RestTemplate restTemplate) {
+        public PaymentTransactionProcessingService paymentTransactionService(RestTemplate restTemplate) {
             return realPaymentTransactionService == null ? new RestPaymentTransactionService(getBaseUrl(), restTemplate) : realPaymentTransactionService;
         }
 
@@ -109,8 +109,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public PaymentTransactionService paymentTransactionService() {
-            return new PaymentTransactionService() {
+        public PaymentTransactionProcessingService paymentTransactionService() {
+            return new PaymentTransactionProcessingService() {
 
                 @Override
                 public PaymentTransaction process(PaymentTransaction paymentTransaction) {
