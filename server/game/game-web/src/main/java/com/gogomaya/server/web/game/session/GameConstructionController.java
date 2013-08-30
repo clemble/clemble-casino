@@ -19,26 +19,28 @@ import com.gogomaya.game.GameState;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameRequest;
 import com.gogomaya.game.event.schedule.InvitationResponseEvent;
+import com.gogomaya.game.service.GameConstructionService;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
-import com.gogomaya.server.game.construct.GameConstructionService;
+import com.gogomaya.server.game.construct.GameConstructionProcessingService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.web.game.GameWebMapping;
 
 @Controller
-public class GameConstructionController<State extends GameState> {
+public class GameConstructionController<State extends GameState> implements GameConstructionService {
 
     final private GameSpecificationRegistry configurationManager;
-    final private GameConstructionService constructionService;
+    final private GameConstructionProcessingService constructionService;
     final private GameConstructionRepository constructionRepository;
 
     public GameConstructionController(final GameConstructionRepository constructionRepository,
-            final GameConstructionService matchingService,
+            final GameConstructionProcessingService matchingService,
             final GameSpecificationRegistry configurationManager) {
         this.constructionService = checkNotNull(matchingService);
         this.configurationManager = checkNotNull(configurationManager);
         this.constructionRepository = checkNotNull(constructionRepository);
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
@@ -50,6 +52,7 @@ public class GameConstructionController<State extends GameState> {
         return constructionService.construct(gameRequest);
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
@@ -63,20 +66,20 @@ public class GameConstructionController<State extends GameState> {
         return construction;
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    ClientEvent getResponce(
+    public @ResponseBody ClientEvent getResponce(
             @RequestHeader("playerId") final long requester,
             @PathVariable("sessionId") final long session,
             @PathVariable("playerId") final long player) {
         return (ClientEvent) constructionRepository.findOne(session).getResponses().fetchAction(player);
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    GameConstruction invitationResponsed(
+    public @ResponseBody GameConstruction invitationResponsed(
             @RequestHeader("playerId") final long playerId,
             @PathVariable("sessionId") long sessionId,
             @RequestBody final InvitationResponseEvent gameRequest) {

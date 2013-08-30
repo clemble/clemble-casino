@@ -24,7 +24,7 @@ import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 
-public class SimpleGameConstructionService implements GameConstructionService {
+public class SimpleGameConstructionService implements GameConstructionProcessingService {
 
     final private AutomaticConstructionManager automaticGameInitiatorManager;
 

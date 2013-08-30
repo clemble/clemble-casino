@@ -23,7 +23,7 @@ import com.gogomaya.server.game.aspect.price.GamePriceAspectFactory;
 import com.gogomaya.server.game.aspect.security.GameSecurityAspectFactory;
 import com.gogomaya.server.game.aspect.time.GameTimeAspectFactory;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
-import com.gogomaya.server.game.construct.GameConstructionService;
+import com.gogomaya.server.game.construct.GameConstructionProcessingService;
 import com.gogomaya.server.game.construct.GameInitiatorService;
 import com.gogomaya.server.game.construct.SimpleGameConstructionService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
@@ -142,7 +142,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public GameConstructionService gameConstructionService() {
+        public GameConstructionProcessingService gameConstructionService() {
             return new SimpleGameConstructionService(playerAccountService, playerNotificationService, constructionRepository, initiatorService(),
                     playerLockService, playerStateManager);
         }

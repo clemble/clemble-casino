@@ -32,11 +32,7 @@ public class GameActionController<State extends GameState> {
 
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSION_ACTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    State process(
-            @RequestHeader("playerId") long playerId,
-            @RequestHeader("sessionId") long sessionId,
-            @PathVariable("sessionId") long requestSessionId,
+    public @ResponseBody State process(@RequestHeader("playerId") long playerId, @RequestHeader("sessionId") long sessionId, @PathVariable("sessionId") long requestSessionId,
             @RequestHeader("tableId") long tableId,
             @RequestBody ClientEvent move) {
         // Step 1. Retrieving associated table

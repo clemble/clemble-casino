@@ -36,7 +36,7 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
 
     @Override
     public GameSpecificationOptions getOptions(Game game, Player player) {
-        return configuartionManagerController.get(player != null ? player.getPlayerId() : -1L, game);
+        return configuartionManagerController.getSpecificationOptions(player != null ? player.getPlayerId() : -1L, game);
     }
 
     @Override

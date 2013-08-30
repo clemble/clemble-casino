@@ -31,14 +31,14 @@ import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.UNIT_TEST)
 @ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
-public class GameConstructionServiceTest {
+public class GameConstructionProcessingServiceTest {
 
     final private Random RANDOM = new Random();
 
     final private int NUM_PARTICIPANTS = 50;
 
     @Autowired
-    public GameConstructionService constructionService;
+    public GameConstructionProcessingService constructionService;
 
     @Autowired
     public GameConstructionRepository constructionRepository;
@@ -90,11 +90,11 @@ public class GameConstructionServiceTest {
     public static class GameResponce implements Callable<GameConstruction> {
 
         final public CountDownLatch endLatch;
-        final public GameConstructionService constructionService;
+        final public GameConstructionProcessingService constructionService;
         final public long construction;
         final public long player;
 
-        public GameResponce(long construction, long player, CountDownLatch endLatch, GameConstructionService constructionService) {
+        public GameResponce(long construction, long player, CountDownLatch endLatch, GameConstructionProcessingService constructionService) {
             this.construction = construction;
             this.player = player;
             this.endLatch = endLatch;

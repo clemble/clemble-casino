@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.game.Game;
 import com.gogomaya.game.configuration.GameSpecificationOptions;
+import com.gogomaya.game.service.GameSpecificationService;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.web.game.GameWebMapping;
 
 @Controller
-public class GameConfigurationManagerController {
+public class GameConfigurationManagerController implements GameSpecificationService {
 
     final private GameSpecificationRegistry configurationManager;
 
@@ -25,10 +26,11 @@ public class GameConfigurationManagerController {
         this.configurationManager = checkNotNull(configurationManager);
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SPECIFICATION_OPTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     // Can be null
-    public @ResponseBody GameSpecificationOptions get(@RequestHeader(value = "playerId", required = false) final Long playerId, @PathVariable("name") Game game) {
+    public @ResponseBody GameSpecificationOptions getSpecificationOptions(@RequestHeader(value = "playerId", required = false) final long playerId, @PathVariable("name") Game game) {
         return configurationManager.getSpecificationOptions(game);
     }
 
