@@ -8,7 +8,7 @@ import com.gogomaya.game.Game;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.web.mapping.GameWebMapping;
+import com.gogomaya.web.game.GameWebMapping;
 
 public class IntegrationGameSessionPlayerFactory<State extends GameState> implements GameSessionPlayerFactory<State> {
 

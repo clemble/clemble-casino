@@ -11,7 +11,7 @@ import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.player.PlayerWebMapping;
 
 public class IntegrationPlayerOperations extends AbstractPlayerOperations {
 

@@ -17,7 +17,7 @@ import com.gogomaya.game.GameState;
 import com.gogomaya.game.event.client.MadeMove;
 import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.repository.game.GameSessionRepository;
-import com.gogomaya.web.mapping.GameWebMapping;
+import com.gogomaya.web.game.GameWebMapping;
 
 @Controller
 public class GameActionController<State extends GameState> {

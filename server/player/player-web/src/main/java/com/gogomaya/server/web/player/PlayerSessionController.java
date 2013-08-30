@@ -20,7 +20,7 @@ import com.gogomaya.player.security.PlayerSessionService;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.player.PlayerSessionRepository;
-import com.gogomaya.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.player.PlayerWebMapping;
 
 @Controller
 public class PlayerSessionController implements PlayerSessionService {

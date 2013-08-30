@@ -1,7 +1,7 @@
 package com.gogomaya.server.integration.game;
 
+import com.gogomaya.event.Event;
 import com.gogomaya.game.SessionAware;
-import com.gogomaya.server.event.Event;
 
 abstract public class GameSessionListener {
 

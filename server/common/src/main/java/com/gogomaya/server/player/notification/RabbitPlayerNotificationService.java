@@ -15,7 +15,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.event.Event;
+import com.gogomaya.event.Event;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

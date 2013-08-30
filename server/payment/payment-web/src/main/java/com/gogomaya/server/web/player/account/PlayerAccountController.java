@@ -28,7 +28,7 @@ import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
-import com.gogomaya.web.mapping.PaymentWebMapping;
+import com.gogomaya.web.payment.PaymentWebMapping;
 
 @Controller
 public class PlayerAccountController {

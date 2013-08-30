@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.game.GameSession;
 import com.gogomaya.game.GameState;
 import com.gogomaya.server.repository.game.GameSessionRepository;
-import com.gogomaya.web.mapping.GameWebMapping;
+import com.gogomaya.web.game.GameWebMapping;
 
 @Controller
 public class GameSessionController<State extends GameState> {

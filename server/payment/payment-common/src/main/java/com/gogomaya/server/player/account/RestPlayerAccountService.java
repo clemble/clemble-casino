@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import com.gogomaya.money.Money;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.web.mapping.PaymentWebMapping;
+import com.gogomaya.web.payment.PaymentWebMapping;
 
 public class RestPlayerAccountService implements PlayerAccountService {
 

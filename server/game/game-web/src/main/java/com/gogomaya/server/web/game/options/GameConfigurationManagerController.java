@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.game.Game;
 import com.gogomaya.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
-import com.gogomaya.web.mapping.GameWebMapping;
+import com.gogomaya.web.game.GameWebMapping;
 
 @Controller
 public class GameConfigurationManagerController {

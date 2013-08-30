@@ -1,4 +1,4 @@
-package com.gogomaya.server.utils;
+package com.gogomaya.utils;
 
 import java.io.File;
 import java.io.IOException;

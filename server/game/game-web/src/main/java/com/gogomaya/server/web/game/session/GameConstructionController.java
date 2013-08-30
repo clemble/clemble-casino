@@ -22,7 +22,7 @@ import com.gogomaya.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.server.game.construct.GameConstructionService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
-import com.gogomaya.web.mapping.GameWebMapping;
+import com.gogomaya.web.game.GameWebMapping;
 
 @Controller
 public class GameConstructionController<State extends GameState> {

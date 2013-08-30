@@ -1,6 +1,6 @@
 package com.gogomaya.server.integration.player.listener;
 
-import com.gogomaya.server.event.Event;
+import com.gogomaya.event.Event;
 
 public interface PlayerListener {
 

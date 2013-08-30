@@ -1,4 +1,4 @@
-package com.gogomaya.server.event;
+package com.gogomaya.event;
 
 import java.io.Serializable;
 

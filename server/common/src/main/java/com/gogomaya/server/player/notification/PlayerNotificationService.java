@@ -2,7 +2,7 @@ package com.gogomaya.server.player.notification;
 
 import java.util.Collection;
 
-import com.gogomaya.server.event.Event;
+import com.gogomaya.event.Event;
 
 public interface PlayerNotificationService {
 

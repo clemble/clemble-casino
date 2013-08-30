@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
-import com.gogomaya.server.utils.ReflectionUtils;
+import com.gogomaya.utils.ReflectionUtils;
 
 public class ObjectMapperUtils {
 

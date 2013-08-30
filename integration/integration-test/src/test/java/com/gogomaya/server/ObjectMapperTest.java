@@ -42,7 +42,7 @@ import com.gogomaya.game.event.server.GameStartedEvent;
 import com.gogomaya.game.rule.GameRule;
 import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.spring.integration.TestConfiguration;
-import com.gogomaya.server.utils.ReflectionUtils;
+import com.gogomaya.utils.ReflectionUtils;
 import com.stresstest.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)

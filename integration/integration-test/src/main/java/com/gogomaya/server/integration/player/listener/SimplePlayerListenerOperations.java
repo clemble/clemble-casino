@@ -22,8 +22,8 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.event.Event;
 import com.gogomaya.player.security.PlayerSession;
-import com.gogomaya.server.event.Event;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.websocket.DefaultWebSocketListener;
 import com.ning.http.client.websocket.WebSocket;

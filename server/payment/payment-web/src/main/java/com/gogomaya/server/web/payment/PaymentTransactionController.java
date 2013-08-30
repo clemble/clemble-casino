@@ -19,7 +19,7 @@ import com.gogomaya.payment.PaymentTransactionId;
 import com.gogomaya.payment.PaymentTransactionService;
 import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
-import com.gogomaya.web.mapping.PaymentWebMapping;
+import com.gogomaya.web.payment.PaymentWebMapping;
 
 @Controller
 public class PaymentTransactionController implements PaymentTransactionService {

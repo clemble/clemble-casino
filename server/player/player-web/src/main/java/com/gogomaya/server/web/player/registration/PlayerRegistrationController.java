@@ -22,7 +22,7 @@ import com.gogomaya.server.player.registration.PlayerRegistrationService;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
-import com.gogomaya.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.player.PlayerWebMapping;
 
 @Controller
 public class PlayerRegistrationController implements PlayerRegistrationOperations {

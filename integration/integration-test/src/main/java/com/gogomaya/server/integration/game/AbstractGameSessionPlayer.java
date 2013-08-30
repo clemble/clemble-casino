@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.event.Event;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.ServerResourse;
 import com.gogomaya.game.construct.GameConstruction;
@@ -15,7 +16,6 @@ import com.gogomaya.game.event.client.surrender.GiveUpEvent;
 import com.gogomaya.game.event.server.GameServerEvent;
 import com.gogomaya.game.event.server.GameStartedEvent;
 import com.gogomaya.game.specification.GameSpecification;
-import com.gogomaya.server.event.Event;
 import com.gogomaya.server.integration.player.Player;
 
 abstract public class AbstractGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State>, Closeable {

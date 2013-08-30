@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.web.mapping.PlayerWebMapping;
+import com.gogomaya.web.player.PlayerWebMapping;
 
 public class IntegrationSessionOperations extends AbstractSessionOperations {
 

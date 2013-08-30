@@ -10,7 +10,7 @@ import com.gogomaya.game.ServerResourse;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.event.client.GameClientEvent;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.web.mapping.GameWebMapping;
+import com.gogomaya.web.game.GameWebMapping;
 
 public class IntegrationGameSessionPlayer<State extends GameState> extends AbstractGameSessionPlayer<State> {
 
