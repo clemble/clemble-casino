@@ -12,5 +12,9 @@
             <groupId>com.gogomaya</groupId>
             <artifactId>contract-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gogomaya</groupId>
+            <artifactId>contract-payment</artifactId>
+        </dependency>
     </dependencies>
 </project>

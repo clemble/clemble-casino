@@ -17,12 +17,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.gogomaya</groupId>
-                <artifactId>contract-game</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.gogomaya.server</groupId>
                 <artifactId>game-common</artifactId>
                 <version>${project.version}</version>
@@ -49,4 +43,10 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.gogomaya</groupId>
+            <artifactId>contract-game</artifactId>
+        </dependency>
+    </dependencies>
 </project>

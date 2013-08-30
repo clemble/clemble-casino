@@ -13,44 +13,12 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>common</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.gogomaya</groupId>
+            <artifactId>contract-player</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>common-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>payment-common</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
-            <artifactId>player-common</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.gogomaya</groupId>
+            <artifactId>contract-payment</artifactId>
         </dependency>
 
         <dependency>

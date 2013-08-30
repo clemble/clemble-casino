@@ -15,4 +15,5 @@
         <module>contract-payment</module>
         <module>contract-game</module>
     </modules>
+
 </project>

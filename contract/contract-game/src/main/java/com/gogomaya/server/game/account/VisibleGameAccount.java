@@ -1,13 +1,13 @@
 package com.gogomaya.server.game.account;
 
 import java.util.Collection;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.money.Money;
-import com.gogomaya.server.player.PlayerAwareUtils;
-import com.google.common.collect.ImmutableMap;
+import com.gogomaya.player.PlayerAwareUtils;
 
 @JsonTypeName("visible")
 public class VisibleGameAccount implements GameAccount {
@@ -15,7 +15,7 @@ public class VisibleGameAccount implements GameAccount {
     private static final long serialVersionUID = -6227399075601837719L;
 
     private Money bank;
-    final private ImmutableMap<Long, GamePlayerAccount> playerToAccount;
+    final private Map<Long, GamePlayerAccount> playerToAccount;
 
     @JsonCreator
     public VisibleGameAccount(@JsonProperty("bank") Money bank, @JsonProperty("playerAccounts") Collection<GamePlayerAccount> playerAccounts) {

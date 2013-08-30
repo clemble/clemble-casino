@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gogomaya.player.PlayerAware;
 import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.game.specification.GameSpecificationAware;
-import com.google.common.collect.ImmutableSet;
+import com.gogomaya.utils.CollectionUtils;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 abstract public class GameRequest implements PlayerAware, GameSpecificationAware, GameOpponentsAware {
@@ -23,7 +23,7 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
     final private Collection<Long> participants;
 
     public GameRequest(long playerId, GameSpecification specification) {
-        this(playerId, specification, ImmutableSet.<Long> of(playerId));
+        this(playerId, specification, CollectionUtils.immutableSet(playerId));
     }
 
     public GameRequest(long playerId, GameSpecification specification, Collection<Long> participants) {

@@ -3,26 +3,27 @@ package com.gogomaya.server.game.configuration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.server.game.rule.GameRule;
-import com.google.common.collect.ImmutableSet;
+import com.gogomaya.utils.CollectionUtils;
 
 public class GameRuleOptions<T extends GameRule> {
 
     final private T defaultOption;
 
-    final private Collection<T> allOptions;
+    final private Set<T> allOptions;
 
     public GameRuleOptions(T defaultOption, Collection<T> otherOptions) {
         this.defaultOption = defaultOption;
         if (otherOptions == null || otherOptions.size() == 0) {
-            this.allOptions = ImmutableSet.<T> of(defaultOption);
+            this.allOptions = CollectionUtils.immutableSet(defaultOption);
         } else {
             otherOptions = new ArrayList<>(otherOptions);
             otherOptions.add(defaultOption);
-            this.allOptions = ImmutableSet.<T> copyOf(otherOptions);
+            this.allOptions = CollectionUtils.immutableSet(otherOptions);
         }
     }
 

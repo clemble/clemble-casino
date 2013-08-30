@@ -32,9 +32,9 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_SESSION")
-@TypeDefs(value = { @TypeDef(name = "gameState", typeClass = JsonHibernateType.class, defaultForType = GameState.class, parameters = { @Parameter(
-        name = JsonHibernateType.CLASS_NAME_PARAMETER,
-        value = "com.gogomaya.server.game.GameState") }) })
+@TypeDefs(value = { @TypeDef(name = "gameState",
+    typeClass = JsonHibernateType.class,
+    defaultForType = GameState.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.server.game.GameState") }) })
 public class GameSession<State extends GameState> implements GameSpecificationAware, SessionAware, Serializable {
 
     /**

@@ -1,7 +1,5 @@
 package com.gogomaya.money;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -22,7 +20,9 @@ public class Money implements Serializable {
 
     @JsonCreator
     public Money(@JsonProperty("currency") final Currency currency, @JsonProperty("amount") final long amount) {
-        this.currency = checkNotNull(currency);
+        if (currency == null)
+            throw new IllegalArgumentException();
+        this.currency = currency;
         this.amount = amount;
     }
 

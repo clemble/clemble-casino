@@ -1,6 +1,6 @@
 package com.gogomaya.server.game.configuration;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.gogomaya.utils.Preconditions.checkNotNull;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.server.game.Game;
 import com.gogomaya.server.game.specification.GameSpecification;
-import com.google.common.collect.ImmutableList;
+import com.gogomaya.utils.CollectionUtils;
 
 @JsonTypeName("selectSpecification")
 public class SelectSpecificationOptions implements GameSpecificationOptions {
@@ -26,7 +26,7 @@ public class SelectSpecificationOptions implements GameSpecificationOptions {
     @JsonCreator
     public SelectSpecificationOptions(@JsonProperty("game") Game game, @JsonProperty("specifications") List<? extends GameSpecification> gameSpecifications) {
         this.game = game;
-        this.specifications = ImmutableList.<GameSpecification> copyOf(checkNotNull(gameSpecifications));
+        this.specifications = CollectionUtils.<GameSpecification>immutableList(checkNotNull(gameSpecifications));
     }
 
     public Game getGame() {

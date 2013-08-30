@@ -1,4 +1,4 @@
-package com.gogomaya.server.json;
+package com.gogomaya.json;
 
 import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;

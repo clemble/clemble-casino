@@ -1,11 +1,9 @@
-package com.gogomaya.server.player;
+package com.gogomaya.player;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.gogomaya.player.PlayerAware;
-import com.google.common.collect.ImmutableMap;
 
 public class PlayerAwareUtils {
 
@@ -16,7 +14,7 @@ public class PlayerAwareUtils {
     public static <M extends PlayerAware> Map<Long, M> toMap(Collection<? extends M> sourceCollection) {
         // Step 0. Sanity check
         if (sourceCollection == null || sourceCollection.isEmpty())
-            return ImmutableMap.<Long, M> of();
+            return Collections.emptyMap();
         // Step 1. Converting to Map
         HashMap<Long, M> tmpMap = new HashMap<Long, M>();
         for (M value : sourceCollection) {
@@ -27,8 +25,8 @@ public class PlayerAwareUtils {
         return tmpMap;
     }
     
-    public static <M extends PlayerAware> ImmutableMap<Long, M> toImmutableMap(Collection<? extends M> sourceCollection) {
-        return ImmutableMap.<Long, M>copyOf(toMap(sourceCollection));
+    public static <M extends PlayerAware> Map<Long, M> toImmutableMap(Collection<? extends M> sourceCollection) {
+        return Collections.unmodifiableMap(toMap(sourceCollection));
     }
 
 }

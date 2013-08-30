@@ -1,7 +1,5 @@
 package com.gogomaya.error;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,7 +11,9 @@ public class GogomayaValidationService {
     final private ValidatorFactory validatorFactory;
 
     public GogomayaValidationService(ValidatorFactory validatorFactory) {
-        this.validatorFactory = checkNotNull(validatorFactory);
+        if (validatorFactory == null)
+            throw new NullPointerException();
+        this.validatorFactory = validatorFactory;
     }
 
     public <T> void validate(T object) {

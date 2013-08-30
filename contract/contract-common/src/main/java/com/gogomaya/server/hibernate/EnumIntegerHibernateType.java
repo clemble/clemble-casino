@@ -10,13 +10,11 @@ import java.util.Map;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 
-import com.google.common.collect.ImmutableMap;
-
 public class EnumIntegerHibernateType extends ImmutableHibernateType<Enum<?>> {
 
     final private int[] TYPES = new int[] { Types.INTEGER };
     final private Class<Enum<?>> ENUM_CLASS;
-    final private ImmutableMap<Integer, Enum<?>> ENUM_MAP;
+    final private Map<Integer, Enum<?>> ENUM_MAP;
 
     public EnumIntegerHibernateType(Class<Enum<?>> enumClass) {
         this.ENUM_CLASS = enumClass;
@@ -25,7 +23,7 @@ public class EnumIntegerHibernateType extends ImmutableHibernateType<Enum<?>> {
         for (Enum<?> enumValue : enumClass.getEnumConstants()) {
             mapValues.put(enumValue.ordinal(), enumValue);
         }
-        this.ENUM_MAP = ImmutableMap.<Integer, Enum<?>> copyOf(mapValues);
+        this.ENUM_MAP = mapValues;
     }
 
     @Override

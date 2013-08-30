@@ -1,17 +1,10 @@
 package com.gogomaya.server.game.rule.bet;
 
-import java.util.concurrent.ExecutionException;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.error.GogomayaError;
-import com.gogomaya.error.GogomayaException;
 import com.gogomaya.server.game.event.client.BetEvent;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 
 @JsonTypeName("limited")
 public class LimitedBetRule implements BetRule {
@@ -20,15 +13,6 @@ public class LimitedBetRule implements BetRule {
      * Generated 09/04/13
      */
     final static private long serialVersionUID = -5560244451652751412L;
-
-    final private static LoadingCache<Long, LimitedBetRule> INSTANCE_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<Long, LimitedBetRule>() {
-
-        @Override
-        public LimitedBetRule load(Long entry) throws Exception {
-            return new LimitedBetRule((int) (entry >> 32), (int) (entry & 0x00000000FFFFFFFFL));
-        }
-
-    });
 
     final private int minBet;
 
@@ -54,11 +38,7 @@ public class LimitedBetRule implements BetRule {
 
     @JsonCreator
     public static LimitedBetRule create(@JsonProperty("min") int minBet, @JsonProperty("max") int maxBet) {
-        try {
-            return INSTANCE_CACHE.get(((long) minBet << 32) | maxBet);
-        } catch (ExecutionException e) {
-            throw GogomayaException.fromError(GogomayaError.ServerCacheError);
-        }
+        return new LimitedBetRule(minBet, maxBet);
     }
 
     @Override

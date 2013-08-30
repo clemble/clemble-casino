@@ -43,6 +43,12 @@
             <groupId>de.roderick</groupId>
             <artifactId>weberknecht</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <profiles>

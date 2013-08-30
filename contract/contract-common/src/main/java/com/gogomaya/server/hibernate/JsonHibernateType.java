@@ -11,11 +11,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
-import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.server.json.CustomJacksonAnnotationIntrospector;
-import com.gogomaya.server.spring.common.JsonSpringConfiguration;
+import com.gogomaya.json.CustomJacksonAnnotationIntrospector;
+import com.gogomaya.json.ObjectMapperUtils;
 
 public class JsonHibernateType<T extends Serializable> implements ParameterizedType, UserType {
 
@@ -26,7 +25,7 @@ public class JsonHibernateType<T extends Serializable> implements ParameterizedT
     final private static int[] TYPES = new int[] { Types.VARCHAR };
 
     static {
-        OBJECT_MAPPER = JsonSpringConfiguration.createObjectMapper();
+        OBJECT_MAPPER = ObjectMapperUtils.createObjectMapper();
         OBJECT_MAPPER.setAnnotationIntrospector(new CustomJacksonAnnotationIntrospector());
     }
 
@@ -47,7 +46,7 @@ public class JsonHibernateType<T extends Serializable> implements ParameterizedT
         String jsonPresentation = rs.getString(names[0]);
         T result = null;
         try {
-            if (StringUtils.hasText(jsonPresentation))
+            if (jsonPresentation != null && jsonPresentation.length() > 0)
                 result = (T) OBJECT_MAPPER.readValue(jsonPresentation, returnedClass());
         } catch (Throwable ignore) {
             System.out.println(jsonPresentation);

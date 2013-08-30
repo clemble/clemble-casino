@@ -1,13 +1,11 @@
 package com.gogomaya.player;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
 public enum PlayerGender {
     M, W;
 
     public static PlayerGender parse(String gender) {
         // Step 1. Sanity check
-        if (isNullOrEmpty(gender))
+        if (gender == null || gender.length() == 0)
             return null;
         // Step 2. Checking for male
         gender = gender.toLowerCase().trim();
