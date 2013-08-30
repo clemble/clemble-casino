@@ -25,11 +25,8 @@ public class WebGameSessionPlayer<State extends GameState> extends AbstractGameS
 
     @Override
     public State perform(Player player, ServerResourse resourse, long session, GameClientEvent clientEvent) {
-        // Step 0. Parsing player, session and table identifiers
-        long playerId = clientEvent.getPlayerId();
-        long tableId = resourse.getTableId();
         // Step 1. Processing action by controller
-        return (State) gameEngineController.process(playerId, session, session, tableId, clientEvent);
+        return (State) gameEngineController.process(session, clientEvent);
     }
 
 }

@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,12 +14,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.event.client.MadeMove;
+import com.gogomaya.game.service.GameActionService;
 import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.web.game.GameWebMapping;
 
 @Controller
-public class GameActionController<State extends GameState> {
+public class GameActionController<State extends GameState> implements GameActionService<State> {
 
     final private GameSessionProcessor<State> sessionProcessor;
     final private GameSessionRepository<State> sessionRepository;
@@ -30,19 +30,18 @@ public class GameActionController<State extends GameState> {
         this.sessionRepository = checkNotNull(sessionRepository);
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSION_ACTIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody State process(@RequestHeader("playerId") long playerId, @RequestHeader("sessionId") long sessionId, @PathVariable("sessionId") long requestSessionId,
-            @RequestHeader("tableId") long tableId,
-            @RequestBody ClientEvent move) {
+    public @ResponseBody State process(@PathVariable("sessionId") long sessionId, @RequestBody ClientEvent move) {
         // Step 1. Retrieving associated table
         return sessionProcessor.process(sessionId, move);
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSION_ACTIONS_ACTION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    MadeMove getAction(@RequestHeader("playerId") long playerId, @PathVariable("sessionId") long sessionId, @PathVariable("actionId") int actionId) {
+    public @ResponseBody MadeMove getAction(@PathVariable("sessionId") long sessionId, @PathVariable("actionId") int actionId) {
         return sessionRepository.findAction(sessionId, actionId);
     }
 }
