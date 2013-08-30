@@ -1,6 +1,7 @@
 package com.gogomaya.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,4 +23,9 @@ public class CollectionUtils {
     public static <T> List<T> immutableList(Collection<? extends T> list) {
         return Collections.<T> unmodifiableList(list instanceof List ? (List<? extends T>) list : new ArrayList<>(list));
     }
+
+    public static <T> List<T> immutableList(T ... list) {
+        return immutableList(Arrays.asList(list));
+    }
+
 }

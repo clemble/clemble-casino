@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.cell;
+package com.gogomaya.game.cell;
 
 import java.util.Collection;
 

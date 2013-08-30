@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.cell;
+package com.gogomaya.game.cell;
 
 import java.util.Collection;
 
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.game.event.client.BetEvent;
-import com.google.common.collect.ImmutableList;
+import com.gogomaya.utils.CollectionUtils;
 
 @JsonTypeName("exposed")
 public class ExposedCellState extends CellState {
@@ -16,7 +16,7 @@ public class ExposedCellState extends CellState {
     @JsonCreator
     public ExposedCellState(@JsonProperty("owner") long owner, @JsonProperty("bets") Collection<BetEvent> bets) {
         super(owner);
-        this.bets = ImmutableList.<BetEvent> copyOf(bets);
+        this.bets = CollectionUtils.<BetEvent>immutableList(bets);
     }
 
     public ExposedCellState(Collection<BetEvent> bets) {
@@ -25,7 +25,7 @@ public class ExposedCellState extends CellState {
 
     public ExposedCellState(BetEvent... bets) {
         super(BetEvent.whoBetMore(bets));
-        this.bets = ImmutableList.<BetEvent> copyOf(bets);
+        this.bets = CollectionUtils.<BetEvent>immutableList(bets);
     }
 
     public Collection<BetEvent> getBets() {

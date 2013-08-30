@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.player.PlayerProfileService;
+import com.gogomaya.player.service.PlayerProfileService;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
 import com.gogomaya.web.player.PlayerWebMapping;
 

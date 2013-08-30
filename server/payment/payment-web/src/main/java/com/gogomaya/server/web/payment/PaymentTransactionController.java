@@ -16,7 +16,7 @@ import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PaymentTransactionId;
-import com.gogomaya.payment.PaymentTransactionService;
+import com.gogomaya.payment.service.PaymentTransactionService;
 import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.web.payment.PaymentWebMapping;

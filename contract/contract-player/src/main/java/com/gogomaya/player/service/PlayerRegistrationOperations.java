@@ -1,5 +1,6 @@
-package com.gogomaya.player;
+package com.gogomaya.player.service;
 
+import com.gogomaya.player.SocialConnectionData;
 import com.gogomaya.player.security.PlayerCredential;
 import com.gogomaya.player.security.PlayerIdentity;
 import com.gogomaya.player.web.RegistrationRequest;

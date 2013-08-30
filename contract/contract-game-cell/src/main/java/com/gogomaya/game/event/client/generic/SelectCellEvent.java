@@ -1,10 +1,10 @@
-package com.gogomaya.server.game.event.client.generic;
+package com.gogomaya.game.event.client.generic;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.game.cell.Cell;
 import com.gogomaya.game.event.client.GameClientEvent;
-import com.gogomaya.server.game.cell.Cell;
 
 @JsonTypeName("select")
 public class SelectCellEvent extends GameClientEvent {

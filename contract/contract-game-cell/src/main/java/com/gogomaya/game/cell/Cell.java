@@ -1,4 +1,4 @@
-package com.gogomaya.server.game.cell;
+package com.gogomaya.game.cell;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

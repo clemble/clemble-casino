@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
 import com.gogomaya.player.security.PlayerSession;
-import com.gogomaya.player.security.PlayerSessionService;
+import com.gogomaya.player.service.PlayerSessionService;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.player.PlayerSessionRepository;

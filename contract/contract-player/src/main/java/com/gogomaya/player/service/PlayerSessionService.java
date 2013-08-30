@@ -1,6 +1,8 @@
-package com.gogomaya.player.security;
+package com.gogomaya.player.service;
 
 import java.util.List;
+
+import com.gogomaya.player.security.PlayerSession;
 
 public interface PlayerSessionService {
 

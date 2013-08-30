@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>game-common</module>
-        <module>game-common-cell</module>
         <module>game-management</module>
         <module>game-web</module>
     </modules>

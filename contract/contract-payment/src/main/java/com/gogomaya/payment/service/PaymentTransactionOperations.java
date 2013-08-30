@@ -1,4 +1,6 @@
-package com.gogomaya.payment;
+package com.gogomaya.payment.service;
+
+import com.gogomaya.payment.PaymentTransaction;
 
 public interface PaymentTransactionOperations {
 
