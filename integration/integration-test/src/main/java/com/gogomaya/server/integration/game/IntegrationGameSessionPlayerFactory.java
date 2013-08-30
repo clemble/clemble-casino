@@ -4,11 +4,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
-import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.construct.GameConstruction;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.web.mapping.GameWebMapping;
+import com.gogomaya.web.mapping.GameWebMapping;
 
 public class IntegrationGameSessionPlayerFactory<State extends GameState> implements GameSessionPlayerFactory<State> {
 

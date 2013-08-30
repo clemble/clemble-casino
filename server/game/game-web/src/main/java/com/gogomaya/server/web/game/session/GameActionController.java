@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.event.client.MadeMove;
 import com.gogomaya.server.game.action.GameSessionProcessor;
-import com.gogomaya.server.game.event.client.MadeMove;
 import com.gogomaya.server.repository.game.GameSessionRepository;
-import com.gogomaya.server.web.mapping.GameWebMapping;
+import com.gogomaya.web.mapping.GameWebMapping;
 
 @Controller
 public class GameActionController<State extends GameState> {

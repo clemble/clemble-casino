@@ -1,9 +1,9 @@
 package com.gogomaya.server.game.action;
 
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.event.server.GameServerEvent;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.event.server.GameServerEvent;
 
 public interface GameProcessor<State extends GameState> {
 

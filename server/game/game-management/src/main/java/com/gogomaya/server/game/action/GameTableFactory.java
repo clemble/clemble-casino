@@ -2,13 +2,13 @@ package com.gogomaya.server.game.action;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameSessionState;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.GameTable;
-import com.gogomaya.server.game.construct.GameInitiation;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameSessionState;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.GameTable;
+import com.gogomaya.game.construct.GameInitiation;
+import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.game.notification.TableServerRegistry;
-import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.repository.game.GameTableRepository;
 
 public class GameTableFactory<State extends GameState> {

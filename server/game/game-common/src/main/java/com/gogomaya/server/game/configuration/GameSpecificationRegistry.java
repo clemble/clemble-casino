@@ -7,7 +7,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.gogomaya.server.game.Game;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.configuration.GameSpecificationConfiguration;
+import com.gogomaya.game.configuration.GameSpecificationOptions;
 import com.google.common.collect.ImmutableMap;
 
 public class GameSpecificationRegistry implements ApplicationContextAware {

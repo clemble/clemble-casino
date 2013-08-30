@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.event.client.MadeMove;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.event.client.MadeMove;
 
 @Repository
 public interface GameSessionRepository<State extends GameState> extends JpaRepository<GameSession<State>, Long> {

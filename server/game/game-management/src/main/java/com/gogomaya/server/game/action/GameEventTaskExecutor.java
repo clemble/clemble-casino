@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.Game;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.Game;
 
 public class GameEventTaskExecutor implements BeanPostProcessor {
 

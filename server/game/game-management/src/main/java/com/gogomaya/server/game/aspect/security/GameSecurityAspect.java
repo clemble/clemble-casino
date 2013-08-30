@@ -2,8 +2,8 @@ package com.gogomaya.server.game.aspect.security;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameState;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
 
 public class GameSecurityAspect<State extends GameState> extends BasicGameAspect<State> {

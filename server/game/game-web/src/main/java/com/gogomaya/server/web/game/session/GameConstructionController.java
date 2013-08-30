@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.GameRequest;
+import com.gogomaya.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
-import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.game.construct.GameConstructionService;
-import com.gogomaya.server.game.construct.GameRequest;
-import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
-import com.gogomaya.server.web.mapping.GameWebMapping;
+import com.gogomaya.web.mapping.GameWebMapping;
 
 @Controller
 public class GameConstructionController<State extends GameState> {

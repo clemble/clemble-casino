@@ -2,10 +2,10 @@ package com.gogomaya.server.integration.game;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.ServerResourse;
-import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.event.client.GameClientEvent;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.ServerResourse;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.event.client.GameClientEvent;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.web.game.session.GameActionController;
 

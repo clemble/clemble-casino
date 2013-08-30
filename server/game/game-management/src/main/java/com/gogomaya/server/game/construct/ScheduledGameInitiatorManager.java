@@ -4,6 +4,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.concurrent.ExecutorService;
 
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.ScheduledGame;
+import com.gogomaya.game.construct.ScheduledGameRequest;
 import com.gogomaya.server.repository.game.GameScheduleRepository;
 
 public class ScheduledGameInitiatorManager implements GameInitiatorManager {

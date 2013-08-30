@@ -2,22 +2,22 @@ package com.gogomaya.server.game.aspect.outcome;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameAware;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameSessionState;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.account.GamePlayerAccount;
+import com.gogomaya.game.event.server.GameServerEvent;
+import com.gogomaya.game.outcome.GameOutcome;
+import com.gogomaya.game.outcome.PlayerWonOutcome;
 import com.gogomaya.money.Money;
 import com.gogomaya.money.MoneySource;
 import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PaymentTransactionId;
-import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.GameAware;
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameSessionState;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.account.GamePlayerAccount;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
-import com.gogomaya.server.game.event.server.GameServerEvent;
-import com.gogomaya.server.game.outcome.GameOutcome;
-import com.gogomaya.server.game.outcome.PlayerWonOutcome;
 import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 

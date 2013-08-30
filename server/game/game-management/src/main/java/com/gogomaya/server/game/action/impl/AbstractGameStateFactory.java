@@ -4,14 +4,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.GameInitiation;
+import com.gogomaya.game.event.client.MadeMove;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.GameStateFactory;
-import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.construct.GameInitiation;
-import com.gogomaya.server.game.event.client.MadeMove;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 
 abstract public class AbstractGameStateFactory<State extends GameState> implements GameStateFactory<State> {

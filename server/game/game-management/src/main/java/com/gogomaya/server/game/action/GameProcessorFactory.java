@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.construct.GameInitiation;
+import com.gogomaya.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.aspect.GameAspect;
 import com.gogomaya.server.game.aspect.GameAspectFactory;
-import com.gogomaya.server.game.construct.GameInitiation;
-import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class GameProcessorFactory<State extends GameState> {
 

@@ -2,12 +2,12 @@ package com.gogomaya.server.game.aspect.price;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.account.GamePlayerAccount;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.account.GamePlayerAccount;
+import com.gogomaya.game.event.client.BetEvent;
+import com.gogomaya.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
-import com.gogomaya.server.game.event.client.BetEvent;
-import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
 
 public class GamePriceAspect<State extends GameState> extends BasicGameAspect<State> {
 

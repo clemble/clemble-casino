@@ -1,13 +1,13 @@
 package com.gogomaya.server.game.cache;
 
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameState;
 import com.gogomaya.game.SessionAware;
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.server.game.action.GameProcessor;
 import com.gogomaya.server.game.action.GameProcessorFactory;
 import com.gogomaya.server.game.action.GameStateFactory;
-import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.google.common.cache.CacheBuilder;

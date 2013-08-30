@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gogomaya.server.game.construct.GameConstruction;
+import com.gogomaya.game.construct.GameConstruction;
 
 @Repository
 @Transactional

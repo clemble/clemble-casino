@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.payment.web.mapping.PaymentWebMapping;
+import com.gogomaya.web.mapping.PaymentWebMapping;
 
 public class IntegrationPaymentTransactionOperations extends AbstractPaymentTransactionOperations {
 

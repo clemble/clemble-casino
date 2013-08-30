@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.server.game.event.client.BetEvent;
+import com.gogomaya.game.event.client.BetEvent;
 import com.google.common.collect.ImmutableList;
 
 @JsonTypeName("exposed")

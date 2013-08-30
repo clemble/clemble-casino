@@ -3,7 +3,10 @@ package com.gogomaya.server.game.configuration;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.Game;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.configuration.GameSpecificationConfiguration;
+import com.gogomaya.game.configuration.GameSpecificationOptions;
+import com.gogomaya.game.configuration.SelectSpecificationOptions;
 import com.gogomaya.server.repository.game.GameSpecificationRepository;
 
 public class GameSpecificationConfigurationManager implements GameSpecificationConfiguration {

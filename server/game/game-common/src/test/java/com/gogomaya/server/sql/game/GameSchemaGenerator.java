@@ -7,11 +7,11 @@ import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
 import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Test;
 
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameTable;
-import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.construct.ScheduledGame;
-import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameTable;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.ScheduledGame;
+import com.gogomaya.game.specification.GameSpecification;
 
 public class GameSchemaGenerator {
 

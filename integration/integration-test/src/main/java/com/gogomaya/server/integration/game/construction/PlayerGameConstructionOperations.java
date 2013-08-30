@@ -5,11 +5,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.GameAware;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.construct.GameRequest;
-import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameAware;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.construct.GameRequest;
+import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.player.Player;
 

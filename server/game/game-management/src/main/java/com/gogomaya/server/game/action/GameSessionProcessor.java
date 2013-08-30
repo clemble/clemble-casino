@@ -6,17 +6,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.GameAware;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.GameTable;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameAware;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.GameTable;
+import com.gogomaya.game.construct.GameInitiation;
+import com.gogomaya.game.event.client.surrender.SurrenderEvent;
+import com.gogomaya.game.event.server.GameServerEvent;
+import com.gogomaya.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.cache.GameCache;
 import com.gogomaya.server.game.cache.GameCacheService;
-import com.gogomaya.server.game.construct.GameInitiation;
-import com.gogomaya.server.game.event.client.surrender.SurrenderEvent;
-import com.gogomaya.server.game.event.server.GameServerEvent;
-import com.gogomaya.server.game.event.server.GameStartedEvent;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 
 public class GameSessionProcessor<State extends GameState> implements GameAware {

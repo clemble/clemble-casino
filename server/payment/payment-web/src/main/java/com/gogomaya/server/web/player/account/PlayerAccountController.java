@@ -25,10 +25,10 @@ import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PaymentTransactionId;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.payment.web.mapping.PaymentWebMapping;
 import com.gogomaya.server.player.account.PlayerAccountService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
+import com.gogomaya.web.mapping.PaymentWebMapping;
 
 @Controller
 public class PlayerAccountController {

@@ -2,12 +2,12 @@ package com.gogomaya.server.integration.game.construction;
 
 import java.util.Collection;
 
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameAware;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.configuration.GameSpecificationOptions;
-import com.gogomaya.server.game.construct.GameRequest;
-import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameAware;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.configuration.GameSpecificationOptions;
+import com.gogomaya.game.construct.GameRequest;
+import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.player.Player;
 

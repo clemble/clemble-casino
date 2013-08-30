@@ -2,12 +2,12 @@ package com.gogomaya.server.game.aspect.time;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.event.server.GameServerEvent;
 import com.gogomaya.server.game.action.GameEventTaskExecutor;
 import com.gogomaya.server.game.aspect.GameAspect;
-import com.gogomaya.server.game.event.server.GameServerEvent;
 
 public class GameTimeAspect<State extends GameState> implements GameAspect<State> {
 

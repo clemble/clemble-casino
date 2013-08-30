@@ -2,13 +2,13 @@ package com.gogomaya.server.integration.game.construction;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.configuration.GameSpecificationOptions;
-import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.construct.GameRequest;
-import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.configuration.GameSpecificationOptions;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.GameRequest;
+import com.gogomaya.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.web.game.options.GameConfigurationManagerController;

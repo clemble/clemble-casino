@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.gogomaya.server.game.construct.ScheduledGame;
+import com.gogomaya.game.construct.ScheduledGame;
 
 @Repository
 public interface GameScheduleRepository extends JpaRepository<ScheduledGame, Long> {

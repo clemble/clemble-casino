@@ -2,11 +2,11 @@ package com.gogomaya.server.game.aspect.bet;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.event.client.BetEvent;
+import com.gogomaya.game.rule.bet.BetRule;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
-import com.gogomaya.server.game.event.client.BetEvent;
-import com.gogomaya.server.game.rule.bet.BetRule;
 
 public class GameBetAspect<State extends GameState> extends BasicGameAspect<State> {
 

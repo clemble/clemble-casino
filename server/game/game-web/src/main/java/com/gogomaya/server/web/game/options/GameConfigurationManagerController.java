@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.configuration.GameSpecificationOptions;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.configuration.GameSpecificationOptions;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
-import com.gogomaya.server.web.mapping.GameWebMapping;
+import com.gogomaya.web.mapping.GameWebMapping;
 
 @Controller
 public class GameConfigurationManagerController {

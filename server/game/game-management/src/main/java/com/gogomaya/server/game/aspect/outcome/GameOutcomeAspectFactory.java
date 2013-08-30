@@ -2,10 +2,10 @@ package com.gogomaya.server.game.aspect.outcome;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.server.game.aspect.GameAspect;
 import com.gogomaya.server.game.aspect.GameAspectFactory;
-import com.gogomaya.server.game.construct.GameInitiation;
 import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 

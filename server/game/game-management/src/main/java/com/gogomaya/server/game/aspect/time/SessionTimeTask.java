@@ -6,12 +6,12 @@ import java.util.Date;
 
 import org.springframework.scheduling.TriggerContext;
 
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.Game;
 import com.gogomaya.game.SessionAware;
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.Game;
+import com.gogomaya.game.construct.GameInitiation;
+import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.game.action.GameEventTask;
-import com.gogomaya.server.game.construct.GameInitiation;
-import com.gogomaya.server.game.specification.GameSpecification;
 
 public class SessionTimeTask implements GameEventTask, SessionAware {
 

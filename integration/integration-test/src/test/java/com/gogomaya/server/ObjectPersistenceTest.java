@@ -20,8 +20,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.construct.ScheduledGame;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.ScheduledGame;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameScheduleRepository;
 import com.gogomaya.server.spring.integration.TestConfiguration;

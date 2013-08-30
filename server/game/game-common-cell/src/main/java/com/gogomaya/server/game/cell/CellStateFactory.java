@@ -2,7 +2,7 @@ package com.gogomaya.server.game.cell;
 
 import java.util.Collection;
 
-import com.gogomaya.server.game.event.client.BetEvent;
+import com.gogomaya.game.event.client.BetEvent;
 
 abstract public class CellStateFactory {
 

@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.specification.GameSpecification;
-import com.gogomaya.server.game.specification.SpecificationName;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.specification.GameSpecification;
+import com.gogomaya.game.specification.SpecificationName;
 
 @Repository
 public interface GameSpecificationRepository extends JpaRepository<GameSpecification, SpecificationName> {

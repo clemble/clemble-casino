@@ -1,7 +1,7 @@
 package com.gogomaya.server.game.aspect;
 
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.construct.GameInitiation;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.construct.GameInitiation;
 
 public interface GameAspectFactory {
 

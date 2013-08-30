@@ -2,6 +2,8 @@ package com.gogomaya.server.game.construct;
 
 import java.util.Collection;
 
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.server.player.PlayerState;
 import com.gogomaya.server.player.state.PlayerStateListener;
 import com.gogomaya.server.player.state.PlayerStateManager;

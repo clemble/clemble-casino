@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.account.GameAccount;
-import com.gogomaya.server.game.event.server.GameServerEvent;
-import com.gogomaya.server.game.iterator.GamePlayerIterator;
-import com.gogomaya.server.game.iterator.SequentialPlayerIterator;
-import com.gogomaya.server.game.outcome.GameOutcome;
+import com.gogomaya.base.ActionLatch;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.account.GameAccount;
+import com.gogomaya.game.event.server.GameServerEvent;
+import com.gogomaya.game.iterator.GamePlayerIterator;
+import com.gogomaya.game.iterator.SequentialPlayerIterator;
+import com.gogomaya.game.outcome.GameOutcome;
 import com.google.common.collect.ImmutableList;
 
 @JsonTypeName("stub")

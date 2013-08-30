@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.gogomaya.server.game.GameSession;
-import com.gogomaya.server.game.GameState;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameState;
 import com.gogomaya.server.repository.game.GameSessionRepository;
-import com.gogomaya.server.web.mapping.GameWebMapping;
+import com.gogomaya.web.mapping.GameWebMapping;
 
 @Controller
 public class GameSessionController<State extends GameState> {

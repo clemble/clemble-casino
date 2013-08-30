@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.gogomaya.game.SessionAware;
+import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.server.event.Event;
-import com.gogomaya.server.game.construct.GameConstruction;
 import com.gogomaya.server.integration.game.GameSessionListener;
 import com.gogomaya.server.integration.player.Player;
 

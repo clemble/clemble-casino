@@ -6,16 +6,16 @@ import java.io.Closeable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.gogomaya.server.event.ClientEvent;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.ServerResourse;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.event.client.GameClientEvent;
+import com.gogomaya.game.event.client.surrender.GiveUpEvent;
+import com.gogomaya.game.event.server.GameServerEvent;
+import com.gogomaya.game.event.server.GameStartedEvent;
+import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.event.Event;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.ServerResourse;
-import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.event.client.GameClientEvent;
-import com.gogomaya.server.game.event.client.surrender.GiveUpEvent;
-import com.gogomaya.server.game.event.server.GameServerEvent;
-import com.gogomaya.server.game.event.server.GameStartedEvent;
-import com.gogomaya.server.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
 
 abstract public class AbstractGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State>, Closeable {

@@ -2,11 +2,11 @@ package com.gogomaya.server.integration.game;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.event.client.GameClientEvent;
-import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.event.client.GameClientEvent;
+import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.integration.player.Player;
 
 public class GenericGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State> {

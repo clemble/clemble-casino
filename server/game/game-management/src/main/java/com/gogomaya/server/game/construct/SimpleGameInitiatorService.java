@@ -4,6 +4,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
+import com.gogomaya.game.construct.AutomaticGameRequest;
+import com.gogomaya.game.construct.AvailabilityGameRequest;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.GameInitiation;
+import com.gogomaya.game.construct.GameRequest;
 import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.player.state.PlayerStateManager;
 

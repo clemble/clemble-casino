@@ -7,9 +7,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;

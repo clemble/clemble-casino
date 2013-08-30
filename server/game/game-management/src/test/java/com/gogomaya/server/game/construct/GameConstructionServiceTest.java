@@ -19,8 +19,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gogomaya.server.game.event.schedule.InvitationAcceptedEvent;
-import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.game.construct.AvailabilityGameRequest;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.GameConstructionState;
+import com.gogomaya.game.event.schedule.InvitationAcceptedEvent;
+import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;

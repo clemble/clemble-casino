@@ -8,17 +8,17 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.gogomaya.server.event.ClientEvent;
-import com.gogomaya.server.game.Game;
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.configuration.GameSpecificationOptions;
-import com.gogomaya.server.game.construct.GameConstruction;
-import com.gogomaya.server.game.construct.GameRequest;
-import com.gogomaya.server.game.event.schedule.InvitationResponseEvent;
-import com.gogomaya.server.game.specification.GameSpecification;
+import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.configuration.GameSpecificationOptions;
+import com.gogomaya.game.construct.GameConstruction;
+import com.gogomaya.game.construct.GameRequest;
+import com.gogomaya.game.event.schedule.InvitationResponseEvent;
+import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayerFactory;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.web.mapping.GameWebMapping;
+import com.gogomaya.web.mapping.GameWebMapping;
 
 public class IntegrationGameConstructionOperations<State extends GameState> extends AbstractGameConstructionOperation<State> {
 

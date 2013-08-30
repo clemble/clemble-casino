@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.gogomaya.server.game.GameState;
-import com.gogomaya.server.game.GameTable;
+import com.gogomaya.game.GameState;
+import com.gogomaya.game.GameTable;
 
 @Repository
 public interface GameTableRepository<State extends GameState> extends JpaRepository<GameTable<State>, Long> {
