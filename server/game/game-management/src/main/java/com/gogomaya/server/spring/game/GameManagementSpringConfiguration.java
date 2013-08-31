@@ -28,7 +28,7 @@ import com.gogomaya.server.game.construct.GameInitiatorService;
 import com.gogomaya.server.game.construct.SimpleGameConstructionService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.payment.PaymentTransactionProcessingService;
-import com.gogomaya.server.player.account.PlayerAccountService;
+import com.gogomaya.server.player.account.PlayerAccountProcessingService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
@@ -138,7 +138,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         public GameConstructionRepository constructionRepository;
 
         @Autowired
-        public PlayerAccountService playerAccountService;
+        public PlayerAccountProcessingService playerAccountService;
 
         @Bean
         @Singleton

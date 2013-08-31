@@ -6,7 +6,7 @@ import com.gogomaya.money.Money;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
 
-public interface PlayerAccountService {
+public interface PlayerAccountProcessingService {
 
     public PlayerAccount register(PlayerProfile playerProfile);
 

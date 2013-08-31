@@ -14,7 +14,7 @@ import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
-public class RestPlayerAccountService implements PlayerAccountService {
+public class RestPlayerAccountService implements PlayerAccountProcessingService {
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
@@ -27,7 +27,7 @@ public class RestPlayerAccountService implements PlayerAccountService {
     @Override
     public PlayerAccount register(PlayerProfile playerProfile) {
         HttpEntity<PlayerProfile> request = sign(playerProfile);
-        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS, request, PlayerAccount.class)
+        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS, request, PlayerAccount.class)
                 .getBody();
     }
 
@@ -39,7 +39,7 @@ public class RestPlayerAccountService implements PlayerAccountService {
     @Override
     public boolean canAfford(Collection<Long> playerId, Money amount) {
         String urlPostfix = "?player=" + StringUtils.collectionToCommaDelimitedString(playerId) + "&currency=" + amount.getCurrency() + "&amount=" + amount.getAmount();
-        return restTemplate.getForEntity(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS + urlPostfix, Boolean.class)
+        return restTemplate.getForEntity(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS + urlPostfix, Boolean.class)
                 .getBody();
     }
 

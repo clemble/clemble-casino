@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 
 import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.payment.PaymentTransactionProcessingServiceImpl;
-import com.gogomaya.server.player.account.PlayerAccountService;
+import com.gogomaya.server.player.account.PlayerAccountProcessingService;
 import com.gogomaya.server.player.account.PlayerAccountServiceImpl;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
@@ -31,7 +31,7 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
 
     @Bean
     @Singleton
-    public PlayerAccountService realPlayerAccountService() {
+    public PlayerAccountProcessingService realPlayerAccountService() {
         return new PlayerAccountServiceImpl(playerAccountRepository, realPaymentTransactionService());
     }
 

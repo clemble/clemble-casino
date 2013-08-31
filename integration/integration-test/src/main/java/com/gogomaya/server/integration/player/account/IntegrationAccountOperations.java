@@ -29,7 +29,7 @@ public class IntegrationAccountOperations extends AbstractAccountOperations {
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, request, PlayerAccount.class,
+        return restTemplate.exchange(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, request, PlayerAccount.class,
                 playerId).getBody();
     }
 
@@ -38,7 +38,7 @@ public class IntegrationAccountOperations extends AbstractAccountOperations {
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
+        return restTemplate.exchange(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
                 new ParameterizedTypeReference<List<PaymentTransaction>>() {
                 }, playerId).getBody();
     }
@@ -48,8 +48,8 @@ public class IntegrationAccountOperations extends AbstractAccountOperations {
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS_TRANSACTION, HttpMethod.GET,
-                request, PaymentTransaction.class, playerId, moneySource, transactionId).getBody();
+        return restTemplate.exchange(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET,
+                request, PaymentTransaction.class, moneySource, transactionId).getBody();
 
     }
 

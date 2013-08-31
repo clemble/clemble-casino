@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -45,6 +46,7 @@ public class PlayerAccountOperationsITest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    @Ignore // TODO security was temporary disabled
     @Test
     public void testAmountAfterRegistration() {
         // Step 1. Creating player
@@ -72,6 +74,7 @@ public class PlayerAccountOperationsITest {
         accountOperations.getAccount(player, anotherPlayer.getPlayerId());
     }
 
+    @Ignore // TODO security was temporary disabled
     @Test
     public void testTransactionsListAccess() {
         // Step 1. Checking player has no transactions to access

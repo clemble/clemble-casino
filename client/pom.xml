@@ -19,6 +19,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>com.gogomaya.client</groupId>
+                <artifactId>client-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.android</groupId>
                 <artifactId>spring-android-rest-template</artifactId>
                 <version>${spring.android.version}</version>
@@ -26,6 +31,10 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.gogomaya</groupId>
             <artifactId>contract-player</artifactId>

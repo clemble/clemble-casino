@@ -19,7 +19,7 @@ public class RestPaymentTransactionService implements PaymentTransactionProcessi
 
     @Override
     public PaymentTransaction process(PaymentTransaction paymentTransaction) {
-        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.ACCOUNT_PREFIX + PaymentWebMapping.PAYMENT_TRANSACTIONS, paymentTransaction,
+        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_TRANSACTIONS, paymentTransaction,
                 PaymentTransaction.class).getBody();
     }
 

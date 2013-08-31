@@ -2,6 +2,8 @@ package com.gogomaya.server.web.payment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,6 +56,15 @@ public class PaymentTransactionController implements PaymentTransactionService {
         if (!paymentTransaction.isParticipant(requesterId))
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionAccessDenied);
         return paymentTransaction;
+    }
+    
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, produces = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody List<PaymentTransaction> listPlayerTransaction(@PathVariable("playerId") long playerId) {
+        // Step 1. Sending transactions
+        return paymentTransactionRepository.findByPaymentOperationsPlayerId(playerId);
     }
 
 }

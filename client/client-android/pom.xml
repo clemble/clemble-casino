@@ -12,6 +12,11 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>com.gogomaya.client</groupId>
+            <artifactId>client-common</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.android</groupId>
             <artifactId>spring-android-rest-template</artifactId>
         </dependency>

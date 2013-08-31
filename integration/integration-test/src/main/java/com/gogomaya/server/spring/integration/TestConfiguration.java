@@ -105,7 +105,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public AccountOperations accountOperations() {
-            return new WebAccountOperations(playerAccountController);
+            return new WebAccountOperations(paymentTransactionController, playerAccountController);
         }
 
         @Bean

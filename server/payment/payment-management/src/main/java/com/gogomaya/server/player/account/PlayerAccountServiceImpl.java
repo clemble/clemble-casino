@@ -19,7 +19,7 @@ import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 
-public class PlayerAccountServiceImpl implements PlayerAccountService {
+public class PlayerAccountServiceImpl implements PlayerAccountProcessingService {
 
     final private PlayerAccountRepository playerAccountRepository;
     final private PaymentTransactionProcessingService paymentTransactionService;

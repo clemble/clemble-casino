@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.gogomaya.server.player.account.PlayerAccountService;
+import com.gogomaya.server.player.account.PlayerAccountProcessingService;
 import com.gogomaya.server.player.registration.PlayerRegistrationProcessingService;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
@@ -35,7 +35,7 @@ public class PlayerManagementSpringConfiguration implements SpringConfiguration 
 
     @Autowired
     @Qualifier("playerAccountService")
-    public PlayerAccountService playerAccountService;
+    public PlayerAccountProcessingService playerAccountService;
 
     @Bean
     @Singleton

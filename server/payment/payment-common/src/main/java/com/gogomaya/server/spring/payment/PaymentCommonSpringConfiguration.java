@@ -18,7 +18,7 @@ import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.payment.PaymentTransactionProcessingService;
 import com.gogomaya.server.payment.RestPaymentTransactionService;
-import com.gogomaya.server.player.account.PlayerAccountService;
+import com.gogomaya.server.player.account.PlayerAccountProcessingService;
 import com.gogomaya.server.player.account.RestPlayerAccountService;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
@@ -62,7 +62,7 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Autowired(required = false)
         @Qualifier("realPlayerAccountService")
-        public PlayerAccountService realPlayerAccountService;
+        public PlayerAccountProcessingService realPlayerAccountService;
 
         public String getBaseUrl() {
             return "http://localhost:8080/";
@@ -76,7 +76,7 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Autowired
-        public PlayerAccountService playerAccountService(RestTemplate restTemplate) {
+        public PlayerAccountProcessingService playerAccountService(RestTemplate restTemplate) {
             return realPlayerAccountService == null ? new RestPlayerAccountService(getBaseUrl(), restTemplate) : realPlayerAccountService;
         }
     }
@@ -87,8 +87,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public PlayerAccountService playerAccountService() {
-            return new PlayerAccountService() {
+        public PlayerAccountProcessingService playerAccountService() {
+            return new PlayerAccountProcessingService() {
 
                 @Override
                 public PlayerAccount register(PlayerProfile playerProfile) {

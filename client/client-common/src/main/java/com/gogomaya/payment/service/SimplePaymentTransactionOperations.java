@@ -2,6 +2,8 @@ package com.gogomaya.payment.service;
 
 import static com.gogomaya.utils.Preconditions.checkNotNull;
 
+import java.util.List;
+
 import com.gogomaya.money.MoneySource;
 import com.gogomaya.payment.PaymentTransaction;
 
@@ -28,6 +30,11 @@ public class SimplePaymentTransactionOperations implements PaymentTransactionOpe
     @Override
     public PaymentTransaction getPaymentTransaction(String source, long transactionId) {
         return paymentTransactionService.getPaymentTransaction(playerId, source, transactionId);
+    }
+
+    @Override
+    public List<PaymentTransaction> listPlayerTransaction() {
+        return paymentTransactionService.listPlayerTransaction(playerId);
     }
 
     @Override
