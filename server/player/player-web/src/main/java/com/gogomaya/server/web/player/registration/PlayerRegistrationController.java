@@ -16,18 +16,18 @@ import com.gogomaya.error.GogomayaValidationService;
 import com.gogomaya.player.SocialConnectionData;
 import com.gogomaya.player.security.PlayerCredential;
 import com.gogomaya.player.security.PlayerIdentity;
-import com.gogomaya.player.service.PlayerRegistrationOperations;
+import com.gogomaya.player.service.PlayerRegistrationService;
 import com.gogomaya.player.web.RegistrationRequest;
-import com.gogomaya.server.player.registration.PlayerRegistrationService;
+import com.gogomaya.server.player.registration.PlayerRegistrationProcessingService;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.web.player.PlayerWebMapping;
 
 @Controller
-public class PlayerRegistrationController implements PlayerRegistrationOperations {
+public class PlayerRegistrationController implements PlayerRegistrationService {
 
-    final private PlayerRegistrationService playerRegistrationService;
+    final private PlayerRegistrationProcessingService playerRegistrationService;
     final private PlayerCredentialRepository playerCredentialRepository;
     final private PlayerIdentityRepository playerIdentityRepository;
     final private SocialConnectionDataAdapter socialConnectionDataAdapter;
@@ -36,7 +36,7 @@ public class PlayerRegistrationController implements PlayerRegistrationOperation
     public PlayerRegistrationController(final PlayerCredentialRepository playerCredentialRepository,
             final PlayerIdentityRepository playerIdentityRepository,
             final GogomayaValidationService validationService,
-            final PlayerRegistrationService playerRegistrationService,
+            final PlayerRegistrationProcessingService playerRegistrationService,
             final SocialConnectionDataAdapter socialConnectionDataAdapter) {
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
         this.playerIdentityRepository = checkNotNull(playerIdentityRepository);

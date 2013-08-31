@@ -15,7 +15,7 @@ import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 
-import com.gogomaya.server.player.registration.PlayerRegistrationService;
+import com.gogomaya.server.player.registration.PlayerRegistrationProcessingService;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
 import com.gogomaya.server.social.SocialConnectionAdapterRegistry;
@@ -43,7 +43,7 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("playerRegistrationService")
-    public PlayerRegistrationService playerRegistrationService;
+    public PlayerRegistrationProcessingService playerRegistrationService;
 
     @Bean @Singleton
     public SocialConnectionDataAdapter socialConnectionDataAdapter() {

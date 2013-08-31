@@ -6,10 +6,37 @@
         <artifactId>parent</artifactId>
         <version>0.5.1-SNAPSHOT</version>
     </parent>
+    <properties>
+        <spring.android.version>1.0.1.RELEASE</spring.android.version>
+    </properties>
     <groupId>com.gogomaya.client</groupId>
     <artifactId>client</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>gogomaya-android</module>
+        <module>client-common</module>
+        <module>client-android</module>
     </modules>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.android</groupId>
+                <artifactId>spring-android-rest-template</artifactId>
+                <version>${spring.android.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.gogomaya</groupId>
+            <artifactId>contract-player</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gogomaya</groupId>
+            <artifactId>contract-payment</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gogomaya</groupId>
+            <artifactId>contract-game</artifactId>
+        </dependency>
+    </dependencies>
 </project>

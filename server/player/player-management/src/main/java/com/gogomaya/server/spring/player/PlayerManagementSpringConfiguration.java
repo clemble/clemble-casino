@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.gogomaya.server.player.account.PlayerAccountService;
-import com.gogomaya.server.player.registration.PlayerRegistrationService;
+import com.gogomaya.server.player.registration.PlayerRegistrationProcessingService;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
@@ -39,8 +39,8 @@ public class PlayerManagementSpringConfiguration implements SpringConfiguration 
 
     @Bean
     @Singleton
-    public PlayerRegistrationService playerRegistrationService() {
-        return new PlayerRegistrationService(playerProfileRepository, playerIdentityRepository, playerCredentialRepository, playerAccountService);
+    public PlayerRegistrationProcessingService playerRegistrationService() {
+        return new PlayerRegistrationProcessingService(playerProfileRepository, playerIdentityRepository, playerCredentialRepository, playerAccountService);
     }
 
 }

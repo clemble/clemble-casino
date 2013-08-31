@@ -13,14 +13,14 @@ import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
 
-public class PlayerRegistrationService {
+public class PlayerRegistrationProcessingService {
 
     final private PlayerAccountService playerAccountService;
     final private PlayerProfileRepository playerProfileRepository;
     final private PlayerIdentityRepository playerIdentityRepository;
     final private PlayerCredentialRepository playerCredentialRepository;
 
-    public PlayerRegistrationService(final PlayerProfileRepository playerProfileRepository,
+    public PlayerRegistrationProcessingService(final PlayerProfileRepository playerProfileRepository,
             final PlayerIdentityRepository playerIdentityRepository,
             final PlayerCredentialRepository playerCredentialRepository,
             final PlayerAccountService playerAccountService) {

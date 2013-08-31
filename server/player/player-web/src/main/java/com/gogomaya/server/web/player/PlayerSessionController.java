@@ -54,7 +54,7 @@ public class PlayerSessionController implements PlayerSessionService {
     @Override
     @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_SESSIONS_SESSION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public @ResponseBody PlayerSession refresh(@PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
+    public @ResponseBody PlayerSession refreshPlayerSession(@PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
         // Step 1. Fetching session
         PlayerSession playerSession = getPlayerSession(playerId, sessionId);
         // Step 2. Sanity check
@@ -69,7 +69,7 @@ public class PlayerSessionController implements PlayerSessionService {
     @Override
     @RequestMapping(method = RequestMethod.DELETE, value = PlayerWebMapping.PLAYER_SESSIONS_SESSION, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerSession end(@PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
+    public @ResponseBody PlayerSession endPlayerSession(@PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
         // Step 1. Fetching player session
         PlayerSession playerSession = getPlayerSession(playerId, sessionId);
         if (playerSession.expired())
@@ -84,7 +84,7 @@ public class PlayerSessionController implements PlayerSessionService {
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_SESSIONS, produces = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PlayerSession> list(@PathVariable("playerId") long playerId) {
+    public @ResponseBody List<PlayerSession> listPlayerSessions(@PathVariable("playerId") long playerId) {
         // Step 1. Reading specific session
         List<PlayerSession> playerSessions = sessionRepository.findByPlayerId(playerId);
         // Step 2. Returning read sessions

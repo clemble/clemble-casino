@@ -23,7 +23,7 @@ public class WebSessionOperations extends AbstractSessionOperations {
 
     @Override
     public PlayerSession end(Player player, long session) {
-        return playerSessionController.end(player.getPlayerId(), session);
+        return playerSessionController.endPlayerSession(player.getPlayerId(), session);
     }
 
     @Override
@@ -33,12 +33,12 @@ public class WebSessionOperations extends AbstractSessionOperations {
 
     @Override
     public PlayerSession refresh(Player player, long session) {
-        return playerSessionController.refresh(player.getPlayerId(), session);
+        return playerSessionController.refreshPlayerSession(player.getPlayerId(), session);
     }
 
     @Override
     public List<PlayerSession> list(Player player) {
-        return playerSessionController.list(player.getPlayerId());
+        return playerSessionController.listPlayerSessions(player.getPlayerId());
     }
 
 }

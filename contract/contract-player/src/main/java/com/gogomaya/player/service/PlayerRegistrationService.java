@@ -5,7 +5,7 @@ import com.gogomaya.player.security.PlayerCredential;
 import com.gogomaya.player.security.PlayerIdentity;
 import com.gogomaya.player.web.RegistrationRequest;
 
-public interface PlayerRegistrationOperations {
+public interface PlayerRegistrationService {
 
     public PlayerIdentity login(final PlayerCredential playerCredentials);
 

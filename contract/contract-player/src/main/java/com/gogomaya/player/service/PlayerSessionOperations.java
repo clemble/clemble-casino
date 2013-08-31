@@ -2,9 +2,10 @@ package com.gogomaya.player.service;
 
 import java.util.List;
 
+import com.gogomaya.player.PlayerAware;
 import com.gogomaya.player.security.PlayerSession;
 
-public interface PlayerSessionOperations {
+public interface PlayerSessionOperations extends PlayerAware {
 
     public PlayerSession createPlayerSession();
 
@@ -12,8 +13,8 @@ public interface PlayerSessionOperations {
 
     public List<PlayerSession> listPlayerSessions();
 
-    public PlayerSession updatePlayerSession(long sessionId);
+    public PlayerSession refreshPlayerSession(long sessionId);
 
-    public PlayerSession terminatePlayerSession(long sessionId);
+    public PlayerSession endPlayerSession(long sessionId);
 
 }

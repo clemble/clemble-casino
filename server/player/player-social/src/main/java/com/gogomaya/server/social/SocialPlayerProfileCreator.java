@@ -14,17 +14,17 @@ import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.player.security.PlayerCredential;
 import com.gogomaya.player.security.PlayerIdentity;
 import com.gogomaya.player.web.RegistrationRequest;
-import com.gogomaya.server.player.registration.PlayerRegistrationService;
+import com.gogomaya.server.player.registration.PlayerRegistrationProcessingService;
 
 public class SocialPlayerProfileCreator implements ConnectionSignUp {
 
-    final private PlayerRegistrationService playerRegistrationService;
+    final private PlayerRegistrationProcessingService playerRegistrationService;
 
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
 
     @Inject
     public SocialPlayerProfileCreator(
-            final PlayerRegistrationService playerRegistrationService,
+            final PlayerRegistrationProcessingService playerRegistrationService,
             final SocialConnectionAdapterRegistry socialAdapterRegistry) {
         this.playerRegistrationService = checkNotNull(playerRegistrationService);
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);

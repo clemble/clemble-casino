@@ -10,10 +10,10 @@ public interface PlayerSessionService {
 
     public PlayerSession getPlayerSession(long playerId, long sessionId);
 
-    public PlayerSession refresh(long playerId, long sessionId);
+    public PlayerSession refreshPlayerSession(long playerId, long sessionId);
 
-    public PlayerSession end(long playerId, long sessionId);
+    public PlayerSession endPlayerSession(long playerId, long sessionId);
 
-    public List<PlayerSession> list(long playerId);
+    public List<PlayerSession> listPlayerSessions(long playerId);
 
 }
