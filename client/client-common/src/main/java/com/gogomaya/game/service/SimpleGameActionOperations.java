@@ -3,6 +3,9 @@ package com.gogomaya.game.service;
 import static com.gogomaya.utils.Preconditions.checkNotNull;
 
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.event.listener.EventListener;
+import com.gogomaya.event.listener.EventListenersManager;
+import com.gogomaya.event.listener.SessionEventSelector;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.event.client.MadeMove;
 
@@ -16,10 +19,12 @@ public class SimpleGameActionOperations<State extends GameState> implements Game
     final private long playerId;
     final private long sessionId;
     final private GameActionService<State> gameActionService;
+    final private EventListenersManager eventListenersManager;
 
-    public SimpleGameActionOperations(long playerId, long sessionId, GameActionService<State> gameActionService) {
+    public SimpleGameActionOperations(long playerId, long sessionId, EventListenersManager eventListenersManager, GameActionService<State> gameActionService) {
         this.playerId = playerId;
         this.sessionId = sessionId;
+        this.eventListenersManager = checkNotNull(eventListenersManager);
         this.gameActionService = checkNotNull(gameActionService);
     }
 
@@ -31,6 +36,11 @@ public class SimpleGameActionOperations<State extends GameState> implements Game
     @Override
     public MadeMove getAction(int actionId) {
         return gameActionService.getAction(sessionId, actionId);
+    }
+
+    @Override
+    public void subscribe(EventListener eventListener) {
+        eventListenersManager.subscribe(new SessionEventSelector(sessionId), eventListener);
     }
 
     @Override
