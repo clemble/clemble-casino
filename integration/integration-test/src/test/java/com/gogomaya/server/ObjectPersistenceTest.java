@@ -5,11 +5,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,12 +33,13 @@ import com.stresstest.random.ObjectGenerator;
 @ContextConfiguration(classes = { TestConfiguration.class })
 public class ObjectPersistenceTest extends ObjectTest implements ApplicationContextAware {
 
+    @SuppressWarnings("rawtypes")
     Map<String, JpaRepository> repositories;
 
-    @Autowired
+    @Inject
     public GameScheduleRepository gameScheduleRepository;
 
-    @Autowired
+    @Inject
     public GameConstructionRepository constructionRepository;
 
     @Test

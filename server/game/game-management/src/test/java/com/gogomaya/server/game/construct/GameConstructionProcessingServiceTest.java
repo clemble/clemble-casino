@@ -11,10 +11,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -37,10 +38,10 @@ public class GameConstructionProcessingServiceTest {
 
     final private int NUM_PARTICIPANTS = 50;
 
-    @Autowired
+    @Inject
     public GameConstructionProcessingService constructionService;
 
-    @Autowired
+    @Inject
     public GameConstructionRepository constructionRepository;
 
     @Test

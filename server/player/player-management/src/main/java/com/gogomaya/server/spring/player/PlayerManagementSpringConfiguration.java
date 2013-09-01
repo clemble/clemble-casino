@@ -1,9 +1,9 @@
 package com.gogomaya.server.spring.player;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,20 +21,20 @@ import com.gogomaya.server.spring.payment.PaymentCommonSpringConfiguration;
 @Import(value = { CommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class })
 public class PlayerManagementSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("playerIdentityRepository")
+    @Inject
+    @Named("playerIdentityRepository")
     public PlayerIdentityRepository playerIdentityRepository;
 
-    @Autowired
-    @Qualifier("playerCredentialRepository")
+    @Inject
+    @Named("playerCredentialRepository")
     public PlayerCredentialRepository playerCredentialRepository;
 
-    @Autowired
-    @Qualifier("playerProfileRepository")
+    @Inject
+    @Named("playerProfileRepository")
     public PlayerProfileRepository playerProfileRepository;
 
-    @Autowired
-    @Qualifier("playerAccountService")
+    @Inject
+    @Named("playerAccountService")
     public PlayerAccountProcessingService playerAccountService;
 
     @Bean

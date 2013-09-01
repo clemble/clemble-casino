@@ -6,17 +6,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.error.GogomayaValidationService;
 import com.gogomaya.player.PlayerGender;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
@@ -46,11 +46,8 @@ public class PlayerProfileTest {
     final private String JSON_PRESENTATION = "{" + "\"playerId\":1," + "\"nickName\":\"michael.limbo\"," + "\"firstName\":\"Michael\","
             + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\"," + "\"birthDate\":\"10/10/1990\"," + "\"imageUrl\":\"https://limbozo.com/\"" + "}";
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private GogomayaValidationService validationService;
+    @Inject
+    public ObjectMapper objectMapper;
 
     @Test
     public void testSerialization() throws JsonGenerationException, JsonMappingException, IOException, ParseException {

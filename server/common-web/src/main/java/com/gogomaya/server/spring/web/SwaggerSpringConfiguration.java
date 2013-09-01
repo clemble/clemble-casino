@@ -1,6 +1,7 @@
 package com.gogomaya.server.spring.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 
@@ -26,7 +27,7 @@ abstract public class SwaggerSpringConfiguration implements SpringConfiguration 
     }
 
     @Bean
-    @Autowired
+    @Inject
     abstract public SwaggerConfiguration swaggerConfiguration(DefaultConfigurationModule defaultConfig, ExtensibilityModule extensibility);
 
     @Bean
@@ -45,19 +46,19 @@ abstract public class SwaggerSpringConfiguration implements SpringConfiguration 
     }
 
     @Bean
-    @Autowired
+    @Inject
     public DocumentationTransformer documentationTransformer() {
         return new DefaultDocumentationTransformer(null, null);
     }
 
     @Bean
-    @Autowired
+    @Inject
     public DocumentationSchemaProvider documentationSchemaProvider(TypeResolver typeResolver, SchemaDescriptor schemaDescriptor) {
         return new DocumentationSchemaProvider(typeResolver, schemaDescriptor);
     }
 
     @Bean
-    @Autowired
+    @Inject
     public SchemaDescriptor schemaDescriptor(@Qualifier("objectMapper") ObjectMapper objectMapper) {
         return new Jackson2SchemaDescriptor(objectMapper);
     }

@@ -2,14 +2,14 @@ package com.gogomaya.server.spring.common;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -37,12 +37,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Import(value = { JPASpringConfiguration.DefaultAndTest.class })
 public class JPASpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("dataSource")
+    @Inject
+    @Named("dataSource")
     public DataSource dataSource;
 
-    @Autowired
-    @Qualifier("jpaVendorAdapter")
+    @Inject
+    @Named("jpaVendorAdapter")
     public JpaVendorAdapter jpaVendorAdapter;
 
     @Bean

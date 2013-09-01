@@ -1,9 +1,9 @@
 package com.gogomaya.server.spring.web;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -23,8 +23,8 @@ import com.google.common.collect.ImmutableList;
 @Import({ JsonSpringConfiguration.class })
 public class WebCommonSpringConfiguration extends WebMvcConfigurationSupport implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("objectMapper")
+    @Inject
+    @Named("objectMapper")
     public ObjectMapper objectMapper;
 
     @Bean

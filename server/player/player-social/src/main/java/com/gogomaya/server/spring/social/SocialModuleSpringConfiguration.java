@@ -1,10 +1,10 @@
 package com.gogomaya.server.spring.social;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,20 +29,20 @@ import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
 @Import(value = { PlayerManagementSpringConfiguration.class })
 public class SocialModuleSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("dataSource")
+    @Inject
+    @Named("dataSource")
     public DataSource dataSource;
 
-    @Autowired
-    @Qualifier("playerProfileRepository")
+    @Inject
+    @Named("playerProfileRepository")
     public PlayerProfileRepository playerProfileRepository;
 
-    @Autowired
-    @Qualifier("playerIdentityRepository")
+    @Inject
+    @Named("playerIdentityRepository")
     public PlayerIdentityRepository playerIdentityRepository;
 
-    @Autowired
-    @Qualifier("playerRegistrationService")
+    @Inject
+    @Named("playerRegistrationService")
     public PlayerRegistrationProcessingService playerRegistrationService;
 
     @Bean @Singleton

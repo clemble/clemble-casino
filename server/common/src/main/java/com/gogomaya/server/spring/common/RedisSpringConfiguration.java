@@ -2,10 +2,10 @@ package com.gogomaya.server.spring.common;
 
 import java.nio.ByteBuffer;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -20,8 +20,8 @@ import org.springframework.data.redis.serializer.SerializationException;
 @Import(value = { RedisSpringConfiguration.DefaultAndTest.class })
 public class RedisSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("redisConnectionFactory")
+    @Inject
+    @Named("redisConnectionFactory")
     public RedisConnectionFactory redisConnectionFactory;
 
     public static class LongRedisSerializer implements RedisSerializer<Long> {
