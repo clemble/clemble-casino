@@ -6,11 +6,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -46,7 +45,7 @@ public class PlayerProfileTest {
     final private String JSON_PRESENTATION = "{" + "\"playerId\":1," + "\"nickName\":\"michael.limbo\"," + "\"firstName\":\"Michael\","
             + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\"," + "\"birthDate\":\"10/10/1990\"," + "\"imageUrl\":\"https://limbozo.com/\"" + "}";
 
-    @Inject
+    @Autowired
     public ObjectMapper objectMapper;
 
     @Test

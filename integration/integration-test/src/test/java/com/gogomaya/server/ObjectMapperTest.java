@@ -11,11 +11,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -50,10 +49,10 @@ import com.stresstest.random.ObjectGenerator;
 @ContextConfiguration(classes = { TestConfiguration.class })
 public class ObjectMapperTest extends ObjectTest {
 
-    @Inject
+    @Autowired
     public ObjectMapper objectMapper;
 
-    @Inject
+    @Autowired
     public MappingJackson2HttpMessageConverter httpMessageConverter;
 
     @Test

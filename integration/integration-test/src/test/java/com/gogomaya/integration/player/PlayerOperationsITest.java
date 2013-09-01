@@ -3,11 +3,10 @@ package com.gogomaya.integration.player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import javax.inject.Inject;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,8 +29,8 @@ import com.gogomaya.server.test.RedisCleaner;
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
 public class PlayerOperationsITest {
 
-    @Inject
-    PlayerOperations playerOperations;
+    @Autowired
+    public PlayerOperations playerOperations;
 
     @Test
     public void createRandomPlayer() {

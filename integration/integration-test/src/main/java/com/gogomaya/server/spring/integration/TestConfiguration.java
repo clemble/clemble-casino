@@ -1,9 +1,9 @@
 package com.gogomaya.server.spring.integration;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -52,8 +52,8 @@ import com.gogomaya.server.web.player.registration.PlayerRegistrationController;
         TestConfiguration.RemoteIntegrationTestConfiguration.class })
 public class TestConfiguration {
 
-    @Inject
-    @Named("playerOperations")
+    @Autowired
+    @Qualifier("playerOperations")
     public PlayerOperations playerOperations;
 
     @Bean
@@ -67,26 +67,26 @@ public class TestConfiguration {
     @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
-        @Inject
-        @Named("objectMapper")
+        @Autowired
+        @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
-        @Inject
-        @Named("registrationLoginController")
+        @Autowired
+        @Qualifier("registrationLoginController")
         public PlayerRegistrationController registrationLoginController;
 
-        @Inject
-        @Named("playerSessionController")
+        @Autowired
+        @Qualifier("playerSessionController")
         public PlayerSessionController playerSessionController;
 
-        @Inject
-        @Named("playerAccountController")
+        @Autowired
+        @Qualifier("playerAccountController")
         public PlayerAccountController playerAccountController;
 
-        @Inject
+        @Autowired
         public PlayerProfileController playerProfileController;
 
-        @Inject
+        @Autowired
         public PaymentTransactionController paymentTransactionController;
 
         @Bean
@@ -159,8 +159,8 @@ public class TestConfiguration {
     @Import(ClientRestCommonSpringConfiguration.class)
     public static class IntegrationTestConfiguration {
 
-        @Inject
-        @Named("objectMapper")
+        @Autowired
+        @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
         public String getBaseUrl() {

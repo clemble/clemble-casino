@@ -2,11 +2,10 @@ package com.gogomaya.server.web.player.session;
 
 import java.util.Collections;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,10 +23,10 @@ import com.gogomaya.server.web.player.PlayerSessionController;
 @ContextConfiguration(classes = { PlayerWebSpringConfiguration.class })
 public class PlayerSessionControllerTest {
 
-    @Inject
+    @Autowired
     public PlayerSessionController playerSessionController;
 
-    @Inject
+    @Autowired
     public PlayerStateManager playerStateManager;
 
     @Test

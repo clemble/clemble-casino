@@ -1,9 +1,9 @@
 package com.gogomaya.server.spring.web.player;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -33,40 +33,40 @@ import com.mangofactory.swagger.configuration.ExtensibilityModule;
 @Import(value = { PlayerWebSpringConfiguration.PlayerDefaultAndTest.class, SocialModuleSpringConfiguration.class, WebCommonSpringConfiguration.class })
 public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
-    @Inject
-    @Named("socialConnectionDataAdapter")
+    @Autowired
+    @Qualifier("socialConnectionDataAdapter")
     public SocialConnectionDataAdapter socialConnectionDataAdapter;
 
-    @Inject
-    @Named("playerProfileRepository")
+    @Autowired
+    @Qualifier("playerProfileRepository")
     public PlayerProfileRepository playerProfileRepository;
 
-    @Inject
-    @Named("playerCredentialRepository")
+    @Autowired
+    @Qualifier("playerCredentialRepository")
     public PlayerCredentialRepository playerCredentialRepository;
 
-    @Inject
-    @Named("playerIdentityRepository")
+    @Autowired
+    @Qualifier("playerIdentityRepository")
     public PlayerIdentityRepository playerIdentityRepository;
 
-    @Inject
-    @Named("playerRegistrationService")
+    @Autowired
+    @Qualifier("playerRegistrationService")
     public PlayerRegistrationProcessingService playerRegistrationService;
 
-    @Inject
-    @Named("playerSessionRepository")
+    @Autowired
+    @Qualifier("playerSessionRepository")
     public PlayerSessionRepository playerSessionRepository;
 
-    @Inject
-    @Named("playerNotificationRegistry")
+    @Autowired
+    @Qualifier("playerNotificationRegistry")
     public PlayerNotificationRegistry playerNotificationRegistry;
 
-    @Inject
-    @Named("gogomayaValidationService")
+    @Autowired
+    @Qualifier("gogomayaValidationService")
     public GogomayaValidationService gogomayaValidationService;
 
-    @Inject
-    @Named("playerStateManager")
+    @Autowired
+    @Qualifier("playerStateManager")
     public PlayerStateManager playerStateManager;
 
     @Bean

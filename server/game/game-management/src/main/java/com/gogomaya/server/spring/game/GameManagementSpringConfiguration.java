@@ -3,10 +3,10 @@ package com.gogomaya.server.spring.game;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -44,12 +44,12 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
         GameManagementSpringConfiguration.GameTimeAspectConfiguration.class, GameManagementSpringConfiguration.DefaultAndTest.class, GameManagementSpringConfiguration.Cloud.class, GameManagementSpringConfiguration.Test.class })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
-    @Inject
-    @Named("paymentTransactionService")
+    @Autowired
+    @Qualifier("paymentTransactionService")
     public PaymentTransactionProcessingService paymentTransactionService;
 
-    @Inject
-    @Named("playerStateManager")
+    @Autowired
+    @Qualifier("playerStateManager")
     public PlayerStateManager playerStateManager;
 
     @Bean
@@ -125,19 +125,19 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Profile(value = { UNIT_TEST })
     public static class Test {
 
-        @Inject
+        @Autowired
         public PlayerLockService playerLockService;
 
-        @Inject
+        @Autowired
         public PlayerStateManager playerStateManager;
 
-        @Inject
+        @Autowired
         public PlayerNotificationService playerNotificationService;
 
-        @Inject
+        @Autowired
         public GameConstructionRepository constructionRepository;
 
-        @Inject
+        @Autowired
         public PlayerAccountProcessingService playerAccountService;
 
         @Bean
@@ -168,8 +168,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Profile(value = { CLOUD })
     public static class Cloud {
 
-        @Inject
-        @Named("tableQueueTemplate")
+        @Autowired
+        @Qualifier("tableQueueTemplate")
         public RedisTemplate<byte[], Long> redisTemplate;
 
         @Bean

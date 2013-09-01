@@ -2,12 +2,11 @@ package com.gogomaya.server.payment;
 
 import java.util.Random;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -28,10 +27,10 @@ public class PaymentTransactionServiceTest {
 
     final private Random RANDOM = new Random();
 
-    @Inject
+    @Autowired
     public PlayerAccountRepository playerAccountRepository;
 
-    @Inject
+    @Autowired
     public PaymentTransactionProcessingService paymentTransactionService;
 
     private long playerFrom = RANDOM.nextLong();

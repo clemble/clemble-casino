@@ -1,9 +1,9 @@
 package com.gogomaya.server.spring.web;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -19,8 +19,8 @@ import com.gogomaya.server.web.error.GogomayaRESTErrorHandler;
 @Import({ JsonSpringConfiguration.class })
 public class ClientRestCommonSpringConfiguration {
 
-    @Inject
-    @Named("objectMapper")
+    @Autowired
+    @Qualifier("objectMapper")
     public ObjectMapper objectMapper;
 
     @Bean

@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
-
 import com.gogomaya.money.Currency;
 import com.gogomaya.money.Money;
 import com.gogomaya.money.MoneySource;
@@ -24,7 +22,6 @@ public class PlayerAccountServiceImpl implements PlayerAccountProcessingService 
     final private PlayerAccountRepository playerAccountRepository;
     final private PaymentTransactionProcessingService paymentTransactionService;
 
-    @Inject
     public PlayerAccountServiceImpl(final PlayerAccountRepository playerWalletRepository, final PaymentTransactionProcessingService paymentTransactionService) {
         this.playerAccountRepository = checkNotNull(playerWalletRepository);
         this.paymentTransactionService = checkNotNull(paymentTransactionService);

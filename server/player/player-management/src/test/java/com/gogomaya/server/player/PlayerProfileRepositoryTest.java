@@ -1,11 +1,10 @@
 package com.gogomaya.server.player;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,10 +21,10 @@ import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
 @ContextConfiguration(classes = PlayerManagementSpringConfiguration.class)
 public class PlayerProfileRepositoryTest {
 
-    @Inject
+    @Autowired
     public PlayerProfileRepository playerProfileRepository;
 
-    @Inject
+    @Autowired
     public PlayerSessionRepository sessionRepository;
 
     @Before

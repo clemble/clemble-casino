@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionSignUp;
@@ -22,7 +20,6 @@ public class SocialPlayerProfileCreator implements ConnectionSignUp {
 
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
 
-    @Inject
     public SocialPlayerProfileCreator(
             final PlayerRegistrationProcessingService playerRegistrationService,
             final SocialConnectionAdapterRegistry socialAdapterRegistry) {

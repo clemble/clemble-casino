@@ -5,8 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
-import javax.inject.Inject;
-
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -39,7 +37,6 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
 
     final private PlayerNotificationRegistry notificationRegistry;
 
-    @Inject
     public RabbitPlayerNotificationService(final MessageConverter messageConverter, final PlayerNotificationRegistry notificationRegistry) {
         this.messageConverter = checkNotNull(messageConverter);
         this.notificationRegistry = checkNotNull(notificationRegistry);

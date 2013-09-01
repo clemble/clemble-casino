@@ -1,9 +1,9 @@
 package com.gogomaya.server.spring.web.payment;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -30,20 +30,20 @@ import com.mangofactory.swagger.configuration.ExtensibilityModule;
     WebCommonSpringConfiguration.class })
 public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
-    @Inject
-    @Named("realPlayerAccountService")
+    @Autowired
+    @Qualifier("realPlayerAccountService")
     public PlayerAccountProcessingService playerAccountService;
 
-    @Inject
-    @Named("paymentTransactionRepository")
+    @Autowired
+    @Qualifier("paymentTransactionRepository")
     public PaymentTransactionRepository paymentTransactionRepository;
 
-    @Inject
-    @Named("realPaymentTransactionService")
+    @Autowired
+    @Qualifier("realPaymentTransactionService")
     public PaymentTransactionProcessingService paymentTransactionService;
 
-    @Inject
-    @Named("playerAccountRepository")
+    @Autowired
+    @Qualifier("playerAccountRepository")
     public PlayerAccountRepository playerAccountRepository;
 
     @Bean

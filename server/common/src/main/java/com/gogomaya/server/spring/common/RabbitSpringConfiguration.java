@@ -1,7 +1,5 @@
 package com.gogomaya.server.spring.common;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.amqp.core.Queue;
@@ -10,6 +8,8 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -26,16 +26,16 @@ import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
 @Import({ RabbitSpringConfiguration.DefaultAndTest.class, JsonSpringConfiguration.class })
 public class RabbitSpringConfiguration implements SpringConfiguration {
 
-    @Inject
-    @Named("connectionFactory")
+    @Autowired
+    @Qualifier("connectionFactory")
     public ConnectionFactory connectionFactory;
 
-    @Inject
-    @Named("objectMapper")
+    @Autowired
+    @Qualifier("objectMapper")
     public ObjectMapper objectMapper;
 
-    @Inject
-    @Named("playerNotificationRegistry")
+    @Autowired
+    @Qualifier("playerNotificationRegistry")
     public PlayerNotificationRegistry playerNotificationRegistry;
 
     @Bean

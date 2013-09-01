@@ -6,14 +6,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -38,10 +37,10 @@ import com.gogomaya.server.test.RedisCleaner;
 @TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
 public class PlayerAccountOperationsITest {
 
-    @Inject
+    @Autowired
     public PlayerOperations playerOperations;
 
-    @Inject
+    @Autowired
     public AccountOperations accountOperations;
 
     @Rule

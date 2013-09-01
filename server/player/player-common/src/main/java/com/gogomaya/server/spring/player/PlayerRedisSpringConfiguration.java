@@ -4,6 +4,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -16,8 +18,8 @@ import com.gogomaya.server.spring.common.SpringConfiguration;
 @Configuration
 public class PlayerRedisSpringConfiguration  implements SpringConfiguration {
 
-    @Inject
-    @Named("playerQueueTemplate")
+    @Autowired
+    @Qualifier("playerQueueTemplate")
     public StringRedisTemplate playerQueueTemplate;
 
     @Bean

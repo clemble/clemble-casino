@@ -5,10 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -38,7 +37,7 @@ public class SocialConnectionDataTest {
             "\"refreshToken\":\"e22rwewfwfdscsfwerfrev\"," + 
             "\"expireTime\":12345678 }";
 
-    @Inject
+    @Autowired
     public ObjectMapper objectMapper;
 
     @Test

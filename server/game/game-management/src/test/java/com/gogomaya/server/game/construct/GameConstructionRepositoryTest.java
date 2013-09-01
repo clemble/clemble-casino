@@ -2,11 +2,10 @@ package com.gogomaya.server.game.construct;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,11 +29,11 @@ import com.google.common.collect.ImmutableList;
 @ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
 public class GameConstructionRepositoryTest {
 
-    @Inject
-    GameConstructionRepository constructionRepository;
+    @Autowired
+    public GameConstructionRepository constructionRepository;
 
-    @Inject
-    ObjectMapper objectMapper;
+    @Autowired
+    public ObjectMapper objectMapper;
 
     @Test
     public void testActionLatchSerialization() throws JsonParseException, JsonMappingException, IOException {

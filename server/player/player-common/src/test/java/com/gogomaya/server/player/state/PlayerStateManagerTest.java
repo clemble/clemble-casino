@@ -9,11 +9,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -28,7 +27,7 @@ public class PlayerStateManagerTest {
 
     final private Random RANDOM = new Random();
 
-    @Inject
+    @Autowired
     public PlayerStateManager playerStateManager;
 
     @Test

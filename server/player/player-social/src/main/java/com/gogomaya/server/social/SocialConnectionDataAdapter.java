@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionFactoryLocator;
@@ -25,7 +23,6 @@ public class SocialConnectionDataAdapter {
 
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
 
-    @Inject
     public SocialConnectionDataAdapter(final ConnectionFactoryLocator connectionFactoryLocator, final UsersConnectionRepository usersConnectionRepository, final SocialConnectionAdapterRegistry socialAdapterRegistry) {
         this.connectionFactoryLocator = checkNotNull(connectionFactoryLocator);
         this.usersConnectionRepository = checkNotNull(usersConnectionRepository);
