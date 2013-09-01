@@ -1,4 +1,4 @@
-package com.gogomaya.player.service;
+package com.gogomaya.client.player.service;
 
 import com.gogomaya.player.PlayerAware;
 import com.gogomaya.player.PlayerProfile;

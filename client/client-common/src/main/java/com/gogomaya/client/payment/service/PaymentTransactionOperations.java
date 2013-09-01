@@ -1,4 +1,4 @@
-package com.gogomaya.payment.service;
+package com.gogomaya.client.payment.service;
 
 import java.util.List;
 

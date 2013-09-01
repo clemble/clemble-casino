@@ -4,16 +4,16 @@ import static com.gogomaya.utils.Preconditions.checkNotNull;
 
 import java.util.List;
 
+import com.gogomaya.client.service.RESTClientService;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.service.PaymentTransactionService;
-import com.gogomaya.player.service.RESTService;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
 public class AndroidPaymentTransactionService implements PaymentTransactionService {
 
-    final private RESTService restService;
+    final private RESTClientService restService;
 
-    public AndroidPaymentTransactionService(RESTService restService) {
+    public AndroidPaymentTransactionService(RESTClientService restService) {
         this.restService = checkNotNull(restService);
     }
 

@@ -1,4 +1,4 @@
-package com.gogomaya.payment.service;
+package com.gogomaya.client.payment.service;
 
 import static com.gogomaya.utils.Preconditions.checkNotNull;
 
@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.gogomaya.money.MoneySource;
 import com.gogomaya.payment.PaymentTransaction;
+import com.gogomaya.payment.service.PaymentTransactionService;
 
 public class SimplePaymentTransactionOperations implements PaymentTransactionOperations {
 

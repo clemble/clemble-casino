@@ -4,20 +4,17 @@ import static com.gogomaya.utils.Preconditions.checkNotNull;
 
 import javax.inject.Inject;
 
-import org.springframework.http.HttpEntity;
-
+import com.gogomaya.client.service.RESTClientService;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.player.service.PlayerProfileService;
-import com.gogomaya.player.service.PlayerSecurityService;
-import com.gogomaya.player.service.RESTService;
 import com.gogomaya.web.player.PlayerWebMapping;
 
 public class AndroidPlayerProfileService implements PlayerProfileService {
 
-    final private RESTService restService;
+    final private RESTClientService restService;
 
     @Inject
-    public AndroidPlayerProfileService(RESTService restService, PlayerSecurityService<HttpEntity<?>> securityService) {
+    public AndroidPlayerProfileService(RESTClientService restService) {
         this.restService = checkNotNull(restService);
     }
 
@@ -28,7 +25,7 @@ public class AndroidPlayerProfileService implements PlayerProfileService {
 
     @Override
     public PlayerProfile updatePlayerProfile(long playerId, PlayerProfile playerProfile) {
-        return restService.postForEntity(PlayerWebMapping.PLAYER_PREFIX, PlayerWebMapping.PLAYER_PROFILE, playerProfile, PlayerProfile.class, playerId);
+        return restService.putForEntity(PlayerWebMapping.PLAYER_PREFIX, PlayerWebMapping.PLAYER_PROFILE, playerProfile, PlayerProfile.class, playerId);
     }
 
 }

@@ -1,6 +1,7 @@
-package com.gogomaya.player.service;
+package com.gogomaya.client.player.service;
 
 import com.gogomaya.player.PlayerProfile;
+import com.gogomaya.player.service.PlayerProfileService;
 
 public class SimplePlayerProfileOperations implements PlayerProfileOperations {
 

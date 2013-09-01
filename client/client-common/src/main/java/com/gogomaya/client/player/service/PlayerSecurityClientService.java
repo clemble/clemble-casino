@@ -1,8 +1,8 @@
-package com.gogomaya.player.service;
+package com.gogomaya.client.player.service;
 
 import java.io.Serializable;
 
-public interface PlayerSecurityService<T> {
+public interface PlayerSecurityClientService<T> {
 
     public T signGet(String request);
 

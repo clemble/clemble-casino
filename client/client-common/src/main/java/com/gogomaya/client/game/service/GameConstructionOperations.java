@@ -1,4 +1,4 @@
-package com.gogomaya.game.service;
+package com.gogomaya.client.game.service;
 
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.construct.GameConstruction;

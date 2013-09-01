@@ -1,4 +1,4 @@
-package com.gogomaya.game.service;
+package com.gogomaya.client.game.service;
 
 import static com.gogomaya.utils.Preconditions.checkNotNull;
 
@@ -8,6 +8,7 @@ import com.gogomaya.event.listener.EventListenersManager;
 import com.gogomaya.event.listener.SessionEventSelector;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.event.client.MadeMove;
+import com.gogomaya.game.service.GameActionService;
 
 public class SimpleGameActionOperations<State extends GameState> implements GameActionOperations<State> {
 

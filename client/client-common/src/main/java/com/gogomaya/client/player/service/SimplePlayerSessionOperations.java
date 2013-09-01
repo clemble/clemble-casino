@@ -1,4 +1,4 @@
-package com.gogomaya.player.service;
+package com.gogomaya.client.player.service;
 
 
 import static com.gogomaya.utils.Preconditions.checkNotNull;
@@ -6,6 +6,7 @@ import static com.gogomaya.utils.Preconditions.checkNotNull;
 import java.util.List;
 
 import com.gogomaya.player.security.PlayerSession;
+import com.gogomaya.player.service.PlayerSessionService;
 
 public class SimplePlayerSessionOperations implements PlayerSessionOperations {
 

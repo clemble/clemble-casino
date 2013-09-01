@@ -1,4 +1,4 @@
-package com.gogomaya.game.service;
+package com.gogomaya.client.game.service;
 
 import com.gogomaya.game.Game;
 import com.gogomaya.game.configuration.GameSpecificationOptions;

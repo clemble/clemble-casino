@@ -7,9 +7,6 @@
         <version>0.5.1-SNAPSHOT</version>
     </parent>
     <artifactId>client-android</artifactId>
-    <properties>
-        <spring.android.version>1.0.1.RELEASE</spring.android.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.client</groupId>
@@ -19,6 +16,14 @@
         <dependency>
             <groupId>org.springframework.android</groupId>
             <artifactId>spring-android-rest-template</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.roboguice</groupId>
+            <artifactId>roboguice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
         </dependency>
     </dependencies>
 </project>
