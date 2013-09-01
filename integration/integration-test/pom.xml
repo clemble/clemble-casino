@@ -190,7 +190,7 @@
                         </executions>
                         <configuration>
                             <includes>
-                                <include>**/*Test.java</include>
+                                <include>**/*ITest.java</include>
                             </includes>
                             <argLine>-Dspring.profiles.active=remoteIntegration</argLine>
                         </configuration>
