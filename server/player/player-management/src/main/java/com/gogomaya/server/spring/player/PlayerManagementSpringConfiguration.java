@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.gogomaya.server.player.account.PlayerAccountProcessingService;
-import com.gogomaya.server.player.registration.PlayerRegistrationProcessingService;
+import com.gogomaya.server.player.account.PlayerAccountServerService;
+import com.gogomaya.server.player.registration.PlayerRegistrationServerService;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
@@ -35,12 +35,12 @@ public class PlayerManagementSpringConfiguration implements SpringConfiguration 
 
     @Autowired
     @Qualifier("playerAccountService")
-    public PlayerAccountProcessingService playerAccountService;
+    public PlayerAccountServerService playerAccountService;
 
     @Bean
     @Singleton
-    public PlayerRegistrationProcessingService playerRegistrationService() {
-        return new PlayerRegistrationProcessingService(playerProfileRepository, playerIdentityRepository, playerCredentialRepository, playerAccountService);
+    public PlayerRegistrationServerService playerRegistrationService() {
+        return new PlayerRegistrationServerService(playerProfileRepository, playerIdentityRepository, playerCredentialRepository, playerAccountService);
     }
 
 }

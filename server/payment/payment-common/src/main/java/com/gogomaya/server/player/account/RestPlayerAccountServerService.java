@@ -14,12 +14,12 @@ import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
-public class RestPlayerAccountService implements PlayerAccountProcessingService {
+public class RestPlayerAccountServerService implements PlayerAccountServerService {
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
 
-    public RestPlayerAccountService(String baseUrl, RestTemplate restTemplate) {
+    public RestPlayerAccountServerService(String baseUrl, RestTemplate restTemplate) {
         this.baseUrl = baseUrl;
         this.restTemplate = restTemplate;
     }

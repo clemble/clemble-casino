@@ -23,12 +23,12 @@ import com.gogomaya.server.game.aspect.price.GamePriceAspectFactory;
 import com.gogomaya.server.game.aspect.security.GameSecurityAspectFactory;
 import com.gogomaya.server.game.aspect.time.GameTimeAspectFactory;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
-import com.gogomaya.server.game.construct.GameConstructionProcessingService;
+import com.gogomaya.server.game.construct.GameConstructionServerService;
 import com.gogomaya.server.game.construct.GameInitiatorService;
-import com.gogomaya.server.game.construct.SimpleGameConstructionService;
+import com.gogomaya.server.game.construct.SimpleGameConstructionServerService;
 import com.gogomaya.server.game.notification.TableServerRegistry;
-import com.gogomaya.server.payment.PaymentTransactionProcessingService;
-import com.gogomaya.server.player.account.PlayerAccountProcessingService;
+import com.gogomaya.server.payment.PaymentTransactionServerService;
+import com.gogomaya.server.player.account.PlayerAccountServerService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
@@ -46,7 +46,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("paymentTransactionService")
-    public PaymentTransactionProcessingService paymentTransactionService;
+    public PaymentTransactionServerService paymentTransactionService;
 
     @Autowired
     @Qualifier("playerStateManager")
@@ -138,12 +138,12 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         public GameConstructionRepository constructionRepository;
 
         @Autowired
-        public PlayerAccountProcessingService playerAccountService;
+        public PlayerAccountServerService playerAccountService;
 
         @Bean
         @Singleton
-        public GameConstructionProcessingService gameConstructionService() {
-            return new SimpleGameConstructionService(playerAccountService, playerNotificationService, constructionRepository, initiatorService(),
+        public GameConstructionServerService gameConstructionService() {
+            return new SimpleGameConstructionServerService(playerAccountService, playerNotificationService, constructionRepository, initiatorService(),
                     playerLockService, playerStateManager);
         }
 

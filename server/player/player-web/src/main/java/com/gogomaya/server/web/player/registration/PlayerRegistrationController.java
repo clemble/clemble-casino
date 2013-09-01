@@ -18,7 +18,7 @@ import com.gogomaya.player.security.PlayerCredential;
 import com.gogomaya.player.security.PlayerIdentity;
 import com.gogomaya.player.service.PlayerRegistrationService;
 import com.gogomaya.player.web.RegistrationRequest;
-import com.gogomaya.server.player.registration.PlayerRegistrationProcessingService;
+import com.gogomaya.server.player.registration.PlayerRegistrationServerService;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
@@ -27,7 +27,7 @@ import com.gogomaya.web.player.PlayerWebMapping;
 @Controller
 public class PlayerRegistrationController implements PlayerRegistrationService {
 
-    final private PlayerRegistrationProcessingService playerRegistrationService;
+    final private PlayerRegistrationServerService playerRegistrationService;
     final private PlayerCredentialRepository playerCredentialRepository;
     final private PlayerIdentityRepository playerIdentityRepository;
     final private SocialConnectionDataAdapter socialConnectionDataAdapter;
@@ -36,7 +36,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     public PlayerRegistrationController(final PlayerCredentialRepository playerCredentialRepository,
             final PlayerIdentityRepository playerIdentityRepository,
             final GogomayaValidationService validationService,
-            final PlayerRegistrationProcessingService playerRegistrationService,
+            final PlayerRegistrationServerService playerRegistrationService,
             final SocialConnectionDataAdapter socialConnectionDataAdapter) {
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
         this.playerIdentityRepository = checkNotNull(playerIdentityRepository);

@@ -16,10 +16,10 @@ import com.gogomaya.money.Money;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.payment.PaymentTransactionProcessingService;
-import com.gogomaya.server.payment.RestPaymentTransactionService;
-import com.gogomaya.server.player.account.PlayerAccountProcessingService;
-import com.gogomaya.server.player.account.RestPlayerAccountService;
+import com.gogomaya.server.payment.PaymentTransactionServerService;
+import com.gogomaya.server.payment.RestPaymentTransactionServerService;
+import com.gogomaya.server.player.account.PlayerAccountServerService;
+import com.gogomaya.server.player.account.RestPlayerAccountServerService;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 
@@ -58,11 +58,11 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Autowired(required = false)
         @Qualifier("realPaymentTransactionService")
-        public PaymentTransactionProcessingService realPaymentTransactionService;
+        public PaymentTransactionServerService realPaymentTransactionService;
 
         @Autowired(required = false)
         @Qualifier("realPlayerAccountService")
-        public PlayerAccountProcessingService realPlayerAccountService;
+        public PlayerAccountServerService realPlayerAccountService;
 
         public String getBaseUrl() {
             return "http://localhost:8080/";
@@ -70,14 +70,14 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Autowired
-        public PaymentTransactionProcessingService paymentTransactionService(RestTemplate restTemplate) {
-            return realPaymentTransactionService == null ? new RestPaymentTransactionService(getBaseUrl(), restTemplate) : realPaymentTransactionService;
+        public PaymentTransactionServerService paymentTransactionService(RestTemplate restTemplate) {
+            return realPaymentTransactionService == null ? new RestPaymentTransactionServerService(getBaseUrl(), restTemplate) : realPaymentTransactionService;
         }
 
         @Bean
         @Autowired
-        public PlayerAccountProcessingService playerAccountService(RestTemplate restTemplate) {
-            return realPlayerAccountService == null ? new RestPlayerAccountService(getBaseUrl(), restTemplate) : realPlayerAccountService;
+        public PlayerAccountServerService playerAccountService(RestTemplate restTemplate) {
+            return realPlayerAccountService == null ? new RestPlayerAccountServerService(getBaseUrl(), restTemplate) : realPlayerAccountService;
         }
     }
 
@@ -87,8 +87,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public PlayerAccountProcessingService playerAccountService() {
-            return new PlayerAccountProcessingService() {
+        public PlayerAccountServerService playerAccountService() {
+            return new PlayerAccountServerService() {
 
                 @Override
                 public PlayerAccount register(PlayerProfile playerProfile) {
@@ -109,8 +109,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Singleton
-        public PaymentTransactionProcessingService paymentTransactionService() {
-            return new PaymentTransactionProcessingService() {
+        public PaymentTransactionServerService paymentTransactionService() {
+            return new PaymentTransactionServerService() {
 
                 @Override
                 public PaymentTransaction process(PaymentTransaction paymentTransaction) {

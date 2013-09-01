@@ -21,7 +21,7 @@ import com.gogomaya.game.construct.GameRequest;
 import com.gogomaya.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.game.service.GameConstructionService;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
-import com.gogomaya.server.game.construct.GameConstructionProcessingService;
+import com.gogomaya.server.game.construct.GameConstructionServerService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.web.game.GameWebMapping;
 
@@ -29,11 +29,11 @@ import com.gogomaya.web.game.GameWebMapping;
 public class GameConstructionController<State extends GameState> implements GameConstructionService {
 
     final private GameSpecificationRegistry configurationManager;
-    final private GameConstructionProcessingService constructionService;
+    final private GameConstructionServerService constructionService;
     final private GameConstructionRepository constructionRepository;
 
     public GameConstructionController(final GameConstructionRepository constructionRepository,
-            final GameConstructionProcessingService matchingService,
+            final GameConstructionServerService matchingService,
             final GameSpecificationRegistry configurationManager) {
         this.constructionService = checkNotNull(matchingService);
         this.configurationManager = checkNotNull(configurationManager);

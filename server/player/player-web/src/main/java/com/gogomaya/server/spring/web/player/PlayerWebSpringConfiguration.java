@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.gogomaya.error.GogomayaValidationService;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
-import com.gogomaya.server.player.registration.PlayerRegistrationProcessingService;
+import com.gogomaya.server.player.registration.PlayerRegistrationServerService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
@@ -51,7 +51,7 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("playerRegistrationService")
-    public PlayerRegistrationProcessingService playerRegistrationService;
+    public PlayerRegistrationServerService playerRegistrationService;
 
     @Autowired
     @Qualifier("playerSessionRepository")

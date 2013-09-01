@@ -19,18 +19,18 @@ import com.gogomaya.error.GogomayaException;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PaymentTransactionId;
 import com.gogomaya.payment.service.PaymentTransactionService;
-import com.gogomaya.server.payment.PaymentTransactionProcessingService;
+import com.gogomaya.server.payment.PaymentTransactionServerService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
 @Controller
 public class PaymentTransactionController implements PaymentTransactionService {
 
-    final private PaymentTransactionProcessingService paymentTransactionService;
+    final private PaymentTransactionServerService paymentTransactionService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
     public PaymentTransactionController(final PaymentTransactionRepository paymentTransactionRepository,
-            final PaymentTransactionProcessingService paymentTransactionService) {
+            final PaymentTransactionServerService paymentTransactionService) {
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
     }

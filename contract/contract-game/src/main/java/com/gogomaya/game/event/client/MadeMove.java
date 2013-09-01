@@ -1,5 +1,6 @@
 package com.gogomaya.game.event.client;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -16,7 +17,12 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 @TypeDef(name = "gameMove", typeClass = JsonHibernateType.class, defaultForType = ClientEvent.class, parameters = { @Parameter(
         name = JsonHibernateType.CLASS_NAME_PARAMETER,
         value = "com.gogomaya.event.ClientEvent") })
-public class MadeMove {
+public class MadeMove implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7090751719767060121L;
 
     @Column(name = "MOVE_ID")
     private int moveId;

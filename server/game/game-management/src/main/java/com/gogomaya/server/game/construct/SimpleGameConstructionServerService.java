@@ -18,22 +18,22 @@ import com.gogomaya.game.event.schedule.InvitationDeclinedEvent;
 import com.gogomaya.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.game.event.schedule.PlayerInvitedEvent;
 import com.gogomaya.money.Money;
-import com.gogomaya.server.player.account.PlayerAccountProcessingService;
+import com.gogomaya.server.player.account.PlayerAccountServerService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 
-public class SimpleGameConstructionService implements GameConstructionProcessingService {
+public class SimpleGameConstructionServerService implements GameConstructionServerService {
 
     final private AutomaticConstructionManager automaticGameInitiatorManager;
 
-    final private PlayerAccountProcessingService playerAccounttService;
+    final private PlayerAccountServerService playerAccounttService;
     final private PlayerNotificationService playerNotificationService;
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
 
-    public SimpleGameConstructionService(final PlayerAccountProcessingService playerAccountService,
+    public SimpleGameConstructionServerService(final PlayerAccountServerService playerAccountService,
             final PlayerNotificationService playerNotificationService,
             final GameConstructionRepository constructionRepository,
             final GameInitiatorService initiatorService,

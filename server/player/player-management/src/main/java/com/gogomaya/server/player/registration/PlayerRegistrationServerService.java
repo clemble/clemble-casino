@@ -8,22 +8,22 @@ import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.player.security.PlayerCredential;
 import com.gogomaya.player.security.PlayerIdentity;
 import com.gogomaya.player.web.RegistrationRequest;
-import com.gogomaya.server.player.account.PlayerAccountProcessingService;
+import com.gogomaya.server.player.account.PlayerAccountServerService;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
 
-public class PlayerRegistrationProcessingService {
+public class PlayerRegistrationServerService {
 
-    final private PlayerAccountProcessingService playerAccountService;
+    final private PlayerAccountServerService playerAccountService;
     final private PlayerProfileRepository playerProfileRepository;
     final private PlayerIdentityRepository playerIdentityRepository;
     final private PlayerCredentialRepository playerCredentialRepository;
 
-    public PlayerRegistrationProcessingService(final PlayerProfileRepository playerProfileRepository,
+    public PlayerRegistrationServerService(final PlayerProfileRepository playerProfileRepository,
             final PlayerIdentityRepository playerIdentityRepository,
             final PlayerCredentialRepository playerCredentialRepository,
-            final PlayerAccountProcessingService playerAccountService) {
+            final PlayerAccountServerService playerAccountService) {
         this.playerCredentialRepository = playerCredentialRepository;
         this.playerIdentityRepository = playerIdentityRepository;
         this.playerProfileRepository = playerProfileRepository;

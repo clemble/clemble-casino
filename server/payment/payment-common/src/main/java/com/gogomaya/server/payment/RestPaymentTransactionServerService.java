@@ -7,12 +7,12 @@ import org.springframework.web.client.RestTemplate;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
-public class RestPaymentTransactionService implements PaymentTransactionProcessingService {
+public class RestPaymentTransactionServerService implements PaymentTransactionServerService {
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
     
-    public RestPaymentTransactionService(String baseUrl, RestTemplate restTemplate) {
+    public RestPaymentTransactionServerService(String baseUrl, RestTemplate restTemplate) {
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);
     }

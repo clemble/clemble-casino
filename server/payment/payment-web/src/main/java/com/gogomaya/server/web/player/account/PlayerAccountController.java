@@ -22,7 +22,7 @@ import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.payment.service.PlayerAccountService;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.player.account.PlayerAccountProcessingService;
+import com.gogomaya.server.player.account.PlayerAccountServerService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.web.payment.PaymentWebMapping;
@@ -30,11 +30,11 @@ import com.gogomaya.web.payment.PaymentWebMapping;
 @Controller
 public class PlayerAccountController implements PlayerAccountService {
 
-    final private PlayerAccountProcessingService playerAccountService;
+    final private PlayerAccountServerService playerAccountService;
     final private PlayerAccountRepository playerAccountRepository;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PlayerAccountController(PlayerAccountProcessingService playerAccountService,
+    public PlayerAccountController(PlayerAccountServerService playerAccountService,
             PlayerAccountRepository playerAccountRepository,
             PaymentTransactionRepository paymentTransactionRepository) {
         this.playerAccountService = checkNotNull(playerAccountService);

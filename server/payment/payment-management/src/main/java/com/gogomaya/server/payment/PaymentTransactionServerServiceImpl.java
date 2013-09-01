@@ -17,12 +17,12 @@ import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 
-public class PaymentTransactionProcessingServiceImpl implements PaymentTransactionProcessingService {
+public class PaymentTransactionServerServiceImpl implements PaymentTransactionServerService {
 
     final private PlayerAccountRepository playerAccountRepository;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PaymentTransactionProcessingServiceImpl(PaymentTransactionRepository paymentTransactionRepository, PlayerAccountRepository playerWalletRepository) {
+    public PaymentTransactionServerServiceImpl(PaymentTransactionRepository paymentTransactionRepository, PlayerAccountRepository playerWalletRepository) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
         this.playerAccountRepository = checkNotNull(playerWalletRepository);
     }

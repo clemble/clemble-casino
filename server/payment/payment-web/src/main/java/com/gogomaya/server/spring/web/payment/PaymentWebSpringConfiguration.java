@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import com.gogomaya.server.payment.PaymentTransactionProcessingService;
-import com.gogomaya.server.player.account.PlayerAccountProcessingService;
+import com.gogomaya.server.payment.PaymentTransactionServerService;
+import com.gogomaya.server.player.account.PlayerAccountServerService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
@@ -32,7 +32,7 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("realPlayerAccountService")
-    public PlayerAccountProcessingService playerAccountService;
+    public PlayerAccountServerService playerAccountService;
 
     @Autowired
     @Qualifier("paymentTransactionRepository")
@@ -40,7 +40,7 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("realPaymentTransactionService")
-    public PaymentTransactionProcessingService paymentTransactionService;
+    public PaymentTransactionServerService paymentTransactionService;
 
     @Autowired
     @Qualifier("playerAccountRepository")
