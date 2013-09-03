@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,12 +17,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gogomaya.money.Currency;
 import com.gogomaya.money.Money;
-import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.payment.service.PlayerAccountService;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccountServerService;
-import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
@@ -32,14 +29,11 @@ public class PlayerAccountController implements PlayerAccountService {
 
     final private PlayerAccountServerService playerAccountService;
     final private PlayerAccountRepository playerAccountRepository;
-    final private PaymentTransactionRepository paymentTransactionRepository;
 
     public PlayerAccountController(PlayerAccountServerService playerAccountService,
-            PlayerAccountRepository playerAccountRepository,
-            PaymentTransactionRepository paymentTransactionRepository) {
+            PlayerAccountRepository playerAccountRepository) {
         this.playerAccountService = checkNotNull(playerAccountService);
         this.playerAccountRepository = checkNotNull(playerAccountRepository);
-        this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")

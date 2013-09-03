@@ -55,7 +55,7 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
     @Bean
     @Singleton
     public PlayerAccountController playerAccountController() {
-        return new PlayerAccountController(playerAccountService, playerAccountRepository, paymentTransactionRepository);
+        return new PlayerAccountController(playerAccountService, playerAccountRepository);
     }
 
     @Configuration
