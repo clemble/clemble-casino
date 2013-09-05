@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationContextAware;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.player.security.PlayerCredential;
 import com.gogomaya.player.security.PlayerIdentity;
-import com.gogomaya.player.web.RegistrationRequest;
+import com.gogomaya.player.web.PlayerRegistrationRequest;
 import com.gogomaya.server.integration.game.construction.GameConstructionOperations;
 import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
@@ -58,7 +58,8 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
         // Step 1. Creating RegistrationRequest for processing
         PlayerCredential playerCredential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(30) + "@gmail.com").setPassword(
                 UUID.randomUUID().toString());
-        RegistrationRequest registrationRequest = new RegistrationRequest().setPlayerProfile(playerProfile).setPlayerCredential(playerCredential);
+        PlayerIdentity playerIdentity = new PlayerIdentity().setSecret(UUID.randomUUID().toString());
+        PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(playerProfile, playerCredential, playerIdentity);
         // Step 2. Forwarding to appropriate method for processing
         return createPlayer(registrationRequest);
     }

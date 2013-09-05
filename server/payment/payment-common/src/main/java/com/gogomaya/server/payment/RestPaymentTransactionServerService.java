@@ -11,7 +11,7 @@ public class RestPaymentTransactionServerService implements PaymentTransactionSe
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
-    
+
     public RestPaymentTransactionServerService(String baseUrl, RestTemplate restTemplate) {
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);

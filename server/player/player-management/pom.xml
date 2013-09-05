@@ -10,10 +10,6 @@
     <dependencies>
         <dependency>
             <groupId>com.gogomaya.server</groupId>
-            <artifactId>payment-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.gogomaya.server</groupId>
             <artifactId>player-common</artifactId>
         </dependency>
 

@@ -28,6 +28,10 @@
             <groupId>com.gogomaya.server</groupId>
             <artifactId>game-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gogomaya.server</groupId>
+            <artifactId>management-web</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.ning</groupId>
@@ -103,6 +107,12 @@
                                             <version>${project.version}</version>
                                             <type>war</type>
                                         </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.gogomaya.server</groupId>
+                                            <artifactId>management-web</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
@@ -121,15 +131,17 @@
                                 <configuration>
                                     <daemon>true</daemon>
                                     <contextHandlers>
-                                        <contextHandler
-                                            implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/player-web.war</war>
                                             <contextPath>/player-web</contextPath>
                                         </contextHandler>
-                                        <contextHandler
-                                            implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/payment-web.war</war>
                                             <contextPath>/payment-web</contextPath>
+                                        </contextHandler>
+                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/management-web.war</war>
+                                            <contextPath>/management-web</contextPath>
                                         </contextHandler>
                                     </contextHandlers>
                                 </configuration>

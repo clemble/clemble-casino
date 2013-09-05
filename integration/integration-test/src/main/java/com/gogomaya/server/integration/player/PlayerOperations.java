@@ -1,17 +1,17 @@
 package com.gogomaya.server.integration.player;
 
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.player.security.PlayerCredential;
-import com.gogomaya.player.web.RegistrationRequest;
+import com.gogomaya.player.web.PlayerLoginRequest;
+import com.gogomaya.player.web.PlayerRegistrationRequest;
 
 public interface PlayerOperations {
 
-    public Player login(PlayerCredential credential);
-
     public Player createPlayer();
+
+    public Player login(PlayerLoginRequest credential);
 
     public Player createPlayer(PlayerProfile playerProfile);
 
-    public Player createPlayer(RegistrationRequest registrationRequest);
+    public Player createPlayer(PlayerRegistrationRequest registrationRequest);
 
 }

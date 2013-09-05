@@ -3,6 +3,8 @@ package com.gogomaya.integration.player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.UUID;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +19,9 @@ import com.gogomaya.player.PlayerCategory;
 import com.gogomaya.player.PlayerGender;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.player.security.PlayerCredential;
-import com.gogomaya.player.web.RegistrationRequest;
+import com.gogomaya.player.security.PlayerIdentity;
+import com.gogomaya.player.web.PlayerLoginRequest;
+import com.gogomaya.player.web.PlayerRegistrationRequest;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.spring.integration.TestConfiguration;
@@ -60,8 +64,9 @@ public class PlayerOperationsITest {
                 .setNickName("mavarazy");
 
         PlayerCredential playerCredential = new PlayerCredential().setEmail("mavarazy@gmail.com").setPassword("23443545");
+        PlayerIdentity playerIdentity = new PlayerIdentity().setSecret(UUID.randomUUID().toString());
 
-        RegistrationRequest registrationRequest = new RegistrationRequest().setPlayerProfile(profile).setPlayerCredential(playerCredential);
+        PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(profile, playerCredential, playerIdentity);
 
         Player player = playerOperations.createPlayer(registrationRequest);
 
@@ -87,15 +92,16 @@ public class PlayerOperationsITest {
         Player player = playerOperations.createPlayer(profile);
 
         PlayerCredential loginCredential = new PlayerCredential().setEmail(player.getCredential().getEmail()).setPassword(player.getCredential().getPassword());
+        PlayerIdentity playerIdentity = new PlayerIdentity().setSecret(UUID.randomUUID().toString());
 
-        Player loginPlayer = playerOperations.login(loginCredential);
+        Player loginPlayer = playerOperations.login(new PlayerLoginRequest(playerIdentity, loginCredential));
 
         assertEquals(loginPlayer.getPlayerId(), player.getPlayerId());
 
         assertEquals(loginPlayer.getCredential().getEmail(), player.getCredential().getEmail());
         assertEquals(loginPlayer.getCredential().getPassword(), player.getCredential().getPassword());
 
-        assertEquals(loginPlayer.getIdentity().getSecret(), player.getIdentity().getSecret());
+        assertEquals(loginPlayer.getIdentity().getSecret(), playerIdentity.getSecret());
         assertEquals(loginPlayer.getIdentity().getPlayerId(), player.getIdentity().getPlayerId());
 
     }

@@ -4,17 +4,17 @@ import static com.gogomaya.utils.Preconditions.checkNotNull;
 
 import javax.inject.Inject;
 
-import com.gogomaya.client.service.RESTClientService;
+import com.gogomaya.client.service.RestClientService;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.player.service.PlayerProfileService;
 import com.gogomaya.web.player.PlayerWebMapping;
 
 public class AndroidPlayerProfileService implements PlayerProfileService {
 
-    final private RESTClientService restService;
+    final private RestClientService restService;
 
     @Inject
-    public AndroidPlayerProfileService(RESTClientService restService) {
+    public AndroidPlayerProfileService(RestClientService restService) {
         this.restService = checkNotNull(restService);
     }
 

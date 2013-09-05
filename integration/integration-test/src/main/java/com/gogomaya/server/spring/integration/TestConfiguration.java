@@ -36,14 +36,15 @@ import com.gogomaya.server.integration.player.session.WebSessionOperations;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
+import com.gogomaya.server.spring.web.management.ManagementWebSpringConfiguration;
 import com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 import com.gogomaya.server.web.error.GogomayaRESTErrorHandler;
+import com.gogomaya.server.web.management.PlayerRegistrationController;
 import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.account.PlayerAccountController;
-import com.gogomaya.server.web.player.registration.PlayerRegistrationController;
 
 @Configuration
 @Import(value = { JsonSpringConfiguration.class,
@@ -64,7 +65,7 @@ public class TestConfiguration {
 
     @Configuration
     @Profile(value = SpringConfiguration.DEFAULT)
-    @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class })
+    @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, ManagementWebSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
         @Autowired
@@ -72,8 +73,8 @@ public class TestConfiguration {
         public ObjectMapper objectMapper;
 
         @Autowired
-        @Qualifier("registrationLoginController")
-        public PlayerRegistrationController registrationLoginController;
+        @Qualifier("playerRegistrationController")
+        public PlayerRegistrationController playerRegistrationController;
 
         @Autowired
         @Qualifier("playerSessionController")
@@ -98,7 +99,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(registrationLoginController, sessionOperations(), accountOperations(),
+            return new WebPlayerOperations(playerRegistrationController, sessionOperations(), accountOperations(),
                     playerListenerOperations(), playerProfileOperations());
         }
 

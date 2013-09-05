@@ -1,7 +1,5 @@
 package com.gogomaya.server.spring.web;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;

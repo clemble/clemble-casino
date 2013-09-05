@@ -2,16 +2,16 @@ package com.gogomaya.android.payment.service;
 
 import static com.gogomaya.utils.Preconditions.checkNotNull;
 
-import com.gogomaya.client.service.RESTClientService;
+import com.gogomaya.client.service.RestClientService;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.payment.service.PlayerAccountService;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
 public class AndroidPlayerAccountService implements PlayerAccountService {
 
-    final private RESTClientService restService;
+    final private RestClientService restService;
     
-    public AndroidPlayerAccountService(RESTClientService restService) {
+    public AndroidPlayerAccountService(RestClientService restService) {
         this.restService = checkNotNull(restService);
     }
 

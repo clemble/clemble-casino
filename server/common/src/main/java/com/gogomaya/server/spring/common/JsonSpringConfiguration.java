@@ -1,7 +1,5 @@
 package com.gogomaya.server.spring.common;
 
-import javax.inject.Singleton;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +9,7 @@ import com.gogomaya.json.ObjectMapperUtils;
 @Configuration
 public class JsonSpringConfiguration implements SpringConfiguration {
 
-    @Bean @Singleton
+    @Bean
     public ObjectMapper objectMapper() {
         return ObjectMapperUtils.createObjectMapper();
     }

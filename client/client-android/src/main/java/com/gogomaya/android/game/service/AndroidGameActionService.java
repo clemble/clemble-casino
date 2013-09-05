@@ -2,7 +2,7 @@ package com.gogomaya.android.game.service;
 
 import static com.gogomaya.utils.Preconditions.checkNotNull;
 
-import com.gogomaya.client.service.RESTClientService;
+import com.gogomaya.client.service.RestClientService;
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.event.client.MadeMove;
@@ -11,9 +11,9 @@ import com.gogomaya.web.game.GameWebMapping;
 
 public class AndroidGameActionService<State extends GameState> implements GameActionService<State> {
 
-    final private RESTClientService restService;
+    final private RestClientService restService;
 
-    public AndroidGameActionService(RESTClientService restService) {
+    public AndroidGameActionService(RestClientService restService) {
         this.restService = checkNotNull(restService);
     }
 

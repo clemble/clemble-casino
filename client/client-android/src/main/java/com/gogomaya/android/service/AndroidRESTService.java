@@ -9,9 +9,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.android.player.service.AndroidPlayerSecurityService;
-import com.gogomaya.client.service.RESTClientService;
+import com.gogomaya.client.service.RestClientService;
 
-public class AndroidRESTService implements RESTClientService {
+public class AndroidRESTService implements RestClientService {
 
     final private String baseUrl;
     final private RestTemplate restTemplate;

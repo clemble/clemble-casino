@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 
 import com.gogomaya.server.payment.PaymentTransactionServerService;
 import com.gogomaya.server.player.account.PlayerAccountServerService;
@@ -15,17 +14,12 @@ import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.payment.PaymentManagementSpringConfiguration;
-import com.gogomaya.server.spring.web.SwaggerSpringConfiguration;
 import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.account.PlayerAccountController;
-import com.mangofactory.swagger.SwaggerConfiguration;
-import com.mangofactory.swagger.configuration.DefaultConfigurationModule;
-import com.mangofactory.swagger.configuration.ExtensibilityModule;
 
 @Configuration
 @Import({
-    PaymentWebSpringConfiguration.PaymentDefaultAndTest.class,
     PaymentManagementSpringConfiguration.class,
     WebCommonSpringConfiguration.class })
 public class PaymentWebSpringConfiguration implements SpringConfiguration {
@@ -56,18 +50,6 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
     @Singleton
     public PlayerAccountController playerAccountController() {
         return new PlayerAccountController(playerAccountService, playerAccountRepository);
-    }
-
-    @Configuration
-    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
-    public static class PaymentDefaultAndTest extends SwaggerSpringConfiguration {
-
-        @Override
-        public SwaggerConfiguration swaggerConfiguration(DefaultConfigurationModule defaultConfig, ExtensibilityModule extensibility) {
-            SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration("1.0", "http://localhost:8080/payment-web/");
-            return extensibility.apply(defaultConfig.apply(swaggerConfiguration));
-        }
-
     }
 
 }

@@ -2,7 +2,7 @@ package com.gogomaya.client.service;
 
 import java.util.List;
 
-public interface RESTClientService {
+public interface RestClientService {
 
     public <T> T getForEntity(String prefix, String url, Class<T> responseType, Object... urlVariables);
 

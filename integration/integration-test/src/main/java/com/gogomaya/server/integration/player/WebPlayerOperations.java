@@ -2,14 +2,14 @@ package com.gogomaya.server.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.player.security.PlayerCredential;
 import com.gogomaya.player.security.PlayerIdentity;
-import com.gogomaya.player.web.RegistrationRequest;
+import com.gogomaya.player.web.PlayerLoginRequest;
+import com.gogomaya.player.web.PlayerRegistrationRequest;
 import com.gogomaya.server.integration.player.account.AccountOperations;
 import com.gogomaya.server.integration.player.listener.PlayerListenerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
-import com.gogomaya.server.web.player.registration.PlayerRegistrationController;
+import com.gogomaya.server.web.management.PlayerRegistrationController;
 
 public class WebPlayerOperations extends AbstractPlayerOperations {
 
@@ -25,7 +25,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
     }
 
     @Override
-    public Player createPlayer(RegistrationRequest registrationRequest) {
+    public Player createPlayer(PlayerRegistrationRequest registrationRequest) {
         // Step 0. Sanity check
         checkNotNull(registrationRequest);
         // Step 1. Performing actual player creation
@@ -39,14 +39,14 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
     }
 
     @Override
-    public Player login(PlayerCredential credential) {
+    public Player login(PlayerLoginRequest credential) {
         // Step 0. Sanity check
         checkNotNull(credential);
         // Step 1. Performing actual player login
         PlayerIdentity playerIdentity = registrationController.login(credential);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
-        Player player = super.create(playerIdentity, credential);
+        Player player = super.create(playerIdentity, credential.getPlayerCredential());
         // Step 3. Returning player session result
         return player;
     }

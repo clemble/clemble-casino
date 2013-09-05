@@ -1,36 +1,28 @@
 package com.gogomaya.server.spring.web.player;
 
-import javax.inject.Singleton;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 
 import com.gogomaya.error.GogomayaValidationService;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
-import com.gogomaya.server.player.registration.PlayerRegistrationServerService;
+import com.gogomaya.server.player.registration.PlayerProfileRegistrationServerService;
+import com.gogomaya.server.player.registration.SimplePlayerProfileRegistrationServerService;
 import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.repository.player.PlayerCredentialRepository;
-import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
 import com.gogomaya.server.repository.player.PlayerSessionRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
-import com.gogomaya.server.spring.web.SwaggerSpringConfiguration;
 import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.PlayerSessionController;
-import com.gogomaya.server.web.player.registration.PlayerRegistrationController;
-import com.mangofactory.swagger.SwaggerConfiguration;
-import com.mangofactory.swagger.configuration.DefaultConfigurationModule;
-import com.mangofactory.swagger.configuration.ExtensibilityModule;
+import com.gogomaya.server.web.player.registration.PlayerProfileRegistrationController;
 
 @Configuration
-@Import(value = { PlayerWebSpringConfiguration.PlayerDefaultAndTest.class, SocialModuleSpringConfiguration.class, WebCommonSpringConfiguration.class })
+@Import(value = { SocialModuleSpringConfiguration.class, WebCommonSpringConfiguration.class })
 public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -40,18 +32,6 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     @Autowired
     @Qualifier("playerProfileRepository")
     public PlayerProfileRepository playerProfileRepository;
-
-    @Autowired
-    @Qualifier("playerCredentialRepository")
-    public PlayerCredentialRepository playerCredentialRepository;
-
-    @Autowired
-    @Qualifier("playerIdentityRepository")
-    public PlayerIdentityRepository playerIdentityRepository;
-
-    @Autowired
-    @Qualifier("playerRegistrationService")
-    public PlayerRegistrationServerService playerRegistrationService;
 
     @Autowired
     @Qualifier("playerSessionRepository")
@@ -70,34 +50,23 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     public PlayerStateManager playerStateManager;
 
     @Bean
-    @Singleton
     public PlayerProfileController playerProfileController() {
         return new PlayerProfileController(playerProfileRepository);
     }
 
     @Bean
-    @Singleton
-    public PlayerRegistrationController registrationLoginController() {
-        return new PlayerRegistrationController(playerCredentialRepository, playerIdentityRepository, gogomayaValidationService, playerRegistrationService,
-                socialConnectionDataAdapter);
+    public PlayerProfileRegistrationServerService realPlayerProfileRegistrationService() {
+        return new SimplePlayerProfileRegistrationServerService(gogomayaValidationService, playerProfileRepository, socialConnectionDataAdapter);
     }
 
     @Bean
-    @Singleton
-    public PlayerSessionController playerSessionController() {
-        return new PlayerSessionController(playerNotificationRegistry, playerSessionRepository, playerStateManager);
+    public PlayerProfileRegistrationController playerProfileRegistrationController() {
+        return new PlayerProfileRegistrationController(realPlayerProfileRegistrationService());
     }
 
-    @Configuration
-    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
-    public static class PlayerDefaultAndTest extends SwaggerSpringConfiguration {
-
-        @Override
-        public SwaggerConfiguration swaggerConfiguration(DefaultConfigurationModule defaultConfig, ExtensibilityModule extensibility) {
-            SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration("1.0", "http://localhost:8080/player-web/");
-            return extensibility.apply(defaultConfig.apply(swaggerConfiguration));
-        }
-
+    @Bean
+    public PlayerSessionController playerSessionController() {
+        return new PlayerSessionController(playerNotificationRegistry, playerSessionRepository, playerStateManager);
     }
 
 }

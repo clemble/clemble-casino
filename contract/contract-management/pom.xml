@@ -12,5 +12,10 @@
             <groupId>com.gogomaya</groupId>
             <artifactId>contract-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gogomaya</groupId>
+            <artifactId>contract-player</artifactId>
+        </dependency>
+
     </dependencies>
 </project>
