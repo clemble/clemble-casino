@@ -14,6 +14,7 @@ import com.gogomaya.error.GogomayaException;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.player.service.PlayerProfileService;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
+import com.gogomaya.web.mapping.WebMapping;
 import com.gogomaya.web.player.PlayerWebMapping;
 
 @Controller
@@ -26,7 +27,7 @@ public class PlayerProfileController implements PlayerProfileService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILE, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
     public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("playerId") long playerId) {
         // Step 1. Fetching playerProfile
         PlayerProfile playerProfile = profileRepository.findOne(playerId);
@@ -38,7 +39,7 @@ public class PlayerProfileController implements PlayerProfileService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_PROFILE, produces = "application/json")
+    @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
     public @ResponseBody PlayerProfile updatePlayerProfile(@PathVariable("playerId") long playerId, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (playerProfile == null)

@@ -15,6 +15,7 @@ import com.gogomaya.game.GameSession;
 import com.gogomaya.game.GameState;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.web.game.GameWebMapping;
+import com.gogomaya.web.mapping.WebMapping;
 
 @Controller
 public class GameSessionController<State extends GameState> {
@@ -25,7 +26,7 @@ public class GameSessionController<State extends GameState> {
         this.sessionRepository = checkNotNull(sessionRepository);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_SESSION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     GameSession<State> get(@RequestHeader("playerId") long playerId, @PathVariable("sessionId") long sessionId) {

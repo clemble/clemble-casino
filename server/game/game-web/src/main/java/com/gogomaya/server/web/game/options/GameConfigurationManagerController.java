@@ -16,6 +16,7 @@ import com.gogomaya.game.configuration.GameSpecificationOptions;
 import com.gogomaya.game.service.GameSpecificationService;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.web.game.GameWebMapping;
+import com.gogomaya.web.mapping.WebMapping;
 
 @Controller
 public class GameConfigurationManagerController implements GameSpecificationService {
@@ -27,7 +28,7 @@ public class GameConfigurationManagerController implements GameSpecificationServ
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SPECIFICATION_OPTIONS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SPECIFICATION_OPTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     // Can be null
     public @ResponseBody GameSpecificationOptions getSpecificationOptions(@RequestHeader(value = "playerId", required = false) final long playerId, @PathVariable("name") Game game) {

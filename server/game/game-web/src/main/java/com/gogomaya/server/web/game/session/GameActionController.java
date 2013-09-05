@@ -18,6 +18,7 @@ import com.gogomaya.game.service.GameActionService;
 import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.web.game.GameWebMapping;
+import com.gogomaya.web.mapping.WebMapping;
 
 @Controller
 public class GameActionController<State extends GameState> implements GameActionService<State> {
@@ -31,7 +32,7 @@ public class GameActionController<State extends GameState> implements GameAction
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSION_ACTIONS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSION_ACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody State process(@PathVariable("sessionId") long sessionId, @RequestBody ClientEvent move) {
         // Step 1. Retrieving associated table
@@ -39,7 +40,7 @@ public class GameActionController<State extends GameState> implements GameAction
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSION_ACTIONS_ACTION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSION_ACTIONS_ACTION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody MadeMove getAction(@PathVariable("sessionId") long sessionId, @PathVariable("actionId") int actionId) {
         return sessionRepository.findAction(sessionId, actionId);

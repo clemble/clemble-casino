@@ -20,6 +20,7 @@ import com.gogomaya.player.service.PlayerSessionService;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.player.PlayerSessionRepository;
+import com.gogomaya.web.mapping.WebMapping;
 import com.gogomaya.web.player.PlayerWebMapping;
 
 @Controller
@@ -38,7 +39,7 @@ public class PlayerSessionController implements PlayerSessionService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_SESSIONS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_SESSIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerSession create(@PathVariable("playerId") long playerId) {
         // Step 1. Generated player session
@@ -52,7 +53,7 @@ public class PlayerSessionController implements PlayerSessionService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_SESSIONS_SESSION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody PlayerSession refreshPlayerSession(@PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
         // Step 1. Fetching session
@@ -67,7 +68,7 @@ public class PlayerSessionController implements PlayerSessionService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.DELETE, value = PlayerWebMapping.PLAYER_SESSIONS_SESSION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.DELETE, value = PlayerWebMapping.PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerSession endPlayerSession(@PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
         // Step 1. Fetching player session
@@ -82,7 +83,7 @@ public class PlayerSessionController implements PlayerSessionService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_SESSIONS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_SESSIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<PlayerSession> listPlayerSessions(@PathVariable("playerId") long playerId) {
         // Step 1. Reading specific session
@@ -92,7 +93,7 @@ public class PlayerSessionController implements PlayerSessionService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_SESSIONS_SESSION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerSession getPlayerSession(@PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
         // Step 2. Reading specific session

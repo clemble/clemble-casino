@@ -22,6 +22,7 @@ import com.gogomaya.server.player.registration.PlayerRegistrationServerService;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
+import com.gogomaya.web.mapping.WebMapping;
 import com.gogomaya.web.player.PlayerWebMapping;
 
 @Controller
@@ -63,7 +64,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_REGISTRATION_SIGN_IN, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_REGISTRATION_SIGN_IN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerIdentity createPlayer(@RequestBody final RegistrationRequest registrationRequest) {
@@ -76,7 +77,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_REGISTRATION_SOCIAL, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerIdentity createPlayer(@RequestBody SocialConnectionData socialConnectionData) {

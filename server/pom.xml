@@ -16,6 +16,7 @@
         <module>payment</module>
         <module>player</module>
         <module>game</module>
+        <module>management</module>
     </modules>
     <dependencies>
         <dependency>

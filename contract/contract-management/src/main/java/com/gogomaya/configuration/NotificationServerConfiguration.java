@@ -1,11 +1,11 @@
-package com.gogomaya.client;
+package com.gogomaya.configuration;
 
 import static com.gogomaya.utils.Preconditions.checkNotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class NotificationServerConfigurations {
+public class NotificationServerConfiguration {
 
     final private String user;
     final private String password;
@@ -15,7 +15,7 @@ public class NotificationServerConfigurations {
     final private String routingKey;
 
     @JsonCreator
-    public NotificationServerConfigurations(@JsonProperty("user") String user,
+    public NotificationServerConfiguration(@JsonProperty("user") String user,
             @JsonProperty("password") String password,
             @JsonProperty("host") String host,
             @JsonProperty("port") int port,

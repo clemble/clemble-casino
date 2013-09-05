@@ -21,6 +21,7 @@ import com.gogomaya.payment.PaymentTransactionId;
 import com.gogomaya.payment.service.PaymentTransactionService;
 import com.gogomaya.server.payment.PaymentTransactionServerService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
+import com.gogomaya.web.mapping.WebMapping;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
 @Controller
@@ -35,14 +36,14 @@ public class PaymentTransactionController implements PaymentTransactionService {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_TRANSACTIONS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_TRANSACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PaymentTransaction perform(@RequestBody PaymentTransaction paymentTransaction) {
         return paymentTransactionService.process(paymentTransaction);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, produces = WebMapping.PRODUCES)
     public @ResponseBody PaymentTransaction getPaymentTransaction(
             @RequestHeader("playerId") long requesterId,
             @PathVariable("source") String source,
@@ -60,7 +61,7 @@ public class PaymentTransactionController implements PaymentTransactionService {
     
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<PaymentTransaction> listPlayerTransaction(@PathVariable("playerId") long playerId) {
         // Step 1. Sending transactions

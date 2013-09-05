@@ -6,6 +6,7 @@ import org.springframework.util.MultiValueMap;
 
 import com.gogomaya.client.player.service.PlayerSecurityClientService;
 import com.gogomaya.player.security.PlayerIdentity;
+import com.gogomaya.web.mapping.WebMapping;
 
 public class AndroidPlayerSecurityService implements PlayerSecurityClientService {
 
@@ -21,7 +22,7 @@ public class AndroidPlayerSecurityService implements PlayerSecurityClientService
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(playerIdentity.getPlayerId()));
-        header.add("Content-Type", "application/json");
+        header.add("Content-Type", WebMapping.PRODUCES);
         // Step 2. Generating request
         return new HttpEntity(header);
     }
@@ -31,7 +32,7 @@ public class AndroidPlayerSecurityService implements PlayerSecurityClientService
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(playerIdentity.getPlayerId()));
-        header.add("Content-Type", "application/json");
+        header.add("Content-Type", WebMapping.PRODUCES);
         // Step 2. Generating request
         return new HttpEntity(request, header);
     }

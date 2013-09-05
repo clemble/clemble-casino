@@ -156,6 +156,16 @@
                 <artifactId>payment-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>management-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.server</groupId>
+                <artifactId>management-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Contract dependencies -->
 
@@ -177,6 +187,24 @@
             <dependency>
                 <groupId>com.gogomaya</groupId>
                 <artifactId>contract-player</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya</groupId>
+                <artifactId>contract-management</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Client dependencies -->
+
+            <dependency>
+                <groupId>com.gogomaya.client</groupId>
+                <artifactId>client-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gogomaya.client</groupId>
+                <artifactId>client-android</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

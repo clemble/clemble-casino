@@ -59,5 +59,9 @@
             <groupId>com.gogomaya</groupId>
             <artifactId>contract-game</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gogomaya</groupId>
+            <artifactId>contract-management</artifactId>
+        </dependency>
     </dependencies>
 </project>

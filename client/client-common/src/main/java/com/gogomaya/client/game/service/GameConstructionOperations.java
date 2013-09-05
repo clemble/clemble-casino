@@ -11,9 +11,12 @@ public interface GameConstructionOperations {
 
     public GameConstruction getConstruct(final long session);
 
+    public GameConstruction accept(final long sessionId);
+
+    public GameConstruction decline(final long sessionId);
+
+    public GameConstruction response(final long sessionId, final InvitationResponseEvent gameRequest);
+
     public ClientEvent getResponce(final long session, final long player);
-
-    public GameConstruction invitationResponsed(final long sessionId, final InvitationResponseEvent gameRequest);
-
 
 }

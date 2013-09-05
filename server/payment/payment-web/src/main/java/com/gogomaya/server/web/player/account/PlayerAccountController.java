@@ -22,6 +22,7 @@ import com.gogomaya.payment.service.PlayerAccountService;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.player.account.PlayerAccountServerService;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
+import com.gogomaya.web.mapping.WebMapping;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
 @Controller
@@ -36,21 +37,21 @@ public class PlayerAccountController implements PlayerAccountService {
         this.playerAccountRepository = checkNotNull(playerAccountRepository);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerAccount register(@RequestBody PlayerProfile playerProfile) {
         return playerAccountService.register(playerProfile);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerAccount get(@PathVariable("playerId") long playerWalletId) {
         // Step 1. Returning account from repository
         return playerAccountRepository.findOne(playerWalletId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody boolean canAfford(@RequestParam("player") String players, @RequestParam("currency") Currency currency, @RequestParam("amount") Long amount) {
         String[] splitPlayers = players.split(",");
