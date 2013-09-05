@@ -1,7 +1,7 @@
 package com.gogomaya.client;
 
 import com.gogomaya.client.player.service.PlayerSecurityClientService;
-import com.gogomaya.configuration.NotificationServerConfiguration;
+import com.gogomaya.configuration.NotificationConfiguration;
 
 public interface GogomayaResourceLocator {
 
@@ -9,7 +9,7 @@ public interface GogomayaResourceLocator {
     public PlayerSecurityClientService getSecurityService();
 
     // Notification server endpoint
-    public NotificationServerConfiguration getNotificationServerConfigurations();
+    public NotificationConfiguration getNotificationServerConfigurations();
 
     // Player related endpoint
     public String getPlayerProfileEndpoint();

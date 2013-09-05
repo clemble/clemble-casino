@@ -49,7 +49,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.PLAYER_REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     PlayerIdentity login(@RequestBody PlayerLoginRequest loginRequest) {
@@ -69,7 +69,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.PLAYER_REGISTRATION_SIGN_IN, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerIdentity createPlayer(@RequestBody final PlayerRegistrationRequest registrationRequest) {
@@ -85,7 +85,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.PLAYER_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerIdentity createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.client.ImmutablePair;
-import com.gogomaya.configuration.NotificationServerConfiguration;
+import com.gogomaya.configuration.NotificationConfiguration;
 import com.gogomaya.event.Event;
 import com.gogomaya.event.listener.EventListener;
 import com.gogomaya.event.listener.EventListenersManager;
@@ -29,13 +29,13 @@ public class AndroidEventListenerManager implements EventListenersManager, Close
     final protected Collection<Entry<EventSelector, EventListener>> eventListeners = new ArrayList<>();
     final protected ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-    final public NotificationServerConfiguration configurations;
+    final public NotificationConfiguration configurations;
     final public ObjectMapper objectMapper;
 
     protected Connection connection;
     protected volatile boolean closed = false;
 
-    public AndroidEventListenerManager(NotificationServerConfiguration configurations, ObjectMapper objectMapper) throws IOException {
+    public AndroidEventListenerManager(NotificationConfiguration configurations, ObjectMapper objectMapper) throws IOException {
         this.configurations = configurations;
         this.objectMapper = objectMapper;
 
@@ -73,8 +73,8 @@ public class AndroidEventListenerManager implements EventListenersManager, Close
                     ConnectionFactory factory = new ConnectionFactory();
                     factory.setUsername(configurations.getUser());
                     factory.setPassword(configurations.getPassword());
-                    factory.setHost(configurations.getHost());
-                    factory.setPort(configurations.getPort());
+                    factory.setHost(configurations.getRabbitHost().getHost());
+                    factory.setPort(configurations.getRabbitHost().getPort());
                     // Step 2. Creating connection
                     connection = factory.newConnection(executor);
                     // Step 3. Creating new Channel

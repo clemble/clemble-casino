@@ -35,7 +35,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(registrationRequest);
         // Step 1. Performing actual player creation
-        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.PLAYER_REGISTRATION_SIGN_IN,
+        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION,
                 registrationRequest, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
@@ -49,7 +49,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(credential);
         // Step 1. Performing actual player login
-        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.PLAYER_REGISTRATION_LOGIN,
+        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN,
                 credential, PlayerIdentity.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials

@@ -8,13 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ResourceLocations {
 
     // Notification server endpoint
-    final private NotificationServerConfiguration notificationServerConfiguration;
+    final private NotificationConfiguration notificationServerConfiguration;
 
     // Player related endpoint
     final private String playerProfileEndpoint;
-
-    // Player session endpoint
-    final private String playerSessionEndpoint;
 
     // Payment related endpoint
     final private String paymentEndpoing;
@@ -23,14 +20,12 @@ public class ResourceLocations {
     final private String gameConstructionEndpoint;
 
     @JsonCreator
-    public ResourceLocations(@JsonProperty("notificationServerConfigurations") NotificationServerConfiguration notificationServerConfigurations,
+    public ResourceLocations(@JsonProperty("notificationServerConfigurations") NotificationConfiguration notificationServerConfigurations,
             @JsonProperty("playerProfileEndpoint") String playerProfileEndpoint,
-            @JsonProperty("playerSessionEndpoint") String playerSessionEndpoint,
             @JsonProperty("paymentEndpoint") String paymentEndpoint,
             @JsonProperty("gameConstructionEndpoint") String gameConstructionEndpoint) {
         this.notificationServerConfiguration = checkNotNull(notificationServerConfigurations);
         this.playerProfileEndpoint = checkNotNull(playerProfileEndpoint);
-        this.playerSessionEndpoint = checkNotNull(playerSessionEndpoint);
         this.paymentEndpoing = paymentEndpoint;
         this.gameConstructionEndpoint = gameConstructionEndpoint;
 
@@ -40,11 +35,7 @@ public class ResourceLocations {
         return playerProfileEndpoint;
     }
 
-    public String getPlayerSessionEndpoint() {
-        return playerSessionEndpoint;
-    }
-
-    public NotificationServerConfiguration getNotificationServerConfiguration() {
+    public NotificationConfiguration getNotificationServerConfiguration() {
         return notificationServerConfiguration;
     }
 
@@ -64,7 +55,6 @@ public class ResourceLocations {
         result = prime * result + ((notificationServerConfiguration == null) ? 0 : notificationServerConfiguration.hashCode());
         result = prime * result + ((paymentEndpoing == null) ? 0 : paymentEndpoing.hashCode());
         result = prime * result + ((playerProfileEndpoint == null) ? 0 : playerProfileEndpoint.hashCode());
-        result = prime * result + ((playerSessionEndpoint == null) ? 0 : playerSessionEndpoint.hashCode());
         return result;
     }
 
@@ -96,11 +86,6 @@ public class ResourceLocations {
             if (other.playerProfileEndpoint != null)
                 return false;
         } else if (!playerProfileEndpoint.equals(other.playerProfileEndpoint))
-            return false;
-        if (playerSessionEndpoint == null) {
-            if (other.playerSessionEndpoint != null)
-                return false;
-        } else if (!playerSessionEndpoint.equals(other.playerSessionEndpoint))
             return false;
         return true;
     }
