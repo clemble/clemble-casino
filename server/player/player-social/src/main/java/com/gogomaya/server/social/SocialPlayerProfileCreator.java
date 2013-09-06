@@ -12,8 +12,7 @@ public class SocialPlayerProfileCreator implements ConnectionSignUp {
 
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
 
-    public SocialPlayerProfileCreator(
-            final SocialConnectionAdapterRegistry socialAdapterRegistry) {
+    public SocialPlayerProfileCreator(final SocialConnectionAdapterRegistry socialAdapterRegistry) {
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
     }
 

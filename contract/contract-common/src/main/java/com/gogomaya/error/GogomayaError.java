@@ -51,6 +51,7 @@ public enum GogomayaError {
     SocialConnectionProviderUserNull(Code.SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE, "Social connection provider User can't be NULL"),
     SocialConnectionProviderIdNull(Code.SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE, "Social connection provider ID can't be NULL"),
     SocialConnectionInvalid(Code.SOCIAL_CONNECTION_INVALID_CODE, "Social connection is invalid"),
+    SocialConnectionAlreadyRegistered(Code.SOCIAL_CONNECTION_ALREADY_REGISTERED, "Social connection already registered"),
 
     ClientJsonInvalidError(Code.CLIENT_JSON_INVALID_ERROR_CODE, "Invalid Json"),
     ClientJsonFormatError(Code.CLIENT_JSON_FORMAT_ERROR_CODE, "Incorrect Json"),
@@ -205,6 +206,7 @@ public enum GogomayaError {
         final public static String SOCIAL_CONNECTION_PROVIDER_ID_NULL_CODE = "090";
         final public static String SOCIAL_CONNECTION_INVALID_CODE = "091";
         final public static String SOCIAL_CONNECTION_PROVIDER_USER_NULL_CODE = "092";
+        final public static String SOCIAL_CONNECTION_ALREADY_REGISTERED = "093";
         // Generic Client errors
         final public static String CLIENT_JSON_INVALID_ERROR_CODE = "0D0";
         final public static String CLIENT_JSON_FORMAT_ERROR_CODE = "0D1";
