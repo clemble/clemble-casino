@@ -5,6 +5,6 @@ public interface PlayerSecurityClientService {
 
     public <T> T signGet(String request);
 
-    public <T> T signUpdate(T request);
+    public <T, S> T signUpdate(S request);
 
 }

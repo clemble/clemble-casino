@@ -8,16 +8,16 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
-import com.gogomaya.android.player.service.AndroidPlayerSecurityService;
+import com.gogomaya.client.player.service.PlayerSecurityClientService;
 import com.gogomaya.client.service.RestClientService;
 
 public class AndroidRestService implements RestClientService {
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
-    final private AndroidPlayerSecurityService securityClientService;
+    final private PlayerSecurityClientService securityClientService;
 
-    public AndroidRestService(String baseUrl, RestTemplate restTemplate, AndroidPlayerSecurityService securityClientService) {
+    public AndroidRestService(String baseUrl, RestTemplate restTemplate, PlayerSecurityClientService securityClientService) {
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);
         this.securityClientService = checkNotNull(securityClientService);
