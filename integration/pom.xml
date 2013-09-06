@@ -10,6 +10,16 @@
     <artifactId>integration</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>integration-management-web</module>
         <module>integration-test</module>
     </modules>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.gogomaya.integration</groupId>
+                <artifactId>integration-management-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

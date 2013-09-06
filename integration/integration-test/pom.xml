@@ -34,6 +34,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.gogomaya.integration</groupId>
+            <artifactId>integration-management-web</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.ning</groupId>
             <artifactId>async-http-client</artifactId>
         </dependency>
@@ -108,8 +113,8 @@
                                             <type>war</type>
                                         </artifactItem>
                                         <artifactItem>
-                                            <groupId>com.gogomaya.server</groupId>
-                                            <artifactId>management-web</artifactId>
+                                            <groupId>com.gogomaya.integration</groupId>
+                                            <artifactId>integration-management-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
                                         </artifactItem>
@@ -140,7 +145,7 @@
                                             <contextPath>/payment-web</contextPath>
                                         </contextHandler>
                                         <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
-                                            <war>${project.build.directory}/wars-to-be-tested/management-web.war</war>
+                                            <war>${project.build.directory}/wars-to-be-tested/integration-management-web.war</war>
                                             <contextPath>/management-web</contextPath>
                                         </contextHandler>
                                     </contextHandlers>

@@ -6,6 +6,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.configuration.ResourceLocations;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.web.payment.PaymentWebMapping;
@@ -28,10 +29,11 @@ public class IntegrationPaymentTransactionOperations extends AbstractPaymentTran
 
     @Override
     public PaymentTransaction get(Player player, String source, long transactionId) {
+        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating empty signed request
         HttpEntity<Void> signedRequest = player.sign(null);
         // Step 2. Performing empty signed GET request
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, signedRequest,
+        return restTemplate.exchange(resourceLocations.getPaymentEndpoint() + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, signedRequest,
                 PaymentTransaction.class, source, transactionId).getBody();
     }
 

@@ -192,7 +192,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public AccountOperations accountOperations() {
-            return new IntegrationAccountOperations(restTemplate(), getBaseUrl());
+            return new IntegrationAccountOperations(restTemplate());
         }
 
         @Bean
@@ -211,7 +211,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public ProfileOperations playerProfileOperations() {
-            return new IntegrationProfileOperations(restTemplate(), getBaseUrl());
+            return new IntegrationProfileOperations(restTemplate());
         }
 
         @Bean

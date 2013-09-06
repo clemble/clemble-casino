@@ -2,6 +2,8 @@ package com.gogomaya.configuration;
 
 import static com.gogomaya.utils.Preconditions.checkNotNull;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,20 +16,20 @@ public class ResourceLocations {
     final private String playerProfileEndpoint;
 
     // Payment related endpoint
-    final private String paymentEndpoing;
+    final private String paymentEndpoint;
 
     // Game construction related endpoint
-    final private String gameConstructionEndpoint;
+    final private List<GameLocation> gameLocations;
 
     @JsonCreator
     public ResourceLocations(@JsonProperty("notificationConfiguration") NotificationConfiguration notificationConfiguration,
             @JsonProperty("playerProfileEndpoint") String playerProfileEndpoint,
             @JsonProperty("paymentEndpoint") String paymentEndpoint,
-            @JsonProperty("gameConstructionEndpoint") String gameConstructionEndpoint) {
+            @JsonProperty("gameLocations") List<GameLocation> gameLocations) {
         this.notificationConfiguration = checkNotNull(notificationConfiguration);
         this.playerProfileEndpoint = checkNotNull(playerProfileEndpoint);
-        this.paymentEndpoing = paymentEndpoint;
-        this.gameConstructionEndpoint = gameConstructionEndpoint;
+        this.paymentEndpoint = checkNotNull(paymentEndpoint);
+        this.gameLocations = checkNotNull(gameLocations);
 
     }
 
@@ -39,21 +41,21 @@ public class ResourceLocations {
         return notificationConfiguration;
     }
 
-    public String getGameConstructionEndpoint() {
-        return gameConstructionEndpoint;
+    public String getPaymentEndpoint() {
+        return paymentEndpoint;
     }
 
-    public String getPaymentEndpoing() {
-        return paymentEndpoing;
+    public List<GameLocation> getGameLocations() {
+        return gameLocations;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((gameConstructionEndpoint == null) ? 0 : gameConstructionEndpoint.hashCode());
+        result = prime * result + ((gameLocations == null) ? 0 : gameLocations.hashCode());
         result = prime * result + ((notificationConfiguration == null) ? 0 : notificationConfiguration.hashCode());
-        result = prime * result + ((paymentEndpoing == null) ? 0 : paymentEndpoing.hashCode());
+        result = prime * result + ((paymentEndpoint == null) ? 0 : paymentEndpoint.hashCode());
         result = prime * result + ((playerProfileEndpoint == null) ? 0 : playerProfileEndpoint.hashCode());
         return result;
     }
@@ -67,20 +69,20 @@ public class ResourceLocations {
         if (getClass() != obj.getClass())
             return false;
         ResourceLocations other = (ResourceLocations) obj;
-        if (gameConstructionEndpoint == null) {
-            if (other.gameConstructionEndpoint != null)
+        if (gameLocations == null) {
+            if (other.gameLocations != null)
                 return false;
-        } else if (!gameConstructionEndpoint.equals(other.gameConstructionEndpoint))
+        } else if (!gameLocations.equals(other.gameLocations))
             return false;
         if (notificationConfiguration == null) {
             if (other.notificationConfiguration != null)
                 return false;
         } else if (!notificationConfiguration.equals(other.notificationConfiguration))
             return false;
-        if (paymentEndpoing == null) {
-            if (other.paymentEndpoing != null)
+        if (paymentEndpoint == null) {
+            if (other.paymentEndpoint != null)
                 return false;
-        } else if (!paymentEndpoing.equals(other.paymentEndpoing))
+        } else if (!paymentEndpoint.equals(other.paymentEndpoint))
             return false;
         if (playerProfileEndpoint == null) {
             if (other.playerProfileEndpoint != null)

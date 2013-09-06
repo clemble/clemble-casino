@@ -9,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
+import com.gogomaya.configuration.ResourceLocations;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.integration.player.Player;
@@ -17,38 +18,39 @@ import com.gogomaya.web.payment.PaymentWebMapping;
 public class IntegrationAccountOperations extends AbstractAccountOperations {
 
     final private RestTemplate restTemplate;
-    final private String baseUrl;
 
-    public IntegrationAccountOperations(RestTemplate restTemplate, String baseUrl) {
+    public IntegrationAccountOperations(RestTemplate restTemplate) {
         this.restTemplate = checkNotNull(restTemplate);
-        this.baseUrl = checkNotNull(baseUrl);
     }
 
     @Override
     public PlayerAccount getAccount(Player player, long playerId) {
+        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, request, PlayerAccount.class,
+        return restTemplate.exchange(resourceLocations.getPaymentEndpoint() + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, request, PlayerAccount.class,
                 playerId).getBody();
     }
 
     @Override
     public List<PaymentTransaction> getTransactions(Player player, long playerId) {
+        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
+        return restTemplate.exchange(resourceLocations.getPaymentEndpoint() + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
                 new ParameterizedTypeReference<List<PaymentTransaction>>() {
                 }, playerId).getBody();
     }
 
     @Override
     public PaymentTransaction getTransaction(Player player, long playerId, String moneySource, long transactionId) {
+        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET,
+        return restTemplate.exchange(resourceLocations.getPaymentEndpoint() + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET,
                 request, PaymentTransaction.class, moneySource, transactionId).getBody();
 
     }
