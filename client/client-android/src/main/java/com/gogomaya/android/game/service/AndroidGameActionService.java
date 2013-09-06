@@ -20,12 +20,12 @@ public class AndroidGameActionService<State extends GameState> implements GameAc
     @Override
     @SuppressWarnings("unchecked")
     public State process(long sessionId, ClientEvent move) {
-        return (State) restService.putForEntity(GameWebMapping.GAME_PREFIX, GameWebMapping.GAME_SESSION_ACTIONS, move, GameState.class, sessionId);
+        return (State) restService.putForEntity(GameWebMapping.GAME_SESSION_ACTIONS, move, GameState.class, sessionId);
     }
 
     @Override
     public MadeMove getAction(long sessionId, int actionId) {
-        return restService.getForEntity(GameWebMapping.GAME_PREFIX, GameWebMapping.GAME_SESSION_ACTIONS_ACTION, MadeMove.class, sessionId, actionId);
+        return restService.getForEntity(GameWebMapping.GAME_SESSION_ACTIONS_ACTION, MadeMove.class, sessionId, actionId);
     }
 
 }
