@@ -41,9 +41,9 @@ import com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
 import com.gogomaya.server.web.error.GogomayaRESTErrorHandler;
 import com.gogomaya.server.web.management.PlayerRegistrationController;
+import com.gogomaya.server.web.management.PlayerSessionController;
 import com.gogomaya.server.web.payment.PaymentTransactionController;
 import com.gogomaya.server.web.player.PlayerProfileController;
-import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.account.PlayerAccountController;
 
 @Configuration

@@ -12,13 +12,11 @@ import com.gogomaya.server.player.registration.PlayerProfileRegistrationServerSe
 import com.gogomaya.server.player.registration.SimplePlayerProfileRegistrationServerService;
 import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
-import com.gogomaya.server.repository.player.PlayerSessionRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
 import com.gogomaya.server.web.player.PlayerProfileController;
-import com.gogomaya.server.web.player.PlayerSessionController;
 import com.gogomaya.server.web.player.registration.PlayerProfileRegistrationController;
 
 @Configuration
@@ -32,10 +30,6 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     @Autowired
     @Qualifier("playerProfileRepository")
     public PlayerProfileRepository playerProfileRepository;
-
-    @Autowired
-    @Qualifier("playerSessionRepository")
-    public PlayerSessionRepository playerSessionRepository;
 
     @Autowired
     @Qualifier("playerNotificationRegistry")
@@ -62,11 +56,6 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     @Bean
     public PlayerProfileRegistrationController playerProfileRegistrationController() {
         return new PlayerProfileRegistrationController(realPlayerProfileRegistrationService());
-    }
-
-    @Bean
-    public PlayerSessionController playerSessionController() {
-        return new PlayerSessionController(playerNotificationRegistry, playerSessionRepository, playerStateManager);
     }
 
 }

@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gogomaya.player.PlayerCategory;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
-import com.gogomaya.server.repository.player.PlayerSessionRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.player.PlayerManagementSpringConfiguration;
 
@@ -23,9 +22,6 @@ public class PlayerProfileRepositoryTest {
 
     @Autowired
     public PlayerProfileRepository playerProfileRepository;
-
-    @Autowired
-    public PlayerSessionRepository sessionRepository;
 
     @Before
     public void clean() {

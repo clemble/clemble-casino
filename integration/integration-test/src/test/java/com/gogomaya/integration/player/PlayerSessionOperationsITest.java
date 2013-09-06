@@ -1,9 +1,5 @@
 package com.gogomaya.integration.player;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,7 +20,6 @@ import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.integration.util.GogomayaExceptionMatcherFactory;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.server.test.RedisCleaner;
-import com.stresstest.util.CollectionAssert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -64,7 +59,7 @@ public class PlayerSessionOperationsITest {
         PlayerSession refreshedSession = sessionOperations.refresh(player, currentSession.getSessionId());
         Assert.assertNotEquals(refreshedSession.getExpirationTime(), currentSession.getExpirationTime());
         Assert.assertEquals(refreshedSession.getPlayerId(), currentSession.getPlayerId());
-        Assert.assertEquals(refreshedSession.getServer(), currentSession.getServer());
+        Assert.assertEquals(refreshedSession.getResourceLocations(), currentSession.getResourceLocations());
         Assert.assertEquals(refreshedSession.getSessionId(), currentSession.getSessionId());
     }
 
@@ -108,24 +103,6 @@ public class PlayerSessionOperationsITest {
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotSessionOwner));
 
         Assert.assertEquals(currentSession, sessionOperations.get(anotherPlayer, currentSession.getSessionId()));
-    }
-
-    @Test
-    public void testList() {
-        // Step 1. Creating fake player
-        Player player = playerOperations.createPlayer();
-        // Step 2. When player was created he started session
-        Collection<PlayerSession> expectedSessions = new ArrayList<>();
-        expectedSessions.add(player.getSession());
-        List<PlayerSession> actualSessions = new ArrayList<>(sessionOperations.list(player));
-        Assert.assertNotNull(actualSessions);
-        Assert.assertTrue(!actualSessions.isEmpty());
-        CollectionAssert.assertContent(expectedSessions, sessionOperations.list(player));
-        // Step 3. Generating list of sessions
-        for (int i = 0; i < 100; i++)
-            expectedSessions.add(sessionOperations.start(player));
-        // Step 4. Check current player can read sessions
-        CollectionAssert.assertContent(expectedSessions, new ArrayList<>(sessionOperations.list(player)));
     }
 
 }

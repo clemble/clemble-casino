@@ -2,11 +2,9 @@ package com.gogomaya.server.integration.player.session;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.List;
-
 import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.server.web.player.PlayerSessionController;
+import com.gogomaya.server.web.management.PlayerSessionController;
 
 public class WebSessionOperations extends AbstractSessionOperations {
 
@@ -27,18 +25,13 @@ public class WebSessionOperations extends AbstractSessionOperations {
     }
 
     @Override
-    public PlayerSession get(Player player, long session) {
-        return playerSessionController.getPlayerSession(player.getPlayerId(), session);
-    }
-
-    @Override
     public PlayerSession refresh(Player player, long session) {
         return playerSessionController.refreshPlayerSession(player.getPlayerId(), session);
     }
 
     @Override
-    public List<PlayerSession> list(Player player) {
-        return playerSessionController.listPlayerSessions(player.getPlayerId());
+    public PlayerSession get(Player player, long session) {
+        return playerSessionController.getPlayerSession(player.getPlayerId(), session);
     }
 
 }

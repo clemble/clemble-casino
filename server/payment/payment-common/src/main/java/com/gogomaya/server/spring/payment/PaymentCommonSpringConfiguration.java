@@ -36,7 +36,7 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Override
         public String getBaseUrl() {
-            return "http://ec2-50-16-93-157.compute-1.amazonaws.com/gogomaya/";
+            return "http://ec2-50-16-93-157.compute-1.amazonaws.com/";
         }
 
     }

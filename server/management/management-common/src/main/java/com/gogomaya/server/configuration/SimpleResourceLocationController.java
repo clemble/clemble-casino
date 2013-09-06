@@ -1,4 +1,4 @@
-package com.gogomaya.server.web.configuration;
+package com.gogomaya.server.configuration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

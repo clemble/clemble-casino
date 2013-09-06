@@ -22,6 +22,8 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.configuration.NotificationConfiguration;
+import com.gogomaya.configuration.NotificationHost;
 import com.gogomaya.event.Event;
 import com.gogomaya.player.security.PlayerSession;
 import com.ning.http.client.AsyncHttpClient;
@@ -63,7 +65,8 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
 
     private PlayerListenerControl addRabbitListener(final PlayerSession playerSession, final PlayerListener playerListener) {
         // Step 1. Creating Server connection
-        ConnectionFactory connectionFactory = new CachingConnectionFactory(playerSession.getServer());
+        NotificationHost rabbitNotification = playerSession.getResourceLocations().getNotificationConfiguration().getRabbitHost();
+        ConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitNotification.getHost());
         // Step 2. Creating binding
         RabbitAdmin admin = new RabbitAdmin(connectionFactory);
         Queue tmpQueue = admin.declareQueue();
@@ -104,7 +107,9 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
         final String channel = "/topic/" + player;
         // Step 1. Creating a game table client
         try {
-            final Client stompClient = new Client(playerSession.getServer(), 61613, "guest", "guest");
+            final NotificationConfiguration notificationConfiguration = playerSession.getResourceLocations().getNotificationConfiguration();
+            final NotificationHost stompNotification = playerSession.getResourceLocations().getNotificationConfiguration().getStompHost();
+            final Client stompClient = new Client(stompNotification.getHost(), stompNotification.getPort(), notificationConfiguration.getUser(), notificationConfiguration.getPassword());
             stompClient.subscribe(channel, new Listener() {
 
                 @Override
@@ -140,7 +145,8 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
     private PlayerListenerControl addSockJSListener(final PlayerSession playerSession, final PlayerListener playerListener) {
         try {
             AsyncHttpClient asyncClient = new AsyncHttpClient();
-            final WebSocket webSocket = asyncClient.prepareGet("http://" + playerSession.getServer() + ":15674/stomp")
+            NotificationHost sockJSNotification = playerSession.getResourceLocations().getNotificationConfiguration().getSockjsHost();
+            final WebSocket webSocket = asyncClient.prepareGet("http://" + sockJSNotification.getHost() + ":" + sockJSNotification.getPort() + "/stomp")
                     .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(new DefaultWebSocketListener() {
 
                         @Override

@@ -8,6 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.gogomaya.configuration.ResourceLocations;
 
 @Entity
 @Table(name = "PLAYER_SESSION")
@@ -21,14 +24,14 @@ public class PlayerSession {
     @Column(name = "PLAYER_ID")
     private long playerId;
 
-    @Column(name = "SERVER")
-    private String server;
-
     @Column(name = "START_TIME")
     private Date startTime = new Date();
 
     @Column(name = "EXPIRATION_TIME")
     private Date expirationTime = new Date();
+
+    @Transient
+    private ResourceLocations resourceLocations;
 
     public long getSessionId() {
         return sessionId;
@@ -48,13 +51,12 @@ public class PlayerSession {
         return this;
     }
 
-    public String getServer() {
-        return server;
+    public ResourceLocations getResourceLocations() {
+        return resourceLocations;
     }
 
-    public PlayerSession setServer(String server) {
-        this.server = server;
-        return this;
+    public void setResourceLocations(ResourceLocations resourceLocations) {
+        this.resourceLocations = resourceLocations;
     }
 
     public Date getStartTime() {
@@ -87,7 +89,6 @@ public class PlayerSession {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (playerId ^ (playerId >>> 32));
-        result = prime * result + ((server == null) ? 0 : server.hashCode());
         result = prime * result + (int) (sessionId ^ (sessionId >>> 32));
         return result;
     }
@@ -103,11 +104,6 @@ public class PlayerSession {
         PlayerSession other = (PlayerSession) obj;
         if (playerId != other.playerId)
             return false;
-        if (server == null) {
-            if (other.server != null)
-                return false;
-        } else if (!server.equals(other.server))
-            return false;
         if (sessionId != other.sessionId)
             return false;
         return true;
@@ -115,8 +111,7 @@ public class PlayerSession {
 
     @Override
     public String toString() {
-        return "PlayerSession [sessionId=" + sessionId + ", playerId=" + playerId + ", server=" + server + ", startTime=" + startTime + ", expirationTime="
-                + expirationTime + "]";
+        return "PlayerSession [sessionId=" + sessionId + ", playerId=" + playerId + ", startTime=" + startTime + ", expirationTime=" + expirationTime + "]";
     }
 
 }

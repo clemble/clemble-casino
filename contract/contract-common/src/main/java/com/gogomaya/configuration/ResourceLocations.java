@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ResourceLocations {
 
     // Notification server endpoint
-    final private NotificationConfiguration notificationServerConfiguration;
+    final private NotificationConfiguration notificationConfiguration;
 
     // Player related endpoint
     final private String playerProfileEndpoint;
@@ -20,11 +20,11 @@ public class ResourceLocations {
     final private String gameConstructionEndpoint;
 
     @JsonCreator
-    public ResourceLocations(@JsonProperty("notificationServerConfigurations") NotificationConfiguration notificationServerConfigurations,
+    public ResourceLocations(@JsonProperty("notificationConfiguration") NotificationConfiguration notificationConfiguration,
             @JsonProperty("playerProfileEndpoint") String playerProfileEndpoint,
             @JsonProperty("paymentEndpoint") String paymentEndpoint,
             @JsonProperty("gameConstructionEndpoint") String gameConstructionEndpoint) {
-        this.notificationServerConfiguration = checkNotNull(notificationServerConfigurations);
+        this.notificationConfiguration = checkNotNull(notificationConfiguration);
         this.playerProfileEndpoint = checkNotNull(playerProfileEndpoint);
         this.paymentEndpoing = paymentEndpoint;
         this.gameConstructionEndpoint = gameConstructionEndpoint;
@@ -35,8 +35,8 @@ public class ResourceLocations {
         return playerProfileEndpoint;
     }
 
-    public NotificationConfiguration getNotificationServerConfiguration() {
-        return notificationServerConfiguration;
+    public NotificationConfiguration getNotificationConfiguration() {
+        return notificationConfiguration;
     }
 
     public String getGameConstructionEndpoint() {
@@ -52,7 +52,7 @@ public class ResourceLocations {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((gameConstructionEndpoint == null) ? 0 : gameConstructionEndpoint.hashCode());
-        result = prime * result + ((notificationServerConfiguration == null) ? 0 : notificationServerConfiguration.hashCode());
+        result = prime * result + ((notificationConfiguration == null) ? 0 : notificationConfiguration.hashCode());
         result = prime * result + ((paymentEndpoing == null) ? 0 : paymentEndpoing.hashCode());
         result = prime * result + ((playerProfileEndpoint == null) ? 0 : playerProfileEndpoint.hashCode());
         return result;
@@ -72,10 +72,10 @@ public class ResourceLocations {
                 return false;
         } else if (!gameConstructionEndpoint.equals(other.gameConstructionEndpoint))
             return false;
-        if (notificationServerConfiguration == null) {
-            if (other.notificationServerConfiguration != null)
+        if (notificationConfiguration == null) {
+            if (other.notificationConfiguration != null)
                 return false;
-        } else if (!notificationServerConfiguration.equals(other.notificationServerConfiguration))
+        } else if (!notificationConfiguration.equals(other.notificationConfiguration))
             return false;
         if (paymentEndpoing == null) {
             if (other.paymentEndpoing != null)

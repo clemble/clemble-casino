@@ -2,9 +2,6 @@ package com.gogomaya.server.integration.player.session;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.List;
-
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.LinkedMultiValueMap;
@@ -13,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.server.integration.player.Player;
-import com.gogomaya.web.player.PlayerWebMapping;
+import com.gogomaya.web.management.ManagementWebMapping;
 
 public class IntegrationSessionOperations extends AbstractSessionOperations {
 
@@ -34,7 +31,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         // Step 2. Generating request
         HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
         // Step 3. Rest template generation
-        return restTemplate.exchange(baseUrl + PlayerWebMapping.PLAYER_PREFIX + PlayerWebMapping.PLAYER_SESSIONS, HttpMethod.POST, requestEntity,
+        return restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS, HttpMethod.POST, requestEntity,
                 PlayerSession.class, player.getPlayerId()).getBody();
 
     }
@@ -44,7 +41,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         // Step 1. Generating request
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Calling appropriate services
-        return restTemplate.exchange(baseUrl + PlayerWebMapping.PLAYER_PREFIX + PlayerWebMapping.PLAYER_SESSIONS_SESSION, HttpMethod.DELETE, requestEntity,
+        return restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, HttpMethod.DELETE, requestEntity,
                 PlayerSession.class, player.getPlayerId(), session).getBody();
 
     }
@@ -54,7 +51,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         // Step 1. Generating request
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Rest template generation
-        String refreshUrl = baseUrl + PlayerWebMapping.PLAYER_PREFIX + PlayerWebMapping.PLAYER_SESSIONS_SESSION;
+        String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
         return restTemplate.exchange(refreshUrl, HttpMethod.PUT, requestEntity, PlayerSession.class, player.getPlayerId(), session).getBody();
     }
 
@@ -63,18 +60,8 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         // Step 1. Generating request
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Rest template generation
-        return restTemplate.exchange(baseUrl + PlayerWebMapping.PLAYER_PREFIX + PlayerWebMapping.PLAYER_SESSIONS_SESSION, HttpMethod.GET, requestEntity,
-                PlayerSession.class, player.getPlayerId(), session).getBody();
-    }
-
-    @Override
-    public List<PlayerSession> list(Player player) {
-        // Step 1. Generating request
-        HttpEntity<Void> requestEntity = player.<Void> sign(null);
-        // Step 2. Rest template generation
-        return restTemplate.exchange(baseUrl + PlayerWebMapping.PLAYER_PREFIX + PlayerWebMapping.PLAYER_SESSIONS, HttpMethod.GET, requestEntity,
-                new ParameterizedTypeReference<List<PlayerSession>>() {
-                }, player.getPlayerId()).getBody();
+        String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
+        return restTemplate.exchange(refreshUrl, HttpMethod.GET, requestEntity, PlayerSession.class, player.getPlayerId(), session).getBody();
     }
 
 }

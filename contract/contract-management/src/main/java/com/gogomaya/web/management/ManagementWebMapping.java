@@ -12,4 +12,7 @@ public interface ManagementWebMapping extends WebMapping {
     final public static String MANAGEMENT_PLAYER_REGISTRATION = "/registration/signin";
     final public static String MANAGEMENT_PLAYER_REGISTRATION_SOCIAL = "/registration/social";
 
+    final public static String MANAGEMENT_PLAYER_SESSIONS = "/player/{playerId}/session";
+    final public static String MANAGEMENT_PLAYER_SESSIONS_SESSION = "/player/{playerId}/session/{sessionId}";
+
 }

@@ -14,7 +14,7 @@ import com.gogomaya.server.player.state.StringRedisPlayerStateManager;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 
 @Configuration
-public class PlayerRedisSpringConfiguration  implements SpringConfiguration {
+public class PlayerRedisSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("playerQueueTemplate")

@@ -4,14 +4,11 @@ import com.gogomaya.client.game.service.GameActionOperations;
 import com.gogomaya.client.game.service.GameConstructionOperations;
 import com.gogomaya.client.payment.service.PaymentTransactionOperations;
 import com.gogomaya.client.player.service.PlayerProfileOperations;
-import com.gogomaya.client.player.service.PlayerSessionOperations;
 import com.gogomaya.game.GameState;
 
 public interface Gogomaya {
 
     public PlayerProfileOperations getPlayerProfileOperations();
-
-    public PlayerSessionOperations getPlayerSessionOperations();
 
     public PaymentTransactionOperations getPaymentTransactionOperations();
 
