@@ -24,7 +24,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
-public class AndroidEventListenerManager implements EventListenersManager, Closeable {
+public class RabbitEventListenerManager implements EventListenersManager, Closeable {
 
     final protected Collection<Entry<EventSelector, EventListener>> eventListeners = new ArrayList<>();
     final protected ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -35,7 +35,7 @@ public class AndroidEventListenerManager implements EventListenersManager, Close
     protected Connection connection;
     protected volatile boolean closed = false;
 
-    public AndroidEventListenerManager(NotificationConfiguration configurations, ObjectMapper objectMapper) throws IOException {
+    public RabbitEventListenerManager(NotificationConfiguration configurations, ObjectMapper objectMapper) throws IOException {
         this.configurations = configurations;
         this.objectMapper = objectMapper;
 
@@ -68,7 +68,7 @@ public class AndroidEventListenerManager implements EventListenersManager, Close
             if (closed)
                 return;
             try {
-                synchronized (AndroidEventListenerManager.this) {
+                synchronized (RabbitEventListenerManager.this) {
                     // Step 1. Generalizing connection factory
                     ConnectionFactory factory = new ConnectionFactory();
                     factory.setUsername(configurations.getUser());
