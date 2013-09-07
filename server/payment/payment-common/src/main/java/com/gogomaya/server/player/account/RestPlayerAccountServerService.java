@@ -12,23 +12,24 @@ import org.springframework.web.client.RestTemplate;
 import com.gogomaya.money.Money;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
+import com.gogomaya.server.configuration.ServerRegistryService;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
 public class RestPlayerAccountServerService implements PlayerAccountServerService {
 
-    final private String baseUrl;
     final private RestTemplate restTemplate;
+    final private ServerRegistryService serverRegistryService;
 
-    public RestPlayerAccountServerService(String baseUrl, RestTemplate restTemplate) {
-        this.baseUrl = baseUrl;
+    public RestPlayerAccountServerService(ServerRegistryService serverRegistryService, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+        this.serverRegistryService = serverRegistryService;
     }
 
     @Override
     public PlayerAccount register(PlayerProfile playerProfile) {
         HttpEntity<PlayerProfile> request = sign(playerProfile);
-        return restTemplate.postForEntity(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS, request, PlayerAccount.class)
-                .getBody();
+        return restTemplate.postForEntity(serverRegistryService.getPaymentEndpointRegistry().getPaymentEndpoint() + PaymentWebMapping.PAYMENT_ACCOUNTS,
+                request, PlayerAccount.class).getBody();
     }
 
     @Override
@@ -38,8 +39,10 @@ public class RestPlayerAccountServerService implements PlayerAccountServerServic
 
     @Override
     public boolean canAfford(Collection<Long> playerId, Money amount) {
-        String urlPostfix = "?player=" + StringUtils.collectionToCommaDelimitedString(playerId) + "&currency=" + amount.getCurrency() + "&amount=" + amount.getAmount();
-        return restTemplate.getForEntity(baseUrl + PaymentWebMapping.PAYMENT_PREFIX + PaymentWebMapping.PAYMENT_ACCOUNTS + urlPostfix, Boolean.class)
+        String urlPostfix = "?player=" + StringUtils.collectionToCommaDelimitedString(playerId) + "&currency=" + amount.getCurrency() + "&amount="
+                + amount.getAmount();
+        return restTemplate.getForEntity(
+                serverRegistryService.getPaymentEndpointRegistry().getPaymentEndpoint() + PaymentWebMapping.PAYMENT_ACCOUNTS + urlPostfix, Boolean.class)
                 .getBody();
     }
 

@@ -28,45 +28,33 @@ import com.gogomaya.server.web.management.ServerRegistryController;
 @Import(value = { WebCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class })
 abstract public class AbstractManagementWebSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
+    @Autowired(required = true)
     @Qualifier("playerCredentialRepository")
     public PlayerCredentialRepository playerCredentialRepository;;
 
-    @Autowired
+    @Autowired(required = true)
     @Qualifier("playerIdentityRepository")
     public PlayerIdentityRepository playerIdentityRepository;
 
-    @Autowired
+    @Autowired(required = true)
     @Qualifier("playerProfileRegistrationService")
     public PlayerProfileRegistrationServerService playerProfileRegistrationService;
 
-    @Autowired
+    @Autowired(required = true)
     @Qualifier("gogomayaValidationService")
     public GogomayaValidationService validationService;
 
-    @Autowired
+    @Autowired(required = true)
     @Qualifier("playerAccountService")
     public PlayerAccountServerService playerAccountService;
 
-    @Autowired
+    @Autowired(required = true)
     @Qualifier("resourceLocationService")
     public ResourceLocationService resourceLocationService;
 
-    @Autowired
+    @Autowired(required = true)
     @Qualifier("playerSessionRepository")
     public PlayerSessionRepository playerSessionRepository;
-
-    @Autowired
-    @Qualifier("playerStateManager")
-    public PlayerStateManager playerStateManager;
-
-    @Autowired
-    @Qualifier("playerNotificationRegistry")
-    public PlayerNotificationRegistry playerNotificationRegistry;
-    
-    @Autowired
-    @Qualifier("paymentEndpointRegistry")
-    public PaymentEndpointRegistry paymentEndpointRegistry;
 
     @Bean
     public PlayerRegistrationController playerRegistrationController() {
@@ -75,12 +63,14 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     }
 
     @Bean
-    public PlayerSessionController playerSessionController() {
+    @Autowired
+    public PlayerSessionController playerSessionController(ResourceLocationService resourceLocationService, PlayerSessionRepository playerSessionRepository, PlayerStateManager playerStateManager) {
         return new PlayerSessionController(resourceLocationService, playerSessionRepository, playerStateManager);
     }
 
     @Bean
-    public ServerRegistryController serverRegistryService() {
+    @Autowired
+    public ServerRegistryController serverRegistryService(PlayerNotificationRegistry playerNotificationRegistry, PaymentEndpointRegistry paymentEndpointRegistry) {
         return new ServerRegistryController(playerNotificationRegistry, paymentEndpointRegistry);
     }
 
