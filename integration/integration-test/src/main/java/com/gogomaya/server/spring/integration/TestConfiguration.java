@@ -36,6 +36,7 @@ import com.gogomaya.server.integration.player.session.WebSessionOperations;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
+import com.gogomaya.server.spring.web.management.AbstractManagementWebSpringConfiguration;
 import com.gogomaya.server.spring.web.management.ManagementWebSpringConfiguration;
 import com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;

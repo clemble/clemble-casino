@@ -1,70 +1,107 @@
 package com.gogomaya.server.spring.web.management;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 
+import com.gogomaya.configuration.GameLocation;
 import com.gogomaya.configuration.ResourceLocationService;
-import com.gogomaya.error.GogomayaValidationService;
-import com.gogomaya.server.player.account.PlayerAccountServerService;
-import com.gogomaya.server.player.registration.PlayerProfileRegistrationServerService;
-import com.gogomaya.server.player.state.PlayerStateManager;
-import com.gogomaya.server.repository.player.PlayerCredentialRepository;
-import com.gogomaya.server.repository.player.PlayerIdentityRepository;
-import com.gogomaya.server.repository.player.PlayerSessionRepository;
-import com.gogomaya.server.spring.common.SpringConfiguration;
-import com.gogomaya.server.spring.management.ManagementCommonSpringConfiguration;
-import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
-import com.gogomaya.server.web.management.PlayerRegistrationController;
-import com.gogomaya.server.web.management.PlayerSessionController;
+import com.gogomaya.server.ServerRegistry;
+import com.gogomaya.server.configuration.SimpleNotificationConfigurationService;
+import com.gogomaya.server.configuration.SimpleResourceLocationController;
+import com.gogomaya.server.player.notification.PaymentEndpointRegistry;
+import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
+import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
+import com.gogomaya.server.spring.common.CommonSpringConfiguration;
+import com.gogomaya.server.spring.payment.PaymentCommonSpringConfiguration;
+import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration;
+import com.google.common.collect.ImmutableList;
 
 @Configuration
-@Import(value = { ManagementCommonSpringConfiguration.class, WebCommonSpringConfiguration.class })
-public class ManagementWebSpringConfiguration implements SpringConfiguration {
+@Import(value = { CommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class,
+        ManagementWebSpringConfiguration.DefaultAndTest.class, ManagementWebSpringConfiguration.Cloud.class, ManagementWebSpringConfiguration.Integration.class })
+public class ManagementWebSpringConfiguration extends AbstractManagementWebSpringConfiguration {
 
-    @Autowired
-    @Qualifier("playerCredentialRepository")
-    public PlayerCredentialRepository playerCredentialRepository;;
+    @Configuration
+    @Profile({ UNIT_TEST, DEFAULT, INTEGRATION_DEFAULT })
+    public static class DefaultAndTest {
 
-    @Autowired
-    @Qualifier("playerIdentityRepository")
-    public PlayerIdentityRepository playerIdentityRepository;
+        @Bean
+        public PaymentEndpointRegistry paymentEndpointRegistry(){
+            return new PaymentEndpointRegistry("http://localhost:8080/payment-web/");
+        }
 
-    @Autowired
-    @Qualifier("playerProfileRegistrationService")
-    public PlayerProfileRegistrationServerService playerProfileRegistrationService;
+        @Bean
+        public PlayerNotificationRegistry playerNotificationRegistry() {
+            final ServerRegistry serverRegistry = new ServerRegistry();
+            serverRegistry.register(1_000_000L, "localhost");
+            return new SimplePlayerNotificationRegistry(serverRegistry);
+        }
 
-    @Autowired
-    @Qualifier("gogomayaValidationService")
-    public GogomayaValidationService validationService;
+        @Bean
+        public ResourceLocationService resourceLocationService() {
+            SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", playerNotificationRegistry());
+            return new SimpleResourceLocationController(configurationService,
+                    "http://localhost:8080/player-web/",
+                    "http://localhost:8080/payment-web/",
+                    ImmutableList.<GameLocation> of());
+        }
 
-    @Autowired
-    @Qualifier("playerAccountService")
-    public PlayerAccountServerService playerAccountService;
-
-    @Autowired
-    @Qualifier("resourceLocationService")
-    public ResourceLocationService resourceLocationService;
-
-    @Autowired
-    @Qualifier("playerSessionRepository")
-    public PlayerSessionRepository playerSessionRepository;
-
-    @Autowired
-    @Qualifier("playerStateManager")
-    public PlayerStateManager playerStateManager;
-
-    @Bean
-    public PlayerRegistrationController playerRegistrationController() {
-        return new PlayerRegistrationController(playerProfileRegistrationService, playerCredentialRepository, playerIdentityRepository, validationService,
-                playerAccountService);
     }
 
-    @Bean
-    public PlayerSessionController playerSessionController() {
-        return new PlayerSessionController(resourceLocationService, playerSessionRepository, playerStateManager);
+    @Configuration
+    @Profile(INTEGRATION_TEST)
+    public static class Integration {
+
+        @Bean
+        public PaymentEndpointRegistry paymentEndpointRegistry(){
+            return new PaymentEndpointRegistry("http://localhost:9999/payment-web/");
+        }
+
+        @Bean
+        public PlayerNotificationRegistry playerNotificationRegistry() {
+            final ServerRegistry serverRegistry = new ServerRegistry();
+            serverRegistry.register(1_000_000L, "localhost");
+            return new SimplePlayerNotificationRegistry(serverRegistry);
+        }
+
+        @Bean
+        public ResourceLocationService resourceLocationService() {
+            SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", playerNotificationRegistry());
+            return new SimpleResourceLocationController(configurationService,
+                    "http://localhost:9999/player-web/",
+                    "http://localhost:9999/payment-web/",
+                    ImmutableList.<GameLocation> of());
+        }
+
+    }
+
+    @Configuration
+    @Profile(CLOUD)
+    public static class Cloud {
+
+        @Bean
+        public PaymentEndpointRegistry paymentEndpointRegistry(){
+            return new PaymentEndpointRegistry("http://ec2-50-16-93-157.compute-1.amazonaws.com/payment-web/");
+        }
+
+        @Bean
+        public PlayerNotificationRegistry playerNotificationRegistry() {
+            final ServerRegistry serverRegistry = new ServerRegistry();
+            serverRegistry.register(1_000_000L, "ec2-50-16-93-157.compute-1.amazonaws.com");
+            return new SimplePlayerNotificationRegistry(serverRegistry);
+        }
+
+        @Bean
+        public ResourceLocationService resourceLocationService() {
+            SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", playerNotificationRegistry());
+            return new SimpleResourceLocationController(configurationService,
+                    "http://ec2-50-16-93-157.compute-1.amazonaws.com/player-web/",
+                    "http://ec2-50-16-93-157.compute-1.amazonaws.com/payment-web/",
+                    ImmutableList.<GameLocation> of());
+        }
+
     }
 
 }

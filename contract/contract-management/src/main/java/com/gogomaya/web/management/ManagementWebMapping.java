@@ -15,4 +15,7 @@ public interface ManagementWebMapping extends WebMapping {
     final public static String MANAGEMENT_PLAYER_SESSIONS = "/player/{playerId}/session";
     final public static String MANAGEMENT_PLAYER_SESSIONS_SESSION = "/player/{playerId}/session/{sessionId}";
 
+    final public static String MANAGEMENT_CONFIGURATION_NOTIFICATION = "/configuration/notification";
+    final public static String MANAGEMENT_CONFIGURATION_PAYMENT = "/configuration/payment";
+
 }
