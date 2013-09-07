@@ -14,16 +14,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.ServerRegistry;
+import com.gogomaya.server.configuration.RestServerRegistryService;
+import com.gogomaya.server.configuration.ServerRegistryService;
+import com.gogomaya.server.player.notification.PaymentEndpointRegistry;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 import com.gogomaya.server.player.notification.RabbitPlayerNotificationService;
 import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
+import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 
 @Configuration
-@Import({ RabbitSpringConfiguration.DefaultAndTest.class, JsonSpringConfiguration.class })
+@Import({ RabbitSpringConfiguration.Default.class, RabbitSpringConfiguration.Cloud.class, RabbitSpringConfiguration.IntegrationTest.class,
+        RabbitSpringConfiguration.Test.class, JsonSpringConfiguration.class })
 public class RabbitSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -35,8 +41,8 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     public ObjectMapper objectMapper;
 
     @Autowired
-    @Qualifier("playerNotificationRegistry")
-    public PlayerNotificationRegistry playerNotificationRegistry;
+    @Qualifier("serverRegistryService")
+    public ServerRegistryService serverRegistryService;
 
     @Bean
     @Singleton
@@ -61,26 +67,31 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     @Bean
     @Singleton
     public PlayerNotificationService playerNotificationService() {
-        return new RabbitPlayerNotificationService(jsonMessageConverter(), playerNotificationRegistry);
+        return new RabbitPlayerNotificationService(jsonMessageConverter(), serverRegistryService);
     }
 
     @Configuration
+    @Import(ClientRestCommonSpringConfiguration.class)
     @Profile(value = { CLOUD })
-    public static class Development {
+    public static class Cloud {
+
+        @Autowired
+        public RestTemplate restTemplate;
 
         @Bean
-        @Singleton
-        public SimplePlayerNotificationRegistry playerNotificationRegistry() {
-            final ServerRegistry serverRegistry = new ServerRegistry();
-            serverRegistry.register(1_000_000L, "ec2-50-16-93-157.compute-1.amazonaws.com");
-            return new SimplePlayerNotificationRegistry(serverRegistry);
+        public ServerRegistryService serverRegistryService() {
+            return new RestServerRegistryService("http://ec2-50-16-93-157.compute-1.amazonaws.com/management-web/", restTemplate);
         }
 
     }
 
     @Configuration
-    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
-    public static class DefaultAndTest {
+    @Import(ClientRestCommonSpringConfiguration.class)
+    @Profile(value = { INTEGRATION_TEST })
+    public static class IntegrationTest {
+
+        @Autowired
+        public RestTemplate restTemplate;
 
         @Bean
         @Singleton
@@ -89,11 +100,71 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
+        public ServerRegistryService serverRegistryService() {
+            return new RestServerRegistryService("http://localhost:9999/management-web/", restTemplate);
+        }
+
+    }
+
+    @Configuration
+    @Import(ClientRestCommonSpringConfiguration.class)
+    @Profile(value = { DEFAULT })
+    public static class Default {
+
+        @Autowired
+        public RestTemplate restTemplate;
+
+        @Bean
         @Singleton
-        public SimplePlayerNotificationRegistry playerNotificationRegistry() {
-            final ServerRegistry serverRegistry = new ServerRegistry();
-            serverRegistry.register(1_000_000L, "localhost");
-            return new SimplePlayerNotificationRegistry(serverRegistry);
+        public ConnectionFactory connectionFactory() {
+            return new CachingConnectionFactory();
+        }
+
+        @Autowired(required = false)
+        @Qualifier("serverRegistryService")
+        public ServerRegistryService serverRegistryService;
+
+        @Bean
+        public ServerRegistryService serverRegistryService() {
+            return serverRegistryService != null ? null : new RestServerRegistryService("http://localhost:8080/management-web/", restTemplate);
+        }
+
+    }
+
+    @Configuration
+    @Import(ClientRestCommonSpringConfiguration.class)
+    @Profile(value = { UNIT_TEST })
+    public static class Test {
+
+        @Autowired
+        public RestTemplate restTemplate;
+
+        @Bean
+        @Singleton
+        public ConnectionFactory connectionFactory() {
+            return new CachingConnectionFactory();
+        }
+
+        @Autowired(required = false)
+        @Qualifier("serverRegistryService")
+        public ServerRegistryService serverRegistryService;
+
+        @Bean
+        public ServerRegistryService serverRegistryService() {
+            return serverRegistryService != null ? null : new ServerRegistryService() {
+
+                @Override
+                public PlayerNotificationRegistry getPlayerNotificationRegistry() {
+                    ServerRegistry serverRegistry = new ServerRegistry();
+                    serverRegistry.register(1_000_000L, "http://localhost/");
+                    return new SimplePlayerNotificationRegistry(serverRegistry);
+                }
+
+                @Override
+                public PaymentEndpointRegistry getPaymentEndpointRegistry() {
+                    return new PaymentEndpointRegistry("http://localhost:8080/payment-web/");
+                }
+            };
         }
 
     }

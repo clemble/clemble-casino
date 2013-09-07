@@ -40,7 +40,7 @@ import com.gogomaya.server.spring.web.management.AbstractManagementWebSpringConf
 import com.gogomaya.server.spring.web.management.ManagementWebSpringConfiguration;
 import com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
-import com.gogomaya.server.web.error.GogomayaRESTErrorHandler;
+import com.gogomaya.server.web.error.GogomayaRestErrorHandler;
 import com.gogomaya.server.web.management.PlayerRegistrationController;
 import com.gogomaya.server.web.management.PlayerSessionController;
 import com.gogomaya.server.web.payment.PaymentTransactionController;
@@ -186,7 +186,7 @@ public class TestConfiguration {
                 }
             }
 
-            restTemplate.setErrorHandler(new GogomayaRESTErrorHandler(objectMapper));
+            restTemplate.setErrorHandler(new GogomayaRestErrorHandler(objectMapper));
             return restTemplate;
         }
 

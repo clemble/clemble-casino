@@ -10,11 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.error.GogomayaException;
 import com.gogomaya.error.GogomayaFailureDescription;
 
-public class GogomayaRESTErrorHandler implements ResponseErrorHandler {
+public class GogomayaRestErrorHandler implements ResponseErrorHandler {
 
     final ObjectMapper objectMapper;
 
-    public GogomayaRESTErrorHandler(ObjectMapper objectMapper) {
+    public GogomayaRestErrorHandler(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

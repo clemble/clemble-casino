@@ -3,7 +3,6 @@ package com.gogomaya.server.player.notification;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
-import java.util.concurrent.ExecutionException;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -11,9 +10,8 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 
-import com.gogomaya.error.GogomayaError;
-import com.gogomaya.error.GogomayaException;
 import com.gogomaya.event.Event;
+import com.gogomaya.server.configuration.ServerRegistryService;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -34,45 +32,49 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     });
 
     final private MessageConverter messageConverter;
+    final private ServerRegistryService serverRegistryService;
 
-    final private PlayerNotificationRegistry notificationRegistry;
-
-    public RabbitPlayerNotificationService(final MessageConverter messageConverter, final PlayerNotificationRegistry notificationRegistry) {
+    public RabbitPlayerNotificationService(final MessageConverter messageConverter, final ServerRegistryService serverRegistryService) {
         this.messageConverter = checkNotNull(messageConverter);
-        this.notificationRegistry = checkNotNull(notificationRegistry);
+        this.serverRegistryService = checkNotNull(serverRegistryService);
     }
 
     @Override
-    public void notify(final Collection<Long> playerIds, final Event event) {
+    public boolean notify(final Collection<Long> playerIds, final Event event) {
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
         // Step 2. Notifying specific player
+        boolean fullSuccess = true;
         for (Long playerId : playerIds)
-            notify(playerId, message);
+            fullSuccess = notify(playerId, message) & fullSuccess;
+        return fullSuccess;
     }
 
     @Override
-    public void notify(final Collection<Long> playerIds, final Collection<? extends Event> events) {
+    public boolean notify(final Collection<Long> playerIds, final Collection<? extends Event> events) {
         // Step 1. Notifying each event one after another
+        boolean fullSuccess = true;
         for (Event event : events)
-            notify(playerIds, event);
+            fullSuccess = notify(playerIds, event) & fullSuccess;
+        return fullSuccess;
     }
 
     @Override
-    public void notify(long playerId, Event event) {
+    public boolean notify(long playerId, Event event) {
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
         // Step 2. Notifying specific player
-        notify(playerId, message);
+        return notify(playerId, message);
     }
 
-    private void notify(final long playerId, final Message message) {
+    private boolean notify(final long playerId, final Message message) {
         try {
-            RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(notificationRegistry.findNotificationServer(playerId));
+            RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(serverRegistryService.getPlayerNotificationRegistry().findNotificationServer(playerId));
             rabbitTemplate.send(String.valueOf(playerId), message);
-        } catch (ExecutionException e) {
-            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
+        } catch (Throwable e) {
+            return false;
         }
+        return true;
     }
 
 }

@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
-import com.gogomaya.server.web.error.GogomayaRESTErrorHandler;
+import com.gogomaya.server.web.error.GogomayaRestErrorHandler;
 
 @Configuration
 @Import({ JsonSpringConfiguration.class })
@@ -34,7 +34,7 @@ public class ClientRestCommonSpringConfiguration {
             }
         }
 
-        restTemplate.setErrorHandler(new GogomayaRESTErrorHandler(objectMapper));
+        restTemplate.setErrorHandler(new GogomayaRestErrorHandler(objectMapper));
         return restTemplate;
     }
 

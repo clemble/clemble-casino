@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.gogomaya.error.GogomayaValidationService;
-import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.registration.PlayerProfileRegistrationServerService;
 import com.gogomaya.server.player.registration.SimplePlayerProfileRegistrationServerService;
 import com.gogomaya.server.player.state.PlayerStateManager;
@@ -30,10 +29,6 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     @Autowired
     @Qualifier("playerProfileRepository")
     public PlayerProfileRepository playerProfileRepository;
-
-    @Autowired
-    @Qualifier("playerNotificationRegistry")
-    public PlayerNotificationRegistry playerNotificationRegistry;
 
     @Autowired
     @Qualifier("gogomayaValidationService")

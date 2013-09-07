@@ -80,7 +80,7 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     }
 
     @Bean
-    public ServerRegistryController serverConfigurationController() {
+    public ServerRegistryController serverRegistryService() {
         return new ServerRegistryController(playerNotificationRegistry, paymentEndpointRegistry);
     }
 
