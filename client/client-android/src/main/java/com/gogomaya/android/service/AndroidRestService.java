@@ -15,9 +15,9 @@ public class AndroidRestService implements RestClientService {
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
-    final private PlayerSecurityClientService securityClientService;
+    final private PlayerSecurityClientService<HttpEntity<?>> securityClientService;
 
-    public AndroidRestService(String baseUrl, RestTemplate restTemplate, PlayerSecurityClientService securityClientService) {
+    public AndroidRestService(String baseUrl, RestTemplate restTemplate, PlayerSecurityClientService<HttpEntity<?>> securityClientService) {
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);
         this.securityClientService = checkNotNull(securityClientService);

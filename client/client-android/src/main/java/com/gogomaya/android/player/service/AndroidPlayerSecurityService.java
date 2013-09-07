@@ -8,7 +8,7 @@ import com.gogomaya.client.player.service.PlayerSecurityClientService;
 import com.gogomaya.player.security.PlayerIdentity;
 import com.gogomaya.web.mapping.WebMapping;
 
-public class AndroidPlayerSecurityService implements PlayerSecurityClientService {
+public class AndroidPlayerSecurityService implements PlayerSecurityClientService<HttpEntity<?>> {
 
     final private PlayerIdentity playerIdentity;
 
@@ -17,14 +17,13 @@ public class AndroidPlayerSecurityService implements PlayerSecurityClientService
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public HttpEntity<?> signGet(String request) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(playerIdentity.getPlayerId()));
         header.add("Content-Type", WebMapping.PRODUCES);
         // Step 2. Generating request
-        return new HttpEntity(header);
+        return new HttpEntity<>(header);
     }
 
     @Override
@@ -34,7 +33,10 @@ public class AndroidPlayerSecurityService implements PlayerSecurityClientService
         header.add("playerId", String.valueOf(playerIdentity.getPlayerId()));
         header.add("Content-Type", WebMapping.PRODUCES);
         // Step 2. Generating request
-        return new HttpEntity(request, header);
+        return new HttpEntity<>(request, header);
     }
 
+    public static PlayerSecurityClientService<HttpEntity<?>> fetch() {
+        return null;
+    }
 }

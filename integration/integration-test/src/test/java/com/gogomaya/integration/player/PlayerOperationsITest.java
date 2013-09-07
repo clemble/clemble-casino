@@ -64,7 +64,9 @@ public class PlayerOperationsITest {
                 .setNickName("mavarazy");
 
         PlayerCredential playerCredential = new PlayerCredential().setEmail("mavarazy@gmail.com").setPassword("23443545");
-        PlayerIdentity playerIdentity = new PlayerIdentity().setSecret(UUID.randomUUID().toString());
+        PlayerIdentity playerIdentity = new PlayerIdentity()
+            .setSecret(UUID.randomUUID().toString())
+            .setDevice(UUID.randomUUID().toString());
 
         PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(profile, playerCredential, playerIdentity);
 
@@ -91,8 +93,12 @@ public class PlayerOperationsITest {
 
         Player player = playerOperations.createPlayer(profile);
 
-        PlayerCredential loginCredential = new PlayerCredential().setEmail(player.getCredential().getEmail()).setPassword(player.getCredential().getPassword());
-        PlayerIdentity playerIdentity = new PlayerIdentity().setSecret(UUID.randomUUID().toString());
+        PlayerCredential loginCredential = new PlayerCredential()
+            .setEmail(player.getCredential().getEmail())
+            .setPassword(player.getCredential().getPassword());
+        PlayerIdentity playerIdentity = new PlayerIdentity()
+            .setSecret(UUID.randomUUID().toString())
+            .setDevice(UUID.randomUUID().toString());
 
         Player loginPlayer = playerOperations.login(new PlayerLoginRequest(playerIdentity, loginCredential));
 

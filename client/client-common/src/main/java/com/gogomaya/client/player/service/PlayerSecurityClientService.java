@@ -1,10 +1,10 @@
 package com.gogomaya.client.player.service;
 
 
-public interface PlayerSecurityClientService {
+public interface PlayerSecurityClientService<T> {
 
-    public <T> T signGet(String request);
+    public T signGet(String request);
 
-    public <T, S> T signUpdate(S request);
+    public <S> T signUpdate(S request);
 
 }

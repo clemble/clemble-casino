@@ -58,7 +58,9 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
         // Step 1. Creating RegistrationRequest for processing
         PlayerCredential playerCredential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(30) + "@gmail.com").setPassword(
                 UUID.randomUUID().toString());
-        PlayerIdentity playerIdentity = new PlayerIdentity().setSecret(UUID.randomUUID().toString());
+        PlayerIdentity playerIdentity = new PlayerIdentity()
+            .setSecret(UUID.randomUUID().toString())
+            .setDevice(UUID.randomUUID().toString());
         PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(playerProfile, playerCredential, playerIdentity);
         // Step 2. Forwarding to appropriate method for processing
         return createPlayer(registrationRequest);
