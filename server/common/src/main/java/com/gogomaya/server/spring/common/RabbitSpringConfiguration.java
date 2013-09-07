@@ -10,6 +10,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -79,8 +80,8 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
         public RestTemplate restTemplate;
 
         @Bean
-        public ServerRegistryService serverRegistryService() {
-            return new RestServerRegistryService("http://ec2-50-16-93-157.compute-1.amazonaws.com/management-web/", restTemplate);
+        public ServerRegistryService serverRegistryService(@Value("${gogomaya.management.url}") String url ) {
+            return new RestServerRegistryService(url, restTemplate);
         }
 
     }
@@ -100,8 +101,8 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public ServerRegistryService serverRegistryService() {
-            return new RestServerRegistryService("http://localhost:9999/management-web/", restTemplate);
+        public ServerRegistryService serverRegistryService(@Value("${gogomaya.management.url ?: 'http://localhost:9999/management-web/'}") String url) {
+            return new RestServerRegistryService(url, restTemplate);
         }
 
     }
@@ -125,8 +126,8 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
         public ServerRegistryService serverRegistryService;
 
         @Bean
-        public ServerRegistryService serverRegistryService() {
-            return serverRegistryService != null ? null : new RestServerRegistryService("http://localhost:8080/management-web/", restTemplate);
+        public ServerRegistryService serverRegistryService(@Value("${gogomaya.management.url ?: 'http://localhost:8080/management-web/'}") String url) {
+            return serverRegistryService != null ? null : new RestServerRegistryService(url, restTemplate);
         }
 
     }
