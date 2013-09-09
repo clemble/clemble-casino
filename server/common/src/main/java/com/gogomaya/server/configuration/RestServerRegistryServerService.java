@@ -8,12 +8,12 @@ import com.gogomaya.server.player.notification.PaymentEndpointRegistry;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.web.management.ManagementWebMapping;
 
-public class RestServerRegistryService implements ServerRegistryService {
+public class RestServerRegistryServerService implements ServerRegistryServerService {
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
 
-    public RestServerRegistryService(String baseUrl, RestTemplate restTemplate) {
+    public RestServerRegistryServerService(String baseUrl, RestTemplate restTemplate) {
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);
     }

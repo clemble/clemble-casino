@@ -1,9 +1,14 @@
 package com.gogomaya.server.spring.integration;
 
+import static com.gogomaya.server.spring.common.SpringConfiguration.INTEGRATION_CLOUD;
+import static com.gogomaya.server.spring.common.SpringConfiguration.INTEGRATION_DEFAULT;
+import static com.gogomaya.server.spring.common.SpringConfiguration.INTEGRATION_TEST;
+
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -36,7 +41,6 @@ import com.gogomaya.server.integration.player.session.WebSessionOperations;
 import com.gogomaya.server.spring.common.JsonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
-import com.gogomaya.server.spring.web.management.AbstractManagementWebSpringConfiguration;
 import com.gogomaya.server.spring.web.management.ManagementWebSpringConfiguration;
 import com.gogomaya.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.gogomaya.server.spring.web.player.PlayerWebSpringConfiguration;
@@ -50,8 +54,7 @@ import com.gogomaya.server.web.player.account.PlayerAccountController;
 @Configuration
 @Import(value = { JsonSpringConfiguration.class,
         TestConfiguration.LocalTestConfiguration.class,
-        TestConfiguration.LocalIntegrationTestConfiguration.class,
-        TestConfiguration.RemoteIntegrationTestConfiguration.class })
+        TestConfiguration.IntegrationTestConfiguration.class})
 public class TestConfiguration {
 
     @Autowired
@@ -131,33 +134,7 @@ public class TestConfiguration {
     }
 
     @Configuration
-    @Profile(value = SpringConfiguration.INTEGRATION_CLOUD)
-    public static class RemoteIntegrationTestConfiguration extends IntegrationTestConfiguration {
-
-        @Override
-        public String getBaseUrl() {
-            return "http://ec2-50-16-93-157.compute-1.amazonaws.com/gogomaya/";
-        }
-
-    }
-
-    @Configuration
-    @Profile(value = SpringConfiguration.INTEGRATION_TEST)
-    public static class LocalIntegrationTestConfiguration extends IntegrationTestConfiguration {
-
-        @Override
-        public String getBaseUrl() {
-            return "http://localhost:9999/";
-        }
-
-    }
-
-    @Configuration
-    @Profile(value = SpringConfiguration.INTEGRATION_DEFAULT)
-    public static class LocalServerIntegrationTestConfiguration extends IntegrationTestConfiguration {
-
-    }
-
+    @Profile({INTEGRATION_TEST, INTEGRATION_CLOUD, INTEGRATION_DEFAULT})
     @Import(ClientRestCommonSpringConfiguration.class)
     public static class IntegrationTestConfiguration {
 
@@ -165,10 +142,14 @@ public class TestConfiguration {
         @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
-        public String getBaseUrl() {
-            return "http://localhost:8080/";
-        }
+        @Value("#{systemProperties['gogomaya.management.url'] ?: 'http://localhost:8080/picpacpoe/'}")
+        public String baseUrl;
 
+        public String getBaseUrl(){
+            String base = baseUrl.substring(0, baseUrl.substring(0, baseUrl.length() - 1).lastIndexOf("/") + 1);
+            return base;
+        }
+        
         @Bean
         @Singleton
         public PlayerListenerOperations playerListenerOperations() {
@@ -199,14 +180,14 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new IntegrationPlayerOperations(getBaseUrl(), restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
+            return new IntegrationPlayerOperations(baseUrl, restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
                     accountOperations());
         }
 
         @Bean
         @Singleton
         public SessionOperations sessionOperations() {
-            return new IntegrationSessionOperations(restTemplate(), getBaseUrl());
+            return new IntegrationSessionOperations(restTemplate(), baseUrl);
         }
 
         @Bean

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.gogomaya.configuration.GameLocation;
 import com.gogomaya.configuration.ResourceLocationService;
+import com.gogomaya.game.Game;
 import com.gogomaya.server.ServerRegistry;
 import com.gogomaya.server.configuration.SimpleNotificationConfigurationService;
 import com.gogomaya.server.configuration.SimpleResourceLocationController;
@@ -45,7 +46,7 @@ public class ManagementWebSpringConfiguration extends AbstractManagementWebSprin
             return new SimpleResourceLocationController(configurationService,
                     "http://localhost:8080/player-web/",
                     "http://localhost:8080/payment-web/",
-                    ImmutableList.<GameLocation> of());
+                    ImmutableList.<GameLocation> of(new GameLocation(Game.num, "http://localhost:8080/integration-game/")));
         }
 
     }
@@ -72,7 +73,7 @@ public class ManagementWebSpringConfiguration extends AbstractManagementWebSprin
             return new SimpleResourceLocationController(configurationService,
                     "http://localhost:9999/player-web/",
                     "http://localhost:9999/payment-web/",
-                    ImmutableList.<GameLocation> of());
+                    ImmutableList.<GameLocation> of(new GameLocation(Game.num, "http://localhost:9999/integration-game/")));
         }
 
     }
@@ -99,7 +100,7 @@ public class ManagementWebSpringConfiguration extends AbstractManagementWebSprin
             return new SimpleResourceLocationController(configurationService,
                     "http://ec2-50-16-93-157.compute-1.amazonaws.com/player-web/",
                     "http://ec2-50-16-93-157.compute-1.amazonaws.com/payment-web/",
-                    ImmutableList.<GameLocation> of());
+                    ImmutableList.<GameLocation> of(new GameLocation(Game.num, "http://ec2-50-16-93-157.compute-1.amazonaws.com/integration-game/")));
         }
 
     }

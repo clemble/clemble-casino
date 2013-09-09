@@ -40,6 +40,7 @@ import com.gogomaya.game.event.schedule.PlayerInvitedEvent;
 import com.gogomaya.game.event.server.GameStartedEvent;
 import com.gogomaya.game.rule.GameRule;
 import com.gogomaya.game.specification.GameSpecification;
+import com.gogomaya.server.integration.NumberState;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.utils.ReflectionUtils;
 import com.stresstest.random.ObjectGenerator;
@@ -72,6 +73,7 @@ public class ObjectMapperTest extends ObjectTest {
         Assert.assertNull(checkSerialization(VisibleGameAccount.class));
         Assert.assertNull(checkSerialization(InvisibleGameAccount.class));
         Assert.assertNull(checkSerialization(BetEvent.class));
+        Assert.assertNull(checkSerialization(NumberState.class));
     }
 
     @Test

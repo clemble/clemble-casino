@@ -5,15 +5,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.server.configuration.ServerRegistryService;
+import com.gogomaya.server.configuration.ServerRegistryServerService;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
 public class RestPaymentTransactionServerService implements PaymentTransactionServerService {
 
     final private RestTemplate restTemplate;
-    final private ServerRegistryService serverRegistryService;
+    final private ServerRegistryServerService serverRegistryService;
 
-    public RestPaymentTransactionServerService(ServerRegistryService serverRegistryService, RestTemplate restTemplate) {
+    public RestPaymentTransactionServerService(ServerRegistryServerService serverRegistryService, RestTemplate restTemplate) {
         this.serverRegistryService = checkNotNull(serverRegistryService);
         this.restTemplate = checkNotNull(restTemplate);
     }

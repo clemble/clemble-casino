@@ -12,15 +12,15 @@ import org.springframework.web.client.RestTemplate;
 import com.gogomaya.money.Money;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerProfile;
-import com.gogomaya.server.configuration.ServerRegistryService;
+import com.gogomaya.server.configuration.ServerRegistryServerService;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
 public class RestPlayerAccountServerService implements PlayerAccountServerService {
 
     final private RestTemplate restTemplate;
-    final private ServerRegistryService serverRegistryService;
+    final private ServerRegistryServerService serverRegistryService;
 
-    public RestPlayerAccountServerService(ServerRegistryService serverRegistryService, RestTemplate restTemplate) {
+    public RestPlayerAccountServerService(ServerRegistryServerService serverRegistryService, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.serverRegistryService = serverRegistryService;
     }

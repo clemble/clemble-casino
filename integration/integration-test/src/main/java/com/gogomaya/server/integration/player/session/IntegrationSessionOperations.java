@@ -31,7 +31,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         // Step 2. Generating request
         HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
         // Step 3. Rest template generation
-        return restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS, HttpMethod.POST, requestEntity,
+        return restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS, HttpMethod.POST, requestEntity,
                 PlayerSession.class, player.getPlayerId()).getBody();
 
     }
@@ -41,7 +41,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         // Step 1. Generating request
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Calling appropriate services
-        return restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, HttpMethod.DELETE, requestEntity,
+        return restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, HttpMethod.DELETE, requestEntity,
                 PlayerSession.class, player.getPlayerId(), session).getBody();
 
     }
@@ -51,7 +51,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         // Step 1. Generating request
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Rest template generation
-        String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
+        String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
         return restTemplate.exchange(refreshUrl, HttpMethod.PUT, requestEntity, PlayerSession.class, player.getPlayerId(), session).getBody();
     }
 
@@ -60,7 +60,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         // Step 1. Generating request
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Rest template generation
-        String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PREFIX + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
+        String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
         return restTemplate.exchange(refreshUrl, HttpMethod.GET, requestEntity, PlayerSession.class, player.getPlayerId(), session).getBody();
     }
 

@@ -11,7 +11,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 
 import com.gogomaya.event.Event;
-import com.gogomaya.server.configuration.ServerRegistryService;
+import com.gogomaya.server.configuration.ServerRegistryServerService;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -32,9 +32,9 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     });
 
     final private MessageConverter messageConverter;
-    final private ServerRegistryService serverRegistryService;
+    final private ServerRegistryServerService serverRegistryService;
 
-    public RabbitPlayerNotificationService(final MessageConverter messageConverter, final ServerRegistryService serverRegistryService) {
+    public RabbitPlayerNotificationService(final MessageConverter messageConverter, final ServerRegistryServerService serverRegistryService) {
         this.messageConverter = checkNotNull(messageConverter);
         this.serverRegistryService = checkNotNull(serverRegistryService);
     }

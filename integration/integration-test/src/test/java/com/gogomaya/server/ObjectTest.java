@@ -43,6 +43,7 @@ import com.gogomaya.player.PlayerCategory;
 import com.gogomaya.player.PlayerGender;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.player.security.PlayerCredential;
+import com.gogomaya.server.integration.NumberState;
 import com.google.common.collect.ImmutableList;
 import com.stresstest.random.AbstractValueGenerator;
 import com.stresstest.random.ObjectGenerator;
@@ -162,6 +163,15 @@ public class ObjectTest {
             }
 
         });
+        ObjectGenerator.register(NumberState.class, new AbstractValueGenerator<NumberState>() {
+
+            @Override
+            public NumberState generate() {
+                return new NumberState(null, null, null);
+            }
+
+        });
+
     }
 
 }

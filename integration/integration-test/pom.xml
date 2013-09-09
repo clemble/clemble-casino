@@ -37,6 +37,10 @@
             <groupId>com.gogomaya.integration</groupId>
             <artifactId>integration-management-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gogomaya.integration</groupId>
+            <artifactId>integration-game</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.ning</groupId>
@@ -83,7 +87,7 @@
                             <includes>
                                 <include>**/*ITest.java</include>
                             </includes>
-                            <argLine>-Dspring.profiles.active=int_test</argLine>
+                            <argLine>-Dspring.profiles.active=int_test -Dgogomaya.management.url=http://localhost:9999/integration-management-web/</argLine>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -118,6 +122,12 @@
                                             <version>${project.version}</version>
                                             <type>war</type>
                                         </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.gogomaya.integration</groupId>
+                                            <artifactId>integration-game</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
@@ -146,7 +156,11 @@
                                         </contextHandler>
                                         <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/integration-management-web.war</war>
-                                            <contextPath>/management-web</contextPath>
+                                            <contextPath>/integration-management-web</contextPath>
+                                        </contextHandler>
+                                        <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/integration-game.war</war>
+                                            <contextPath>/integration-game</contextPath>
                                         </contextHandler>
                                     </contextHandlers>
                                 </configuration>
@@ -168,7 +182,7 @@
                                 </systemProperty>
                                 <systemProperty>
                                     <name>gogomaya.management.url</name>
-                                    <value>http://localhost:9999/management-web/</value>
+                                    <value>http://localhost:9999/integration-management-web/</value>
                                 </systemProperty>
                                 <systemProperty>
                                     <name>spring.profiles.active</name>
@@ -213,7 +227,6 @@
                             <includes>
                                 <include>**/*ITest.java</include>
                             </includes>
-                            <argLine>-Dspring.profiles.active=remoteIntegration -Dmanagement.url=http://localhost:9999/management-web/</argLine>
                         </configuration>
                     </plugin>
                 </plugins>
