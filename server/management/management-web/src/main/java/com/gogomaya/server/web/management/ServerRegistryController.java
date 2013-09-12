@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gogomaya.server.configuration.ServerRegistryServerService;
 import com.gogomaya.server.player.notification.PaymentEndpointRegistry;
@@ -22,12 +23,12 @@ public class ServerRegistryController {
     }
 
     @RequestMapping(value = ManagementWebMapping.MANAGEMENT_CONFIGURATION_NOTIFICATION, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    public PlayerNotificationRegistry getPlayerNotificationRegistry() {
+    public @ResponseBody PlayerNotificationRegistry getPlayerNotificationRegistry() {
         return serverRegistryServerService.getPlayerNotificationRegistry();
     }
 
     @RequestMapping(value = ManagementWebMapping.MANAGEMENT_CONFIGURATION_PAYMENT, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    public PaymentEndpointRegistry getPaymentEndpointRegistry() {
+    public @ResponseBody PaymentEndpointRegistry getPaymentEndpointRegistry() {
         return serverRegistryServerService.getPaymentEndpointRegistry();
     }
 

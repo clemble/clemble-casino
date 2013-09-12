@@ -4,7 +4,7 @@ import com.gogomaya.web.mapping.WebMapping;
 
 public interface GameWebMapping extends WebMapping {
 
-    final public static String GAME_PREFIX = "/game";
+    final public static String GAME_PREFIX = "/picpacpoe-game"; // Temporary
 
     final public static String GAME_SPECIFICATION_OPTIONS = "/options/{name}";
 

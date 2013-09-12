@@ -41,6 +41,7 @@ import com.gogomaya.game.event.server.GameStartedEvent;
 import com.gogomaya.game.rule.GameRule;
 import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.integration.NumberState;
+import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.gogomaya.utils.ReflectionUtils;
 import com.stresstest.random.ObjectGenerator;
@@ -67,6 +68,7 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void testSpecialSerialization() {
+        Assert.assertNull(checkSerialization(SimplePlayerNotificationRegistry.class));
         Assert.assertNull(checkSerialization(GameStartedEvent.class));
         Assert.assertNull(checkSerialization(StubGameState.class));
         Assert.assertNull(checkSerialization(GameAccount.class));

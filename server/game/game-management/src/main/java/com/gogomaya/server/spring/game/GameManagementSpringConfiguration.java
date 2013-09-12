@@ -115,7 +115,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Singleton
         public TableServerRegistry tableServerRegistry() {
             ServerRegistry serverRegistry = new ServerRegistry();
-            serverRegistry.register(10000L, "localhost");
+            serverRegistry.register(10_000L, "localhost");
             return new TableServerRegistry(serverRegistry);
         }
 

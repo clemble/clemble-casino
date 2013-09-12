@@ -39,11 +39,12 @@ public class RestPlayerAccountServerService implements PlayerAccountServerServic
 
     @Override
     public boolean canAfford(Collection<Long> playerId, Money amount) {
-        String urlPostfix = "?player=" + StringUtils.collectionToCommaDelimitedString(playerId) + "&currency=" + amount.getCurrency() + "&amount="
-                + amount.getAmount();
-        return restTemplate.getForEntity(
-                serverRegistryService.getPaymentEndpointRegistry().getPaymentEndpoint() + PaymentWebMapping.PAYMENT_ACCOUNTS + urlPostfix, Boolean.class)
-                .getBody();
+        String url = serverRegistryService.getPaymentEndpointRegistry().getPaymentEndpoint()
+                + PaymentWebMapping.PAYMENT_ACCOUNTS
+                + "?player=" + StringUtils.collectionToCommaDelimitedString(playerId)
+                + "&currency=" + amount.getCurrency()
+                + "&amount=" + amount.getAmount();
+        return restTemplate.getForEntity(url, Boolean.class).getBody();
     }
 
     private <T> HttpEntity<T> sign(T value) {

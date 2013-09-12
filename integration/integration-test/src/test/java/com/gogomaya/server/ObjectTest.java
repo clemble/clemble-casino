@@ -2,8 +2,10 @@ package com.gogomaya.server;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import com.gogomaya.base.ActionLatch;
 import com.gogomaya.event.ClientEvent;
@@ -44,6 +46,7 @@ import com.gogomaya.player.PlayerGender;
 import com.gogomaya.player.PlayerProfile;
 import com.gogomaya.player.security.PlayerCredential;
 import com.gogomaya.server.integration.NumberState;
+import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
 import com.google.common.collect.ImmutableList;
 import com.stresstest.random.AbstractValueGenerator;
 import com.stresstest.random.ObjectGenerator;
@@ -171,7 +174,20 @@ public class ObjectTest {
             }
 
         });
+        ObjectGenerator.register(ServerRegistry.class, new AbstractValueGenerator<ServerRegistry>() {
 
+            @Override
+            public ServerRegistry generate() {
+                return new ServerRegistry(ImmutableList.<Map.Entry<String,String>>of(new ImmutablePair<String, String>("1000000", "host.me")));
+            }
+        });
+        ObjectGenerator.register(SimplePlayerNotificationRegistry.class, new AbstractValueGenerator<SimplePlayerNotificationRegistry>() {
+
+            @Override
+            public SimplePlayerNotificationRegistry generate() {
+                return new SimplePlayerNotificationRegistry(ObjectGenerator.generate(ServerRegistry.class));
+            }
+        });
     }
 
 }

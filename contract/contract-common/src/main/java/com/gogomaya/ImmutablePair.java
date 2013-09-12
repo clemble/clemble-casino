@@ -1,4 +1,4 @@
-package com.gogomaya.client;
+package com.gogomaya;
 
 import java.util.Map.Entry;
 

@@ -46,7 +46,7 @@ public class ServerRegistrySpringConfiguration implements SpringConfiguration {
         public RestTemplate restTemplate;
 
         @Bean
-        public ServerRegistryServerService serverRegistryService(@Value("${gogomaya.management.url ?: 'http://localhost:9999/management-web/'}") String url) {
+        public ServerRegistryServerService serverRegistryService(@Value("${gogomaya.management.url?:http://localhost:9999/picpacpoe-management/}") String url) {
             return new RestServerRegistryServerService(url, restTemplate);
         }
 
@@ -65,7 +65,7 @@ public class ServerRegistrySpringConfiguration implements SpringConfiguration {
         public ServerRegistryServerService realServerRegistryService;
 
         @Bean
-        public ServerRegistryServerService serverRegistryService(@Value("${gogomaya.management.url ?: 'http://localhost:8080/management-web/'}") String url) {
+        public ServerRegistryServerService serverRegistryService(@Value("${gogomaya.management.url?:http://localhost:8080/picpacpoe-management/}") String url) {
             return realServerRegistryService != null ? realServerRegistryService : new RestServerRegistryServerService(url, restTemplate);
         }
 

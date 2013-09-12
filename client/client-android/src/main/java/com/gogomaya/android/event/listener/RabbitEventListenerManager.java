@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gogomaya.client.ImmutablePair;
+import com.gogomaya.ImmutablePair;
 import com.gogomaya.configuration.NotificationConfiguration;
 import com.gogomaya.event.Event;
 import com.gogomaya.event.listener.EventListener;
