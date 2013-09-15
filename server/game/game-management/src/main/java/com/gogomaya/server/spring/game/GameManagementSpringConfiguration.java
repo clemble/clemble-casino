@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.redis.core.RedisTemplate;
 
+import com.gogomaya.event.Event;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.server.ServerRegistry;
@@ -31,7 +31,7 @@ import com.gogomaya.server.payment.PaymentTransactionServerService;
 import com.gogomaya.server.player.account.PlayerAccountServerService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
-import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
@@ -50,7 +50,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("playerStateManager")
-    public PlayerStateManager playerStateManager;
+    public PlayerPresenceServerService playerStateManager;
 
     @Bean
     @Singleton
@@ -129,10 +129,10 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         public PlayerLockService playerLockService;
 
         @Autowired
-        public PlayerStateManager playerStateManager;
+        public PlayerPresenceServerService playerStateManager;
 
         @Autowired
-        public PlayerNotificationService playerNotificationService;
+        public PlayerNotificationService<Event> playerNotificationService;
 
         @Autowired
         public GameConstructionRepository constructionRepository;
@@ -167,10 +167,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Configuration
     @Profile(value = { CLOUD })
     public static class Cloud {
-
-        @Autowired
-        @Qualifier("tableQueueTemplate")
-        public RedisTemplate<byte[], Long> redisTemplate;
 
         @Bean
         @Singleton

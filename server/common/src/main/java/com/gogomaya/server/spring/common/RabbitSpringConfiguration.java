@@ -13,8 +13,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gogomaya.event.Event;
+import com.gogomaya.event.NotificationMapping;
+import com.gogomaya.player.Presence;
 import com.gogomaya.server.configuration.ServerRegistryServerService;
+import com.gogomaya.server.player.notification.PlayerNotificationListenerManger;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
+import com.gogomaya.server.player.notification.RabbitPlayerNotificationManager;
 import com.gogomaya.server.player.notification.RabbitPlayerNotificationService;
 
 @Configuration
@@ -53,9 +58,13 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    @Autowired
-    public PlayerNotificationService playerNotificationService() {
-        return new RabbitPlayerNotificationService(jsonMessageConverter(), serverRegistryService);
+    public PlayerNotificationService<Event> playerNotificationService() {
+        return new RabbitPlayerNotificationService<Event>(NotificationMapping.PLAYER_NOTIFICATION, jsonMessageConverter(), serverRegistryService);
+    }
+
+    @Bean
+    public PlayerNotificationService<Presence> playerStateNotificationService() {
+        return new RabbitPlayerNotificationService<Presence>(NotificationMapping.PLAYER_PRESENCE_NOTIFICATION, jsonMessageConverter(), serverRegistryService);
     }
 
 }

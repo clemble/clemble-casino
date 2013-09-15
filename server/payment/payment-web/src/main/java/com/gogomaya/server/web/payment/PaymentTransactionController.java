@@ -25,7 +25,7 @@ import com.gogomaya.web.mapping.WebMapping;
 import com.gogomaya.web.payment.PaymentWebMapping;
 
 @Controller
-public class PaymentTransactionController implements PaymentTransactionService {
+public class PaymentTransactionController implements PaymentTransactionService, PaymentTransactionServerService {
 
     final private PaymentTransactionServerService paymentTransactionService;
     final private PaymentTransactionRepository paymentTransactionRepository;
@@ -36,9 +36,10 @@ public class PaymentTransactionController implements PaymentTransactionService {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
     }
 
+    @Override
     @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_TRANSACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PaymentTransaction perform(@RequestBody PaymentTransaction paymentTransaction) {
+    public @ResponseBody PaymentTransaction process(@RequestBody PaymentTransaction paymentTransaction) {
         return paymentTransactionService.process(paymentTransaction);
     }
 

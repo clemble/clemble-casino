@@ -24,6 +24,7 @@ public class CollectionUtils {
         return Collections.<T> unmodifiableList(list instanceof List ? (List<? extends T>) list : new ArrayList<>(list));
     }
 
+    @SafeVarargs
     public static <T> List<T> immutableList(T ... list) {
         return immutableList(Arrays.asList(list));
     }

@@ -16,7 +16,7 @@ public class WebPaymentTransactionOperations  extends AbstractPaymentTransaction
 
     @Override
     public PaymentTransaction perform(PaymentTransaction transaction) {
-        return paymentTransactionController.perform(transaction);
+        return paymentTransactionController.process(transaction);
     }
 
     @Override

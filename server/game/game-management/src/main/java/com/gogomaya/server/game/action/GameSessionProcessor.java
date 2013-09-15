@@ -7,6 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.event.Event;
 import com.gogomaya.game.Game;
 import com.gogomaya.game.GameAware;
 import com.gogomaya.game.GameState;
@@ -30,12 +31,12 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
 
     final private GameCacheService<State> cacheService;
     final private GameTableFactory<State> tableFactory;
-    final private PlayerNotificationService notificationService;
+    final private PlayerNotificationService<Event> notificationService;
 
     public GameSessionProcessor(final Game game,
             final GameTableFactory<State> tableFactory,
             final GameCacheService<State> cacheService,
-            final PlayerNotificationService notificationService) {
+            final PlayerNotificationService<Event> notificationService) {
         this.game = game;
         this.notificationService = checkNotNull(notificationService);
         this.tableFactory = checkNotNull(tableFactory);

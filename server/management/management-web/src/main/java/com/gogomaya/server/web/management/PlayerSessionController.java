@@ -2,8 +2,6 @@ package com.gogomaya.server.web.management;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Date;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +15,7 @@ import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
 import com.gogomaya.player.security.PlayerSession;
 import com.gogomaya.player.service.PlayerSessionService;
-import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 import com.gogomaya.server.repository.player.PlayerSessionRepository;
 import com.gogomaya.web.management.ManagementWebMapping;
 import com.gogomaya.web.mapping.WebMapping;
@@ -27,26 +25,24 @@ public class PlayerSessionController implements PlayerSessionService {
 
     final private ResourceLocationService resourceLocationService;
     final private PlayerSessionRepository sessionRepository;
-    final private PlayerStateManager stateManager;
+    final private PlayerPresenceServerService playerPresenceService;
 
     public PlayerSessionController(final ResourceLocationService resourceLocationService,
             final PlayerSessionRepository sessionRepository,
-            final PlayerStateManager stateManager) {
+            final PlayerPresenceServerService stateManager) {
         this.resourceLocationService = checkNotNull(resourceLocationService);
         this.sessionRepository = checkNotNull(sessionRepository);
-        this.stateManager = checkNotNull(stateManager);
+        this.playerPresenceService = checkNotNull(stateManager);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PlayerSession create(@PathVariable("playerId") long playerId) {
+    public @ResponseBody PlayerSession create(@PathVariable("playerId") long playerId) {
         // Step 1. Generated player session
         PlayerSession playerSession = new PlayerSession().setPlayerId(playerId);
         // Step 2. Providing result as a Session data
-        Date expireTime = stateManager.markAlive(playerId);
-        playerSession.setExpirationTime(expireTime);
+        playerSession.setExpirationTime(playerPresenceService.markOnline(playerId));
         playerSession = sessionRepository.saveAndFlush(playerSession);
         // Step 3. Specifying player resources
         playerSession.setResourceLocations(resourceLocationService.getResources(playerId));
@@ -64,8 +60,7 @@ public class PlayerSessionController implements PlayerSessionService {
         // Step 2. Sanity check
         if (playerSession.expired())
             throw GogomayaException.fromError(GogomayaError.PlayerSessionClosed);
-        Date expireTime = stateManager.refresh(playerId);
-        playerSession.setExpirationTime(expireTime);
+        playerSession.setExpirationTime(playerPresenceService.markOnline(playerId));
         playerSession = sessionRepository.saveAndFlush(playerSession);
         // Step 3. Specifying player resources
         playerSession.setResourceLocations(resourceLocationService.getResources(playerId));
@@ -77,13 +72,13 @@ public class PlayerSessionController implements PlayerSessionService {
     @RequestMapping(method = RequestMethod.DELETE, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    PlayerSession endPlayerSession(@PathVariable("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
+    PlayerSession endPlayerSession(@PathVariable("playerId") long player, @PathVariable("sessionId") long sessionId) {
         // Step 1. Fetching player session
-        PlayerSession playerSession = getPlayerSession(playerId, sessionId);
+        PlayerSession playerSession = getPlayerSession(player, sessionId);
         if (playerSession.expired())
             throw GogomayaException.fromError(GogomayaError.PlayerSessionClosed);
         // Step 2. Notifying all listeners of the state change
-        stateManager.markLeft(playerId);
+        playerPresenceService.markOffline(player);
         // Step 3. Marking player state as ended
         playerSession.markExpired();
         return sessionRepository.saveAndFlush(playerSession);

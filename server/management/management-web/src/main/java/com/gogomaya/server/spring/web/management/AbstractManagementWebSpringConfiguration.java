@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Import;
 
 import com.gogomaya.configuration.ResourceLocationService;
 import com.gogomaya.error.GogomayaValidationService;
+import com.gogomaya.server.configuration.ServerLocation;
 import com.gogomaya.server.configuration.ServerRegistryServerService;
 import com.gogomaya.server.configuration.SimpleServerRegistryServerService;
 import com.gogomaya.server.player.account.PlayerAccountServerService;
-import com.gogomaya.server.player.notification.PaymentEndpointRegistry;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 import com.gogomaya.server.player.registration.PlayerProfileRegistrationServerService;
-import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.player.PlayerCredentialRepository;
 import com.gogomaya.server.repository.player.PlayerIdentityRepository;
 import com.gogomaya.server.repository.player.PlayerSessionRepository;
@@ -34,7 +34,8 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     public PlayerNotificationRegistry playerNotificationRegistry;
 
     @Autowired
-    public PaymentEndpointRegistry paymentEndpointRegistry;
+    @Qualifier("paymentEndpointRegistry")
+    public ServerLocation paymentEndpointRegistry;
 
     @Bean
     @Autowired
@@ -53,7 +54,7 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     public PlayerSessionController playerSessionController(
             ResourceLocationService resourceLocationService,
             PlayerSessionRepository playerSessionRepository,
-            PlayerStateManager playerStateManager) {
+            PlayerPresenceServerService playerStateManager) {
         return new PlayerSessionController(resourceLocationService, playerSessionRepository, playerStateManager);
     }
 

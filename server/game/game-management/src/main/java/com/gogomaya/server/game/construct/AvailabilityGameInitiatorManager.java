@@ -4,17 +4,17 @@ import java.util.Collection;
 
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameInitiation;
-import com.gogomaya.server.player.PlayerState;
-import com.gogomaya.server.player.state.PlayerStateListener;
-import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.player.Presence;
+import com.gogomaya.server.player.notification.PlayerNotificationListener;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 
 public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
 
-    final private PlayerStateManager playerStateManager;
+    final private PlayerPresenceServerService playerPresenceService;
     final private GameInitiatorService initiatorService;
 
-    public AvailabilityGameInitiatorManager(final PlayerStateManager playerStateManager, final GameInitiatorService initiatorService) {
-        this.playerStateManager = playerStateManager;
+    public AvailabilityGameInitiatorManager(final PlayerPresenceServerService playerPresenceService, final GameInitiatorService initiatorService) {
+        this.playerPresenceService = playerPresenceService;
         this.initiatorService = initiatorService;
     }
 
@@ -26,12 +26,12 @@ public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
                 .getSpecification());
         if (!initiatorService.initiate(initiation)) {
             // Step 2.1 Pretty naive implementation of MessageListener functionality
-            playerStateManager.subscribe(participants, new PlayerStateListener() {
+            playerPresenceService.subscribe(participants, new PlayerNotificationListener<Presence>() {
 
                 @Override
-                public void onUpdate(long playerId, PlayerState state) {
+                public void onUpdate(long playerId, Presence state) {
                     if (initiatorService.initiate(initiation))
-                        playerStateManager.unsubscribe(participants, this);
+                        playerPresenceService.unsubscribe(participants, this);
                 }
             });
         }

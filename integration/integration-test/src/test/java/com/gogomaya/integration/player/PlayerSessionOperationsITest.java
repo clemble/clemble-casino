@@ -19,12 +19,11 @@ import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.session.SessionOperations;
 import com.gogomaya.server.integration.util.GogomayaExceptionMatcherFactory;
 import com.gogomaya.server.spring.integration.TestConfiguration;
-import com.gogomaya.server.test.RedisCleaner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
+@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
 public class PlayerSessionOperationsITest {
 
     @Autowired

@@ -28,7 +28,7 @@ public class RestPlayerAccountServerService implements PlayerAccountServerServic
     @Override
     public PlayerAccount register(PlayerProfile playerProfile) {
         HttpEntity<PlayerProfile> request = sign(playerProfile);
-        return restTemplate.postForEntity(serverRegistryService.getPaymentEndpointRegistry().getPaymentEndpoint() + PaymentWebMapping.PAYMENT_ACCOUNTS,
+        return restTemplate.postForEntity(serverRegistryService.getPayment().getLocation() + PaymentWebMapping.PAYMENT_ACCOUNTS,
                 request, PlayerAccount.class).getBody();
     }
 
@@ -39,7 +39,7 @@ public class RestPlayerAccountServerService implements PlayerAccountServerServic
 
     @Override
     public boolean canAfford(Collection<Long> playerId, Money amount) {
-        String url = serverRegistryService.getPaymentEndpointRegistry().getPaymentEndpoint()
+        String url = serverRegistryService.getPayment().getLocation()
                 + PaymentWebMapping.PAYMENT_ACCOUNTS
                 + "?player=" + StringUtils.collectionToCommaDelimitedString(playerId)
                 + "&currency=" + amount.getCurrency()

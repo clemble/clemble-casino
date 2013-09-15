@@ -9,9 +9,9 @@ import com.gogomaya.configuration.GameLocation;
 import com.gogomaya.configuration.ResourceLocationService;
 import com.gogomaya.game.Game;
 import com.gogomaya.server.ServerRegistry;
+import com.gogomaya.server.configuration.ServerLocation;
 import com.gogomaya.server.configuration.SimpleNotificationConfigurationService;
 import com.gogomaya.server.configuration.SimpleResourceLocationController;
-import com.gogomaya.server.player.notification.PaymentEndpointRegistry;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
@@ -29,8 +29,8 @@ public class ManagementWebSpringConfiguration extends AbstractManagementWebSprin
     public static class DefaultAndTest {
 
         @Bean
-        public PaymentEndpointRegistry paymentEndpointRegistry(){
-            return new PaymentEndpointRegistry("http://localhost:8080/payment-web/");
+        public ServerLocation paymentEndpointRegistry(){
+            return new ServerLocation("http://localhost:8080/payment-web/");
         }
 
         @Bean
@@ -56,8 +56,8 @@ public class ManagementWebSpringConfiguration extends AbstractManagementWebSprin
     public static class Integration {
 
         @Bean
-        public PaymentEndpointRegistry paymentEndpointRegistry(){
-            return new PaymentEndpointRegistry("http://localhost:9999/payment-web/");
+        public ServerLocation paymentEndpointRegistry(){
+            return new ServerLocation("http://localhost:9999/payment-web/");
         }
 
         @Bean
@@ -83,8 +83,8 @@ public class ManagementWebSpringConfiguration extends AbstractManagementWebSprin
     public static class Cloud {
 
         @Bean
-        public PaymentEndpointRegistry paymentEndpointRegistry(){
-            return new PaymentEndpointRegistry("http://ec2-50-16-93-157.compute-1.amazonaws.com/payment-web/");
+        public ServerLocation paymentEndpointRegistry(){
+            return new ServerLocation("http://ec2-50-16-93-157.compute-1.amazonaws.com/payment-web/");
         }
 
         @Bean

@@ -11,14 +11,15 @@ import java.util.concurrent.ExecutionException;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
-import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.construct.AutomaticGameRequest;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.game.specification.SpecificationName;
+import com.gogomaya.player.PlayerPresence;
+import com.gogomaya.player.Presence;
 import com.gogomaya.server.player.lock.PlayerLockService;
-import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -72,12 +73,12 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
     final private GameInitiatorService initiatorService;
 
     final private PlayerLockService playerLockService;
-    final private PlayerStateManager playerStateManager;
+    final private PlayerPresenceServerService playerStateManager;
 
     public AutomaticConstructionManager(final GameInitiatorService initiatorService,
             final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService,
-            final PlayerStateManager playerStateManager) {
+            final PlayerPresenceServerService playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
         this.constructionRepository = checkNotNull(constructionRepository);
         this.playerLockService = checkNotNull(playerLockService);
@@ -89,9 +90,9 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
         // Step 1. Sanity check
         if (request == null)
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
-        Long activeSession = playerStateManager.getActiveSession(request.getPlayerId());
-        if (activeSession != null && activeSession != SessionAware.DEFAULT_SESSION) {
-            GameConstruction activeConstruction = constructionRepository.findOne(activeSession);
+        PlayerPresence playerPresence = playerStateManager.getPresence(request.getPlayerId());
+        if (playerPresence.getPresence() == Presence.playing) {
+            GameConstruction activeConstruction = constructionRepository.findOne(playerPresence.getSession());
             if (activeConstruction != null)
                 return activeConstruction;
         }

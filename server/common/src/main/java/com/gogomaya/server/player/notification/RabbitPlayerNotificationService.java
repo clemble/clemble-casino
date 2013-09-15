@@ -16,7 +16,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class RabbitPlayerNotificationService implements PlayerNotificationService {
+public class RabbitPlayerNotificationService<T extends Event>  implements PlayerNotificationService<T> {
 
     final private LoadingCache<String, RabbitTemplate> RABBIT_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<String, RabbitTemplate>() {
 
@@ -31,16 +31,18 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
 
     });
 
+    final private String postfix;
     final private MessageConverter messageConverter;
     final private ServerRegistryServerService serverRegistryService;
 
-    public RabbitPlayerNotificationService(final MessageConverter messageConverter, final ServerRegistryServerService serverRegistryService) {
+    public RabbitPlayerNotificationService(final String postfix, final MessageConverter messageConverter, final ServerRegistryServerService serverRegistryService) {
+        this.postfix = checkNotNull(postfix);
         this.messageConverter = checkNotNull(messageConverter);
         this.serverRegistryService = checkNotNull(serverRegistryService);
     }
 
     @Override
-    public boolean notify(final Collection<Long> playerIds, final Event event) {
+    public boolean notify(final Collection<Long> playerIds, final T event) {
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
         // Step 2. Notifying specific player
@@ -51,16 +53,16 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     }
 
     @Override
-    public boolean notify(final Collection<Long> playerIds, final Collection<? extends Event> events) {
+    public boolean notify(final Collection<Long> playerIds, final Collection<? extends T> events) {
         // Step 1. Notifying each event one after another
         boolean fullSuccess = true;
-        for (Event event : events)
+        for (T event : events)
             fullSuccess = notify(playerIds, event) & fullSuccess;
         return fullSuccess;
     }
 
     @Override
-    public boolean notify(long playerId, Event event) {
+    public boolean notify(long playerId, T event) {
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
         // Step 2. Notifying specific player
@@ -70,7 +72,7 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     private boolean notify(final long playerId, final Message message) {
         try {
             RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(serverRegistryService.getPlayerNotificationRegistry().findNotificationServer(playerId));
-            rabbitTemplate.send(String.valueOf(playerId), message);
+            rabbitTemplate.send(String.valueOf(playerId) + postfix, message);
         } catch (Throwable e) {
             return false;
         }

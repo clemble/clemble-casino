@@ -22,13 +22,12 @@ import com.gogomaya.server.integration.player.PlayerOperations;
 import com.gogomaya.server.integration.player.profile.ProfileOperations;
 import com.gogomaya.server.integration.util.GogomayaExceptionMatcherFactory;
 import com.gogomaya.server.spring.integration.TestConfiguration;
-import com.gogomaya.server.test.RedisCleaner;
 import com.stresstest.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
+@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
 public class PlayerProfileOperationsITest {
 
     @Autowired

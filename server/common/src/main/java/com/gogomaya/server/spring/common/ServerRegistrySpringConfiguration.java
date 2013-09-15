@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.server.ServerRegistry;
+import com.gogomaya.server.configuration.ServerLocation;
 import com.gogomaya.server.configuration.RestServerRegistryServerService;
 import com.gogomaya.server.configuration.ServerRegistryServerService;
-import com.gogomaya.server.player.notification.PaymentEndpointRegistry;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
@@ -91,9 +91,10 @@ public class ServerRegistrySpringConfiguration implements SpringConfiguration {
                 }
 
                 @Override
-                public PaymentEndpointRegistry getPaymentEndpointRegistry() {
-                    return new PaymentEndpointRegistry("http://localhost:8080/payment-web/");
+                public ServerLocation getPayment() {
+                    return new ServerLocation("http://localhost:8080/payment-web/");
                 }
+
             };
         }
 

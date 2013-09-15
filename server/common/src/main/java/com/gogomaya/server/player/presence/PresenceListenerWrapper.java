@@ -1,4 +1,4 @@
-package com.gogomaya.server.player.state;
+package com.gogomaya.server.player.presence;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -6,14 +6,15 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-import com.gogomaya.server.player.PlayerState;
+import com.gogomaya.player.Presence;
+import com.gogomaya.server.player.notification.PlayerNotificationListener;
 
-public class PlayerStateListenerWrapper implements MessageListener {
+public class PresenceListenerWrapper implements MessageListener {
 
     final private RedisSerializer<String> stringRedisSerializer;
-    final private PlayerStateListener playerStateListener;
+    final private PlayerNotificationListener<Presence> playerStateListener;
 
-    public PlayerStateListenerWrapper(RedisSerializer<String> stringRedisSerializer, PlayerStateListener playerStateListener) {
+    public PresenceListenerWrapper(RedisSerializer<String> stringRedisSerializer, PlayerNotificationListener<Presence> playerStateListener) {
         this.stringRedisSerializer = checkNotNull(stringRedisSerializer);
         this.playerStateListener = checkNotNull(playerStateListener);
     }
@@ -24,7 +25,7 @@ public class PlayerStateListenerWrapper implements MessageListener {
         String deserializedChannel = stringRedisSerializer.deserialize(message.getChannel());
         String deserializedMessage = stringRedisSerializer.deserialize(message.getBody());
         // Step 2. Notifying associated PlayerStateListener
-        playerStateListener.onUpdate(Long.valueOf(deserializedChannel), PlayerState.valueOf(deserializedMessage));
+        playerStateListener.onUpdate(Long.valueOf(deserializedChannel), Presence.valueOf(deserializedMessage));
 
     }
 
@@ -45,7 +46,7 @@ public class PlayerStateListenerWrapper implements MessageListener {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerStateListenerWrapper other = (PlayerStateListenerWrapper) obj;
+        PresenceListenerWrapper other = (PresenceListenerWrapper) obj;
         if (playerStateListener == null) {
             if (other.playerStateListener != null)
                 return false;

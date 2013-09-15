@@ -13,6 +13,7 @@ import com.gogomaya.player.SocialConnectionData;
 import com.gogomaya.server.player.registration.PlayerProfileRegistrationServerService;
 import com.gogomaya.server.player.registration.RestPlayerProfileRegistrationServerService;
 import com.gogomaya.server.spring.common.CommonSpringConfiguration;
+import com.gogomaya.server.spring.common.PlayerPresenceSpringConfiguration;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration.IntegrationCloudPlayerConfiguration;
 import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration.IntegrationPlayerConfiguration;
@@ -21,8 +22,12 @@ import com.gogomaya.server.spring.player.PlayerCommonSpringConfiguration.TestPla
 import com.gogomaya.server.spring.web.ClientRestCommonSpringConfiguration;
 
 @Configuration
-@Import({ PlayerRedisSpringConfiguration.class, CommonSpringConfiguration.class, IntegrationCloudPlayerConfiguration.class,
-        IntegrationTestPlayerConfiguration.class, IntegrationPlayerConfiguration.class, TestPlayerConfiguration.class })
+@Import({ CommonSpringConfiguration.class,
+    IntegrationCloudPlayerConfiguration.class,
+    IntegrationTestPlayerConfiguration.class,
+    IntegrationPlayerConfiguration.class,
+    TestPlayerConfiguration.class,
+    PlayerPresenceSpringConfiguration.class })
 public class PlayerCommonSpringConfiguration implements SpringConfiguration {
 
     @Configuration
@@ -69,7 +74,7 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = {UNIT_TEST })
+    @Profile(value = { UNIT_TEST })
     public static class TestPlayerConfiguration {
 
         @Bean

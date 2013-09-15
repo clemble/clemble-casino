@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.gogomaya.error.GogomayaValidationService;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 import com.gogomaya.server.player.registration.PlayerProfileRegistrationServerService;
 import com.gogomaya.server.player.registration.SimplePlayerProfileRegistrationServerService;
-import com.gogomaya.server.player.state.PlayerStateManager;
 import com.gogomaya.server.repository.player.PlayerProfileRepository;
 import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.common.SpringConfiguration;
@@ -36,7 +36,7 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("playerStateManager")
-    public PlayerStateManager playerStateManager;
+    public PlayerPresenceServerService playerStateManager;
 
     @Bean
     public PlayerProfileController playerProfileController() {

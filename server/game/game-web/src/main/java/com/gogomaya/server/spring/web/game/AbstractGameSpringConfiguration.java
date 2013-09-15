@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 
+import com.gogomaya.event.Event;
 import com.gogomaya.game.Game;
 import com.gogomaya.game.GameState;
 import com.gogomaya.server.game.action.GameProcessorFactory;
@@ -31,7 +32,7 @@ import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.player.account.PlayerAccountServerService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
-import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.repository.game.GameSpecificationRepository;
@@ -65,7 +66,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Autowired
     @Qualifier("playerNotificationService")
-    public PlayerNotificationService playerNotificationService;
+    public PlayerNotificationService<Event> playerNotificationService;
 
     @Autowired
     @Qualifier("gamePriceAspectFactory")
@@ -97,7 +98,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Autowired
     @Qualifier("playerStateManager")
-    public PlayerStateManager playerStateManager;
+    public PlayerPresenceServerService playerStateManager;
 
     @Autowired
     @Qualifier("playerLockService")

@@ -17,9 +17,10 @@ import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
 import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.player.PlayerPresence;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
 import com.gogomaya.server.payment.PaymentTransactionServerService;
-import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 
 public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<State> implements GameAware {
 
@@ -29,10 +30,10 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
     private static final long serialVersionUID = -5737576972775889894L;
 
     final private Game game;
-    final private PlayerStateManager activePlayerQueue;
+    final private PlayerPresenceServerService activePlayerQueue;
     final private PaymentTransactionServerService paymentTransactionService;
 
-    public GameOutcomeAspect(final Game game, final PlayerStateManager activePlayerQueue, final PaymentTransactionServerService paymentTransactionService) {
+    public GameOutcomeAspect(final Game game, final PlayerPresenceServerService activePlayerQueue, final PaymentTransactionServerService paymentTransactionService) {
         this.game = game;
         this.activePlayerQueue = checkNotNull(activePlayerQueue);
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
@@ -47,7 +48,7 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
     public void afterGame(GameSession<State> session, GameServerEvent<State> madeMoves) {
         session.setSessionState(GameSessionState.finished);
         for (long player : session.getState().getPlayerIterator().getPlayers())
-            activePlayerQueue.markAvailable(player);
+            activePlayerQueue.markOnline(player);
 
         GameOutcome outcome = session.getState().getOutcome();
         if (outcome instanceof PlayerWonOutcome) {

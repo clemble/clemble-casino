@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gogomaya.base.ActionLatch;
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
+import com.gogomaya.event.Event;
 import com.gogomaya.game.construct.AutomaticGameRequest;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameConstructionState;
@@ -21,7 +22,7 @@ import com.gogomaya.money.Money;
 import com.gogomaya.server.player.account.PlayerAccountServerService;
 import com.gogomaya.server.player.lock.PlayerLockService;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
-import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 
 public class SimpleGameConstructionServerService implements GameConstructionServerService {
@@ -29,16 +30,16 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
     final private AutomaticConstructionManager automaticGameInitiatorManager;
 
     final private PlayerAccountServerService playerAccounttService;
-    final private PlayerNotificationService playerNotificationService;
+    final private PlayerNotificationService<Event> playerNotificationService;
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
 
     public SimpleGameConstructionServerService(final PlayerAccountServerService playerAccountService,
-            final PlayerNotificationService playerNotificationService,
+            final PlayerNotificationService<Event> playerNotificationService,
             final GameConstructionRepository constructionRepository,
             final GameInitiatorService initiatorService,
             final PlayerLockService playerLockService,
-            final PlayerStateManager playerStateManager) {
+            final PlayerPresenceServerService playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
         this.playerAccounttService = checkNotNull(playerAccountService);
         this.playerNotificationService = checkNotNull(playerNotificationService);

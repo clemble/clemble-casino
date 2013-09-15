@@ -10,21 +10,22 @@ import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.game.construct.GameRequest;
 import com.gogomaya.server.game.action.GameSessionProcessor;
-import com.gogomaya.server.player.state.PlayerStateManager;
+import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 
 public class SimpleGameInitiatorService implements GameInitiatorService {
 
-    final private PlayerStateManager playerStateManager;
+    final private PlayerPresenceServerService playerStateManager;
 
     final private GameSessionProcessor<?> processor;
 
     final private AvailabilityGameInitiatorManager availabilityGameInitiatorManager;
 
-    public SimpleGameInitiatorService(final GameSessionProcessor<?> stateFactory, final PlayerStateManager playerStateManager) {
+    public SimpleGameInitiatorService(final GameSessionProcessor<?> stateFactory,
+            final PlayerPresenceServerService playerPresenceService) {
         this.processor = checkNotNull(stateFactory);
-        this.playerStateManager = checkNotNull(playerStateManager);
+        this.playerStateManager = checkNotNull(playerPresenceService);
 
-        this.availabilityGameInitiatorManager = new AvailabilityGameInitiatorManager(playerStateManager, this);
+        this.availabilityGameInitiatorManager = new AvailabilityGameInitiatorManager(checkNotNull(playerPresenceService), this);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class SimpleGameInitiatorService implements GameInitiatorService {
 
     @Override
     public boolean initiate(GameInitiation initiation) {
-        if (playerStateManager.markBusy(initiation.getParticipants(), initiation.getSession())) {
+        if (playerStateManager.markPlaying(initiation.getParticipants(), initiation.getSession())) {
             processor.start(initiation);
             return true;
         }

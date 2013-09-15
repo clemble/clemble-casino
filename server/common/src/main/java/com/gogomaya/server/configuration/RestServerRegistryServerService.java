@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.web.client.RestTemplate;
 
-import com.gogomaya.server.player.notification.PaymentEndpointRegistry;
 import com.gogomaya.server.player.notification.PlayerNotificationRegistry;
 import com.gogomaya.web.management.ManagementWebMapping;
 
@@ -24,8 +23,8 @@ public class RestServerRegistryServerService implements ServerRegistryServerServ
     }
 
     @Override
-    public PaymentEndpointRegistry getPaymentEndpointRegistry() {
-        return restTemplate.getForEntity(baseUrl + ManagementWebMapping.MANAGEMENT_CONFIGURATION_PAYMENT, PaymentEndpointRegistry.class).getBody();
+    public ServerLocation getPayment() {
+        return restTemplate.getForEntity(baseUrl + ManagementWebMapping.MANAGEMENT_CONFIGURATION_PAYMENT, ServerLocation.class).getBody();
     }
 
 }
