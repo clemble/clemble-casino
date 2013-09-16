@@ -28,22 +28,22 @@ import com.google.common.collect.ImmutableList;
 @ActiveProfiles(SpringConfiguration.UNIT_TEST)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { PlayerCommonSpringConfiguration.class })
-public class PlayerStateManagerTest {
+public class PlayerPresenceServerServiceTest {
 
     final private Random RANDOM = new Random();
 
     @Autowired
-    public PlayerPresenceServerService playerPresenceState;
+    public PlayerPresenceServerService playerPresenceService;
 
     @Test
     public void testMarkAvailable() {
         long player = new Random().nextLong();
 
-        Assert.assertFalse(playerPresenceState.isAvailable(player));
+        Assert.assertFalse(playerPresenceService.isAvailable(player));
 
-        playerPresenceState.markOnline(player);
+        playerPresenceService.markOnline(player);
 
-        Assert.assertTrue(playerPresenceState.isAvailable(player));
+        Assert.assertTrue(playerPresenceService.isAvailable(player));
     }
 
     @Test(expected = GogomayaException.class)
@@ -51,9 +51,9 @@ public class PlayerStateManagerTest {
         long player = RANDOM.nextLong();
         long session = RANDOM.nextLong();
 
-        Assert.assertFalse(playerPresenceState.isAvailable(player));
+        Assert.assertFalse(playerPresenceService.isAvailable(player));
 
-        playerPresenceState.markPlaying(player, session);
+        playerPresenceService.markPlaying(player, session);
     }
 
     @Test
@@ -61,16 +61,16 @@ public class PlayerStateManagerTest {
         long player = RANDOM.nextLong();
         long session = RANDOM.nextLong();
 
-        Assert.assertFalse(playerPresenceState.isAvailable(player));
+        Assert.assertFalse(playerPresenceService.isAvailable(player));
 
-        playerPresenceState.markOnline(player);
+        playerPresenceService.markOnline(player);
 
-        Assert.assertTrue(playerPresenceState.isAvailable(player));
+        Assert.assertTrue(playerPresenceService.isAvailable(player));
 
-        playerPresenceState.markPlaying(player, session);
+        playerPresenceService.markPlaying(player, session);
 
-        Assert.assertFalse("Player must not be available", playerPresenceState.isAvailable(player));
-        Assert.assertEquals("Player active session must match", playerPresenceState.getPresence(player).getSession(), session);
+        Assert.assertFalse("Player must not be available", playerPresenceService.isAvailable(player));
+        Assert.assertEquals("Player active session must match", playerPresenceService.getPresence(player).getSession(), session);
     }
 
     @Test
@@ -81,17 +81,17 @@ public class PlayerStateManagerTest {
         long session = RANDOM.nextLong();
 
         for (Long player : players) {
-            Assert.assertFalse(playerPresenceState.isAvailable(player));
-            playerPresenceState.markOnline(player);
-            Assert.assertTrue(playerPresenceState.isAvailable(player));
+            Assert.assertFalse(playerPresenceService.isAvailable(player));
+            playerPresenceService.markOnline(player);
+            Assert.assertTrue(playerPresenceService.isAvailable(player));
         }
 
-        playerPresenceState.markPlaying(players, session);
+        playerPresenceService.markPlaying(players, session);
 
-        Assert.assertFalse("None of the players supposed to be available ", playerPresenceState.areAvailable(players));
+        Assert.assertFalse("None of the players supposed to be available ", playerPresenceService.areAvailable(players));
         for (Long player : players) {
-            Assert.assertFalse(playerPresenceState.isAvailable(player));
-            Assert.assertEquals(playerPresenceState.getPresence(player).getSession(), session);
+            Assert.assertFalse(playerPresenceService.isAvailable(player));
+            Assert.assertEquals(playerPresenceService.getPresence(player).getSession(), session);
         }
     }
 
@@ -103,15 +103,15 @@ public class PlayerStateManagerTest {
     @Test
     public void testMarkActiveInParrallel() {
         final long genericPlayer = RANDOM.nextLong();
-        playerPresenceState.markOnline(genericPlayer);
-        Assert.assertTrue(playerPresenceState.isAvailable(genericPlayer));
+        playerPresenceService.markOnline(genericPlayer);
+        Assert.assertTrue(playerPresenceService.isAvailable(genericPlayer));
 
         final CountDownLatch startLatch = new CountDownLatch(MARK_ACTIVE_IN_PARRALLEL_THREADS);
         final CountDownLatch endLatch = new CountDownLatch(MARK_ACTIVE_IN_PARRALLEL_THREADS);
         final AtomicInteger numLocksReceived = new AtomicInteger(0);
 
         final PlayerListener playerListener = new PlayerListener(1);
-        playerPresenceState.subscribe(genericPlayer, playerListener);
+        playerPresenceService.subscribe(genericPlayer, playerListener);
 
         try {
             Thread.sleep(10);
@@ -124,15 +124,15 @@ public class PlayerStateManagerTest {
                 public void run() {
                     try {
                         long anotherPlayer = RANDOM.nextLong();
-                        playerPresenceState.markOnline(anotherPlayer);
-                        Assert.assertTrue(playerPresenceState.isAvailable(anotherPlayer));
+                        playerPresenceService.markOnline(anotherPlayer);
+                        Assert.assertTrue(playerPresenceService.isAvailable(anotherPlayer));
 
                         List<Long> participants = ImmutableList.<Long> of(genericPlayer, anotherPlayer);
                         long randomSession = RANDOM.nextLong();
                         startLatch.countDown();
                         startLatch.await();
 
-                        if (playerPresenceState.markPlaying(participants, randomSession))
+                        if (playerPresenceService.markPlaying(participants, randomSession))
                             numLocksReceived.incrementAndGet();
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
@@ -165,14 +165,14 @@ public class PlayerStateManagerTest {
         long player = RANDOM.nextLong();
 
         PlayerListener playerListener = new PlayerListener(1);
-        playerPresenceState.subscribe(player, playerListener);
+        playerPresenceService.subscribe(player, playerListener);
         // There is a timeout between listen
         try {
             Thread.sleep(10);
         } catch (InterruptedException e1) {
         }
 
-        playerPresenceState.markOnline(player);
+        playerPresenceService.markOnline(player);
 
         playerListener.countDownLatch.await(1, TimeUnit.SECONDS);
 
@@ -186,14 +186,14 @@ public class PlayerStateManagerTest {
         long player = RANDOM.nextLong();
 
         PlayerListener playerListener = new PlayerListener(3);
-        playerPresenceState.subscribe(player, playerListener);
+        playerPresenceService.subscribe(player, playerListener);
         // There is a timeout between listen
 
         Thread.sleep(50);
 
-        playerPresenceState.markOnline(player);
-        playerPresenceState.markPlaying(player, RANDOM.nextLong());
-        playerPresenceState.markOnline(player);
+        playerPresenceService.markOnline(player);
+        playerPresenceService.markPlaying(player, RANDOM.nextLong());
+        playerPresenceService.markOnline(player);
 
         playerListener.countDownLatch.await(1, TimeUnit.SECONDS);
 

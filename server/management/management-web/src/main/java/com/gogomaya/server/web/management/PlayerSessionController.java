@@ -29,10 +29,10 @@ public class PlayerSessionController implements PlayerSessionService {
 
     public PlayerSessionController(final ResourceLocationService resourceLocationService,
             final PlayerSessionRepository sessionRepository,
-            final PlayerPresenceServerService stateManager) {
+            final PlayerPresenceServerService playerPresenceService) {
         this.resourceLocationService = checkNotNull(resourceLocationService);
         this.sessionRepository = checkNotNull(sessionRepository);
-        this.playerPresenceService = checkNotNull(stateManager);
+        this.playerPresenceService = checkNotNull(playerPresenceService);
     }
 
     @Override

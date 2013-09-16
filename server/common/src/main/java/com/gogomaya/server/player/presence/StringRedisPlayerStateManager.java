@@ -29,23 +29,28 @@ import com.gogomaya.game.SessionAware;
 import com.gogomaya.player.PlayerPresence;
 import com.gogomaya.player.Presence;
 import com.gogomaya.server.player.notification.PlayerNotificationListener;
+import com.gogomaya.server.player.notification.PlayerNotificationService;
 
 public class StringRedisPlayerStateManager implements PlayerPresenceServerService {
 
     final private Logger LOGGER = LoggerFactory.getLogger(StringRedisPlayerStateManager.class);
 
     final private long EXPIRATION_TIME = TimeUnit.MINUTES.toMillis(20);
-
     final private String ZERO_SESSION = String.valueOf(SessionAware.DEFAULT_SESSION);
 
     final private StringRedisTemplate redisTemplate;
     final private RedisSerializer<String> stringRedisSerializer;
     final private RedisMessageListenerContainer listenerContainer;
+    final private PlayerNotificationService<PlayerPresence> presenceNotification;
 
-    public StringRedisPlayerStateManager(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer) {
+    public StringRedisPlayerStateManager(
+            StringRedisTemplate redisTemplate,
+            RedisMessageListenerContainer listenerContainer,
+            PlayerNotificationService<PlayerPresence> presenceNotification) {
         this.redisTemplate = checkNotNull(redisTemplate);
         this.stringRedisSerializer = redisTemplate.getStringSerializer();
-        this.listenerContainer = listenerContainer;
+        this.listenerContainer = checkNotNull(listenerContainer);
+        this.presenceNotification = checkNotNull(presenceNotification);
     }
 
     public Long getActiveSession(long playerId) {
@@ -126,7 +131,9 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         });
         // Step 2. If atomic update success, then move on
         if (updated) {
-            notifyStateChange(players, Presence.playing);
+            for(long player: players) {
+                notifyStateChange(PlayerPresence.playing(player, sessionId));
+            }
         }
         // Step 3. Returning result of operation
         return updated;
@@ -134,8 +141,10 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
 
     @Override
     public void markOffline(long player) {
+        // Step 1. Removing associated key from the list
         redisTemplate.delete(String.valueOf(player));
-        notifyStateChange(player, Presence.offline);
+        // Step 2. Notifying listeners of state change
+        notifyStateChange(PlayerPresence.offline(player));
     }
 
     @Override
@@ -146,7 +155,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         valueOperations.set(ZERO_SESSION);
         valueOperations.expireAt(newExpirationTime);
         // Step 2. Sending notification, for player state update
-        notifyStateChange(playerId, Presence.online);
+        notifyStateChange(PlayerPresence.online(playerId));
         return newExpirationTime;
     }
 
@@ -181,23 +190,19 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         return playerTopics;
     }
 
-    private void notifyStateChange(final Collection<Long> players, final Presence state) {
-        for (Long player : players)
-            notifyStateChange(player, state);
-    }
-
-    private void notifyStateChange(final long playerId, final Presence state) {
+    private void notifyStateChange(final PlayerPresence newPresence) {
+        // Step 1. Notifying through native Redis mechanisms
         Long numUpdatedClients = redisTemplate.execute(new RedisCallback<Long>() {
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
                 // Step 1. Generating channel byte array from player identifier
-                byte[] channel = redisTemplate.getStringSerializer().serialize(String.valueOf(playerId));
-                byte[] message = redisTemplate.getStringSerializer().serialize(state.name());
+                byte[] channel = redisTemplate.getStringSerializer().serialize(String.valueOf(newPresence.getPlayerId()));
+                byte[] message = redisTemplate.getStringSerializer().serialize(newPresence.getPresence().name());
                 // Step 2. Performing actual publish
                 return connection.publish(channel, message);
             }
         });
-
-        LOGGER.debug("Notified of change in {} state {} listeners", playerId, numUpdatedClients);
+        LOGGER.debug("Notified of change in {} state {} listeners", newPresence.getPlayerId(), numUpdatedClients);
+        presenceNotification.notify(newPresence.getPlayerId(), newPresence);
     }
 
 }

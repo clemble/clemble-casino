@@ -3,18 +3,11 @@ package com.gogomaya.player;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.event.Event;
 import com.gogomaya.game.SessionAware;
 
-@Entity
-@Table(name = "PLAYER_PRESENCE")
 public class PlayerPresence implements Event, PlayerAware, SessionAware, PresenceAware {
 
     /**
@@ -22,18 +15,9 @@ public class PlayerPresence implements Event, PlayerAware, SessionAware, Presenc
      */
     private static final long serialVersionUID = 2110453101269621164L;
 
-    @Id
-    @Column(name = "PLAYER_ID")
-    private long playerId;
-
-    @Column(name = "PRESENCE")
-    private Presence presence;
-
-    @Column(name = "SESSION_ID")
-    private long sessionId;
-
-    public PlayerPresence() {
-    }
+    final private long playerId;
+    final private Presence presence;
+    final private long sessionId;
 
     @JsonCreator
     public PlayerPresence(@JsonProperty("playerId") long playerId, @JsonProperty("sessionId") long sessionId, @JsonProperty("presence") Presence presence) {
@@ -47,17 +31,9 @@ public class PlayerPresence implements Event, PlayerAware, SessionAware, Presenc
         return playerId;
     }
 
-    public void setPlayerId(long playerId) {
-        this.playerId = playerId;
-    }
-
     @Override
     public Presence getPresence() {
         return presence;
-    }
-
-    public void setPresence(Presence presence) {
-        this.presence = presence;
     }
 
     @Override
@@ -75,6 +51,10 @@ public class PlayerPresence implements Event, PlayerAware, SessionAware, Presenc
 
     public static PlayerPresence playing(long playerId, long sessionId) {
         return new PlayerPresence(playerId, sessionId, Presence.playing);
+    }
+
+    public static PlayerPresence create(long playerId, Presence presence) {
+        return new PlayerPresence(playerId, SessionAware.DEFAULT_SESSION, presence);
     }
 
     public static Collection<PlayerPresence> playing(Collection<Long> players, long session) {
