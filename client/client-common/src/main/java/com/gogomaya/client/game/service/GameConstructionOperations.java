@@ -12,6 +12,8 @@ public interface GameConstructionOperations {
 
     public ClientEvent getResponce(final long session, final long player);
 
+    public String getGameActionServer(final long sessionId);
+
     public GameConstruction construct(final GameRequest gameRequest);
 
     public GameConstruction accept(final long sessionId);

@@ -60,4 +60,9 @@ public class SimpleGameConstructionOperations implements GameConstructionOperati
         listenersManager.subscribe(new ConstructionEventSelector(sessionId), constructionListener);
     }
 
+    @Override
+    public String getGameActionServer(long sessionId) {
+        return constructionService.getServer(playerId, sessionId);
+    }
+
 }
