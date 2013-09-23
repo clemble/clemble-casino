@@ -1,8 +1,11 @@
 package com.gogomaya.client.game.service;
 
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.event.listener.EventListener;
+import com.gogomaya.event.listener.EventListenersManager;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameRequest;
+import com.gogomaya.game.event.ConstructionEventSelector;
 import com.gogomaya.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.game.event.schedule.InvitationDeclinedEvent;
 import com.gogomaya.game.event.schedule.InvitationResponseEvent;
@@ -11,11 +14,13 @@ import com.gogomaya.game.service.GameConstructionService;
 public class SimpleGameConstructionOperations implements GameConstructionOperations {
 
     final private long playerId;
+    final private EventListenersManager listenersManager;
     final private GameConstructionService constructionService;
 
-    public SimpleGameConstructionOperations(long playerId, GameConstructionService constructionService) {
+    public SimpleGameConstructionOperations(long playerId, GameConstructionService constructionService, EventListenersManager listenersManager) {
         this.playerId = playerId;
         this.constructionService = constructionService;
+        this.listenersManager = listenersManager;
     }
 
     @Override
@@ -46,6 +51,11 @@ public class SimpleGameConstructionOperations implements GameConstructionOperati
     @Override
     public ClientEvent getResponce(long session, long player) {
         return constructionService.getResponce(playerId, session, player);
+    }
+
+    @Override
+    public void subscribe(long sessionId, EventListener constructionListener) {
+        listenersManager.subscribe(new ConstructionEventSelector(sessionId), constructionListener);
     }
 
 }
