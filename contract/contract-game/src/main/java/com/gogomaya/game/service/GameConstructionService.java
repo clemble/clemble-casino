@@ -13,6 +13,8 @@ public interface GameConstructionService {
 
     public ClientEvent getResponce(final long requester, final long session, final long player);
 
-    public GameConstruction invitationResponsed(final long playerId, long sessionId, final InvitationResponseEvent gameRequest);
+    public GameConstruction reply(final long playerId, long sessionId, final InvitationResponseEvent gameRequest);
+
+    public String getServer(final long playerId, long sessionId);
 
 }

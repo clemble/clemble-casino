@@ -1,8 +1,7 @@
-package com.gogomaya.game.event;
+package com.gogomaya.event.listener;
 
 import com.gogomaya.event.Event;
 import com.gogomaya.event.GameConstructionEvent;
-import com.gogomaya.event.listener.EventSelector;
 
 public class ConstructionEventSelector implements EventSelector {
 

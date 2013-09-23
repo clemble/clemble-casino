@@ -52,7 +52,7 @@ public class GameEndedEvent<State extends GameState> extends GameServerEvent<Sta
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GameEndedEvent other = (GameEndedEvent) obj;
+        GameEndedEvent<?> other = (GameEndedEvent<?>) obj;
         if (outcome == null) {
             if (other.outcome != null)
                 return false;

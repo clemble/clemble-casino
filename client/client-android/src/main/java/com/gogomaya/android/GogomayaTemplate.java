@@ -3,15 +3,10 @@ package com.gogomaya.android;
 import static com.gogomaya.utils.Preconditions.checkNotNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gogomaya.android.event.listener.RabbitEventListenerManager;
@@ -45,28 +40,23 @@ public class GogomayaTemplate implements Gogomaya {
     final private Map<Game, GameConstructionOperations> gameToConstructionOperations;
 
     public GogomayaTemplate(PlayerSession playerSession, PlayerSecurityClientService<HttpEntity<?>> securityClientService, ObjectMapper objectMapper) throws IOException {
-        RestTemplate restTemplate = new RestTemplate();
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
-        jackson2HttpMessageConverter.setObjectMapper(objectMapper);
-        messageConverters.add(jackson2HttpMessageConverter);
-        restTemplate.setMessageConverters(messageConverters);
-        
+        RestClientService restClient = new AndroidRestService("", objectMapper, securityClientService);
+
         long playerId = checkNotNull(playerSession).getPlayerId();
         ResourceLocations resourceLocations = checkNotNull(playerSession.getResourceLocations());
         // Step 1. Creating PlayerProfile service
-        RestClientService playerRestService = new AndroidRestService(resourceLocations.getPlayerProfileEndpoint(), restTemplate, securityClientService);
+        RestClientService playerRestService = restClient.construct(resourceLocations.getPlayerProfileEndpoint());
         PlayerProfileService playerProfileService = new AndroidPlayerProfileService(playerRestService);
         this.playerProfileOperations = new SimplePlayerProfileOperations(playerId, playerProfileService);
         // Step 2. Creating PaymentTransaction service
-        RestClientService paymentRestService = new AndroidRestService(resourceLocations.getPaymentEndpoint(), restTemplate, securityClientService);
+        RestClientService paymentRestService = restClient.construct(resourceLocations.getPaymentEndpoint());
         PaymentTransactionService paymentTransactionService = new AndroidPaymentTransactionService(paymentRestService);
         this.paymentTransactionOperations = new SimplePaymentTransactionOperations(playerId, paymentTransactionService);
         // Step 3. Creating GameConstruction services
         this.gameToConstructionOperations = new HashMap<Game, GameConstructionOperations>();
         this.eventListenersManager = new RabbitEventListenerManager(resourceLocations.getNotificationConfiguration(), objectMapper);
         for (GameLocation location : resourceLocations.getGameLocations()) {
-            final RestClientService gameRestService = new AndroidRestService(location.getUrl(), restTemplate, securityClientService);
+            final RestClientService gameRestService = restClient.construct(location.getUrl());
             final GameConstructionService constructionService = new AndroidGameConstructionService(gameRestService);
             final GameConstructionOperations constructionOperations = new SimpleGameConstructionOperations(playerId, constructionService, eventListenersManager);
             this.gameToConstructionOperations.put(location.getGame(), constructionOperations);

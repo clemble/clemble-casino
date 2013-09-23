@@ -22,6 +22,7 @@ import com.gogomaya.game.event.schedule.InvitationResponseEvent;
 import com.gogomaya.game.service.GameConstructionService;
 import com.gogomaya.server.game.configuration.GameSpecificationRegistry;
 import com.gogomaya.server.game.construct.GameConstructionServerService;
+import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.web.game.GameWebMapping;
 import com.gogomaya.web.mapping.WebMapping;
@@ -29,13 +30,16 @@ import com.gogomaya.web.mapping.WebMapping;
 @Controller
 public class GameConstructionController<State extends GameState> implements GameConstructionService {
 
+    final private TableServerRegistry tableServerRegistry;
     final private GameSpecificationRegistry configurationManager;
     final private GameConstructionServerService constructionService;
     final private GameConstructionRepository constructionRepository;
 
     public GameConstructionController(final GameConstructionRepository constructionRepository,
             final GameConstructionServerService matchingService,
-            final GameSpecificationRegistry configurationManager) {
+            final GameSpecificationRegistry configurationManager,
+            final TableServerRegistry tableServerRegistry) {
+        this.tableServerRegistry = checkNotNull(tableServerRegistry);
         this.constructionService = checkNotNull(matchingService);
         this.configurationManager = checkNotNull(configurationManager);
         this.constructionRepository = checkNotNull(constructionRepository);
@@ -79,11 +83,19 @@ public class GameConstructionController<State extends GameState> implements Game
     @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameConstruction invitationResponsed(
+    public @ResponseBody GameConstruction reply(
             @RequestHeader("playerId") final long playerId,
             @PathVariable("sessionId") long sessionId,
             @RequestBody final InvitationResponseEvent gameRequest) {
         // Step 1. Invoking actual matching service
         return constructionService.invitationResponsed(gameRequest);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_SERVER, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public String getServer(@RequestHeader("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
+        // Step 1. Fetching applicable server for the session
+        return tableServerRegistry.findServer(sessionId);
     }
 }

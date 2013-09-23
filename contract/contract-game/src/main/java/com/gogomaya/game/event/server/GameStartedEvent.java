@@ -71,7 +71,7 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GameStartedEvent other = (GameStartedEvent) obj;
+        GameStartedEvent<?> other = (GameStartedEvent<?>) obj;
         if (resource == null) {
             if (other.resource != null)
                 return false;

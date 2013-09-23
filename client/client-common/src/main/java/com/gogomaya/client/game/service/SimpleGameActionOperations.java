@@ -54,4 +54,10 @@ public class SimpleGameActionOperations<State extends GameState> implements Game
         return playerId;
     }
 
+    @Override
+    public GameActionOperations<State> clone(String server) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

@@ -1,11 +1,13 @@
 package com.gogomaya.client.game.service;
 
+import static com.gogomaya.utils.Preconditions.checkNotNull;
+
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.event.listener.ConstructionEventSelector;
 import com.gogomaya.event.listener.EventListener;
 import com.gogomaya.event.listener.EventListenersManager;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameRequest;
-import com.gogomaya.game.event.ConstructionEventSelector;
 import com.gogomaya.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.game.event.schedule.InvitationDeclinedEvent;
 import com.gogomaya.game.event.schedule.InvitationResponseEvent;
@@ -19,8 +21,8 @@ public class SimpleGameConstructionOperations implements GameConstructionOperati
 
     public SimpleGameConstructionOperations(long playerId, GameConstructionService constructionService, EventListenersManager listenersManager) {
         this.playerId = playerId;
-        this.constructionService = constructionService;
-        this.listenersManager = listenersManager;
+        this.constructionService = checkNotNull(constructionService);
+        this.listenersManager = checkNotNull(listenersManager);
     }
 
     @Override
@@ -45,7 +47,7 @@ public class SimpleGameConstructionOperations implements GameConstructionOperati
 
     @Override
     public GameConstruction response(long sessionId, InvitationResponseEvent responce) {
-        return constructionService.invitationResponsed(playerId, sessionId, responce);
+        return constructionService.reply(playerId, sessionId, responce);
     }
 
     @Override

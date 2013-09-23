@@ -12,4 +12,6 @@ public interface RestClientService {
 
     public <T> T postForEntity(String url, Object request, Class<T> responseType, Object... urlVariables);
 
+    public RestClientService construct(String baseUrl);
+
 }
