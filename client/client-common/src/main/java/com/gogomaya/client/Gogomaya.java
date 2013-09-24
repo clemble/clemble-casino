@@ -3,6 +3,7 @@ package com.gogomaya.client;
 import com.gogomaya.client.game.service.GameActionOperations;
 import com.gogomaya.client.game.service.GameConstructionOperations;
 import com.gogomaya.client.payment.service.PaymentTransactionOperations;
+import com.gogomaya.client.player.service.PlayerPresenceOperations;
 import com.gogomaya.client.player.service.PlayerProfileOperations;
 import com.gogomaya.game.Game;
 import com.gogomaya.game.GameState;
@@ -10,6 +11,8 @@ import com.gogomaya.game.GameState;
 public interface Gogomaya {
 
     public PlayerProfileOperations getPlayerProfileOperations();
+    
+    public PlayerPresenceOperations getPlayerPresenceOperations();
 
     public PaymentTransactionOperations getPaymentTransactionOperations();
 

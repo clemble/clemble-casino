@@ -28,14 +28,12 @@ public class AndroidPlayerRegistrationService implements PlayerRegistrationServi
 
     @Override
     public PlayerIdentity createPlayer(PlayerRegistrationRequest registrationRequest) {
-        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION, registrationRequest, PlayerIdentity.class)
-                .getBody();
+        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION, registrationRequest, PlayerIdentity.class).getBody();
     }
 
     @Override
     public PlayerIdentity createSocialPlayer(PlayerSocialRegistrationRequest socialConnectionData) {
-        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, socialConnectionData,
-                PlayerIdentity.class).getBody();
+        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, socialConnectionData, PlayerIdentity.class).getBody();
     }
 
 }

@@ -15,6 +15,7 @@ import com.gogomaya.server.social.SocialConnectionDataAdapter;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.social.SocialModuleSpringConfiguration;
 import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
+import com.gogomaya.server.web.player.PlayerPresenceController;
 import com.gogomaya.server.web.player.PlayerProfileController;
 import com.gogomaya.server.web.player.registration.PlayerProfileRegistrationController;
 
@@ -36,7 +37,7 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("playerStateManager")
-    public PlayerPresenceServerService playerStateManager;
+    public PlayerPresenceServerService playerPresenceServerService;
 
     @Bean
     public PlayerProfileController playerProfileController() {
@@ -51,6 +52,11 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     @Bean
     public PlayerProfileRegistrationController playerProfileRegistrationController() {
         return new PlayerProfileRegistrationController(realPlayerProfileRegistrationService());
+    }
+    
+    @Bean
+    public PlayerPresenceController playerPresenceController() {
+        return new PlayerPresenceController(playerPresenceServerService);
     }
 
 }

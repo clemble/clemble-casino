@@ -13,6 +13,7 @@ import com.gogomaya.android.event.listener.RabbitEventListenerManager;
 import com.gogomaya.android.game.service.AndroidGameActionService;
 import com.gogomaya.android.game.service.AndroidGameConstructionService;
 import com.gogomaya.android.payment.service.AndroidPaymentTransactionService;
+import com.gogomaya.android.player.service.AndroidPlayerPresenceService;
 import com.gogomaya.android.player.service.AndroidPlayerProfileService;
 import com.gogomaya.android.service.AndroidRestService;
 import com.gogomaya.client.Gogomaya;
@@ -22,8 +23,10 @@ import com.gogomaya.client.game.service.SimpleGameActionOperations;
 import com.gogomaya.client.game.service.SimpleGameConstructionOperations;
 import com.gogomaya.client.payment.service.PaymentTransactionOperations;
 import com.gogomaya.client.payment.service.SimplePaymentTransactionOperations;
+import com.gogomaya.client.player.service.PlayerPresenceOperations;
 import com.gogomaya.client.player.service.PlayerProfileOperations;
 import com.gogomaya.client.player.service.PlayerSecurityClientService;
+import com.gogomaya.client.player.service.SimplePlayerPresenceOperations;
 import com.gogomaya.client.player.service.SimplePlayerProfileOperations;
 import com.gogomaya.client.service.RestClientService;
 import com.gogomaya.configuration.GameLocation;
@@ -34,6 +37,7 @@ import com.gogomaya.game.GameState;
 import com.gogomaya.game.service.GameConstructionService;
 import com.gogomaya.payment.service.PaymentTransactionService;
 import com.gogomaya.player.security.PlayerSession;
+import com.gogomaya.player.service.PlayerPresenceService;
 import com.gogomaya.player.service.PlayerProfileService;
 
 public class GogomayaTemplate implements Gogomaya {
@@ -42,6 +46,7 @@ public class GogomayaTemplate implements Gogomaya {
     final private RestClientService restClient;
     final private EventListenersManager eventListenersManager;
     final private PlayerProfileOperations playerProfileOperations;
+    final private PlayerPresenceOperations playerPresenceOperations;
     final private PaymentTransactionOperations paymentTransactionOperations;
     final private Map<Game, GameConstructionOperations> gameToConstructionOperations;
 
@@ -54,11 +59,14 @@ public class GogomayaTemplate implements Gogomaya {
         RestClientService playerRestService = restClient.construct(resourceLocations.getPlayerProfileEndpoint());
         PlayerProfileService playerProfileService = new AndroidPlayerProfileService(playerRestService);
         this.playerProfileOperations = new SimplePlayerProfileOperations(playerId, playerProfileService);
-        // Step 2. Creating PaymentTransaction service
+        // Step 2. Creating PlayerPresence service
+        PlayerPresenceService playerPresenceService = new AndroidPlayerPresenceService(playerRestService);
+        this.playerPresenceOperations = new SimplePlayerPresenceOperations(playerId, playerPresenceService);
+        // Step 3. Creating PaymentTransaction service
         RestClientService paymentRestService = restClient.construct(resourceLocations.getPaymentEndpoint());
         PaymentTransactionService paymentTransactionService = new AndroidPaymentTransactionService(paymentRestService);
         this.paymentTransactionOperations = new SimplePaymentTransactionOperations(playerId, paymentTransactionService);
-        // Step 3. Creating GameConstruction services
+        // Step 4. Creating GameConstruction services
         this.gameToConstructionOperations = new HashMap<Game, GameConstructionOperations>();
         this.eventListenersManager = new RabbitEventListenerManager(resourceLocations.getNotificationConfiguration(), objectMapper);
         for (GameLocation location : resourceLocations.getGameLocations()) {
@@ -92,6 +100,11 @@ public class GogomayaTemplate implements Gogomaya {
         String actionServer = constructionOperations.getGameActionServer(sessionId);
         // Step 3. Preparing new restService
         return new SimpleGameActionOperations<>(playerId, sessionId, eventListenersManager, new AndroidGameActionService<State>(restClient.construct(actionServer)));
+    }
+
+    @Override
+    public PlayerPresenceOperations getPlayerPresenceOperations() {
+        return playerPresenceOperations;
     }
 
 }

@@ -21,17 +21,17 @@ public class AndroidRestService implements RestClientService {
     final private RestTemplate restTemplate;
     final private PlayerSecurityClientService<HttpEntity<?>> securityClientService;
 
-    public AndroidRestService(String baseUrl, RestTemplate restTemplate, PlayerSecurityClientService<HttpEntity<?>> securityClientService) {
+    private AndroidRestService(CharSequence baseUrl, RestTemplate restTemplate, PlayerSecurityClientService<HttpEntity<?>> securityClientService) {
         this.securityClientService = securityClientService;
         this.restTemplate = restTemplate;
-        this.baseUrl = baseUrl;
+        this.baseUrl = baseUrl.toString();
     }
 
-    public AndroidRestService(String baseUrl, ObjectMapper objectMapper, PlayerSecurityClientService<HttpEntity<?>> securityClientService) {
-        this.baseUrl = checkNotNull(baseUrl);
+    public AndroidRestService(CharSequence baseUrl, ObjectMapper objectMapper, PlayerSecurityClientService<HttpEntity<?>> securityClientService) {
+        this.baseUrl = checkNotNull(baseUrl).toString();
         this.securityClientService = checkNotNull(securityClientService);
 
-        this.restTemplate = checkNotNull(new RestTemplate());
+        this.restTemplate = new RestTemplate();
 
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
@@ -43,7 +43,7 @@ public class AndroidRestService implements RestClientService {
     }
 
     @Override
-    public <T> T getForEntity(String url, Class<T> responseType, Object... urlVariables) {
+    public <T> T getForEntity(CharSequence url, Class<T> responseType, Object... urlVariables) {
         String fullURL = baseUrl + url;
         HttpEntity<?> request = securityClientService.signGet(fullURL);
         return restTemplate.exchange(fullURL, HttpMethod.GET, request, responseType, urlVariables).getBody();
@@ -51,26 +51,26 @@ public class AndroidRestService implements RestClientService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> getForEntityList(String url, Class<T> responseType, Object... urlVariables) {
+    public <T> List<T> getForEntityList(CharSequence url, Class<T> responseType, Object... urlVariables) {
         String fullURL = baseUrl + url;
         HttpEntity<?> request = securityClientService.signGet(fullURL);
         return restTemplate.exchange(fullURL, HttpMethod.GET, request, List.class, urlVariables).getBody();
     }
 
     @Override
-    public <T> T putForEntity(String url, Object requestObject, Class<T> responseType, Object... urlVariables) {
+    public <T> T putForEntity(CharSequence url, Object requestObject, Class<T> responseType, Object... urlVariables) {
         HttpEntity<?> request = securityClientService.signUpdate(requestObject);
         return restTemplate.exchange(baseUrl + url, HttpMethod.PUT, request, responseType, urlVariables).getBody();
     }
 
     @Override
-    public <T> T postForEntity(String url, Object requestObject, Class<T> responseType, Object... urlVariables) {
+    public <T> T postForEntity(CharSequence url, Object requestObject, Class<T> responseType, Object... urlVariables) {
         HttpEntity<?> request = securityClientService.signUpdate(requestObject);
         return restTemplate.exchange(baseUrl + url, HttpMethod.POST, request, responseType, urlVariables).getBody();
     }
 
     @Override
-    public RestClientService construct(String baseUrl) {
+    public RestClientService construct(CharSequence baseUrl) {
         return new AndroidRestService(baseUrl, restTemplate, securityClientService);
     }
 
