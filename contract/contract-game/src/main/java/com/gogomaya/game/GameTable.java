@@ -50,7 +50,7 @@ public class GameTable<State extends GameState> implements GameSpecificationAwar
     private List<Long> players = new ArrayList<Long>();
 
     @OneToOne(fetch = FetchType.EAGER, targetEntity = GameSession.class, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinColumn(name = "SESSION_ID")
+    @JoinColumns(value = {@JoinColumn(name = "SESSION_ID"), @JoinColumn(name = "GAME")})
     private GameSession<State> currentSession;
 
     @Transient

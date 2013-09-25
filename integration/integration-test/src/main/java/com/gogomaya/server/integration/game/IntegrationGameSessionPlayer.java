@@ -5,6 +5,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.ServerResourse;
 import com.gogomaya.game.construct.GameConstruction;
@@ -30,7 +31,7 @@ public class IntegrationGameSessionPlayer<State extends GameState> extends Abstr
 
     @Override
     @SuppressWarnings("unchecked")
-    public State perform(Player player, ServerResourse resourse, long session, GameClientEvent clientEvent) {
+    public State perform(Player player, ServerResourse resourse, GameSessionKey session, GameClientEvent clientEvent) {
         // Step 1. Generating signed request
         HttpEntity<ClientEvent> requestEntity = player.<ClientEvent> signGame(session, resourse.getTableId(), clientEvent);
         // Step 2. Rest template generation

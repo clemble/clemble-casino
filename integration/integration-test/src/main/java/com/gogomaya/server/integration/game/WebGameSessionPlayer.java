@@ -2,6 +2,7 @@ package com.gogomaya.server.integration.game;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.ServerResourse;
 import com.gogomaya.game.construct.GameConstruction;
@@ -24,9 +25,9 @@ public class WebGameSessionPlayer<State extends GameState> extends AbstractGameS
     }
 
     @Override
-    public State perform(Player player, ServerResourse resourse, long session, GameClientEvent clientEvent) {
+    public State perform(Player player, ServerResourse resourse, GameSessionKey session, GameClientEvent clientEvent) {
         // Step 1. Processing action by controller
-        return (State) gameEngineController.process(session, clientEvent);
+        return (State) gameEngineController.process(session.getSession(), clientEvent);
     }
 
 }

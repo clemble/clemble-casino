@@ -1,6 +1,7 @@
 package com.gogomaya.server.game.cache;
 
 import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.construct.GameConstruction;
@@ -16,9 +17,9 @@ import com.google.common.cache.LoadingCache;
 
 public class GameCacheService<State extends GameState> {
 
-    final private LoadingCache<Long, GameCache<State>> gameCache = CacheBuilder.newBuilder().build(new CacheLoader<Long, GameCache<State>>() {
+    final private LoadingCache<GameSessionKey, GameCache<State>> gameCache = CacheBuilder.newBuilder().build(new CacheLoader<GameSessionKey, GameCache<State>>() {
         @Override
-        public GameCache<State> load(Long sessionId) throws Exception {
+        public GameCache<State> load(GameSessionKey sessionId) throws Exception {
             GameConstruction construction = constructionRepository.findOne(sessionId);
             // Step 1. Searching for appropriate session in repository
             GameSession<State> session = sessionRepository.findOne(sessionId);
@@ -50,7 +51,7 @@ public class GameCacheService<State extends GameState> {
         return gameCache.getUnchecked(sessionAware.getSession());
     }
 
-    public GameCache<State> get(Long sessionId) {
+    public GameCache<State> get(GameSessionKey sessionId) {
         return gameCache.getUnchecked(sessionId);
     }
 }

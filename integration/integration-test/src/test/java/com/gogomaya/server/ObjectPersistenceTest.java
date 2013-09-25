@@ -1,5 +1,6 @@
 package com.gogomaya.server;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -20,8 +21,6 @@ import org.springframework.data.repository.core.support.DefaultRepositoryMetadat
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import scala.reflect.generic.Trees.Modifiers;
 
 import com.gogomaya.game.GameTable;
 import com.gogomaya.game.construct.GameConstruction;
@@ -108,7 +107,7 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
         Assert.assertTrue(String.valueOf(errors), errors.isEmpty());
     }
 
-    private <T> void check(JpaRepository<T, Long> relatedEntityRepository, Class<T> domainClass) {
+    private <T, ID extends Serializable> void check(JpaRepository<T, ID> relatedEntityRepository, Class<T> domainClass) {
         T objectToSave = ObjectGenerator.generate(domainClass);
         relatedEntityRepository.saveAndFlush(objectToSave);
     }

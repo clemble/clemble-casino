@@ -16,7 +16,7 @@ import com.gogomaya.money.MoneySource;
 import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionKey;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.server.repository.player.PlayerAccountRepository;
 import com.gogomaya.server.spring.payment.PaymentManagementSpringConfiguration;
@@ -50,9 +50,9 @@ public class PaymentTransactionServiceTest {
     public void testWalletUpdate() {
         Money amount = Money.create(Currency.FakeMoney, RANDOM.nextInt(100));
 
-        PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(1L);
+        PaymentTransactionKey transactionId = new PaymentTransactionKey().setSource(MoneySource.TicTacToe).setTransactionId(1L);
 
-        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionId(transactionId)
+        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(transactionId)
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmount(amount))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmount(amount));
 

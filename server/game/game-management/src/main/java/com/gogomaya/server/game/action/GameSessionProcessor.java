@@ -10,6 +10,7 @@ import com.gogomaya.event.ClientEvent;
 import com.gogomaya.event.Event;
 import com.gogomaya.game.Game;
 import com.gogomaya.game.GameAware;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.GameTable;
 import com.gogomaya.game.construct.GameInitiation;
@@ -57,12 +58,12 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
         return table;
     }
 
-    public State process(long sessionId, ClientEvent move) {
+    public State process(GameSessionKey session, ClientEvent move) {
         // Step 1. Sanity check
         if (move == null)
             throw GogomayaException.fromError(GogomayaError.GamePlayMoveUndefined);
         // Step 2. Acquiring lock for session event processing
-        GameCache<State> cache = cacheService.get(sessionId);
+        GameCache<State> cache = cacheService.get(session);
         // Step 3. Checking
         switch (cache.getSession().getSessionState()) {
         case finished:
@@ -81,7 +82,7 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
             GameProcessor<State> processor = cache.getProcessor();
             // Step 5. Processing movement
             GameServerEvent<State> event = processor.process(cache.getSession(), move);
-            event.setSession(sessionId);
+            event.setSession(session);
             // Step 6. Invoking appropriate notification
             notificationService.notify(cache.getPlayerIds(), event);
             // Step 7. Returning state of the game

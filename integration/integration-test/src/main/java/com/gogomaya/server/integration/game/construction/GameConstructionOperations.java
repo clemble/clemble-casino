@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.GameAware;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.configuration.GameSpecificationOptions;
 import com.gogomaya.game.construct.GameRequest;
@@ -19,7 +20,7 @@ public interface GameConstructionOperations<State extends GameState> extends Gam
 
     public GameSpecificationOptions getOptions(Player player);
 
-    public ClientEvent constructionResponse(Player player, long requested, long construction);
+    public ClientEvent constructionResponse(Player player, long requested, GameSessionKey construction);
 
     public GameSessionPlayer<State> constructAutomatic(Player player);
 
@@ -29,8 +30,8 @@ public interface GameConstructionOperations<State extends GameState> extends Gam
 
     public GameSessionPlayer<State> construct(Player player, GameRequest request);
 
-    public GameSessionPlayer<State> acceptInvitation(Player player, long construction);
+    public GameSessionPlayer<State> acceptInvitation(Player player, GameSessionKey construction);
 
-    public void declineInvitation(Player player, long construction);
+    public void declineInvitation(Player player, GameSessionKey construction);
 
 }

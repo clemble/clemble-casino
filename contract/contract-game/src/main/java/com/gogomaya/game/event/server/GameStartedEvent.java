@@ -1,6 +1,9 @@
 package com.gogomaya.game.event.server;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.GameTable;
 import com.gogomaya.game.ServerResourse;
@@ -14,17 +17,20 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
      */
     private static final long serialVersionUID = -4474960027054354888L;
 
-    private long session;
-
     private ServerResourse resource;
 
     public GameStartedEvent() {
     }
 
-    public GameStartedEvent(long session, GameTable<State> table) {
+    public GameStartedEvent(GameSessionKey session, GameTable<State> table) {
         super(table.getCurrentSession());
-        this.session = session;
         this.resource = table.fetchServerResourse();
+    }
+
+    @JsonCreator
+    public GameStartedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("resource") ServerResourse resource) {
+        super(session);
+        this.resource = resource;
     }
 
     public GameStartedEvent(SessionAware sessionAware) {
@@ -45,21 +51,11 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
     }
 
     @Override
-    public long getSession() {
-        return session;
-    }
-
-    public GameServerEvent<State> setSession(long construction) {
-        this.session = construction;
-        return this;
-    }
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + (int) (super.hashCode());
         result = prime * result + ((resource == null) ? 0 : resource.hashCode());
-        result = prime * result + (int) (session ^ (session >>> 32));
         return result;
     }
 
@@ -72,12 +68,12 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
         if (getClass() != obj.getClass())
             return false;
         GameStartedEvent<?> other = (GameStartedEvent<?>) obj;
+        if (!super.equals(obj))
+            return false;
         if (resource == null) {
             if (other.resource != null)
                 return false;
         } else if (!resource.equals(other.resource))
-            return false;
-        if (session != other.session)
             return false;
         return true;
     }

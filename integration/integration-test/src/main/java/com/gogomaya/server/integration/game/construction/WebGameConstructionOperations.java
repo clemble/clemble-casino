@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.configuration.GameSpecificationOptions;
 import com.gogomaya.game.construct.GameConstruction;
@@ -46,12 +47,12 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
 
     @Override
     protected void response(Player player, InvitationResponseEvent responseEvent) {
-        constructionController.reply(player.getPlayerId(), responseEvent.getSession(), responseEvent);
+        constructionController.reply(player.getPlayerId(), responseEvent.getSession().getSession(), responseEvent);
     }
 
     @Override
-    public ClientEvent constructionResponse(Player player, long requested, long construction) {
-        return constructionController.getResponce(player.getPlayerId(), construction, requested);
+    public ClientEvent constructionResponse(Player player, long requested, GameSessionKey construction) {
+        return constructionController.getResponce(player.getPlayerId(), construction.getSession(), requested);
     }
 
 }

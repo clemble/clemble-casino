@@ -1,10 +1,11 @@
 package com.gogomaya.game.construct;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 
 @Entity
@@ -16,9 +17,8 @@ public class ScheduledGame implements SessionAware {
      */
     private static final long serialVersionUID = 1773102437262489956L;
 
-    @Id
-    @Column(name = "CONSTRUCTION_ID")
-    private long session;
+    @EmbeddedId
+    private GameSessionKey session;
 
     @Column(name = "START_TIME")
     private long startDate;
@@ -26,18 +26,18 @@ public class ScheduledGame implements SessionAware {
     public ScheduledGame() {
     }
 
-    public ScheduledGame( long session, long startDate) {
+    public ScheduledGame(GameSessionKey session, long startDate) {
         this.session = session;
         this.startDate = startDate;
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 
-    public void setSession(long construction) {
-        this.session = construction;
+    public void setSession(GameSessionKey sessionKey) {
+        this.session = sessionKey;
     }
 
     public long getStartDate() {
@@ -52,7 +52,7 @@ public class ScheduledGame implements SessionAware {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (session ^ (session >>> 32));
+        result = prime * result + session.hashCode();
         result = prime * result + (int) (startDate ^ (startDate >>> 32));
         return result;
     }

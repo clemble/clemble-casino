@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.player.PlayerAware;
 
@@ -86,7 +88,12 @@ public class GogomayaErrorFormat {
 
             if (failure.getSession() != SessionAware.DEFAULT_SESSION) {
                 jsonGenerator.writeFieldName("session");
-                jsonGenerator.writeNumber(failure.getPlayerId());
+                jsonGenerator.writeStartObject();
+                jsonGenerator.writeFieldName("game");
+                jsonGenerator.writeString(failure.getSession().getGame().name());
+                jsonGenerator.writeFieldName("session");
+                jsonGenerator.writeNumber(failure.getSession().getSession());
+                jsonGenerator.writeEndObject();
             }
 
             jsonGenerator.writeEndObject();
@@ -101,7 +108,7 @@ public class GogomayaErrorFormat {
             String code = null;
             JsonToken token = null;
             long playerId = PlayerAware.DEFAULT_PLAYER;
-            long sessionId = SessionAware.DEFAULT_SESSION;
+            GameSessionKey session = SessionAware.DEFAULT_SESSION;
             do {
                 if (jp.getCurrentName() == "code") {
                     code = jp.getValueAsString();
@@ -110,12 +117,22 @@ public class GogomayaErrorFormat {
                 } else if (jp.getCurrentName() == "player") {
                     playerId = jp.getNumberValue().longValue();
                 } else if (jp.getCurrentName() == "session") {
-                    sessionId = jp.getNumberValue().longValue();
+                    jp.nextToken();
+                    jp.nextToken();
+                    if (jp.getCurrentName() == "game") {
+                        Game game = Game.valueOf(jp.getValueAsString());
+                        jp.nextToken();
+                        session = new GameSessionKey(game, jp.getNumberValue().longValue());
+                    } else {
+                        long sessionIdentifier = jp.getNumberValue().longValue();
+                        jp.nextToken();
+                        session = new GameSessionKey(Game.valueOf(jp.getValueAsString()), sessionIdentifier);
+                    }
                 }
                 token = jp.nextToken();
             } while (token != null && token != JsonToken.END_OBJECT);
 
-            return new GogomayaFailure(GogomayaError.forCode(code), playerId, sessionId);
+            return new GogomayaFailure(GogomayaError.forCode(code), playerId, session);
         }
     }
 

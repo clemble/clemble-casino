@@ -24,7 +24,7 @@ import com.gogomaya.money.MoneySource;
 import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionKey;
 import com.gogomaya.server.integration.payment.PaymentTransactionOperations;
 import com.gogomaya.server.integration.player.Player;
 import com.gogomaya.server.integration.player.PlayerOperations;
@@ -48,7 +48,7 @@ public class PaymentTransactionOperationsITest {
 
     @Test
     public void testFakePaymentTransaction() {
-        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionId(new PaymentTransactionId(MoneySource.TicTacToe.name(), 2432))
+        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(-1).setAmount(Money.create(Currency.FakeMoney, 50)))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(-2).setAmount(Money.create(Currency.FakeMoney, 50)));
 
@@ -63,7 +63,7 @@ public class PaymentTransactionOperationsITest {
         Player anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionId(new PaymentTransactionId(MoneySource.TicTacToe.name(), 2432))
+                .setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
                                 .setAmount(Money.create(Currency.FakeMoney, 60)))
@@ -82,7 +82,7 @@ public class PaymentTransactionOperationsITest {
         Player anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionId(new PaymentTransactionId(MoneySource.TicTacToe.name(), 2432))
+                .setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)))
@@ -104,7 +104,7 @@ public class PaymentTransactionOperationsITest {
         Player anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionId(new PaymentTransactionId(source, transactionId))
+                .setTransactionKey(new PaymentTransactionKey(source, transactionId))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)))
@@ -129,7 +129,7 @@ public class PaymentTransactionOperationsITest {
         Player therdPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionId(new PaymentTransactionId(source, transactionId))
+                .setTransactionKey(new PaymentTransactionKey(source, transactionId))
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)))

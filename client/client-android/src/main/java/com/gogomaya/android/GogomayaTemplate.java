@@ -33,6 +33,7 @@ import com.gogomaya.configuration.GameLocation;
 import com.gogomaya.configuration.ResourceLocations;
 import com.gogomaya.event.listener.EventListenersManager;
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.service.GameConstructionService;
 import com.gogomaya.payment.service.PaymentTransactionService;
@@ -72,7 +73,7 @@ public class GogomayaTemplate implements Gogomaya {
         for (GameLocation location : resourceLocations.getGameLocations()) {
             final RestClientService gameRestService = restClient.construct(location.getUrl());
             final GameConstructionService constructionService = new AndroidGameConstructionService(gameRestService);
-            final GameConstructionOperations constructionOperations = new SimpleGameConstructionOperations(playerId, constructionService, eventListenersManager);
+            final GameConstructionOperations constructionOperations = new SimpleGameConstructionOperations(playerId, location.getGame(), constructionService, eventListenersManager);
             this.gameToConstructionOperations.put(location.getGame(), constructionOperations);
         }
     }
@@ -93,13 +94,13 @@ public class GogomayaTemplate implements Gogomaya {
     }
 
     @Override
-    public <State extends GameState> GameActionOperations<State> getGameActionOperations(Game game, long sessionId) {
+    public <State extends GameState> GameActionOperations<State> getGameActionOperations(GameSessionKey session) {
         // Step 1. Fetching game construction operations
-        GameConstructionOperations constructionOperations = getGameConstructionOperations(game);
+        GameConstructionOperations constructionOperations = getGameConstructionOperations(session.getGame());
         // Step 2. Fetching action Server
-        String actionServer = constructionOperations.getGameActionServer(sessionId);
+        String actionServer = constructionOperations.getGameActionServer(session.getSession());
         // Step 3. Preparing new restService
-        return new SimpleGameActionOperations<>(playerId, sessionId, eventListenersManager, new AndroidGameActionService<State>(restClient.construct(actionServer)));
+        return new SimpleGameActionOperations<>(playerId, session, eventListenersManager, new AndroidGameActionService<State>(restClient.construct(actionServer)));
     }
 
     @Override

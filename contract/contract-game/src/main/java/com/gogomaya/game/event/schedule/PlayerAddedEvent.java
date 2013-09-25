@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.event.GameConstructionEvent;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("added")
@@ -14,17 +15,17 @@ public class PlayerAddedEvent implements GameConstructionEvent, PlayerAware {
      */
     private static final long serialVersionUID = -5442563161615470910L;
 
-    final private long session;
+    final private GameSessionKey session;
     final private long playerId;
 
     @JsonCreator
-    public PlayerAddedEvent(@JsonProperty("session") long session, @JsonProperty("playerId") long player) {
+    public PlayerAddedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("playerId") long player) {
         this.session = session;
         this.playerId = player;
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 
@@ -38,7 +39,7 @@ public class PlayerAddedEvent implements GameConstructionEvent, PlayerAware {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (playerId ^ (playerId >>> 32));
-        result = prime * result + (int) (session ^ (session >>> 32));
+        result = prime * result + (int) (session.hashCode());
         return result;
     }
 

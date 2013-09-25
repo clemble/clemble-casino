@@ -3,6 +3,7 @@ package com.gogomaya.game.event.schedule;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.game.GameSessionKey;
 
 @JsonTypeName("declined")
 public class InvitationDeclinedEvent implements InvitationResponseEvent {
@@ -14,10 +15,10 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
 
     final private long playerId;
 
-    final private long session;
+    final private GameSessionKey session;
 
     @JsonCreator
-    public InvitationDeclinedEvent(@JsonProperty("playerId") long playerId, @JsonProperty("session") long session) {
+    public InvitationDeclinedEvent(@JsonProperty("playerId") long playerId, @JsonProperty("session") GameSessionKey session) {
         this.playerId = playerId;
         this.session = session;
     }
@@ -28,7 +29,7 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 
@@ -37,7 +38,7 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (playerId ^ (playerId >>> 32));
-        result = prime * result + (int) (session ^ (session >>> 32));
+        result = prime * result + (int) (session.hashCode());
         return result;
     }
 

@@ -5,22 +5,24 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
+import com.gogomaya.VersionAware;
 import com.gogomaya.base.ActionLatch;
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.event.schedule.InvitationAcceptedEvent;
 import com.gogomaya.server.hibernate.JsonHibernateType;
@@ -34,20 +36,22 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
         @TypeDef(name = "action_latch", typeClass = JsonHibernateType.class, defaultForType = ActionLatch.class, parameters = { @Parameter(
                 name = JsonHibernateType.CLASS_NAME_PARAMETER,
                 value = "com.gogomaya.base.ActionLatch") }) })
-public class GameConstruction implements SessionAware {
+public class GameConstruction implements SessionAware, VersionAware {
 
     /**
      * Generated 10/07/13
      */
     private static final long serialVersionUID = 2712386710995109913L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "SESSION_ID")
-    private long session;
+    @EmbeddedId
+    @GeneratedValue(generator = "gameSessionKeyGenerator")
+    @GenericGenerator(
+        name = "gameSessionKeyGenerator",
+        strategy = "com.gogomaya.game.GameSessionKeyGenerator")
+    private GameSessionKey session;
 
     @Type(type = "game_request")
-    @Column(name = "REQUEST", length = 4096, nullable = false)
+    @Column(name = "REQUEST", length = 8192, nullable = false)
     private GameRequest request;
 
     @Column(name = "STATE", nullable = false)
@@ -55,7 +59,7 @@ public class GameConstruction implements SessionAware {
     private GameConstructionState state;
 
     @Type(type = "action_latch")
-    @Column(name = "RESPONSES", length = 4096, nullable = false)
+    @Column(name = "RESPONSES", length = 8192, nullable = false)
     private ActionLatch responses;
 
     @Version
@@ -66,17 +70,19 @@ public class GameConstruction implements SessionAware {
 
     public GameConstruction(GameRequest request) {
         this.request = request;
+        this.session = new GameSessionKey(request.getSpecification().getName().getGame(), 0);
         this.state = GameConstructionState.pending;
         this.responses = new ActionLatch(((GameOpponentsAware) request).getParticipants(), "response");
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 
-    public void setConstruction(long session) {
+    public GameConstruction setSession(GameSessionKey session) {
         this.session = session;
+        return this;
     }
 
     public GameRequest getRequest() {
@@ -117,6 +123,7 @@ public class GameConstruction implements SessionAware {
         return acceptedParticipants;
     }
 
+    @Override
     public int getVersion() {
         return version;
     }

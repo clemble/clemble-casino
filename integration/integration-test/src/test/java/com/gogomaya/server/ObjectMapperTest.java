@@ -68,8 +68,8 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void testSpecialSerialization() {
-        Assert.assertNull(checkSerialization(SimplePlayerNotificationRegistry.class));
         Assert.assertNull(checkSerialization(GameStartedEvent.class));
+        Assert.assertNull(checkSerialization(SimplePlayerNotificationRegistry.class));
         Assert.assertNull(checkSerialization(StubGameState.class));
         Assert.assertNull(checkSerialization(GameAccount.class));
         Assert.assertNull(checkSerialization(VisibleGameAccount.class));

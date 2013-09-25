@@ -13,7 +13,7 @@ import com.gogomaya.game.Game;
 import com.gogomaya.game.GameAware;
 
 @Embeddable
-public class SpecificationName implements GameAware {
+public class GameSpecificationKey implements GameAware {
 
     /**
      * Generated 13/04/13
@@ -27,11 +27,11 @@ public class SpecificationName implements GameAware {
     @Column(name = "SPECIFICATION_NAME")
     private String specificationName = "";
 
-    public SpecificationName() {
+    public GameSpecificationKey() {
     }
 
     @JsonCreator
-    public SpecificationName(@JsonProperty("game") Game game, @JsonProperty("group") String group) {
+    public GameSpecificationKey(@JsonProperty("game") Game game, @JsonProperty("group") String group) {
         this.game = game;
         this.specificationName = group;
     }
@@ -41,7 +41,7 @@ public class SpecificationName implements GameAware {
         return game;
     }
 
-    public SpecificationName setGame(Game game) {
+    public GameSpecificationKey setGame(Game game) {
         this.game = game;
         return this;
     }
@@ -50,7 +50,7 @@ public class SpecificationName implements GameAware {
         return specificationName;
     }
 
-    public SpecificationName setSpecificationName(String specificationName) {
+    public GameSpecificationKey setSpecificationName(String specificationName) {
         this.specificationName = specificationName;
         return this;
     }
@@ -88,7 +88,7 @@ public class SpecificationName implements GameAware {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SpecificationName other = (SpecificationName) obj;
+        GameSpecificationKey other = (GameSpecificationKey) obj;
         if (specificationName == null) {
             if (other.specificationName != null)
                 return false;

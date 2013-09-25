@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameRequest;
@@ -30,15 +32,19 @@ import com.gogomaya.web.mapping.WebMapping;
 @Controller
 public class GameConstructionController<State extends GameState> implements GameConstructionService {
 
+    final private Game game;
     final private TableServerRegistry tableServerRegistry;
     final private GameSpecificationRegistry configurationManager;
     final private GameConstructionServerService constructionService;
     final private GameConstructionRepository constructionRepository;
 
-    public GameConstructionController(final GameConstructionRepository constructionRepository,
+    public GameConstructionController(
+            final Game game,
+            final GameConstructionRepository constructionRepository,
             final GameConstructionServerService matchingService,
             final GameSpecificationRegistry configurationManager,
             final TableServerRegistry tableServerRegistry) {
+        this.game = checkNotNull(game);
         this.tableServerRegistry = checkNotNull(tableServerRegistry);
         this.constructionService = checkNotNull(matchingService);
         this.configurationManager = checkNotNull(configurationManager);
@@ -62,7 +68,7 @@ public class GameConstructionController<State extends GameState> implements Game
     public @ResponseBody
     GameConstruction getConstruct(@RequestHeader("playerId") final long playerId, @PathVariable("sessionId") final long session) {
         // Step 1. Searching for construction
-        GameConstruction construction = constructionRepository.findOne(session);
+        GameConstruction construction = constructionRepository.findOne(new GameSessionKey(game, session));
         // Step 2. Sending error in case resource not found
         if (construction == null)
             throw GogomayaException.fromError(GogomayaError.GameConstructionDoesNotExistent);
@@ -77,7 +83,7 @@ public class GameConstructionController<State extends GameState> implements Game
             @RequestHeader("playerId") final long requester,
             @PathVariable("sessionId") final long session,
             @PathVariable("playerId") final long player) {
-        return (ClientEvent) constructionRepository.findOne(session).getResponses().fetchAction(player);
+        return (ClientEvent) constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().fetchAction(player);
     }
 
     @Override

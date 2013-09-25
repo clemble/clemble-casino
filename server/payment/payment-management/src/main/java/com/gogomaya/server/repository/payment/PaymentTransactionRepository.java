@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionKey;
 
 @Repository
-public interface PaymentTransactionRepository extends JpaRepository<PaymentTransaction, PaymentTransactionId> {
+public interface PaymentTransactionRepository extends JpaRepository<PaymentTransaction, PaymentTransactionKey> {
 
     public List<PaymentTransaction> findByPaymentOperationsPlayerId(long player);
 

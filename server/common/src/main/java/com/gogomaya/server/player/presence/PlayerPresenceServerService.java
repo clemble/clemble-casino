@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.player.PlayerPresence;
 import com.gogomaya.player.Presence;
 import com.gogomaya.server.player.notification.PlayerNotificationListener;
@@ -22,9 +23,9 @@ public interface PlayerPresenceServerService {
 
     public void markOffline(long player);
 
-    public boolean markPlaying(long player, long session);
+    public boolean markPlaying(long player, GameSessionKey session);
 
-    public boolean markPlaying(Collection<Long> players, long session);
+    public boolean markPlaying(Collection<Long> players, GameSessionKey session);
 
     public void subscribe(long playerId, PlayerNotificationListener<Presence> messageListener);
 

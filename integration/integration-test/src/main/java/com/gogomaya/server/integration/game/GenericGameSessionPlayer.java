@@ -3,6 +3,7 @@ package com.gogomaya.server.integration.game;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.event.client.GameClientEvent;
@@ -33,7 +34,7 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
-    final public long getSession() {
+    final public GameSessionKey getSession() {
         return actualPlayer.getSession();
     }
 

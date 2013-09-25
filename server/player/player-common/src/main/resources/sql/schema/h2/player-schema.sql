@@ -10,6 +10,6 @@
         IMAGE_URL varchar(255),
         LAST_NAME varchar(64),
         NICK_NAME varchar(64),
-        VERSION bigint,
+        VERSION integer,
         primary key (PLAYER_ID)
     );

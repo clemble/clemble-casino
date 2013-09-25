@@ -18,6 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogomaya.error.GogomayaException;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.player.Presence;
 import com.gogomaya.server.player.notification.PlayerNotificationListener;
 import com.gogomaya.server.player.presence.PlayerPresenceServerService;
@@ -53,7 +55,7 @@ public class PlayerPresenceServerServiceTest {
 
         Assert.assertFalse(playerPresenceService.isAvailable(player));
 
-        playerPresenceService.markPlaying(player, session);
+        playerPresenceService.markPlaying(player, new GameSessionKey(Game.pic, session));
     }
 
     @Test
@@ -67,10 +69,10 @@ public class PlayerPresenceServerServiceTest {
 
         Assert.assertTrue(playerPresenceService.isAvailable(player));
 
-        playerPresenceService.markPlaying(player, session);
+        playerPresenceService.markPlaying(player, new GameSessionKey(Game.pic, session));
 
         Assert.assertFalse("Player must not be available", playerPresenceService.isAvailable(player));
-        Assert.assertEquals("Player active session must match", playerPresenceService.getPresence(player).getSession(), session);
+        Assert.assertEquals("Player active session must match", playerPresenceService.getPresence(player).getSession().getSession(), session);
     }
 
     @Test
@@ -86,12 +88,12 @@ public class PlayerPresenceServerServiceTest {
             Assert.assertTrue(playerPresenceService.isAvailable(player));
         }
 
-        playerPresenceService.markPlaying(players, session);
+        playerPresenceService.markPlaying(players, new GameSessionKey(Game.pic, session));
 
         Assert.assertFalse("None of the players supposed to be available ", playerPresenceService.areAvailable(players));
         for (Long player : players) {
             Assert.assertFalse(playerPresenceService.isAvailable(player));
-            Assert.assertEquals(playerPresenceService.getPresence(player).getSession(), session);
+            Assert.assertEquals(playerPresenceService.getPresence(player).getSession().getSession(), session);
         }
     }
 
@@ -132,7 +134,7 @@ public class PlayerPresenceServerServiceTest {
                         startLatch.countDown();
                         startLatch.await();
 
-                        if (playerPresenceService.markPlaying(participants, randomSession))
+                        if (playerPresenceService.markPlaying(participants, new GameSessionKey(Game.pic, randomSession)))
                             numLocksReceived.incrementAndGet();
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
@@ -192,7 +194,7 @@ public class PlayerPresenceServerServiceTest {
         Thread.sleep(50);
 
         playerPresenceService.markOnline(player);
-        playerPresenceService.markPlaying(player, RANDOM.nextLong());
+        playerPresenceService.markPlaying(player, new GameSessionKey(Game.pic, RANDOM.nextLong()));
         playerPresenceService.markOnline(player);
 
         playerListener.countDownLatch.await(1, TimeUnit.SECONDS);

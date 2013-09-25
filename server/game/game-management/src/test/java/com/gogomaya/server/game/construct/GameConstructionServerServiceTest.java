@@ -19,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.construct.AvailabilityGameRequest;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameConstructionState;
@@ -89,12 +90,12 @@ public class GameConstructionServerServiceTest {
 
     public static class GameResponce implements Callable<GameConstruction> {
 
+        final public GameSessionKey construction;
         final public CountDownLatch endLatch;
         final public GameConstructionServerService constructionService;
-        final public long construction;
         final public long player;
 
-        public GameResponce(long construction, long player, CountDownLatch endLatch, GameConstructionServerService constructionService) {
+        public GameResponce(GameSessionKey construction, long player, CountDownLatch endLatch, GameConstructionServerService constructionService) {
             this.construction = construction;
             this.player = player;
             this.endLatch = endLatch;

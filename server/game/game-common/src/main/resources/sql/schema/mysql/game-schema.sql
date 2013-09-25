@@ -5,15 +5,15 @@
 
     alter table GAME_SESSION_MOVES 
         drop 
-        foreign key FK_bq49v0ydocrflq3xsbrjo2pgp;
+        foreign key FK_aedf85y3v0mkk356uwh8l0raq;
 
     alter table GAME_SESSION_PLAYERS 
         drop 
-        foreign key FK_crckpasqd60bigdxpcb6v1f4c;
+        foreign key FK_q9w5vqx8fjrruds2lr7b6uyc6;
 
     alter table GAME_TABLE 
         drop 
-        foreign key FK_fpvd7oni58y8s0ckfh5dhd74p;
+        foreign key FK_nqchqv3c0d5p0kgxarlm5eosj;
 
     alter table GAME_TABLE 
         drop 
@@ -40,42 +40,47 @@
     drop table if exists GAME_TABLE_PLAYERS;
 
     create table GAME_SCHEDULE (
-        CONSTRUCTION_ID bigint not null,
+        GAME integer not null,
+        SESSION_ID bigint not null,
         START_TIME bigint,
-        primary key (CONSTRUCTION_ID)
+        primary key (GAME, SESSION_ID)
     ) ENGINE=InnoDB;
 
     create table GAME_SESSION (
+        GAME integer not null,
         SESSION_ID bigint not null,
         SESSION_STATE integer,
         GAME_STATE varchar(4096),
         VERSION integer,
         GAME_NAME varchar(255),
         SPECIFICATION_NAME varchar(255),
-        primary key (SESSION_ID)
+        primary key (GAME, SESSION_ID)
     ) ENGINE=InnoDB;
 
     create table GAME_SESSION_CONSTRUCTION (
-        SESSION_ID bigint not null auto_increment,
-        REQUEST varchar(4096) not null,
-        RESPONSES varchar(4096) not null,
+        GAME integer not null,
+        SESSION_ID bigint not null,
+        REQUEST varchar(8192) not null,
+        RESPONSES varchar(8192) not null,
         STATE varchar(255) not null,
         version integer not null,
-        primary key (SESSION_ID)
+        primary key (GAME, SESSION_ID)
     ) ENGINE=InnoDB;
 
     create table GAME_SESSION_MOVES (
-        SESSION_ID bigint not null,
+        SESSION_ID integer not null,
+        GAME bigint not null,
         GAME_MOVE varchar(512),
         MOVE_ID integer,
         MOVE_TIME bigint
     ) ENGINE=InnoDB;
 
     create table GAME_SESSION_PLAYERS (
-        SESSION_ID bigint not null,
+        SESSION_ID integer not null,
+        GAME bigint not null,
         players bigint,
         PLAYERS_ORDER integer not null,
-        primary key (SESSION_ID, PLAYERS_ORDER)
+        primary key (SESSION_ID, GAME, PLAYERS_ORDER)
     ) ENGINE=InnoDB;
 
     create table GAME_SPECIFICATION (
@@ -97,7 +102,8 @@
 
     create table GAME_TABLE (
         TABLE_ID bigint not null auto_increment,
-        SESSION_ID bigint,
+        SESSION_ID integer,
+        GAME bigint,
         GAME_NAME varchar(255),
         SPECIFICATION_NAME varchar(255),
         primary key (TABLE_ID)
@@ -117,22 +123,22 @@
         references GAME_SPECIFICATION (GAME_NAME, SPECIFICATION_NAME);
 
     alter table GAME_SESSION_MOVES 
-        add index FK_bq49v0ydocrflq3xsbrjo2pgp (SESSION_ID), 
-        add constraint FK_bq49v0ydocrflq3xsbrjo2pgp 
-        foreign key (SESSION_ID) 
-        references GAME_SESSION (SESSION_ID);
+        add index FK_aedf85y3v0mkk356uwh8l0raq (SESSION_ID, GAME), 
+        add constraint FK_aedf85y3v0mkk356uwh8l0raq 
+        foreign key (SESSION_ID, GAME) 
+        references GAME_SESSION (GAME, SESSION_ID);
 
     alter table GAME_SESSION_PLAYERS 
-        add index FK_crckpasqd60bigdxpcb6v1f4c (SESSION_ID), 
-        add constraint FK_crckpasqd60bigdxpcb6v1f4c 
-        foreign key (SESSION_ID) 
-        references GAME_SESSION (SESSION_ID);
+        add index FK_q9w5vqx8fjrruds2lr7b6uyc6 (SESSION_ID, GAME), 
+        add constraint FK_q9w5vqx8fjrruds2lr7b6uyc6 
+        foreign key (SESSION_ID, GAME) 
+        references GAME_SESSION (GAME, SESSION_ID);
 
     alter table GAME_TABLE 
-        add index FK_fpvd7oni58y8s0ckfh5dhd74p (SESSION_ID), 
-        add constraint FK_fpvd7oni58y8s0ckfh5dhd74p 
-        foreign key (SESSION_ID) 
-        references GAME_SESSION (SESSION_ID);
+        add index FK_nqchqv3c0d5p0kgxarlm5eosj (SESSION_ID, GAME), 
+        add constraint FK_nqchqv3c0d5p0kgxarlm5eosj 
+        foreign key (SESSION_ID, GAME) 
+        references GAME_SESSION (GAME, SESSION_ID);
 
     alter table GAME_TABLE 
         add index FK_nq44xp7iy46f50hbqlflg1eqp (GAME_NAME, SPECIFICATION_NAME), 

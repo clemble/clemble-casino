@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.gogomaya.event.Event;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.server.integration.game.GameSessionListener;
@@ -15,7 +16,7 @@ import com.gogomaya.server.integration.player.Player;
 public class PlayerListenerManager implements PlayerListener, Closeable {
 
     final private Object listenerSync = new Object();
-    final private Map<Long, Collection<GameSessionListener>> sessionListenersMap = new HashMap<Long, Collection<GameSessionListener>>();
+    final private Map<GameSessionKey, Collection<GameSessionListener>> sessionListenersMap = new HashMap<>();
     final private ArrayList<Event> events = new ArrayList<Event>();
     final private PlayerListenerControl listenerControl;
 
@@ -28,7 +29,7 @@ public class PlayerListenerManager implements PlayerListener, Closeable {
         synchronized (listenerSync) {
             events.add(event);
             if (event instanceof SessionAware) {
-                long session = ((SessionAware) event).getSession();
+                GameSessionKey session = ((SessionAware) event).getSession();
                 Collection<GameSessionListener> sessionListeners = sessionListenersMap.get(session);
                 if (sessionListeners != null && sessionListeners.size() > 0)
                     for (GameSessionListener sessionListener : sessionListeners)
@@ -37,14 +38,14 @@ public class PlayerListenerManager implements PlayerListener, Closeable {
         }
     }
 
-    public void listen(long session, GameSessionListener sessionListener) {
+    public void listen(GameSessionKey session, GameSessionListener sessionListener) {
         synchronized (listenerSync) {
             // Step 1. Sanity check
             if (!sessionListenersMap.containsKey(session))
                 sessionListenersMap.put(session, new ArrayList<GameSessionListener>());
             // Step 2. Notifying of all the events that already happened, related to this session
             for (Event event : events) {
-                if (event instanceof SessionAware && (((SessionAware) event).getSession()) == session) {
+                if (event instanceof SessionAware && (((SessionAware) event).getSession()).equals(session)) {
                     sessionListener.update(event);
                 }
             }

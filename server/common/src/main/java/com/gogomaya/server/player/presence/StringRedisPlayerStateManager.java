@@ -25,6 +25,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.player.PlayerPresence;
 import com.gogomaya.player.Presence;
@@ -36,7 +38,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     final private Logger LOGGER = LoggerFactory.getLogger(StringRedisPlayerStateManager.class);
 
     final private long EXPIRATION_TIME = TimeUnit.MINUTES.toMillis(20);
-    final private String ZERO_SESSION = String.valueOf(SessionAware.DEFAULT_SESSION);
+    final private String ZERO_SESSION = ":";
 
     final private StringRedisTemplate redisTemplate;
     final private RedisSerializer<String> stringRedisSerializer;
@@ -53,17 +55,22 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         this.presenceNotification = checkNotNull(presenceNotification);
     }
 
-    public Long getActiveSession(long playerId) {
+    public GameSessionKey getActiveSession(long playerId) {
         String session = redisTemplate.boundValueOps(String.valueOf(playerId)).get();
-        return session != null ? Long.valueOf(session) : null;
+        if (session == null)
+            return null;
+        if (session.length() == 1)
+            return SessionAware.DEFAULT_SESSION;
+        String[] splittedSession = session.split(":");
+        return splittedSession[0].equals("") ? SessionAware.DEFAULT_SESSION : new GameSessionKey(Game.valueOf(splittedSession[0]), Long.valueOf(splittedSession[1]));
     }
 
     @Override
     public PlayerPresence getPresence(long player) {
-        Long session = getActiveSession(player);
+        GameSessionKey session = getActiveSession(player);
         if (session == null) {
             return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, Presence.offline);
-        } else if (session == SessionAware.DEFAULT_SESSION) {
+        } else if (session.equals(SessionAware.DEFAULT_SESSION)) {
             return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, Presence.online);
         }
         return new PlayerPresence(player, session, Presence.playing);
@@ -80,9 +87,9 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     @Override
     public boolean isAvailable(final long player) {
         // Step 1. Fetch active session
-        Long activePlayerSession = getActiveSession(player);
+        GameSessionKey activePlayerSession = getActiveSession(player);
         // Step 2. Only if player has session 0, it is available
-        return activePlayerSession != null && activePlayerSession == SessionAware.DEFAULT_SESSION;
+        return activePlayerSession != null && activePlayerSession.equals(SessionAware.DEFAULT_SESSION);
     }
 
     @Override
@@ -95,14 +102,14 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     }
 
     @Override
-    public boolean markPlaying(final long playerId, final long sessionId) {
+    public boolean markPlaying(final long playerId, final GameSessionKey sessionId) {
         if (!isAvailable(playerId))
             throw GogomayaException.fromError(GogomayaError.PlayerSessionTimeout);
         return markPlaying(Collections.singleton(playerId), sessionId);
     }
 
     @Override
-    public boolean markPlaying(final Collection<Long> players, final long sessionId) {
+    public boolean markPlaying(final Collection<Long> players, final GameSessionKey session) {
         // Step 1. Performing atomic update of the state
         boolean updated = redisTemplate.execute(new SessionCallback<Boolean>() {
 
@@ -118,8 +125,9 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
                 }
                 // Step 2. Performing atomic operation
                 operations.multi();
+                String sessionKeyPresentation = session.getGame().name() + ":" + session.getSession();
                 for (Long player : players) {
-                    operations.boundValueOps(String.valueOf(player)).set(String.valueOf(sessionId));
+                    operations.boundValueOps(String.valueOf(player)).set(sessionKeyPresentation);
                 }
                 // Step 3. If operation failed discard it
                 try {
@@ -132,7 +140,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         // Step 2. If atomic update success, then move on
         if (updated) {
             for(long player: players) {
-                notifyStateChange(PlayerPresence.playing(player, sessionId));
+                notifyStateChange(PlayerPresence.playing(player, session));
             }
         }
         // Step 3. Returning result of operation

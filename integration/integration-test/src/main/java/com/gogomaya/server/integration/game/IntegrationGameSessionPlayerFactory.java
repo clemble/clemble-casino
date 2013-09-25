@@ -5,6 +5,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.server.integration.player.Player;
@@ -36,7 +37,7 @@ public class IntegrationGameSessionPlayerFactory<State extends GameState> implem
     }
 
     @Override
-    public GameSessionPlayer<State> construct(Player player, long constructionId) {
+    public GameSessionPlayer<State> construct(Player player, GameSessionKey constructionId) {
         // Step 1. Generating signed request
         HttpEntity<Void> requestEntity = player.<Void>sign(null);
         // Step 3. Requesting associated Construction

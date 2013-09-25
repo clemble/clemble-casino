@@ -31,7 +31,7 @@ public class PaymentTransaction implements Serializable {
     private static final long serialVersionUID = 2610517770966910840L;
 
     @EmbeddedId
-    private PaymentTransactionId transactionId;
+    private PaymentTransactionKey transactionId;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "PAYMENT_TRANSACTION_OPERATION", joinColumns = { @JoinColumn(name = "TRANSACTION_ID"), @JoinColumn(name = "MONEY_SOURCE") })
@@ -40,11 +40,11 @@ public class PaymentTransaction implements Serializable {
     @Column(name = "TRANSACTION_DATE")
     private Date transactionDate;
 
-    public PaymentTransactionId getTransactionId() {
+    public PaymentTransactionKey getTransactionKey() {
         return transactionId;
     }
 
-    public PaymentTransaction setTransactionId(PaymentTransactionId transactionId) {
+    public PaymentTransaction setTransactionKey(PaymentTransactionKey transactionId) {
         this.transactionId = transactionId;
         return this;
     }

@@ -16,7 +16,7 @@ import com.gogomaya.money.MoneySource;
 import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionKey;
 import com.gogomaya.player.PlayerPresence;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
 import com.gogomaya.server.payment.PaymentTransactionServerService;
@@ -55,8 +55,7 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
             long winnerId = ((PlayerWonOutcome) outcome).getWinner();
             Money price = session.getSpecification().getPrice();
             // Step 2. Generating payment transaction
-            PaymentTransactionId transactionId = new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(session.getSession());
-            PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionId(transactionId);
+            PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(session.getSession().toPaymentTransactionKey());
             for (GamePlayerAccount playerState : session.getState().getAccount().getPlayerAccounts()) {
                 if (playerState.getPlayerId() != winnerId) {
                     paymentTransaction.addPaymentOperation(

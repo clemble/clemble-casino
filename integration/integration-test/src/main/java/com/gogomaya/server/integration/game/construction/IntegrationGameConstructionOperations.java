@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.configuration.GameSpecificationOptions;
 import com.gogomaya.game.construct.GameConstruction;
@@ -72,7 +73,7 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
     }
 
     @Override
-    public ClientEvent constructionResponse(Player player, long requested, long construction) {
+    public ClientEvent constructionResponse(Player player, long requested, GameSessionKey construction) {
         // Step 1. Generating signed request
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Rest template generation

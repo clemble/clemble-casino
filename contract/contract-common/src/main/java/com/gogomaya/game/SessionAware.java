@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public interface SessionAware extends Serializable {
 
-    final long DEFAULT_SESSION = 0L;
+    final GameSessionKey DEFAULT_SESSION = new GameSessionKey();
 
-    long getSession();
+    GameSessionKey getSession();
 
 }

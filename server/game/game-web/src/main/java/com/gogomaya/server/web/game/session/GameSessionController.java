@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.gogomaya.game.Game;
 import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.web.game.GameWebMapping;
@@ -20,16 +22,17 @@ import com.gogomaya.web.mapping.WebMapping;
 @Controller
 public class GameSessionController<State extends GameState> {
 
+    final private Game game;
     final private GameSessionRepository<State> sessionRepository;
 
-    public GameSessionController(GameSessionRepository<State> sessionRepository) {
+    public GameSessionController(Game game, GameSessionRepository<State> sessionRepository) {
+        this.game = checkNotNull(game);
         this.sessionRepository = checkNotNull(sessionRepository);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    GameSession<State> get(@RequestHeader("playerId") long playerId, @PathVariable("sessionId") long sessionId) {
-        return sessionRepository.findOne(sessionId);
+    public @ResponseBody GameSession<State> get(@RequestHeader("playerId") long playerId, @PathVariable("sessionId") long session) {
+        return sessionRepository.findOne(new GameSessionKey(game, session));
     }
 }

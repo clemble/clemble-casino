@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.event.GameConstructionEvent;
+import com.gogomaya.game.GameSessionKey;
 
 @JsonTypeName("gameConstructed")
 public class GameConstructedEvent implements GameConstructionEvent {
@@ -13,24 +14,21 @@ public class GameConstructedEvent implements GameConstructionEvent {
      */
     private static final long serialVersionUID = 1069615920429317027L;
 
-    final private long session;
+    final private GameSessionKey session;
 
     @JsonCreator
-    public GameConstructedEvent(@JsonProperty("session") long session) {
+    public GameConstructedEvent(@JsonProperty("session") GameSessionKey session) {
         this.session = session;
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (session ^ (session >>> 32));
-        return result;
+        return session.hashCode();
     }
 
     @Override

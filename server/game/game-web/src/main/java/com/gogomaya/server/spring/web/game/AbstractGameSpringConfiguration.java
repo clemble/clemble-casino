@@ -161,7 +161,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Bean
     @Singleton
     public GameConstructionController<State> picPacPoeConstructionController() {
-        return new GameConstructionController<State>(gameConstructionRepository, picPacPoeConstructionService(), gameSpecificationRegistry, tableServerRegistry);
+        return new GameConstructionController<State>(getGame(), gameConstructionRepository, picPacPoeConstructionService(), gameSpecificationRegistry, tableServerRegistry);
     }
 
     @Bean
@@ -173,6 +173,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Bean
     @Singleton
     public GameActionController<State> picPacPoeEngineController() {
-        return new GameActionController<State>(gameSessionRepository, picPacPoeSessionProcessor());
+        return new GameActionController<State>(getGame(), gameSessionRepository, picPacPoeSessionProcessor());
     }
 }

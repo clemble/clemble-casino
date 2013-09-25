@@ -15,7 +15,7 @@ import com.gogomaya.game.construct.AutomaticGameRequest;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.game.specification.GameSpecification;
-import com.gogomaya.game.specification.SpecificationName;
+import com.gogomaya.game.specification.GameSpecificationKey;
 import com.gogomaya.player.PlayerPresence;
 import com.gogomaya.player.Presence;
 import com.gogomaya.server.player.lock.PlayerLockService;
@@ -55,14 +55,14 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
 
         public GameInitiation toInitiation() {
             // Step 1. Creating instant game request
-            return new GameInitiation(construction.getRequest().getSpecification().getName().getGame(), construction.getSession(), participants, specification);
+            return new GameInitiation(construction.getSession(), participants, specification);
         }
     }
 
-    final private LoadingCache<SpecificationName, Queue<AutomaticGameConstruction>> PENDING_CONSTRUCTIONS = CacheBuilder.newBuilder().build(
-            new CacheLoader<SpecificationName, Queue<AutomaticGameConstruction>>() {
+    final private LoadingCache<GameSpecificationKey, Queue<AutomaticGameConstruction>> PENDING_CONSTRUCTIONS = CacheBuilder.newBuilder().build(
+            new CacheLoader<GameSpecificationKey, Queue<AutomaticGameConstruction>>() {
                 @Override
-                public Queue<AutomaticGameConstruction> load(SpecificationName key) throws Exception {
+                public Queue<AutomaticGameConstruction> load(GameSpecificationKey key) throws Exception {
                     return new ArrayBlockingQueue<AutomaticGameConstruction>(100);
                 }
             });
@@ -108,7 +108,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
             // Step 2.2. Acquire and process Queue
             Queue<AutomaticGameConstruction> specificationQueue = null;
             try {
-                SpecificationName constructionKey = request.getSpecification().getName();
+                GameSpecificationKey constructionKey = request.getSpecification().getName();
                 specificationQueue = PENDING_CONSTRUCTIONS.get(constructionKey);
             } catch (ExecutionException e) {
                 throw GogomayaException.fromError(GogomayaError.ServerCacheError);

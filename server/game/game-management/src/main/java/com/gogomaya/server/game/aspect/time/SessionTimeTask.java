@@ -8,6 +8,7 @@ import org.springframework.scheduling.TriggerContext;
 
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.game.specification.GameSpecification;
@@ -20,12 +21,10 @@ public class SessionTimeTask implements GameEventTask, SessionAware {
      */
     private static final long serialVersionUID = -7157994014672627030L;
 
-    final private Game game;
-    final private long session;
+    final private GameSessionKey session;
     final private PlayerTimeTracker[] playerTimeTrackers;
 
     public SessionTimeTask(GameInitiation initiation) {
-        this.game = initiation.getGame();
         this.session = initiation.getSession();
 
         final GameSpecification specification = initiation.getSpecification();
@@ -41,12 +40,7 @@ public class SessionTimeTask implements GameEventTask, SessionAware {
     }
 
     @Override
-    public Game getGame() {
-        return game;
-    }
-
-    @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 

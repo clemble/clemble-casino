@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.server.integration.game.GameSessionPlayer;
@@ -50,7 +51,7 @@ public class GameScenarios {
         // Step 2. Creating availability game request
         GameSessionPlayer<State> sessionPlayer = players.get(0).<State> getGameConstructor(gameName).constructAvailability(specification, participants);
         constructedGames.add(sessionPlayer);
-        long construction = sessionPlayer.getSession();
+        GameSessionKey construction = sessionPlayer.getSession();
         for (int i = 1; i < numPlayers; i++) {
             constructedGames.add(players.get(i).<State> getGameConstructor(gameName).acceptInvitation(construction));
         }

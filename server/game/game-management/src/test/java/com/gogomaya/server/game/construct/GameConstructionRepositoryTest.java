@@ -1,5 +1,7 @@
 package com.gogomaya.server.game.construct;
 
+import static org.junit.Assert.assertNotEquals;
+
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -57,5 +59,25 @@ public class GameConstructionRepositoryTest {
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
         Assert.assertNotNull(construction.getResponses());
+    }
+
+    @Test
+    public void testSaving2() {
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(1L, GameSpecification.DEFAULT, ImmutableList.<Long> of(1L, 2L), GameDeclineBehavior.invalidate);
+
+        GameConstruction construction = new GameConstruction(availabilityGameRequest);
+        construction.setState(GameConstructionState.pending);
+        Assert.assertNotNull(construction.getResponses());
+        construction = constructionRepository.saveAndFlush(construction);
+        Assert.assertNotNull(construction.getResponses());
+
+        GameConstruction anotherConstruction = new GameConstruction(availabilityGameRequest);
+        anotherConstruction.setState(GameConstructionState.pending);
+        Assert.assertNotNull(anotherConstruction.getResponses());
+        anotherConstruction = constructionRepository.saveAndFlush(anotherConstruction);
+        Assert.assertNotNull(anotherConstruction.getResponses());
+        
+        assertNotEquals(anotherConstruction.getSession(), construction.getSession());
+
     }
 }

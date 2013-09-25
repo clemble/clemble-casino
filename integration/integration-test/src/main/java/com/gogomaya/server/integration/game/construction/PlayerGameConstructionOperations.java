@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import com.gogomaya.game.Game;
 import com.gogomaya.game.GameAware;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.construct.GameRequest;
 import com.gogomaya.game.specification.GameSpecification;
@@ -56,11 +57,11 @@ public class PlayerGameConstructionOperations<State extends GameState> implement
         return gameOperations.construct(player, request);
     }
 
-    public GameSessionPlayer<State> acceptInvitation(long construction) {
+    public GameSessionPlayer<State> acceptInvitation(GameSessionKey construction) {
         return gameOperations.acceptInvitation(player, construction);
     }
 
-    public void declineInvitation(long construction) {
+    public void declineInvitation(GameSessionKey construction) {
         gameOperations.declineInvitation(player, construction);
     }
 

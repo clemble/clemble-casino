@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.event.GameConstructionEvent;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("canceled")
@@ -14,24 +15,24 @@ public class GameCanceledEvent implements GameConstructionEvent, PlayerAware {
      */
     private static final long serialVersionUID = 1L;
 
-    final private long session;
+    final private GameSessionKey session;
 
     final private long playerId;
 
     @JsonCreator
-    public GameCanceledEvent(@JsonProperty("session") long session, @JsonProperty("playerId") long playerId) {
+    public GameCanceledEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("playerId") long playerId) {
         this.session = session;
         this.playerId = playerId;
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 
     @Override
     public int hashCode() {
-        return 31 + (int) (session ^ (session >>> 32));
+        return session.hashCode();
     }
 
     @Override

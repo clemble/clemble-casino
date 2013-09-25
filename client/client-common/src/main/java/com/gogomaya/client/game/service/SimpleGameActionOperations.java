@@ -6,6 +6,7 @@ import com.gogomaya.event.ClientEvent;
 import com.gogomaya.event.listener.EventListener;
 import com.gogomaya.event.listener.EventListenersManager;
 import com.gogomaya.event.listener.SessionEventSelector;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.event.client.MadeMove;
 import com.gogomaya.game.service.GameActionService;
@@ -18,35 +19,35 @@ public class SimpleGameActionOperations<State extends GameState> implements Game
     private static final long serialVersionUID = -2263303118851762598L;
 
     final private long playerId;
-    final private long sessionId;
+    final private GameSessionKey session;
     final private GameActionService<State> gameActionService;
     final private EventListenersManager eventListenersManager;
 
-    public SimpleGameActionOperations(long playerId, long sessionId, EventListenersManager eventListenersManager, GameActionService<State> gameActionService) {
+    public SimpleGameActionOperations(long playerId, GameSessionKey sessionId, EventListenersManager eventListenersManager, GameActionService<State> gameActionService) {
         this.playerId = playerId;
-        this.sessionId = sessionId;
+        this.session = sessionId;
         this.eventListenersManager = checkNotNull(eventListenersManager);
         this.gameActionService = checkNotNull(gameActionService);
     }
 
     @Override
     public State process(ClientEvent move) {
-        return gameActionService.process(sessionId, move);
+        return gameActionService.process(session.getSession(), move);
     }
 
     @Override
     public MadeMove getAction(int actionId) {
-        return gameActionService.getAction(sessionId, actionId);
+        return gameActionService.getAction(session.getSession(), actionId);
     }
 
     @Override
     public void subscribe(EventListener eventListener) {
-        eventListenersManager.subscribe(new SessionEventSelector(sessionId), eventListener);
+        eventListenersManager.subscribe(new SessionEventSelector(session), eventListener);
     }
 
     @Override
-    public long getSession() {
-        return sessionId;
+    public GameSessionKey getSession() {
+        return session;
     }
 
     @Override

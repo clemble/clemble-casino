@@ -11,6 +11,7 @@ import com.gogomaya.VersionAware;
 import com.gogomaya.base.ActionLatch;
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.account.GameAccount;
 import com.gogomaya.game.account.GameAccountFactory;
 import com.gogomaya.game.configuration.GameRuleOptions;
@@ -40,7 +41,7 @@ import com.gogomaya.money.MoneySource;
 import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionKey;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerCategory;
 import com.gogomaya.player.PlayerGender;
@@ -91,7 +92,7 @@ public class ObjectTest {
             @Override
             public PaymentTransaction generate() {
                 return new PaymentTransaction()
-                        .setTransactionId(new PaymentTransactionId().setSource(MoneySource.TicTacToe).setTransactionId(0))
+                        .setTransactionKey(new PaymentTransactionKey().setSource(MoneySource.TicTacToe).setTransactionId(0))
                         .addPaymentOperation(
                                 new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayerId(0))
                         .addPaymentOperation(
@@ -128,8 +129,11 @@ public class ObjectTest {
 
             @Override
             public GameConstruction generate() {
-                return new GameConstruction().setRequest(new AutomaticGameRequest(1, GameSpecification.DEFAULT))
-                        .setResponses(new ActionLatch(ImmutableList.<Long> of(1L, 2L), "response")).setState(GameConstructionState.pending);
+                return new GameConstruction()
+                    .setSession(new GameSessionKey(Game.pic, 0))
+                    .setRequest(new AutomaticGameRequest(1, GameSpecification.DEFAULT))
+                    .setResponses(new ActionLatch(ImmutableList.<Long> of(1L, 2L), "response"))
+                    .setState(GameConstructionState.pending);
             }
         });
 
@@ -161,7 +165,7 @@ public class ObjectTest {
 
             @Override
             public StubGameState generate() {
-                GameAccount account = GameAccountFactory.create(new GameInitiation(Game.pac, 1L, ImmutableList.<Long> of(1L, 2L), GameSpecification.DEFAULT));
+                GameAccount account = GameAccountFactory.create(new GameInitiation(new GameSessionKey(Game.pac, 1L), ImmutableList.<Long> of(1L, 2L), GameSpecification.DEFAULT));
                 ActionLatch actionLatch = new ActionLatch(ImmutableList.<Long> of(1L, 2L), "stub");
                 GameOutcome outcome = new NoOutcome();
                 return new StubGameState(account, actionLatch, outcome, 1);

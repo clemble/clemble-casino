@@ -5,30 +5,24 @@ import static com.gogomaya.utils.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import com.gogomaya.game.Game;
-import com.gogomaya.game.GameAware;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.specification.GameSpecification;
 import com.gogomaya.game.specification.GameSpecificationAware;
 
-public class GameInitiation implements GameOpponentsAware, GameSpecificationAware, SessionAware, GameAware {
+public class GameInitiation implements GameOpponentsAware, GameSpecificationAware, SessionAware {
 
     /**
      * Generated 10/07/13
      */
     private static final long serialVersionUID = -8584404446775359390L;
 
-    final private Game game;
-
-    final private long session;
-
+    final private GameSessionKey session;
     final private GameSpecification specification;
-
     final private LinkedHashSet<Long> participants;
 
     public GameInitiation(GameConstruction construction) {
         this.specification = construction.getRequest().getSpecification();
-        this.game = specification.getName().getGame();
         this.session = construction.getSession();
 
         final Collection<Long> accpectedParticipants = construction.fetchAcceptedParticipants();
@@ -36,16 +30,10 @@ public class GameInitiation implements GameOpponentsAware, GameSpecificationAwar
                 accpectedParticipants);
     }
 
-    public GameInitiation(final Game game, long session, Collection<Long> participants, GameSpecification specification) {
-        this.game = game;
+    public GameInitiation(GameSessionKey session, Collection<Long> participants, GameSpecification specification) {
         this.session = session;
         this.specification = checkNotNull(specification);
         this.participants = participants instanceof LinkedHashSet ? (LinkedHashSet<Long>) participants : new LinkedHashSet<Long>(participants);
-    }
-
-    @Override
-    public Game getGame() {
-        return game;
     }
 
     @Override
@@ -59,7 +47,7 @@ public class GameInitiation implements GameOpponentsAware, GameSpecificationAwar
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 }

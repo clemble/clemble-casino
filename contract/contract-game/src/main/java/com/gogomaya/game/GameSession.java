@@ -8,9 +8,9 @@ import java.util.List;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -25,7 +25,6 @@ import org.hibernate.annotations.TypeDefs;
 
 import com.gogomaya.VersionAware;
 import com.gogomaya.event.ClientEvent;
-import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.game.event.client.MadeMove;
 import com.gogomaya.game.specification.GameSpecification;
@@ -44,12 +43,12 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
      */
     private static final long serialVersionUID = -6572596573895530995L;
 
-    @Id
-    @Column(name = "SESSION_ID")
-    private long session;
+    @EmbeddedId
+    private GameSessionKey session;
 
     @ManyToOne
-    @JoinColumns(value = { @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
+    @JoinColumns(value = {
+            @JoinColumn(name = "SPECIFICATION_NAME", referencedColumnName = "SPECIFICATION_NAME"),
             @JoinColumn(name = "GAME_NAME", referencedColumnName = "GAME_NAME") })
     private GameSpecification specification;
 
@@ -58,11 +57,13 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
 
     @ElementCollection(fetch = FetchType.EAGER)
     @OrderColumn(name = "PLAYERS_ORDER")
-    @CollectionTable(name = "GAME_SESSION_PLAYERS", joinColumns = @JoinColumn(name = "SESSION_ID"))
+    @CollectionTable(name = "GAME_SESSION_PLAYERS",
+            joinColumns = {@JoinColumn(name = "SESSION_ID"), @JoinColumn(name = "GAME")})
     private List<Long> players = new ArrayList<Long>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "GAME_SESSION_MOVES", joinColumns = @JoinColumn(name = "SESSION_ID"))
+    @CollectionTable(name = "GAME_SESSION_MOVES", 
+        joinColumns = {@JoinColumn(name = "SESSION_ID"), @JoinColumn(name = "GAME")})
     private List<MadeMove> madeMoves = new ArrayList<MadeMove>();
 
     @Type(type = "gameState")
@@ -77,11 +78,11 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 
-    public void setSession(long newSession) {
+    public void setSession(GameSessionKey newSession) {
         this.session = newSession;
     }
 
@@ -148,7 +149,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     }
 
     public GameInitiation toInitiation() {
-        return new GameInitiation(specification.getName().getGame(), session, players, specification);
+        return new GameInitiation(session, players, specification);
     }
 
     @Override
@@ -157,7 +158,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
         int result = 1;
         result = prime * result + ((madeMoves == null) ? 0 : madeMoves.hashCode());
         result = prime * result + ((players == null) ? 0 : players.hashCode());
-        result = prime * result + (int) (session ^ (session >>> 32));
+        result = prime * result + ((session == null) ? 0 : session.hashCode());
         result = prime * result + ((sessionState == null) ? 0 : sessionState.hashCode());
         result = prime * result + ((specification == null) ? 0 : specification.hashCode());
         return result;

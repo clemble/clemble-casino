@@ -6,6 +6,8 @@ import com.gogomaya.event.ClientEvent;
 import com.gogomaya.event.listener.ConstructionEventSelector;
 import com.gogomaya.event.listener.EventListener;
 import com.gogomaya.event.listener.EventListenersManager;
+import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameRequest;
 import com.gogomaya.game.event.schedule.InvitationAcceptedEvent;
@@ -16,11 +18,13 @@ import com.gogomaya.game.service.GameConstructionService;
 public class SimpleGameConstructionOperations implements GameConstructionOperations {
 
     final private long playerId;
+    final private Game game;
     final private EventListenersManager listenersManager;
     final private GameConstructionService constructionService;
 
-    public SimpleGameConstructionOperations(long playerId, GameConstructionService constructionService, EventListenersManager listenersManager) {
+    public SimpleGameConstructionOperations(long playerId, Game game, GameConstructionService constructionService, EventListenersManager listenersManager) {
         this.playerId = playerId;
+        this.game = game;
         this.constructionService = checkNotNull(constructionService);
         this.listenersManager = checkNotNull(listenersManager);
     }
@@ -37,12 +41,12 @@ public class SimpleGameConstructionOperations implements GameConstructionOperati
 
     @Override
     public GameConstruction accept(long sessionId) {
-        return response(sessionId, new InvitationAcceptedEvent(sessionId, playerId));
+        return response(sessionId, new InvitationAcceptedEvent(new GameSessionKey(game, sessionId), playerId));
     }
 
     @Override
     public GameConstruction decline(long sessionId) {
-        return response(sessionId, new InvitationDeclinedEvent(sessionId, playerId));
+        return response(sessionId, new InvitationDeclinedEvent(playerId, new GameSessionKey(game, sessionId)));
     }
 
     @Override
@@ -56,8 +60,8 @@ public class SimpleGameConstructionOperations implements GameConstructionOperati
     }
 
     @Override
-    public void subscribe(long sessionId, EventListener constructionListener) {
-        listenersManager.subscribe(new ConstructionEventSelector(sessionId), constructionListener);
+    public void subscribe(long session, EventListener constructionListener) {
+        listenersManager.subscribe(new ConstructionEventSelector(new GameSessionKey(game, session)), constructionListener);
     }
 
     @Override

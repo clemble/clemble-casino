@@ -11,6 +11,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.player.PlayerAware;
@@ -132,7 +133,7 @@ public class Player implements PlayerAware {
         return new HttpEntity<T>(value, header);
     }
 
-    public <T> HttpEntity<T> signGame(long session, long table, T value) {
+    public <T> HttpEntity<T> signGame(GameSessionKey session, long table, T value) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(playerId));
@@ -143,7 +144,7 @@ public class Player implements PlayerAware {
         return new HttpEntity<T>(value, header);
     }
 
-    public void listen(long session, GameSessionListener sessionListener) {
+    public void listen(GameSessionKey session, GameSessionListener sessionListener) {
         playerListenersManager.listen(session, sessionListener);
     }
 

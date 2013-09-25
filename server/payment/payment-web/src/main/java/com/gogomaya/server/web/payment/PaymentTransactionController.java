@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionKey;
 import com.gogomaya.payment.service.PaymentTransactionService;
 import com.gogomaya.server.payment.PaymentTransactionServerService;
 import com.gogomaya.server.repository.payment.PaymentTransactionRepository;
@@ -50,7 +50,7 @@ public class PaymentTransactionController implements PaymentTransactionService, 
             @PathVariable("source") String source,
             @PathVariable("transactionId") long transactionId) {
         // Step 1. Checking payment transaction exists
-        PaymentTransactionId paymentTransactionId = new PaymentTransactionId(source, transactionId);
+        PaymentTransactionKey paymentTransactionId = new PaymentTransactionKey(source, transactionId);
         PaymentTransaction paymentTransaction = paymentTransactionRepository.findOne(paymentTransactionId);
         if (paymentTransaction == null)
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionNotExists);

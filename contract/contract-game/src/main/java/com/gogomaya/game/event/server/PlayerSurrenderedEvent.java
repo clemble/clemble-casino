@@ -60,7 +60,7 @@ public class PlayerSurrenderedEvent<State extends GameState> extends GameServerE
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerSurrenderedEvent<State> other = (PlayerSurrenderedEvent<State>) obj;
+        PlayerSurrenderedEvent<?> other = (PlayerSurrenderedEvent<?>) obj;
         if (playerId != other.playerId)
             return false;
         if (reason == null) {

@@ -47,13 +47,13 @@ public class GameSpecification implements Serializable {
      */
     private static final long serialVersionUID = 6573909004152898162L;
 
-    final public static GameSpecification DEFAULT = new GameSpecification().setName(new SpecificationName(Game.pic, "DEFAULT"))
+    final public static GameSpecification DEFAULT = new GameSpecification().setName(new GameSpecificationKey(Game.pic, "DEFAULT"))
             .setBetRule(FixedBetRule.DEFAULT).setPrice(Money.create(Currency.FakeMoney, 50)).setGiveUpRule(GiveUpRule.lost)
             .setMoveTimeRule(MoveTimeRule.DEFAULT).setTotalTimeRule(TotalTimeRule.DEFAULT).setNumberRule(PlayerNumberRule.two)
             .setPrivacayRule(PrivacyRule.everybody);
 
     @EmbeddedId
-    private SpecificationName name;
+    private GameSpecificationKey name;
 
     @Type(type = "money")
     @Columns(columns = { @Column(name = "CURRENCY"), @Column(name = "PRICE") })
@@ -90,11 +90,11 @@ public class GameSpecification implements Serializable {
     public GameSpecification() {
     }
 
-    public SpecificationName getName() {
+    public GameSpecificationKey getName() {
         return name;
     }
 
-    public GameSpecification setName(SpecificationName name) {
+    public GameSpecification setName(GameSpecificationKey name) {
         this.name = name;
         return this;
     }

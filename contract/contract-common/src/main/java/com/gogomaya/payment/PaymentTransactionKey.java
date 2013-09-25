@@ -10,7 +10,7 @@ import javax.persistence.Enumerated;
 import com.gogomaya.money.MoneySource;
 
 @Embeddable
-public class PaymentTransactionId implements Serializable {
+public class PaymentTransactionKey implements Serializable {
 
     /**
      * Generated 05/05/13
@@ -24,14 +24,14 @@ public class PaymentTransactionId implements Serializable {
     @Enumerated(EnumType.STRING)
     private MoneySource source;
 
-    public PaymentTransactionId() {
+    public PaymentTransactionKey() {
     }
 
-    public PaymentTransactionId(String source, long transactionId) {
+    public PaymentTransactionKey(String source, long transactionId) {
         this(MoneySource.valueOf(source), transactionId);
     }
 
-    public PaymentTransactionId(MoneySource source, long transactionId) {
+    public PaymentTransactionKey(MoneySource source, long transactionId) {
         this.source = source;
         this.transactionId = transactionId;
     }
@@ -40,7 +40,7 @@ public class PaymentTransactionId implements Serializable {
         return transactionId;
     }
 
-    public PaymentTransactionId setTransactionId(long transactionId) {
+    public PaymentTransactionKey setTransactionId(long transactionId) {
         this.transactionId = transactionId;
         return this;
     }
@@ -49,7 +49,7 @@ public class PaymentTransactionId implements Serializable {
         return source;
     }
 
-    public PaymentTransactionId setSource(MoneySource source) {
+    public PaymentTransactionKey setSource(MoneySource source) {
         this.source = source;
         return this;
     }
@@ -71,7 +71,7 @@ public class PaymentTransactionId implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PaymentTransactionId other = (PaymentTransactionId) obj;
+        PaymentTransactionKey other = (PaymentTransactionKey) obj;
         if (source != other.source)
             return false;
         if (transactionId != other.transactionId)

@@ -10,7 +10,7 @@ import com.gogomaya.money.MoneySource;
 import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionId;
+import com.gogomaya.payment.PaymentTransactionKey;
 import com.gogomaya.payment.PlayerAccount;
 import com.gogomaya.player.PlayerAware;
 import com.gogomaya.player.PlayerProfile;
@@ -35,7 +35,7 @@ public class PlayerAccountServerServiceImpl implements PlayerAccountServerServic
         // Step 2. Creating initial empty
         Money initialBalance = Money.create(Currency.FakeMoney, 500);
         PaymentTransaction initialTransaction = new PaymentTransaction()
-                .setTransactionId(new PaymentTransactionId(MoneySource.Registration, player.getPlayerId()))
+                .setTransactionKey(new PaymentTransactionKey(MoneySource.Registration, player.getPlayerId()))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setAmount(initialBalance).setPlayerId(player.getPlayerId()))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setAmount(initialBalance).setPlayerId(PlayerAware.DEFAULT_PLAYER));
         // Step 3. Returning PaymentTransaction

@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.configuration.GameSpecificationOptions;
 import com.gogomaya.game.configuration.SelectSpecificationOptions;
@@ -88,7 +89,7 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
     abstract protected GameConstruction request(Player player, GameRequest request);
 
     @Override
-    final public GameSessionPlayer<State> acceptInvitation(Player player, long construction) {
+    final public GameSessionPlayer<State> acceptInvitation(Player player, GameSessionKey construction) {
         // Step 1. Need to start listening before sending accept, otherwise constructed event might be missed
         GameSessionPlayer<State> sessionPlayer = playerFactory.construct(player, construction);
         // Step 2. Sending accept message to the server
@@ -98,8 +99,8 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
     }
 
     @Override
-    final public void declineInvitation(Player player, long construction) {
-        InvitationResponseEvent declinedEvents = new InvitationDeclinedEvent(construction, player.getPlayerId());
+    final public void declineInvitation(Player player, GameSessionKey construction) {
+        InvitationResponseEvent declinedEvents = new InvitationDeclinedEvent(player.getPlayerId(), construction);
         response(player, declinedEvents);
     }
 

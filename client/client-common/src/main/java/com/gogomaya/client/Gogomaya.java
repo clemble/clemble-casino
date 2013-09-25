@@ -6,6 +6,7 @@ import com.gogomaya.client.payment.service.PaymentTransactionOperations;
 import com.gogomaya.client.player.service.PlayerPresenceOperations;
 import com.gogomaya.client.player.service.PlayerProfileOperations;
 import com.gogomaya.game.Game;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 
 public interface Gogomaya {
@@ -18,6 +19,6 @@ public interface Gogomaya {
 
     public GameConstructionOperations getGameConstructionOperations(Game game);
 
-    public <State extends GameState> GameActionOperations<State> getGameActionOperations(Game game, long sessionId);
+    public <State extends GameState> GameActionOperations<State> getGameActionOperations(GameSessionKey session);
 
 }

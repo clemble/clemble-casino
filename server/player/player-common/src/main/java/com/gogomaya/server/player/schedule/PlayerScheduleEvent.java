@@ -1,12 +1,14 @@
 package com.gogomaya.server.player.schedule;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.player.PlayerAware;
 
@@ -22,9 +24,8 @@ public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparabl
     @Id
     @Column(name = "PLAYER_ID")
     private long playerId;
-    @Id
-    @Column(name = "CONSTRUCTION_ID")
-    private long session;
+    @Embedded
+    private GameSessionKey session;
     @Column(name = "START_TIME")
     private long startTime;
     @Column(name = "END_TIME")
@@ -35,7 +36,7 @@ public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparabl
 
     @JsonCreator
     public PlayerScheduleEvent(@JsonProperty("playerId") long player,
-            @JsonProperty("construction") long construction,
+            @JsonProperty("session") GameSessionKey construction,
             @JsonProperty("startTime") long startTime,
             @JsonProperty("endTime") long endTime) {
         this.playerId = player;
@@ -54,11 +55,11 @@ public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparabl
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 
-    public void setSession(long session) {
+    public void setSession(GameSessionKey session) {
         this.session = session;
     }
 
@@ -87,7 +88,7 @@ public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparabl
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (session ^ (session >>> 32));
+        result = prime * result + (int) (session != null ? session.hashCode() : 0);
         result = prime * result + (int) (endTime ^ (endTime >>> 32));
         result = prime * result + (int) (getPlayerId() ^ (getPlayerId() >>> 32));
         result = prime * result + (int) (startTime ^ (startTime >>> 32));

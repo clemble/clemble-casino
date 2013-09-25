@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.event.Event;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.ServerResourse;
 import com.gogomaya.game.construct.GameConstruction;
@@ -31,7 +32,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     final private AtomicBoolean keepAlive = new AtomicBoolean(true);
     final private AtomicReference<State> currentState = new AtomicReference<State>();
 
-    private long session;
+    private GameSessionKey session;
     private ServerResourse serverResourse;
 
     public AbstractGameSessionPlayer(final Player player, GameConstruction construction) {
@@ -42,7 +43,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
             @Override
             public void notify(Event event) {
                 if (event instanceof GameStartedEvent) {
-                    GameStartedEvent<State> gameStartedEvent = ((GameStartedEvent<State>) event);
+                    GameStartedEvent<?> gameStartedEvent = ((GameStartedEvent<?>) event);
                     session = gameStartedEvent.getSession();
                     serverResourse = gameStartedEvent.getResource();
                 }
@@ -58,8 +59,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    final public long getSession() {
-        return construction != null ? construction.getSession() : 0;
+    final public GameSessionKey getSession() {
+        return construction != null ? construction.getSession() : null;
     }
 
     @Override
@@ -183,6 +184,6 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         setState(perform(player, serverResourse, session, gameAction));
     }
 
-    abstract public State perform(Player player, ServerResourse resourse, long session, GameClientEvent clientEvent);
+    abstract public State perform(Player player, ServerResourse resourse, GameSessionKey session, GameClientEvent clientEvent);
 
 }

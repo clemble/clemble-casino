@@ -9,11 +9,12 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.construct.GameConstruction;
 
 @Repository
 @Transactional
-public interface GameConstructionRepository extends JpaRepository<GameConstruction, Long> {
+public interface GameConstructionRepository extends JpaRepository<GameConstruction, GameSessionKey> {
 
     @Override
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)

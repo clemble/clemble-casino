@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gogomaya.error.GogomayaErrorFormat.GogomayaFailureDeserializer;
 import com.gogomaya.error.GogomayaErrorFormat.GogomayaFailureSerializer;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.player.PlayerAware;
 
@@ -19,8 +20,8 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
     private static final long serialVersionUID = 8151325637613551745L;
 
     final private GogomayaError error;
+    final private GameSessionKey session;
     final private long player;
-    final private long session;
 
     public GogomayaFailure(final GogomayaError error) {
         this(error, PlayerAware.DEFAULT_PLAYER, SessionAware.DEFAULT_SESSION);
@@ -32,10 +33,10 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
 
     @JsonCreator
     public GogomayaFailure(@JsonProperty("error") final GogomayaError error, @JsonProperty("playerId") final long playerId,
-            @JsonProperty("session") final long sessionId) {
+            @JsonProperty("session") final GameSessionKey session) {
         this.error = error;
+        this.session = session;
         this.player = playerId;
-        this.session = sessionId;
     }
 
     public GogomayaError getError() {
@@ -48,7 +49,7 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
     }
 
     @Override
-    public long getSession() {
+    public GameSessionKey getSession() {
         return session;
     }
 
@@ -63,7 +64,7 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
         int result = 1;
         result = prime * result + ((error == null) ? 0 : error.hashCode());
         result = prime * result + (int) (player ^ (player >>> 32));
-        result = prime * result + (int) (session ^ (session >>> 32));
+        result = prime * result + (int) (session.hashCode());
         return result;
     }
 
