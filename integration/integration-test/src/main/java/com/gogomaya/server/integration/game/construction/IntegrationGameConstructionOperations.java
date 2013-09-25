@@ -69,7 +69,7 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
         HttpEntity<InvitationResponseEvent> requestEntity = player.<InvitationResponseEvent> sign(responseEvent);
         // Step 2. Rest template generation
         restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, HttpMethod.POST, requestEntity,
-                GameConstruction.class, responseEvent.getSession());
+                GameConstruction.class, responseEvent.getSession().getSession());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Rest template generation
         return restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, HttpMethod.GET,
-                requestEntity, ClientEvent.class, construction, requested).getBody();
+                requestEntity, ClientEvent.class, construction.getSession(), requested).getBody();
     }
 
 }

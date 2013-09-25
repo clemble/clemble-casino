@@ -48,9 +48,7 @@ public class InvitationAcceptedEvent implements InvitationResponseEvent {
         InvitationAcceptedEvent other = (InvitationAcceptedEvent) obj;
         if (playerId != other.playerId)
             return false;
-        if (session != other.session)
-            return false;
-        return true;
+        return session.equals(other.session);
     }
 
 }

@@ -37,12 +37,12 @@ public class IntegrationGameSessionPlayerFactory<State extends GameState> implem
     }
 
     @Override
-    public GameSessionPlayer<State> construct(Player player, GameSessionKey constructionId) {
+    public GameSessionPlayer<State> construct(Player player, GameSessionKey sessionKey) {
         // Step 1. Generating signed request
         HttpEntity<Void> requestEntity = player.<Void>sign(null);
         // Step 3. Requesting associated Construction
         GameConstruction construction = (GameConstruction) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SESSIONS_CONSTRUCTION,
-                HttpMethod.GET, requestEntity, GameConstruction.class, constructionId).getBody();
+                HttpMethod.GET, requestEntity, GameConstruction.class, sessionKey.getSession()).getBody();
         // Step 4. Returning IntegrationGameSessionProcessor
         return new IntegrationGameSessionPlayer<State>(player, construction, restTemplate, baseUrl);
     }
