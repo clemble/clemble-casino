@@ -23,9 +23,9 @@
 
     create table GAME_SESSION (
         SESSION_ID bigint not null,
-        NUM_MADE_MOVES integer,
         SESSION_STATE integer,
         GAME_STATE varchar(4096),
+        VERSION integer,
         GAME_NAME varchar(255),
         SPECIFICATION_NAME varchar(255),
         primary key (SESSION_ID)

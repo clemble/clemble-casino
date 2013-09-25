@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import com.gogomaya.VersionAware;
 import com.gogomaya.base.ActionLatch;
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.Game;
@@ -50,6 +51,7 @@ import com.gogomaya.server.player.notification.SimplePlayerNotificationRegistry;
 import com.google.common.collect.ImmutableList;
 import com.stresstest.random.AbstractValueGenerator;
 import com.stresstest.random.ObjectGenerator;
+import com.stresstest.random.ValueGenerator;
 
 public class ObjectTest {
 
@@ -178,7 +180,7 @@ public class ObjectTest {
 
             @Override
             public ServerRegistry generate() {
-                return new ServerRegistry(ImmutableList.<Map.Entry<String,String>>of(new ImmutablePair<String, String>("1000000", "host.me")));
+                return new ServerRegistry(ImmutableList.<Map.Entry<String, String>> of(new ImmutablePair<String, String>("1000000", "host.me")));
             }
         });
         ObjectGenerator.register(SimplePlayerNotificationRegistry.class, new AbstractValueGenerator<SimplePlayerNotificationRegistry>() {
@@ -186,6 +188,21 @@ public class ObjectTest {
             @Override
             public SimplePlayerNotificationRegistry generate() {
                 return new SimplePlayerNotificationRegistry(ObjectGenerator.generate(ServerRegistry.class));
+            }
+        });
+        ObjectGenerator.register(VersionAware.class, "version", new ValueGenerator<Integer>() {
+            @Override
+            public Integer generate() {
+                return 0;
+            }
+
+            @Override
+            public int scope() {
+                return 1;
+            }
+            
+            public ValueGenerator<Integer> clone() {
+                return this;
             }
         });
     }

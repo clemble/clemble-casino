@@ -16,12 +16,14 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
+import com.gogomaya.VersionAware;
 import com.gogomaya.event.ClientEvent;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.construct.GameInitiation;
@@ -35,7 +37,7 @@ import com.gogomaya.server.hibernate.JsonHibernateType;
 @TypeDefs(value = { @TypeDef(name = "gameState",
     typeClass = JsonHibernateType.class,
     defaultForType = GameState.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.gogomaya.game.GameState") }) })
-public class GameSession<State extends GameState> implements GameSpecificationAware, SessionAware, Serializable {
+public class GameSession<State extends GameState> implements GameSpecificationAware, SessionAware, VersionAware, Serializable {
 
     /**
      * Generated 16/02/13
@@ -67,8 +69,9 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     @Column(name = "GAME_STATE", length = 4096)
     private State state;
 
-    @Column(name = "NUM_MADE_MOVES")
-    private int numMadeMoves;
+    @Version
+    @Column(name = "VERSION")
+    private int version;
 
     public GameSession() {
     }
@@ -123,16 +126,16 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     }
 
     public void addMadeMove(ClientEvent madeMove) {
-        MadeMove move = new MadeMove().setMove(madeMove).setMoveId(numMadeMoves++).setProcessingTime(System.currentTimeMillis());
+        MadeMove move = new MadeMove().setMove(madeMove).setMoveId(version + 1).setProcessingTime(System.currentTimeMillis());
         this.madeMoves.add(move);
     }
 
-    public int getNumMadeMoves() {
-        return numMadeMoves;
+    public int getVersion() {
+        return version;
     }
 
-    public void setNumMadeMoves(int numMadeMoves) {
-        this.numMadeMoves = numMadeMoves;
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public State getState() {

@@ -2,6 +2,7 @@ package com.gogomaya.server;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,10 +21,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import scala.reflect.generic.Trees.Modifiers;
+
+import com.gogomaya.game.GameTable;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.ScheduledGame;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameScheduleRepository;
+import com.gogomaya.server.repository.game.GameTableRepository;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.stresstest.random.ObjectGenerator;
 
@@ -40,9 +45,13 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
 
     @Autowired
     public GameConstructionRepository constructionRepository;
+    
+    @Autowired
+    public GameTableRepository gameTableRepository;
 
     @Test
     public void testSpecialCase() {
+        check(gameTableRepository, GameTable.class);
         check(constructionRepository, GameConstruction.class);
 
         ScheduledGame scheduledGame = ObjectGenerator.generate(ScheduledGame.class);
@@ -70,12 +79,15 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
             try {
                 Object objectToSave = ObjectGenerator.generate(domainClass);
                 for (Field field : domainClass.getDeclaredFields()) {
+                    if((field.getModifiers() & Modifier.STATIC) > 0)
+                            continue;
                     @SuppressWarnings("rawtypes")
                     JpaRepository relatedEntityRepository = domainClassToRepository.get(field.getType());
                     if (relatedEntityRepository != null) {
                         field.setAccessible(true);
                         Object relatedEntity = field.get(objectToSave);
-                        relatedEntityRepository.saveAndFlush(relatedEntity);
+                        Object savedEntity = relatedEntityRepository.saveAndFlush(relatedEntity);
+                        field.set(objectToSave, savedEntity);
                     }
                 }
 

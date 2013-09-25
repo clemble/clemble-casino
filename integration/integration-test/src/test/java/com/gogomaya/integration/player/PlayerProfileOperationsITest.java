@@ -69,17 +69,35 @@ public class PlayerProfileOperationsITest {
 
     @Test
     public void testProfileWrite() {
+        // Step 1. Generating and saving layer with random profile
         PlayerProfile playerProfile = randomProfile();
-
+        // Step 2. Saving profile to DB
         Player player = playerOperations.createPlayer(playerProfile);
         playerProfile.setPlayerId(player.getPlayerId());
         Player anotherPlayer = playerOperations.createPlayer();
         Assert.assertEquals(playerProfile, player.getProfile());
-
+        // Step 3. Updating created player with new Profile value
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayerId(player.getPlayerId());
+        newProfile.setVersion(0);
+        // Step 4. Checking saved profile, replaced the old one
+        PlayerProfile savedProfile = playerProfileOperations.put(player, player.getPlayerId(), newProfile);
 
-        Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayerId(), newProfile));
+        newProfile.setVersion(savedProfile.getVersion());
+        Assert.assertEquals(savedProfile, newProfile);
+
+        Assert.assertEquals(newProfile, player.getProfile());
+        Assert.assertEquals(newProfile, playerProfileOperations.get(player, player.getPlayerId()));
+        Assert.assertEquals(newProfile, playerProfileOperations.get(anotherPlayer, player.getPlayerId()));
+        // Step 5. Repeating steps from 3 to 4 with another new Profile
+        newProfile = randomProfile();
+        newProfile.setPlayerId(player.getPlayerId());
+        newProfile.setVersion(savedProfile.getVersion());
+
+        savedProfile = playerProfileOperations.put(player, player.getPlayerId(), newProfile);
+
+        newProfile.setVersion(savedProfile.getVersion());
+        Assert.assertEquals(savedProfile, newProfile);
 
         Assert.assertEquals(newProfile, player.getProfile());
         Assert.assertEquals(newProfile, playerProfileOperations.get(player, player.getPlayerId()));
@@ -87,7 +105,7 @@ public class PlayerProfileOperationsITest {
     }
 
     @Test
-    @Ignore //Test security
+    @Ignore //TODO Test security
     public void testProfileWriteByAnother() {
         PlayerProfile playerProfile = randomProfile();
         playerProfile.setPlayerId(0);
