@@ -133,11 +133,10 @@ public class Player implements PlayerAware {
         return new HttpEntity<T>(value, header);
     }
 
-    public <T> HttpEntity<T> signGame(GameSessionKey session, long table, T value) {
+    public <T> HttpEntity<T> signGame(GameSessionKey session, T value) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(playerId));
-        header.add("tableId", String.valueOf(table));
         header.add("sessionId", String.valueOf(session));
         header.add("Content-Type", "application/json");
         // Step 2. Generating request

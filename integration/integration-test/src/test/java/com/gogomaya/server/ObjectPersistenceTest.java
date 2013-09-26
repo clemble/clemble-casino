@@ -22,12 +22,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.gogomaya.game.GameTable;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.ScheduledGame;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameScheduleRepository;
-import com.gogomaya.server.repository.game.GameTableRepository;
 import com.gogomaya.server.spring.integration.TestConfiguration;
 import com.stresstest.random.ObjectGenerator;
 
@@ -45,12 +43,8 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
     @Autowired
     public GameConstructionRepository constructionRepository;
     
-    @Autowired
-    public GameTableRepository gameTableRepository;
-
     @Test
     public void testSpecialCase() {
-        check(gameTableRepository, GameTable.class);
         check(constructionRepository, GameConstruction.class);
 
         ScheduledGame scheduledGame = ObjectGenerator.generate(ScheduledGame.class);

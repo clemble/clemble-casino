@@ -9,7 +9,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.gogomaya.game.GameSession;
-import com.gogomaya.game.GameTable;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.ScheduledGame;
 import com.gogomaya.game.specification.GameSpecification;
@@ -51,7 +50,6 @@ public class GameSchemaGenerator {
         return configuration
                 .addAnnotatedClass(GameSpecification.class)
                 .addAnnotatedClass(GameSession.class)
-                .addAnnotatedClass(GameTable.class)
                 .addAnnotatedClass(GameConstruction.class)
                 .addAnnotatedClass(ScheduledGame.class);
     }

@@ -1,11 +1,13 @@
 package com.gogomaya.game.event.server;
 
+import static com.gogomaya.utils.Preconditions.checkNotNull;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.game.GameSession;
 import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
-import com.gogomaya.game.GameTable;
 import com.gogomaya.game.ServerResourse;
 import com.gogomaya.game.SessionAware;
 
@@ -19,9 +21,9 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
 
     final private ServerResourse resource;
 
-    public GameStartedEvent(GameTable<State> table) {
-        super(table.getCurrentSession());
-        this.resource = table.fetchServerResourse();
+    public GameStartedEvent(GameSession<State> session, ServerResourse resourse) {
+        super(session);
+        this.resource = checkNotNull(resourse);
     }
 
     @JsonCreator

@@ -10,15 +10,16 @@ import com.gogomaya.event.ClientEvent;
 import com.gogomaya.event.Event;
 import com.gogomaya.game.Game;
 import com.gogomaya.game.GameAware;
+import com.gogomaya.game.GameSession;
 import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
-import com.gogomaya.game.GameTable;
 import com.gogomaya.game.construct.GameInitiation;
 import com.gogomaya.game.event.client.surrender.SurrenderEvent;
 import com.gogomaya.game.event.server.GameServerEvent;
 import com.gogomaya.game.event.server.GameStartedEvent;
 import com.gogomaya.server.game.cache.GameCache;
 import com.gogomaya.server.game.cache.GameCacheService;
+import com.gogomaya.server.game.notification.TableServerRegistry;
 import com.gogomaya.server.player.notification.PlayerNotificationService;
 
 public class GameSessionProcessor<State extends GameState> implements GameAware {
@@ -30,17 +31,21 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
 
     final private Game game;
 
+    final private TableServerRegistry serverRegistry;
     final private GameCacheService<State> cacheService;
-    final private GameTableFactory<State> tableFactory;
+    final private GameSessionFactory<State> sessionFactory;
     final private PlayerNotificationService<Event> notificationService;
 
-    public GameSessionProcessor(final Game game,
-            final GameTableFactory<State> tableFactory,
+    public GameSessionProcessor(
+            final Game game,
+            final TableServerRegistry serverRegistry,
+            final GameSessionFactory<State> sessionFactory,
             final GameCacheService<State> cacheService,
             final PlayerNotificationService<Event> notificationService) {
         this.game = game;
+        this.serverRegistry = checkNotNull(serverRegistry);
         this.notificationService = checkNotNull(notificationService);
-        this.tableFactory = checkNotNull(tableFactory);
+        this.sessionFactory = checkNotNull(sessionFactory);
         this.cacheService = checkNotNull(cacheService);
     }
 
@@ -49,13 +54,13 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
         return game;
     }
 
-    public GameTable<State> start(GameInitiation initiation) {
+    public GameSession<State> start(GameInitiation initiation) {
         // Step 1. Allocating table for game initiation
-        final GameTable<State> table = tableFactory.constructTable(initiation);
+        final GameSession<State> session = sessionFactory.construct(initiation);
         // Step 2. Sending notification for game started
-        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(table));
+        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(session, serverRegistry.findServer(session)));
         // Step 3. Returning active table
-        return table;
+        return session;
     }
 
     public State process(GameSessionKey session, ClientEvent move) {

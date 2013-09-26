@@ -13,9 +13,9 @@ import com.gogomaya.event.Event;
 import com.gogomaya.game.Game;
 import com.gogomaya.game.GameState;
 import com.gogomaya.server.game.action.GameProcessorFactory;
+import com.gogomaya.server.game.action.GameSessionFactory;
 import com.gogomaya.server.game.action.GameSessionProcessor;
 import com.gogomaya.server.game.action.GameStateFactory;
-import com.gogomaya.server.game.action.GameTableFactory;
 import com.gogomaya.server.game.aspect.bet.GameBetAspectFactory;
 import com.gogomaya.server.game.aspect.outcome.GameOutcomeAspectFactory;
 import com.gogomaya.server.game.aspect.price.GamePriceAspectFactory;
@@ -36,7 +36,6 @@ import com.gogomaya.server.player.presence.PlayerPresenceServerService;
 import com.gogomaya.server.repository.game.GameConstructionRepository;
 import com.gogomaya.server.repository.game.GameSessionRepository;
 import com.gogomaya.server.repository.game.GameSpecificationRepository;
-import com.gogomaya.server.repository.game.GameTableRepository;
 import com.gogomaya.server.spring.common.SpringConfiguration;
 import com.gogomaya.server.spring.game.GameManagementSpringConfiguration;
 import com.gogomaya.server.spring.web.WebCommonSpringConfiguration;
@@ -55,10 +54,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Autowired
     @Qualifier("gameSpecificationRepository")
     public GameSpecificationRepository gameSpecificationRepository;
-
-    @Autowired
-    @Qualifier("gameTableRepository")
-    public GameTableRepository<State> gameTableRepository;
 
     @Autowired
     @Qualifier("gameConstructionRepository")
@@ -111,8 +106,8 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     @Singleton
-    public GameTableFactory<State> picPacPoeTableFactory() {
-        return new GameTableFactory<State>(ticTacToeStateFactory(), gameTableRepository, tableServerRegistry);
+    public GameSessionFactory<State> gameSessionFactory() {
+        return new GameSessionFactory<State>(ticTacToeStateFactory(), gameSessionRepository);
     }
 
     @Bean
@@ -155,7 +150,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Bean
     @Singleton
     public GameSessionProcessor<State> picPacPoeSessionProcessor() {
-        return new GameSessionProcessor<State>(getGame(), picPacPoeTableFactory(), picPacPoeCacheService(), playerNotificationService);
+        return new GameSessionProcessor<State>(getGame(), tableServerRegistry, gameSessionFactory(), picPacPoeCacheService(), playerNotificationService);
     }
 
     @Bean

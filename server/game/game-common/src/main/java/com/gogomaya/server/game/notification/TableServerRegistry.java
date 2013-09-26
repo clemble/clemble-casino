@@ -2,9 +2,10 @@ package com.gogomaya.server.game.notification;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.gogomaya.server.ServerRegistry;
 import com.gogomaya.game.GameState;
-import com.gogomaya.game.GameTable;
+import com.gogomaya.game.ServerResourse;
+import com.gogomaya.game.SessionAware;
+import com.gogomaya.server.ServerRegistry;
 
 public class TableServerRegistry {
 
@@ -14,17 +15,15 @@ public class TableServerRegistry {
         this.SERVER_REGISTRY = checkNotNull(serverRegistry);
     }
 
-    public String findServer(long tableId) {
-        return SERVER_REGISTRY.find(tableId);
+    public String findServer(long session) {
+        return SERVER_REGISTRY.find(session);
     }
 
-    public <State extends GameState> GameTable<State> specifyServer(GameTable<State> table) {
-        if (table == null)
-            return table;
+    public <State extends GameState> ServerResourse findServer(SessionAware sessionAware) {
+        if (sessionAware == null)
+            return null;
 
-        table.setServer(findServer(table.getTableId()));
-
-        return table;
+        return new ServerResourse(findServer(sessionAware.getSession().getSession()), sessionAware.getSession());
     }
 
 }

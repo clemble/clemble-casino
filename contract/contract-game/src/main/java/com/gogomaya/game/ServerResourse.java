@@ -3,24 +3,29 @@ package com.gogomaya.game;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ServerResourse {
+public class ServerResourse implements SessionAware {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2462996262286612159L;
 
     final private String server;
-
-    final private long tableId;
+    final private GameSessionKey session;
 
     @JsonCreator
-    public ServerResourse(@JsonProperty("server") final String server, @JsonProperty("tableId") final long tableId) {
+    public ServerResourse(@JsonProperty("server") final String server, @JsonProperty("session") final GameSessionKey session) {
         this.server = server;
-        this.tableId = tableId;
+        this.session = session;
     }
 
     public String getServer() {
         return server;
     }
 
-    public long getTableId() {
-        return tableId;
+    @Override
+    public GameSessionKey getSession() {
+        return session;
     }
 
     @Override
@@ -28,7 +33,7 @@ public class ServerResourse {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((server == null) ? 0 : server.hashCode());
-        result = prime * result + (int) (tableId ^ (tableId >>> 32));
+        result = prime * result + ((session == null) ? 0 : session.hashCode());;
         return result;
     }
 
@@ -46,9 +51,7 @@ public class ServerResourse {
                 return false;
         } else if (!server.equals(other.server))
             return false;
-        if (tableId != other.tableId)
-            return false;
-        return true;
+        return session.equals(other.session);
     }
 
 }

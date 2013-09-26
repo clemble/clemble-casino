@@ -33,7 +33,7 @@ public class IntegrationGameSessionPlayer<State extends GameState> extends Abstr
     @SuppressWarnings("unchecked")
     public State perform(Player player, ServerResourse resourse, GameSessionKey session, GameClientEvent clientEvent) {
         // Step 1. Generating signed request
-        HttpEntity<ClientEvent> requestEntity = player.<ClientEvent> signGame(session, resourse.getTableId(), clientEvent);
+        HttpEntity<ClientEvent> requestEntity = player.<ClientEvent> signGame(session, clientEvent);
         // Step 2. Rest template generation
         return (State) restTemplate.exchange(baseUrl + GameWebMapping.GAME_PREFIX + GameWebMapping.GAME_SESSIONS_ACTIONS, HttpMethod.POST, requestEntity,
                 GameState.class, session.getSession()).getBody();
