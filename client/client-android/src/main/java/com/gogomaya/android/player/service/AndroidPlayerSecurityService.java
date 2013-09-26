@@ -10,6 +10,11 @@ import com.gogomaya.web.mapping.WebMapping;
 
 public class AndroidPlayerSecurityService implements PlayerSecurityClientService<HttpEntity<?>> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3770963835672665720L;
+
     final private PlayerIdentity playerIdentity;
 
     public AndroidPlayerSecurityService(PlayerIdentity playerIdentity) {
@@ -17,7 +22,22 @@ public class AndroidPlayerSecurityService implements PlayerSecurityClientService
     }
 
     @Override
-    public HttpEntity<?> signGet(String request) {
+    public long getPlayerId() {
+        return playerIdentity.getPlayerId();
+    }
+
+    @Override
+    public <S> HttpEntity<?> signCreate(S request) {
+        // Step 1. Creating Header
+        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
+        header.add("playerId", String.valueOf(playerIdentity.getPlayerId()));
+        header.add("Content-Type", WebMapping.PRODUCES);
+        // Step 2. Generating request
+        return new HttpEntity<>(request, header);
+    }
+
+    @Override
+    public HttpEntity<?> signRead(String request) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         header.add("playerId", String.valueOf(playerIdentity.getPlayerId()));
@@ -28,15 +48,11 @@ public class AndroidPlayerSecurityService implements PlayerSecurityClientService
 
     @Override
     public HttpEntity<?> signUpdate(Object request) {
-        // Step 1. Creating Header
-        MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(playerIdentity.getPlayerId()));
-        header.add("Content-Type", WebMapping.PRODUCES);
-        // Step 2. Generating request
-        return new HttpEntity<>(request, header);
+        return signCreate(request);
     }
 
-    public static PlayerSecurityClientService<HttpEntity<?>> fetch() {
-        return null;
+    @Override
+    public HttpEntity<?> signDelete(String request) {
+        return signRead(request);
     }
 }

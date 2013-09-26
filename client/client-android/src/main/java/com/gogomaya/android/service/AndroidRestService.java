@@ -17,6 +17,8 @@ import com.gogomaya.client.service.RestClientService;
 
 public class AndroidRestService implements RestClientService {
 
+    private static final long serialVersionUID = 9132360474553910610L;
+
     final private String baseUrl;
     final private RestTemplate restTemplate;
     final private PlayerSecurityClientService<HttpEntity<?>> securityClientService;
@@ -39,13 +41,17 @@ public class AndroidRestService implements RestClientService {
         messageConverters.add(jackson2HttpMessageConverter);
 
         this.restTemplate.setMessageConverters(messageConverters);
+    }
 
+    @Override
+    public long getPlayerId() {
+        return securityClientService.getPlayerId();
     }
 
     @Override
     public <T> T getForEntity(CharSequence url, Class<T> responseType, Object... urlVariables) {
         String fullURL = baseUrl + url;
-        HttpEntity<?> request = securityClientService.signGet(fullURL);
+        HttpEntity<?> request = securityClientService.signRead(fullURL);
         return restTemplate.exchange(fullURL, HttpMethod.GET, request, responseType, urlVariables).getBody();
     }
 
@@ -53,7 +59,7 @@ public class AndroidRestService implements RestClientService {
     @Override
     public <T> List<T> getForEntityList(CharSequence url, Class<T> responseType, Object... urlVariables) {
         String fullURL = baseUrl + url;
-        HttpEntity<?> request = securityClientService.signGet(fullURL);
+        HttpEntity<?> request = securityClientService.signRead(fullURL);
         return restTemplate.exchange(fullURL, HttpMethod.GET, request, List.class, urlVariables).getBody();
     }
 
@@ -67,6 +73,13 @@ public class AndroidRestService implements RestClientService {
     public <T> T postForEntity(CharSequence url, Object requestObject, Class<T> responseType, Object... urlVariables) {
         HttpEntity<?> request = securityClientService.signUpdate(requestObject);
         return restTemplate.exchange(baseUrl + url, HttpMethod.POST, request, responseType, urlVariables).getBody();
+    }
+
+    @Override
+    public <T> T deleteForEntity(CharSequence url, Class<T> responseType, Object... urlVariable) {
+        String fullURL = baseUrl + url;
+        HttpEntity<?> request = securityClientService.signDelete(fullURL);
+        return restTemplate.exchange(fullURL, HttpMethod.DELETE, request, responseType).getBody();
     }
 
     @Override
