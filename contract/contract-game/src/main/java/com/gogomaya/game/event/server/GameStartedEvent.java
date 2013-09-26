@@ -17,37 +17,21 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
      */
     private static final long serialVersionUID = -4474960027054354888L;
 
-    private ServerResourse resource;
+    final private ServerResourse resource;
 
-    public GameStartedEvent() {
-    }
-
-    public GameStartedEvent(GameSessionKey session, GameTable<State> table) {
+    public GameStartedEvent(GameTable<State> table) {
         super(table.getCurrentSession());
         this.resource = table.fetchServerResourse();
     }
 
     @JsonCreator
-    public GameStartedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("resource") ServerResourse resource) {
-        super(session);
+    public GameStartedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("state") State state, @JsonProperty("resource") ServerResourse resource) {
+        super(session, state);
         this.resource = resource;
-    }
-
-    public GameStartedEvent(SessionAware sessionAware) {
-        super(sessionAware);
-    }
-
-    public GameStartedEvent(SessionAware sessionAware, State state) {
-        super(sessionAware);
-        this.setState(state);
     }
 
     public ServerResourse getResource() {
         return resource;
-    }
-
-    public void setResource(ServerResourse resource) {
-        this.resource = resource;
     }
 
     @Override

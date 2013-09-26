@@ -1,41 +1,38 @@
 package com.gogomaya.game.event.server;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
-import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("playerMoved")
-public class PlayerMovedEvent<State extends GameState> extends GameServerEvent<State> implements PlayerAware {
+public class PlayerMovedEvent<State extends GameState> extends GameServerEvent<State> {
 
     /**
      * Generated 07/05/2013
      */
     private static final long serialVersionUID = -3272848407005579296L;
 
-    private ClientEvent madeMove;
+    final private ClientEvent madeMove;
 
-    public PlayerMovedEvent() {
+    public PlayerMovedEvent(GameSession<State> session, ClientEvent madeMove) {
+        super(session);
+        this.madeMove = madeMove;
     }
 
-    public PlayerMovedEvent(State state) {
-        this.setState(state);
+    @JsonCreator
+    public PlayerMovedEvent(@JsonProperty("session") GameSessionKey sessionKey,
+            @JsonProperty("state") State state,
+            @JsonProperty("madeMove") ClientEvent madeMove) {
+        super(sessionKey, state);
+        this.madeMove = madeMove;
     }
 
     public ClientEvent getMadeMove() {
         return madeMove;
-    }
-
-    public PlayerMovedEvent<State> setMadeMove(ClientEvent madeMove) {
-        this.madeMove = madeMove;
-        return this;
-    }
-
-    @Override
-    @JsonIgnore
-    public long getPlayerId() {
-        return madeMove.getPlayerId();
     }
 
     @Override

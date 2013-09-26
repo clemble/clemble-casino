@@ -9,6 +9,7 @@ import com.gogomaya.base.ActionLatch;
 import com.gogomaya.error.GogomayaError;
 import com.gogomaya.error.GogomayaException;
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameSession;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.account.GameAccount;
 import com.gogomaya.game.event.client.surrender.SurrenderEvent;
@@ -52,14 +53,13 @@ public class NumberState implements GameState {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public GameServerEvent<NumberState> process(ClientEvent clientEvent) {
+    public <State extends GameState> GameServerEvent<State> process(GameSession<State> session, ClientEvent clientEvent) {
         // Step 1. Processing Select cell move
         if (outcome != null) {
             throw GogomayaException.fromError(GogomayaError.GamePlayGameEnded);
         }
 
-        GameServerEvent<NumberState> resultEvent = null;
+        GameServerEvent<State> resultEvent = null;
 
         if (clientEvent instanceof SelectNumberEvent) {
             actionLatch.put(clientEvent.getPlayerId(), clientEvent);
@@ -75,7 +75,7 @@ public class NumberState implements GameState {
                     }
                 }
             }
-            resultEvent = new GameEndedEvent<NumberState>(this).setOutcome(outcome);
+            resultEvent = new GameEndedEvent<>(session, outcome);
         } else if (clientEvent instanceof SurrenderEvent) {
             // Step 1. Fetching player identifier
             long looser = ((SurrenderEvent) clientEvent).getPlayerId();
@@ -83,12 +83,12 @@ public class NumberState implements GameState {
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
                 outcome = new NoOutcome();
-                resultEvent = new GameEndedEvent<NumberState>(this).setOutcome(outcome);
+                resultEvent = new GameEndedEvent<>(session, outcome);
             } else {
                 long winner = opponents.iterator().next();
                 outcome = new PlayerWonOutcome(winner);
                 // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
-                resultEvent = new GameEndedEvent<NumberState>(this).setOutcome(outcome);
+                resultEvent = new GameEndedEvent<>(session, outcome);
             }
         }
         // Step 3. Sanity check

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.base.ActionLatch;
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.game.GameSession;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.account.GameAccount;
 import com.gogomaya.game.event.server.GameServerEvent;
@@ -41,7 +42,7 @@ public class StubGameState implements GameState {
     }
 
     @Override
-    public <State extends GameState> GameServerEvent<State> process(ClientEvent move) {
+    public <State extends GameState> GameServerEvent<State> process(GameSession<State> session, ClientEvent move) {
         return null;
     }
 

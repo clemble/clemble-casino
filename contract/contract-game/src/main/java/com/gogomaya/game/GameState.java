@@ -13,7 +13,7 @@ import com.gogomaya.game.outcome.GameOutcome;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public interface GameState extends Serializable {
 
-    public <State extends GameState> GameServerEvent<State> process(ClientEvent move);
+    public <State extends GameState> GameServerEvent<State> process(GameSession<State> session,ClientEvent move);
 
     public GameAccount getAccount();
 

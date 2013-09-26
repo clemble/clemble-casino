@@ -1,7 +1,7 @@
 package com.gogomaya.event.listener;
 
 import com.gogomaya.event.Event;
-import com.gogomaya.event.GameConstructionEvent;
+import com.gogomaya.event.ConstructionEvent;
 import com.gogomaya.game.GameSessionKey;
 
 public class ConstructionEventSelector implements EventSelector {
@@ -14,7 +14,7 @@ public class ConstructionEventSelector implements EventSelector {
 
     @Override
     public boolean filter(Event event) {
-        return event instanceof GameConstructionEvent && ((GameConstructionEvent) event).getSession().equals(session);
+        return event instanceof ConstructionEvent && ((ConstructionEvent) event).getSession().equals(session);
     }
 
 }

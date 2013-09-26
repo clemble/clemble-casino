@@ -3,11 +3,11 @@ package com.gogomaya.game.event.schedule;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gogomaya.event.GameConstructionEvent;
+import com.gogomaya.event.ConstructionEvent;
 import com.gogomaya.game.GameSessionKey;
 
 @JsonTypeName("gameConstructed")
-public class GameConstructedEvent implements GameConstructionEvent {
+public class GameConstructedEvent implements ConstructionEvent {
 
     /**
      * Generated 24/06/13

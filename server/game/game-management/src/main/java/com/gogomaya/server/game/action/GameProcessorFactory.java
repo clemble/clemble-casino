@@ -53,7 +53,7 @@ public class GameProcessorFactory<State extends GameState> {
                 listener.beforeMove(state, move);
             }
             // Step 2. Processing in core
-            GameServerEvent<State> event = state.process(move);
+            GameServerEvent<State> event = state.process(session, move);
             // Step 3. After move notification
             if (session.getState().getOutcome() == null) {
                 for (GameAspect<State> listener : listenerArray) {

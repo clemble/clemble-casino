@@ -1,8 +1,11 @@
 package com.gogomaya.game.event.server;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gogomaya.game.GameSession;
+import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.GameState;
-import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.outcome.GameOutcome;
 
 @JsonTypeName("ended")
@@ -13,27 +16,21 @@ public class GameEndedEvent<State extends GameState> extends GameServerEvent<Sta
      */
     private static final long serialVersionUID = 820200145932972096L;
 
-    private GameOutcome outcome;
+    final private GameOutcome outcome;
 
-    public GameEndedEvent(){
+    public GameEndedEvent(GameSession<State> session, GameOutcome outcome) {
+        super(session);
+        this.outcome = outcome;
     }
 
-    public GameEndedEvent(SessionAware sessionAware) {
-        super(sessionAware);
+    @JsonCreator
+    public GameEndedEvent(@JsonProperty("session") GameSessionKey sessionKey, @JsonProperty("state") State state, @JsonProperty("outcome") GameOutcome outcome) {
+        super(sessionKey, state);
+        this.outcome = outcome;
     }
-
-    public GameEndedEvent(State state) {
-        this.setState(state);
-        this.outcome = state.getOutcome();
-    }
-
+    
     public GameOutcome getOutcome() {
         return outcome;
-    }
-
-    public GameEndedEvent<State> setOutcome(GameOutcome outcome) {
-        this.outcome = outcome;
-        return this;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.gogomaya.game.event.server;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gogomaya.event.ServerEvent;
 import com.gogomaya.game.GameSession;
 import com.gogomaya.game.GameSessionKey;
@@ -15,23 +17,18 @@ abstract public class GameServerEvent<State extends GameState> implements Sessio
      */
     private static final long serialVersionUID = -4837244615682915463L;
 
-    private GameSessionKey session;
-    private State state;
-
-    public GameServerEvent() {
-    }
+    final private GameSessionKey session;
+    final private State state;
 
     public GameServerEvent(GameSession<State> session) {
         this.session = session.getSession();
         this.state = session.getState();
     }
 
-    public GameServerEvent(SessionAware sessionAware) {
-        this.session = sessionAware.getSession();
-    }
-
-    public GameServerEvent(GameSessionKey session) {
-        this.session = session;
+    @JsonCreator
+    public GameServerEvent(@JsonProperty("session") GameSessionKey sessionKey, @JsonProperty("state") State state) {
+        this.session = sessionKey;
+        this.state = state;
     }
 
     @Override
@@ -39,18 +36,8 @@ abstract public class GameServerEvent<State extends GameState> implements Sessio
         return session;
     }
 
-    public GameServerEvent<State> setSession(GameSessionKey session) {
-        this.session = session;
-        return this;
-    }
-
     public State getState() {
         return state;
-    }
-
-    public GameServerEvent<State> setState(State state) {
-        this.state = state;
-        return this;
     }
 
     @Override

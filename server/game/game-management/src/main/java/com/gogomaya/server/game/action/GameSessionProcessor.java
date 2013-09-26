@@ -53,7 +53,7 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
         // Step 1. Allocating table for game initiation
         final GameTable<State> table = tableFactory.constructTable(initiation);
         // Step 2. Sending notification for game started
-        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(initiation.getSession(), table));
+        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(table));
         // Step 3. Returning active table
         return table;
     }
@@ -82,7 +82,6 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
             GameProcessor<State> processor = cache.getProcessor();
             // Step 5. Processing movement
             GameServerEvent<State> event = processor.process(cache.getSession(), move);
-            event.setSession(session);
             // Step 6. Invoking appropriate notification
             notificationService.notify(cache.getPlayerIds(), event);
             // Step 7. Returning state of the game
