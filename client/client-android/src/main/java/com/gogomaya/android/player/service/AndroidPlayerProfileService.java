@@ -19,13 +19,13 @@ public class AndroidPlayerProfileService implements PlayerProfileService {
     }
 
     @Override
-    public PlayerProfile getPlayerProfile(long playerId) {
-        return restService.getForEntity(PlayerWebMapping.PLAYER_PROFILE, PlayerProfile.class, playerId);
+    public PlayerProfile getPlayerProfile(String player) {
+        return restService.getForEntity(PlayerWebMapping.PLAYER_PROFILE, PlayerProfile.class, player);
     }
 
     @Override
-    public PlayerProfile updatePlayerProfile(long playerId, PlayerProfile playerProfile) {
-        return restService.putForEntity(PlayerWebMapping.PLAYER_PROFILE, playerProfile, PlayerProfile.class, playerId);
+    public PlayerProfile updatePlayerProfile(String player, PlayerProfile playerProfile) {
+        return restService.putForEntity(PlayerWebMapping.PLAYER_PROFILE, playerProfile, PlayerProfile.class, player);
     }
 
 }

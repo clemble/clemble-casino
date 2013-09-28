@@ -46,10 +46,10 @@ public class GameConstructionServerServiceTest {
 
     @Test
     public void testSynchronousAvailabilityConstruction() {
-        LinkedHashSet<Long> players = new LinkedHashSet<>();
+        LinkedHashSet<String> players = new LinkedHashSet<>();
         for (int i = 0; i < NUM_PARTICIPANTS; i++)
-            players.add(RANDOM.nextLong());
-        List<Long> participants = new ArrayList<>(players);
+            players.add(String.valueOf(RANDOM.nextLong()));
+        List<String> participants = new ArrayList<>(players);
 
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), GameSpecification.DEFAULT, participants);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
@@ -64,10 +64,10 @@ public class GameConstructionServerServiceTest {
 
     @Test
     public void testAsynchronousAvailabilityConstruction() throws InterruptedException {
-        LinkedHashSet<Long> players = new LinkedHashSet<>();
+        LinkedHashSet<String> players = new LinkedHashSet<>();
         for (int i = 0; i < NUM_PARTICIPANTS; i++)
-            players.add(RANDOM.nextLong());
-        List<Long> participants = new ArrayList<>(players);
+            players.add(String.valueOf(RANDOM.nextLong()));
+        List<String> participants = new ArrayList<>(players);
 
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), GameSpecification.DEFAULT, participants);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
@@ -90,14 +90,14 @@ public class GameConstructionServerServiceTest {
 
     public static class GameResponce implements Callable<GameConstruction> {
 
+        final public String player;
         final public GameSessionKey construction;
         final public CountDownLatch endLatch;
         final public GameConstructionServerService constructionService;
-        final public long player;
 
-        public GameResponce(GameSessionKey construction, long player, CountDownLatch endLatch, GameConstructionServerService constructionService) {
-            this.construction = construction;
+        public GameResponce(GameSessionKey construction, String player, CountDownLatch endLatch, GameConstructionServerService constructionService) {
             this.player = player;
+            this.construction = construction;
             this.endLatch = endLatch;
             this.constructionService = constructionService;
         }

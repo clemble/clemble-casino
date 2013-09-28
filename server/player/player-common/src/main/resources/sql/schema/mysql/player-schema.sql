@@ -2,7 +2,7 @@
     drop table if exists PLAYER_PROFILE;
 
     create table PLAYER_PROFILE (
-        PLAYER_ID bigint not null auto_increment,
+        PLAYER_ID varchar(255) not null,
         BIRTH_DATE date,
         CATEGORY integer,
         FIRST_NAME varchar(64),

@@ -16,19 +16,19 @@ public class PlayerPresence implements Event, PlayerAware, SessionAware, Presenc
      */
     private static final long serialVersionUID = 2110453101269621164L;
 
-    final private long playerId;
+    final private String playerId;
     final private Presence presence;
     final private GameSessionKey session;
 
     @JsonCreator
-    public PlayerPresence(@JsonProperty("playerId") long playerId, @JsonProperty("session") GameSessionKey session, @JsonProperty("presence") Presence presence) {
-        this.playerId = playerId;
+    public PlayerPresence(@JsonProperty(PlayerAware.JSON_ID) String player, @JsonProperty("session") GameSessionKey session, @JsonProperty("presence") Presence presence) {
+        this.playerId = player;
         this.session = session;
         this.presence = presence;
     }
 
     @Override
-    public long getPlayerId() {
+    public String getPlayer() {
         return playerId;
     }
 
@@ -42,25 +42,25 @@ public class PlayerPresence implements Event, PlayerAware, SessionAware, Presenc
         return session;
     }
 
-    public static PlayerPresence offline(long playerId) {
-        return new PlayerPresence(playerId, SessionAware.DEFAULT_SESSION, Presence.offline);
+    public static PlayerPresence offline(String player) {
+        return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, Presence.offline);
     }
 
-    public static PlayerPresence online(long playerId) {
-        return new PlayerPresence(playerId, SessionAware.DEFAULT_SESSION, Presence.online);
+    public static PlayerPresence online(String player) {
+        return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, Presence.online);
     }
 
-    public static PlayerPresence playing(long playerId, GameSessionKey session) {
-        return new PlayerPresence(playerId, session, Presence.playing);
+    public static PlayerPresence playing(String player, GameSessionKey session) {
+        return new PlayerPresence(player, session, Presence.playing);
     }
 
-    public static PlayerPresence create(long playerId, Presence presence) {
-        return new PlayerPresence(playerId, SessionAware.DEFAULT_SESSION, presence);
+    public static PlayerPresence create(String player, Presence presence) {
+        return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, presence);
     }
 
-    public static Collection<PlayerPresence> playing(Collection<Long> players, GameSessionKey session) {
+    public static Collection<PlayerPresence> playing(Collection<String> players, GameSessionKey session) {
         Collection<PlayerPresence> playerPresences = new ArrayList<>();
-        for (Long player : players)
+        for (String player : players)
             playerPresences.add(playing(player, session));
         return playerPresences;
     }

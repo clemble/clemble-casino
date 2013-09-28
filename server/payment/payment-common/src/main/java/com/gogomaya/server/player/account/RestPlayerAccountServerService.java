@@ -33,12 +33,12 @@ public class RestPlayerAccountServerService implements PlayerAccountServerServic
     }
 
     @Override
-    public boolean canAfford(long playerId, Money amount) {
+    public boolean canAfford(String playerId, Money amount) {
         return canAfford(Collections.singleton(playerId), amount);
     }
 
     @Override
-    public boolean canAfford(Collection<Long> playerId, Money amount) {
+    public boolean canAfford(Collection<String> playerId, Money amount) {
         String url = serverRegistryService.getPayment().getLocation()
                 + PaymentWebMapping.PAYMENT_ACCOUNTS
                 + "?player=" + StringUtils.collectionToCommaDelimitedString(playerId)

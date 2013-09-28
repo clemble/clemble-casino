@@ -1,5 +1,7 @@
 package com.gogomaya.server.spring.web.management;
 
+import java.util.Collections;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,9 +37,7 @@ public class ManagementWebSpringConfiguration extends AbstractManagementWebSprin
 
         @Bean
         public PlayerNotificationRegistry playerNotificationRegistry() {
-            final ServerRegistry serverRegistry = new ServerRegistry();
-            serverRegistry.register(1_000_000L, "localhost");
-            return new SimplePlayerNotificationRegistry(serverRegistry);
+            return new SimplePlayerNotificationRegistry(new ServerRegistry(Collections.singletonList("localhost")));
         }
 
         @Bean
@@ -62,9 +62,7 @@ public class ManagementWebSpringConfiguration extends AbstractManagementWebSprin
 
         @Bean
         public PlayerNotificationRegistry playerNotificationRegistry() {
-            final ServerRegistry serverRegistry = new ServerRegistry();
-            serverRegistry.register(1_000_000L, "localhost");
-            return new SimplePlayerNotificationRegistry(serverRegistry);
+            return new SimplePlayerNotificationRegistry(new ServerRegistry(Collections.singletonList("localhost")));
         }
 
         @Bean
@@ -89,9 +87,7 @@ public class ManagementWebSpringConfiguration extends AbstractManagementWebSprin
 
         @Bean
         public PlayerNotificationRegistry playerNotificationRegistry() {
-            final ServerRegistry serverRegistry = new ServerRegistry();
-            serverRegistry.register(1_000_000L, "ec2-50-16-93-157.compute-1.amazonaws.com");
-            return new SimplePlayerNotificationRegistry(serverRegistry);
+            return new SimplePlayerNotificationRegistry(new ServerRegistry(Collections.singletonList("ec2-50-16-93-157.compute-1.amazonaws.com")));
         }
 
         @Bean

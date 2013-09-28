@@ -8,9 +8,9 @@ import com.gogomaya.player.PlayerAware;
 
 public interface PaymentTransactionOperations extends PlayerAware {
 
-    public PaymentTransaction getPaymentTransaction(MoneySource source, long transactionId);
+    public PaymentTransaction getPaymentTransaction(MoneySource source, String transactionId);
 
-    public PaymentTransaction getPaymentTransaction(String source, long transactionId);
+    public PaymentTransaction getPaymentTransaction(String source, String transactionId);
 
     public List<PaymentTransaction> listPlayerTransaction();
 

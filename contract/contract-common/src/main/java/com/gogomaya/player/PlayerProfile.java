@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -36,10 +34,9 @@ public class PlayerProfile implements PlayerAware, VersionAware, Serializable {
     private static final long serialVersionUID = -7544343898430552989L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PLAYER_ID")
-    @JsonProperty("playerId")
-    private long playerId;
+    @JsonProperty(PlayerAware.JSON_ID)
+    private String player;
 
     @Column(name = "NICK_NAME", length = 64)
     @JsonProperty("nickName")
@@ -84,12 +81,12 @@ public class PlayerProfile implements PlayerAware, VersionAware, Serializable {
     private int version;
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
-    public PlayerProfile setPlayerId(long userId) {
-        this.playerId = userId;
+    public PlayerProfile setPlayer(String player) {
+        this.player = player;
         return this;
     }
 
@@ -175,7 +172,7 @@ public class PlayerProfile implements PlayerAware, VersionAware, Serializable {
         result = prime * result + ((imageUrl == null) ? 0 : imageUrl.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((nickName == null) ? 0 : nickName.hashCode());
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + (int) (player == null ? 0 : player.hashCode());
         result = prime * result + (int) (version ^ (version >>> 32));
         return result;
     }
@@ -213,16 +210,14 @@ public class PlayerProfile implements PlayerAware, VersionAware, Serializable {
                 return false;
         } else if (!nickName.equals(other.nickName))
             return false;
-        if (playerId != other.playerId)
-            return false;
         if (version != other.version)
             return false;
-        return true;
+        return player.equals(other.player);
     }
 
     @Override
     public String toString() {
-        return "PlayerProfile [playerId=" + playerId + ", nickName=" + nickName + ", firstName=" + firstName + ", lastName=" + lastName + ", gender=" + gender
+        return "PlayerProfile [playerId=" + player + ", nickName=" + nickName + ", firstName=" + firstName + ", lastName=" + lastName + ", gender=" + gender
                 + ", birthDate=" + birthDate + ", imageUrl=" + imageUrl + ", category=" + category + ", version=" + version + "]";
     }
 

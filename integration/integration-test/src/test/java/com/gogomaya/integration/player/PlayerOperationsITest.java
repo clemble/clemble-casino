@@ -101,13 +101,13 @@ public class PlayerOperationsITest {
 
         Player loginPlayer = playerOperations.login(new PlayerLoginRequest(playerIdentity, loginCredential));
 
-        assertEquals(loginPlayer.getPlayerId(), player.getPlayerId());
+        assertEquals(loginPlayer.getPlayer(), player.getPlayer());
 
         assertEquals(loginPlayer.getCredential().getEmail(), player.getCredential().getEmail());
         assertEquals(loginPlayer.getCredential().getPassword(), player.getCredential().getPassword());
 
         assertEquals(loginPlayer.getIdentity().getSecret(), playerIdentity.getSecret());
-        assertEquals(loginPlayer.getIdentity().getPlayerId(), player.getIdentity().getPlayerId());
+        assertEquals(loginPlayer.getIdentity().getPlayer(), player.getIdentity().getPlayer());
 
     }
 }

@@ -26,13 +26,13 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
     public PlayerSession start(Player player) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(player.getPlayerId()));
+        header.add("playerId", String.valueOf(player.getPlayer()));
         header.add("Content-Type", "application/json");
         // Step 2. Generating request
         HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
         // Step 3. Rest template generation
         return restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS, HttpMethod.POST, requestEntity,
-                PlayerSession.class, player.getPlayerId()).getBody();
+                PlayerSession.class, player.getPlayer()).getBody();
 
     }
 
@@ -42,7 +42,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Calling appropriate services
         return restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, HttpMethod.DELETE, requestEntity,
-                PlayerSession.class, player.getPlayerId(), session).getBody();
+                PlayerSession.class, player.getPlayer(), session).getBody();
 
     }
 
@@ -52,7 +52,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Rest template generation
         String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
-        return restTemplate.exchange(refreshUrl, HttpMethod.PUT, requestEntity, PlayerSession.class, player.getPlayerId(), session).getBody();
+        return restTemplate.exchange(refreshUrl, HttpMethod.PUT, requestEntity, PlayerSession.class, player.getPlayer(), session).getBody();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Rest template generation
         String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
-        return restTemplate.exchange(refreshUrl, HttpMethod.GET, requestEntity, PlayerSession.class, player.getPlayerId(), session).getBody();
+        return restTemplate.exchange(refreshUrl, HttpMethod.GET, requestEntity, PlayerSession.class, player.getPlayer(), session).getBody();
     }
 
 }

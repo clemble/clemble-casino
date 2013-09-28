@@ -6,17 +6,17 @@ import com.gogomaya.game.service.GameSpecificationService;
 
 public class SimpleGameSpecificationOperations implements GameSpecificationOperations {
 
-    final private long playerId;
+    final private String player;
     final private GameSpecificationService specificationService;
 
-    public SimpleGameSpecificationOperations(long playerId, GameSpecificationService specificationService) {
-        this.playerId = playerId;
+    public SimpleGameSpecificationOperations(String player, GameSpecificationService specificationService) {
+        this.player = player;
         this.specificationService = specificationService;
     }
 
     @Override
     public GameSpecificationOptions get(Game game) {
-        return specificationService.getSpecificationOptions(playerId, game);
+        return specificationService.getSpecificationOptions(player, game);
     }
 
 }

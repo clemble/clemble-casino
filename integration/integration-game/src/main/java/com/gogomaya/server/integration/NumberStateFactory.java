@@ -27,7 +27,7 @@ public class NumberStateFactory extends AbstractGameStateFactory<NumberState> {
 
         Money price = initiation.getSpecification().getPrice();
         Collection<GamePlayerAccount> playerAccounts = new ArrayList<>();
-        for (Long participant : initiation.getParticipants()) {
+        for (String participant : initiation.getParticipants()) {
             playerAccounts.add(new GamePlayerAccount(participant, price.getAmount()));
         }
 

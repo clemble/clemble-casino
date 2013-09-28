@@ -1,5 +1,7 @@
 package com.gogomaya.server;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -54,7 +56,7 @@ public class StubGameState implements GameState {
     @Override
     @JsonIgnore
     public GamePlayerIterator getPlayerIterator() {
-        return new SequentialPlayerIterator(ImmutableList.<Long> of(1L, 2L));
+        return new SequentialPlayerIterator(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)));
     }
 
     @Override

@@ -20,7 +20,7 @@ public class GamePriceAspect<State extends GameState> extends BasicGameAspect<St
         if (!(move instanceof SurrenderEvent)) {
             // Step 3. Checking that move
             if (move instanceof BetEvent) {
-                GamePlayerAccount gamePlayerState = state.getAccount().getPlayerAccount(move.getPlayerId());
+                GamePlayerAccount gamePlayerState = state.getAccount().getPlayerAccount(move.getPlayer());
                 if (((BetEvent) move).getBet() > gamePlayerState.getMoneyLeft())
                     throw GogomayaException.fromError(GogomayaError.GamePlayBetOverflow);
             }

@@ -20,7 +20,7 @@ public class IntegrationProfileOperations implements ProfileOperations {
     }
 
     @Override
-    public PlayerProfile get(Player player, long playerId) {
+    public PlayerProfile get(Player player, String playerId) {
         ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Creating signed request
         HttpEntity<Void> requestEntity = player.<Void>sign(null);
@@ -30,7 +30,7 @@ public class IntegrationProfileOperations implements ProfileOperations {
     }
 
     @Override
-    public PlayerProfile put(Player player, long playerId, PlayerProfile newProfile) {
+    public PlayerProfile put(Player player, String playerId, PlayerProfile newProfile) {
         ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 2. Generating request
         HttpEntity<PlayerProfile> requestEntity = player.<PlayerProfile>sign(newProfile);

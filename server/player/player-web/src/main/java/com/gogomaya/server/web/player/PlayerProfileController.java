@@ -28,7 +28,7 @@ public class PlayerProfileController implements PlayerProfileService {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
-    public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("playerId") long playerId) {
+    public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("playerId") String playerId) {
         // Step 1. Fetching playerProfile
         PlayerProfile playerProfile = profileRepository.findOne(playerId);
         // Step 2. Checking profile
@@ -40,13 +40,13 @@ public class PlayerProfileController implements PlayerProfileService {
 
     @Override
     @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
-    public @ResponseBody PlayerProfile updatePlayerProfile(@PathVariable("playerId") long playerId, @RequestBody PlayerProfile playerProfile) {
+    public @ResponseBody PlayerProfile updatePlayerProfile(@PathVariable("playerId") String player, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (playerProfile == null)
             throw GogomayaException.fromError(GogomayaError.PlayerProfileInvalid);
-        if (playerProfile.getPlayerId() != 0 && playerProfile.getPlayerId() != playerId)
+        if (!playerProfile.getPlayer().equals(player))
             throw GogomayaException.fromError(GogomayaError.PlayerNotProfileOwner);
-        playerProfile.setPlayerId(playerId);
+        playerProfile.setPlayer(player);
         // Step 2. Updating Profile
         return profileRepository.saveAndFlush(playerProfile);
     }

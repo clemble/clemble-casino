@@ -33,7 +33,7 @@ public class PlayerAccount implements PlayerAware {
 
     @Id
     @Column(name = "PLAYER_ID")
-    private long playerId;
+    private String player;
 
     @ElementCollection(targetClass = Money.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "PLAYER_ACCOUNT_AMOUNT", joinColumns = @JoinColumn(name = "PLAYER_ID"))
@@ -42,12 +42,12 @@ public class PlayerAccount implements PlayerAware {
     private Set<Money> playerMoney = new HashSet<Money>();
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
-    public PlayerAccount setPlayerId(long playerId) {
-        this.playerId = playerId;
+    public PlayerAccount setPlayer(String player) {
+        this.player = player;
         return this;
     }
 
@@ -89,14 +89,14 @@ public class PlayerAccount implements PlayerAware {
 
     @Override
     public String toString() {
-        return "PlayerWallet [playerId=" + playerId + ", playerMoney=" + playerMoney + "]";
+        return "PlayerWallet [playerId=" + player + ", playerMoney=" + playerMoney + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + (int) (player != null ? player.hashCode() : 0);
         result = prime * result + ((playerMoney == null) ? 0 : playerMoney.hashCode());
         return result;
     }
@@ -110,7 +110,7 @@ public class PlayerAccount implements PlayerAware {
         if (getClass() != obj.getClass())
             return false;
         PlayerAccount other = (PlayerAccount) obj;
-        if (playerId != other.playerId)
+        if (player != other.player)
             return false;
         if (playerMoney == null) {
             if (other.playerMoney != null)

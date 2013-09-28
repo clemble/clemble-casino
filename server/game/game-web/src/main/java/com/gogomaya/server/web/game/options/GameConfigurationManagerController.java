@@ -31,7 +31,7 @@ public class GameConfigurationManagerController implements GameSpecificationServ
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SPECIFICATION_OPTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     // Can be null
-    public @ResponseBody GameSpecificationOptions getSpecificationOptions(@RequestHeader(value = "playerId", required = false) final long playerId, @PathVariable("name") Game game) {
+    public @ResponseBody GameSpecificationOptions getSpecificationOptions(@RequestHeader(value = "playerId", required = false) final String player, @PathVariable("name") Game game) {
         return configurationManager.getSpecificationOptions(game);
     }
 

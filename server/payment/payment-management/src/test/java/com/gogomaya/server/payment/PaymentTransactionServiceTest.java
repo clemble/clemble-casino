@@ -33,14 +33,14 @@ public class PaymentTransactionServiceTest {
     @Autowired
     public PaymentTransactionServerService paymentTransactionService;
 
-    private long playerFrom = RANDOM.nextLong();
-    private long playerTo = RANDOM.nextLong();
+    private String playerFrom = String.valueOf(RANDOM.nextLong());
+    private String playerTo = String.valueOf(RANDOM.nextLong());
 
     @Before
     public void initialize() {
-        PlayerAccount accountFrom = new PlayerAccount().add(Money.create(Currency.FakeMoney, 100)).setPlayerId(playerFrom);
+        PlayerAccount accountFrom = new PlayerAccount().add(Money.create(Currency.FakeMoney, 100)).setPlayer(playerFrom);
 
-        PlayerAccount accountTo = new PlayerAccount().add(Money.create(Currency.FakeMoney, 50)).setPlayerId(playerTo);
+        PlayerAccount accountTo = new PlayerAccount().add(Money.create(Currency.FakeMoney, 50)).setPlayer(playerTo);
 
         playerAccountRepository.saveAndFlush(accountFrom);
         playerAccountRepository.saveAndFlush(accountTo);
@@ -50,11 +50,11 @@ public class PaymentTransactionServiceTest {
     public void testWalletUpdate() {
         Money amount = Money.create(Currency.FakeMoney, RANDOM.nextInt(100));
 
-        PaymentTransactionKey transactionId = new PaymentTransactionKey().setSource(MoneySource.TicTacToe).setTransactionId(1L);
+        PaymentTransactionKey transactionId = new PaymentTransactionKey().setSource(MoneySource.TicTacToe).setTransaction("1");
 
         PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(transactionId)
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(playerFrom).setAmount(amount))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(playerTo).setAmount(amount));
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayer(playerFrom).setAmount(amount))
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayer(playerTo).setAmount(amount));
 
         paymentTransactionService.process(paymentTransaction);
 

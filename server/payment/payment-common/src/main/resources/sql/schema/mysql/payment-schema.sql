@@ -17,27 +17,27 @@
 
     create table PAYMENT_TRANSACTION (
         MONEY_SOURCE varchar(255) not null,
-        TRANSACTION_ID bigint not null,
+        TRANSACTION_ID varchar(255) not null,
         TRANSACTION_DATE datetime,
         primary key (MONEY_SOURCE, TRANSACTION_ID)
     ) ENGINE=InnoDB;
 
     create table PAYMENT_TRANSACTION_OPERATION (
         TRANSACTION_ID varchar(255) not null,
-        MONEY_SOURCE bigint not null,
+        MONEY_SOURCE varchar(255) not null,
         CURRENCY integer,
         AMOUNT bigint,
         OPERATION varchar(255),
-        PLAYER_ID bigint
+        PLAYER_ID varchar(255)
     ) ENGINE=InnoDB;
 
     create table PLAYER_ACCOUNT (
-        PLAYER_ID bigint not null,
+        PLAYER_ID varchar(255) not null,
         primary key (PLAYER_ID)
     ) ENGINE=InnoDB;
 
     create table PLAYER_ACCOUNT_AMOUNT (
-        PLAYER_ID bigint not null,
+        PLAYER_ID varchar(255) not null,
         CURRENCY integer,
         AMOUNT bigint
     ) ENGINE=InnoDB;

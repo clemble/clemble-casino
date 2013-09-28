@@ -25,7 +25,7 @@ public class PresenceListenerWrapper implements MessageListener {
         String deserializedChannel = stringRedisSerializer.deserialize(message.getChannel());
         String deserializedMessage = stringRedisSerializer.deserialize(message.getBody());
         // Step 2. Notifying associated PlayerStateListener
-        playerStateListener.onUpdate(Long.valueOf(deserializedChannel), Presence.valueOf(deserializedMessage));
+        playerStateListener.onUpdate(deserializedChannel, Presence.valueOf(deserializedMessage));
 
     }
 

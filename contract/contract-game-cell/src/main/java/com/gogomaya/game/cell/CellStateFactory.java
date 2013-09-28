@@ -8,7 +8,7 @@ abstract public class CellStateFactory {
 
     abstract public CellState create(Collection<BetEvent> bets);
 
-    abstract public CellState create(int owner, Collection<BetEvent> bets);
+    abstract public CellState create(String owner, Collection<BetEvent> bets);
 
     static public CellStateFactory create() {
         return new ExposedCellStateFactory();
@@ -22,7 +22,7 @@ abstract public class CellStateFactory {
         }
 
         @Override
-        public CellState create(int owner, Collection<BetEvent> bets) {
+        public CellState create(String owner, Collection<BetEvent> bets) {
             return new CellState(owner);
         }
 
@@ -36,7 +36,7 @@ abstract public class CellStateFactory {
         }
 
         @Override
-        public CellState create(int owner, Collection<BetEvent> bets) {
+        public CellState create(String owner, Collection<BetEvent> bets) {
             return new ExposedCellState(owner, bets);
         }
 

@@ -4,8 +4,8 @@ import com.gogomaya.player.PlayerProfile;
 
 public interface PlayerProfileService {
 
-    public PlayerProfile getPlayerProfile(long playerId);
+    public PlayerProfile getPlayerProfile(String player);
 
-    public PlayerProfile updatePlayerProfile(long playerId, PlayerProfile playerProfile);
+    public PlayerProfile updatePlayerProfile(String player, PlayerProfile playerProfile);
 
 }

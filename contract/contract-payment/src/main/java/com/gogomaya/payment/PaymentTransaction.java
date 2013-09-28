@@ -49,9 +49,9 @@ public class PaymentTransaction implements Serializable {
         return this;
     }
 
-    public boolean isParticipant(long playerId) {
+    public boolean isParticipant(String player) {
         for (PaymentOperation paymentOperation: paymentOperations)
-            if (paymentOperation.getPlayerId() == playerId)
+            if (paymentOperation.getPlayer().equals(player))
                 return true;
         return false;
     }

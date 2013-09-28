@@ -29,11 +29,6 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
-    public long getPlayerId() {
-        return actualPlayer.getPlayerId();
-    }
-
-    @Override
     final public GameSessionKey getSession() {
         return actualPlayer.getSession();
     }

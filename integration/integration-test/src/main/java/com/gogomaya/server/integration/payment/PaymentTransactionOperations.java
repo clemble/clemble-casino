@@ -8,8 +8,8 @@ public interface PaymentTransactionOperations {
 
     public PaymentTransaction perform(PaymentTransaction transaction);
 
-    public PaymentTransaction get(Player player, MoneySource source, long transactionId);
+    public PaymentTransaction get(Player player, MoneySource source, String transactionId);
 
-    public PaymentTransaction get(Player player, String source, long transactionId);
+    public PaymentTransaction get(Player player, String source, String transactionId);
 
 }

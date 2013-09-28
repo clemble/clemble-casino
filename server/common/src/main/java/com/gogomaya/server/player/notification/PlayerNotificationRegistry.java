@@ -7,6 +7,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public interface PlayerNotificationRegistry extends Serializable {
 
-    public String findNotificationServer(long playerId);
+    public String findNotificationServer(String player);
 
 }

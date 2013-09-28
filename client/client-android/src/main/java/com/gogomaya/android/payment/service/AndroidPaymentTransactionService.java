@@ -18,13 +18,13 @@ public class AndroidPaymentTransactionService implements PaymentTransactionServi
     }
 
     @Override
-    public PaymentTransaction getPaymentTransaction(long playerId, String source, long transactionId) {
+    public PaymentTransaction getPaymentTransaction(String player, String source, String transactionId) {
         return restService.getForEntity(PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, PaymentTransaction.class, source, transactionId);
     }
 
     @Override
-    public List<PaymentTransaction> listPlayerTransaction(long playerId) {
-        return restService.getForEntityList(PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, PaymentTransaction.class, playerId);
+    public List<PaymentTransaction> listPlayerTransaction(String player) {
+        return restService.getForEntityList(PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, PaymentTransaction.class, player);
     }
 
 }

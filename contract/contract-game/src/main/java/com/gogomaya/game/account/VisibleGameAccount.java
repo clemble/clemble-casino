@@ -15,7 +15,7 @@ public class VisibleGameAccount implements GameAccount {
     private static final long serialVersionUID = -6227399075601837719L;
 
     private Money bank;
-    final private Map<Long, GamePlayerAccount> playerToAccount;
+    final private Map<String, GamePlayerAccount> playerToAccount;
 
     @JsonCreator
     public VisibleGameAccount(@JsonProperty("bank") Money bank, @JsonProperty("playerAccounts") Collection<GamePlayerAccount> playerAccounts) {
@@ -34,13 +34,13 @@ public class VisibleGameAccount implements GameAccount {
     }
 
     @Override
-    final public GamePlayerAccount getPlayerAccount(long playerId) {
-        return playerToAccount.get(playerId);
+    final public GamePlayerAccount getPlayerAccount(String player) {
+        return playerToAccount.get(player);
     }
 
     @Override
-    final public void subMoneyLeft(long playerId, long amount) {
-        playerToAccount.get(playerId).subMoneyLeft(amount);
+    final public void subMoneyLeft(String player, long amount) {
+        playerToAccount.get(player).subMoneyLeft(amount);
         bank = bank.add(amount);
     }
 

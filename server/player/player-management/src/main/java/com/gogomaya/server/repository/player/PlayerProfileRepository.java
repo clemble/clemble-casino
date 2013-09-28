@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.gogomaya.player.PlayerProfile;
 
 @Repository
-public interface PlayerProfileRepository extends JpaRepository<PlayerProfile, Long>, JpaSpecificationExecutor<PlayerProfile> {
+public interface PlayerProfileRepository extends JpaRepository<PlayerProfile, String>, JpaSpecificationExecutor<PlayerProfile> {
 
 }

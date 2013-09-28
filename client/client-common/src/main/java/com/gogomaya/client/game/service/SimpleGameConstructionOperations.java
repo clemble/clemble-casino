@@ -17,13 +17,13 @@ import com.gogomaya.game.service.GameConstructionService;
 
 public class SimpleGameConstructionOperations implements GameConstructionOperations {
 
-    final private long playerId;
+    final private String player;
     final private Game game;
     final private EventListenersManager listenersManager;
     final private GameConstructionService constructionService;
 
-    public SimpleGameConstructionOperations(long playerId, Game game, GameConstructionService constructionService, EventListenersManager listenersManager) {
-        this.playerId = playerId;
+    public SimpleGameConstructionOperations(String player, Game game, GameConstructionService constructionService, EventListenersManager listenersManager) {
+        this.player = player;
         this.game = game;
         this.constructionService = checkNotNull(constructionService);
         this.listenersManager = checkNotNull(listenersManager);
@@ -31,32 +31,32 @@ public class SimpleGameConstructionOperations implements GameConstructionOperati
 
     @Override
     public GameConstruction construct(GameRequest gameRequest) {
-        return constructionService.construct(playerId, gameRequest);
+        return constructionService.construct(player, gameRequest);
     }
 
     @Override
     public GameConstruction getConstruct(long session) {
-        return constructionService.getConstruct(playerId, session);
+        return constructionService.getConstruct(player, session);
     }
 
     @Override
     public GameConstruction accept(long sessionId) {
-        return response(sessionId, new InvitationAcceptedEvent(new GameSessionKey(game, sessionId), playerId));
+        return response(sessionId, new InvitationAcceptedEvent(new GameSessionKey(game, sessionId), player));
     }
 
     @Override
     public GameConstruction decline(long sessionId) {
-        return response(sessionId, new InvitationDeclinedEvent(playerId, new GameSessionKey(game, sessionId)));
+        return response(sessionId, new InvitationDeclinedEvent(player, new GameSessionKey(game, sessionId)));
     }
 
     @Override
     public GameConstruction response(long sessionId, InvitationResponseEvent responce) {
-        return constructionService.reply(playerId, sessionId, responce);
+        return constructionService.reply(player, sessionId, responce);
     }
 
     @Override
-    public ClientEvent getResponce(long session, long player) {
-        return constructionService.getResponce(playerId, session, player);
+    public ClientEvent getResponce(long session, String player) {
+        return constructionService.getResponce(player, session, player);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SimpleGameConstructionOperations implements GameConstructionOperati
 
     @Override
     public String getGameActionServer(long sessionId) {
-        return constructionService.getServer(playerId, sessionId);
+        return constructionService.getServer(player, sessionId);
     }
 
 }

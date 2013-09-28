@@ -42,7 +42,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
     @Override
     public PlayerListenerControl listen(PlayerSession playerSession, final PlayerListener gameListener) {
         // Step 1. Creating Server connection
-        return listen(playerSession, gameListener, ListenerChannel.values()[(int) (playerSession.getPlayerId() % ListenerChannel.values().length)]);
+        return listen(playerSession, gameListener, ListenerChannel.values()[Math.abs(playerSession.getPlayer().hashCode() % ListenerChannel.values().length)]);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
         // Step 2. Creating binding
         RabbitAdmin admin = new RabbitAdmin(connectionFactory);
         Queue tmpQueue = admin.declareQueue();
-        Binding tmpBinding = BindingBuilder.bind(tmpQueue).to(new TopicExchange("amq.topic")).with(String.valueOf(playerSession.getPlayerId()));
+        Binding tmpBinding = BindingBuilder.bind(tmpQueue).to(new TopicExchange("amq.topic")).with(playerSession.getPlayer());
         admin.declareBinding(tmpBinding);
         // Step 3. Creating MessageListener
         final SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
@@ -80,7 +80,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
             @Override
             public void onMessage(Message message) {
                 try {
-                    System.out.println(playerSession.getPlayerId() + " > " + new String(message.getBody()));
+                    System.out.println(playerSession.getPlayer() + " > " + new String(message.getBody()));
                     // Step 1. Parsing GameTable
                     Event event = objectMapper.readValue(new String(message.getBody()), Event.class);
                     // Step 2. Updating game table
@@ -103,8 +103,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
     }
 
     private PlayerListenerControl addStompListener(final PlayerSession playerSession, final PlayerListener playerListener) {
-        final long player = playerSession.getPlayerId();
-        final String channel = "/topic/" + player;
+        final String channel = "/topic/" + playerSession.getPlayer();
         // Step 1. Creating a game table client
         try {
             final NotificationConfiguration notificationConfiguration = playerSession.getResourceLocations().getNotificationConfiguration();
@@ -115,7 +114,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
                 @Override
                 public void message(Map parameters, String message) {
                     try {
-                        System.out.println(player + " > " + message);
+                        System.out.println(playerSession.getPlayer() + " > " + message);
                         // Step 1. Reading game table
                         Event event = objectMapper.readValue(message, Event.class);
                         // Step 2. Updating game table
@@ -152,7 +151,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
                         @Override
                         public void onOpen(WebSocket websocket) {
                             super.onOpen(webSocket);
-                            websocket.sendTextMessage("SUBSCRIBE /topic/" + playerSession.getPlayerId());
+                            websocket.sendTextMessage("SUBSCRIBE /topic/" + playerSession.getPlayer());
                         }
 
                         @Override

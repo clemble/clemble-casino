@@ -78,12 +78,12 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
                 }
 
                 @Override
-                public boolean canAfford(long playerId, Money amount) {
+                public boolean canAfford(String playerId, Money amount) {
                     return true;
                 }
 
                 @Override
-                public boolean canAfford(Collection<Long> playerId, Money amount) {
+                public boolean canAfford(Collection<String> playerId, Money amount) {
                     return true;
                 }
             };

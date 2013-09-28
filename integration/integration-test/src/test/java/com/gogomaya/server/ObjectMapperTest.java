@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,7 +81,7 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void testGiveUpReadWrite() throws JsonParseException, JsonMappingException, IOException {
-        GiveUpEvent event = new GiveUpEvent(0L);
+        GiveUpEvent event = new GiveUpEvent(RandomStringUtils.random(5));
         String stringEvent = objectMapper.writeValueAsString(event);
         GiveUpEvent readEvent = (GiveUpEvent) objectMapper.readValue(stringEvent, ClientEvent.class);
         Assert.assertEquals(event, readEvent);

@@ -15,12 +15,12 @@ public class WebProfileOperations implements ProfileOperations {
     }
 
     @Override
-    public PlayerProfile get(Player player, long playerId) {
+    public PlayerProfile get(Player player, String playerId) {
         return profileController.getPlayerProfile(playerId);
     }
 
     @Override
-    public PlayerProfile put(Player player, long playerId, PlayerProfile playerProfile) {
+    public PlayerProfile put(Player player, String playerId, PlayerProfile playerProfile) {
         return profileController.updatePlayerProfile(playerId, playerProfile);
     }
 

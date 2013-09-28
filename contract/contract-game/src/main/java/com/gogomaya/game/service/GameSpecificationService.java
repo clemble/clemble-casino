@@ -5,6 +5,6 @@ import com.gogomaya.game.configuration.GameSpecificationOptions;
 
 public interface GameSpecificationService {
 
-    public GameSpecificationOptions getSpecificationOptions(final long playerId, Game game);
+    public GameSpecificationOptions getSpecificationOptions(final String player, Game game);
 
 }

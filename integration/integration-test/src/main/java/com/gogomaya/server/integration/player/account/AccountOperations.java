@@ -11,18 +11,18 @@ public interface AccountOperations {
 
     public PlayerAccount getAccount(Player player);
 
-    public PlayerAccount getAccount(Player player, long playerId);
+    public PlayerAccount getAccount(Player player, String playerKey);
 
     public List<PaymentTransaction> getTransactions(Player player);
 
-    public List<PaymentTransaction> getTransactions(Player player, long playerId);
+    public List<PaymentTransaction> getTransactions(Player player, String playerKey);
 
-    public PaymentTransaction getTransaction(Player player, MoneySource moneySource, long transactionId);
+    public PaymentTransaction getTransaction(Player player, MoneySource moneySource, String transactionId);
 
-    public PaymentTransaction getTransaction(Player player, long playerId, MoneySource moneySource, long transactionId);
+    public PaymentTransaction getTransaction(Player player, String playerKey, MoneySource moneySource, String transactionId);
 
-    public PaymentTransaction getTransaction(Player player, String moneySource, long transactionId);
+    public PaymentTransaction getTransaction(Player player, String moneySource, String transactionId);
 
-    public PaymentTransaction getTransaction(Player player, long playerId, String moneySource, long transactionId);
+    public PaymentTransaction getTransaction(Player player, String playerKey, String moneySource, String transactionId);
 
 }

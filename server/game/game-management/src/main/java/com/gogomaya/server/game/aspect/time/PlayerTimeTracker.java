@@ -17,22 +17,22 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
 
     final public static long DEFAULT_BREACH_TIME = Long.MAX_VALUE;
 
-    final private long playerId;
+    final private String player;
     final private TimeRule timeRule;
 
     private long moveStartTime;
     private long totalSpentTime;
     private long breachTime;
 
-    public PlayerTimeTracker(long playerId, TimeRule timeRule) {
-        this.playerId = playerId;
+    public PlayerTimeTracker(String player, TimeRule timeRule) {
+        this.player = player;
         this.timeRule = checkNotNull(timeRule);
         this.breachTime = Long.MAX_VALUE;
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
     /**
@@ -58,7 +58,7 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
 
     public void appendBreachEvent(Collection<ClientEvent> events) {
         if (System.currentTimeMillis() >= breachTime)
-            events.add(timeRule.toTimeBreachedEvent(playerId));
+            events.add(timeRule.toTimeBreachedEvent(player));
     }
 
     public long getBreachTime() {
@@ -72,12 +72,12 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
 
     @Override
     public int hashCode() {
-        return (int) (playerId ^ (playerId >>> 32));
+        return (int) (player == null ? 0 : player.hashCode());
     }
 
     @Override
     public boolean equals(Object obj) {
-        return playerId == ((PlayerAware) obj).getPlayerId();
+        return player == ((PlayerAware) obj).getPlayer();
     }
 
 }

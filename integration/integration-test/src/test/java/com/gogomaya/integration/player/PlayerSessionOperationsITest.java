@@ -57,7 +57,7 @@ public class PlayerSessionOperationsITest {
         // Step 3. Refreshing player session
         PlayerSession refreshedSession = sessionOperations.refresh(player, currentSession.getSessionId());
         Assert.assertNotEquals(refreshedSession.getExpirationTime(), currentSession.getExpirationTime());
-        Assert.assertEquals(refreshedSession.getPlayerId(), currentSession.getPlayerId());
+        Assert.assertEquals(refreshedSession.getPlayer(), currentSession.getPlayer());
         Assert.assertEquals(refreshedSession.getResourceLocations(), currentSession.getResourceLocations());
         Assert.assertEquals(refreshedSession.getSessionId(), currentSession.getSessionId());
     }

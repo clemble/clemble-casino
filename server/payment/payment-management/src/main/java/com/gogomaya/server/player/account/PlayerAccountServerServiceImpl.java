@@ -30,31 +30,31 @@ public class PlayerAccountServerServiceImpl implements PlayerAccountServerServic
     @Override
     public PlayerAccount register(PlayerProfile player) {
         // Step 1. Creating initial empty account
-        PlayerAccount initialWallet = new PlayerAccount().setPlayerId(player.getPlayerId());
+        PlayerAccount initialWallet = new PlayerAccount().setPlayer(player.getPlayer());
         initialWallet = playerAccountRepository.save(initialWallet);
         // Step 2. Creating initial empty
         Money initialBalance = Money.create(Currency.FakeMoney, 500);
         PaymentTransaction initialTransaction = new PaymentTransaction()
-                .setTransactionKey(new PaymentTransactionKey(MoneySource.Registration, player.getPlayerId()))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setAmount(initialBalance).setPlayerId(player.getPlayerId()))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setAmount(initialBalance).setPlayerId(PlayerAware.DEFAULT_PLAYER));
+                .setTransactionKey(new PaymentTransactionKey(MoneySource.Registration, player.getPlayer()))
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setAmount(initialBalance).setPlayer(player.getPlayer()))
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setAmount(initialBalance).setPlayer(PlayerAware.DEFAULT_PLAYER));
         // Step 3. Returning PaymentTransaction
         paymentTransactionService.process(initialTransaction);
-        return playerAccountRepository.findOne(player.getPlayerId());
+        return playerAccountRepository.findOne(player.getPlayer());
     }
 
     @Override
-    public boolean canAfford(long playerId, Money amount) {
+    public boolean canAfford(String player, Money amount) {
         // Step 1. Retrieving players account
-        PlayerAccount playerAccount = playerAccountRepository.findOne(playerId);
+        PlayerAccount playerAccount = playerAccountRepository.findOne(player);
         Money existingAmmount = playerAccount.getMoney(amount.getCurrency());
         // Step 2. If existing amount is not enough player can't afford it
         return existingAmmount.getAmount() >= amount.getAmount();
     }
 
     @Override
-    public boolean canAfford(Collection<Long> players, Money amount) {
-        for (Long player : players) {
+    public boolean canAfford(Collection<String> players, Money amount) {
+        for (String player : players) {
             if (!canAfford(player, amount))
                 return false;
         }

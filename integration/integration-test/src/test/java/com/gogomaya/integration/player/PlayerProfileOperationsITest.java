@@ -2,6 +2,7 @@ package com.gogomaya.integration.player;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -52,10 +53,10 @@ public class PlayerProfileOperationsITest {
         Player player = playerOperations.createPlayer(playerProfile);
         Player anotherPlayer = playerOperations.createPlayer();
 
-        playerProfile.setPlayerId(player.getPlayerId());
+        playerProfile.setPlayer(player.getPlayer());
         Assert.assertEquals(playerProfile, player.getProfile());
-        Assert.assertEquals(playerProfile, playerProfileOperations.get(player, player.getPlayerId()));
-        Assert.assertEquals(playerProfile, playerProfileOperations.get(anotherPlayer, player.getPlayerId()));
+        Assert.assertEquals(playerProfile, playerProfileOperations.get(player, player.getPlayer()));
+        Assert.assertEquals(playerProfile, playerProfileOperations.get(anotherPlayer, player.getPlayer()));
     }
 
     @Test
@@ -64,7 +65,7 @@ public class PlayerProfileOperationsITest {
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerProfileDoesNotExists));
 
-        playerProfileOperations.get(player, -1);
+        playerProfileOperations.get(player, "-1");
     }
 
     @Test
@@ -73,86 +74,86 @@ public class PlayerProfileOperationsITest {
         PlayerProfile playerProfile = randomProfile();
         // Step 2. Saving profile to DB
         Player player = playerOperations.createPlayer(playerProfile);
-        playerProfile.setPlayerId(player.getPlayerId());
+        playerProfile.setPlayer(player.getPlayer());
         Player anotherPlayer = playerOperations.createPlayer();
         Assert.assertEquals(playerProfile, player.getProfile());
         // Step 3. Updating created player with new Profile value
         PlayerProfile newProfile = randomProfile();
-        newProfile.setPlayerId(player.getPlayerId());
+        newProfile.setPlayer(player.getPlayer());
         newProfile.setVersion(0);
         // Step 4. Checking saved profile, replaced the old one
-        PlayerProfile savedProfile = playerProfileOperations.put(player, player.getPlayerId(), newProfile);
+        PlayerProfile savedProfile = playerProfileOperations.put(player, player.getPlayer(), newProfile);
 
         newProfile.setVersion(savedProfile.getVersion());
         Assert.assertEquals(savedProfile, newProfile);
 
         Assert.assertEquals(newProfile, player.getProfile());
-        Assert.assertEquals(newProfile, playerProfileOperations.get(player, player.getPlayerId()));
-        Assert.assertEquals(newProfile, playerProfileOperations.get(anotherPlayer, player.getPlayerId()));
+        Assert.assertEquals(newProfile, playerProfileOperations.get(player, player.getPlayer()));
+        Assert.assertEquals(newProfile, playerProfileOperations.get(anotherPlayer, player.getPlayer()));
         // Step 5. Repeating steps from 3 to 4 with another new Profile
         newProfile = randomProfile();
-        newProfile.setPlayerId(player.getPlayerId());
+        newProfile.setPlayer(player.getPlayer());
         newProfile.setVersion(savedProfile.getVersion());
 
-        savedProfile = playerProfileOperations.put(player, player.getPlayerId(), newProfile);
+        savedProfile = playerProfileOperations.put(player, player.getPlayer(), newProfile);
 
         newProfile.setVersion(savedProfile.getVersion());
         Assert.assertEquals(savedProfile, newProfile);
 
         Assert.assertEquals(newProfile, player.getProfile());
-        Assert.assertEquals(newProfile, playerProfileOperations.get(player, player.getPlayerId()));
-        Assert.assertEquals(newProfile, playerProfileOperations.get(anotherPlayer, player.getPlayerId()));
+        Assert.assertEquals(newProfile, playerProfileOperations.get(player, player.getPlayer()));
+        Assert.assertEquals(newProfile, playerProfileOperations.get(anotherPlayer, player.getPlayer()));
     }
 
     @Test
     @Ignore //TODO Test security
     public void testProfileWriteByAnother() {
         PlayerProfile playerProfile = randomProfile();
-        playerProfile.setPlayerId(0);
+        playerProfile.setPlayer(RandomStringUtils.random(5));
 
         Player player = playerOperations.createPlayer(playerProfile);
         Player anotherPlayer = playerOperations.createPlayer();
-        playerProfile.setPlayerId(player.getPlayerId());
+        playerProfile.setPlayer(player.getPlayer());
         Assert.assertEquals(playerProfile, player.getProfile());
 
         PlayerProfile newProfile = randomProfile();
-        newProfile.setPlayerId(player.getPlayerId());
+        newProfile.setPlayer(player.getPlayer());
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotProfileOwner));
 
-        Assert.assertEquals(newProfile, playerProfileOperations.put(anotherPlayer, player.getPlayerId(), newProfile));
+        Assert.assertEquals(newProfile, playerProfileOperations.put(anotherPlayer, player.getPlayer(), newProfile));
     }
 
     @Test
     public void testProfileWriteNull() {
         PlayerProfile playerProfile = randomProfile();
-        playerProfile.setPlayerId(0);
+        playerProfile.setPlayer("0");
 
         Player player = playerOperations.createPlayer(playerProfile);
-        playerProfile.setPlayerId(player.getPlayerId());
+        playerProfile.setPlayer(player.getPlayer());
         Assert.assertEquals(playerProfile, player.getProfile());
 
         PlayerProfile newProfile = null;
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromPossibleErrors(GogomayaError.PlayerProfileInvalid, GogomayaError.ServerError));
 
-        Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayerId(), newProfile));
+        Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayer(), newProfile));
     }
 
     @Test
     public void testProfileWriteWithDifferentId() {
         PlayerProfile playerProfile = randomProfile();
-        playerProfile.setPlayerId(0);
+        playerProfile.setPlayer(RandomStringUtils.random(5));
 
         Player player = playerOperations.createPlayer(playerProfile);
-        playerProfile.setPlayerId(player.getPlayerId());
+        playerProfile.setPlayer(player.getPlayer());
         Assert.assertEquals(playerProfile, player.getProfile());
 
         PlayerProfile newProfile = randomProfile();
-        newProfile.setPlayerId(player.getPlayerId() + 10);
+        newProfile.setPlayer(RandomStringUtils.random(5));
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotProfileOwner));
 
-        Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayerId(), newProfile));
+        Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayer(), newProfile));
     }
 }

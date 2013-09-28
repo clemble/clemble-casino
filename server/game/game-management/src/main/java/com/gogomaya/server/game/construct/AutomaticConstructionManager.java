@@ -30,12 +30,12 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
     final public static class AutomaticGameConstruction {
         final private GameConstruction construction;
         final private GameSpecification specification;
-        final private LinkedHashSet<Long> participants = new LinkedHashSet<Long>();
+        final private LinkedHashSet<String> participants = new LinkedHashSet<>();
 
         public AutomaticGameConstruction(GameConstruction construction) {
             this.construction = construction;
             this.specification = construction.getRequest().getSpecification();
-            this.participants.add(construction.getRequest().getPlayerId());
+            this.participants.add(construction.getRequest().getPlayer());
         }
 
         public GameConstruction getConstruction() {
@@ -44,7 +44,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
 
         public boolean append(AutomaticGameRequest request) {
             if (request != null) {
-                participants.add(request.getPlayerId());
+                participants.add(request.getPlayer());
             }
             return participants.size() >= specification.getNumberRule().getMinPlayers();
         }
@@ -67,7 +67,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
                 }
             });
 
-    final private Map<Long, AutomaticGameConstruction> playerConstructions = new ConcurrentHashMap<>();
+    final private Map<String, AutomaticGameConstruction> playerConstructions = new ConcurrentHashMap<>();
 
     final private GameConstructionRepository constructionRepository;
     final private GameInitiatorService initiatorService;
@@ -90,14 +90,14 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
         // Step 1. Sanity check
         if (request == null)
             throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
-        PlayerPresence playerPresence = playerStateManager.getPresence(request.getPlayerId());
+        PlayerPresence playerPresence = playerStateManager.getPresence(request.getPlayer());
         if (playerPresence.getPresence() == Presence.playing) {
             GameConstruction activeConstruction = constructionRepository.findOne(playerPresence.getSession());
             if (activeConstruction != null)
                 return activeConstruction;
         }
         // Step 2. Fetching associated Queue
-        long player = request.getPlayerId();
+        String player = request.getPlayer();
         playerLockService.lock(player);
         AutomaticGameConstruction pendingConstuction;
         try {
@@ -127,7 +127,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
                 if (pendingConstuction.append(request)) {
                     GameInitiation initiation = pendingConstuction.toInitiation();
                     if (initiatorService.initiate(initiation)) {
-                        for (Long participant : initiation.getParticipants())
+                        for (String participant : initiation.getParticipants())
                             playerConstructions.remove(participant);
                     }
                 } else {

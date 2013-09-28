@@ -16,18 +16,18 @@ public class PlayerProfileOperations {
     }
 
     public PlayerProfile get() {
-        return get(player.getPlayerId());
+        return get(player.getPlayer());
     }
 
-    public PlayerProfile get(long playerId) {
+    public PlayerProfile get(String playerId) {
         return profileOperations.get(player, playerId);
     }
 
     public PlayerProfile set(PlayerProfile newProfile) {
-        return set(newProfile, player.getPlayerId());
+        return set(newProfile, player.getPlayer());
     }
 
-    public PlayerProfile set(PlayerProfile newProfile, long playerId) {
+    public PlayerProfile set(PlayerProfile newProfile, String playerId) {
         return profileOperations.put(player, playerId, newProfile);
     }
 

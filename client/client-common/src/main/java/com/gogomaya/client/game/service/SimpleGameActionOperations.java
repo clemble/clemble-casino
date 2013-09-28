@@ -18,14 +18,14 @@ public class SimpleGameActionOperations<State extends GameState> implements Game
      */
     private static final long serialVersionUID = -2263303118851762598L;
 
-    final private long playerId;
+    final private String player;
     final private GameSessionKey session;
     final private GameActionService<State> gameActionService;
     final private EventListenersManager eventListenersManager;
 
-    public SimpleGameActionOperations(long playerId, GameSessionKey sessionId, EventListenersManager eventListenersManager, GameActionService<State> gameActionService) {
-        this.playerId = playerId;
-        this.session = sessionId;
+    public SimpleGameActionOperations(String player, GameSessionKey session, EventListenersManager eventListenersManager, GameActionService<State> gameActionService) {
+        this.player = player;
+        this.session = session;
         this.eventListenersManager = checkNotNull(eventListenersManager);
         this.gameActionService = checkNotNull(gameActionService);
     }
@@ -51,14 +51,8 @@ public class SimpleGameActionOperations<State extends GameState> implements Game
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
-    }
-
-    @Override
-    public GameActionOperations<State> clone(String server) {
-        // TODO Auto-generated method stub
-        return null;
+    public String getPlayer() {
+        return player;
     }
 
 }

@@ -25,7 +25,7 @@ public class PlayerSocialProfileController implements PlayerSocialProfileService
     @Override
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_SOCIAL, produces = WebMapping.PRODUCES)
     public @ResponseBody
-    SocialConnectionData add(@PathVariable("playerId") long playerId, @RequestBody SocialConnectionData socialConnectionData) {
+    SocialConnectionData add(@PathVariable("playerId") String playerId, @RequestBody SocialConnectionData socialConnectionData) {
         return socialConnectionDataAdapter.add(playerId, socialConnectionData);
     }
 

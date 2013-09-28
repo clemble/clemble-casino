@@ -23,8 +23,8 @@ public class SimplePlayerNotificationRegistry implements PlayerNotificationRegis
     }
 
     @Override
-    public String findNotificationServer(long playerId) {
-        return getServerRegistry().find(playerId);
+    public String findNotificationServer(String player) {
+        return serverRegistry.find(player);
     }
 
     public ServerRegistry getServerRegistry() {

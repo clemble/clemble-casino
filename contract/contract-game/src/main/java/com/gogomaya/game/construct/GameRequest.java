@@ -16,33 +16,32 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
      */
     private static final long serialVersionUID = 4949060894194971610L;
 
-    final private long playerId;
+    final private String player;
+    final private Collection<String> participants;
 
     final private GameSpecification specification;
 
-    final private Collection<Long> participants;
-
-    public GameRequest(long playerId, GameSpecification specification) {
-        this(playerId, specification, CollectionUtils.immutableSet(playerId));
+    public GameRequest(String player, GameSpecification specification) {
+        this(player, specification, CollectionUtils.immutableSet(player));
     }
 
-    public GameRequest(long playerId, GameSpecification specification, Collection<Long> participants) {
-        this.playerId = playerId;
+    public GameRequest(String player, GameSpecification specification, Collection<String> participants) {
+        this.player = player;
         this.specification = specification;
 
-        if (!participants.contains(playerId))
-            participants.add(playerId);
+        if (!participants.contains(player))
+            participants.add(player);
         this.participants = participants;
     }
 
     @Override
-    public Collection<Long> getParticipants() {
+    public Collection<String> getParticipants() {
         return participants;
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
     @Override
@@ -54,7 +53,7 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + (int) (player != null ? player.hashCode() : 0);
         result = prime * result + ((specification == null) ? 0 : specification.hashCode());
         return result;
     }
@@ -68,7 +67,7 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
         if (getClass() != obj.getClass())
             return false;
         GameRequest other = (GameRequest) obj;
-        if (playerId != other.playerId)
+        if (player != other.player)
             return false;
         if (specification == null) {
             if (other.specification != null)

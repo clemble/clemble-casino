@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.game.specification.GameSpecification;
+import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("scheduled")
 public class ScheduledGameRequest extends GameRequest {
@@ -21,12 +22,12 @@ public class ScheduledGameRequest extends GameRequest {
     final private Date startTime;
 
     @JsonCreator
-    public ScheduledGameRequest(@JsonProperty("playerId") long playerId,
+    public ScheduledGameRequest(@JsonProperty(PlayerAware.JSON_ID) String player,
             @JsonProperty("specification") GameSpecification specification,
-            @JsonProperty("participants") Collection<Long> participants,
+            @JsonProperty("participants") Collection<String> participants,
             @JsonProperty("declineBehavior") GameDeclineBehavior declineBehavior,
             @JsonProperty("startTime") Date startTime) {
-        super(playerId, specification, participants);
+        super(player, specification, participants);
         this.declineBehavior = declineBehavior != null ? declineBehavior : GameDeclineBehavior.invalidate;
         this.startTime = startTime;
     }

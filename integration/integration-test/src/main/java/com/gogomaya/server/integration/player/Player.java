@@ -39,7 +39,7 @@ public class Player implements PlayerAware {
      */
     private static final long serialVersionUID = -4160641502466429770L;
 
-    final private long playerId;
+    final private String player;
     final private PlayerSession session;
     final private PlayerIdentity identity;
     final private PlayerListenerManager playerListenersManager;
@@ -63,7 +63,7 @@ public class Player implements PlayerAware {
         this.playerWalletOperations = new PlayerAccountOperations(this, accountOperations);
 
         this.identity = checkNotNull(playerIdentity);
-        this.playerId = identity.getPlayerId();
+        this.player = identity.getPlayer();
         this.session = checkNotNull(playerSessionOperations.start());
         this.credential = checkNotNull(credential);
         this.playerListenersManager = new PlayerListenerManager(this, listenerOperations);
@@ -88,8 +88,8 @@ public class Player implements PlayerAware {
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
     public PlayerProfile getProfile() {
@@ -127,7 +127,7 @@ public class Player implements PlayerAware {
     public <T> HttpEntity<T> sign(T value) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(playerId));
+        header.add("playerId", String.valueOf(player));
         header.add("Content-Type", "application/json");
         // Step 2. Generating request
         return new HttpEntity<T>(value, header);
@@ -136,7 +136,7 @@ public class Player implements PlayerAware {
     public <T> HttpEntity<T> signGame(GameSessionKey session, T value) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(playerId));
+        header.add("playerId", String.valueOf(player));
         header.add("sessionId", String.valueOf(session));
         header.add("Content-Type", "application/json");
         // Step 2. Generating request

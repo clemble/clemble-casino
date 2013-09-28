@@ -16,7 +16,7 @@ public class AndroidPlayerAccountService implements PlayerAccountService {
     }
 
     @Override
-    public PlayerAccount get(long playerId) {
+    public PlayerAccount get(String playerId) {
         return restService.getForEntity(PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, PlayerAccount.class, playerId);
     }
 

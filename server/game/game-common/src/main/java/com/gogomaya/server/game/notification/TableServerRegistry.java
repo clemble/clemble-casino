@@ -5,13 +5,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.gogomaya.game.GameState;
 import com.gogomaya.game.ServerResourse;
 import com.gogomaya.game.SessionAware;
-import com.gogomaya.server.ServerRegistry;
+import com.gogomaya.server.LongServerRegistry;
 
 public class TableServerRegistry {
 
-    final private ServerRegistry SERVER_REGISTRY;
+    final private LongServerRegistry SERVER_REGISTRY;
 
-    public TableServerRegistry(ServerRegistry serverRegistry) {
+    public TableServerRegistry(LongServerRegistry serverRegistry) {
         this.SERVER_REGISTRY = checkNotNull(serverRegistry);
     }
 

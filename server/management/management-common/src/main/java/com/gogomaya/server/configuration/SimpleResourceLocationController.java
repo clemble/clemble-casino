@@ -31,7 +31,7 @@ public class SimpleResourceLocationController implements ResourceLocationService
     }
 
     @Override
-    public ResourceLocations getResources(long playerId) {
+    public ResourceLocations getResources(String playerId) {
         return new ResourceLocations(notificationConfigurationService.get(playerId), playerProfileEndpoint, paymentEndpoint, gameLocations);
     }
 

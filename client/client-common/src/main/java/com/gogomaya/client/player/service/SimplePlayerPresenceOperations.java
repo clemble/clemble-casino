@@ -7,26 +7,26 @@ import com.gogomaya.player.service.PlayerPresenceService;
 
 public class SimplePlayerPresenceOperations implements PlayerPresenceOperations {
 
-    final private long playerId;
+    final private String player;
     final private PlayerPresenceService playerPresenceService;
 
-    public SimplePlayerPresenceOperations(long playerId, PlayerPresenceService playerPresenceService) {
-        this.playerId = playerId;
+    public SimplePlayerPresenceOperations(String player, PlayerPresenceService playerPresenceService) {
+        this.player = player;
         this.playerPresenceService = playerPresenceService;
     }
 
     @Override
     public PlayerPresence getPresence() {
-        return playerPresenceService.getPresence(playerId);
-    }
-
-    @Override
-    public PlayerPresence getPresence(long player) {
         return playerPresenceService.getPresence(player);
     }
 
     @Override
-    public List<PlayerPresence> getPresences(List<Long> players) {
+    public PlayerPresence getPresence(String player) {
+        return playerPresenceService.getPresence(player);
+    }
+
+    @Override
+    public List<PlayerPresence> getPresences(List<String> players) {
         return playerPresenceService.getPresences(players);
     }
 }

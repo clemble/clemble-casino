@@ -41,7 +41,7 @@ import com.gogomaya.player.service.PlayerProfileService;
 
 public class GogomayaTemplate implements Gogomaya {
 
-    final private long playerId;
+    final private String player;
     final private RestClientService restClient;
     final private EventListenersManager eventListenersManager;
     final private PlayerSessionOperations playerSessionOperations;
@@ -51,31 +51,30 @@ public class GogomayaTemplate implements Gogomaya {
     final private Map<Game, GameConstructionOperations> gameToConstructionOperations;
 
     public GogomayaTemplate(RestClientService restClient, ObjectMapper objectMapper) throws IOException {
-        this.playerId = checkNotNull(restClient).getPlayerId();
+        this.player = checkNotNull(restClient).getPlayer();
         this.restClient = checkNotNull(restClient);
 
-        this.playerSessionOperations = new SimplePlayerSessionOperations(playerId, new AndroidPlayerSessionService(restClient));
+        this.playerSessionOperations = new SimplePlayerSessionOperations(player, new AndroidPlayerSessionService(restClient));
         ResourceLocations resourceLocations = checkNotNull(playerSessionOperations.create().getResourceLocations());
 
         // Step 1. Creating PlayerProfile service
         RestClientService playerRestService = restClient.construct(resourceLocations.getPlayerProfileEndpoint());
         PlayerProfileService playerProfileService = new AndroidPlayerProfileService(playerRestService);
-        this.playerProfileOperations = new SimplePlayerProfileOperations(playerId, playerProfileService);
+        this.playerProfileOperations = new SimplePlayerProfileOperations(player, playerProfileService);
         // Step 2. Creating PlayerPresence service
         PlayerPresenceService playerPresenceService = new AndroidPlayerPresenceService(playerRestService);
-        this.playerPresenceOperations = new SimplePlayerPresenceOperations(playerId, playerPresenceService);
+        this.playerPresenceOperations = new SimplePlayerPresenceOperations(player, playerPresenceService);
         // Step 3. Creating PaymentTransaction service
         RestClientService paymentRestService = restClient.construct(resourceLocations.getPaymentEndpoint());
         PaymentTransactionService paymentTransactionService = new AndroidPaymentTransactionService(paymentRestService);
-        this.paymentTransactionOperations = new SimplePaymentTransactionOperations(playerId, paymentTransactionService);
+        this.paymentTransactionOperations = new SimplePaymentTransactionOperations(player, paymentTransactionService);
         // Step 4. Creating GameConstruction services
         this.gameToConstructionOperations = new HashMap<Game, GameConstructionOperations>();
         this.eventListenersManager = new RabbitEventListenerManager(resourceLocations.getNotificationConfiguration(), objectMapper);
         for (GameLocation location : resourceLocations.getGameLocations()) {
             final RestClientService gameRestService = restClient.construct(location.getUrl());
             final GameConstructionService constructionService = new AndroidGameConstructionService(gameRestService);
-            final GameConstructionOperations constructionOperations = new SimpleGameConstructionOperations(playerId, location.getGame(), constructionService,
-                    eventListenersManager);
+            final GameConstructionOperations constructionOperations = new SimpleGameConstructionOperations(player, location.getGame(), constructionService, eventListenersManager);
             this.gameToConstructionOperations.put(location.getGame(), constructionOperations);
         }
     }
@@ -112,7 +111,7 @@ public class GogomayaTemplate implements Gogomaya {
         // Step 2. Fetching action Server
         String actionServer = constructionOperations.getGameActionServer(session.getSession());
         // Step 3. Preparing new restService
-        return new SimpleGameActionOperations<>(playerId, session, eventListenersManager, new AndroidGameActionService<State>(restClient.construct(actionServer)));
+        return new SimpleGameActionOperations<>(player, session, eventListenersManager, new AndroidGameActionService<State>(restClient.construct(actionServer)));
     }
 
 }

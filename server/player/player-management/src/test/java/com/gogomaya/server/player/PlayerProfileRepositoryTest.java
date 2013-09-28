@@ -1,5 +1,6 @@
 package com.gogomaya.server.player;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,36 +36,36 @@ public class PlayerProfileRepositoryTest {
 
     @Test
     public void testSave() {
-        PlayerProfile gamerProfile = new PlayerProfile();
+        PlayerProfile gamerProfile = new PlayerProfile().setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedProfile = playerProfileRepository.save(gamerProfile);
-        gamerProfile.setPlayerId(savedProfile.getPlayerId());
-        Assert.assertNotNull(gamerProfile.getPlayerId());
-        Assert.assertNotNull(savedProfile.getPlayerId());
-        PlayerProfile found = playerProfileRepository.findOne(gamerProfile.getPlayerId());
+        gamerProfile.setPlayer(savedProfile.getPlayer());
+        Assert.assertNotNull(gamerProfile.getPlayer());
+        Assert.assertNotNull(savedProfile.getPlayer());
+        PlayerProfile found = playerProfileRepository.findOne(gamerProfile.getPlayer());
         Assert.assertEquals(found, gamerProfile);
         Assert.assertEquals(found, savedProfile);
     }
 
     @Test
     public void testSaveMultiple() {
-        PlayerProfile playerA = new PlayerProfile().setFirstName("User A").setLastName("Userius").setCategory(PlayerCategory.Novice);
+        PlayerProfile playerA = new PlayerProfile().setPlayer(RandomStringUtils.random(5)).setFirstName("User A").setLastName("Userius").setCategory(PlayerCategory.Novice);
         PlayerProfile savedPlayerA = playerProfileRepository.saveAndFlush(playerA);
-        playerA.setPlayerId(savedPlayerA.getPlayerId());
-        Assert.assertNotNull(playerA.getPlayerId());
-        Assert.assertNotNull(savedPlayerA.getPlayerId());
-        PlayerProfile foundPlayerA = playerProfileRepository.findOne(playerA.getPlayerId());
+        playerA.setPlayer(savedPlayerA.getPlayer());
+        Assert.assertNotNull(playerA.getPlayer());
+        Assert.assertNotNull(savedPlayerA.getPlayer());
+        PlayerProfile foundPlayerA = playerProfileRepository.findOne(playerA.getPlayer());
         Assert.assertEquals(foundPlayerA, playerA);
         Assert.assertEquals(foundPlayerA, savedPlayerA);
 
         Assert.assertEquals(playerProfileRepository.count(), 1);
 
-        PlayerProfile playerB = new PlayerProfile().setFirstName("User B").setLastName("Userius").setCategory(PlayerCategory.Amateur);
+        PlayerProfile playerB = new PlayerProfile().setPlayer(RandomStringUtils.random(5)).setFirstName("User B").setLastName("Userius").setCategory(PlayerCategory.Amateur);
         PlayerProfile savedPlayerB = playerProfileRepository.saveAndFlush(playerB);
-        playerB.setPlayerId(savedPlayerB.getPlayerId());
-        Assert.assertNotSame(savedPlayerA.getPlayerId(), savedPlayerB.getPlayerId());
-        Assert.assertNotNull(playerB.getPlayerId());
-        Assert.assertNotNull(savedPlayerB.getPlayerId());
-        PlayerProfile foundPlayerB = playerProfileRepository.findOne(playerB.getPlayerId());
+        playerB.setPlayer(savedPlayerB.getPlayer());
+        Assert.assertNotSame(savedPlayerA.getPlayer(), savedPlayerB.getPlayer());
+        Assert.assertNotNull(playerB.getPlayer());
+        Assert.assertNotNull(savedPlayerB.getPlayer());
+        PlayerProfile foundPlayerB = playerProfileRepository.findOne(playerB.getPlayer());
         Assert.assertEquals(foundPlayerB, playerB);
         Assert.assertEquals(foundPlayerB, savedPlayerB);
 

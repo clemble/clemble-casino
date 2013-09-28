@@ -44,8 +44,8 @@ public class AndroidRestService implements RestClientService {
     }
 
     @Override
-    public long getPlayerId() {
-        return securityClientService.getPlayerId();
+    public String getPlayer() {
+        return securityClientService.getPlayer();
     }
 
     @Override

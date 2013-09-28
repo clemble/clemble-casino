@@ -30,7 +30,7 @@ public class SocialPlayerProfileCreator implements ConnectionSignUp {
         // Step 3. Generating gamer profile based on SocialConnection
         PlayerProfile playerProfile = socialAdapter.fetchGamerProfile(connection.getApi());
         // Step 4. Returning playerIdentity as a result
-        return String.valueOf(playerProfile.getPlayerId());
+        return String.valueOf(playerProfile.getPlayer());
     }
 
 }

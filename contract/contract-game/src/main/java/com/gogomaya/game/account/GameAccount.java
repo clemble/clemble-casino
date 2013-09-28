@@ -13,8 +13,8 @@ public interface GameAccount extends Serializable {
 
     public Collection<GamePlayerAccount> getPlayerAccounts();
 
-    public GamePlayerAccount getPlayerAccount(long playerId);
+    public GamePlayerAccount getPlayerAccount(String player);
 
-    public void subMoneyLeft(long playerId, long amount);
+    public void subMoneyLeft(String player, long amount);
 
 }

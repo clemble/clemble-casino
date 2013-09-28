@@ -16,22 +16,22 @@ public class WebSessionOperations extends AbstractSessionOperations {
 
     @Override
     public PlayerSession start(Player player) {
-        return playerSessionController.create(player.getPlayerId());
+        return playerSessionController.create(player.getPlayer());
     }
 
     @Override
     public PlayerSession end(Player player, long session) {
-        return playerSessionController.endPlayerSession(player.getPlayerId(), session);
+        return playerSessionController.endPlayerSession(player.getPlayer(), session);
     }
 
     @Override
     public PlayerSession refresh(Player player, long session) {
-        return playerSessionController.refreshPlayerSession(player.getPlayerId(), session);
+        return playerSessionController.refreshPlayerSession(player.getPlayer(), session);
     }
 
     @Override
     public PlayerSession get(Player player, long session) {
-        return playerSessionController.getPlayerSession(player.getPlayerId(), session);
+        return playerSessionController.getPlayerSession(player.getPlayer(), session);
     }
 
 }

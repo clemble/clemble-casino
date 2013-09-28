@@ -49,8 +49,8 @@ public class PaymentTransactionOperationsITest {
     @Test
     public void testFakePaymentTransaction() {
         PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayerId(-1).setAmount(Money.create(Currency.FakeMoney, 50)))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayerId(-2).setAmount(Money.create(Currency.FakeMoney, 50)));
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayer("-1").setAmount(Money.create(Currency.FakeMoney, 50)))
+                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayer("-2").setAmount(Money.create(Currency.FakeMoney, 50)));
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionUnknownPlayers));
 
@@ -65,10 +65,10 @@ public class PaymentTransactionOperationsITest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
+                        new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 60)))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Debit).setPlayerId(anotherPlayer.getPlayerId())
+                        new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)));
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionInvalid));
@@ -84,10 +84,10 @@ public class PaymentTransactionOperationsITest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
+                        new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Debit).setPlayerId(anotherPlayer.getPlayerId())
+                        new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)));
 
         PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
@@ -106,17 +106,17 @@ public class PaymentTransactionOperationsITest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(source, transactionId))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
+                        new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Debit).setPlayerId(anotherPlayer.getPlayerId())
+                        new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)));
 
         PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
 
         assertEquals(savedPaymentTransaction, paymentTransaction);
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(player, source, transactionId));
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(anotherPlayer, source, transactionId));
+        assertEquals(paymentTransaction, paymentTransactionOperations.get(player, source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, paymentTransactionOperations.get(anotherPlayer, source, String.valueOf(transactionId)));
     }
 
     @Test
@@ -131,20 +131,20 @@ public class PaymentTransactionOperationsITest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(source, transactionId))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Credit).setPlayerId(player.getPlayerId())
+                        new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Debit).setPlayerId(anotherPlayer.getPlayerId())
+                        new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)));
 
         PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
 
         assertEquals(savedPaymentTransaction, paymentTransaction);
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(player, source, transactionId));
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(anotherPlayer, source, transactionId));
+        assertEquals(paymentTransaction, paymentTransactionOperations.get(player, source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, paymentTransactionOperations.get(anotherPlayer, source, String.valueOf(transactionId)));
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionAccessDenied));
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(therdPlayer, source, transactionId));
+        assertEquals(paymentTransaction, paymentTransactionOperations.get(therdPlayer, source, String.valueOf(transactionId)));
     }
 
     @Test
@@ -152,10 +152,10 @@ public class PaymentTransactionOperationsITest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer();
         // Step 2. Checking account exists
-        PaymentTransaction paymentTransaction = paymentTransactionOperations.get(player, MoneySource.Registration, player.getPlayerId());
+        PaymentTransaction paymentTransaction = paymentTransactionOperations.get(player, MoneySource.Registration, player.getPlayer());
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
-            if (paymentOperation.getPlayerId() == player.getPlayerId()) {
+            if (paymentOperation.getPlayer().equals(player.getPlayer())) {
                 associatedOperation.add(paymentOperation);
             }
         }

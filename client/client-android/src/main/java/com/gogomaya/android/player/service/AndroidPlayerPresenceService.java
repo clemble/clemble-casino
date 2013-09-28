@@ -20,12 +20,12 @@ public class AndroidPlayerPresenceService implements PlayerPresenceService {
     }
 
     @Override
-    public PlayerPresence getPresence(long player) {
+    public PlayerPresence getPresence(String player) {
         return restClientService.getForEntity(PlayerWebMapping.PLAYER_PRESENCE, PlayerPresence.class, player);
     }
 
     @Override
-    public List<PlayerPresence> getPresences(List<Long> players) {
+    public List<PlayerPresence> getPresences(List<String> players) {
         if(players == null || players.isEmpty())
             return new ArrayList<>();
         StringBuilder url = new StringBuilder(PlayerWebMapping.PLAYER_PRESENCES)

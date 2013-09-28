@@ -55,8 +55,8 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         this.presenceNotification = checkNotNull(presenceNotification);
     }
 
-    public GameSessionKey getActiveSession(long playerId) {
-        String session = redisTemplate.boundValueOps(String.valueOf(playerId)).get();
+    public GameSessionKey getActiveSession(String player) {
+        String session = redisTemplate.boundValueOps(String.valueOf(player)).get();
         if (session == null)
             return null;
         if (session.length() == 1)
@@ -66,7 +66,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     }
 
     @Override
-    public PlayerPresence getPresence(long player) {
+    public PlayerPresence getPresence(String player) {
         GameSessionKey session = getActiveSession(player);
         if (session == null) {
             return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, Presence.offline);
@@ -77,15 +77,15 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     }
 
     @Override
-    public List<PlayerPresence> getPresences(Collection<Long> presences) {
+    public List<PlayerPresence> getPresences(Collection<String> presences) {
         List<PlayerPresence> playerPresences = new ArrayList<>();
-        for (Long presence : presences)
+        for (String presence : presences)
             playerPresences.add(getPresence(presence));
         return playerPresences;
     }
 
     @Override
-    public boolean isAvailable(final long player) {
+    public boolean isAvailable(final String player) {
         // Step 1. Fetch active session
         GameSessionKey activePlayerSession = getActiveSession(player);
         // Step 2. Only if player has session 0, it is available
@@ -93,8 +93,8 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     }
 
     @Override
-    public boolean areAvailable(final Collection<Long> players) {
-        for (Long player : players) {
+    public boolean areAvailable(final Collection<String> players) {
+        for (String player : players) {
             if (!isAvailable(player))
                 return false;
         }
@@ -102,14 +102,14 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     }
 
     @Override
-    public boolean markPlaying(final long playerId, final GameSessionKey sessionId) {
-        if (!isAvailable(playerId))
+    public boolean markPlaying(final String player, final GameSessionKey sessionId) {
+        if (!isAvailable(player))
             throw GogomayaException.fromError(GogomayaError.PlayerSessionTimeout);
-        return markPlaying(Collections.singleton(playerId), sessionId);
+        return markPlaying(Collections.singleton(player), sessionId);
     }
 
     @Override
-    public boolean markPlaying(final Collection<Long> players, final GameSessionKey session) {
+    public boolean markPlaying(final Collection<String> players, final GameSessionKey session) {
         // Step 1. Performing atomic update of the state
         boolean updated = redisTemplate.execute(new SessionCallback<Boolean>() {
 
@@ -117,7 +117,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
             @SuppressWarnings({ "rawtypes", "unchecked" })
             public Boolean execute(RedisOperations operations) throws DataAccessException {
                 // Step 1. Checking all players are available
-                for (Long player : players) {
+                for (String player : players) {
                     operations.watch(String.valueOf(player));
                     if (!isAvailable(player)) {
                         return false;
@@ -126,7 +126,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
                 // Step 2. Performing atomic operation
                 operations.multi();
                 String sessionKeyPresentation = session.getGame().name() + ":" + session.getSession();
-                for (Long player : players) {
+                for (String player : players) {
                     operations.boundValueOps(String.valueOf(player)).set(sessionKeyPresentation);
                 }
                 // Step 3. If operation failed discard it
@@ -139,7 +139,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         });
         // Step 2. If atomic update success, then move on
         if (updated) {
-            for(long player: players) {
+            for(String player: players) {
                 notifyStateChange(PlayerPresence.playing(player, session));
             }
         }
@@ -148,7 +148,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     }
 
     @Override
-    public void markOffline(long player) {
+    public void markOffline(String player) {
         // Step 1. Removing associated key from the list
         redisTemplate.delete(String.valueOf(player));
         // Step 2. Notifying listeners of state change
@@ -156,24 +156,24 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     }
 
     @Override
-    public Date markOnline(final long playerId) {
+    public Date markOnline(final String player) {
         // Step 1. Setting new expiration time
         Date newExpirationTime = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
-        BoundValueOperations<String, String> valueOperations = redisTemplate.boundValueOps(String.valueOf(playerId));
+        BoundValueOperations<String, String> valueOperations = redisTemplate.boundValueOps(String.valueOf(player));
         valueOperations.set(ZERO_SESSION);
         valueOperations.expireAt(newExpirationTime);
         // Step 2. Sending notification, for player state update
-        notifyStateChange(PlayerPresence.online(playerId));
+        notifyStateChange(PlayerPresence.online(player));
         return newExpirationTime;
     }
 
     @Override
-    public void subscribe(final long playerId, final PlayerNotificationListener<Presence> messageListener) {
-        subscribe(Collections.singleton(playerId), messageListener);
+    public void subscribe(final String player, final PlayerNotificationListener<Presence> messageListener) {
+        subscribe(Collections.singleton(player), messageListener);
     }
 
     @Override
-    public void subscribe(Collection<Long> players, PlayerNotificationListener<Presence> messageListener) {
+    public void subscribe(Collection<String> players, PlayerNotificationListener<Presence> messageListener) {
         // Step 1. Add message listener
         listenerContainer.addMessageListener(new PresenceListenerWrapper(redisTemplate.getStringSerializer(), messageListener), toTopics(players));
         // Step 2. Checking if listener container is alive, and starting it if needed
@@ -182,19 +182,19 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     }
 
     @Override
-    public void unsubscribe(final long player, final PlayerNotificationListener<Presence> messageListener) {
+    public void unsubscribe(final String player, final PlayerNotificationListener<Presence> messageListener) {
         unsubscribe(Collections.singleton(player), messageListener);
     }
 
     @Override
-    public void unsubscribe(Collection<Long> players, PlayerNotificationListener<Presence> playerStateListener) {
+    public void unsubscribe(Collection<String> players, PlayerNotificationListener<Presence> playerStateListener) {
         listenerContainer.removeMessageListener(new PresenceListenerWrapper(stringRedisSerializer, playerStateListener), toTopics(players));
     }
 
-    private Collection<Topic> toTopics(Collection<Long> players) {
+    private Collection<Topic> toTopics(Collection<String> players) {
         Collection<Topic> playerTopics = new ArrayList<Topic>(players.size());
-        for (Long player : players)
-            playerTopics.add(new ChannelTopic(String.valueOf(player)));
+        for (String player : players)
+            playerTopics.add(new ChannelTopic(player));
         return playerTopics;
     }
 
@@ -203,14 +203,14 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         Long numUpdatedClients = redisTemplate.execute(new RedisCallback<Long>() {
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
                 // Step 1. Generating channel byte array from player identifier
-                byte[] channel = redisTemplate.getStringSerializer().serialize(String.valueOf(newPresence.getPlayerId()));
+                byte[] channel = redisTemplate.getStringSerializer().serialize(String.valueOf(newPresence.getPlayer()));
                 byte[] message = redisTemplate.getStringSerializer().serialize(newPresence.getPresence().name());
                 // Step 2. Performing actual publish
                 return connection.publish(channel, message);
             }
         });
-        LOGGER.debug("Notified of change in {} state {} listeners", newPresence.getPlayerId(), numUpdatedClients);
-        presenceNotification.notify(newPresence.getPlayerId(), newPresence);
+        LOGGER.debug("Notified of change in {} state {} listeners", newPresence.getPlayer(), numUpdatedClients);
+        presenceNotification.notify(newPresence.getPlayer(), newPresence);
     }
 
 }

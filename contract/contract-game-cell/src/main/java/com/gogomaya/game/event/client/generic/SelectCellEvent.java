@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.game.cell.Cell;
 import com.gogomaya.game.event.client.GameClientEvent;
+import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("select")
 public class SelectCellEvent extends GameClientEvent {
@@ -17,8 +18,8 @@ public class SelectCellEvent extends GameClientEvent {
     final private Cell cell;
 
     @JsonCreator
-    public SelectCellEvent(@JsonProperty("playerId") final long playerId, @JsonProperty("cell") final Cell cell) {
-        super(playerId);
+    public SelectCellEvent(@JsonProperty(PlayerAware.JSON_ID) final String player, @JsonProperty("cell") final Cell cell) {
+        super(player);
         this.cell = cell;
     }
 
@@ -28,7 +29,7 @@ public class SelectCellEvent extends GameClientEvent {
 
     @Override
     public String toString() {
-        return "{cell:" + cell + ", player: " + getPlayerId() + "}";
+        return "{cell:" + cell + ", player: " + getPlayer() + "}";
     }
 
     @Override

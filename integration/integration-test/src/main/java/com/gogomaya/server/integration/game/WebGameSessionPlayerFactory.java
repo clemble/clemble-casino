@@ -35,7 +35,7 @@ public class WebGameSessionPlayerFactory<State extends GameState> implements Gam
 
     @Override
     public GameSessionPlayer<State> construct(Player player, GameSessionKey construction) {
-        return new WebGameSessionPlayer<>(player, constructionController.getConstruct(player.getPlayerId(), construction.getSession()), engineController);
+        return new WebGameSessionPlayer<>(player, constructionController.getConstruct(player.getPlayer(), construction.getSession()), engineController);
     }
 
 }

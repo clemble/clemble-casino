@@ -12,12 +12,9 @@ import com.gogomaya.game.event.server.GameServerEvent;
 import com.gogomaya.game.outcome.GameOutcome;
 import com.gogomaya.game.outcome.PlayerWonOutcome;
 import com.gogomaya.money.Money;
-import com.gogomaya.money.MoneySource;
 import com.gogomaya.money.Operation;
 import com.gogomaya.payment.PaymentOperation;
 import com.gogomaya.payment.PaymentTransaction;
-import com.gogomaya.payment.PaymentTransactionKey;
-import com.gogomaya.player.PlayerPresence;
 import com.gogomaya.server.game.aspect.BasicGameAspect;
 import com.gogomaya.server.payment.PaymentTransactionServerService;
 import com.gogomaya.server.player.presence.PlayerPresenceServerService;
@@ -47,20 +44,20 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
     @Override
     public void afterGame(GameSession<State> session, GameServerEvent<State> madeMoves) {
         session.setSessionState(GameSessionState.finished);
-        for (long player : session.getState().getPlayerIterator().getPlayers())
+        for (String player : session.getState().getPlayerIterator().getPlayers())
             activePlayerQueue.markOnline(player);
 
         GameOutcome outcome = session.getState().getOutcome();
         if (outcome instanceof PlayerWonOutcome) {
-            long winnerId = ((PlayerWonOutcome) outcome).getWinner();
+            String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             Money price = session.getSpecification().getPrice();
             // Step 2. Generating payment transaction
             PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(session.getSession().toPaymentTransactionKey());
             for (GamePlayerAccount playerState : session.getState().getAccount().getPlayerAccounts()) {
-                if (playerState.getPlayerId() != winnerId) {
+                if (playerState.getPlayer() != winnerId) {
                     paymentTransaction.addPaymentOperation(
-                            new PaymentOperation().setAmount(price).setOperation(Operation.Credit).setPlayerId(playerState.getPlayerId())).addPaymentOperation(
-                                    new PaymentOperation().setAmount(price).setOperation(Operation.Debit).setPlayerId(winnerId));
+                            new PaymentOperation().setAmount(price).setOperation(Operation.Credit).setPlayer(playerState.getPlayer())).addPaymentOperation(
+                                    new PaymentOperation().setAmount(price).setOperation(Operation.Debit).setPlayer(winnerId));
                 }
             }
             // Step 3. Processing payment transaction

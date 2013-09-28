@@ -23,7 +23,7 @@ public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparabl
 
     @Id
     @Column(name = "PLAYER_ID")
-    private long playerId;
+    private String player;
     @Embedded
     private GameSessionKey session;
     @Column(name = "START_TIME")
@@ -35,23 +35,24 @@ public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparabl
     }
 
     @JsonCreator
-    public PlayerScheduleEvent(@JsonProperty("playerId") long player,
+    public PlayerScheduleEvent(@JsonProperty(PlayerAware.JSON_ID) String player,
             @JsonProperty("session") GameSessionKey construction,
             @JsonProperty("startTime") long startTime,
             @JsonProperty("endTime") long endTime) {
-        this.playerId = player;
+        this.player = player;
         this.session = construction;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
-    public void setPlayerId(long playerId) {
-        this.playerId = playerId;
+    public PlayerScheduleEvent setPlayer(String player) {
+        this.player = player;
+        return this;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparabl
         int result = 1;
         result = prime * result + (int) (session != null ? session.hashCode() : 0);
         result = prime * result + (int) (endTime ^ (endTime >>> 32));
-        result = prime * result + (int) (getPlayerId() ^ (getPlayerId() >>> 32));
+        result = prime * result + (int) (player == null ? 0 : player.hashCode());
         result = prime * result + (int) (startTime ^ (startTime >>> 32));
         return result;
     }
@@ -106,6 +107,6 @@ public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparabl
         PlayerScheduleEvent other = (PlayerScheduleEvent) obj;
         if (session != other.session)
             return false;
-        return (endTime == other.endTime) && (getPlayerId() == other.getPlayerId()) && (startTime == other.startTime);
+        return (endTime == other.endTime) && (getPlayer() == other.getPlayer()) && (startTime == other.startTime);
     }
 }

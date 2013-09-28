@@ -1,5 +1,7 @@
 package com.gogomaya.server.spring.common;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,8 +87,7 @@ public class ServerRegistrySpringConfiguration implements SpringConfiguration {
 
                 @Override
                 public PlayerNotificationRegistry getPlayerNotificationRegistry() {
-                    ServerRegistry serverRegistry = new ServerRegistry();
-                    serverRegistry.register(1_000_000L, "http://localhost/");
+                    ServerRegistry serverRegistry = new ServerRegistry(Collections.singletonList("http://localhost"));
                     return new SimplePlayerNotificationRegistry(serverRegistry);
                 }
 

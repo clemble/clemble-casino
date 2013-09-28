@@ -32,8 +32,8 @@ public class GameBankSerializationTest {
     @Test
     public void testVisibleBankSerialization() throws IOException {
         Money money = Money.create(Currency.FakeMoney, 100);
-        GamePlayerAccount firstAccount = new GamePlayerAccount(1, 50);
-        GamePlayerAccount secondAccount = new GamePlayerAccount(2, 50);
+        GamePlayerAccount firstAccount = new GamePlayerAccount("1", 50);
+        GamePlayerAccount secondAccount = new GamePlayerAccount("2", 50);
 
         GameAccount savedBank = new VisibleGameAccount(money, ImmutableList.<GamePlayerAccount> of(firstAccount, secondAccount));
 
@@ -47,8 +47,8 @@ public class GameBankSerializationTest {
     @Test
     public void testInvisibleBankSerialization() throws IOException {
         Money money = Money.create(Currency.FakeMoney, 100);
-        GamePlayerAccount firstAccount = new GamePlayerAccount(1, 50);
-        GamePlayerAccount secondAccount = new GamePlayerAccount(2, 50);
+        GamePlayerAccount firstAccount = new GamePlayerAccount("1", 50);
+        GamePlayerAccount secondAccount = new GamePlayerAccount("2", 50);
 
         GameAccount savedBank = new InvisibleGameAccount(money, ImmutableList.<GamePlayerAccount> of(firstAccount, secondAccount));
 

@@ -14,8 +14,8 @@ public class GameSecurityAspect<State extends GameState> extends BasicGameAspect
         if (move == null)
             throw GogomayaException.fromError(GogomayaError.GamePlayMoveUndefined);
         // Step 2. Checking player participate in the game
-        final long playerId = move.getPlayerId();
-        if (!state.getPlayerIterator().contains(playerId)) {
+        final String player = move.getPlayer();
+        if (!state.getPlayerIterator().contains(player)) {
             throw GogomayaException.fromError(GogomayaError.GamePlayPlayerNotParticipate);
         }
     }

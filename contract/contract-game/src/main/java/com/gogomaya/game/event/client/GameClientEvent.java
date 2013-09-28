@@ -10,30 +10,30 @@ abstract public class GameClientEvent implements ClientEvent {
      */
     private static final long serialVersionUID = 5862534746429660030L;
 
-    final private long playerId;
+    final private String player;
 
-    public GameClientEvent(final long playerId) {
-        this.playerId = playerId;
+    public GameClientEvent(final String player) {
+        this.player = player;
     }
 
     @Override
-    final public long getPlayerId() {
-        return playerId;
+    final public String getPlayer() {
+        return player;
     }
 
     @Override
     public String toString() {
-        return "GameMove [playerId=" + playerId + "]";
+        return "GameMove [playerId=" + player + "]";
     }
 
     @Override
     public int hashCode() {
-        return (int) (playerId ^ (playerId >>> 32));
+        return player == null ? 0 : player.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof GameClientEvent && playerId == ((GameClientEvent) obj).getPlayerId();
+        return obj instanceof GameClientEvent && player.equals(((GameClientEvent) obj).getPlayer());
     }
 
 }

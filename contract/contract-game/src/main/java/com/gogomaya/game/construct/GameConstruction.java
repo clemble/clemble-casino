@@ -112,10 +112,10 @@ public class GameConstruction implements SessionAware, VersionAware {
         return this;
     }
 
-    public List<Long> fetchAcceptedParticipants() {
-        List<Long> acceptedParticipants = new ArrayList<Long>(responses.fetchParticipants().size());
+    public List<String> fetchAcceptedParticipants() {
+        List<String> acceptedParticipants = new ArrayList<>(responses.fetchParticipants().size());
 
-        for (Entry<Long, ClientEvent> responseEntry : responses.fetchActionsMap().entrySet()) {
+        for (Entry<String, ClientEvent> responseEntry : responses.fetchActionsMap().entrySet()) {
             if (responseEntry.getValue() instanceof InvitationAcceptedEvent)
                 acceptedParticipants.add(responseEntry.getKey());
         }

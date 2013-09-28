@@ -29,7 +29,7 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
 
     final private AutomaticConstructionManager automaticGameInitiatorManager;
 
-    final private PlayerAccountServerService playerAccounttService;
+    final private PlayerAccountServerService playerAccountService;
     final private PlayerNotificationService<Event> playerNotificationService;
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
@@ -41,7 +41,7 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
             final PlayerLockService playerLockService,
             final PlayerPresenceServerService playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
-        this.playerAccounttService = checkNotNull(playerAccountService);
+        this.playerAccountService = checkNotNull(playerAccountService);
         this.playerNotificationService = checkNotNull(playerNotificationService);
         this.constructionRepository = checkNotNull(constructionRepository);
 
@@ -57,18 +57,18 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
         // Step 2. Checking players can afford operations
         // Step 2.1. Checking initiator
         Money price = request.getSpecification().getPrice();
-        if (!playerAccounttService.canAfford(request.getPlayerId(), price))
+        if (!playerAccountService.canAfford(request.getPlayer(), price))
             throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         if (request instanceof AutomaticGameRequest) {
             return automaticGameInitiatorManager.register((AutomaticGameRequest) request);
         }
         // Step 2.2. Checking opponents
-        if (!playerAccounttService.canAfford(request.getParticipants(), price))
+        if (!playerAccountService.canAfford(request.getParticipants(), price))
             throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(request);
         construction.setState(GameConstructionState.pending);
-        construction.getResponses().put(request.getPlayerId(), new InvitationAcceptedEvent(construction.getSession(), request.getPlayerId()));
+        construction.getResponses().put(request.getPlayer(), new InvitationAcceptedEvent(construction.getSession(), request.getPlayer()));
         construction = constructionRepository.saveAndFlush(construction);
         // Step 4. Sending invitation to opponents
         if (!construction.getResponses().complete()) {
@@ -97,7 +97,7 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
                 throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
             // Step 2. Checking if player is part of the game
             ActionLatch responseLatch = construction.getResponses();
-            responseLatch.put(response.getPlayerId(), response);
+            responseLatch.put(response.getPlayer(), response);
             // Step 3. Checking if latch is full
             if (response instanceof InvitationDeclinedEvent) {
                 // Step 4.1. In case declined send game canceled notification

@@ -15,10 +15,10 @@ public class CellState {
 
     final static public CellState DEFAULT = new CellState(PlayerAware.DEFAULT_PLAYER);
 
-    final private long owner;
+    final private String owner;
 
     @JsonCreator
-    public CellState(@JsonProperty("owner") long owner) {
+    public CellState(@JsonProperty("owner") String owner) {
         this.owner = owner;
     }
 
@@ -30,7 +30,7 @@ public class CellState {
         this(BetEvent.whoBetMore(bets));
     }
 
-    public long getOwner() {
+    public String getOwner() {
         return owner;
     }
 
@@ -42,7 +42,7 @@ public class CellState {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (owner ^ (owner >>> 32));
+        result = prime * result + (int) (owner == null ? 0 : owner.hashCode());
         return result;
     }
 

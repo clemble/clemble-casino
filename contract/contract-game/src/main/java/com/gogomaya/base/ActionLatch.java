@@ -20,32 +20,32 @@ public class ActionLatch implements Serializable {
      */
     private static final long serialVersionUID = -7689529505293361503L;
 
-    final private Map<Long, ClientEvent> actions = new HashMap<Long, ClientEvent>();
+    final private Map<String, ClientEvent> actions = new HashMap<String, ClientEvent>();
     final private Class<?> expectedClass;
 
-    public ActionLatch(final Long participant, final String action) {
+    public ActionLatch(final String participant, final String action) {
         this(Collections.singleton(participant), action);
     }
 
-    public ActionLatch(final Collection<Long> participants, final String action) {
+    public ActionLatch(final Collection<String> participants, final String action) {
         this(participants, action, null);
     }
 
-    public ActionLatch(final Collection<Long> participants, final String action, final Class<?> expectedClass) {
+    public ActionLatch(final Collection<String> participants, final String action, final Class<?> expectedClass) {
         this.expectedClass = expectedClass;
-        for (Long participant : participants) {
+        for (String participant : participants) {
             actions.put(participant, new ExpectedAction(participant, action));
         }
     }
 
-    public ActionLatch(final long[] participants, final String action, final Class<?> expectedClass) {
+    public ActionLatch(final String[] participants, final String action, final Class<?> expectedClass) {
         this.expectedClass = expectedClass;
-        for (long participant : participants) {
+        for (String participant : participants) {
             actions.put(participant, new ExpectedAction(participant, action));
         }
     }
 
-    public ActionLatch(final long player, String action, Class<?> expectedClass) {
+    public ActionLatch(final String player, String action, Class<?> expectedClass) {
         this.actions.put(player, new ExpectedAction(player, action));
         this.expectedClass = expectedClass;
     }
@@ -54,19 +54,19 @@ public class ActionLatch implements Serializable {
     public ActionLatch(@JsonProperty("actions") final Collection<ClientEvent> expectedActions) {
         this.expectedClass = null;
         for (ClientEvent expectedAction : expectedActions) {
-            actions.put(expectedAction.getPlayerId(), expectedAction);
+            actions.put(expectedAction.getPlayer(), expectedAction);
         }
     }
 
-    public boolean contains(long participant) {
+    public boolean contains(String participant) {
         return actions.keySet().contains(participant);
     }
 
-    public boolean acted(long player) {
+    public boolean acted(String player) {
         return !(actions.get(player) instanceof ExpectedAction);
     }
 
-    public Set<Long> fetchParticipants() {
+    public Set<String> fetchParticipants() {
         return actions.keySet();
     }
 
@@ -75,15 +75,15 @@ public class ActionLatch implements Serializable {
         return (Collection<T>) actions.values();
     }
 
-    public Map<Long, ClientEvent> fetchActionsMap() {
+    public Map<String, ClientEvent> fetchActionsMap() {
         return actions;
     }
 
-    public ClientEvent fetchAction(long player) {
+    public ClientEvent fetchAction(String player) {
         return actions.get(player);
     }
 
-    public ClientEvent put(long participant, ClientEvent action) {
+    public ClientEvent put(String participant, ClientEvent action) {
         ClientEvent event = actions.get(participant);
         if (event instanceof ExpectedAction) {
             if (expectedClass != null && action.getClass() != expectedClass)

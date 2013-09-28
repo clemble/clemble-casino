@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.game.GameSessionKey;
+import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("accepted")
 public class InvitationAcceptedEvent implements InvitationResponseEvent {
@@ -13,18 +14,18 @@ public class InvitationAcceptedEvent implements InvitationResponseEvent {
      */
     private static final long serialVersionUID = -4465974655141746411L;
 
-    final private long playerId;
+    final private String player;
     final private GameSessionKey session;
 
     @JsonCreator
-    public InvitationAcceptedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("playerId") long playerId) {
+    public InvitationAcceptedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty(PlayerAware.JSON_ID) String player) {
         this.session = session;
-        this.playerId = playerId;
+        this.player = player;
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class InvitationAcceptedEvent implements InvitationResponseEvent {
 
     @Override
     public int hashCode() {
-        return 31 * (31 + (int) (playerId ^ (playerId >>> 32))) + (int) (session.hashCode());
+        return player.hashCode() + session.hashCode();
     }
 
     @Override
@@ -46,7 +47,7 @@ public class InvitationAcceptedEvent implements InvitationResponseEvent {
         if (getClass() != obj.getClass())
             return false;
         InvitationAcceptedEvent other = (InvitationAcceptedEvent) obj;
-        if (playerId != other.playerId)
+        if (player != other.player)
             return false;
         return session.equals(other.session);
     }

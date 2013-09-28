@@ -7,14 +7,14 @@ import com.gogomaya.game.event.schedule.InvitationResponseEvent;
 
 public interface GameConstructionService {
 
-    public GameConstruction construct(final long playerId, final GameRequest gameRequest);
+    public GameConstruction construct(final String player, final GameRequest gameRequest);
 
-    public GameConstruction getConstruct(final long playerId, final long session);
+    public GameConstruction getConstruct(final String player, final long session);
 
-    public ClientEvent getResponce(final long requester, final long session, final long player);
+    public ClientEvent getResponce(final String requester, final long session, final String player);
 
-    public GameConstruction reply(final long playerId, long sessionId, final InvitationResponseEvent gameRequest);
+    public GameConstruction reply(final String player, long sessionId, final InvitationResponseEvent gameRequest);
 
-    public String getServer(final long playerId, long sessionId);
+    public String getServer(final String player, long sessionId);
 
 }

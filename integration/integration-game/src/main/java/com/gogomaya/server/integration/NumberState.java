@@ -62,14 +62,14 @@ public class NumberState implements GameState {
         GameServerEvent<State> resultEvent = null;
 
         if (clientEvent instanceof SelectNumberEvent) {
-            actionLatch.put(clientEvent.getPlayerId(), clientEvent);
+            actionLatch.put(clientEvent.getPlayer(), clientEvent);
             if (actionLatch.complete()) {
                 int maxBet = 0;
                 for (ClientEvent madeMove : actionLatch.fetchActionsMap().values()) {
                     SelectNumberEvent selectNumberEvent = (SelectNumberEvent) madeMove;
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
-                        outcome = new PlayerWonOutcome(selectNumberEvent.getPlayerId());
+                        outcome = new PlayerWonOutcome(selectNumberEvent.getPlayer());
                     } else if (selectNumberEvent.getNumber() == maxBet) {
                         outcome = new DrawOutcome();
                     }
@@ -78,14 +78,14 @@ public class NumberState implements GameState {
             resultEvent = new GameEndedEvent<>(session, outcome);
         } else if (clientEvent instanceof SurrenderEvent) {
             // Step 1. Fetching player identifier
-            long looser = ((SurrenderEvent) clientEvent).getPlayerId();
-            Collection<Long> opponents = playerIterator.whoIsOpponents(looser);
+            String looser = ((SurrenderEvent) clientEvent).getPlayer();
+            Collection<String> opponents = playerIterator.whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
                 outcome = new NoOutcome();
                 resultEvent = new GameEndedEvent<>(session, outcome);
             } else {
-                long winner = opponents.iterator().next();
+                String winner = opponents.iterator().next();
                 outcome = new PlayerWonOutcome(winner);
                 // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
                 resultEvent = new GameEndedEvent<>(session, outcome);

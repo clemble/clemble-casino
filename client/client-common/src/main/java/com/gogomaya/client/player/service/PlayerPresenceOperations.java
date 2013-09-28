@@ -8,8 +8,8 @@ public interface PlayerPresenceOperations {
 
     public PlayerPresence getPresence();
 
-    public PlayerPresence getPresence(long player);
+    public PlayerPresence getPresence(String player);
 
-    public List<PlayerPresence> getPresences(List<Long> players);
+    public List<PlayerPresence> getPresences(List<String> players);
 
 }

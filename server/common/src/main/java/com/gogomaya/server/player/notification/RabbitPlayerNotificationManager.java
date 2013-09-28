@@ -36,7 +36,7 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
 
     });
 
-    final private ConcurrentHashMap<Long, Collection<PlayerNotificationListener<T>>> listeners = new ConcurrentHashMap<>();
+    final private ConcurrentHashMap<String, Collection<PlayerNotificationListener<T>>> listeners = new ConcurrentHashMap<>();
 
     final private String postfix;
     final private MessageConverter messageConverter;
@@ -49,7 +49,7 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
     }
 
     @Override
-    public void subscribe(long player, PlayerNotificationListener<T> messageListener) {
+    public void subscribe(String player, PlayerNotificationListener<T> messageListener) {
         if (messageListener == null)
             return;
         // Step 1. Checking that there is something
@@ -63,14 +63,14 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
     }
 
     @Override
-    public void subscribe(Collection<Long> players, PlayerNotificationListener<T> messageListener) {
-        for (Long player : players) {
+    public void subscribe(Collection<String> players, PlayerNotificationListener<T> messageListener) {
+        for (String player : players) {
             subscribe(player, messageListener);
         }
     }
 
     @Override
-    public void unsubscribe(long player, PlayerNotificationListener<T> messageListener) {
+    public void unsubscribe(String player, PlayerNotificationListener<T> messageListener) {
         if (messageListener == null)
             return;
         // Step 1. Checking that there is something
@@ -87,8 +87,8 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
     }
 
     @Override
-    public void unsubscribe(Collection<Long> players, PlayerNotificationListener<T> messageListener) {
-        for (Long player : players)
+    public void unsubscribe(Collection<String> players, PlayerNotificationListener<T> messageListener) {
+        for (String player : players)
             unsubscribe(player, messageListener);
     }
 
@@ -110,7 +110,7 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
                     @SuppressWarnings("unchecked")
                     T event = (T) messageConverter.fromMessage(message);
                     String routingKey = message.getMessageProperties().getReceivedRoutingKey();
-                    Long player = Long.valueOf(routingKey.substring(0, routingKey.length() - postfix.length()));
+                    String player = routingKey.substring(0, routingKey.length() - postfix.length());
                     for(PlayerNotificationListener<T> playerStateListener: listeners.get(player)) {
                         playerStateListener.onUpdate(player, event);
                     }
@@ -118,14 +118,16 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
             });
         }
 
-        public void subscribe(long playerId) {
-            Binding notificationBinding = BindingBuilder.bind(queue).to(new TopicExchange("amq.topic")).with(String.valueOf(playerId) + postfix);
-            admin.declareBinding(notificationBinding);
+        public void subscribe(String player) {
+            admin.declareBinding(toBinding(player));
         }
 
-        public void unsubscribe(long playerId) {
-            Binding notificationBinding = BindingBuilder.bind(queue).to(new TopicExchange("amq.topic")).with(String.valueOf(playerId) + postfix);
-            admin.removeBinding(notificationBinding);
+        public void unsubscribe(String player) {
+            admin.removeBinding(toBinding(player));
+        }
+
+        private Binding toBinding(String player) {
+            return BindingBuilder.bind(queue).to(new TopicExchange("amq.topic")).with(player + postfix);
         }
     }
 

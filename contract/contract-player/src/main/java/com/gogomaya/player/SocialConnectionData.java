@@ -44,7 +44,12 @@ public class SocialConnectionData implements Serializable {
     final private long expireTime;
 
     @JsonCreator
-    public SocialConnectionData(@JsonProperty("providerId") final String providerId, @JsonProperty("providerUserId") final String providerUserId, @JsonProperty("accessToken") final String accessToken, @JsonProperty("secret") final String secret, @JsonProperty("refreshToken") final String refreshToken, @JsonProperty("expireTime") final long expireTime) {
+    public SocialConnectionData(@JsonProperty("providerId") final String providerId,
+            @JsonProperty("providerUserId") final String providerUserId,
+            @JsonProperty("accessToken") final String accessToken,
+            @JsonProperty("secret") final String secret,
+            @JsonProperty("refreshToken") final String refreshToken,
+            @JsonProperty("expireTime") final long expireTime) {
         this.providerId = providerId;
         this.providerUserId = providerUserId;
         this.accessToken = accessToken;

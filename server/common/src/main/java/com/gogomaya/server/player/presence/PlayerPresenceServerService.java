@@ -11,28 +11,28 @@ import com.gogomaya.server.player.notification.PlayerNotificationListener;
 
 public interface PlayerPresenceServerService {
 
-    public boolean isAvailable(long player);
+    public boolean isAvailable(String player);
 
-    public boolean areAvailable(Collection<Long> players);
+    public boolean areAvailable(Collection<String> players);
 
-    public PlayerPresence getPresence(long player);
+    public PlayerPresence getPresence(String player);
 
-    public List<PlayerPresence> getPresences(Collection<Long> presences);
+    public List<PlayerPresence> getPresences(Collection<String> presences);
 
-    public Date markOnline(long player);
+    public Date markOnline(String player);
 
-    public void markOffline(long player);
+    public void markOffline(String player);
 
-    public boolean markPlaying(long player, GameSessionKey session);
+    public boolean markPlaying(String player, GameSessionKey session);
 
-    public boolean markPlaying(Collection<Long> players, GameSessionKey session);
+    public boolean markPlaying(Collection<String> players, GameSessionKey session);
 
-    public void subscribe(long playerId, PlayerNotificationListener<Presence> messageListener);
+    public void subscribe(String playerId, PlayerNotificationListener<Presence> messageListener);
 
-    public void subscribe(Collection<Long> players, PlayerNotificationListener<Presence> messageListener);
+    public void subscribe(Collection<String> players, PlayerNotificationListener<Presence> messageListener);
 
-    public void unsubscribe(long player, PlayerNotificationListener<Presence> messageListener);
+    public void unsubscribe(String player, PlayerNotificationListener<Presence> messageListener);
 
-    public void unsubscribe(Collection<Long> players, PlayerNotificationListener<Presence> playerStateListener);
+    public void unsubscribe(Collection<String> players, PlayerNotificationListener<Presence> playerStateListener);
 
 }

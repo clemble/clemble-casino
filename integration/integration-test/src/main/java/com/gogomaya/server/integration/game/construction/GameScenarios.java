@@ -42,11 +42,11 @@ public class GameScenarios {
         int numPlayers = specification.getNumberRule().getMaxPlayers();
         // Step 1. Generating players
         List<Player> players = new ArrayList<>();
-        List<Long> participants = new ArrayList<>();
+        List<String> participants = new ArrayList<>();
         for (int i = 0; i < numPlayers; i++) {
             Player participant = playerOperations.createPlayer();
             players.add(participant);
-            participants.add(participant.getPlayerId());
+            participants.add(participant.getPlayer());
         }
         // Step 2. Creating availability game request
         GameSessionPlayer<State> sessionPlayer = players.get(0).<State> getGameConstructor(gameName).constructAvailability(specification, participants);

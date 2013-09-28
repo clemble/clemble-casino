@@ -12,9 +12,10 @@ import org.hibernate.annotations.Type;
 
 import com.gogomaya.money.Money;
 import com.gogomaya.money.Operation;
+import com.gogomaya.player.PlayerAware;
 
 @Embeddable
-public class PaymentOperation implements Serializable {
+public class PaymentOperation implements PlayerAware, Serializable {
 
     /**
      * Generated 05/05/13
@@ -22,7 +23,7 @@ public class PaymentOperation implements Serializable {
     private static final long serialVersionUID = 4480718203883740214L;
 
     @Column(name = "PLAYER_ID")
-    private long playerId;
+    private String player;
 
     @Type(type = "money")
     @Columns(columns = { @Column(name = "CURRENCY"), @Column(name = "AMOUNT") })
@@ -32,12 +33,13 @@ public class PaymentOperation implements Serializable {
     @Column(name = "OPERATION")
     private Operation operation;
 
-    public long getPlayerId() {
-        return playerId;
+    @Override
+    public String getPlayer() {
+        return player;
     }
 
-    public PaymentOperation setPlayerId(long playerId) {
-        this.playerId = playerId;
+    public PaymentOperation setPlayer(String playerId) {
+        this.player = playerId;
         return this;
     }
 
@@ -61,7 +63,7 @@ public class PaymentOperation implements Serializable {
 
     @Override
     public String toString() {
-        return "WalletOperation [playerId=" + playerId + ", amount=" + amount + ", operation=" + operation + "]";
+        return "WalletOperation [playerId=" + player + ", amount=" + amount + ", operation=" + operation + "]";
     }
 
     @Override
@@ -70,7 +72,7 @@ public class PaymentOperation implements Serializable {
         int result = 1;
         result = prime * result + ((amount == null) ? 0 : amount.hashCode());
         result = prime * result + ((operation == null) ? 0 : operation.hashCode());
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + ((player == null) ? 0 : player.hashCode());
         return result;
     }
 
@@ -90,9 +92,7 @@ public class PaymentOperation implements Serializable {
             return false;
         if (operation != other.operation)
             return false;
-        if (playerId != other.playerId)
-            return false;
-        return true;
+        return player.equals(other.player);
     }
 
 }

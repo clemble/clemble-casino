@@ -19,27 +19,27 @@ public class AndroidGameConstructionService implements GameConstructionService {
     }
 
     @Override
-    public GameConstruction construct(long playerId, GameRequest gameRequest) {
+    public GameConstruction construct(String player, GameRequest gameRequest) {
         return restService.postForEntity(GameWebMapping.GAME_SESSIONS, gameRequest, GameConstruction.class);
     }
 
     @Override
-    public GameConstruction getConstruct(long playerId, long session) {
+    public GameConstruction getConstruct(String player, long session) {
         return restService.getForEntity(GameWebMapping.GAME_SESSIONS_CONSTRUCTION, GameConstruction.class, session);
     }
 
     @Override
-    public ClientEvent getResponce(long requester, long session, long player) {
+    public ClientEvent getResponce(String requester, long session, String player) {
         return restService.getForEntity(GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, ClientEvent.class, session, player);
     }
 
     @Override
-    public GameConstruction reply(long playerId, long sessionId, InvitationResponseEvent gameRequest) {
+    public GameConstruction reply(String player, long sessionId, InvitationResponseEvent gameRequest) {
         return restService.postForEntity(GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, gameRequest, GameConstruction.class, sessionId);
     }
 
     @Override
-    public String getServer(long playerId, long sessionId) {
+    public String getServer(String playerId, long sessionId) {
         return restService.getForEntity(GameWebMapping.GAME_SESSIONS_SERVER, String.class, sessionId);
     }
 

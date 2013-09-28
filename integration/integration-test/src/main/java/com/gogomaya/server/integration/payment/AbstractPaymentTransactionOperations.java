@@ -7,7 +7,7 @@ import com.gogomaya.server.integration.player.Player;
 abstract public class AbstractPaymentTransactionOperations implements PaymentTransactionOperations {
 
     @Override
-    final public PaymentTransaction get(Player player, MoneySource source, long transactionId) {
+    final public PaymentTransaction get(Player player, MoneySource source, String transactionId) {
         return get(player, source.name(), transactionId);
     }
 

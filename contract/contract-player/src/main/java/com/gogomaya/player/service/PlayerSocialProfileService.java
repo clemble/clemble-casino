@@ -4,6 +4,6 @@ import com.gogomaya.player.SocialConnectionData;
 
 public interface PlayerSocialProfileService {
 
-    public SocialConnectionData add(long playerId, SocialConnectionData socialConnectionData);
+    public SocialConnectionData add(String player, SocialConnectionData socialConnectionData);
 
 }

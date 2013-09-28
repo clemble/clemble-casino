@@ -11,10 +11,16 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.gogomaya.configuration.ResourceLocations;
+import com.gogomaya.player.PlayerAware;
 
 @Entity
 @Table(name = "PLAYER_SESSION")
-public class PlayerSession {
+public class PlayerSession implements PlayerAware {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5003851677194227089L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +28,7 @@ public class PlayerSession {
     private long sessionId;
 
     @Column(name = "PLAYER_ID")
-    private long playerId;
+    private String player;
 
     @Column(name = "START_TIME")
     private Date startTime = new Date();
@@ -42,12 +48,12 @@ public class PlayerSession {
         return this;
     }
 
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
-    public PlayerSession setPlayerId(long playerId) {
-        this.playerId = playerId;
+    public PlayerSession setPlayer(String playerId) {
+        this.player = playerId;
         return this;
     }
 
@@ -88,7 +94,7 @@ public class PlayerSession {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + (int) (player == null ? 0 : player.hashCode());
         result = prime * result + (int) (sessionId ^ (sessionId >>> 32));
         return result;
     }
@@ -102,16 +108,14 @@ public class PlayerSession {
         if (getClass() != obj.getClass())
             return false;
         PlayerSession other = (PlayerSession) obj;
-        if (playerId != other.playerId)
-            return false;
         if (sessionId != other.sessionId)
             return false;
-        return true;
+        return player.equals(other.player);
     }
 
     @Override
     public String toString() {
-        return "PlayerSession [sessionId=" + sessionId + ", playerId=" + playerId + ", startTime=" + startTime + ", expirationTime=" + expirationTime + "]";
+        return "PlayerSession [sessionId=" + sessionId + ", playerId=" + player + ", startTime=" + startTime + ", expirationTime=" + expirationTime + "]";
     }
 
 }

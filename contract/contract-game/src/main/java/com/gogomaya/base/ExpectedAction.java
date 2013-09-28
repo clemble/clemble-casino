@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.event.ClientEvent;
+import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("expected")
 public class ExpectedAction implements ClientEvent {
@@ -13,18 +14,18 @@ public class ExpectedAction implements ClientEvent {
      */
     private static final long serialVersionUID = 6497446081286294728L;
 
-    final private long playerId;
+    final private String player;
     final private String action;
 
     @JsonCreator
-    public ExpectedAction(@JsonProperty("playerId") long playerId, @JsonProperty("action") String action) {
-        this.playerId = playerId;
+    public ExpectedAction(@JsonProperty(PlayerAware.JSON_ID) String player, @JsonProperty("action") String action) {
+        this.player = player;
         this.action = action;
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
     public String getAction() {
@@ -36,7 +37,7 @@ public class ExpectedAction implements ClientEvent {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((action == null) ? 0 : action.hashCode());
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + ((player == null) ? 0 : player.hashCode());
         return result;
     }
 
@@ -54,9 +55,7 @@ public class ExpectedAction implements ClientEvent {
                 return false;
         } else if (!action.equals(other.action))
             return false;
-        if (playerId != other.playerId)
-            return false;
-        return true;
+        return player.equals(other.player);
     }
 
 }

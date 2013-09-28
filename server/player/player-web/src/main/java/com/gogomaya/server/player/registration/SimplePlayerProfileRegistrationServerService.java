@@ -34,9 +34,9 @@ public class SimplePlayerProfileRegistrationServerService implements PlayerProfi
     public PlayerProfile createPlayerProfile(SocialConnectionData socialConnectionData) {
         validationService.validate(socialConnectionData);
         // Step 1. Registering player with SocialConnection
-        Long playerId = socialConnectionDataAdapter.register(socialConnectionData);
+        String player = socialConnectionDataAdapter.register(socialConnectionData);
         // Step 2. Fetch Player identity information
-        return playerProfileRepository.findOne(playerId);
+        return playerProfileRepository.findOne(player);
     }
 
 }

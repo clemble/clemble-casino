@@ -2,10 +2,8 @@ package com.gogomaya.server;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import com.gogomaya.VersionAware;
 import com.gogomaya.base.ActionLatch;
@@ -68,14 +66,14 @@ public class ObjectTest {
 
             @Override
             public ClientEvent generate() {
-                return new GiveUpEvent(-1L);
+                return new GiveUpEvent(RandomStringUtils.random(5));
             }
         });
         ObjectGenerator.register(BetEvent.class, new AbstractValueGenerator<BetEvent>() {
 
             @Override
             public BetEvent generate() {
-                return new BetEvent(-1L, 100);
+                return new BetEvent(RandomStringUtils.random(5), 100);
             }
 
         });
@@ -83,7 +81,7 @@ public class ObjectTest {
 
             @Override
             public PlayerAccount generate() {
-                return new PlayerAccount().setPlayerId(0).add(Money.create(Currency.FakeMoney, 500));
+                return new PlayerAccount().setPlayer(RandomStringUtils.random(5)).add(Money.create(Currency.FakeMoney, 500));
             }
 
         });
@@ -92,11 +90,11 @@ public class ObjectTest {
             @Override
             public PaymentTransaction generate() {
                 return new PaymentTransaction()
-                        .setTransactionKey(new PaymentTransactionKey().setSource(MoneySource.TicTacToe).setTransactionId(0))
+                        .setTransactionKey(new PaymentTransactionKey().setSource(MoneySource.TicTacToe).setTransaction(RandomStringUtils.random(5)))
                         .addPaymentOperation(
-                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayerId(0))
+                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayer(RandomStringUtils.random(5)))
                         .addPaymentOperation(
-                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit).setPlayerId(1));
+                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit).setPlayer(RandomStringUtils.random(5)));
             }
 
         });
@@ -104,8 +102,10 @@ public class ObjectTest {
 
             @Override
             public PlayerCredential generate() {
-                return new PlayerCredential().setEmail(org.apache.commons.lang3.RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
-                        RandomStringUtils.random(10));
+                return new PlayerCredential()
+                    .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
+                    .setPassword(RandomStringUtils.random(10))
+                    .setPlayer(RandomStringUtils.random(5));
             }
 
         });
@@ -113,7 +113,7 @@ public class ObjectTest {
 
             @Override
             public PlayerProfile generate() {
-                return new PlayerProfile().setBirthDate(new Date(0)).setCategory(PlayerCategory.Amateur).setFirstName(RandomStringUtils.randomAlphabetic(10))
+                return new PlayerProfile().setPlayer(RandomStringUtils.random(5)).setBirthDate(new Date(0)).setCategory(PlayerCategory.Amateur).setFirstName(RandomStringUtils.randomAlphabetic(10))
                         .setGender(PlayerGender.M).setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10));
             }
 
@@ -131,8 +131,8 @@ public class ObjectTest {
             public GameConstruction generate() {
                 return new GameConstruction()
                     .setSession(new GameSessionKey(Game.pic, 0))
-                    .setRequest(new AutomaticGameRequest(1, GameSpecification.DEFAULT))
-                    .setResponses(new ActionLatch(ImmutableList.<Long> of(1L, 2L), "response"))
+                    .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), GameSpecification.DEFAULT))
+                    .setResponses(new ActionLatch(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
                     .setState(GameConstructionState.pending);
             }
         });
@@ -165,8 +165,10 @@ public class ObjectTest {
 
             @Override
             public StubGameState generate() {
-                GameAccount account = GameAccountFactory.create(new GameInitiation(new GameSessionKey(Game.pac, 1L), ImmutableList.<Long> of(1L, 2L), GameSpecification.DEFAULT));
-                ActionLatch actionLatch = new ActionLatch(ImmutableList.<Long> of(1L, 2L), "stub");
+                String playerA = RandomStringUtils.random(5);
+                String playerB = RandomStringUtils.random(5);
+                GameAccount account = GameAccountFactory.create(new GameInitiation(new GameSessionKey(Game.pac, 1L), ImmutableList.<String> of(playerA, playerB), GameSpecification.DEFAULT));
+                ActionLatch actionLatch = new ActionLatch(ImmutableList.<String> of(playerA, playerB), "stub");
                 GameOutcome outcome = new NoOutcome();
                 return new StubGameState(account, actionLatch, outcome, 1);
             }
@@ -184,7 +186,7 @@ public class ObjectTest {
 
             @Override
             public ServerRegistry generate() {
-                return new ServerRegistry(ImmutableList.<Map.Entry<String, String>> of(new ImmutablePair<String, String>("1000000", "host.me")));
+                return new ServerRegistry(ImmutableList.<String> of("host.me"));
             }
         });
         ObjectGenerator.register(SimplePlayerNotificationRegistry.class, new AbstractValueGenerator<SimplePlayerNotificationRegistry>() {

@@ -43,7 +43,7 @@ public class PaymentTransactionServerServiceImpl implements PaymentTransactionSe
         // Step 1. Processing payment transactions
         Collection<PlayerAccount> updatedWallets = new ArrayList<>(paymentTransaction.getPaymentOperations().size());
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
-            PlayerAccount associatedWallet = playerAccountRepository.findOne(paymentOperation.getPlayerId());
+            PlayerAccount associatedWallet = playerAccountRepository.findOne(paymentOperation.getPlayer());
             if (associatedWallet == null) {
                 throw GogomayaException.fromError(GogomayaError.PaymentTransactionUnknownPlayers);
             } else if (paymentOperation.getOperation() == Operation.Credit) {

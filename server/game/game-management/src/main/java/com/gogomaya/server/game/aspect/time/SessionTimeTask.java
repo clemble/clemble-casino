@@ -7,7 +7,6 @@ import java.util.Date;
 import org.springframework.scheduling.TriggerContext;
 
 import com.gogomaya.event.ClientEvent;
-import com.gogomaya.game.Game;
 import com.gogomaya.game.GameSessionKey;
 import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.construct.GameInitiation;
@@ -29,11 +28,11 @@ public class SessionTimeTask implements GameEventTask, SessionAware {
 
         final GameSpecification specification = initiation.getSpecification();
 
-        final Collection<Long> participants = initiation.getParticipants();
+        final Collection<String> participants = initiation.getParticipants();
         this.playerTimeTrackers = new PlayerTimeTracker[participants.size() * 2];
 
         int pointer = 0;
-        for (Long participant : participants) {
+        for (String participant : participants) {
             playerTimeTrackers[pointer++] = new PlayerTimeTracker(participant, specification.getTotalTimeRule());
             playerTimeTrackers[pointer++] = new PlayerTimeTracker(participant, specification.getMoveTimeRule());
         }
@@ -46,7 +45,7 @@ public class SessionTimeTask implements GameEventTask, SessionAware {
 
     public void markMoved(ClientEvent move) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
-            if (playerTimeTracker.getPlayerId() == move.getPlayerId()) {
+            if (playerTimeTracker.getPlayer() == move.getPlayer()) {
                 playerTimeTracker.markMoved();
             }
         }
@@ -54,7 +53,7 @@ public class SessionTimeTask implements GameEventTask, SessionAware {
 
     public void markToMove(ClientEvent nextMove) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
-            if (playerTimeTracker.getPlayerId() == nextMove.getPlayerId()) {
+            if (playerTimeTracker.getPlayer() == nextMove.getPlayer()) {
                 playerTimeTracker.markToMove();
             }
         }

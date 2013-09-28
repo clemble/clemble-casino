@@ -20,7 +20,7 @@ public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
 
     public void register(final GameConstruction availabilityRequest) {
         // Step 1. Checking all users are active
-        final Collection<Long> participants = availabilityRequest.fetchAcceptedParticipants();
+        final Collection<String> participants = availabilityRequest.fetchAcceptedParticipants();
         // Step 2. Checking all participants are available
         final GameInitiation initiation = new GameInitiation(availabilityRequest.getSession(), participants, availabilityRequest.getRequest().getSpecification());
         if (!initiatorService.initiate(initiation)) {
@@ -28,7 +28,7 @@ public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
             playerPresenceService.subscribe(participants, new PlayerNotificationListener<Presence>() {
 
                 @Override
-                public void onUpdate(long playerId, Presence state) {
+                public void onUpdate(String player, Presence state) {
                     if (initiatorService.initiate(initiation))
                         playerPresenceService.unsubscribe(participants, this);
                 }

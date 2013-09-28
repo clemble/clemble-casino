@@ -26,8 +26,8 @@ public class PlayerCredential implements PlayerAware {
 
     @Id
     @Column(name = "PLAYER_ID")
-    @JsonProperty("playerId")
-    private long playerId;
+    @JsonProperty(PlayerAware.JSON_ID)
+    private String player;
 
     @Column(name = "EMAIL", unique = true, length = 128)
     @JsonProperty("email")
@@ -43,12 +43,12 @@ public class PlayerCredential implements PlayerAware {
     private String password;
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
-    public PlayerCredential setPlayerId(long profileId) {
-        this.playerId = profileId;
+    public PlayerCredential setPlayer(String profileId) {
+        this.player = profileId;
         return this;
     }
 

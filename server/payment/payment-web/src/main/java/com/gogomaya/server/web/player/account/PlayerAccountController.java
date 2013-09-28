@@ -46,7 +46,7 @@ public class PlayerAccountController implements PlayerAccountService {
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerAccount get(@PathVariable("playerId") long playerWalletId) {
+    public @ResponseBody PlayerAccount get(@PathVariable("playerId") String playerWalletId) {
         // Step 1. Returning account from repository
         return playerAccountRepository.findOne(playerWalletId);
     }
@@ -55,9 +55,9 @@ public class PlayerAccountController implements PlayerAccountService {
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody boolean canAfford(@RequestParam("player") String players, @RequestParam("currency") Currency currency, @RequestParam("amount") Long amount) {
         String[] splitPlayers = players.split(",");
-        Collection<Long> parsedPlayers = new ArrayList<>(splitPlayers.length);
+        Collection<String> parsedPlayers = new ArrayList<>(splitPlayers.length);
         for(String splitedPlayer: splitPlayers)
-            parsedPlayers.add(Long.valueOf(splitedPlayer));
+            parsedPlayers.add(splitedPlayer);
         return playerAccountService.canAfford(parsedPlayers, Money.create(currency, amount));
     }
 

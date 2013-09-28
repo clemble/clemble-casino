@@ -8,10 +8,9 @@ import com.gogomaya.game.SessionAware;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.event.client.GameClientEvent;
 import com.gogomaya.game.specification.GameSpecificationAware;
-import com.gogomaya.player.PlayerAware;
 import com.gogomaya.server.integration.player.Player;
 
-public interface GameSessionPlayer<State extends GameState> extends SessionAware, PlayerAware, Closeable, GameSpecificationAware {
+public interface GameSessionPlayer<State extends GameState> extends SessionAware, Closeable, GameSpecificationAware {
 
     public Player getPlayer();
 

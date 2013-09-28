@@ -14,7 +14,7 @@ public class ExposedCellState extends CellState {
     final private Collection<BetEvent> bets;
 
     @JsonCreator
-    public ExposedCellState(@JsonProperty("owner") long owner, @JsonProperty("bets") Collection<BetEvent> bets) {
+    public ExposedCellState(@JsonProperty("owner") String owner, @JsonProperty("bets") Collection<BetEvent> bets) {
         super(owner);
         this.bets = CollectionUtils.<BetEvent>immutableList(bets);
     }

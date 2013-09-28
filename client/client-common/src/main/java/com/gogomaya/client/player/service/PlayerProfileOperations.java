@@ -7,7 +7,7 @@ public interface PlayerProfileOperations extends PlayerAware {
 
     public PlayerProfile getPlayerProfile();
     
-    public PlayerProfile getPlayerProfile(long playerId);
+    public PlayerProfile getPlayerProfile(String player);
 
     public PlayerProfile updatePlayerProfile(PlayerProfile playerProfile);
 

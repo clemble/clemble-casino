@@ -6,8 +6,8 @@ import com.gogomaya.payment.PaymentTransaction;
 
 public interface PaymentTransactionService {
 
-    public PaymentTransaction getPaymentTransaction(long playerId, String source, long transactionId);
+    public PaymentTransaction getPaymentTransaction(String player, String source, String transactionId);
 
-    public List<PaymentTransaction> listPlayerTransaction(long playerId);
+    public List<PaymentTransaction> listPlayerTransaction(String player);
 
 }

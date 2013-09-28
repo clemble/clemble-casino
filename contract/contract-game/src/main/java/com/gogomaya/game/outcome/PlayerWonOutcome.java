@@ -12,20 +12,20 @@ public class PlayerWonOutcome extends GameOutcome {
      */
     private static final long serialVersionUID = -3259192146118069428L;
 
-    final private long winner;
+    final private String winner;
 
     @JsonCreator
-    public PlayerWonOutcome(@JsonProperty("winner") long winner) {
+    public PlayerWonOutcome(@JsonProperty("winner") String winner) {
         this.winner = winner;
     }
 
-    public long getWinner() {
+    public String getWinner() {
         return winner;
     }
 
     @Override
     public int hashCode() {
-        return 31 + (int) (winner ^ (winner >>> 32));
+        return winner == null ? 0 : winner.hashCode();
     }
 
     @Override

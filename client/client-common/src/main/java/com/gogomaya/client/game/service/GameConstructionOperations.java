@@ -10,7 +10,7 @@ public interface GameConstructionOperations {
 
     public GameConstruction getConstruct(final long session);
 
-    public ClientEvent getResponce(final long session, final long player);
+    public ClientEvent getResponce(final long session, final String player);
 
     public String getGameActionServer(final long sessionId);
 

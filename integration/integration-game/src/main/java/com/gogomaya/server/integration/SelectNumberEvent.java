@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.game.event.client.GameClientEvent;
+import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("selectNumber")
 public class SelectNumberEvent extends GameClientEvent {
@@ -13,8 +14,8 @@ public class SelectNumberEvent extends GameClientEvent {
     final private int number;
 
     @JsonCreator
-    public SelectNumberEvent(@JsonProperty("playerId") long playerId, @JsonProperty("number") int number) {
-        super(playerId);
+    public SelectNumberEvent(@JsonProperty(PlayerAware.JSON_ID) String player, @JsonProperty("number") int number) {
+        super(player);
         this.number = number;
     }
 

@@ -28,7 +28,7 @@ public class IntegrationPaymentTransactionOperations extends AbstractPaymentTran
     }
 
     @Override
-    public PaymentTransaction get(Player player, String source, long transactionId) {
+    public PaymentTransaction get(Player player, String source, String transactionId) {
         ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating empty signed request
         HttpEntity<Void> signedRequest = player.sign(null);

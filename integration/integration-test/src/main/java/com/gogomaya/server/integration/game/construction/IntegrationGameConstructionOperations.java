@@ -45,7 +45,7 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
         // Step 1. Initializing headers
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
         if (player != null)
-            header.add("playerId", String.valueOf(player.getPlayerId()));
+            header.add("playerId", String.valueOf(player.getPlayer()));
         header.add("Content-Type", "application/json");
         // Step 2. Generating request
         HttpEntity<GameSpecification> requestEntity = new HttpEntity<GameSpecification>(header);
@@ -73,7 +73,7 @@ public class IntegrationGameConstructionOperations<State extends GameState> exte
     }
 
     @Override
-    public ClientEvent constructionResponse(Player player, long requested, GameSessionKey construction) {
+    public ClientEvent constructionResponse(Player player, String requested, GameSessionKey construction) {
         // Step 1. Generating signed request
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Rest template generation

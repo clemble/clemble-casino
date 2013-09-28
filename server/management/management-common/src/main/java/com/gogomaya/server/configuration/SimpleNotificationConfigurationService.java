@@ -18,12 +18,12 @@ public class SimpleNotificationConfigurationService implements NotificationConfi
     }
 
     @Override
-    public NotificationConfiguration get(long playerId) {
+    public NotificationConfiguration get(String playerId) {
         String host = playerNotificationRegistry.findNotificationServer(playerId);
         NotificationHost rabbitHost = new NotificationHost(host, 5672);
         NotificationHost stompHost = new NotificationHost(host, 61613);
         NotificationHost sockjsHost = new NotificationHost(host, 15674);
-        return new NotificationConfiguration(user, password, String.valueOf(playerId), rabbitHost, stompHost, sockjsHost);
+        return new NotificationConfiguration(user, password, playerId, rabbitHost, stompHost, sockjsHost);
     }
 
 }

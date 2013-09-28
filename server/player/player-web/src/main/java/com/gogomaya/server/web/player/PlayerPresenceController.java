@@ -28,13 +28,13 @@ public class PlayerPresenceController implements PlayerPresenceService {
 
     @Override
     @RequestMapping(params = PlayerWebMapping.PLAYER_PRESENCE, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    public @ResponseBody PlayerPresence getPresence(@PathVariable("playerId") long player) {
+    public @ResponseBody PlayerPresence getPresence(@PathVariable("playerId") String player) {
         return presenceServerService.getPresence(player);
     }
 
     @Override
     @RequestMapping(params = PlayerWebMapping.PLAYER_PRESENCES, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    public @ResponseBody List<PlayerPresence> getPresences(@RequestParam(required = true, value = PlayerWebMapping.PLAYER_PRESENCES_PARAM) List<Long> players) {
+    public @ResponseBody List<PlayerPresence> getPresences(@RequestParam(required = true, value = PlayerWebMapping.PLAYER_PRESENCES_PARAM) List<String> players) {
         return presenceServerService.getPresences(players);
     }
 

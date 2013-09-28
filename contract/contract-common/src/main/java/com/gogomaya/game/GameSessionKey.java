@@ -78,4 +78,9 @@ public class GameSessionKey implements GameAware, Serializable {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return game + ":" + session;
+    }
+
 }

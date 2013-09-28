@@ -45,7 +45,7 @@ public class MoveTimeRule implements TimeRule {
     }
 
     @Override
-    public ClientEvent toTimeBreachedEvent(long player) {
+    public ClientEvent toTimeBreachedEvent(String player) {
         return new MoveTimeoutSurrenderEvent(player);
     }
 

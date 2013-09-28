@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 public interface PlayerAware extends Serializable {
 
-    final public long DEFAULT_PLAYER = 0L;
+    final public String DEFAULT_PLAYER = "casino";
+    final public String JSON_ID = "player";
 
-    long getPlayerId();
+    String getPlayer();
 
 }

@@ -10,8 +10,8 @@ public interface PlayerAccountServerService {
 
     public PlayerAccount register(PlayerProfile playerProfile);
 
-    public boolean canAfford(long playerId, Money amount);
+    public boolean canAfford(String player, Money amount);
 
-    public boolean canAfford(Collection<Long> playerId, Money amount);
+    public boolean canAfford(Collection<String> players, Money amount);
 
 }

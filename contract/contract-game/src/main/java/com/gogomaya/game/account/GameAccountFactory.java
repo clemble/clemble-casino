@@ -13,11 +13,11 @@ public class GameAccountFactory {
 
     public static GameAccount create(GameInitiation initiation) {
         GameSpecification specification = initiation.getSpecification();
-        List<Long> players = new ArrayList<>(initiation.getParticipants());
+        List<String> players = new ArrayList<>(initiation.getParticipants());
         // Step 1. Generating player accounts
         List<GamePlayerAccount> playerAccounts = new ArrayList<>(players.size());
         long amount = specification.getPrice().getAmount();
-        for (Long player : players) {
+        for (String player : players) {
             playerAccounts.add(new GamePlayerAccount(player, amount));
         }
         return specification.getVisibilityRule() == VisibilityRule.hidden ? new InvisibleGameAccount(Money.create(Currency.FakeMoney, 0), playerAccounts)

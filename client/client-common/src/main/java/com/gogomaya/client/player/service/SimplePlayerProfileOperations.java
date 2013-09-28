@@ -10,33 +10,33 @@ public class SimplePlayerProfileOperations implements PlayerProfileOperations {
      */
     private static final long serialVersionUID = 2044631083380608080L;
 
-    final private long playerId;
+    final private String player;
     final private PlayerProfileService playerProfileService;
 
-    public SimplePlayerProfileOperations(long playerId, PlayerProfileService playerProfileService) {
-        this.playerId = playerId;
+    public SimplePlayerProfileOperations(String player, PlayerProfileService playerProfileService) {
+        this.player = player;
         this.playerProfileService = playerProfileService;
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
     @Override
     public PlayerProfile getPlayerProfile() {
-        return playerProfileService.getPlayerProfile(playerId);
+        return playerProfileService.getPlayerProfile(player);
     }
 
     @Override
-    public PlayerProfile getPlayerProfile(long playerId) {
-        return playerProfileService.getPlayerProfile(playerId);
+    public PlayerProfile getPlayerProfile(String player) {
+        return playerProfileService.getPlayerProfile(player);
     }
 
     @Override
     public PlayerProfile updatePlayerProfile(PlayerProfile playerProfile) {
-        playerProfile.setPlayerId(playerId);
-        return playerProfileService.updatePlayerProfile(playerId, playerProfile);
+        playerProfile.setPlayer(player);
+        return playerProfileService.updatePlayerProfile(player, playerProfile);
     }
 
 }

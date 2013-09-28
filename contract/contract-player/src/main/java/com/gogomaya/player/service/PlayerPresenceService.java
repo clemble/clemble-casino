@@ -6,8 +6,8 @@ import com.gogomaya.player.PlayerPresence;
 
 public interface PlayerPresenceService {
 
-    public PlayerPresence getPresence(long player);
+    public PlayerPresence getPresence(String player);
 
-    public List<PlayerPresence> getPresences(List<Long> players);
+    public List<PlayerPresence> getPresences(List<String> players);
 
 }

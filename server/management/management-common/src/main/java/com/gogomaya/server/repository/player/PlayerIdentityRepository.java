@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.gogomaya.player.security.PlayerIdentity;
 
 @Repository
-public interface PlayerIdentityRepository extends JpaRepository<PlayerIdentity, Long> {
+public interface PlayerIdentityRepository extends JpaRepository<PlayerIdentity, String> {
 }

@@ -59,7 +59,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
     @OrderColumn(name = "PLAYERS_ORDER")
     @CollectionTable(name = "GAME_SESSION_PLAYERS",
             joinColumns = {@JoinColumn(name = "SESSION_ID"), @JoinColumn(name = "GAME")})
-    private List<Long> players = new ArrayList<Long>();
+    private List<String> players = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "GAME_SESSION_MOVES", 
@@ -104,21 +104,21 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
         this.sessionState = gameSessionState;
     }
 
-    public List<Long> getPlayers() {
+    public List<String> getPlayers() {
         return players;
     }
 
-    public GameSession<State> setPlayers(Collection<Long> players) {
+    public GameSession<State> setPlayers(Collection<String> players) {
         this.players.clear();
         this.players.addAll(players);
         return this;
     }
 
-    public void addPlayer(Long player) {
+    public void addPlayer(String player) {
         this.players.add(player);
     }
 
-    public void addPlayers(Collection<Long> players) {
+    public void addPlayers(Collection<String> players) {
         this.players.addAll(players);
     }
 

@@ -70,12 +70,12 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
 
     @Override
     public GameSessionPlayer<State> constructAutomatic(Player player, GameSpecification specification) {
-        GameRequest automaticGameRequest = new AutomaticGameRequest(player.getPlayerId(), specification);
+        GameRequest automaticGameRequest = new AutomaticGameRequest(player.getPlayer(), specification);
         return construct(player, automaticGameRequest);
     }
 
-    public GameSessionPlayer<State> constructAvailability(Player player, GameSpecification specification, Collection<Long> participants) {
-        GameRequest availabilityGameRequest = new AvailabilityGameRequest(player.getPlayerId(), specification, participants);
+    public GameSessionPlayer<State> constructAvailability(Player player, GameSpecification specification, Collection<String> participants) {
+        GameRequest availabilityGameRequest = new AvailabilityGameRequest(player.getPlayer(), specification, participants);
 
         return construct(player, availabilityGameRequest);
     }
@@ -93,14 +93,14 @@ abstract public class AbstractGameConstructionOperation<State extends GameState>
         // Step 1. Need to start listening before sending accept, otherwise constructed event might be missed
         GameSessionPlayer<State> sessionPlayer = playerFactory.construct(player, construction);
         // Step 2. Sending accept message to the server
-        InvitationResponseEvent acceptedEvents = new InvitationAcceptedEvent(construction, player.getPlayerId());
+        InvitationResponseEvent acceptedEvents = new InvitationAcceptedEvent(construction, player.getPlayer());
         response(player, acceptedEvents);
         return sessionPlayer;
     }
 
     @Override
     final public void declineInvitation(Player player, GameSessionKey construction) {
-        InvitationResponseEvent declinedEvents = new InvitationDeclinedEvent(player.getPlayerId(), construction);
+        InvitationResponseEvent declinedEvents = new InvitationDeclinedEvent(player.getPlayer(), construction);
         response(player, declinedEvents);
     }
 

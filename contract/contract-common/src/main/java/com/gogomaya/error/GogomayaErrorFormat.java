@@ -81,9 +81,9 @@ public class GogomayaErrorFormat {
             jsonGenerator.writeFieldName("description");
             jsonGenerator.writeString(failure.getError().getDescription());
 
-            if (failure.getPlayerId() != PlayerAware.DEFAULT_PLAYER) {
+            if (failure.getPlayer() != PlayerAware.DEFAULT_PLAYER) {
                 jsonGenerator.writeFieldName("player");
-                jsonGenerator.writeNumber(failure.getPlayerId());
+                jsonGenerator.writeNumber(failure.getPlayer());
             }
 
             if (failure.getSession() != SessionAware.DEFAULT_SESSION) {
@@ -107,7 +107,7 @@ public class GogomayaErrorFormat {
         public GogomayaFailure deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
             String code = null;
             JsonToken token = null;
-            long playerId = PlayerAware.DEFAULT_PLAYER;
+            String player = PlayerAware.DEFAULT_PLAYER;
             GameSessionKey session = SessionAware.DEFAULT_SESSION;
             do {
                 if (jp.getCurrentName() == "code") {
@@ -115,7 +115,7 @@ public class GogomayaErrorFormat {
                 } else if (jp.getCurrentName() == "description") {
                     jp.getValueAsString();
                 } else if (jp.getCurrentName() == "player") {
-                    playerId = jp.getNumberValue().longValue();
+                    player = jp.getValueAsString();
                 } else if (jp.getCurrentName() == "session") {
                     jp.nextToken();
                     jp.nextToken();
@@ -132,7 +132,7 @@ public class GogomayaErrorFormat {
                 token = jp.nextToken();
             } while (token != null && token != JsonToken.END_OBJECT);
 
-            return new GogomayaFailure(GogomayaError.forCode(code), playerId, session);
+            return new GogomayaFailure(GogomayaError.forCode(code), player, session);
         }
     }
 

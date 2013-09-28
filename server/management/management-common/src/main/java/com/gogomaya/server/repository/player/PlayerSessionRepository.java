@@ -10,6 +10,6 @@ import com.gogomaya.player.security.PlayerSession;
 @Repository
 public interface PlayerSessionRepository extends JpaRepository<PlayerSession, Long> {
 
-    public List<PlayerSession> findByPlayerId(long playerId);
+    public List<PlayerSession> findByPlayer(String playerId);
 
 }

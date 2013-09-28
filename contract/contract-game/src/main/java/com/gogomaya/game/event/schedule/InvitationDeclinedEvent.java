@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gogomaya.game.GameSessionKey;
+import com.gogomaya.player.PlayerAware;
 
 @JsonTypeName("declined")
 public class InvitationDeclinedEvent implements InvitationResponseEvent {
@@ -13,19 +14,18 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
      */
     private static final long serialVersionUID = 655381424177654890L;
 
-    final private long playerId;
-
+    final private String player;
     final private GameSessionKey session;
 
     @JsonCreator
-    public InvitationDeclinedEvent(@JsonProperty("playerId") long playerId, @JsonProperty("session") GameSessionKey session) {
-        this.playerId = playerId;
+    public InvitationDeclinedEvent(@JsonProperty(PlayerAware.JSON_ID) String player, @JsonProperty("session") GameSessionKey session) {
+        this.player = player;
         this.session = session;
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + (int) (player == null ? 0 : player.hashCode());
         result = prime * result + (int) (session.hashCode());
         return result;
     }
@@ -51,7 +51,7 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
         if (getClass() != obj.getClass())
             return false;
         InvitationDeclinedEvent other = (InvitationDeclinedEvent) obj;
-        if (playerId != other.playerId)
+        if (player != other.player)
             return false;
         if (session != other.session)
             return false;

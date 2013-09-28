@@ -39,7 +39,7 @@ public class PlayerPresenceServerServiceTest {
 
     @Test
     public void testMarkAvailable() {
-        long player = new Random().nextLong();
+        String player = String.valueOf(RANDOM.nextLong());
 
         Assert.assertFalse(playerPresenceService.isAvailable(player));
 
@@ -50,7 +50,7 @@ public class PlayerPresenceServerServiceTest {
 
     @Test(expected = GogomayaException.class)
     public void testMarkActiveIncorrect() {
-        long player = RANDOM.nextLong();
+        String player = String.valueOf(RANDOM.nextLong());
         long session = RANDOM.nextLong();
 
         Assert.assertFalse(playerPresenceService.isAvailable(player));
@@ -60,7 +60,7 @@ public class PlayerPresenceServerServiceTest {
 
     @Test
     public void testMarkActive() {
-        long player = RANDOM.nextLong();
+        String player = String.valueOf(RANDOM.nextLong());
         long session = RANDOM.nextLong();
 
         Assert.assertFalse(playerPresenceService.isAvailable(player));
@@ -77,12 +77,12 @@ public class PlayerPresenceServerServiceTest {
 
     @Test
     public void testMarkCollectionActive() {
-        Collection<Long> players = new ArrayList<>();
+        Collection<String> players = new ArrayList<>();
         for (int i = 0; i < 2; i++)
-            players.add(RANDOM.nextLong());
+            players.add(String.valueOf(RANDOM.nextLong()));
         long session = RANDOM.nextLong();
 
-        for (Long player : players) {
+        for (String player : players) {
             Assert.assertFalse(playerPresenceService.isAvailable(player));
             playerPresenceService.markOnline(player);
             Assert.assertTrue(playerPresenceService.isAvailable(player));
@@ -91,7 +91,7 @@ public class PlayerPresenceServerServiceTest {
         playerPresenceService.markPlaying(players, new GameSessionKey(Game.pic, session));
 
         Assert.assertFalse("None of the players supposed to be available ", playerPresenceService.areAvailable(players));
-        for (Long player : players) {
+        for (String player : players) {
             Assert.assertFalse(playerPresenceService.isAvailable(player));
             Assert.assertEquals(playerPresenceService.getPresence(player).getSession().getSession(), session);
         }
@@ -104,7 +104,7 @@ public class PlayerPresenceServerServiceTest {
 
     @Test
     public void testMarkActiveInParrallel() {
-        final long genericPlayer = RANDOM.nextLong();
+        final String genericPlayer = String.valueOf(RANDOM.nextLong());
         playerPresenceService.markOnline(genericPlayer);
         Assert.assertTrue(playerPresenceService.isAvailable(genericPlayer));
 
@@ -125,11 +125,11 @@ public class PlayerPresenceServerServiceTest {
                 @Override
                 public void run() {
                     try {
-                        long anotherPlayer = RANDOM.nextLong();
+                        String anotherPlayer = String.valueOf(RANDOM.nextLong());
                         playerPresenceService.markOnline(anotherPlayer);
                         Assert.assertTrue(playerPresenceService.isAvailable(anotherPlayer));
 
-                        List<Long> participants = ImmutableList.<Long> of(genericPlayer, anotherPlayer);
+                        List<String> participants = ImmutableList.<String> of(genericPlayer, anotherPlayer);
                         long randomSession = RANDOM.nextLong();
                         startLatch.countDown();
                         startLatch.await();
@@ -158,13 +158,13 @@ public class PlayerPresenceServerServiceTest {
         }
 
         Assert.assertEquals("Message did not reach listener ", playerListener.countDownLatch.getCount(), 0);
-        Assert.assertEquals("Channel is incorrect ", playerListener.expectedPlayer.poll().longValue(), genericPlayer);
+        Assert.assertEquals("Channel is incorrect ", playerListener.expectedPlayer.poll(), genericPlayer);
         Assert.assertEquals("State is incorrect ", playerListener.expectedState.poll(), Presence.playing);
     }
 
     @Test
     public void testArbitraryListening() throws InterruptedException {
-        long player = RANDOM.nextLong();
+        String player = String.valueOf(RANDOM.nextLong());
 
         PlayerListener playerListener = new PlayerListener(1);
         playerPresenceService.subscribe(player, playerListener);
@@ -179,13 +179,13 @@ public class PlayerPresenceServerServiceTest {
         playerListener.countDownLatch.await(1, TimeUnit.SECONDS);
 
         Assert.assertEquals("Message did not reach listener ", playerListener.countDownLatch.getCount(), 0);
-        Assert.assertEquals("Channel is incorrect ", playerListener.expectedPlayer.poll().longValue(), player);
+        Assert.assertEquals("Channel is incorrect ", playerListener.expectedPlayer.poll(), player);
         Assert.assertEquals("State is incorrect ", playerListener.expectedState.poll(), Presence.online);
     }
 
     @Test
     public void testStateChangeListening() throws InterruptedException {
-        long player = RANDOM.nextLong();
+        String player = String.valueOf(RANDOM.nextLong());
 
         PlayerListener playerListener = new PlayerListener(3);
         playerPresenceService.subscribe(player, playerListener);
@@ -201,14 +201,14 @@ public class PlayerPresenceServerServiceTest {
 
         Assert.assertEquals("Message did not reach listener ", playerListener.countDownLatch.getCount(), 0);
         for (int i = 0; i < 3; i++) {
-            Assert.assertEquals("Channel is incorrect ", playerListener.expectedPlayer.poll().longValue(), player);
+            Assert.assertEquals("Channel is incorrect ", playerListener.expectedPlayer.poll(), player);
             Assert.assertEquals("State is incorrect ", playerListener.expectedState.poll(), i % 2 == 0 ? Presence.online : Presence.playing);
         }
     }
 
     private class PlayerListener implements PlayerNotificationListener<Presence> {
         final public CountDownLatch countDownLatch;
-        final public ArrayBlockingQueue<Long> expectedPlayer;
+        final public ArrayBlockingQueue<String> expectedPlayer;
         final public ArrayBlockingQueue<Presence> expectedState;
 
         public PlayerListener(int numCalls) {
@@ -218,9 +218,9 @@ public class PlayerPresenceServerServiceTest {
         }
 
         @Override
-        public void onUpdate(long playerId, Presence state) {
+        public void onUpdate(String player, Presence state) {
             try {
-                expectedPlayer.put(playerId);
+                expectedPlayer.put(player);
                 expectedState.put(state);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();

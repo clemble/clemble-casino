@@ -19,8 +19,8 @@ public class PlayerIdentity implements PlayerAware {
 
     @Id
     @Column(name = "PLAYER_ID")
-    @JsonProperty("playerId")
-    private long profileId;
+    @JsonProperty(PlayerAware.JSON_ID)
+    private String profileId;
 
     @Column(name = "DEVICE", nullable = false)
     private String device;
@@ -29,11 +29,11 @@ public class PlayerIdentity implements PlayerAware {
     private String secret;
 
     @Override
-    public long getPlayerId() {
+    public String getPlayer() {
         return profileId;
     }
 
-    public PlayerIdentity setPlayerId(long profileId) {
+    public PlayerIdentity setPlayerId(String profileId) {
         this.profileId = profileId;
         return this;
     }

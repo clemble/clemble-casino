@@ -62,7 +62,7 @@
     create table GAME_SESSION_PLAYERS (
         SESSION_ID integer not null,
         GAME bigint not null,
-        players bigint,
+        players varchar(255),
         PLAYERS_ORDER integer not null,
         primary key (SESSION_ID, GAME, PLAYERS_ORDER)
     );

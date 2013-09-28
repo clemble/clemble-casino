@@ -19,21 +19,21 @@ public class GameInitiation implements GameOpponentsAware, GameSpecificationAwar
 
     final private GameSessionKey session;
     final private GameSpecification specification;
-    final private LinkedHashSet<Long> participants;
+    final private LinkedHashSet<String> participants;
 
     public GameInitiation(GameConstruction construction) {
         this.specification = construction.getRequest().getSpecification();
         this.session = construction.getSession();
 
-        final Collection<Long> accpectedParticipants = construction.fetchAcceptedParticipants();
-        this.participants = accpectedParticipants instanceof LinkedHashSet ? (LinkedHashSet<Long>) accpectedParticipants : new LinkedHashSet<Long>(
+        final Collection<String> accpectedParticipants = construction.fetchAcceptedParticipants();
+        this.participants = accpectedParticipants instanceof LinkedHashSet ? (LinkedHashSet<String>) accpectedParticipants : new LinkedHashSet<String>(
                 accpectedParticipants);
     }
 
-    public GameInitiation(GameSessionKey session, Collection<Long> participants, GameSpecification specification) {
+    public GameInitiation(GameSessionKey session, Collection<String> participants, GameSpecification specification) {
         this.session = session;
         this.specification = checkNotNull(specification);
-        this.participants = participants instanceof LinkedHashSet ? (LinkedHashSet<Long>) participants : new LinkedHashSet<Long>(participants);
+        this.participants = participants instanceof LinkedHashSet ? (LinkedHashSet<String>) participants : new LinkedHashSet<String>(participants);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class GameInitiation implements GameOpponentsAware, GameSpecificationAwar
     }
 
     @Override
-    public Collection<Long> getParticipants() {
+    public Collection<String> getParticipants() {
         return participants;
     }
 

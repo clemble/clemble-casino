@@ -11,6 +11,6 @@ public interface TimeRule extends GameRule {
 
     public long getBreachTime(long totalTimeSpent);
 
-    public ClientEvent toTimeBreachedEvent(long player);
+    public ClientEvent toTimeBreachedEvent(String player);
 
 }

@@ -14,14 +14,14 @@ public class GameCache<State extends GameState> {
 
     final private ReentrantLock sessionLock = new ReentrantLock();
 
+    final private Collection<String> playerIds;
     final private GameSession<State> session;
     final private GameProcessor<State> processor;
-    final private Collection<Long> playerIds;
 
-    public GameCache(final GameSession<State> session, final GameProcessor<State> processor, final Collection<Long> playerIds) {
+    public GameCache(final GameSession<State> session, final GameProcessor<State> processor, final Collection<String> playerIds) {
         this.session = checkNotNull(session);
         this.processor = checkNotNull(processor);
-        this.playerIds = ImmutableList.<Long> copyOf(playerIds);
+        this.playerIds = ImmutableList.<String> copyOf(playerIds);
     }
 
     public ReentrantLock getSessionLock() {
@@ -36,7 +36,7 @@ public class GameCache<State extends GameState> {
         return processor;
     }
 
-    public Collection<Long> getPlayerIds() {
+    public Collection<String> getPlayerIds() {
         return playerIds;
     }
 

@@ -18,7 +18,7 @@ public class PaymentTransactionKey implements Serializable {
     private static final long serialVersionUID = 1305768471476355952L;
 
     @Column(name = "TRANSACTION_ID")
-    private long transactionId;
+    private String transaction;
 
     @Column(name = "MONEY_SOURCE")
     @Enumerated(EnumType.STRING)
@@ -32,16 +32,24 @@ public class PaymentTransactionKey implements Serializable {
     }
 
     public PaymentTransactionKey(MoneySource source, long transactionId) {
+        this(source, String.valueOf(transactionId));
+    }
+
+    public PaymentTransactionKey(String source, String transactionId) {
+        this(MoneySource.valueOf(source), transactionId);
+    }
+    
+    public PaymentTransactionKey(MoneySource source, String transactionId) {
         this.source = source;
-        this.transactionId = transactionId;
+        this.transaction = transactionId;
     }
 
-    public long getTransactionId() {
-        return transactionId;
+    public String getTransaction() {
+        return transaction;
     }
 
-    public PaymentTransactionKey setTransactionId(long transactionId) {
-        this.transactionId = transactionId;
+    public PaymentTransactionKey setTransaction(String transactionId) {
+        this.transaction = transactionId;
         return this;
     }
 
@@ -59,7 +67,7 @@ public class PaymentTransactionKey implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((source == null) ? 0 : source.hashCode());
-        result = prime * result + (int) (transactionId ^ (transactionId >>> 32));
+        result = prime * result + ((transaction == null) ? 0 : transaction.hashCode());
         return result;
     }
 
@@ -74,14 +82,12 @@ public class PaymentTransactionKey implements Serializable {
         PaymentTransactionKey other = (PaymentTransactionKey) obj;
         if (source != other.source)
             return false;
-        if (transactionId != other.transactionId)
-            return false;
-        return true;
+        return transaction.equals(other.transaction);
     }
 
     @Override
     public String toString() {
-        return "PaymentTransactionId [transactionId=" + transactionId + ", source=" + source + "]";
+        return "PaymentTransactionId [transaction=" + transaction + ", source=" + source + "]";
     }
 
 }

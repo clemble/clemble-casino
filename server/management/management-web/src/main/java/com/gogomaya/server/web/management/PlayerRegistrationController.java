@@ -2,6 +2,8 @@ package com.gogomaya.server.web.management;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,7 +66,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
             throw GogomayaException.fromError(GogomayaError.EmailOrPasswordIncorrect);
         // Step 4. Everything is fine, return Identity
         PlayerIdentity playerIdentity = loginRequest.getPlayerIdentity();
-        playerIdentity.setPlayerId(fetchedCredentials.getPlayerId());
+        playerIdentity.setPlayerId(fetchedCredentials.getPlayer());
         return playerIdentityRepository.saveAndFlush(playerIdentity);
     }
 
@@ -79,9 +81,11 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
             return playerIdentity;
         validationService.validate(registrationRequest.getPlayerProfile());
         // Step 2. Creating appropriate PlayerProfile
-        PlayerProfile playerProfile = playerProfileRegistrationService.createPlayerProfile(registrationRequest.getPlayerProfile());
+        PlayerProfile savedProfile = registrationRequest.getPlayerProfile();
+        savedProfile.setPlayer(UUID.randomUUID().toString());
+        savedProfile = playerProfileRegistrationService.createPlayerProfile(savedProfile);
         // Step 3. Registration done through separate registration service
-        return register(registrationRequest, playerProfile);
+        return register(registrationRequest, savedProfile);
     }
 
     @Override
@@ -114,7 +118,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         if (fetchedCredentials != null) {
             // Step 2.1 If the password is the same, just return identity to the user
             if (playerCredentials.getPassword().equals(fetchedCredentials.getPassword())) {
-                return playerIdentityRepository.findOne(fetchedCredentials.getPlayerId());
+                return playerIdentityRepository.findOne(fetchedCredentials.getPlayer());
             } else {
                 // Step 2.2 If password does not match this is an error
                 throw GogomayaException.fromError(GogomayaError.EmailAlreadyRegistered);
@@ -127,10 +131,10 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         // Step 0. Registering first wallet
         playerAccountServerService.register(playerProfile);
         // Step 1. Create new credentials
-        PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayerId(playerProfile.getPlayerId());
+        PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(playerProfile.getPlayer());
         playerCredentials = playerCredentialRepository.saveAndFlush(playerCredentials);
         // Step 2. Create new identity
-        PlayerIdentity playerIdentity = loginRequest.getPlayerIdentity().setPlayerId(playerProfile.getPlayerId());
+        PlayerIdentity playerIdentity = loginRequest.getPlayerIdentity().setPlayerId(playerProfile.getPlayer());
         playerIdentity = playerIdentityRepository.saveAndFlush(playerIdentity);
         // Step 3. Sending player identity
         return playerIdentity;

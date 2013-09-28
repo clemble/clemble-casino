@@ -74,11 +74,6 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    final public long getPlayerId() {
-        return player.getPlayerId();
-    }
-
-    @Override
     final public State getState() {
         return currentState.get();
     }
@@ -119,7 +114,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     final public ClientEvent getNextMove() {
-        return getState().getActionLatch().fetchAction(player.getPlayerId());
+        return getState().getActionLatch().fetchAction(player.getPlayer());
     }
 
     final public void waitForStart() {
@@ -147,13 +142,13 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     final public boolean isToMove() {
-        return !getState().getActionLatch().acted(player.getPlayerId());
+        return !getState().getActionLatch().acted(player.getPlayer());
     }
 
     public void giveUp() {
         // Step 1. Giving up if needed
         if (isAlive()) {
-            perform(new GiveUpEvent(player.getPlayerId()));
+            perform(new GiveUpEvent(player.getPlayer()));
         }
     }
 

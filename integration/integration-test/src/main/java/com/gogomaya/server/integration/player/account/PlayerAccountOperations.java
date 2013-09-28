@@ -23,7 +23,7 @@ public class PlayerAccountOperations {
         return accountOperations.getAccount(player);
     }
 
-    public PlayerAccount getAccount(long playerId) {
+    public PlayerAccount getAccount(String playerId) {
         return accountOperations.getAccount(player, playerId);
     }
 
@@ -31,23 +31,23 @@ public class PlayerAccountOperations {
         return accountOperations.getTransactions(player);
     }
 
-    public List<PaymentTransaction> getTransactions(long playerId) {
+    public List<PaymentTransaction> getTransactions(String playerId) {
         return accountOperations.getTransactions(player, playerId);
     }
 
-    public PaymentTransaction getTransaction(MoneySource moneySource, long transactionId) {
+    public PaymentTransaction getTransaction(MoneySource moneySource, String transactionId) {
         return accountOperations.getTransaction(player, moneySource, transactionId);
     }
 
-    public PaymentTransaction getTransaction(long playerId, MoneySource moneySource, long transactionId) {
+    public PaymentTransaction getTransaction(String playerId, MoneySource moneySource, String transactionId) {
         return accountOperations.getTransaction(player, playerId, moneySource, transactionId);
     }
 
-    public PaymentTransaction getTransaction(String moneySource, long transactionId) {
+    public PaymentTransaction getTransaction(String moneySource, String transactionId) {
         return accountOperations.getTransaction(player, moneySource, transactionId);
     }
 
-    public PaymentTransaction getTransaction(long playerId, String moneySource, long transactionId) {
+    public PaymentTransaction getTransaction(String playerId, String moneySource, String transactionId) {
         return accountOperations.getTransaction(player, playerId, moneySource, transactionId);
     }
 

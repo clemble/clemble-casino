@@ -20,13 +20,13 @@ public interface GameConstructionOperations<State extends GameState> extends Gam
 
     public GameSpecificationOptions getOptions(Player player);
 
-    public ClientEvent constructionResponse(Player player, long requested, GameSessionKey construction);
+    public ClientEvent constructionResponse(Player player, String requested, GameSessionKey construction);
 
     public GameSessionPlayer<State> constructAutomatic(Player player);
 
     public GameSessionPlayer<State> constructAutomatic(Player player, GameSpecification gameSpecification);
 
-    public GameSessionPlayer<State> constructAvailability(Player player, GameSpecification specification, Collection<Long> participants);
+    public GameSessionPlayer<State> constructAvailability(Player player, GameSpecification specification, Collection<String> participants);
 
     public GameSessionPlayer<State> construct(Player player, GameRequest request);
 

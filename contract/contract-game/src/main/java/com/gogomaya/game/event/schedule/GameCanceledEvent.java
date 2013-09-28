@@ -15,18 +15,23 @@ public class GameCanceledEvent implements ConstructionEvent, PlayerAware {
      */
     private static final long serialVersionUID = 1L;
 
+    final private String player;
     final private GameSessionKey session;
-    final private long playerId;
 
     @JsonCreator
-    public GameCanceledEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("playerId") long playerId) {
+    public GameCanceledEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty(PlayerAware.JSON_ID) String player) {
         this.session = session;
-        this.playerId = playerId;
+        this.player = player;
     }
 
     @Override
     public GameSessionKey getSession() {
         return session;
+    }
+
+    @Override
+    public String getPlayer() {
+        return player;
     }
 
     @Override
@@ -43,10 +48,6 @@ public class GameCanceledEvent implements ConstructionEvent, PlayerAware {
         if (getClass() != obj.getClass())
             return false;
         return session == ((GameCanceledEvent) obj).session;
-    }
-
-    public long getPlayerId() {
-        return playerId;
     }
 
 }

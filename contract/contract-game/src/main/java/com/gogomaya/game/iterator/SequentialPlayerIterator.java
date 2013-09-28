@@ -17,39 +17,39 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
      */
     private static final long serialVersionUID = -4182637038671660855L;
 
-    final private List<Long> players;
+    final private List<String> players;
 
     private int index;
 
-    public SequentialPlayerIterator(Collection<Long> playerIds) {
+    public SequentialPlayerIterator(Collection<String> playerIds) {
         this.index = 0;
         this.players = new ArrayList<>(playerIds);
     }
 
     @JsonCreator
-    public SequentialPlayerIterator(@JsonProperty("index") final int current, @JsonProperty("players") List<Long> players) {
+    public SequentialPlayerIterator(@JsonProperty("index") final int current, @JsonProperty("players") List<String> players) {
         this.players = players;
         this.index = current;
     }
 
     @Override
-    public long next() {
+    public String next() {
         return players.get(++index % getPlayers().size());
     }
 
     @Override
-    public long current() {
+    public String current() {
         return players.get(index % getPlayers().size());
     }
 
     @Override
-    public Collection<Long> getPlayers() {
+    public Collection<String> getPlayers() {
         return players;
     }
 
     @Override
-    public Collection<Long> whoIsOpponents(long playerId) {
-        Collection<Long> playerIds = new ArrayList<Long>(players);
+    public Collection<String> whoIsOpponents(String playerId) {
+        Collection<String> playerIds = new ArrayList<>(players);
         playerIds.remove(playerId);
         return playerIds;
     }
@@ -59,8 +59,8 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
     }
 
     @Override
-    public boolean contains(long targetPlayerId) {
-        for (long playerId : players) {
+    public boolean contains(String targetPlayerId) {
+        for (String playerId : players) {
             if (playerId == targetPlayerId)
                 return true;
         }
@@ -91,12 +91,12 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
             return false;
         return true;
     }
-    
+
     public static SequentialPlayerIterator create(Collection<? extends PlayerAware> playerAwares) {
-        List<Long> playerIds = new ArrayList<>(playerAwares.size());
+        List<String> playerIds = new ArrayList<>(playerAwares.size());
         // Parsing player aware values
         for (PlayerAware playerAware : playerAwares) {
-            playerIds.add(playerAware.getPlayerId());
+            playerIds.add(playerAware.getPlayer());
         }
         return new SequentialPlayerIterator(playerIds);
     }

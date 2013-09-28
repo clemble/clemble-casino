@@ -15,32 +15,32 @@ public class SimplePaymentTransactionOperations implements PaymentTransactionOpe
      */
     private static final long serialVersionUID = -5498822576528068505L;
 
-    final private long playerId;
+    final private String player;
     final private PaymentTransactionService paymentTransactionService;
 
-    public SimplePaymentTransactionOperations(long playerId, PaymentTransactionService paymentTransactionService) {
-        this.playerId = playerId;
+    public SimplePaymentTransactionOperations(String player, PaymentTransactionService paymentTransactionService) {
+        this.player = player;
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
     }
 
     @Override
-    public PaymentTransaction getPaymentTransaction(MoneySource source, long transactionId) {
-        return paymentTransactionService.getPaymentTransaction(playerId, source.name(), transactionId);
+    public PaymentTransaction getPaymentTransaction(MoneySource source, String transactionId) {
+        return paymentTransactionService.getPaymentTransaction(player, source.name(), transactionId);
     }
 
     @Override
-    public PaymentTransaction getPaymentTransaction(String source, long transactionId) {
-        return paymentTransactionService.getPaymentTransaction(playerId, source, transactionId);
+    public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
+        return paymentTransactionService.getPaymentTransaction(player, source, transactionId);
     }
 
     @Override
     public List<PaymentTransaction> listPlayerTransaction() {
-        return paymentTransactionService.listPlayerTransaction(playerId);
+        return paymentTransactionService.listPlayerTransaction(player);
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
 }

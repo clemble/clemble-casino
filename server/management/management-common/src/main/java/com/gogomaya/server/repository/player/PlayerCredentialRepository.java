@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.gogomaya.player.security.PlayerCredential;
 
 @Repository()
-public interface PlayerCredentialRepository extends JpaRepository<PlayerCredential, Long> {
+public interface PlayerCredentialRepository extends JpaRepository<PlayerCredential, String> {
 
     public PlayerCredential findByEmail(String email);
 

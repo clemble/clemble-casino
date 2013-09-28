@@ -41,7 +41,7 @@ public class GameConstructionRepositoryTest {
     public void testActionLatchSerialization() throws JsonParseException, JsonMappingException, IOException {
         String serializedLatch = null;
         try {
-            ActionLatch randomLatch = new ActionLatch(ImmutableList.<Long>of(1L, 2L), "test");
+            ActionLatch randomLatch = new ActionLatch(ImmutableList.<String>of("1", "2"), "test");
             serializedLatch = objectMapper.writeValueAsString(randomLatch);
             ActionLatch readLatch = objectMapper.readValue(serializedLatch, ActionLatch.class);
             Assert.assertEquals("Failed to deserialize: " + serializedLatch, readLatch, randomLatch);
@@ -52,7 +52,7 @@ public class GameConstructionRepositoryTest {
 
     @Test
     public void testSaving() {
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(1L, GameSpecification.DEFAULT, ImmutableList.<Long> of(1L, 2L), GameDeclineBehavior.invalidate);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", GameSpecification.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setState(GameConstructionState.pending);
@@ -63,7 +63,7 @@ public class GameConstructionRepositoryTest {
 
     @Test
     public void testSaving2() {
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(1L, GameSpecification.DEFAULT, ImmutableList.<Long> of(1L, 2L), GameDeclineBehavior.invalidate);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", GameSpecification.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setState(GameConstructionState.pending);

@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile;
 import com.gogomaya.event.Event;
 import com.gogomaya.game.construct.GameConstruction;
 import com.gogomaya.game.construct.GameInitiation;
-import com.gogomaya.server.ServerRegistry;
+import com.gogomaya.server.LongServerRegistry;
 import com.gogomaya.server.game.action.GameEventTaskExecutor;
 import com.gogomaya.server.game.aspect.bet.GameBetAspectFactory;
 import com.gogomaya.server.game.aspect.outcome.GameOutcomeAspectFactory;
@@ -114,7 +114,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Bean
         @Singleton
         public TableServerRegistry tableServerRegistry() {
-            ServerRegistry serverRegistry = new ServerRegistry();
+            LongServerRegistry serverRegistry = new LongServerRegistry();
             serverRegistry.register(10_000L, "localhost");
             return new TableServerRegistry(serverRegistry);
         }
@@ -171,7 +171,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Bean
         @Singleton
         public TableServerRegistry tableServerRegistry() {
-            ServerRegistry serverRegistry = new ServerRegistry();
+            LongServerRegistry serverRegistry = new LongServerRegistry();
             serverRegistry.register(10_000L, "gogomaya.cloudfoundry.com");
             return new TableServerRegistry(serverRegistry);
         }

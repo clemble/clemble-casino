@@ -24,7 +24,7 @@ public class IntegrationAccountOperations extends AbstractAccountOperations {
     }
 
     @Override
-    public PlayerAccount getAccount(Player player, long playerId) {
+    public PlayerAccount getAccount(Player player, String playerId) {
         ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
@@ -34,7 +34,7 @@ public class IntegrationAccountOperations extends AbstractAccountOperations {
     }
 
     @Override
-    public List<PaymentTransaction> getTransactions(Player player, long playerId) {
+    public List<PaymentTransaction> getTransactions(Player player, String playerId) {
         ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
@@ -45,7 +45,7 @@ public class IntegrationAccountOperations extends AbstractAccountOperations {
     }
 
     @Override
-    public PaymentTransaction getTransaction(Player player, long playerId, String moneySource, long transactionId) {
+    public PaymentTransaction getTransaction(Player player, String playerId, String moneySource, String transactionId) {
         ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);

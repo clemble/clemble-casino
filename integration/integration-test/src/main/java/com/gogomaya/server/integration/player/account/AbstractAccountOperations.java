@@ -11,26 +11,26 @@ abstract public class AbstractAccountOperations implements AccountOperations {
 
     @Override
     final public PlayerAccount getAccount(Player player) {
-        return getAccount(player, player.getPlayerId());
+        return getAccount(player, player.getPlayer());
     }
 
     @Override
     final public List<PaymentTransaction> getTransactions(Player player) {
-        return getTransactions(player, player.getPlayerId());
+        return getTransactions(player, player.getPlayer());
     }
 
     @Override
-    final public PaymentTransaction getTransaction(Player player, String moneySource, long transactionId) {
-        return getTransaction(player, player.getPlayerId(), moneySource, transactionId);
+    final public PaymentTransaction getTransaction(Player player, String moneySource, String transactionId) {
+        return getTransaction(player, player.getPlayer(), moneySource, transactionId);
     }
 
     @Override
-    final public PaymentTransaction getTransaction(Player player, MoneySource moneySource, long transactionId) {
+    final public PaymentTransaction getTransaction(Player player, MoneySource moneySource, String transactionId) {
         return getTransaction(player, moneySource.name(), transactionId);
     }
 
     @Override
-    final public PaymentTransaction getTransaction(Player player, long playerId, MoneySource moneySource, long transactionId) {
+    final public PaymentTransaction getTransaction(Player player, String playerId, MoneySource moneySource, String transactionId) {
         return getTransaction(player, playerId, moneySource.name(), transactionId);
     }
 

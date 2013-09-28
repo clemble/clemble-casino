@@ -22,15 +22,15 @@ public class AndroidPlayerSecurityService implements PlayerSecurityClientService
     }
 
     @Override
-    public long getPlayerId() {
-        return playerIdentity.getPlayerId();
+    public String getPlayer() {
+        return playerIdentity.getPlayer();
     }
 
     @Override
     public <S> HttpEntity<?> signCreate(S request) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(playerIdentity.getPlayerId()));
+        header.add("playerId", String.valueOf(playerIdentity.getPlayer()));
         header.add("Content-Type", WebMapping.PRODUCES);
         // Step 2. Generating request
         return new HttpEntity<>(request, header);
@@ -40,7 +40,7 @@ public class AndroidPlayerSecurityService implements PlayerSecurityClientService
     public HttpEntity<?> signRead(String request) {
         // Step 1. Creating Header
         MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
-        header.add("playerId", String.valueOf(playerIdentity.getPlayerId()));
+        header.add("playerId", String.valueOf(playerIdentity.getPlayer()));
         header.add("Content-Type", WebMapping.PRODUCES);
         // Step 2. Generating request
         return new HttpEntity<>(header);

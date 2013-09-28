@@ -62,7 +62,7 @@ public class PlayerAccountOperationsITest {
         assertNotNull(accountB.getMoney(Currency.FakeMoney));
         assertEquals(accountB, accountA);
         // Step 5. Checking that there are some fake moneys in the newly created account, accesed through another WalletOperations
-        PlayerAccount anotherWallet = accountOperations.getAccount(player, player.getPlayerId());
+        PlayerAccount anotherWallet = accountOperations.getAccount(player, player.getPlayer());
         assertNotNull(anotherWallet);
         assertNotNull(anotherWallet.getMoney(Currency.FakeMoney));
         assertEquals(anotherWallet, accountA);
@@ -70,7 +70,7 @@ public class PlayerAccountOperationsITest {
         Player anotherPlayer = playerOperations.createPlayer();
 
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerAccountAccessDenied));
-        accountOperations.getAccount(player, anotherPlayer.getPlayerId());
+        accountOperations.getAccount(player, anotherPlayer.getPlayer());
     }
 
     @Ignore // TODO security was temporary disabled
@@ -85,7 +85,7 @@ public class PlayerAccountOperationsITest {
         Assert.assertFalse(accountOperations.getTransactions(anotherPlayer).isEmpty());
         // Step 3. Checking no other player can access the transactions
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionAccessDenied));
-        accountOperations.getTransactions(player, anotherPlayer.getPlayerId());
+        accountOperations.getTransactions(player, anotherPlayer.getPlayer());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class PlayerAccountOperationsITest {
         // Step 1. Checking player has no transactions to access
         Player player = playerOperations.createPlayer();
         expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionNotExists));
-        accountOperations.getTransaction(player, MoneySource.TicTacToe, -1);
+        accountOperations.getTransaction(player, MoneySource.TicTacToe, "-1");
     }
 
 }

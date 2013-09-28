@@ -14,23 +14,23 @@ public class AndroidPlayerSessionService implements PlayerSessionService {
     }
 
     @Override
-    public PlayerSession create(long playerId) {
-        return restClientService.postForEntity(ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS, null, PlayerSession.class, playerId);
+    public PlayerSession create(String player) {
+        return restClientService.postForEntity(ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS, null, PlayerSession.class, player);
     }
 
     @Override
-    public PlayerSession refreshPlayerSession(long playerId, long sessionId) {
-        return restClientService.putForEntity(ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, null, PlayerSession.class, playerId, sessionId);
+    public PlayerSession refreshPlayerSession(String player, long sessionId) {
+        return restClientService.putForEntity(ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, null, PlayerSession.class, player, sessionId);
     }
 
     @Override
-    public PlayerSession endPlayerSession(long playerId, long sessionId) {
-        return restClientService.deleteForEntity(ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, null, PlayerSession.class, playerId, sessionId);
+    public PlayerSession endPlayerSession(String player, long sessionId) {
+        return restClientService.deleteForEntity(ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, null, PlayerSession.class, player, sessionId);
     }
 
     @Override
-    public PlayerSession getPlayerSession(long playerId, long sessionId) {
-        return restClientService.getForEntity(ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, null, PlayerSession.class, playerId, sessionId);
+    public PlayerSession getPlayerSession(String player, long sessionId) {
+        return restClientService.getForEntity(ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, null, PlayerSession.class, player, sessionId);
     }
 
 }

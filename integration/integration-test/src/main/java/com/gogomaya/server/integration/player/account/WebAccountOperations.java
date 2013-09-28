@@ -21,17 +21,17 @@ public class WebAccountOperations extends AbstractAccountOperations {
     }
 
     @Override
-    public PlayerAccount getAccount(Player player, long playerId) {
+    public PlayerAccount getAccount(Player player, String playerId) {
         return playerAccountController.get(playerId);
     }
 
     @Override
-    public List<PaymentTransaction> getTransactions(Player player, long playerId) {
+    public List<PaymentTransaction> getTransactions(Player player, String playerId) {
         return paymentTransactionController.listPlayerTransaction(playerId);
     }
 
     @Override
-    public PaymentTransaction getTransaction(Player player, long playerId, String source, long transactionId) {
+    public PaymentTransaction getTransaction(Player player, String playerId, String source, String transactionId) {
         return paymentTransactionController.getPaymentTransaction(playerId, source, transactionId);
     }
 

@@ -8,14 +8,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public interface GamePlayerIterator extends Serializable {
 
-    public long next();
+    public String next();
 
-    public long current();
+    public String current();
 
-    public Collection<Long> getPlayers();
+    public Collection<String> getPlayers();
 
-    public Collection<Long> whoIsOpponents(long playerId);
+    public Collection<String> whoIsOpponents(String player);
 
-    public boolean contains(long playerId);
+    public boolean contains(String player);
 
 }

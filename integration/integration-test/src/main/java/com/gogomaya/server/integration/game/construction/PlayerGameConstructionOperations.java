@@ -39,17 +39,17 @@ public class PlayerGameConstructionOperations<State extends GameState> implement
     }
 
     public GameSessionPlayer<State> constructAvailability(Player... participants) {
-        Collection<Long> participantIds = new ArrayList<>();
+        Collection<String> participantIds = new ArrayList<>();
         for (Player player : participants)
-            participantIds.add(player.getPlayerId());
+            participantIds.add(player.getPlayer());
         return constructAvailability(participantIds);
     }
 
-    public GameSessionPlayer<State> constructAvailability(Collection<Long> participants) {
+    public GameSessionPlayer<State> constructAvailability(Collection<String> participants) {
         return gameOperations.constructAvailability(player, selectSpecification(), participants);
     }
 
-    public GameSessionPlayer<State> constructAvailability(GameSpecification specification, Collection<Long> participants) {
+    public GameSessionPlayer<State> constructAvailability(GameSpecification specification, Collection<String> participants) {
         return gameOperations.constructAvailability(player, specification, participants);
     }
 

@@ -15,6 +15,4 @@ public interface GameActionOperations<State extends GameState> extends SessionAw
 
     public void subscribe(EventListener eventListener);
 
-    public GameActionOperations<State> clone(String server);
-
 }

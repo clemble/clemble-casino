@@ -37,22 +37,22 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
 
     @Override
     public GameSpecificationOptions getOptions(Game game, Player player) {
-        return configuartionManagerController.getSpecificationOptions(player != null ? player.getPlayerId() : -1L, game);
+        return configuartionManagerController.getSpecificationOptions(player != null ? player.getPlayer() : null, game);
     }
 
     @Override
     protected GameConstruction request(Player player, GameRequest request) {
-        return constructionController.construct(player.getPlayerId(), request);
+        return constructionController.construct(player.getPlayer(), request);
     }
 
     @Override
     protected void response(Player player, InvitationResponseEvent responseEvent) {
-        constructionController.reply(player.getPlayerId(), responseEvent.getSession().getSession(), responseEvent);
+        constructionController.reply(player.getPlayer(), responseEvent.getSession().getSession(), responseEvent);
     }
 
     @Override
-    public ClientEvent constructionResponse(Player player, long requested, GameSessionKey construction) {
-        return constructionController.getResponce(player.getPlayerId(), construction.getSession(), requested);
+    public ClientEvent constructionResponse(Player player, String requested, GameSessionKey construction) {
+        return constructionController.getResponce(player.getPlayer(), construction.getSession(), requested);
     }
 
 }

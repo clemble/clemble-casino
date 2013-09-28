@@ -12,28 +12,28 @@ public class GamePlayerAccount implements PlayerAware {
      */
     private static final long serialVersionUID = -1635859321208535243L;
 
-    final private long playerId;
+    final private String player;
 
     private long moneyLeft;
     private long moneySpent;
 
-    public GamePlayerAccount(final long playerId, final long moneyLeft) {
-        this.playerId = playerId;
+    public GamePlayerAccount(final String player, final long moneyLeft) {
+        this.player = player;
         this.moneyLeft = moneyLeft;
     }
 
     @JsonCreator
-    public GamePlayerAccount(@JsonProperty("playerId") final long playerId,
+    public GamePlayerAccount(@JsonProperty(PlayerAware.JSON_ID) final String player,
             @JsonProperty("moneyLeft") final long moneyLeft,
             @JsonProperty("moneySpent") final long moneySpent) {
-        this.playerId = playerId;
+        this.player = player;
         this.moneyLeft = moneyLeft;
         this.moneySpent = moneySpent;
     }
 
     @Override
-    public long getPlayerId() {
-        return playerId;
+    public String getPlayer() {
+        return player;
     }
 
     public long getMoneyLeft() {
@@ -56,7 +56,7 @@ public class GamePlayerAccount implements PlayerAware {
 
     @Override
     public String toString() {
-        return "PlayerState [player=" + playerId + ", money=" + moneyLeft + "]";
+        return "PlayerState [player=" + player + ", money=" + moneyLeft + "]";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class GamePlayerAccount implements PlayerAware {
         int result = 1;
         result = prime * result + (int) (moneyLeft ^ (moneyLeft >>> 32));
         result = prime * result + (int) (moneySpent ^ (moneySpent >>> 32));
-        result = prime * result + (int) (playerId ^ (playerId >>> 32));
+        result = prime * result + (int) (player != null ? player.hashCode() : 0);
         return result;
     }
 
@@ -82,9 +82,7 @@ public class GamePlayerAccount implements PlayerAware {
             return false;
         if (moneySpent != other.moneySpent)
             return false;
-        if (playerId != other.playerId)
-            return false;
-        return true;
+        return player.equals(other.player);
     }
 
 }

@@ -52,7 +52,7 @@ public class TotalTimeRule implements TimeRule {
     }
 
     @Override
-    public ClientEvent toTimeBreachedEvent(long player) {
+    public ClientEvent toTimeBreachedEvent(String player) {
         return new TotalTimeoutSurrenderEvent(player);
     }
 

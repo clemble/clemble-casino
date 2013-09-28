@@ -2,7 +2,6 @@ package com.gogomaya.server.player.lock;
 
 import java.util.Collection;
 import java.util.TreeSet;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -14,12 +13,10 @@ import com.google.common.cache.LoadingCache;
 
 public class JavaPlayerLockService implements PlayerLockService {
 
-    final private static int LOCKS_PER_USER = 10;
-
-    final private LoadingCache<Long, PlayerGroupLock> LOCKS = CacheBuilder.newBuilder().build(new CacheLoader<Long, PlayerGroupLock>() {
+    final private LoadingCache<String, PlayerGroupLock> LOCKS = CacheBuilder.newBuilder().build(new CacheLoader<String, PlayerGroupLock>() {
 
         @Override
-        public PlayerGroupLock load(Long playerGroup) throws Exception {
+        public PlayerGroupLock load(String playerGroup) throws Exception {
             return new PlayerGroupLock(playerGroup);
         }
 
@@ -27,9 +24,9 @@ public class JavaPlayerLockService implements PlayerLockService {
 
     public static class PlayerGroupLock implements Comparable<PlayerGroupLock> {
         final public ReentrantLock lock = new ReentrantLock();
-        final public Long playerGroup;
+        final public String playerGroup;
 
-        public PlayerGroupLock(Long playerGroup) {
+        public PlayerGroupLock(String playerGroup) {
             this.playerGroup = playerGroup;
         }
 
@@ -40,7 +37,7 @@ public class JavaPlayerLockService implements PlayerLockService {
     }
 
     @Override
-    public void lock(long player) {
+    public void lock(String player) {
         PlayerGroupLock playerGroupLock = getLock(player);
         if (!playerGroupLock.lock.tryLock()) {
             try {
@@ -54,7 +51,7 @@ public class JavaPlayerLockService implements PlayerLockService {
     }
 
     @Override
-    public void lock(Collection<Long> players) {
+    public void lock(Collection<String> players) {
         TreeSet<PlayerGroupLock> playerGroupLocks = getLocks(players);
         TreeSet<PlayerGroupLock> acquiredLocks = new TreeSet<PlayerGroupLock>();
         do {
@@ -74,7 +71,7 @@ public class JavaPlayerLockService implements PlayerLockService {
     }
 
     @Override
-    public void unlock(Collection<Long> players) {
+    public void unlock(Collection<String> players) {
         unlock(getLocks(players));
     }
 
@@ -84,26 +81,20 @@ public class JavaPlayerLockService implements PlayerLockService {
     }
 
     @Override
-    public void unlock(long player) {
+    public void unlock(String player) {
         PlayerGroupLock playerGroupLock = getLock(player);
         playerGroupLock.lock.unlock();
     }
 
-    private TreeSet<PlayerGroupLock> getLocks(Collection<Long> players) {
+    private TreeSet<PlayerGroupLock> getLocks(Collection<String> players) {
         TreeSet<PlayerGroupLock> locks = new TreeSet<PlayerGroupLock>();
-        for (Long player : players)
+        for (String player : players)
             locks.add(getLock(player));
         return locks;
     }
 
-    private PlayerGroupLock getLock(long player) {
-        PlayerGroupLock playerGroupLock = null;
-        try {
-            playerGroupLock = LOCKS.get((player >> LOCKS_PER_USER));
-        } catch (ExecutionException e) {
-            throw GogomayaException.fromError(GogomayaError.ServerCacheError);
-        }
-        return playerGroupLock;
+    private PlayerGroupLock getLock(String player) {
+        return LOCKS.getUnchecked(player);
     }
 
 }

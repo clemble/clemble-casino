@@ -4,7 +4,7 @@ import com.gogomaya.payment.PlayerAccount;
 
 public interface PlayerAccountService {
 
-    public PlayerAccount get(long playerId);
+    public PlayerAccount get(String playerId);
 
 
 }
