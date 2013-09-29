@@ -33,8 +33,9 @@ public class PaymentTransactionServerServiceImpl implements PaymentTransactionSe
         // Step 1. Sanity check
         if (paymentTransaction == null)
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionEmpty);
-        if (!paymentTransaction.valid())
+        if (!paymentTransaction.valid()) {
             throw GogomayaException.fromError(GogomayaError.PaymentTransactionInvalid);
+        }
         // Step 2. Processing payment transactions
         return processTransaction(paymentTransaction);
     }

@@ -61,7 +61,7 @@ public class SequentialPlayerIterator implements GamePlayerIterator {
     @Override
     public boolean contains(String targetPlayerId) {
         for (String playerId : players) {
-            if (playerId == targetPlayerId)
+            if (playerId.equals(targetPlayerId))
                 return true;
         }
         return false;

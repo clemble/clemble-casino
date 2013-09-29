@@ -32,6 +32,15 @@ public class PaymentOperation implements PlayerAware, Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "OPERATION")
     private Operation operation;
+    
+    public PaymentOperation(){
+    }
+    
+    public PaymentOperation(String player, Money ammount, Operation operation) {
+        this.player = player;
+        this.amount = ammount;
+        this.operation = operation;
+    }
 
     @Override
     public String getPlayer() {

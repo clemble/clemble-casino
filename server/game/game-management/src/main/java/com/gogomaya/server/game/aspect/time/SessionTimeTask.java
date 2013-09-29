@@ -45,7 +45,7 @@ public class SessionTimeTask implements GameEventTask, SessionAware {
 
     public void markMoved(ClientEvent move) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
-            if (playerTimeTracker.getPlayer() == move.getPlayer()) {
+            if (playerTimeTracker.getPlayer().equals(move.getPlayer())) {
                 playerTimeTracker.markMoved();
             }
         }
@@ -53,7 +53,7 @@ public class SessionTimeTask implements GameEventTask, SessionAware {
 
     public void markToMove(ClientEvent nextMove) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
-            if (playerTimeTracker.getPlayer() == nextMove.getPlayer()) {
+            if (playerTimeTracker.getPlayer().equals(nextMove.getPlayer())) {
                 playerTimeTracker.markToMove();
             }
         }

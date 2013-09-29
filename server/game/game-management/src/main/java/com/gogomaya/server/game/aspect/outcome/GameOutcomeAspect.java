@@ -54,10 +54,12 @@ public class GameOutcomeAspect<State extends GameState> extends BasicGameAspect<
             // Step 2. Generating payment transaction
             PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(session.getSession().toPaymentTransactionKey());
             for (GamePlayerAccount playerState : session.getState().getAccount().getPlayerAccounts()) {
-                if (playerState.getPlayer() != winnerId) {
-                    paymentTransaction.addPaymentOperation(
-                            new PaymentOperation().setAmount(price).setOperation(Operation.Credit).setPlayer(playerState.getPlayer())).addPaymentOperation(
-                                    new PaymentOperation().setAmount(price).setOperation(Operation.Debit).setPlayer(winnerId));
+                if (!playerState.getPlayer().equals(winnerId)) {
+                    paymentTransaction
+                        .addPaymentOperation(
+                            new PaymentOperation(playerState.getPlayer(), price, Operation.Credit))
+                        .addPaymentOperation(
+                            new PaymentOperation(winnerId, price, Operation.Debit));
                 }
             }
             // Step 3. Processing payment transaction

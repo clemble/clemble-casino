@@ -16,9 +16,7 @@ public class GameTimeAspectFactory implements GameAspectFactory {
 
     @Override
     public <T extends GameState> GameAspect<T> construct(GameInitiation initiation) {
-        SessionTimeTask sessionTimeTracker = new SessionTimeTask(initiation);
-        eventTaskExecutor.schedule(sessionTimeTracker);
-        return new GameTimeAspect<>(sessionTimeTracker, eventTaskExecutor);
+        return new GameTimeAspect<>(new SessionTimeTask(initiation), eventTaskExecutor);
     }
 
 }

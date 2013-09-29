@@ -116,7 +116,8 @@ public class PaymentTransaction implements Serializable {
                 }
             }
         }
-        return (creditAmount != null && debitAmount != null) && creditAmount.getAmount() == debitAmount.getAmount()
+        return (creditAmount != null && debitAmount != null)
+                && creditAmount.getAmount() == debitAmount.getAmount()
                 && creditAmount.getCurrency() == debitAmount.getCurrency();
     }
 
