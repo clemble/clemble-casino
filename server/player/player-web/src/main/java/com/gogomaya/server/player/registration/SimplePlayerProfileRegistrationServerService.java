@@ -27,7 +27,7 @@ public class SimplePlayerProfileRegistrationServerService implements PlayerProfi
         // Step 1. Validating input data prior to any actions
         validationService.validate(playerProfile);
         // Step 2. Registration done through separate registration service
-        return playerProfileRepository.saveAndFlush(playerProfile);
+        return playerProfileRepository.save(playerProfile);
     }
 
     @Override

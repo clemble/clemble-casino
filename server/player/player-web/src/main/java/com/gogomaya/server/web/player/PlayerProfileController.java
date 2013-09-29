@@ -48,7 +48,7 @@ public class PlayerProfileController implements PlayerProfileService {
             throw GogomayaException.fromError(GogomayaError.PlayerNotProfileOwner);
         playerProfile.setPlayer(player);
         // Step 2. Updating Profile
-        return profileRepository.saveAndFlush(playerProfile);
+        return profileRepository.save(playerProfile);
     }
 
 }
