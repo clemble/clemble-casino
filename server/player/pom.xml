@@ -2,7 +2,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.gogomaya.server</groupId>
+        <groupId>com.clemble.casino.server</groupId>
         <artifactId>server</artifactId>
         <version>0.5.1-SNAPSHOT</version>
     </parent>
@@ -17,22 +17,22 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.gogomaya.server</groupId>
+                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>player-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.gogomaya.server</groupId>
+                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>player-management</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.gogomaya.server</groupId>
+                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>player-social</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.gogomaya.server</groupId>
+                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>player-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -41,7 +41,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.gogomaya</groupId>
+            <groupId>com.clemble.casino</groupId>
             <artifactId>contract-player</artifactId>
         </dependency>
     </dependencies>

@@ -2,11 +2,11 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.gogomaya.server</groupId>
+        <groupId>com.clemble.casino</groupId>
         <artifactId>parent</artifactId>
         <version>0.5.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.gogomaya.integration</groupId>
+    <groupId>com.clemble.casino.integration</groupId>
     <artifactId>integration</artifactId>
     <packaging>pom</packaging>
     <modules>
@@ -17,12 +17,12 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.gogomaya.integration</groupId>
+                <groupId>com.clemble.casino.integration</groupId>
                 <artifactId>integration-management-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.gogomaya.integration</groupId>
+                <groupId>com.clemble.casino.integration</groupId>
                 <artifactId>integration-game</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -2,14 +2,14 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.gogomaya.client</groupId>
+        <groupId>com.clemble.casino.client</groupId>
         <artifactId>client</artifactId>
         <version>0.5.1-SNAPSHOT</version>
     </parent>
     <artifactId>client-android</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.gogomaya.client</groupId>
+            <groupId>com.clemble.casino.client</groupId>
             <artifactId>client-common</artifactId>
         </dependency>
 

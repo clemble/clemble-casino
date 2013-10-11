@@ -30,7 +30,7 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>com.gogomaya.integration.spring.game.IntegrationGameWebSpringConfiguration</param-value>
+            <param-value>com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration</param-value>
         </init-param>
         <load-on-startup>3</load-on-startup>
     </servlet>
