@@ -107,25 +107,25 @@
                                     <stripVersion>true</stripVersion>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>com.gogomaya.server</groupId>
+                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>player-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
                                         </artifactItem>
                                         <artifactItem>
-                                            <groupId>com.gogomaya.server</groupId>
+                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>payment-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
                                         </artifactItem>
                                         <artifactItem>
-                                            <groupId>com.gogomaya.integration</groupId>
+                                            <groupId>com.clemble.casino.integration</groupId>
                                             <artifactId>integration-management-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
                                         </artifactItem>
                                         <artifactItem>
-                                            <groupId>com.gogomaya.integration</groupId>
+                                            <groupId>com.clemble.casino.integration</groupId>
                                             <artifactId>integration-game</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>

@@ -40,7 +40,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         this.player = player;
 
         player.listen(construction, new GameSessionListener() {
-            @Override
+			@Override
+			@SuppressWarnings("unchecked")
             public void notify(Event event) {
                 if (event instanceof GameStartedEvent) {
                     GameStartedEvent<?> gameStartedEvent = ((GameStartedEvent<?>) event);

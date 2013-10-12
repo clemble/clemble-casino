@@ -142,7 +142,7 @@ public class TestConfiguration {
         @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
-        @Value("#{systemProperties['gogomaya.management.url'] ?: 'http://localhost:8080/picpacpoe-management/'}")
+        @Value("#{systemProperties['gogomaya.management.url'] ?: 'http://localhost:8080/integration-management-web/'}")
         public String baseUrl;
 
         public String getBaseUrl(){

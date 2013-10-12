@@ -40,7 +40,8 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
         this.accountOperations = checkNotNull(accountOperations);
     }
 
-    @Override
+	@Override
+	@SuppressWarnings("unchecked")
     final public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         gameConstructionOperations.addAll((Collection<? extends GameConstructionOperations<?>>)(Collection<?>) applicationContext.getBeansOfType(GameConstructionOperations.class).values());
     }

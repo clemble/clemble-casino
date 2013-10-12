@@ -58,7 +58,7 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
     }
 
     @Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void testPersistence() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         // Step 1. Making class to repositoyr association
         Map<Class<?>, JpaRepository> domainClassToRepository = new HashMap<>();
@@ -74,7 +74,6 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
                 for (Field field : domainClass.getDeclaredFields()) {
                     if((field.getModifiers() & Modifier.STATIC) > 0)
                             continue;
-                    @SuppressWarnings("rawtypes")
                     JpaRepository relatedEntityRepository = domainClassToRepository.get(field.getType());
                     if (relatedEntityRepository != null) {
                         field.setAccessible(true);
@@ -106,7 +105,7 @@ public class ObjectPersistenceTest extends ObjectTest implements ApplicationCont
         relatedEntityRepository.saveAndFlush(objectToSave);
     }
 
-    public Class<?> getDomainClass(JpaRepository repository) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+    public Class<?> getDomainClass(JpaRepository<?,?> repository) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException {
         RepositoryMetadata repositoryMetadata = fetchInterfaces(repository.getClass().getInterfaces());
         return repositoryMetadata.getDomainType();

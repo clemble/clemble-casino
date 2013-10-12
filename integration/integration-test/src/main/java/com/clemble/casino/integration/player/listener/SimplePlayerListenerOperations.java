@@ -26,10 +26,6 @@ import com.clemble.casino.configuration.NotificationHost;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.player.security.PlayerSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.websocket.DefaultWebSocketListener;
-import com.ning.http.client.websocket.WebSocket;
-import com.ning.http.client.websocket.WebSocketUpgradeHandler;
 
 public class SimplePlayerListenerOperations implements PlayerListenerOperations {
 
@@ -112,7 +108,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
             stompClient.subscribe(channel, new Listener() {
 
                 @Override
-                public void message(Map parameters, String message) {
+                public void message(@SuppressWarnings("rawtypes") Map parameters, String message) {
                     try {
                         System.out.println(playerSession.getPlayer() + " > " + message);
                         // Step 1. Reading game table
@@ -141,6 +137,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
         }
     }
 
+    /**
     private PlayerListenerControl addSockJSListener(final PlayerSession playerSession, final PlayerListener playerListener) {
         try {
             AsyncHttpClient asyncClient = new AsyncHttpClient();
@@ -184,5 +181,5 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
             throw new RuntimeException(e);
         }
     }
-
+	*/
 }
