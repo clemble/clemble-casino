@@ -17,5 +17,6 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>payment-common</artifactId>
         </dependency>
+
     </dependencies>
 </project>

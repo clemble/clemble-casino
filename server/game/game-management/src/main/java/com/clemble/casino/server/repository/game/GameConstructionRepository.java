@@ -20,8 +20,4 @@ public interface GameConstructionRepository extends JpaRepository<GameConstructi
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public <S extends GameConstruction> List<S> save(Iterable<S> entities);
 
-    @Override
-    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
-    public GameConstruction saveAndFlush(GameConstruction construction);
-
 }
