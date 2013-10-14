@@ -2,7 +2,6 @@ package com.clemble.casino.server.spring.common;
 
 import java.io.IOException;
 
-import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -46,13 +45,11 @@ public class JPASpringConfiguration implements SpringConfiguration {
     public JpaVendorAdapter jpaVendorAdapter;
 
     @Bean
-    @Singleton
     public JpaDialect jpaDialect() {
         return new HibernateJpaDialect();
     }
 
     @Bean
-    @Singleton
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager(entityManagerFactory());
         transactionManager.setJpaDialect(jpaDialect());
@@ -62,7 +59,6 @@ public class JPASpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    @Singleton
     public EntityManagerFactory entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
@@ -75,7 +71,6 @@ public class JPASpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    @Singleton
     public PersistenceExceptionTranslator persistenceExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }
@@ -87,7 +82,6 @@ public class JPASpringConfiguration implements SpringConfiguration {
         private ApplicationContext applicationContext;
 
         @Bean
-        @Singleton
         public JpaVendorAdapter jpaVendorAdapter() {
             HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
             hibernateJpaVendorAdapter.setDatabase(Database.H2);
@@ -97,7 +91,6 @@ public class JPASpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        @Singleton
         public EmbeddedDatabaseFactory dataSourceFactory() throws IOException {
             EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
             factory.setDatabaseName("gogomaya");
@@ -107,13 +100,11 @@ public class JPASpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        @Singleton
         public DataSource dataSource() throws IOException {
             return dataSourceFactory().getDatabase();
         }
 
         @Bean
-        @Singleton
         public ResourceDatabasePopulator databasePopulator() throws IOException {
             ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
             // Step 1. Searching for schema script files

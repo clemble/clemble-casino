@@ -1,6 +1,5 @@
 package com.clemble.casino.server.spring.social;
 
-import javax.inject.Singleton;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,37 +34,37 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     @Qualifier("playerProfileRepository")
     public PlayerProfileRepository playerProfileRepository;
 
-    @Bean @Singleton
+    @Bean
     public SocialConnectionDataAdapter socialConnectionDataAdapter() {
         return new SocialConnectionDataAdapter(connectionFactoryLocator(), usersConnectionRepository(), socialAdapterRegistry());
     }
 
-    @Bean @Singleton
+    @Bean
     public ConnectionFactoryRegistry connectionFactoryLocator() {
         ConnectionFactoryRegistry connectionFactoryRegistry = new ConnectionFactoryRegistry();
         connectionFactoryRegistry.addConnectionFactory(facebookConnectionFactory());
         return connectionFactoryRegistry;
     }
 
-    @Bean @Singleton
+    @Bean
     public FacebookConnectionFactory facebookConnectionFactory() {
         FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory("486714778051999", "cd4976a1ae74d3e70e804e1ae82b7eb6");
         return facebookConnectionFactory;
     }
 
-    @Bean @Singleton
+    @Bean
     public SocialConnectionAdapterRegistry socialAdapterRegistry() {
         SocialConnectionAdapterRegistry socialAdapterRegistry = new SocialConnectionAdapterRegistry();
         socialAdapterRegistry.register(new FacebookSocialAdapter());
         return socialAdapterRegistry;
     }
 
-    @Bean @Singleton
+    @Bean
     public ConnectionSignUp connectionSignUp() {
         return new SocialPlayerProfileCreator(socialAdapterRegistry());
     }
 
-    @Bean @Singleton
+    @Bean
     public UsersConnectionRepository usersConnectionRepository() {
         JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator(), Encryptors.noOpText());
         repository.setConnectionSignUp(connectionSignUp());

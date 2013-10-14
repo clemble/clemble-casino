@@ -1,7 +1,5 @@
 package com.clemble.casino.server.spring.web.game;
 
-import javax.inject.Singleton;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -105,68 +103,57 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     abstract public Game getGame();
 
     @Bean
-    @Singleton
     public GameSessionFactory<State> gameSessionFactory() {
         return new GameSessionFactory<State>(ticTacToeStateFactory(), gameSessionRepository);
     }
 
     @Bean
-    @Singleton
     public GameConstructionServerService picPacPoeConstructionService() {
         return new SimpleGameConstructionServerService(playerAccountService, playerNotificationService, gameConstructionRepository,
                 picPacPoeInitiatorService(), playerLockService, playerStateManager);
     }
 
     @Bean
-    @Singleton
     public GameInitiatorService picPacPoeInitiatorService() {
         return new SimpleGameInitiatorService(picPacPoeSessionProcessor(), playerStateManager);
     }
 
     @Bean
-    @Singleton
     abstract public GameStateFactory<State> ticTacToeStateFactory();
 
     @Bean
-    @Singleton
     @DependsOn("gameSpecificationRepository")
     public GameSpecificationConfigurationManager picPacPoeConfigurationManager() {
         return new GameSpecificationConfigurationManager(getGame(), gameSpecificationRepository);
     }
 
     @Bean
-    @Singleton()
     public GameProcessorFactory<State> picPacPoeProcessorFactory() {
         return new GameProcessorFactory<State>(gameSecurityAspectFactory, gameBetAspectFactory, gamePriceAspectFactory, gameTimeAspectFactory,
                 gameOutcomeAspectFactory);
     }
 
     @Bean
-    @Singleton
     public GameCacheService<State> picPacPoeCacheService() {
         return new GameCacheService<State>(gameConstructionRepository, gameSessionRepository, picPacPoeProcessorFactory(), ticTacToeStateFactory());
     }
 
     @Bean
-    @Singleton
     public GameSessionProcessor<State> picPacPoeSessionProcessor() {
         return new GameSessionProcessor<State>(getGame(), tableServerRegistry, gameSessionFactory(), picPacPoeCacheService(), playerNotificationService);
     }
 
     @Bean
-    @Singleton
     public GameConstructionController<State> picPacPoeConstructionController() {
         return new GameConstructionController<State>(getGame(), gameConstructionRepository, picPacPoeConstructionService(), gameSpecificationRegistry, tableServerRegistry);
     }
 
     @Bean
-    @Singleton
     public GameConfigurationManagerController picPacPoeConfigurationManagerController() {
         return new GameConfigurationManagerController(gameSpecificationRegistry);
     }
 
     @Bean
-    @Singleton
     public GameActionController<State> picPacPoeEngineController() {
         return new GameActionController<State>(getGame(), gameSessionRepository, picPacPoeSessionProcessor());
     }

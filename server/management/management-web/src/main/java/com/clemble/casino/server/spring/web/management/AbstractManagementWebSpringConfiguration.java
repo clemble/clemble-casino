@@ -27,7 +27,7 @@ import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.clemble.casino.server.web.management.ServerRegistryController;
 
 @Configuration
-@Import(value = { WebCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class })
+@Import(value = { OAuth2ServerSpringConfiguration.class, WebCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class })
 abstract public class AbstractManagementWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired

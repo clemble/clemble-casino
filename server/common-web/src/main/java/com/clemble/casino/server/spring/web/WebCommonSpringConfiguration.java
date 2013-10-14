@@ -1,7 +1,5 @@
 package com.clemble.casino.server.spring.web;
 
-import javax.inject.Singleton;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +26,6 @@ public class WebCommonSpringConfiguration extends WebMvcConfigurationSupport imp
     public ObjectMapper objectMapper;
 
     @Bean
-    @Singleton
     public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter() {
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
         messageConverter.setObjectMapper(objectMapper);
@@ -36,7 +33,6 @@ public class WebCommonSpringConfiguration extends WebMvcConfigurationSupport imp
     }
 
     @Bean
-    @Singleton
     @Override
     public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
 
@@ -47,7 +43,6 @@ public class WebCommonSpringConfiguration extends WebMvcConfigurationSupport imp
     }
 
     @Bean
-    @Singleton
     public HandlerExceptionResolver handlerExceptionResolver() {
         return new GogomayaHandlerExceptionResolver(objectMapper);
     }

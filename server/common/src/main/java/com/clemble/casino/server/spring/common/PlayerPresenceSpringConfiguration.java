@@ -1,7 +1,5 @@
 package com.clemble.casino.server.spring.common;
 
-import javax.inject.Singleton;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +44,6 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     public static class DefaultAndTest {
 
         @Bean
-        @Singleton
         public RedisConnectionFactory redisConnectionFactory() {
             return new LettuceConnectionFactory();
         }

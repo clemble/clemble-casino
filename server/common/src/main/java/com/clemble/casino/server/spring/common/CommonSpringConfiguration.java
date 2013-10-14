@@ -1,6 +1,5 @@
 package com.clemble.casino.server.spring.common;
 
-import javax.inject.Singleton;
 import javax.validation.Validation;
 
 import org.springframework.context.annotation.Bean;
@@ -19,13 +18,11 @@ import com.clemble.casino.error.GogomayaValidationService;
 public class CommonSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    @Singleton
     public PlayerLockService playerLockService() {
         return new JavaPlayerLockService();
     }
 
     @Bean
-    @Singleton
     public GogomayaValidationService gogomayaValidationService() {
         return new GogomayaValidationService(Validation.buildDefaultValidatorFactory());
     }

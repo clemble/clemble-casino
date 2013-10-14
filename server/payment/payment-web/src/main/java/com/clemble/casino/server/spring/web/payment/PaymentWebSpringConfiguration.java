@@ -1,7 +1,5 @@
 package com.clemble.casino.server.spring.web.payment;
 
-import javax.inject.Singleton;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -41,13 +39,11 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
     public PlayerAccountRepository playerAccountRepository;
 
     @Bean
-    @Singleton
     public PaymentTransactionController paymentTransactionController() {
         return new PaymentTransactionController(paymentTransactionRepository, paymentTransactionService);
     }
 
     @Bean
-    @Singleton
     public PlayerAccountController playerAccountController() {
         return new PlayerAccountController(playerAccountService, playerAccountRepository);
     }

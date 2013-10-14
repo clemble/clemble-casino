@@ -1,7 +1,5 @@
 package com.clemble.casino.server.spring.web;
 
-import javax.inject.Singleton;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +22,6 @@ public class ClientRestCommonSpringConfiguration {
     public ObjectMapper objectMapper;
 
     @Bean
-    @Singleton
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
 
