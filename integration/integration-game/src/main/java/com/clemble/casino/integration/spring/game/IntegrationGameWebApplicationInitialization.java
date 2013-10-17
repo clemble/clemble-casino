@@ -9,7 +9,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import com.clemble.casino.server.spring.web.BasicWebApplicationInitializer;
 
-public class IntegrationWebApplicationInitialization extends BasicWebApplicationInitializer {
+public class IntegrationGameWebApplicationInitialization extends BasicWebApplicationInitializer {
 
     @Override
     protected void doInit(ServletContext container) throws ServletException {

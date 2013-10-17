@@ -1,5 +1,7 @@
 package com.clemble.casino.server.spring.web.management;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.JdbcClientDetailsService;
-import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.implicit.ImplicitTokenGranter;
@@ -42,6 +43,9 @@ public class OAuth2ServerSpringConfiguration {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setClientDetailsService(clientDetailsService());
         defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
+        defaultTokenServices.setReuseRefreshToken(false);
+        defaultTokenServices.setRefreshTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30));
         return defaultTokenServices;
     }
 
