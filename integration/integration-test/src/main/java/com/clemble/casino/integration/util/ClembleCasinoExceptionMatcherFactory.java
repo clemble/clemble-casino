@@ -7,33 +7,33 @@ import java.util.Collection;
 import org.hamcrest.CustomMatcher;
 import org.hamcrest.Matcher;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
-import com.clemble.casino.error.GogomayaFailure;
-import com.clemble.casino.error.GogomayaFailureDescription;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleCasinoFailure;
+import com.clemble.casino.error.ClembleCasinoFailureDescription;
 import com.google.common.collect.ImmutableList;
 
-public class GogomayaExceptionMatcherFactory {
+public class ClembleCasinoExceptionMatcherFactory {
 
-    private GogomayaExceptionMatcherFactory() {
+    private ClembleCasinoExceptionMatcherFactory() {
         throw new IllegalAccessError();
     }
 
-    public static Matcher<GogomayaException> fromPossibleErrors(final GogomayaError... errors) {
-        final Collection<GogomayaError> expectedErrors = ImmutableList.<GogomayaError> copyOf(Arrays.asList(errors));
-        return new CustomMatcher<GogomayaException>(Arrays.toString(errors)) {
+    public static Matcher<ClembleCasinoException> fromPossibleErrors(final ClembleCasinoError... errors) {
+        final Collection<ClembleCasinoError> expectedErrors = ImmutableList.<ClembleCasinoError> copyOf(Arrays.asList(errors));
+        return new CustomMatcher<ClembleCasinoException>(Arrays.toString(errors)) {
 
             @Override
             public boolean matches(Object item) {
                 // Step 1. Sanity check
-                if (!(item instanceof GogomayaException))
+                if (!(item instanceof ClembleCasinoException))
                     return false;
                 // Step 2. Checking value
-                GogomayaFailureDescription failureDescription = ((GogomayaException) item).getFailureDescription();
+                ClembleCasinoFailureDescription failureDescription = ((ClembleCasinoException) item).getFailureDescription();
                 if (failureDescription == null || failureDescription.getProblems() == null || failureDescription.getProblems().isEmpty())
                     return false;
                 // Step 3. Accumulating errors
-                for (GogomayaFailure failure : failureDescription.getProblems()) {
+                for (ClembleCasinoFailure failure : failureDescription.getProblems()) {
                     if (expectedErrors.contains(failure.getError()))
                         return true;
                 }
@@ -44,22 +44,22 @@ public class GogomayaExceptionMatcherFactory {
 
     }
 
-    public static Matcher<GogomayaException> fromErrors(final GogomayaError... errors) {
-        final Collection<GogomayaError> expectedErrors = ImmutableList.<GogomayaError> copyOf(Arrays.asList(errors));
-        return new CustomMatcher<GogomayaException>(Arrays.toString(errors)) {
+    public static Matcher<ClembleCasinoException> fromErrors(final ClembleCasinoError... errors) {
+        final Collection<ClembleCasinoError> expectedErrors = ImmutableList.<ClembleCasinoError> copyOf(Arrays.asList(errors));
+        return new CustomMatcher<ClembleCasinoException>(Arrays.toString(errors)) {
 
             @Override
             public boolean matches(Object item) {
                 // Step 1. Sanity check
-                if (!(item instanceof GogomayaException))
+                if (!(item instanceof ClembleCasinoException))
                     return false;
                 // Step 2. Checking value
-                GogomayaFailureDescription failureDescription = ((GogomayaException) item).getFailureDescription();
+                ClembleCasinoFailureDescription failureDescription = ((ClembleCasinoException) item).getFailureDescription();
                 if (failureDescription == null || failureDescription.getProblems() == null || failureDescription.getProblems().isEmpty())
                     return false;
                 // Step 3. Accumulating errors
-                Collection<GogomayaError> actualErrors = new ArrayList<>();
-                for (GogomayaFailure failure : failureDescription.getProblems()) {
+                Collection<ClembleCasinoError> actualErrors = new ArrayList<>();
+                for (ClembleCasinoFailure failure : failureDescription.getProblems()) {
                     actualErrors.add(failure.getError());
                 }
                 // Step 4. Checking errors

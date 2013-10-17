@@ -12,12 +12,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.clemble.casino.error.GogomayaError;
+import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.player.session.SessionOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
-import com.clemble.casino.integration.util.GogomayaExceptionMatcherFactory;
+import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.player.security.PlayerSession;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -72,7 +72,7 @@ public class PlayerSessionOperationsITest {
         sessionOperations.end(player, currentSession);
         Assert.assertTrue(sessionOperations.get(player, currentSession.getSessionId()).expired());
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerSessionClosed));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerSessionClosed));
 
         sessionOperations.end(player, currentSession);
     }
@@ -86,7 +86,7 @@ public class PlayerSessionOperationsITest {
         PlayerSession currentSession = player.getSession();
         Assert.assertEquals(currentSession, sessionOperations.get(player, currentSession.getSessionId()));
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotSessionOwner));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotSessionOwner));
 
         sessionOperations.end(anotherPlayer, currentSession);
     }
@@ -99,7 +99,7 @@ public class PlayerSessionOperationsITest {
         // Step 2. When player was created he started session
         PlayerSession currentSession = player.getSession();
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotSessionOwner));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotSessionOwner));
 
         Assert.assertEquals(currentSession, sessionOperations.get(anotherPlayer, currentSession.getSessionId()));
     }

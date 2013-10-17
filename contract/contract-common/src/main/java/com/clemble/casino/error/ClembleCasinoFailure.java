@@ -1,7 +1,7 @@
 package com.clemble.casino.error;
 
-import com.clemble.casino.error.GogomayaErrorFormat.GogomayaFailureDeserializer;
-import com.clemble.casino.error.GogomayaErrorFormat.GogomayaFailureSerializer;
+import com.clemble.casino.error.ClembleCasinoErrorFormat.ClembleCasinoFailureDeserializer;
+import com.clemble.casino.error.ClembleCasinoErrorFormat.ClembleCasinoFailureSerializer;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.SessionAware;
 import com.clemble.casino.player.PlayerAware;
@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonSerialize(using = GogomayaFailureSerializer.class)
-@JsonDeserialize(using = GogomayaFailureDeserializer.class)
-public class GogomayaFailure implements PlayerAware, SessionAware {
+@JsonSerialize(using = ClembleCasinoFailureSerializer.class)
+@JsonDeserialize(using = ClembleCasinoFailureDeserializer.class)
+public class ClembleCasinoFailure implements PlayerAware, SessionAware {
 
     /**
      * Generated 12/06/13
@@ -20,19 +20,19 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
     private static final long serialVersionUID = 8151325637613551745L;
 
     final private String player;
-    final private GogomayaError error;
+    final private ClembleCasinoError error;
     final private GameSessionKey session;
 
-    public GogomayaFailure(final GogomayaError error) {
+    public ClembleCasinoFailure(final ClembleCasinoError error) {
         this(error, PlayerAware.DEFAULT_PLAYER, SessionAware.DEFAULT_SESSION);
     }
 
-    public GogomayaFailure(final GogomayaError error, final String playerId) {
+    public ClembleCasinoFailure(final ClembleCasinoError error, final String playerId) {
         this(error, playerId, SessionAware.DEFAULT_SESSION);
     }
 
     @JsonCreator
-    public GogomayaFailure(@JsonProperty("error") final GogomayaError error,
+    public ClembleCasinoFailure(@JsonProperty("error") final ClembleCasinoError error,
             @JsonProperty(PlayerAware.JSON_ID) final String player,
             @JsonProperty("session") final GameSessionKey session) {
         this.error = error;
@@ -40,7 +40,7 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
         this.player = player;
     }
 
-    public GogomayaError getError() {
+    public ClembleCasinoError getError() {
         return error;
     }
 
@@ -77,7 +77,7 @@ public class GogomayaFailure implements PlayerAware, SessionAware {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GogomayaFailure other = (GogomayaFailure) obj;
+        ClembleCasinoFailure other = (ClembleCasinoFailure) obj;
         if (error != other.error)
             return false;
         if (player != other.player)

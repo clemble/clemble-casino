@@ -1,7 +1,7 @@
 package com.clemble.casino.server.game.aspect.bet;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.event.client.BetEvent;
@@ -20,7 +20,7 @@ public class GameBetAspect<State extends GameState> extends BasicGameAspect<Stat
     public void beforeMove(State state, ClientEvent move) {
         if (move instanceof BetEvent) {
             if (!betRule.isValid((BetEvent) move)) {
-                throw GogomayaException.fromError(GogomayaError.GamePlayBetInvalid);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayBetInvalid);
             }
         }
     }

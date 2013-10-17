@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.clemble.casino.error.GogomayaValidationService;
+import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
 import com.clemble.casino.server.player.registration.SimplePlayerProfileRegistrationServerService;
@@ -33,7 +33,7 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("gogomayaValidationService")
-    public GogomayaValidationService gogomayaValidationService;
+    public ClembleCasinoValidationService gogomayaValidationService;
 
     @Autowired
     @Qualifier("playerStateManager")

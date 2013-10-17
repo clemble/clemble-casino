@@ -18,19 +18,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
-import com.clemble.casino.error.GogomayaFailureDescription;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleCasinoFailureDescription;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
-public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolver {
+public class ClembleCasinoHandlerExceptionResolver implements HandlerExceptionResolver {
     
-    final private Logger LOGGER = LoggerFactory.getLogger(GogomayaHandlerExceptionResolver.class);
+    final private Logger LOGGER = LoggerFactory.getLogger(ClembleCasinoHandlerExceptionResolver.class);
 
     final private ObjectMapper objectMapper;
 
-    public GogomayaHandlerExceptionResolver(ObjectMapper objectMapper) {
+    public ClembleCasinoHandlerExceptionResolver(ObjectMapper objectMapper) {
         this.objectMapper = checkNotNull(objectMapper);
     }
 
@@ -39,28 +39,28 @@ public class GogomayaHandlerExceptionResolver implements HandlerExceptionResolve
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         LOGGER.error("Error while processing {} with {}", request, handler);
         LOGGER.error("Log trace ", ex);
-        GogomayaFailureDescription gogomayaFailure = null;
-        if (ex instanceof GogomayaException) {
-            gogomayaFailure = ((GogomayaException) ex).getFailureDescription();
+        ClembleCasinoFailureDescription gogomayaFailure = null;
+        if (ex instanceof ClembleCasinoException) {
+            gogomayaFailure = ((ClembleCasinoException) ex).getFailureDescription();
         } else if (ex instanceof ServletRequestBindingException) {
-            Collection<GogomayaError> errors = new ArrayList<GogomayaError>();
+            Collection<ClembleCasinoError> errors = new ArrayList<ClembleCasinoError>();
             ServletRequestBindingException bindingException = (ServletRequestBindingException) ex;
             if (!bindingException.getMessage().contains("playerId")) {
-                errors.add(GogomayaError.BadRequestPlayerIdHeaderMissing);
+                errors.add(ClembleCasinoError.BadRequestPlayerIdHeaderMissing);
             }
             if (!bindingException.getMessage().contains("sessionId")) {
-                errors.add(GogomayaError.BadRequestSessionIdHeaderMissing);
+                errors.add(ClembleCasinoError.BadRequestSessionIdHeaderMissing);
             }
             if (!bindingException.getMessage().contains("tableId")) {
-                errors.add(GogomayaError.BadRequestTableIdHeaderMissing);
+                errors.add(ClembleCasinoError.BadRequestTableIdHeaderMissing);
             }
             if(errors.size() > 0)
-                gogomayaFailure = new GogomayaFailureDescription().setErrors(errors);
+                gogomayaFailure = new ClembleCasinoFailureDescription().setErrors(errors);
         }
 
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setHeader("Content-Type", "application/json");
-        gogomayaFailure = gogomayaFailure == null ? GogomayaFailureDescription.SERVER_ERROR : gogomayaFailure;
+        gogomayaFailure = gogomayaFailure == null ? ClembleCasinoFailureDescription.SERVER_ERROR : gogomayaFailure;
 
         try {
             objectMapper.writeValue(response.getOutputStream(), gogomayaFailure);

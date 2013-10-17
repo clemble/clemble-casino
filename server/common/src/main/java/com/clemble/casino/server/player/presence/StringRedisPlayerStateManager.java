@@ -25,8 +25,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 
 import com.clemble.casino.server.player.notification.PlayerNotificationListener;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.SessionAware;
@@ -104,7 +104,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     @Override
     public boolean markPlaying(final String player, final GameSessionKey sessionId) {
         if (!isAvailable(player))
-            throw GogomayaException.fromError(GogomayaError.PlayerSessionTimeout);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionTimeout);
         return markPlaying(Collections.singleton(player), sessionId);
     }
 

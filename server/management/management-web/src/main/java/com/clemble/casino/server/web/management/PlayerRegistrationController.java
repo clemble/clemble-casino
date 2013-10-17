@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
-import com.clemble.casino.error.GogomayaValidationService;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerIdentity;
@@ -35,13 +35,13 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     final private PlayerCredentialRepository playerCredentialRepository;
     final private PlayerIdentityRepository playerIdentityRepository;
     final private PlayerProfileRegistrationServerService playerProfileRegistrationService;
-    final private GogomayaValidationService validationService;
+    final private ClembleCasinoValidationService validationService;
     final private PlayerAccountServerService playerAccountServerService;
 
     public PlayerRegistrationController(final PlayerProfileRegistrationServerService playerProfileRegistrationService,
             final PlayerCredentialRepository playerCredentialRepository,
             final PlayerIdentityRepository playerIdentityRepository,
-            final GogomayaValidationService validationService,
+            final ClembleCasinoValidationService validationService,
             final PlayerAccountServerService playerAccountServerService) {
         this.playerAccountServerService = checkNotNull(playerAccountServerService);
         this.playerProfileRegistrationService = checkNotNull(playerProfileRegistrationService);
@@ -60,10 +60,10 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         PlayerCredential fetchedCredentials = playerCredentialRepository.findByEmail(playerCredentials.getEmail());
         // Step 2. If there is no such credentials, than user is unregistered
         if (fetchedCredentials == null)
-            throw GogomayaException.fromError(GogomayaError.EmailOrPasswordIncorrect);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
         // Step 3. Compare passwords
         if (!fetchedCredentials.getPassword().equals(playerCredentials.getPassword()))
-            throw GogomayaException.fromError(GogomayaError.EmailOrPasswordIncorrect);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
         // Step 4. Everything is fine, return Identity
         PlayerIdentity playerIdentity = loginRequest.getPlayerIdentity();
         playerIdentity.setPlayerId(fetchedCredentials.getPlayer());
@@ -121,7 +121,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
                 return playerIdentityRepository.findOne(fetchedCredentials.getPlayer());
             } else {
                 // Step 2.2 If password does not match this is an error
-                throw GogomayaException.fromError(GogomayaError.EmailAlreadyRegistered);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.EmailAlreadyRegistered);
             }
         }
         return null;

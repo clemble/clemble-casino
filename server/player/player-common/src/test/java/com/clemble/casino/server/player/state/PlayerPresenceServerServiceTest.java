@@ -17,7 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.Presence;
@@ -48,7 +48,7 @@ public class PlayerPresenceServerServiceTest {
         Assert.assertTrue(playerPresenceService.isAvailable(player));
     }
 
-    @Test(expected = GogomayaException.class)
+    @Test(expected = ClembleCasinoException.class)
     public void testMarkActiveIncorrect() {
         String player = String.valueOf(RANDOM.nextLong());
         long session = RANDOM.nextLong();

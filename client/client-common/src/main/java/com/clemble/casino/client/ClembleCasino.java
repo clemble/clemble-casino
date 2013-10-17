@@ -10,7 +10,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 
-public interface Gogomaya {
+public interface ClembleCasino {
 
     public PlayerProfileOperations getPlayerProfileOperations();
 

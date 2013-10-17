@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.configuration.ResourceLocationService;
-import com.clemble.casino.error.GogomayaValidationService;
+import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.configuration.ServerLocation;
 import com.clemble.casino.server.configuration.ServerRegistryServerService;
 import com.clemble.casino.server.configuration.SimpleServerRegistryServerService;
@@ -43,7 +43,7 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
             @Qualifier("playerProfileRegistrationService") PlayerProfileRegistrationServerService playerProfileRegistrationService,
             PlayerCredentialRepository playerCredentialRepository,
             PlayerIdentityRepository playerIdentityRepository,
-            GogomayaValidationService gogomayaValidationService,
+            ClembleCasinoValidationService gogomayaValidationService,
             @Qualifier("playerAccountService") PlayerAccountServerService playerAccountService) {
         return new PlayerRegistrationController(playerProfileRegistrationService, playerCredentialRepository, playerIdentityRepository,
                 gogomayaValidationService, playerAccountService);

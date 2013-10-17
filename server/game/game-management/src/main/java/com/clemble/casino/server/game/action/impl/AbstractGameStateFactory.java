@@ -2,8 +2,8 @@ package com.clemble.casino.server.game.action.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
@@ -28,7 +28,7 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
     public State constructState(final GameSession<State> session) {
         // Step 1. Sanity check
         if (session == null || session.getSpecification() == null) {
-            throw GogomayaException.fromError(GogomayaError.GameStateReCreationFailure);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameStateReCreationFailure);
         }
         GameConstruction construction = constructionRepository.findOne(session.getSession());
         // Step 2. Re creating state

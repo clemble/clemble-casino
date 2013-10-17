@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.server.player.lock.JavaPlayerLockService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
-import com.clemble.casino.error.GogomayaValidationService;
+import com.clemble.casino.error.ClembleCasinoValidationService;
 
 @Configuration
 @Import({ PropertiesSpringConfiguration.class,
@@ -23,8 +23,8 @@ public class CommonSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GogomayaValidationService gogomayaValidationService() {
-        return new GogomayaValidationService(Validation.buildDefaultValidatorFactory());
+    public ClembleCasinoValidationService gogomayaValidationService() {
+        return new ClembleCasinoValidationService(Validation.buildDefaultValidatorFactory());
     }
 
 }

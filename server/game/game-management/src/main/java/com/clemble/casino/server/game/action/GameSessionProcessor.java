@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.Game;
@@ -66,14 +66,14 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
     public State process(GameSessionKey session, ClientEvent move) {
         // Step 1. Sanity check
         if (move == null)
-            throw GogomayaException.fromError(GogomayaError.GamePlayMoveUndefined);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayMoveUndefined);
         // Step 2. Acquiring lock for session event processing
         GameCache<State> cache = cacheService.get(session);
         // Step 3. Checking
         switch (cache.getSession().getSessionState()) {
         case finished:
             if (!(move instanceof SurrenderEvent)) {
-                throw GogomayaException.fromError(GogomayaError.GamePlayGameEnded);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayGameEnded);
             }
             return cache.getSession().getState();
         default:

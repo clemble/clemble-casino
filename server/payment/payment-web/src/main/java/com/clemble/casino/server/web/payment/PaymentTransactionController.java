@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.service.PaymentTransactionService;
@@ -53,10 +53,10 @@ public class PaymentTransactionController implements PaymentTransactionService, 
         PaymentTransactionKey paymentTransactionId = new PaymentTransactionKey(source, transactionId);
         PaymentTransaction paymentTransaction = paymentTransactionRepository.findOne(paymentTransactionId);
         if (paymentTransaction == null)
-            throw GogomayaException.fromError(GogomayaError.PaymentTransactionNotExists);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionNotExists);
         // Step 2. Checking player is one of the participants
         if (!paymentTransaction.isParticipant(requesterId))
-            throw GogomayaException.fromError(GogomayaError.PaymentTransactionAccessDenied);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionAccessDenied);
         return paymentTransaction;
     }
     

@@ -2,7 +2,7 @@ package com.clemble.casino.server.player.registration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.error.GogomayaValidationService;
+import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
@@ -13,9 +13,9 @@ public class SimplePlayerProfileRegistrationServerService implements PlayerProfi
 
     final private PlayerProfileRepository playerProfileRepository;
     final private SocialConnectionDataAdapter socialConnectionDataAdapter;
-    final private GogomayaValidationService validationService;
+    final private ClembleCasinoValidationService validationService;
 
-    public SimplePlayerProfileRegistrationServerService(final GogomayaValidationService validationService,
+    public SimplePlayerProfileRegistrationServerService(final ClembleCasinoValidationService validationService,
             final PlayerProfileRepository playerProfileRepository,
             final SocialConnectionDataAdapter socialConnectionDataAdapter) {
         this.validationService = checkNotNull(validationService);

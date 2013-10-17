@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.clemble.casino.configuration.ResourceLocationService;
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
@@ -59,7 +59,7 @@ public class PlayerSessionController implements PlayerSessionService {
         PlayerSession playerSession = getPlayerSession(playerId, sessionId);
         // Step 2. Sanity check
         if (playerSession.expired())
-            throw GogomayaException.fromError(GogomayaError.PlayerSessionClosed);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed);
         playerSession.setExpirationTime(playerPresenceService.markOnline(playerId));
         playerSession = sessionRepository.saveAndFlush(playerSession);
         // Step 3. Specifying player resources
@@ -76,7 +76,7 @@ public class PlayerSessionController implements PlayerSessionService {
         // Step 1. Fetching player session
         PlayerSession playerSession = getPlayerSession(player, sessionId);
         if (playerSession.expired())
-            throw GogomayaException.fromError(GogomayaError.PlayerSessionClosed);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed);
         // Step 2. Notifying all listeners of the state change
         playerPresenceService.markOffline(player);
         // Step 3. Marking player state as ended
@@ -92,7 +92,7 @@ public class PlayerSessionController implements PlayerSessionService {
         // Step 2. Reading specific session
         PlayerSession playerSession = sessionRepository.findOne(sessionId);
         if (!playerSession.getPlayer().equals(playerId))
-            throw GogomayaException.fromError(GogomayaError.PlayerNotSessionOwner);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerNotSessionOwner);
         // Step 3. Returning session
         return playerSession;
     }

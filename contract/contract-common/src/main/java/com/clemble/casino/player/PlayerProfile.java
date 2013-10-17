@@ -14,7 +14,7 @@ import javax.persistence.Version;
 import org.hibernate.validator.constraints.URL;
 
 import com.clemble.casino.VersionAware;
-import com.clemble.casino.error.GogomayaError.Code;
+import com.clemble.casino.error.ClembleCasinoError.Code;
 import com.clemble.casino.error.validation.AgeConstraint;
 import com.clemble.casino.error.validation.MaxSize;
 import com.clemble.casino.error.validation.NickNameConstraint;

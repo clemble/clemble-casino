@@ -19,12 +19,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.clemble.casino.error.GogomayaError;
+import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
-import com.clemble.casino.integration.util.GogomayaExceptionMatcherFactory;
+import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentTransaction;
@@ -69,7 +69,7 @@ public class PlayerAccountOperationsITest {
 
         Player anotherPlayer = playerOperations.createPlayer();
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerAccountAccessDenied));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerAccountAccessDenied));
         accountOperations.getAccount(player, anotherPlayer.getPlayer());
     }
 
@@ -84,7 +84,7 @@ public class PlayerAccountOperationsITest {
         Player anotherPlayer = playerOperations.createPlayer();
         Assert.assertFalse(accountOperations.getTransactions(anotherPlayer).isEmpty());
         // Step 3. Checking no other player can access the transactions
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionAccessDenied));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
         accountOperations.getTransactions(player, anotherPlayer.getPlayer());
     }
 
@@ -92,7 +92,7 @@ public class PlayerAccountOperationsITest {
     public void testAccessNonExistent() {
         // Step 1. Checking player has no transactions to access
         Player player = playerOperations.createPlayer();
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionNotExists));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionNotExists));
         accountOperations.getTransaction(player, MoneySource.TicTacToe, "-1");
     }
 

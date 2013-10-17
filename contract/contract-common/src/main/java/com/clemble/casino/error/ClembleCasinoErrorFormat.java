@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-public class GogomayaErrorFormat {
+public class ClembleCasinoErrorFormat {
 
     /**
      * Custom {@link Date} Serializer, used by Jackson, through {@link JsonSerializer} annotation.
@@ -24,10 +24,10 @@ public class GogomayaErrorFormat {
      * @author Anton Oparin
      * 
      */
-    public static class GogomayaErrorSerializer extends JsonSerializer<GogomayaError> {
+    public static class ClembleCasinoErrorSerializer extends JsonSerializer<ClembleCasinoError> {
 
         @Override
-        public void serialize(GogomayaError error, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException,
+        public void serialize(ClembleCasinoError error, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException,
                 JsonProcessingException {
             if (error == null)
                 return;
@@ -42,10 +42,10 @@ public class GogomayaErrorFormat {
 
     }
 
-    public static class GogomayaErrorDeserializer extends JsonDeserializer<GogomayaError> {
+    public static class ClembleCasinoErrorDeserializer extends JsonDeserializer<ClembleCasinoError> {
 
         @Override
-        public GogomayaError deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        public ClembleCasinoError deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
             String code = null;
             JsonToken token = null;
             do {
@@ -57,7 +57,7 @@ public class GogomayaErrorFormat {
                 token = jp.nextToken();
             } while (token != null && token != JsonToken.END_OBJECT);
 
-            return GogomayaError.forCode(code);
+            return ClembleCasinoError.forCode(code);
         }
     }
 
@@ -67,10 +67,10 @@ public class GogomayaErrorFormat {
      * @author Anton Oparin
      * 
      */
-    public static class GogomayaFailureSerializer extends JsonSerializer<GogomayaFailure> {
+    public static class ClembleCasinoFailureSerializer extends JsonSerializer<ClembleCasinoFailure> {
 
         @Override
-        public void serialize(GogomayaFailure failure, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException,
+        public void serialize(ClembleCasinoFailure failure, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException,
                 JsonProcessingException {
             if (failure == null)
                 return;
@@ -101,10 +101,10 @@ public class GogomayaErrorFormat {
 
     }
 
-    public static class GogomayaFailureDeserializer extends JsonDeserializer<GogomayaFailure> {
+    public static class ClembleCasinoFailureDeserializer extends JsonDeserializer<ClembleCasinoFailure> {
 
         @Override
-        public GogomayaFailure deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        public ClembleCasinoFailure deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
             String code = null;
             JsonToken token = null;
             String player = PlayerAware.DEFAULT_PLAYER;
@@ -132,7 +132,7 @@ public class GogomayaErrorFormat {
                 token = jp.nextToken();
             } while (token != null && token != JsonToken.END_OBJECT);
 
-            return new GogomayaFailure(GogomayaError.forCode(code), player, session);
+            return new ClembleCasinoFailure(ClembleCasinoError.forCode(code), player, session);
         }
     }
 

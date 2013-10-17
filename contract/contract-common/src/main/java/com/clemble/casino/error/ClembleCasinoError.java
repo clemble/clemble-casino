@@ -9,15 +9,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.clemble.casino.error.GogomayaErrorFormat.GogomayaErrorDeserializer;
-import com.clemble.casino.error.GogomayaErrorFormat.GogomayaErrorSerializer;
+import com.clemble.casino.error.ClembleCasinoErrorFormat.ClembleCasinoErrorDeserializer;
+import com.clemble.casino.error.ClembleCasinoErrorFormat.ClembleCasinoErrorSerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonSerialize(using = GogomayaErrorSerializer.class)
-@JsonDeserialize(using = GogomayaErrorDeserializer.class)
-public enum GogomayaError {
+@JsonSerialize(using = ClembleCasinoErrorSerializer.class)
+@JsonDeserialize(using = ClembleCasinoErrorDeserializer.class)
+public enum ClembleCasinoError {
 
     ServerError(Code.SERVER_ERROR_CODE, "Server error"),
     ServerCriticalError(Code.SERVER_CRITICAL_ERROR_CODE, "Server critical error"),
@@ -102,14 +102,14 @@ public enum GogomayaError {
     PlayerSessionClosed(Code.PLAYER_SESSION_CLOSED_ERROR_CODE, "Player session already closed"),
     PlayerAccountAccessDenied(Code.PLAYER_ACCOUNT_ACCESS_DENIED, "Player account access denied");
 
-    final private static Map<String, GogomayaError> REGISTERED_ERRORS = new HashMap<String, GogomayaError>();
+    final private static Map<String, ClembleCasinoError> REGISTERED_ERRORS = new HashMap<String, ClembleCasinoError>();
 
     static {
         Set<String> existingCodes = new HashSet<String>();
         try {
-            for (Field field : GogomayaError.Code.class.getFields())
+            for (Field field : ClembleCasinoError.Code.class.getFields())
                 if ((field.getModifiers() & Modifier.STATIC) > 0 && field.getName().endsWith("_CODE")) {
-                    String fieldValue = String.valueOf(field.get(GogomayaError.Code.class));
+                    String fieldValue = String.valueOf(field.get(ClembleCasinoError.Code.class));
                     if (existingCodes.contains(fieldValue))
                         throw new IllegalArgumentException();
                     existingCodes.add(fieldValue);
@@ -119,9 +119,9 @@ public enum GogomayaError {
         }
 
         try {
-            for (Field field : GogomayaError.class.getFields())
-                if ((field.getModifiers() & Modifier.STATIC) > 0 && field.getType().equals(GogomayaError.class)) {
-                    GogomayaError gogomayaError = (GogomayaError) (field.get(GogomayaError.class));
+            for (Field field : ClembleCasinoError.class.getFields())
+                if ((field.getModifiers() & Modifier.STATIC) > 0 && field.getType().equals(ClembleCasinoError.class)) {
+                    ClembleCasinoError gogomayaError = (ClembleCasinoError) (field.get(ClembleCasinoError.class));
                     REGISTERED_ERRORS.put(gogomayaError.getCode(), gogomayaError);
                 }
         } catch (Exception e) {
@@ -134,7 +134,7 @@ public enum GogomayaError {
     @JsonProperty("description")
     final private String description;
 
-    private GogomayaError(final String newCode, final String newDescription) {
+    private ClembleCasinoError(final String newCode, final String newDescription) {
         this.code = newCode;
         this.description = newDescription;
     }
@@ -143,17 +143,17 @@ public enum GogomayaError {
         return REGISTERED_ERRORS.containsKey(code);
     }
 
-    public static GogomayaError forCode(String code) {
+    public static ClembleCasinoError forCode(String code) {
         return REGISTERED_ERRORS.get(code);
     }
 
-    public static Set<GogomayaError> forCodes(Collection<String> errorCodes) {
+    public static Set<ClembleCasinoError> forCodes(Collection<String> errorCodes) {
         errorCodes = errorCodes == null || errorCodes.size() == 0 ? Collections.singleton(Code.SERVER_ERROR_CODE) : errorCodes;
 
-        Set<GogomayaError> convertedErrors = new HashSet<GogomayaError>(errorCodes.size());
+        Set<ClembleCasinoError> convertedErrors = new HashSet<ClembleCasinoError>(errorCodes.size());
         for (String errorCode : errorCodes) {
-            GogomayaError gogomayaError = GogomayaError.forCode(errorCode);
-            convertedErrors.add(gogomayaError != null ? gogomayaError : GogomayaError.ServerError);
+            ClembleCasinoError gogomayaError = ClembleCasinoError.forCode(errorCode);
+            convertedErrors.add(gogomayaError != null ? gogomayaError : ClembleCasinoError.ServerError);
         }
 
         return convertedErrors;

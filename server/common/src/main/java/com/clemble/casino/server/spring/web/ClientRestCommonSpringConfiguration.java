@@ -10,7 +10,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
-import com.clemble.casino.server.web.error.GogomayaRestErrorHandler;
+import com.clemble.casino.server.web.error.ClembleCasinoRestErrorHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
@@ -31,7 +31,7 @@ public class ClientRestCommonSpringConfiguration {
             }
         }
 
-        restTemplate.setErrorHandler(new GogomayaRestErrorHandler(objectMapper));
+        restTemplate.setErrorHandler(new ClembleCasinoRestErrorHandler(objectMapper));
         return restTemplate;
     }
 

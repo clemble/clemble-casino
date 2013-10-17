@@ -7,14 +7,14 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.clemble.casino.error.GogomayaException;
-import com.clemble.casino.error.GogomayaFailureDescription;
+import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleCasinoFailureDescription;
 
-public class GogomayaRestErrorHandler implements ResponseErrorHandler {
+public class ClembleCasinoRestErrorHandler implements ResponseErrorHandler {
 
     final ObjectMapper objectMapper;
 
-    public GogomayaRestErrorHandler(ObjectMapper objectMapper) {
+    public ClembleCasinoRestErrorHandler(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -31,8 +31,8 @@ public class GogomayaRestErrorHandler implements ResponseErrorHandler {
         String errorMessage = new String(buffer);
         // Step 2. Checking that response is of JSON type
         assert response.getHeaders().getContentType().toString().contains(MediaType.APPLICATION_JSON_VALUE) : errorMessage;
-        GogomayaFailureDescription description = objectMapper.readValue(errorMessage, GogomayaFailureDescription.class);
+        ClembleCasinoFailureDescription description = objectMapper.readValue(errorMessage, ClembleCasinoFailureDescription.class);
         // Step 3. Generating GogomayaException
-        throw GogomayaException.fromDescription(description);
+        throw ClembleCasinoException.fromDescription(description);
     }
 }

@@ -6,11 +6,11 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ValidatorFactory;
 
-public class GogomayaValidationService {
+public class ClembleCasinoValidationService {
 
     final private ValidatorFactory validatorFactory;
 
-    public GogomayaValidationService(ValidatorFactory validatorFactory) {
+    public ClembleCasinoValidationService(ValidatorFactory validatorFactory) {
         if (validatorFactory == null)
             throw new NullPointerException();
         this.validatorFactory = validatorFactory;
@@ -28,6 +28,6 @@ public class GogomayaValidationService {
         }
         // Step 3. Generating Gogomaya error
         if (errorCodes.size() > 0)
-            throw GogomayaException.fromCodes(errorCodes);
+            throw ClembleCasinoException.fromCodes(errorCodes);
     }
 }

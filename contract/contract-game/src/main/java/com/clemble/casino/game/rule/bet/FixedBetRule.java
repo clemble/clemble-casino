@@ -2,8 +2,8 @@ package com.clemble.casino.game.rule.bet;
 
 import java.util.Arrays;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.event.client.BetEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,11 +43,11 @@ public class FixedBetRule implements BetRule {
 
     public static FixedBetRule create(long[] useBets) {
         if (useBets == null || useBets.length == 0)
-            throw GogomayaException.fromError(GogomayaError.ClientJsonFormatError);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.ClientJsonFormatError);
         long[] bets = new long[useBets.length];
         for (int i = 0; i < useBets.length; i++) {
             if (useBets[i] <= 0)
-                throw GogomayaException.fromError(GogomayaError.ClientJsonFormatError);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.ClientJsonFormatError);
             bets[i] = useBets[i];
         }
         return new FixedBetRule(bets);

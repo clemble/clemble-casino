@@ -16,10 +16,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.clemble.casino.error.GogomayaError;
+import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
-import com.clemble.casino.integration.util.GogomayaExceptionMatcherFactory;
+import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.test.random.ObjectGenerator;
 
@@ -61,7 +61,7 @@ public class PlayerProfileOperationsITest {
     public void testProfileReadNonExistent() {
         Player player = playerOperations.createPlayer();
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerProfileDoesNotExists));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerProfileDoesNotExists));
 
         playerProfileOperations.get(player, "-1");
     }
@@ -117,7 +117,7 @@ public class PlayerProfileOperationsITest {
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotProfileOwner));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotProfileOwner));
 
         Assert.assertEquals(newProfile, playerProfileOperations.put(anotherPlayer, player.getPlayer(), newProfile));
     }
@@ -133,7 +133,7 @@ public class PlayerProfileOperationsITest {
 
         PlayerProfile newProfile = null;
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromPossibleErrors(GogomayaError.PlayerProfileInvalid, GogomayaError.ServerError));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromPossibleErrors(ClembleCasinoError.PlayerProfileInvalid, ClembleCasinoError.ServerError));
 
         Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayer(), newProfile));
     }
@@ -150,7 +150,7 @@ public class PlayerProfileOperationsITest {
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(RandomStringUtils.random(5));
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PlayerNotProfileOwner));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotProfileOwner));
 
         Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayer(), newProfile));
     }

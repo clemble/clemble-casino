@@ -3,8 +3,8 @@ package com.clemble.casino.integration.game;
 import java.util.Collection;
 
 import com.clemble.casino.base.ActionLatch;
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
@@ -56,7 +56,7 @@ public class NumberState implements GameState {
     public <State extends GameState> GameServerEvent<State> process(GameSession<State> session, ClientEvent clientEvent) {
         // Step 1. Processing Select cell move
         if (outcome != null) {
-            throw GogomayaException.fromError(GogomayaError.GamePlayGameEnded);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayGameEnded);
         }
 
         GameServerEvent<State> resultEvent = null;
@@ -93,7 +93,7 @@ public class NumberState implements GameState {
         }
         // Step 3. Sanity check
         if (resultEvent == null)
-            throw GogomayaException.fromError(GogomayaError.GamePlayMoveNotSupported);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayMoveNotSupported);
         // Step 4. Updating version and returning event
         version++;
         return resultEvent;

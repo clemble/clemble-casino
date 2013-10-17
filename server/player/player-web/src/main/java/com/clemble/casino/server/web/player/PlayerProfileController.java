@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
@@ -33,7 +33,7 @@ public class PlayerProfileController implements PlayerProfileService {
         PlayerProfile playerProfile = profileRepository.findOne(playerId);
         // Step 2. Checking profile
         if(playerProfile == null)
-            throw GogomayaException.fromError(GogomayaError.PlayerProfileDoesNotExists);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileDoesNotExists);
         // Step 3. Returning profile
         return playerProfile;
     }
@@ -43,9 +43,9 @@ public class PlayerProfileController implements PlayerProfileService {
     public @ResponseBody PlayerProfile updatePlayerProfile(@PathVariable("playerId") String player, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (playerProfile == null)
-            throw GogomayaException.fromError(GogomayaError.PlayerProfileInvalid);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileInvalid);
         if (!playerProfile.getPlayer().equals(player))
-            throw GogomayaException.fromError(GogomayaError.PlayerNotProfileOwner);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerNotProfileOwner);
         playerProfile.setPlayer(player);
         // Step 2. Updating Profile
         return profileRepository.save(playerProfile);

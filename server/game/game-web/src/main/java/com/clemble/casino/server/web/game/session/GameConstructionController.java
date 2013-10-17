@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -57,7 +57,7 @@ public class GameConstructionController<State extends GameState> implements Game
     public @ResponseBody GameConstruction construct(@RequestHeader("playerId") final String playerId, @RequestBody final GameRequest gameRequest) {
         // Step 1. Checking that provided specification was valid
         if (!configurationManager.getSpecificationOptions(gameRequest.getSpecification().getName().getGame()).valid(gameRequest.getSpecification()))
-            throw GogomayaException.fromError(GogomayaError.GameSpecificationInvalid);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         // Step 2. Invoking actual matching service
         return constructionService.construct(gameRequest);
     }
@@ -71,7 +71,7 @@ public class GameConstructionController<State extends GameState> implements Game
         GameConstruction construction = constructionRepository.findOne(new GameSessionKey(game, session));
         // Step 2. Sending error in case resource not found
         if (construction == null)
-            throw GogomayaException.fromError(GogomayaError.GameConstructionDoesNotExistent);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionDoesNotExistent);
         // Step 3. Returning construction
         return construction;
     }

@@ -17,11 +17,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.clemble.casino.error.GogomayaError;
+import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
-import com.clemble.casino.integration.util.GogomayaExceptionMatcherFactory;
+import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.MoneySource;
@@ -51,7 +51,7 @@ public class PaymentTransactionOperationsITest {
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayer("-1").setAmount(Money.create(Currency.FakeMoney, 50)))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayer("-2").setAmount(Money.create(Currency.FakeMoney, 50)));
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionUnknownPlayers));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionUnknownPlayers));
 
         paymentTransactionOperations.perform(paymentTransaction);
     }
@@ -70,7 +70,7 @@ public class PaymentTransactionOperationsITest {
                         new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)));
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionInvalid));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionInvalid));
 
         paymentTransactionOperations.perform(paymentTransaction);
     }
@@ -142,7 +142,7 @@ public class PaymentTransactionOperationsITest {
         assertEquals(paymentTransaction, paymentTransactionOperations.get(player, source, String.valueOf(transactionId)));
         assertEquals(paymentTransaction, paymentTransactionOperations.get(anotherPlayer, source, String.valueOf(transactionId)));
 
-        expectedException.expect(GogomayaExceptionMatcherFactory.fromErrors(GogomayaError.PaymentTransactionAccessDenied));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
         assertEquals(paymentTransaction, paymentTransactionOperations.get(therdPlayer, source, String.valueOf(transactionId)));
     }
 

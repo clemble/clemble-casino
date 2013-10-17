@@ -47,7 +47,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
-import com.clemble.casino.server.web.error.GogomayaRestErrorHandler;
+import com.clemble.casino.server.web.error.ClembleCasinoRestErrorHandler;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 
@@ -167,7 +167,7 @@ public class TestConfiguration {
                 }
             }
 
-            restTemplate.setErrorHandler(new GogomayaRestErrorHandler(objectMapper));
+            restTemplate.setErrorHandler(new ClembleCasinoRestErrorHandler(objectMapper));
             return restTemplate;
         }
 

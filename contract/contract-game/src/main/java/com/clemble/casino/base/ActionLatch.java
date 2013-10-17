@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.ClientEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -87,12 +87,12 @@ public class ActionLatch implements Serializable {
         ClientEvent event = actions.get(participant);
         if (event instanceof ExpectedAction) {
             if (expectedClass != null && action.getClass() != expectedClass)
-                throw GogomayaException.fromError(GogomayaError.GamePlayWrongMoveType);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayWrongMoveType);
             return actions.put(participant, action);
         } else if (event != null) {
-            throw GogomayaException.fromError(GogomayaError.GamePlayMoveAlreadyMade);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayMoveAlreadyMade);
         }
-        throw GogomayaException.fromError(GogomayaError.GamePlayNoMoveExpected);
+        throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayNoMoveExpected);
     }
 
     public boolean complete() {

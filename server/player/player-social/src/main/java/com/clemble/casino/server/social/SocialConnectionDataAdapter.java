@@ -10,8 +10,8 @@ import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.SocialConnectionData;
 import com.google.common.collect.ImmutableSet;
 
@@ -34,7 +34,7 @@ public class SocialConnectionDataAdapter {
     public String register(SocialConnectionData socialConnectionData) {
         // Step 1. Sanity check
         if (socialConnectionData == null)
-            throw GogomayaException.fromError(GogomayaError.SocialConnectionInvalid);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
         // Step 2. Checking if user already exists
         String player = null;
 
@@ -52,7 +52,7 @@ public class SocialConnectionDataAdapter {
                 ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(player);
                 connectionRepository.updateConnection(connection);
             } else {
-                throw GogomayaException.fromError(GogomayaError.SocialConnectionInvalid);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
             }
         } else if (existingUsers.size() == 0) {
             // Step 2. Converting SocialConnectionData to ConnectionData in accordance with the provider
@@ -65,7 +65,7 @@ public class SocialConnectionDataAdapter {
             // Check that this logic remains intact
             player = usersConnectionRepository.findUserIdsWithConnection(connection).iterator().next();
         } else {
-            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCriticalError);
         }
         return player;
     }
@@ -73,7 +73,7 @@ public class SocialConnectionDataAdapter {
     public SocialConnectionData add(String playerId, SocialConnectionData socialConnectionData) {
         // Step 1. Sanity check
         if (socialConnectionData == null)
-            throw GogomayaException.fromError(GogomayaError.SocialConnectionInvalid);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
         // Step 2. Creating connection to Social network
         ConnectionData connectionData = socialAdapterRegistry.getSocialAdapter(socialConnectionData.getProviderId()).toConnectionData(socialConnectionData);
         Connection<?> connection = connectionFactoryLocator.getConnectionFactory(connectionData.getProviderId()).createConnection(connectionData);
@@ -82,7 +82,7 @@ public class SocialConnectionDataAdapter {
         if (existingUsers.size() == 1) {
             String existingUser = existingUsers.iterator().next();
             if (!existingUser.equals(playerId)) {
-                throw GogomayaException.fromError(GogomayaError.SocialConnectionAlreadyRegistered);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionAlreadyRegistered);
             }
         }
         // Step 4. Adding connection to player connection repository

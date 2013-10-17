@@ -5,8 +5,8 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -45,7 +45,7 @@ public class JavaPlayerLockService implements PlayerLockService {
                     playerGroupLock.lock.lock();
                 }
             } catch (InterruptedException e) {
-                throw GogomayaException.fromError(GogomayaError.PlayerLockAcquireFailure);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerLockAcquireFailure);
             }
         }
     }

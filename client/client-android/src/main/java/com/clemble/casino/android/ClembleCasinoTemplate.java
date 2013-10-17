@@ -23,7 +23,7 @@ import com.clemble.casino.payment.service.PaymentTransactionService;
 import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.clemble.casino.client.Gogomaya;
+import com.clemble.casino.client.ClembleCasino;
 import com.clemble.casino.client.game.service.GameActionOperations;
 import com.clemble.casino.client.game.service.GameConstructionOperations;
 import com.clemble.casino.client.game.service.SimpleGameActionOperations;
@@ -39,7 +39,7 @@ import com.clemble.casino.client.player.service.SimplePlayerSessionOperations;
 import com.clemble.casino.client.service.RestClientService;
 import com.clemble.casino.event.listener.EventListenersManager;
 
-public class GogomayaTemplate implements Gogomaya {
+public class ClembleCasinoTemplate implements ClembleCasino {
 
     final private String player;
     final private RestClientService restClient;
@@ -50,7 +50,7 @@ public class GogomayaTemplate implements Gogomaya {
     final private PaymentTransactionOperations paymentTransactionOperations;
     final private Map<Game, GameConstructionOperations> gameToConstructionOperations;
 
-    public GogomayaTemplate(RestClientService restClient, ObjectMapper objectMapper) throws IOException {
+    public ClembleCasinoTemplate(RestClientService restClient, ObjectMapper objectMapper) throws IOException {
         this.player = checkNotNull(restClient).getPlayer();
         this.restClient = checkNotNull(restClient);
 

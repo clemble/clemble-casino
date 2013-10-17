@@ -9,8 +9,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -89,7 +89,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
     public GameConstruction register(AutomaticGameRequest request) {
         // Step 1. Sanity check
         if (request == null)
-            throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState);
         PlayerPresence playerPresence = playerStateManager.getPresence(request.getPlayer());
         if (playerPresence.getPresence() == Presence.playing) {
             GameConstruction activeConstruction = constructionRepository.findOne(playerPresence.getSession());
@@ -111,7 +111,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
                 GameSpecificationKey constructionKey = request.getSpecification().getName();
                 specificationQueue = PENDING_CONSTRUCTIONS.get(constructionKey);
             } catch (ExecutionException e) {
-                throw GogomayaException.fromError(GogomayaError.ServerCacheError);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCacheError);
             }
             // Step 3. Processing request
             pendingConstuction = specificationQueue.poll();

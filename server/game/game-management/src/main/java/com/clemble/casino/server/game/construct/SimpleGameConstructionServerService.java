@@ -6,8 +6,8 @@ import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.clemble.casino.base.ActionLatch;
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
@@ -53,18 +53,18 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
     final public GameConstruction construct(GameRequest request) {
         // Step 1. Sanity check
         if (request == null || request.getSpecification() == null)
-            throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidRequest);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidRequest);
         // Step 2. Checking players can afford operations
         // Step 2.1. Checking initiator
         Money price = request.getSpecification().getPrice();
         if (!playerAccountService.canAfford(request.getPlayer(), price))
-            throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInsufficientMoney);
         if (request instanceof AutomaticGameRequest) {
             return automaticGameInitiatorManager.register((AutomaticGameRequest) request);
         }
         // Step 2.2. Checking opponents
         if (!playerAccountService.canAfford(request.getParticipants(), price))
-            throw GogomayaException.fromError(GogomayaError.GameConstructionInsufficientMoney);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInsufficientMoney);
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(request);
         construction.setState(GameConstructionState.pending);
@@ -83,7 +83,7 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
     final public GameConstruction invitationResponsed(InvitationResponseEvent response) {
         // Step 1. Sanity check
         if (response == null)
-            throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidInvitationResponse);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse);
         return tryAcceptResponce(response);
     }
 
@@ -92,9 +92,9 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
             // Step 1. Checking associated construction
             GameConstruction construction = constructionRepository.findOne(response.getSession());
             if (construction == null)
-                throw GogomayaException.fromError(GogomayaError.GameConstructionDoesNotExistent);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionDoesNotExistent);
             if (construction.getState() != GameConstructionState.pending)
-                throw GogomayaException.fromError(GogomayaError.GameConstructionInvalidState);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState);
             // Step 2. Checking if player is part of the game
             ActionLatch responseLatch = construction.getResponses();
             responseLatch.put(response.getPlayer(), response);

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 
-import com.clemble.casino.error.GogomayaError.Code;
+import com.clemble.casino.error.ClembleCasinoError.Code;
 import com.clemble.casino.error.validation.MaxSize;
 import com.clemble.casino.error.validation.MinSize;
 import com.clemble.casino.error.validation.PasswordConstraint;

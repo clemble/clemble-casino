@@ -2,8 +2,8 @@ package com.clemble.casino.server.game.construct;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.error.GogomayaError;
-import com.clemble.casino.error.GogomayaException;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
@@ -32,11 +32,11 @@ public class SimpleGameInitiatorService implements GameInitiatorService {
     public void initiate(GameConstruction construction) {
         GameRequest request = construction.getRequest();
         if (request instanceof AutomaticGameRequest) {
-            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCriticalError);
         } else if (request instanceof AvailabilityGameRequest) {
             availabilityGameInitiatorManager.register(construction);
         } else {
-            throw GogomayaException.fromError(GogomayaError.ServerCriticalError);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCriticalError);
         }
     }
 
