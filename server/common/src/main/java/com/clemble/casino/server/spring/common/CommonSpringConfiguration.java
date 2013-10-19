@@ -6,15 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.lock.JavaPlayerLockService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
-import com.clemble.casino.error.ClembleCasinoValidationService;
 
 @Configuration
 @Import({ PropertiesSpringConfiguration.class,
-        RabbitSpringConfiguration.class,
-        JPASpringConfiguration.class,
-        CouchbaseSpringConfiguration.class })
+        RabbitSpringConfiguration.class})
 public class CommonSpringConfiguration implements SpringConfiguration {
 
     @Bean

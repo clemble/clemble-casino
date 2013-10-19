@@ -6,8 +6,8 @@ import java.util.List;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.rule.visibility.VisibilityRule;
 import com.clemble.casino.game.specification.GameSpecification;
-import com.clemble.casino.money.Currency;
-import com.clemble.casino.money.Money;
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
 
 public class GameAccountFactory {
 

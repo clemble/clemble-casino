@@ -9,8 +9,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 import com.clemble.casino.server.configuration.ServerRegistryServerService;

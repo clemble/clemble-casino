@@ -6,17 +6,11 @@ import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import com.clemble.casino.event.ClientEvent;
-import com.clemble.casino.server.hibernate.JsonHibernateType;
 
 @Embeddable
-@TypeDef(name = "gameMove", typeClass = JsonHibernateType.class, defaultForType = ClientEvent.class, parameters = { @Parameter(
-        name = JsonHibernateType.CLASS_NAME_PARAMETER,
-        value = "com.clemble.casino.event.ClientEvent") })
 public class MadeMove implements Serializable {
 
     /**
@@ -27,7 +21,7 @@ public class MadeMove implements Serializable {
     @Column(name = "MOVE_ID")
     private int moveId;
 
-    @Type(type = "gameMove")
+    @Type(type = "com.clemble.casino.event.ClientEventHibernate")
     @Column(name = "GAME_MOVE", length = 512)
     private ClientEvent move;
 

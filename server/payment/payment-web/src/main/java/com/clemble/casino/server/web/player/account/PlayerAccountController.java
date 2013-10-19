@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.clemble.casino.money.Currency;
-import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
-import com.clemble.casino.server.repository.player.PlayerAccountRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 

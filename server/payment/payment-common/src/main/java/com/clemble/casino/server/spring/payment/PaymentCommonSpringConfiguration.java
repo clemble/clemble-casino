@@ -10,15 +10,15 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.server.configuration.ServerRegistryServerService;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.payment.RestPaymentTransactionServerService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.account.RestPlayerAccountServerService;
-import com.clemble.casino.server.configuration.ServerRegistryServerService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.ServerRegistrySpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;

@@ -14,10 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
 
 import com.clemble.casino.VersionAware;
 import com.clemble.casino.base.ActionLatch;
@@ -25,17 +22,9 @@ import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.SessionAware;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
-import com.clemble.casino.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_SESSION_CONSTRUCTION")
-@TypeDefs({
-        @TypeDef(name = "game_request", typeClass = JsonHibernateType.class, defaultForType = GameRequest.class, parameters = { @Parameter(
-                name = JsonHibernateType.CLASS_NAME_PARAMETER,
-                value = "com.clemble.casino.game.construct.GameRequest") }),
-        @TypeDef(name = "action_latch", typeClass = JsonHibernateType.class, defaultForType = ActionLatch.class, parameters = { @Parameter(
-                name = JsonHibernateType.CLASS_NAME_PARAMETER,
-                value = "com.clemble.casino.base.ActionLatch") }) })
 public class GameConstruction implements SessionAware, VersionAware {
 
     /**
@@ -50,7 +39,7 @@ public class GameConstruction implements SessionAware, VersionAware {
         strategy = "com.clemble.casino.game.GameSessionKeyGenerator")
     private GameSessionKey session;
 
-    @Type(type = "game_request")
+    @Type(type = "com.clemble.casino.game.construct.GameRequestHibernate")
     @Column(name = "REQUEST", length = 8192, nullable = false)
     private GameRequest request;
 
@@ -58,7 +47,7 @@ public class GameConstruction implements SessionAware, VersionAware {
     @Enumerated(EnumType.STRING)
     private GameConstructionState state;
 
-    @Type(type = "action_latch")
+    @Type(type = "com.clemble.casino.base.ActionLatchHibernate")
     @Column(name = "RESPONSES", length = 8192, nullable = false)
     private ActionLatch responses;
 

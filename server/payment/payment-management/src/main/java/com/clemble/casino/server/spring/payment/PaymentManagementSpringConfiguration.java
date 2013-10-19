@@ -11,12 +11,12 @@ import com.clemble.casino.server.payment.PaymentTransactionServerServiceImpl;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.account.PlayerAccountServerServiceImpl;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
-import com.clemble.casino.server.repository.player.PlayerAccountRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 
 @Configuration
-@Import(CommonSpringConfiguration.class)
+@Import({CommonSpringConfiguration.class, PaymentJPASpringConfiguration.class})
 public class PaymentManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired

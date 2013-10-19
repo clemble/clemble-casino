@@ -14,16 +14,11 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.TypeDef;
-
-import com.clemble.casino.money.Currency;
-import com.clemble.casino.money.Money;
-import com.clemble.casino.money.MoneyHibernate;
-import com.clemble.casino.payment.PaymentTransactionKey;
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
 
 @Entity
 @Table(name = "PAYMENT_TRANSACTION")
-@TypeDef(name = "money", typeClass = MoneyHibernate.class)
 public class PaymentTransaction implements Serializable {
 
     /**

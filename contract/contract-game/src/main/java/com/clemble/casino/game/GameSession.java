@@ -18,26 +18,17 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
 
 import com.clemble.casino.VersionAware;
 import com.clemble.casino.event.ClientEvent;
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.client.MadeMove;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.game.specification.GameSpecificationAware;
-import com.clemble.casino.server.hibernate.JsonHibernateType;
 
 @Entity
 @Table(name = "GAME_SESSION")
-@TypeDefs(value = { @TypeDef(name = "gameState",
-    typeClass = JsonHibernateType.class,
-    defaultForType = GameState.class, parameters = { @Parameter(name = JsonHibernateType.CLASS_NAME_PARAMETER, value = "com.clemble.casino.game.GameState") }) })
 public class GameSession<State extends GameState> implements GameSpecificationAware, SessionAware, VersionAware, Serializable {
 
     /**
@@ -68,7 +59,7 @@ public class GameSession<State extends GameState> implements GameSpecificationAw
         joinColumns = {@JoinColumn(name = "SESSION_ID"), @JoinColumn(name = "GAME")})
     private List<MadeMove> madeMoves = new ArrayList<MadeMove>();
 
-    @Type(type = "gameState")
+    @Type(type = "com.clemble.casino.game.GameStateHibernate")
     @Column(name = "GAME_STATE", length = 4096)
     private State state;
 

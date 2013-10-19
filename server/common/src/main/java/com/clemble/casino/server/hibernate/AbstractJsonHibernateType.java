@@ -5,23 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Properties;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
 import com.clemble.casino.json.CustomJacksonAnnotationIntrospector;
 import com.clemble.casino.json.ObjectMapperUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonHibernateType<T extends Serializable> implements ParameterizedType, UserType {
+public class AbstractJsonHibernateType<T extends Serializable> implements UserType {
 
-    final public static String CLASS_NAME_PARAMETER = "className";
-
+    final private Class<T> targetClass;
     final private static ObjectMapper OBJECT_MAPPER;
-
     final private static int[] TYPES = new int[] { Types.VARCHAR };
 
     static {
@@ -29,7 +25,10 @@ public class JsonHibernateType<T extends Serializable> implements ParameterizedT
         OBJECT_MAPPER.setAnnotationIntrospector(new CustomJacksonAnnotationIntrospector());
     }
 
-    private Class<T> targetClass;
+    protected AbstractJsonHibernateType(Class<T> targetClasss) {
+        this.targetClass = targetClasss;
+    }
+
 
     @Override
     public int[] sqlTypes() {
@@ -65,19 +64,6 @@ public class JsonHibernateType<T extends Serializable> implements ParameterizedT
             ignore.printStackTrace();
         }
         st.setString(index, jsonPresentation);
-    }
-
-    @Override
-    @SuppressWarnings({ "static-access", "unchecked" })
-    public synchronized void setParameterValues(final Properties parameters) {
-        if (parameters.contains(CLASS_NAME_PARAMETER))
-            throw new IllegalArgumentException("Class name not provided");
-        String className = parameters.get(CLASS_NAME_PARAMETER).toString();
-        try {
-            targetClass = (Class<T>) getClass().forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

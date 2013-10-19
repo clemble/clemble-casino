@@ -15,8 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.clemble.casino.integration.player.Player;
-import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
 import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerGender;

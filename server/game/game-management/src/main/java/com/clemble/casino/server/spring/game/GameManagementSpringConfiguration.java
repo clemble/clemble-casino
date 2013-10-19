@@ -38,8 +38,16 @@ import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class,
-        GameManagementSpringConfiguration.GameTimeAspectConfiguration.class, GameManagementSpringConfiguration.DefaultAndTest.class, GameManagementSpringConfiguration.Cloud.class, GameManagementSpringConfiguration.Test.class })
+@Import(value = {
+        CommonSpringConfiguration.class,
+        GameJPASpringConfiguration.class,
+        PaymentCommonSpringConfiguration.class,
+        PlayerCommonSpringConfiguration.class,
+        GameManagementSpringConfiguration.GameTimeAspectConfiguration.class,
+        GameManagementSpringConfiguration.DefaultAndTest.class,
+        GameManagementSpringConfiguration.Cloud.class,
+        GameManagementSpringConfiguration.Test.class
+})
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired

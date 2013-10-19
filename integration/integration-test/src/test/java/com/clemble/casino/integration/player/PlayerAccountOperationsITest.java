@@ -20,15 +20,13 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.error.ClembleCasinoError;
-import com.clemble.casino.integration.player.Player;
-import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
-import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.money.Currency;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

@@ -2,8 +2,8 @@ package com.clemble.casino.server.player.account;
 
 import java.util.Collection;
 
-import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerProfile;
 
 public interface PlayerAccountServerService {

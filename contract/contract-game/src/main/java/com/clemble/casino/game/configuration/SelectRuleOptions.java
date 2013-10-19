@@ -13,7 +13,7 @@ import com.clemble.casino.game.specification.GameSpecification;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.clemble.casino.money.Money;
+import com.clemble.casino.payment.money.Money;
 
 @JsonTypeName("selectRule")
 public class SelectRuleOptions implements GameSpecificationOptions {

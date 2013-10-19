@@ -33,7 +33,7 @@ public class ServerRegistrySpringConfiguration implements SpringConfiguration {
         public RestTemplate restTemplate;
 
         @Bean
-        public ServerRegistryServerService serverRegistryService(@Value("${gogomaya.management.url}") String url) {
+        public ServerRegistryServerService serverRegistryService(@Value("${clemble.casino.management.url}") String url) {
             return new RestServerRegistryServerService(url, restTemplate);
         }
 
@@ -48,7 +48,7 @@ public class ServerRegistrySpringConfiguration implements SpringConfiguration {
         public RestTemplate restTemplate;
 
         @Bean
-        public ServerRegistryServerService serverRegistryService(@Value("${gogomaya.management.url?:http://localhost:9999/picpacpoe-management/}") String url) {
+        public ServerRegistryServerService serverRegistryService(@Value("${clemble.casino.management.url?:http://localhost:9999/picpacpoe-management/}") String url) {
             return new RestServerRegistryServerService(url, restTemplate);
         }
 
@@ -67,7 +67,7 @@ public class ServerRegistrySpringConfiguration implements SpringConfiguration {
         public ServerRegistryServerService realServerRegistryService;
 
         @Bean
-        public ServerRegistryServerService serverRegistryService(@Value("${gogomaya.management.url?:http://localhost:8080/picpacpoe-management/}") String url) {
+        public ServerRegistryServerService serverRegistryService(@Value("${clemble.casino.management.url?:http://localhost:8080/picpacpoe-management/}") String url) {
             return realServerRegistryService != null ? realServerRegistryService : new RestServerRegistryServerService(url, restTemplate);
         }
 

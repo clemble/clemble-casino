@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.money.Currency;
-import com.clemble.casino.money.Money;
 import com.clemble.casino.money.MoneySource;
-import com.clemble.casino.money.Operation;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
-import com.clemble.casino.server.repository.player.PlayerAccountRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)

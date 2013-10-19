@@ -2,10 +2,8 @@ package com.clemble.casino.server.spring.common;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,24 +15,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
-import org.springframework.orm.jpa.JpaDialect;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
-import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.clemble.casino.server.repository", entityManagerFactoryRef = "entityManagerFactory")
-@Import(value = { JPASpringConfiguration.DefaultAndTest.class })
-public class JPASpringConfiguration implements SpringConfiguration {
+@Import(value = { BasicJPASpringConfiguration.DefaultAndTest.class })
+public class BasicJPASpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("dataSource")
@@ -43,32 +34,6 @@ public class JPASpringConfiguration implements SpringConfiguration {
     @Autowired
     @Qualifier("jpaVendorAdapter")
     public JpaVendorAdapter jpaVendorAdapter;
-
-    @Bean
-    public JpaDialect jpaDialect() {
-        return new HibernateJpaDialect();
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager(entityManagerFactory());
-        transactionManager.setJpaDialect(jpaDialect());
-        transactionManager.setDataSource(dataSource);
-        transactionManager.setPersistenceUnitName("entityManager");
-        return transactionManager;
-    }
-
-    @Bean
-    public EntityManagerFactory entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactory.setDataSource(dataSource);
-        entityManagerFactory.setPackagesToScan(new String[] { "com.clemble.casino" });
-        entityManagerFactory.setPersistenceProvider(new HibernatePersistence());
-        entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter);
-        entityManagerFactory.setPersistenceUnitName("entityManager");
-        entityManagerFactory.afterPropertiesSet();
-        return entityManagerFactory.getObject();
-    }
 
     @Bean
     public PersistenceExceptionTranslator persistenceExceptionTranslator() {
@@ -93,7 +58,7 @@ public class JPASpringConfiguration implements SpringConfiguration {
         @Bean
         public EmbeddedDatabaseFactory dataSourceFactory() throws IOException {
             EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
-            factory.setDatabaseName("gogomaya");
+            factory.setDatabaseName("clemble_casino");
             factory.setDatabaseType(EmbeddedDatabaseType.H2);
             factory.setDatabasePopulator(databasePopulator());
             return factory;

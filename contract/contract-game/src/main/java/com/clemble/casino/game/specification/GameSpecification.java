@@ -10,10 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Columns;
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.rule.bet.BetRule;
@@ -23,23 +20,12 @@ import com.clemble.casino.game.rule.construct.PrivacyRule;
 import com.clemble.casino.game.rule.giveup.GiveUpRule;
 import com.clemble.casino.game.rule.time.MoveTimeRule;
 import com.clemble.casino.game.rule.time.TotalTimeRule;
-import com.clemble.casino.game.rule.time.TimeRuleFormat.MoveTimeRuleHibernateType;
-import com.clemble.casino.game.rule.time.TimeRuleFormat.TotalTimeRuleHibernateType;
 import com.clemble.casino.game.rule.visibility.VisibilityRule;
-import com.clemble.casino.server.hibernate.JsonHibernateType;
-import com.clemble.casino.money.Currency;
-import com.clemble.casino.money.Money;
-import com.clemble.casino.money.MoneyHibernate;
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
 
 @Entity
 @Table(name = "GAME_SPECIFICATION")
-@TypeDefs(value = {
-        @TypeDef(name = "totalTime", typeClass = TotalTimeRuleHibernateType.class),
-        @TypeDef(name = "moveTime", typeClass = MoveTimeRuleHibernateType.class),
-        @TypeDef(name = "money", typeClass = MoneyHibernate.class),
-        @TypeDef(name = "betRule", typeClass = JsonHibernateType.class, defaultForType = BetRule.class, parameters = { @Parameter(
-                name = JsonHibernateType.CLASS_NAME_PARAMETER,
-                value = "com.clemble.casino.game.rule.bet.BetRule") }) })
 public class GameSpecification implements Serializable {
 
     /**
@@ -55,11 +41,11 @@ public class GameSpecification implements Serializable {
     @EmbeddedId
     private GameSpecificationKey name;
 
-    @Type(type = "money")
+    @Type(type = "com.clemble.casino.payment.money.MoneyHibernate")
     @Columns(columns = { @Column(name = "CURRENCY"), @Column(name = "PRICE") })
     private Money price;
 
-    @Type(type = "betRule")
+    @Type(type = "com.clemble.casino.game.rule.bet.BetRuleHibernate")
     @Columns(columns = { @Column(name = "BET_RULE") })
     private BetRule betRule;
 
@@ -67,11 +53,11 @@ public class GameSpecification implements Serializable {
     @Enumerated(EnumType.STRING)
     private GiveUpRule giveUpRule;
 
-    @Type(type = "moveTime")
+    @Type(type = "com.clemble.casino.game.rule.time.MoveTimeRuleHibernate")
     @Columns(columns = { @Column(name = "MOVE_TIME_BREACH"), @Column(name = "MOVE_TIME_LIMIT"), })
     private MoveTimeRule moveTimeRule;
 
-    @Type(type = "totalTime")
+    @Type(type = "com.clemble.casino.game.rule.time.TotalTimeRule")
     @Columns(columns = { @Column(name = "TOTAL_TIME_BREACH"), @Column(name = "TOTAL_TIME_LIMIT"), })
     private TotalTimeRule totalTimeRule;
 

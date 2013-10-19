@@ -14,16 +14,13 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
-import com.clemble.casino.money.Currency;
-import com.clemble.casino.money.Money;
-import com.clemble.casino.money.MoneyHibernate;
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerAware;
 
 @Entity
 @Table(name = "PLAYER_ACCOUNT")
-@TypeDef(name = "money", typeClass = MoneyHibernate.class)
 public class PlayerAccount implements PlayerAware {
 
     /**
@@ -37,7 +34,7 @@ public class PlayerAccount implements PlayerAware {
 
     @ElementCollection(targetClass = Money.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "PLAYER_ACCOUNT_AMOUNT", joinColumns = @JoinColumn(name = "PLAYER_ID"))
-    @Type(type = "money")
+    @Type(type = "com.clemble.casino.payment.money.MoneyHibernate")
     @Columns(columns = { @Column(name = "CURRENCY"), @Column(name = "AMOUNT") })
     private Set<Money> playerMoney = new HashSet<Money>();
 

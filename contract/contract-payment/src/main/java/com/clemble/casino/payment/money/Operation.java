@@ -1,4 +1,4 @@
-package com.clemble.casino.money;
+package com.clemble.casino.payment.money;
 
 public enum Operation {
 

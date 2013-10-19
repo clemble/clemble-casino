@@ -10,13 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.money.Operation;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
-import com.clemble.casino.server.repository.player.PlayerAccountRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 
 public class PaymentTransactionServerServiceImpl implements PaymentTransactionServerService {
 

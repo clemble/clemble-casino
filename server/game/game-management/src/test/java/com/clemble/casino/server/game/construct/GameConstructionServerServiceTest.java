@@ -111,6 +111,7 @@ public class GameConstructionServerServiceTest {
                 return construct;
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
+                call();
             } finally {
                 endLatch.countDown();
             }

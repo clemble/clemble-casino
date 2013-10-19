@@ -22,13 +22,13 @@ import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
-import com.clemble.casino.money.Currency;
-import com.clemble.casino.money.Money;
 import com.clemble.casino.money.MoneySource;
-import com.clemble.casino.money.Operation;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.payment.money.Operation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

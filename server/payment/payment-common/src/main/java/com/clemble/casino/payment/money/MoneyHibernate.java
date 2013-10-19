@@ -1,4 +1,4 @@
-package com.clemble.casino.money;
+package com.clemble.casino.payment.money;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +8,8 @@ import java.sql.Types;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.hibernate.ImmutableHibernateType;
 
 public class MoneyHibernate extends ImmutableHibernateType<Money> {

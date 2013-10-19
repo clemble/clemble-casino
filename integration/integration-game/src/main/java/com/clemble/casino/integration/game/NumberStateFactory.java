@@ -9,7 +9,7 @@ import com.clemble.casino.game.account.GamePlayerAccount;
 import com.clemble.casino.game.account.VisibleGameAccount;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.iterator.SequentialPlayerIterator;
-import com.clemble.casino.money.Money;
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.impl.AbstractGameStateFactory;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;

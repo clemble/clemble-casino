@@ -10,8 +10,8 @@ import javax.persistence.Enumerated;
 import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
 
-import com.clemble.casino.money.Money;
-import com.clemble.casino.money.Operation;
+import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 
 @Embeddable
@@ -25,7 +25,7 @@ public class PaymentOperation implements PlayerAware, Serializable {
     @Column(name = "PLAYER_ID")
     private String player;
 
-    @Type(type = "money")
+    @Type(type = "com.clemble.casino.payment.money.MoneyHibernate")
     @Columns(columns = { @Column(name = "CURRENCY"), @Column(name = "AMOUNT") })
     private Money amount;
 

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
-import com.clemble.casino.server.repository.player.PlayerAccountRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;
 import com.clemble.casino.server.web.player.account.PlayerAccountController;

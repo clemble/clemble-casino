@@ -3,12 +3,12 @@ package com.clemble.casino.game.account;
 import java.util.Collection;
 import java.util.Map;
 
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.clemble.casino.money.Money;
 
 @JsonTypeName("invisible")
 @JsonIgnoreProperties("playerAccounts")

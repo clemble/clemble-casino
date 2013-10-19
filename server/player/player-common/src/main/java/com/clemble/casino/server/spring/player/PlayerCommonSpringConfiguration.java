@@ -23,6 +23,7 @@ import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 
 @Configuration
 @Import({ CommonSpringConfiguration.class,
+    PlayerJPASpringConfiguration.class,
     IntegrationCloudPlayerConfiguration.class,
     IntegrationTestPlayerConfiguration.class,
     IntegrationPlayerConfiguration.class,
