@@ -2,8 +2,6 @@ package com.clemble.casino.server.web.management;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +20,7 @@ import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
+import com.clemble.casino.server.player.PlayerIdentifierGenerator;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
@@ -32,17 +31,21 @@ import com.clemble.casino.web.mapping.WebMapping;
 @Controller
 public class PlayerRegistrationController implements PlayerRegistrationService {
 
+    final private PlayerIdentifierGenerator playerIdentifierGenerator; 
     final private PlayerCredentialRepository playerCredentialRepository;
     final private PlayerIdentityRepository playerIdentityRepository;
     final private PlayerProfileRegistrationServerService playerProfileRegistrationService;
     final private ClembleCasinoValidationService validationService;
     final private PlayerAccountServerService playerAccountServerService;
 
-    public PlayerRegistrationController(final PlayerProfileRegistrationServerService playerProfileRegistrationService,
+    public PlayerRegistrationController(
+            final PlayerIdentifierGenerator playerIdentifierGenerator,
+            final PlayerProfileRegistrationServerService playerProfileRegistrationService,
             final PlayerCredentialRepository playerCredentialRepository,
             final PlayerIdentityRepository playerIdentityRepository,
             final ClembleCasinoValidationService validationService,
             final PlayerAccountServerService playerAccountServerService) {
+        this.playerIdentifierGenerator = checkNotNull(playerIdentifierGenerator);
         this.playerAccountServerService = checkNotNull(playerAccountServerService);
         this.playerProfileRegistrationService = checkNotNull(playerProfileRegistrationService);
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
@@ -82,7 +85,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         validationService.validate(registrationRequest.getPlayerProfile());
         // Step 2. Creating appropriate PlayerProfile
         PlayerProfile savedProfile = registrationRequest.getPlayerProfile();
-        savedProfile.setPlayer(UUID.randomUUID().toString());
+        savedProfile.setPlayer(playerIdentifierGenerator.newIdentifier());
         savedProfile = playerProfileRegistrationService.createPlayerProfile(savedProfile);
         // Step 3. Registration done through separate registration service
         return register(registrationRequest, savedProfile);

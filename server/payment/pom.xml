@@ -35,7 +35,7 @@
     <dependencies>
         <dependency>
             <groupId>com.clemble.casino</groupId>
-            <artifactId>contract-payment</artifactId>
+            <artifactId>api-payment</artifactId>
         </dependency>
     </dependencies>
 </project>

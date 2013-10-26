@@ -10,11 +10,11 @@
     <dependencies>
         <dependency>
             <groupId>com.clemble.casino</groupId>
-            <artifactId>contract-management</artifactId>
+            <artifactId>api-management</artifactId>
         </dependency>
         <dependency>
             <groupId>com.clemble.casino</groupId>
-            <artifactId>contract-player</artifactId>
+            <artifactId>api-player</artifactId>
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>

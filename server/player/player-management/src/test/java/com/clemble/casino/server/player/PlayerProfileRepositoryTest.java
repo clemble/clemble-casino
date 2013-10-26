@@ -1,5 +1,7 @@
 package com.clemble.casino.server.player;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +17,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerManagementSpringConfiguration;
+import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.UNIT_TEST)
@@ -36,13 +39,15 @@ public class PlayerProfileRepositoryTest {
 
     @Test
     public void testSave() {
-        PlayerProfile gamerProfile = new PlayerProfile().setPlayer(RandomStringUtils.random(5));
-        PlayerProfile savedProfile = playerProfileRepository.save(gamerProfile);
-        gamerProfile.setPlayer(savedProfile.getPlayer());
-        Assert.assertNotNull(gamerProfile.getPlayer());
+        PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class);
+        playerProfile.setImageUrl("http://" + RandomStringUtils.random(10) + ".com/");
+        playerProfile.setBirthDate(new Date(0));
+        PlayerProfile savedProfile = playerProfileRepository.save(playerProfile);
+        playerProfile.setPlayer(savedProfile.getPlayer());
+        Assert.assertNotNull(playerProfile.getPlayer());
         Assert.assertNotNull(savedProfile.getPlayer());
-        PlayerProfile found = playerProfileRepository.findOne(gamerProfile.getPlayer());
-        Assert.assertEquals(found, gamerProfile);
+        PlayerProfile found = playerProfileRepository.findOne(playerProfile.getPlayer());
+        Assert.assertEquals(found, playerProfile);
         Assert.assertEquals(found, savedProfile);
     }
 

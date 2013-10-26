@@ -3,19 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.clemble.casino</groupId>
-        <artifactId>contract</artifactId>
+        <artifactId>api</artifactId>
         <version>0.5.1-SNAPSHOT</version>
     </parent>
-    <artifactId>contract-management</artifactId>
+    <artifactId>api-common</artifactId>
     <dependencies>
-        <dependency>
-            <groupId>com.clemble.casino</groupId>
-            <artifactId>contract-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino</groupId>
-            <artifactId>contract-player</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>

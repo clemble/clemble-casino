@@ -11,7 +11,7 @@
 
         <dependency>
             <groupId>com.clemble.casino</groupId>
-            <artifactId>contract-management</artifactId>
+            <artifactId>api-management</artifactId>
         </dependency>
 
         <dependency>

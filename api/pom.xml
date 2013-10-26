@@ -3,14 +3,18 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.clemble.casino</groupId>
-        <artifactId>contract</artifactId>
+        <artifactId>parent</artifactId>
         <version>0.5.1-SNAPSHOT</version>
     </parent>
-    <artifactId>contract-game-cell</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>com.clemble.casino</groupId>
-            <artifactId>contract-game</artifactId>
-        </dependency>
-    </dependencies>
+    <artifactId>api</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>api-common</module>
+        <module>api-player</module>
+        <module>api-payment</module>
+        <module>api-game</module>
+        <module>api-game-cell</module>
+        <module>api-management</module>
+    </modules>
+
 </project>

@@ -11,6 +11,8 @@ import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.configuration.ServerLocation;
 import com.clemble.casino.server.configuration.ServerRegistryServerService;
 import com.clemble.casino.server.configuration.SimpleServerRegistryServerService;
+import com.clemble.casino.server.player.PlayerIdentifierGenerator;
+import com.clemble.casino.server.player.UUIDPlayerIdentityGenerator;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.notification.PlayerNotificationRegistry;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
@@ -38,14 +40,20 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     public ServerLocation paymentEndpointRegistry;
 
     @Bean
+    public PlayerIdentifierGenerator playerIdentifierGenerator() {
+        return new UUIDPlayerIdentityGenerator();
+    }
+
+    @Bean
     @Autowired
     public PlayerRegistrationController playerRegistrationController(
+            PlayerIdentifierGenerator playerIdentifierGenerator,
             @Qualifier("playerProfileRegistrationService") PlayerProfileRegistrationServerService playerProfileRegistrationService,
             PlayerCredentialRepository playerCredentialRepository,
             PlayerIdentityRepository playerIdentityRepository,
             ClembleCasinoValidationService gogomayaValidationService,
             @Qualifier("playerAccountService") PlayerAccountServerService playerAccountService) {
-        return new PlayerRegistrationController(playerProfileRegistrationService, playerCredentialRepository, playerIdentityRepository,
+        return new PlayerRegistrationController(playerIdentifierGenerator, playerProfileRegistrationService, playerCredentialRepository, playerIdentityRepository,
                 gogomayaValidationService, playerAccountService);
     }
 

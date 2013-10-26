@@ -6,7 +6,7 @@
     <version>0.5.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>contract</module>
+        <module>api</module>
         <module>client</module>
         <module>server</module>
 
@@ -177,31 +177,31 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- Contract dependencies -->
+            <!-- Api dependencies -->
 
             <dependency>
                 <groupId>com.clemble.casino</groupId>
-                <artifactId>contract-common</artifactId>
+                <artifactId>api-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino</groupId>
-                <artifactId>contract-game</artifactId>
+                <artifactId>api-game</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino</groupId>
-                <artifactId>contract-payment</artifactId>
+                <artifactId>api-payment</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino</groupId>
-                <artifactId>contract-player</artifactId>
+                <artifactId>api-player</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino</groupId>
-                <artifactId>contract-management</artifactId>
+                <artifactId>api-management</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
