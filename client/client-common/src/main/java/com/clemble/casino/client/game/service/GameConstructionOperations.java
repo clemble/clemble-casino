@@ -2,26 +2,28 @@ package com.clemble.casino.client.game.service;
 
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.event.listener.EventListener;
+import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameRequest;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 
-public interface GameConstructionOperations {
+public interface GameConstructionOperations<T extends GameState> {
 
-    public GameConstruction getConstruct(final long session);
+    public GameConstruction getConstruct(final String session);
 
-    public ClientEvent getResponce(final long session, final String player);
-
-    public String getGameActionServer(final long sessionId);
+    public ClientEvent getResponce(final String session, final String player);
 
     public GameConstruction construct(final GameRequest gameRequest);
 
-    public GameConstruction accept(final long sessionId);
+    public GameConstruction accept(final String sessionId);
 
-    public GameConstruction decline(final long sessionId);
+    public GameConstruction decline(final String sessionId);
 
-    public GameConstruction response(final long sessionId, final InvitationResponseEvent gameRequest);
+    public GameConstruction response(final String sessionId, final InvitationResponseEvent gameRequest);
 
-    public void subscribe(long sessionId, EventListener constructionListener);
+    public void subscribe(String sessionId, EventListener constructionListener);
+
+    public GameActionOperations<T> getActionOperations(GameSessionKey gameSessionKey);
 
 }

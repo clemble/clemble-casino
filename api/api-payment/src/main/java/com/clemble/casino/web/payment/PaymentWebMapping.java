@@ -4,8 +4,6 @@ import com.clemble.casino.web.mapping.WebMapping;
 
 public interface PaymentWebMapping extends WebMapping {
 
-    final public static String PAYMENT_PREFIX = "/payment-web";
-
     /**
      * Supports POST, that can only be used by the server
      */

@@ -9,11 +9,9 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import com.clemble.casino.VersionAware;
@@ -33,10 +31,6 @@ public class GameConstruction implements SessionAware, VersionAware {
     private static final long serialVersionUID = 2712386710995109913L;
 
     @EmbeddedId
-    @GeneratedValue(generator = "gameSessionKeyGenerator")
-    @GenericGenerator(
-        name = "gameSessionKeyGenerator",
-        strategy = "com.clemble.casino.game.GameSessionKeyGenerator")
     private GameSessionKey session;
 
     @Type(type = "com.clemble.casino.game.construct.GameRequestHibernate")
@@ -59,7 +53,6 @@ public class GameConstruction implements SessionAware, VersionAware {
 
     public GameConstruction(GameRequest request) {
         this.request = request;
-        this.session = new GameSessionKey(request.getSpecification().getName().getGame(), 0);
         this.state = GameConstructionState.pending;
         this.responses = new ActionLatch(((GameOpponentsAware) request).getParticipants(), "response");
     }

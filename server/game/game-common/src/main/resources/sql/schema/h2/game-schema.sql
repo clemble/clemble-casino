@@ -11,28 +11,16 @@
 
     drop table GAME_SPECIFICATION if exists;
 
-    drop sequence if exists pic;
-
-    drop sequence if exists pac;
-
-    drop sequence if exists poe;
-
-    drop sequence if exists poc;
-
-    drop sequence if exists go;
-
-    drop sequence if exists num;
-
     create table GAME_SCHEDULE (
         GAME integer not null,
-        SESSION_ID bigint not null,
+        SESSION_ID varchar(255) not null,
         START_TIME bigint,
         primary key (GAME, SESSION_ID)
     );
 
     create table GAME_SESSION (
         GAME integer not null,
-        SESSION_ID bigint not null,
+        SESSION_ID varchar(255) not null,
         SESSION_STATE integer,
         GAME_STATE varchar(4096),
         VERSION integer,
@@ -43,7 +31,7 @@
 
     create table GAME_SESSION_CONSTRUCTION (
         GAME integer not null,
-        SESSION_ID bigint not null,
+        SESSION_ID varchar(255) not null,
         REQUEST varchar(8192) not null,
         RESPONSES varchar(8192) not null,
         STATE varchar(255) not null,
@@ -53,7 +41,7 @@
 
     create table GAME_SESSION_MOVES (
         SESSION_ID integer not null,
-        GAME bigint not null,
+        GAME varchar(255) not null,
         GAME_MOVE varchar(512),
         MOVE_ID integer,
         MOVE_TIME bigint
@@ -61,7 +49,7 @@
 
     create table GAME_SESSION_PLAYERS (
         SESSION_ID integer not null,
-        GAME bigint not null,
+        GAME varchar(255) not null,
         players varchar(255),
         PLAYERS_ORDER integer not null,
         primary key (SESSION_ID, GAME, PLAYERS_ORDER)
@@ -98,15 +86,3 @@
         add constraint FK_q9w5vqx8fjrruds2lr7b6uyc6 
         foreign key (SESSION_ID, GAME) 
         references GAME_SESSION;
-
-    create sequence pic;
-
-    create sequence pac;
-
-    create sequence poe;
-
-    create sequence poc;
-
-    create sequence go;
-
-    create sequence num;

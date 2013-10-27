@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -23,17 +24,14 @@ import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
 import com.clemble.casino.server.game.construct.GameConstructionServerService;
-import com.clemble.casino.server.game.notification.TableServerRegistry;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
-import com.clemble.casino.web.mapping.WebMapping;
-import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.web.game.GameWebMapping;
+import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
 public class GameConstructionController<State extends GameState> implements GameConstructionService {
 
     final private Game game;
-    final private TableServerRegistry tableServerRegistry;
     final private GameSpecificationRegistry configurationManager;
     final private GameConstructionServerService constructionService;
     final private GameConstructionRepository constructionRepository;
@@ -42,10 +40,8 @@ public class GameConstructionController<State extends GameState> implements Game
             final Game game,
             final GameConstructionRepository constructionRepository,
             final GameConstructionServerService matchingService,
-            final GameSpecificationRegistry configurationManager,
-            final TableServerRegistry tableServerRegistry) {
+            final GameSpecificationRegistry configurationManager) {
         this.game = checkNotNull(game);
-        this.tableServerRegistry = checkNotNull(tableServerRegistry);
         this.constructionService = checkNotNull(matchingService);
         this.configurationManager = checkNotNull(configurationManager);
         this.constructionRepository = checkNotNull(constructionRepository);
@@ -66,7 +62,7 @@ public class GameConstructionController<State extends GameState> implements Game
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    GameConstruction getConstruct(@RequestHeader("playerId") final String playerId, @PathVariable("sessionId") final long session) {
+    GameConstruction getConstruct(@RequestHeader("playerId") final String playerId, @PathVariable("sessionId") final String session) {
         // Step 1. Searching for construction
         GameConstruction construction = constructionRepository.findOne(new GameSessionKey(game, session));
         // Step 2. Sending error in case resource not found
@@ -79,23 +75,16 @@ public class GameConstructionController<State extends GameState> implements Game
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody ClientEvent getResponce(@RequestHeader("playerId") final String requester, @PathVariable("sessionId") final long session, @PathVariable("playerId") final String player) {
+    public @ResponseBody ClientEvent getResponce(@RequestHeader("playerId") final String requester, @PathVariable("sessionId") final String session, @PathVariable("playerId") final String player) {
         return (ClientEvent) constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().fetchAction(player);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameConstruction reply(@RequestHeader("playerId") final String playerId, @PathVariable("sessionId") long sessionId, @RequestBody final InvitationResponseEvent gameRequest) {
+    public @ResponseBody GameConstruction reply(@RequestHeader("playerId") final String playerId, @PathVariable("sessionId") String sessionId, @RequestBody final InvitationResponseEvent gameRequest) {
         // Step 1. Invoking actual matching service
         return constructionService.invitationResponsed(gameRequest);
     }
 
-    @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_SERVER, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public String getServer(@RequestHeader("playerId") String playerId, @PathVariable("sessionId") long sessionId) {
-        // Step 1. Fetching applicable server for the session
-        return tableServerRegistry.findServer(sessionId);
-    }
 }

@@ -9,6 +9,7 @@ import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
@@ -18,6 +19,7 @@ import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
+import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
@@ -29,17 +31,21 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
 
     final private AutomaticConstructionManager automaticGameInitiatorManager;
 
+    final private GameIdGenerator gameIdGenerator;
     final private PlayerAccountServerService playerAccountService;
     final private PlayerNotificationService<Event> playerNotificationService;
     final private GameInitiatorService initiatorService;
     final private GameConstructionRepository constructionRepository;
 
-    public SimpleGameConstructionServerService(final PlayerAccountServerService playerAccountService,
+    public SimpleGameConstructionServerService(
+            final GameIdGenerator gameIdGenerator,
+            final PlayerAccountServerService playerAccountService,
             final PlayerNotificationService<Event> playerNotificationService,
             final GameConstructionRepository constructionRepository,
             final GameInitiatorService initiatorService,
             final PlayerLockService playerLockService,
             final PlayerPresenceServerService playerStateManager) {
+        this.gameIdGenerator = checkNotNull(gameIdGenerator);
         this.initiatorService = checkNotNull(initiatorService);
         this.playerAccountService = checkNotNull(playerAccountService);
         this.playerNotificationService = checkNotNull(playerNotificationService);
@@ -67,6 +73,7 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInsufficientMoney);
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(request);
+        construction.setSession(new GameSessionKey(request.getSpecification().getName().getGame(), gameIdGenerator.newId()));
         construction.setState(GameConstructionState.pending);
         construction.getResponses().put(request.getPlayer(), new InvitationAcceptedEvent(construction.getSession(), request.getPlayer()));
         construction = constructionRepository.saveAndFlush(construction);

@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
+import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.server.configuration.ServerRegistryServerService;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.payment.RestPaymentTransactionServerService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
@@ -34,7 +34,7 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
     public static class Integration {
 
         @Autowired
-        public ServerRegistryServerService serverRegistryService;
+        public ServerRegistryConfiguration serverRegistryConfiguration;
 
         @Autowired
         public RestTemplate restTemplate;
@@ -50,14 +50,14 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
         @Bean
         @Autowired
         public PaymentTransactionServerService paymentTransactionService() {
-            return realPaymentTransactionService == null ? new RestPaymentTransactionServerService(serverRegistryService, restTemplate)
+            return realPaymentTransactionService == null ? new RestPaymentTransactionServerService(serverRegistryConfiguration.getPaymentRegistry(), restTemplate)
                     : realPaymentTransactionService;
         }
 
         @Bean
         @Autowired
         public PlayerAccountServerService playerAccountService() {
-            return realPlayerAccountService == null ? new RestPlayerAccountServerService(serverRegistryService, restTemplate) : realPlayerAccountService;
+            return realPlayerAccountService == null ? new RestPlayerAccountServerService(serverRegistryConfiguration.getPaymentRegistry(), restTemplate) : realPlayerAccountService;
         }
     }
 

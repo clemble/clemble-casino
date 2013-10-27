@@ -96,7 +96,7 @@
                                 <include>**/*ITest.java</include>
                             </includes>
                             <argLine>-Dspring.profiles.active=int_test
-                                -Dgogomaya.management.url=http://localhost:8080/integration-management-web/</argLine>
+                                -Dclemble.casino.management.url=http://localhost:8080/integration-management-web/</argLine>
                         </configuration>
                     </plugin>
                 </plugins>

@@ -17,6 +17,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.IntegrationGameSessionPlayerFactory;
 import com.clemble.casino.integration.game.construction.GameScenarios;
@@ -38,23 +39,22 @@ import com.clemble.casino.integration.player.session.IntegrationSessionOperation
 import com.clemble.casino.integration.player.session.SessionOperations;
 import com.clemble.casino.integration.player.session.WebSessionOperations;
 import com.clemble.casino.integration.spring.web.management.ManagementWebSpringConfiguration;
+import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
+import com.clemble.casino.server.spring.common.ServerRegistrySpringConfiguration;
+import com.clemble.casino.server.spring.common.SpringConfiguration;
+import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.clemble.casino.server.spring.web.player.PlayerWebSpringConfiguration;
+import com.clemble.casino.server.web.error.ClembleCasinoRestErrorHandler;
+import com.clemble.casino.server.web.management.PlayerRegistrationController;
+import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;
 import com.clemble.casino.server.web.player.PlayerProfileController;
 import com.clemble.casino.server.web.player.account.PlayerAccountController;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
-import com.clemble.casino.server.web.error.ClembleCasinoRestErrorHandler;
-import com.clemble.casino.server.web.management.PlayerRegistrationController;
-import com.clemble.casino.server.web.management.PlayerSessionController;
 
 @Configuration
-@Import(value = { JsonSpringConfiguration.class,
-        TestConfiguration.LocalTestConfiguration.class,
-        TestConfiguration.IntegrationTestConfiguration.class})
+@Import(value = { JsonSpringConfiguration.class, TestConfiguration.LocalTestConfiguration.class, TestConfiguration.IntegrationTestConfiguration.class })
 public class TestConfiguration {
 
     @Autowired
@@ -103,8 +103,8 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(playerRegistrationController, sessionOperations(), accountOperations(),
-                    playerListenerOperations(), playerProfileOperations());
+            return new WebPlayerOperations(playerRegistrationController, sessionOperations(), accountOperations(), playerListenerOperations(),
+                    playerProfileOperations());
         }
 
         @Bean
@@ -134,8 +134,8 @@ public class TestConfiguration {
     }
 
     @Configuration
-    @Profile({INTEGRATION_TEST, INTEGRATION_CLOUD, INTEGRATION_DEFAULT})
-    @Import(ClientRestCommonSpringConfiguration.class)
+    @Profile({ INTEGRATION_TEST, INTEGRATION_CLOUD, INTEGRATION_DEFAULT })
+    @Import({ ClientRestCommonSpringConfiguration.class, ServerRegistrySpringConfiguration.class })
     public static class IntegrationTestConfiguration {
 
         @Autowired
@@ -145,11 +145,14 @@ public class TestConfiguration {
         @Value("#{systemProperties['clemble.casino.management.url'] ?: 'http://localhost:8080/integration-management-web/'}")
         public String baseUrl;
 
-        public String getBaseUrl(){
+        @Autowired
+        public ServerRegistryConfiguration serverRegistryConfiguration;
+
+        public String getBaseUrl() {
             String base = baseUrl.substring(0, baseUrl.substring(0, baseUrl.length() - 1).lastIndexOf("/") + 1);
             return base;
         }
-        
+
         @Bean
         @Singleton
         public PlayerListenerOperations playerListenerOperations() {
@@ -205,7 +208,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PaymentTransactionOperations paymentTransactionOperations() {
-            return new IntegrationPaymentTransactionOperations(restTemplate(), getBaseUrl());
+            return new IntegrationPaymentTransactionOperations(restTemplate(), serverRegistryConfiguration.getPaymentRegistry());
         }
 
     }

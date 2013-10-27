@@ -3,6 +3,7 @@ package com.clemble.casino.server.game.construct;
 import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.base.ActionLatch;
+import com.clemble.casino.game.Game;
+import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
@@ -55,6 +58,7 @@ public class GameConstructionRepositoryTest {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", GameSpecification.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
+        construction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         construction.setState(GameConstructionState.pending);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
@@ -67,11 +71,13 @@ public class GameConstructionRepositoryTest {
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setState(GameConstructionState.pending);
+        construction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
         Assert.assertNotNull(construction.getResponses());
 
         GameConstruction anotherConstruction = new GameConstruction(availabilityGameRequest);
+        anotherConstruction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         anotherConstruction.setState(GameConstructionState.pending);
         Assert.assertNotNull(anotherConstruction.getResponses());
         anotherConstruction = constructionRepository.saveAndFlush(anotherConstruction);

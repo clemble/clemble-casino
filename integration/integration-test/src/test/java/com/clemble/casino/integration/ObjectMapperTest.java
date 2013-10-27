@@ -38,7 +38,6 @@ import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.spring.TestConfiguration;
-import com.clemble.casino.server.player.notification.SimplePlayerNotificationRegistry;
 import com.clemble.casino.utils.ReflectionUtils;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -70,7 +69,6 @@ public class ObjectMapperTest extends ObjectTest {
     @Test
     public void testSpecialSerialization() {
         Assert.assertNull(checkSerialization(GameStartedEvent.class));
-        Assert.assertNull(checkSerialization(SimplePlayerNotificationRegistry.class));
         Assert.assertNull(checkSerialization(StubGameState.class));
         Assert.assertNull(checkSerialization(GameAccount.class));
         Assert.assertNull(checkSerialization(VisibleGameAccount.class));

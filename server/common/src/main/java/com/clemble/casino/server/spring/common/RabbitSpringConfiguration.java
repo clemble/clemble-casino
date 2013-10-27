@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.clemble.casino.server.configuration.ServerRegistryServerService;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.notification.RabbitPlayerNotificationService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.event.NotificationMapping;
 import com.clemble.casino.player.PlayerPresence;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.RabbitPlayerNotificationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @Import({ ServerRegistrySpringConfiguration.class, JsonSpringConfiguration.class })
@@ -29,7 +29,7 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     public ObjectMapper objectMapper;
 
     @Autowired
-    public ServerRegistryServerService serverRegistryService;
+    public ServerRegistryConfiguration serverRegistryConfiguration;
 
     @Bean
     public Jackson2JsonMessageConverter jsonMessageConverter() {
@@ -57,12 +57,12 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerNotificationService<Event> playerNotificationService() {
-        return new RabbitPlayerNotificationService<Event>(NotificationMapping.PLAYER_NOTIFICATION, jsonMessageConverter(), serverRegistryService);
+        return new RabbitPlayerNotificationService<Event>(NotificationMapping.PLAYER_NOTIFICATION, jsonMessageConverter(), serverRegistryConfiguration.getPlayerNotificationRegistry());
     }
 
     @Bean
     public PlayerNotificationService<PlayerPresence> playerPresenceNotificationService() {
-        return new RabbitPlayerNotificationService<PlayerPresence>(NotificationMapping.PLAYER_PRESENCE_NOTIFICATION, jsonMessageConverter(), serverRegistryService);
+        return new RabbitPlayerNotificationService<PlayerPresence>(NotificationMapping.PLAYER_PRESENCE_NOTIFICATION, jsonMessageConverter(), serverRegistryConfiguration.getPlayerNotificationRegistry());
     }
 
 }

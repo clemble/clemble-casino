@@ -23,8 +23,6 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.Topic;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-import com.clemble.casino.server.player.notification.PlayerNotificationListener;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
@@ -32,6 +30,8 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.SessionAware;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
+import com.clemble.casino.server.player.notification.PlayerNotificationListener;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class StringRedisPlayerStateManager implements PlayerPresenceServerService {
 
@@ -62,7 +62,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         if (session.length() == 1)
             return SessionAware.DEFAULT_SESSION;
         String[] splittedSession = session.split(":");
-        return splittedSession[0].equals("") ? SessionAware.DEFAULT_SESSION : new GameSessionKey(Game.valueOf(splittedSession[0]), Long.valueOf(splittedSession[1]));
+        return splittedSession[0].equals("") ? SessionAware.DEFAULT_SESSION : new GameSessionKey(Game.valueOf(splittedSession[0]), splittedSession[1]);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
 
         @Override
         public String getBaseUrl() {
-            return "http://localhost:9999/";
+            return "http://localhost:8080/";
         }
 
     }

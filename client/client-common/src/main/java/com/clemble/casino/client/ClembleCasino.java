@@ -20,7 +20,7 @@ public interface ClembleCasino {
 
     public PaymentTransactionOperations getPaymentTransactionOperations();
 
-    public GameConstructionOperations getGameConstructionOperations(Game game);
+    public <T extends GameState> GameConstructionOperations<T> getGameConstructionOperations(Game game);
 
     public <State extends GameState> GameActionOperations<State> getGameActionOperations(GameSessionKey session);
 

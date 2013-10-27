@@ -2,6 +2,7 @@ package com.clemble.casino.client.game.service;
 
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.event.listener.EventListener;
+import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.SessionAware;
 import com.clemble.casino.game.event.client.MadeMove;
@@ -14,5 +15,7 @@ public interface GameActionOperations<State extends GameState> extends SessionAw
     public MadeMove getAction(int actionId);
 
     public void subscribe(EventListener eventListener);
+
+    public GameActionOperations<State> construct(GameSessionKey sessionKey);
 
 }

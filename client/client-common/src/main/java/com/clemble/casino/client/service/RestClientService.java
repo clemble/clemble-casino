@@ -2,6 +2,7 @@ package com.clemble.casino.client.service;
 
 import java.util.List;
 
+import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.player.PlayerAware;
 
 public interface RestClientService extends PlayerAware {
@@ -16,6 +17,6 @@ public interface RestClientService extends PlayerAware {
 
     public <T> T deleteForEntity(CharSequence url, Class<T> responseType, Object... urlVariable);
 
-    public RestClientService construct(CharSequence baseUrl);
+    public RestClientService construct(ServerRegistry registry);
 
 }

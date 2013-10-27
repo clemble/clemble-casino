@@ -6,11 +6,12 @@ import java.io.Closeable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.clemble.casino.ServerRegistry;
+import com.clemble.casino.configuration.ResourceLocations;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.ServerResourse;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.client.GameClientEvent;
 import com.clemble.casino.game.event.client.surrender.GiveUpEvent;
@@ -33,20 +34,18 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     final private AtomicReference<State> currentState = new AtomicReference<State>();
 
     private GameSessionKey session;
-    private ServerResourse serverResourse;
 
     public AbstractGameSessionPlayer(final Player player, GameConstruction construction) {
         this.construction = checkNotNull(construction);
         this.player = player;
 
         player.listen(construction, new GameSessionListener() {
-			@Override
-			@SuppressWarnings("unchecked")
+            @Override
+            @SuppressWarnings("unchecked")
             public void notify(Event event) {
                 if (event instanceof GameStartedEvent) {
                     GameStartedEvent<?> gameStartedEvent = ((GameStartedEvent<?>) event);
                     session = gameStartedEvent.getSession();
-                    serverResourse = gameStartedEvent.getResource();
                 }
                 if (event instanceof GameServerEvent) {
                     setState(((GameServerEvent<State>) event).getState());
@@ -177,9 +176,11 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     public void perform(GameClientEvent gameAction) {
-        setState(perform(player, serverResourse, session, gameAction));
+        ResourceLocations resourceLocations =  player.getSession().getResourceLocations();
+        ServerRegistry gameRegistry = resourceLocations.getServerRegistryConfiguration().getGameRegistry(construction.getSession().getGame());
+        setState(perform(player, gameRegistry, session, gameAction));
     }
 
-    abstract public State perform(Player player, ServerResourse resourse, GameSessionKey session, GameClientEvent clientEvent);
+    abstract public State perform(Player player, ServerRegistry resourse, GameSessionKey session, GameClientEvent clientEvent);
 
 }

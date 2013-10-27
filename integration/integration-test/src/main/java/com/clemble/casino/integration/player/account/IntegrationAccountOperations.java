@@ -25,34 +25,36 @@ public class IntegrationAccountOperations extends AbstractAccountOperations {
 
     @Override
     public PlayerAccount getAccount(Player player, String playerId) {
-        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(resourceLocations.getPaymentEndpoint() + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, request, PlayerAccount.class,
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, request, PlayerAccount.class,
                 playerId).getBody();
     }
 
     @Override
     public List<PaymentTransaction> getTransactions(Player player, String playerId) {
-        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(resourceLocations.getPaymentEndpoint() + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
                 new ParameterizedTypeReference<List<PaymentTransaction>>() {
                 }, playerId).getBody();
     }
 
     @Override
     public PaymentTransaction getTransaction(Player player, String playerId, String moneySource, String transactionId) {
-        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(resourceLocations.getPaymentEndpoint() + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET,
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET,
                 request, PaymentTransaction.class, moneySource, transactionId).getBody();
 
+    }
+    
+    private String getPaymentEndpoint(Player player){
+        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
+        return resourceLocations.getServerRegistryConfiguration().getPaymentRegistry().findBase();
     }
 
 }

@@ -18,7 +18,7 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.support.converter.MessageConverter;
 
-import com.clemble.casino.server.configuration.ServerRegistryServerService;
+import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.event.Event;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -40,12 +40,12 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
 
     final private String postfix;
     final private MessageConverter messageConverter;
-    final private ServerRegistryServerService serverRegistryService;
+    final private ServerRegistry serverRegistry;
 
-    public RabbitPlayerNotificationManager(final String postfix, final MessageConverter messageConverter, final ServerRegistryServerService serverRegistryService) {
+    public RabbitPlayerNotificationManager(final String postfix, final MessageConverter messageConverter, final ServerRegistry serverRegistry) {
         this.postfix = checkNotNull(postfix);
         this.messageConverter = checkNotNull(messageConverter);
-        this.serverRegistryService = checkNotNull(serverRegistryService);
+        this.serverRegistry = checkNotNull(serverRegistry);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
         listeners.putIfAbsent(player, new CopyOnWriteArraySet<PlayerNotificationListener<T>>());
         listeners.get(player).add(messageListener);
         // Step 2. Figuring out involved notification server
-        String notificationServer = serverRegistryService.getPlayerNotificationRegistry().findNotificationServer(player);
+        String notificationServer = serverRegistry.findById(player);
         // Step 3. Add new binding
         RabbitListenerControl rabbitListenerControl = RABBIT_CONTROL_CACHE.getUnchecked(notificationServer);
         rabbitListenerControl.subscribe(player);
@@ -79,7 +79,7 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
             notifications.remove(messageListener);
         if (notifications.isEmpty()) {
             // Step 2. Figuring out involved notification server
-            String notificationServer = serverRegistryService.getPlayerNotificationRegistry().findNotificationServer(player);
+            String notificationServer = serverRegistry.findById(player);
             // Step 3. Add new binding
             RabbitListenerControl rabbitListenerControl = RABBIT_CONTROL_CACHE.getUnchecked(notificationServer);
             rabbitListenerControl.unsubscribe(player);

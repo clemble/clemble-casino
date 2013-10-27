@@ -4,10 +4,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
+import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.ServerResourse;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.client.GameClientEvent;
 import com.clemble.casino.integration.player.Player;
@@ -31,7 +31,7 @@ public class IntegrationGameSessionPlayer<State extends GameState> extends Abstr
 
     @Override
     @SuppressWarnings("unchecked")
-    public State perform(Player player, ServerResourse resourse, GameSessionKey session, GameClientEvent clientEvent) {
+    public State perform(Player player, ServerRegistry resourse, GameSessionKey session, GameClientEvent clientEvent) {
         // Step 1. Generating signed request
         HttpEntity<ClientEvent> requestEntity = player.<ClientEvent> signGame(session, clientEvent);
         // Step 2. Rest template generation

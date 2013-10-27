@@ -19,7 +19,6 @@ import com.clemble.casino.game.event.server.GameServerEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
 import com.clemble.casino.server.game.cache.GameCache;
 import com.clemble.casino.server.game.cache.GameCacheService;
-import com.clemble.casino.server.game.notification.TableServerRegistry;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class GameSessionProcessor<State extends GameState> implements GameAware {
@@ -31,19 +30,16 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
 
     final private Game game;
 
-    final private TableServerRegistry serverRegistry;
     final private GameCacheService<State> cacheService;
     final private GameSessionFactory<State> sessionFactory;
     final private PlayerNotificationService<Event> notificationService;
 
     public GameSessionProcessor(
             final Game game,
-            final TableServerRegistry serverRegistry,
             final GameSessionFactory<State> sessionFactory,
             final GameCacheService<State> cacheService,
             final PlayerNotificationService<Event> notificationService) {
         this.game = game;
-        this.serverRegistry = checkNotNull(serverRegistry);
         this.notificationService = checkNotNull(notificationService);
         this.sessionFactory = checkNotNull(sessionFactory);
         this.cacheService = checkNotNull(cacheService);
@@ -58,7 +54,7 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
         // Step 1. Allocating table for game initiation
         final GameSession<State> session = sessionFactory.construct(initiation);
         // Step 2. Sending notification for game started
-        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(session, serverRegistry.findServer(session)));
+        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(session));
         // Step 3. Returning active table
         return session;
     }

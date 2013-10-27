@@ -46,8 +46,6 @@ import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.server.ServerRegistry;
-import com.clemble.casino.server.player.notification.SimplePlayerNotificationRegistry;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.clemble.test.random.ValueGenerator;
@@ -131,7 +129,7 @@ public class ObjectTest {
             @Override
             public GameConstruction generate() {
                 return new GameConstruction()
-                    .setSession(new GameSessionKey(Game.pic, 0))
+                    .setSession(new GameSessionKey(Game.pic, "0"))
                     .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), GameSpecification.DEFAULT))
                     .setResponses(new ActionLatch(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
                     .setState(GameConstructionState.pending);
@@ -168,7 +166,7 @@ public class ObjectTest {
             public StubGameState generate() {
                 String playerA = RandomStringUtils.random(5);
                 String playerB = RandomStringUtils.random(5);
-                GameAccount account = GameAccountFactory.create(new GameInitiation(new GameSessionKey(Game.pac, 1L), ImmutableList.<String> of(playerA, playerB), GameSpecification.DEFAULT));
+                GameAccount account = GameAccountFactory.create(new GameInitiation(new GameSessionKey(Game.pac, "1"), ImmutableList.<String> of(playerA, playerB), GameSpecification.DEFAULT));
                 ActionLatch actionLatch = new ActionLatch(ImmutableList.<String> of(playerA, playerB), "stub");
                 GameOutcome outcome = new NoOutcome();
                 return new StubGameState(account, actionLatch, outcome, 1);
@@ -182,20 +180,6 @@ public class ObjectTest {
                 return new NumberState(null, null, null);
             }
 
-        });
-        ObjectGenerator.register(ServerRegistry.class, new AbstractValueGenerator<ServerRegistry>() {
-
-            @Override
-            public ServerRegistry generate() {
-                return new ServerRegistry(ImmutableList.<String> of("host.me"));
-            }
-        });
-        ObjectGenerator.register(SimplePlayerNotificationRegistry.class, new AbstractValueGenerator<SimplePlayerNotificationRegistry>() {
-
-            @Override
-            public SimplePlayerNotificationRegistry generate() {
-                return new SimplePlayerNotificationRegistry(ObjectGenerator.generate(ServerRegistry.class));
-            }
         });
         ObjectGenerator.register(VersionAware.class, "version", new ValueGenerator<Integer>() {
             @Override

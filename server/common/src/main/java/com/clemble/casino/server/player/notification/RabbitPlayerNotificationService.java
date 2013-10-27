@@ -10,7 +10,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 
-import com.clemble.casino.server.configuration.ServerRegistryServerService;
+import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.event.Event;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -33,12 +33,12 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
 
     final private String postfix;
     final private MessageConverter messageConverter;
-    final private ServerRegistryServerService serverRegistryService;
+    final private ServerRegistry serverRegistry;
 
-    public RabbitPlayerNotificationService(final String postfix, final MessageConverter messageConverter, final ServerRegistryServerService serverRegistryService) {
+    public RabbitPlayerNotificationService(final String postfix, final MessageConverter messageConverter, final ServerRegistry serverRegistry) {
         this.postfix = checkNotNull(postfix);
         this.messageConverter = checkNotNull(messageConverter);
-        this.serverRegistryService = checkNotNull(serverRegistryService);
+        this.serverRegistry = checkNotNull(serverRegistry);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
 
     private boolean notify(final String player, final Message message) {
         try {
-            RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(serverRegistryService.getPlayerNotificationRegistry().findNotificationServer(player));
+            RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(serverRegistry.findById(player));
             rabbitTemplate.send(String.valueOf(player) + postfix, message);
         } catch (Throwable e) {
             return false;

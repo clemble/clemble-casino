@@ -13,6 +13,7 @@
         <module>integration-management-web</module>
         <module>integration-game</module>
         <module>integration-test</module>
+        <module>integration-android</module>
     </modules>
     <dependencyManagement>
         <dependencies>

@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Profile;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.server.LongServerRegistry;
+import com.clemble.casino.game.id.GameIdGenerator;
+import com.clemble.casino.game.id.UUIDGameIdGenerator;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.aspect.bet.GameBetAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.GameOutcomeAspectFactory;
@@ -24,7 +25,6 @@ import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
 import com.clemble.casino.server.game.construct.GameConstructionServerService;
 import com.clemble.casino.server.game.construct.GameInitiatorService;
 import com.clemble.casino.server.game.construct.SimpleGameConstructionServerService;
-import com.clemble.casino.server.game.notification.TableServerRegistry;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
@@ -38,16 +38,9 @@ import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
-@Import(value = {
-        CommonSpringConfiguration.class,
-        GameJPASpringConfiguration.class,
-        PaymentCommonSpringConfiguration.class,
-        PlayerCommonSpringConfiguration.class,
-        GameManagementSpringConfiguration.GameTimeAspectConfiguration.class,
-        GameManagementSpringConfiguration.DefaultAndTest.class,
-        GameManagementSpringConfiguration.Cloud.class,
-        GameManagementSpringConfiguration.Test.class
-})
+@Import(value = { CommonSpringConfiguration.class, GameJPASpringConfiguration.class, PaymentCommonSpringConfiguration.class,
+        PlayerCommonSpringConfiguration.class, GameManagementSpringConfiguration.GameTimeAspectConfiguration.class,
+        GameManagementSpringConfiguration.Test.class })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -57,6 +50,11 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Autowired
     @Qualifier("playerStateManager")
     public PlayerPresenceServerService playerStateManager;
+
+    @Bean
+    public GameIdGenerator gameIdGenerator() {
+        return new UUIDGameIdGenerator();
+    }
 
     @Bean
     public GamePriceAspectFactory gamePriceAspectFactory() {
@@ -84,11 +82,11 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     /**
-     * Needed to separate this way, since BeanPostProcessor is loaded prior to any other configuration,
-     * Spring tries to load whole configuration, but some dependencies are naturally missing - like Repositories
+     * Needed to separate this way, since BeanPostProcessor is loaded prior to any other configuration, Spring tries to load whole configuration, but some
+     * dependencies are naturally missing - like Repositories
      * 
      * @author mavarazy
-     *
+     * 
      */
     @Configuration
     public static class GameTimeAspectConfiguration {
@@ -104,19 +102,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
             return new GameEventTaskExecutor(executorService);
         }
-    }
-
-    @Configuration
-    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST })
-    public static class DefaultAndTest {
-
-        @Bean
-        public TableServerRegistry tableServerRegistry() {
-            LongServerRegistry serverRegistry = new LongServerRegistry();
-            serverRegistry.register(10_000L, "localhost");
-            return new TableServerRegistry(serverRegistry);
-        }
-
     }
 
     @Configuration
@@ -138,10 +123,13 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Autowired
         public PlayerAccountServerService playerAccountService;
 
+        @Autowired
+        public GameIdGenerator gameIdGenerator;
+
         @Bean
         public GameConstructionServerService gameConstructionService() {
-            return new SimpleGameConstructionServerService(playerAccountService, playerNotificationService, constructionRepository, initiatorService(),
-                    playerLockService, playerStateManager);
+            return new SimpleGameConstructionServerService(gameIdGenerator, playerAccountService, playerNotificationService, constructionRepository,
+                    initiatorService(), playerLockService, playerStateManager);
         }
 
         @Bean
@@ -156,19 +144,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
                     return true;
                 }
             };
-        }
-
-    }
-
-    @Configuration
-    @Profile(value = { CLOUD })
-    public static class Cloud {
-
-        @Bean
-        public TableServerRegistry tableServerRegistry() {
-            LongServerRegistry serverRegistry = new LongServerRegistry();
-            serverRegistry.register(10_000L, "gogomaya.cloudfoundry.com");
-            return new TableServerRegistry(serverRegistry);
         }
 
     }

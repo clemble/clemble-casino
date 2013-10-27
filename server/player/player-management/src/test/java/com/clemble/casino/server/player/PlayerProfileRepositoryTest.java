@@ -1,5 +1,7 @@
 package com.clemble.casino.server.player;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -42,10 +44,9 @@ public class PlayerProfileRepositoryTest {
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class);
         playerProfile.setImageUrl("http://" + RandomStringUtils.random(10) + ".com/");
         playerProfile.setBirthDate(new Date(0));
+        playerProfile.setVersion(0);
         PlayerProfile savedProfile = playerProfileRepository.save(playerProfile);
-        playerProfile.setPlayer(savedProfile.getPlayer());
-        Assert.assertNotNull(playerProfile.getPlayer());
-        Assert.assertNotNull(savedProfile.getPlayer());
+        assertEquals(savedProfile.getPlayer(), playerProfile.getPlayer());
         PlayerProfile found = playerProfileRepository.findOne(playerProfile.getPlayer());
         Assert.assertEquals(found, playerProfile);
         Assert.assertEquals(found, savedProfile);

@@ -1,11 +1,8 @@
 package com.clemble.casino.game.event.server;
 
-import static com.clemble.casino.utils.Preconditions.checkNotNull;
-
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.ServerResourse;
 import com.clemble.casino.game.SessionAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,21 +16,13 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
      */
     private static final long serialVersionUID = -4474960027054354888L;
 
-    final private ServerResourse resource;
-
-    public GameStartedEvent(GameSession<State> session, ServerResourse resourse) {
+    public GameStartedEvent(GameSession<State> session) {
         super(session);
-        this.resource = checkNotNull(resourse);
     }
 
     @JsonCreator
-    public GameStartedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("state") State state, @JsonProperty("resource") ServerResourse resource) {
+    public GameStartedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("state") State state) {
         super(session, state);
-        this.resource = resource;
-    }
-
-    public ServerResourse getResource() {
-        return resource;
     }
 
     @Override
@@ -41,7 +30,6 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (super.hashCode());
-        result = prime * result + ((resource == null) ? 0 : resource.hashCode());
         return result;
     }
 
@@ -54,12 +42,7 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
         if (getClass() != obj.getClass())
             return false;
         GameStartedEvent<?> other = (GameStartedEvent<?>) obj;
-        if (!super.equals(obj))
-            return false;
-        if (resource == null) {
-            if (other.resource != null)
-                return false;
-        } else if (!resource.equals(other.resource))
+        if (!super.equals(other))
             return false;
         return true;
     }

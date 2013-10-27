@@ -122,9 +122,9 @@ public class ClembleCasinoErrorFormat {
                     if (jp.getCurrentName() == "game") {
                         Game game = Game.valueOf(jp.getValueAsString());
                         jp.nextToken();
-                        session = new GameSessionKey(game, jp.getNumberValue().longValue());
+                        session = new GameSessionKey(game, jp.getValueAsString());
                     } else {
-                        long sessionIdentifier = jp.getNumberValue().longValue();
+                        String sessionIdentifier = jp.getValueAsString();
                         jp.nextToken();
                         session = new GameSessionKey(Game.valueOf(jp.getValueAsString()), sessionIdentifier);
                     }

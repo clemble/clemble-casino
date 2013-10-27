@@ -51,7 +51,7 @@ public class PlayerPresenceServerServiceTest {
     @Test(expected = ClembleCasinoException.class)
     public void testMarkActiveIncorrect() {
         String player = String.valueOf(RANDOM.nextLong());
-        long session = RANDOM.nextLong();
+        String session = String.valueOf(RANDOM.nextLong());
 
         Assert.assertFalse(playerPresenceService.isAvailable(player));
 
@@ -61,7 +61,7 @@ public class PlayerPresenceServerServiceTest {
     @Test
     public void testMarkActive() {
         String player = String.valueOf(RANDOM.nextLong());
-        long session = RANDOM.nextLong();
+        String session = String.valueOf(RANDOM.nextLong());
 
         Assert.assertFalse(playerPresenceService.isAvailable(player));
 
@@ -80,7 +80,7 @@ public class PlayerPresenceServerServiceTest {
         Collection<String> players = new ArrayList<>();
         for (int i = 0; i < 2; i++)
             players.add(String.valueOf(RANDOM.nextLong()));
-        long session = RANDOM.nextLong();
+        String session = String.valueOf(RANDOM.nextLong());
 
         for (String player : players) {
             Assert.assertFalse(playerPresenceService.isAvailable(player));
@@ -130,7 +130,7 @@ public class PlayerPresenceServerServiceTest {
                         Assert.assertTrue(playerPresenceService.isAvailable(anotherPlayer));
 
                         List<String> participants = ImmutableList.<String> of(genericPlayer, anotherPlayer);
-                        long randomSession = RANDOM.nextLong();
+                        String randomSession = String.valueOf(RANDOM.nextLong());
                         startLatch.countDown();
                         startLatch.await();
 
@@ -194,7 +194,7 @@ public class PlayerPresenceServerServiceTest {
         Thread.sleep(50);
 
         playerPresenceService.markOnline(player);
-        playerPresenceService.markPlaying(player, new GameSessionKey(Game.pic, RANDOM.nextLong()));
+        playerPresenceService.markPlaying(player, new GameSessionKey(Game.pic, String.valueOf(RANDOM.nextLong())));
         playerPresenceService.markOnline(player);
 
         playerListener.countDownLatch.await(1, TimeUnit.SECONDS);

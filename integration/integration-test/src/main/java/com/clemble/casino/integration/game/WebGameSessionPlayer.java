@@ -2,9 +2,9 @@ package com.clemble.casino.integration.game;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.ServerResourse;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.client.GameClientEvent;
 import com.clemble.casino.integration.player.Player;
@@ -25,7 +25,7 @@ public class WebGameSessionPlayer<State extends GameState> extends AbstractGameS
     }
 
     @Override
-    public State perform(Player player, ServerResourse resourse, GameSessionKey session, GameClientEvent clientEvent) {
+    public State perform(Player player, ServerRegistry resourse, GameSessionKey session, GameClientEvent clientEvent) {
         // Step 1. Processing action by controller
         return (State) gameEngineController.process(session.getSession(), clientEvent);
     }

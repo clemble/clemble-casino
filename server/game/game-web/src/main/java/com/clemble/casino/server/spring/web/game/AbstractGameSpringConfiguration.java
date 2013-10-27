@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.GameSessionFactory;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
@@ -26,7 +27,6 @@ import com.clemble.casino.server.game.construct.GameConstructionServerService;
 import com.clemble.casino.server.game.construct.GameInitiatorService;
 import com.clemble.casino.server.game.construct.SimpleGameConstructionServerService;
 import com.clemble.casino.server.game.construct.SimpleGameInitiatorService;
-import com.clemble.casino.server.game.notification.TableServerRegistry;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -86,10 +86,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     public PlayerAccountServerService playerAccountService;
 
     @Autowired
-    @Qualifier("tableServerRegistry")
-    private TableServerRegistry tableServerRegistry;
-
-    @Autowired
     @Qualifier("playerStateManager")
     public PlayerPresenceServerService playerStateManager;
 
@@ -100,6 +96,9 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Autowired
     public GameSpecificationRegistry gameSpecificationRegistry;
 
+    @Autowired
+    public GameIdGenerator gameIdGenerator;
+
     abstract public Game getGame();
 
     @Bean
@@ -109,7 +108,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public GameConstructionServerService picPacPoeConstructionService() {
-        return new SimpleGameConstructionServerService(playerAccountService, playerNotificationService, gameConstructionRepository,
+        return new SimpleGameConstructionServerService(gameIdGenerator, playerAccountService, playerNotificationService, gameConstructionRepository,
                 picPacPoeInitiatorService(), playerLockService, playerStateManager);
     }
 
@@ -140,12 +139,12 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public GameSessionProcessor<State> picPacPoeSessionProcessor() {
-        return new GameSessionProcessor<State>(getGame(), tableServerRegistry, gameSessionFactory(), picPacPoeCacheService(), playerNotificationService);
+        return new GameSessionProcessor<State>(getGame(), gameSessionFactory(), picPacPoeCacheService(), playerNotificationService);
     }
 
     @Bean
     public GameConstructionController<State> picPacPoeConstructionController() {
-        return new GameConstructionController<State>(getGame(), gameConstructionRepository, picPacPoeConstructionService(), gameSpecificationRegistry, tableServerRegistry);
+        return new GameConstructionController<State>(getGame(), gameConstructionRepository, picPacPoeConstructionService(), gameSpecificationRegistry);
     }
 
     @Bean

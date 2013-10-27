@@ -6,8 +6,8 @@ import com.clemble.casino.game.event.client.MadeMove;
 
 public interface GameActionService<State extends GameState> {
 
-    public State process(long sessionId, ClientEvent move);
+    public State process(String sessionId, ClientEvent move);
 
-    public MadeMove getAction(long sessionId, int actionId);
+    public MadeMove getAction(String sessionId, int actionId);
 
 }

@@ -55,4 +55,8 @@ public class SimpleGameActionOperations<State extends GameState> implements Game
         return player;
     }
 
+    @Override
+    public GameActionOperations<State> construct(GameSessionKey sessionKey) {
+        return new SimpleGameActionOperations<>(player, sessionKey, eventListenersManager, gameActionService);
+    }
 }

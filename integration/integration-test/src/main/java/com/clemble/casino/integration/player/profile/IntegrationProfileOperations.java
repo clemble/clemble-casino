@@ -25,7 +25,7 @@ public class IntegrationProfileOperations implements ProfileOperations {
         // Step 1. Creating signed request
         HttpEntity<Void> requestEntity = player.<Void>sign(null);
         // Step 3. Rest template generation
-        return restTemplate.exchange(resourceLocations.getPlayerProfileEndpoint() + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.GET, requestEntity,
+        return restTemplate.exchange(resourceLocations.getServerRegistryConfiguration().getPlayerRegistry().findById(playerId) + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.GET, requestEntity,
                 PlayerProfile.class, playerId).getBody();
     }
 
@@ -35,7 +35,7 @@ public class IntegrationProfileOperations implements ProfileOperations {
         // Step 2. Generating request
         HttpEntity<PlayerProfile> requestEntity = player.<PlayerProfile>sign(newProfile);
         // Step 3. Rest template generation
-        return restTemplate.exchange(resourceLocations.getPlayerProfileEndpoint() + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.PUT, requestEntity, PlayerProfile.class, playerId).getBody();
+        return restTemplate.exchange(resourceLocations.getServerRegistryConfiguration().getPlayerRegistry().findById(newProfile.getPlayer()) + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.PUT, requestEntity, PlayerProfile.class, playerId).getBody();
     }
 
 }

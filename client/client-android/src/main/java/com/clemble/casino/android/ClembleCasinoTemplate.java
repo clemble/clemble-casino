@@ -3,9 +3,10 @@ package com.clemble.casino.android;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
+import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.android.event.listener.RabbitEventListenerManager;
 import com.clemble.casino.android.game.service.AndroidGameActionService;
 import com.clemble.casino.android.game.service.AndroidGameConstructionService;
@@ -13,16 +14,6 @@ import com.clemble.casino.android.payment.service.AndroidPaymentTransactionServi
 import com.clemble.casino.android.player.service.AndroidPlayerPresenceService;
 import com.clemble.casino.android.player.service.AndroidPlayerProfileService;
 import com.clemble.casino.android.player.service.AndroidPlayerSessionService;
-import com.clemble.casino.configuration.GameLocation;
-import com.clemble.casino.configuration.ResourceLocations;
-import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.service.GameConstructionService;
-import com.clemble.casino.payment.service.PaymentTransactionService;
-import com.clemble.casino.player.service.PlayerPresenceService;
-import com.clemble.casino.player.service.PlayerProfileService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.clemble.casino.client.ClembleCasino;
 import com.clemble.casino.client.game.service.GameActionOperations;
 import com.clemble.casino.client.game.service.GameConstructionOperations;
@@ -37,45 +28,59 @@ import com.clemble.casino.client.player.service.SimplePlayerPresenceOperations;
 import com.clemble.casino.client.player.service.SimplePlayerProfileOperations;
 import com.clemble.casino.client.player.service.SimplePlayerSessionOperations;
 import com.clemble.casino.client.service.RestClientService;
+import com.clemble.casino.configuration.ResourceLocations;
+import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.event.listener.EventListenersManager;
+import com.clemble.casino.game.Game;
+import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.service.GameActionService;
+import com.clemble.casino.game.service.GameConstructionService;
+import com.clemble.casino.payment.service.PaymentTransactionService;
+import com.clemble.casino.player.service.PlayerPresenceService;
+import com.clemble.casino.player.service.PlayerProfileService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ClembleCasinoTemplate implements ClembleCasino {
 
     final private String player;
-    final private RestClientService restClient;
     final private EventListenersManager eventListenersManager;
     final private PlayerSessionOperations playerSessionOperations;
     final private PlayerProfileOperations playerProfileOperations;
     final private PlayerPresenceOperations playerPresenceOperations;
     final private PaymentTransactionOperations paymentTransactionOperations;
-    final private Map<Game, GameConstructionOperations> gameToConstructionOperations;
+    final private Map<Game, GameConstructionOperations<?>> gameToConstructionOperations;
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public ClembleCasinoTemplate(RestClientService restClient, ObjectMapper objectMapper) throws IOException {
         this.player = checkNotNull(restClient).getPlayer();
-        this.restClient = checkNotNull(restClient);
 
         this.playerSessionOperations = new SimplePlayerSessionOperations(player, new AndroidPlayerSessionService(restClient));
         ResourceLocations resourceLocations = checkNotNull(playerSessionOperations.create().getResourceLocations());
+        ServerRegistryConfiguration registryConfiguration = resourceLocations.getServerRegistryConfiguration();
 
         // Step 1. Creating PlayerProfile service
-        RestClientService playerRestService = restClient.construct(resourceLocations.getPlayerProfileEndpoint());
+        RestClientService playerRestService = restClient.construct(registryConfiguration.getPlayerRegistry());
         PlayerProfileService playerProfileService = new AndroidPlayerProfileService(playerRestService);
         this.playerProfileOperations = new SimplePlayerProfileOperations(player, playerProfileService);
         // Step 2. Creating PlayerPresence service
         PlayerPresenceService playerPresenceService = new AndroidPlayerPresenceService(playerRestService);
         this.playerPresenceOperations = new SimplePlayerPresenceOperations(player, playerPresenceService);
         // Step 3. Creating PaymentTransaction service
-        RestClientService paymentRestService = restClient.construct(resourceLocations.getPaymentEndpoint());
+        RestClientService paymentRestService = restClient.construct(registryConfiguration.getPaymentRegistry());
         PaymentTransactionService paymentTransactionService = new AndroidPaymentTransactionService(paymentRestService);
         this.paymentTransactionOperations = new SimplePaymentTransactionOperations(player, paymentTransactionService);
         // Step 4. Creating GameConstruction services
-        this.gameToConstructionOperations = new HashMap<Game, GameConstructionOperations>();
+        this.gameToConstructionOperations = new EnumMap<Game, GameConstructionOperations<?>>(Game.class);
         this.eventListenersManager = new RabbitEventListenerManager(resourceLocations.getNotificationConfiguration(), objectMapper);
-        for (GameLocation location : resourceLocations.getGameLocations()) {
-            final RestClientService gameRestService = restClient.construct(location.getUrl());
-            final GameConstructionService constructionService = new AndroidGameConstructionService(gameRestService);
-            final GameConstructionOperations constructionOperations = new SimpleGameConstructionOperations(player, location.getGame(), constructionService, eventListenersManager);
-            this.gameToConstructionOperations.put(location.getGame(), constructionOperations);
+        for (Game game : resourceLocations.getGames()) {
+            ServerRegistry gameRegistry = registryConfiguration.getGameRegistry(game);
+            RestClientService gameRestService = restClient.construct(gameRegistry);
+            GameConstructionService constructionService = new AndroidGameConstructionService(gameRestService);
+            GameActionService<?> gameActionService = new AndroidGameActionService<>(gameRestService);
+            GameActionOperations<?> actionOperations = new SimpleGameActionOperations<>(player, null, eventListenersManager, gameActionService);
+            GameConstructionOperations<?> constructionOperations = new SimpleGameConstructionOperations(player, game, actionOperations, constructionService, eventListenersManager);
+            this.gameToConstructionOperations.put(game, constructionOperations);
         }
     }
 
@@ -100,18 +105,15 @@ public class ClembleCasinoTemplate implements ClembleCasino {
     }
 
     @Override
-    public GameConstructionOperations getGameConstructionOperations(Game game) {
-        return gameToConstructionOperations.get(game);
+    @SuppressWarnings("unchecked")
+    public <T extends GameState> GameConstructionOperations<T> getGameConstructionOperations(Game game) {
+        return (GameConstructionOperations<T>) gameToConstructionOperations.get(game);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <State extends GameState> GameActionOperations<State> getGameActionOperations(GameSessionKey session) {
-        // Step 1. Fetching game construction operations
-        GameConstructionOperations constructionOperations = getGameConstructionOperations(session.getGame());
-        // Step 2. Fetching action Server
-        String actionServer = constructionOperations.getGameActionServer(session.getSession());
-        // Step 3. Preparing new restService
-        return new SimpleGameActionOperations<>(player, session, eventListenersManager, new AndroidGameActionService<State>(restClient.construct(actionServer)));
+        return (GameActionOperations<State>) gameToConstructionOperations.get(session.getGame()).getActionOperations(session);
     }
 
 }

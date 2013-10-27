@@ -20,7 +20,7 @@ import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
-import com.clemble.casino.server.player.PlayerIdentifierGenerator;
+import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
@@ -31,7 +31,7 @@ import com.clemble.casino.web.mapping.WebMapping;
 @Controller
 public class PlayerRegistrationController implements PlayerRegistrationService {
 
-    final private PlayerIdentifierGenerator playerIdentifierGenerator; 
+    final private PlayerIdGenerator playerIdentifierGenerator; 
     final private PlayerCredentialRepository playerCredentialRepository;
     final private PlayerIdentityRepository playerIdentityRepository;
     final private PlayerProfileRegistrationServerService playerProfileRegistrationService;
@@ -39,7 +39,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     final private PlayerAccountServerService playerAccountServerService;
 
     public PlayerRegistrationController(
-            final PlayerIdentifierGenerator playerIdentifierGenerator,
+            final PlayerIdGenerator playerIdentifierGenerator,
             final PlayerProfileRegistrationServerService playerProfileRegistrationService,
             final PlayerCredentialRepository playerCredentialRepository,
             final PlayerIdentityRepository playerIdentityRepository,
@@ -85,7 +85,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         validationService.validate(registrationRequest.getPlayerProfile());
         // Step 2. Creating appropriate PlayerProfile
         PlayerProfile savedProfile = registrationRequest.getPlayerProfile();
-        savedProfile.setPlayer(playerIdentifierGenerator.newIdentifier());
+        savedProfile.setPlayer(playerIdentifierGenerator.newId());
         savedProfile = playerProfileRegistrationService.createPlayerProfile(savedProfile);
         // Step 3. Registration done through separate registration service
         return register(registrationRequest, savedProfile);

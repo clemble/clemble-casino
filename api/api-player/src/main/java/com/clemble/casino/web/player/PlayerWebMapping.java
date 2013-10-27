@@ -16,4 +16,6 @@ public interface PlayerWebMapping extends WebMapping {
     final public static String PLAYER_PRESENCES = "/presence";
 
     final public static String PLAYER_PRESENCES_PARAM = "players";
+    
+    final public static String PLAYER_NOTIFICATION_DOMAIN_PATTERN = "%s_notif.%s.%s";
 }

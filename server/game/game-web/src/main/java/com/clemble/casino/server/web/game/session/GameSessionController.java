@@ -16,8 +16,8 @@ import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
-import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.game.GameWebMapping;
+import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
 public class GameSessionController<State extends GameState> {
@@ -32,7 +32,7 @@ public class GameSessionController<State extends GameState> {
 
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameSession<State> get(@RequestHeader("playerId") long playerId, @PathVariable("sessionId") long session) {
+    public @ResponseBody GameSession<State> get(@RequestHeader("playerId") String playerId, @PathVariable("sessionId") String session) {
         return sessionRepository.findOne(new GameSessionKey(game, session));
     }
 }

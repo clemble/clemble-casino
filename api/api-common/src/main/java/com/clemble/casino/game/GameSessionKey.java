@@ -21,13 +21,13 @@ public class GameSessionKey implements GameAware, Serializable {
     private Game game;
 
     @Column(name = "SESSION_ID")
-    private long session;
+    private String session;
 
     public GameSessionKey() {
     }
 
     @JsonCreator
-    public GameSessionKey(@JsonProperty("game") Game game, @JsonProperty("session") long session) {
+    public GameSessionKey(@JsonProperty("game") Game game, @JsonProperty("session") String session) {
         this.game = game;
         this.session = session;
     }
@@ -41,11 +41,11 @@ public class GameSessionKey implements GameAware, Serializable {
         this.game = game;
     }
 
-    public long getSession() {
+    public String getSession() {
         return session;
     }
 
-    public void setSession(long session) {
+    public void setSession(String session) {
         this.session = session;
     }
     
@@ -58,7 +58,7 @@ public class GameSessionKey implements GameAware, Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((game == null) ? 0 : game.hashCode());
-        result = prime * result + (int) (session ^ (session >>> 32));
+        result = prime * result + ((session == null) ? 0 : session.hashCode());
         return result;
     }
 
@@ -71,11 +71,7 @@ public class GameSessionKey implements GameAware, Serializable {
         if (getClass() != obj.getClass())
             return false;
         GameSessionKey other = (GameSessionKey) obj;
-        if (game != other.game)
-            return false;
-        if (session != other.session)
-            return false;
-        return true;
+        return game == other.game && session.equals(other.session);
     }
 
     @Override

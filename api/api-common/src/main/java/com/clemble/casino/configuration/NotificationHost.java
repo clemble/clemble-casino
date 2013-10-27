@@ -49,4 +49,9 @@ public class NotificationHost {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "NotificationHost [host=" + host + ", port=" + port + "]";
+    }
 }

@@ -9,26 +9,26 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.web.payment.PaymentWebMapping;
-import com.clemble.casino.server.configuration.ServerRegistryServerService;
 
 public class RestPlayerAccountServerService implements PlayerAccountServerService {
 
     final private RestTemplate restTemplate;
-    final private ServerRegistryServerService serverRegistryService;
+    final private ServerRegistry paymentServerRegistry;
 
-    public RestPlayerAccountServerService(ServerRegistryServerService serverRegistryService, RestTemplate restTemplate) {
+    public RestPlayerAccountServerService(ServerRegistry paymentServerRegistry, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.serverRegistryService = serverRegistryService;
+        this.paymentServerRegistry = paymentServerRegistry;
     }
 
     @Override
     public PlayerAccount register(PlayerProfile playerProfile) {
-        HttpEntity<PlayerProfile> request = sign(playerProfile);
-        return restTemplate.postForEntity(serverRegistryService.getPayment().getLocation() + PaymentWebMapping.PAYMENT_ACCOUNTS,
+        HttpEntity<PlayerProfile> request = sign(playerProfile); 
+        return restTemplate.postForEntity(paymentServerRegistry.findBase() + PaymentWebMapping.PAYMENT_ACCOUNTS,
                 request, PlayerAccount.class).getBody();
     }
 
@@ -39,7 +39,7 @@ public class RestPlayerAccountServerService implements PlayerAccountServerServic
 
     @Override
     public boolean canAfford(Collection<String> playerId, Money amount) {
-        String url = serverRegistryService.getPayment().getLocation()
+        String url = paymentServerRegistry.findBase()
                 + PaymentWebMapping.PAYMENT_ACCOUNTS
                 + "?player=" + StringUtils.collectionToCommaDelimitedString(playerId)
                 + "&currency=" + amount.getCurrency()
