@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
@@ -30,6 +32,7 @@ public class PlayerProfileRepositoryTest {
     public PlayerProfileRepository playerProfileRepository;
 
     @Before
+    @After
     public void clean() {
         playerProfileRepository.deleteAll();
     }
@@ -41,10 +44,11 @@ public class PlayerProfileRepositoryTest {
 
     @Test
     public void testSave() {
-        PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class);
+        NativePlayerProfile playerProfile = ObjectGenerator.generate(NativePlayerProfile.class);
         playerProfile.setImageUrl("http://" + RandomStringUtils.random(10) + ".com/");
         playerProfile.setBirthDate(new Date(0));
         playerProfile.setVersion(0);
+        playerProfile.setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedProfile = playerProfileRepository.save(playerProfile);
         assertEquals(savedProfile.getPlayer(), playerProfile.getPlayer());
         PlayerProfile found = playerProfileRepository.findOne(playerProfile.getPlayer());
@@ -54,7 +58,8 @@ public class PlayerProfileRepositoryTest {
 
     @Test
     public void testSaveMultiple() {
-        PlayerProfile playerA = new PlayerProfile().setPlayer(RandomStringUtils.random(5)).setFirstName("User A").setLastName("Userius").setCategory(PlayerCategory.Novice);
+        NativePlayerProfile playerA = (NativePlayerProfile) new NativePlayerProfile().setFirstName("User A").setLastName("Userius")
+                .setCategory(PlayerCategory.Novice).setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedPlayerA = playerProfileRepository.save(playerA);
         playerA.setPlayer(savedPlayerA.getPlayer());
         Assert.assertNotNull(playerA.getPlayer());
@@ -63,9 +68,8 @@ public class PlayerProfileRepositoryTest {
         Assert.assertEquals(foundPlayerA, playerA);
         Assert.assertEquals(foundPlayerA, savedPlayerA);
 
-        Assert.assertEquals(playerProfileRepository.count(), 1);
-
-        PlayerProfile playerB = new PlayerProfile().setPlayer(RandomStringUtils.random(5)).setFirstName("User B").setLastName("Userius").setCategory(PlayerCategory.Amateur);
+        NativePlayerProfile playerB = (NativePlayerProfile) new NativePlayerProfile().setFirstName("User B").setLastName("Userius")
+                .setCategory(PlayerCategory.Amateur).setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedPlayerB = playerProfileRepository.save(playerB);
         playerB.setPlayer(savedPlayerB.getPlayer());
         Assert.assertNotSame(savedPlayerA.getPlayer(), savedPlayerB.getPlayer());
@@ -74,8 +78,6 @@ public class PlayerProfileRepositoryTest {
         PlayerProfile foundPlayerB = playerProfileRepository.findOne(playerB.getPlayer());
         Assert.assertEquals(foundPlayerB, playerB);
         Assert.assertEquals(foundPlayerB, savedPlayerB);
-
-        Assert.assertEquals(playerProfileRepository.count(), 2);
 
     }
 }

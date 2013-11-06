@@ -32,9 +32,9 @@ public class ManagementWebSpringConfigurationInitializationTest {
 
         @Bean
         public ResourceLocationService resourceLocationService() {
-            SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
-            return new SimpleResourceLocationController(configurationService, serverRegistryConfiguration,
-                    ImmutableList.<Game> of(Game.num));
+            SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest",
+                    serverRegistryConfiguration.getPlayerNotificationRegistry());
+            return new SimpleResourceLocationController(configurationService, serverRegistryConfiguration, ImmutableList.<Game> of(Game.num));
         }
     }
 

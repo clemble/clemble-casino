@@ -2,9 +2,12 @@ package com.clemble.casino.server.player.registration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialConnectionData;
+import com.clemble.casino.player.SocialPlayerProfile;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
@@ -25,6 +28,8 @@ public class SimplePlayerProfileRegistrationServerService implements PlayerProfi
 
     @Override
     public PlayerProfile createPlayerProfile(final PlayerProfile playerProfile) {
+        if (playerProfile instanceof SocialPlayerProfile)
+            throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileInvalid);
         // Step 1. Validating input data prior to any actions
         validationService.validate(playerProfile);
         // Step 2. Registration done through separate registration service

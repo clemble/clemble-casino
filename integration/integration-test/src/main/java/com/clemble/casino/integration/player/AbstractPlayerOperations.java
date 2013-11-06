@@ -17,6 +17,7 @@ import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
 import com.clemble.casino.integration.player.session.SessionOperations;
+import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerIdentity;
@@ -48,7 +49,7 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
 
     @Override
     final public Player createPlayer() {
-        return createPlayer(new PlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10)).setLastName(RandomStringUtils.randomAlphabetic(10))
+        return createPlayer(new NativePlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10)).setLastName(RandomStringUtils.randomAlphabetic(10))
                 .setNickName(RandomStringUtils.randomAlphabetic(10)));
     }
 

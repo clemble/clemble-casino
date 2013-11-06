@@ -92,8 +92,9 @@ public class Player implements PlayerAware {
         return player;
     }
 
-    public PlayerProfile getProfile() {
-        return profileOperations.get();
+    @SuppressWarnings("unchecked")
+    public <T extends PlayerProfile> T getProfile() {
+        return (T) profileOperations.get();
     }
 
     public Player setProfile(PlayerProfile newProfile) {

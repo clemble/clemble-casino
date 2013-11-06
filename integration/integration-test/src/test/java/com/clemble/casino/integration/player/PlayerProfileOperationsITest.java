@@ -20,6 +20,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
+import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.test.random.ObjectGenerator;
 
@@ -38,9 +39,9 @@ public class PlayerProfileOperationsITest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    private PlayerProfile randomProfile() {
-        PlayerProfile randomProfile = ObjectGenerator.generate(PlayerProfile.class);
-        randomProfile.setImageUrl("http://" + randomProfile.getImageUrl() + ".com/");
+    private NativePlayerProfile randomProfile() {
+        NativePlayerProfile randomProfile = ObjectGenerator.generate(NativePlayerProfile.class);
+        randomProfile.setImageUrl("http://" + RandomStringUtils.randomAlphabetic(10) + ".com/");
         randomProfile.setBirthDate(new Date(0));
         return randomProfile;
     }
@@ -76,7 +77,7 @@ public class PlayerProfileOperationsITest {
         Player anotherPlayer = playerOperations.createPlayer();
         Assert.assertEquals(playerProfile, player.getProfile());
         // Step 3. Updating created player with new Profile value
-        PlayerProfile newProfile = randomProfile();
+        NativePlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
         newProfile.setVersion(0);
         // Step 4. Checking saved profile, replaced the old one
@@ -104,7 +105,8 @@ public class PlayerProfileOperationsITest {
     }
 
     @Test
-    @Ignore //TODO Test security
+    @Ignore
+    // TODO Test security
     public void testProfileWriteByAnother() {
         PlayerProfile playerProfile = randomProfile();
         playerProfile.setPlayer(RandomStringUtils.random(5));
@@ -123,7 +125,8 @@ public class PlayerProfileOperationsITest {
     }
 
     @Test
-    @Ignore // Exception happens before the server invocation, this can be considered as Client problem now
+    @Ignore
+    // Exception happens before the server invocation, this can be considered as Client problem now
     // TODO restore to valid state
     public void testProfileWriteNull() {
         PlayerProfile playerProfile = randomProfile();
@@ -135,7 +138,8 @@ public class PlayerProfileOperationsITest {
 
         PlayerProfile newProfile = null;
 
-        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromPossibleErrors(ClembleCasinoError.PlayerProfileInvalid, ClembleCasinoError.ServerError));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromPossibleErrors(ClembleCasinoError.PlayerProfileInvalid,
+                ClembleCasinoError.ServerError));
 
         Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayer(), newProfile));
     }

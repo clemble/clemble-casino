@@ -16,6 +16,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.integration.spring.TestConfiguration;
+import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
@@ -42,22 +43,22 @@ public class PlayerOperationsITest {
 
     @Test
     public void createPlayerUsingProfileTest() {
-        PlayerProfile profile = new PlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
+        PlayerProfile profile = new NativePlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
                 .setNickName("mavarazy");
 
         Player player = playerOperations.createPlayer(profile);
 
         assertNotNull(player);
-        assertEquals(player.getProfile().getCategory(), PlayerCategory.Amateur);
-        assertEquals(player.getProfile().getFirstName(), "Anton");
-        assertEquals(player.getProfile().getLastName(), "Oparin");
-        assertEquals(player.getProfile().getGender(), PlayerGender.M);
-        assertEquals(player.getProfile().getNickName(), "mavarazy");
+        assertEquals(player.<NativePlayerProfile>getProfile().getCategory(), PlayerCategory.Amateur);
+        assertEquals(player.<NativePlayerProfile>getProfile().getFirstName(), "Anton");
+        assertEquals(player.<NativePlayerProfile>getProfile().getLastName(), "Oparin");
+        assertEquals(player.<NativePlayerProfile>getProfile().getGender(), PlayerGender.M);
+        assertEquals(player.<NativePlayerProfile>getProfile().getNickName(), "mavarazy");
     }
 
     @Test
     public void createPlayerUsingRegistrationRequest() {
-        PlayerProfile profile = new PlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
+        PlayerProfile profile = new NativePlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
                 .setNickName("mavarazy");
 
         PlayerCredential playerCredential = new PlayerCredential().setEmail("mavarazy@gmail.com").setPassword("23443545");
@@ -70,11 +71,11 @@ public class PlayerOperationsITest {
         Player player = playerOperations.createPlayer(registrationRequest);
 
         assertNotNull(player);
-        assertEquals(player.getProfile().getCategory(), PlayerCategory.Amateur);
-        assertEquals(player.getProfile().getFirstName(), "Anton");
-        assertEquals(player.getProfile().getLastName(), "Oparin");
-        assertEquals(player.getProfile().getGender(), PlayerGender.M);
-        assertEquals(player.getProfile().getNickName(), "mavarazy");
+        assertEquals(player.<NativePlayerProfile>getProfile().getCategory(), PlayerCategory.Amateur);
+        assertEquals(player.<NativePlayerProfile>getProfile().getFirstName(), "Anton");
+        assertEquals(player.<NativePlayerProfile>getProfile().getLastName(), "Oparin");
+        assertEquals(player.<NativePlayerProfile>getProfile().getGender(), PlayerGender.M);
+        assertEquals(player.<NativePlayerProfile>getProfile().getNickName(), "mavarazy");
 
         try {
             System.out.println(new ObjectMapper().writeValueAsString(registrationRequest));
@@ -85,7 +86,7 @@ public class PlayerOperationsITest {
 
     @Test
     public void loginExistingUser() {
-        PlayerProfile profile = new PlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
+        PlayerProfile profile = new NativePlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
                 .setNickName("mavarazy");
 
         Player player = playerOperations.createPlayer(profile);

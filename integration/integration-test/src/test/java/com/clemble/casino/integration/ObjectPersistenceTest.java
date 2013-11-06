@@ -29,7 +29,7 @@ import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.repository.game.GameScheduleRepository;
 import com.clemble.casino.server.spring.game.GameJPASpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentJPASpringConfiguration;
-import com.clemble.casino.server.spring.player.PlayerJPASpringConfiguration;
+import com.clemble.casino.server.spring.web.management.PlayerJPASpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)

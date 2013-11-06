@@ -27,15 +27,13 @@ public class PlayerProfileRegistrationController {
 
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE_REGISTRATION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PlayerProfile createPlayerProfile(@RequestBody final PlayerProfile playerProfile) {
+    public @ResponseBody PlayerProfile createPlayerProfile(@RequestBody final PlayerProfile playerProfile) {
         return playerProfileRegistrationServerService.createPlayerProfile(playerProfile);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PlayerProfile createPlayerProfile(@RequestBody SocialConnectionData socialConnectionData) {
+    public @ResponseBody PlayerProfile createPlayerProfile(@RequestBody SocialConnectionData socialConnectionData) {
         return playerProfileRegistrationServerService.createPlayerProfile(socialConnectionData);
     }
 

@@ -19,11 +19,12 @@ import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.social.SocialPlayerProfileCreator;
 import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
+import com.clemble.casino.server.spring.common.BasicJPASpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerManagementSpringConfiguration;
 
 @Configuration
-@Import(value = { PlayerManagementSpringConfiguration.class })
+@Import(value = { PlayerManagementSpringConfiguration.class, BasicJPASpringConfiguration.class })
 public class SocialModuleSpringConfiguration implements SpringConfiguration {
 
     @Autowired

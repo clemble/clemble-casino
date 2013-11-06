@@ -16,5 +16,13 @@
         <module>api-game-cell</module>
         <module>api-management</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>1.6.1.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 </project>

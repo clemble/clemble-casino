@@ -99,6 +99,113 @@
                                 -Dclemble.casino.management.url=http://localhost:8080/integration-management-web/</argLine>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-wars</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/wars-to-be-tested</outputDirectory>
+                                    <stripVersion>true</stripVersion>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>player-web</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>payment-web</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.integration</groupId>
+                                            <artifactId>integration-management-web</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.integration</groupId>
+                                            <artifactId>integration-game</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>start-jetty</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run-war</goal>
+                                </goals>
+                                <configuration>
+                                    <daemon>true</daemon>
+                                    <contextHandlers>
+                                        <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/player-web.war</war>
+                                            <contextPath>/player-web</contextPath>
+                                        </contextHandler>
+                                        <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/payment-web.war</war>
+                                            <contextPath>/payment-web</contextPath>
+                                        </contextHandler>
+                                        <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/integration-management-web.war</war>
+                                            <contextPath>/integration-management-web</contextPath>
+                                        </contextHandler>
+                                        <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                            <war>${project.build.directory}/wars-to-be-tested/integration-game.war</war>
+                                            <contextPath>/integration-game</contextPath>
+                                        </contextHandler>
+                                    </contextHandlers>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <systemProperties>
+                                <force>true</force>
+                                <systemProperty>
+                                    <name>jetty.port</name>
+                                    <value>8080</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>clemble.casino.management.url</name>
+                                    <value>http://localhost:9999/integration-management-web/</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>spring.profiles.active</name>
+                                    <value>int_test</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>logback.configurationFile</name>
+                                    <value>./src/test/resources/logback.xml</value>
+                                </systemProperty>
+                            </systemProperties>
+                            <stopPort>9991</stopPort>
+                            <stopKey>test</stopKey>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>

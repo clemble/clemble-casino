@@ -1,4 +1,4 @@
-package com.clemble.casino.server.spring.player;
+package com.clemble.casino.server.spring.web.management;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;

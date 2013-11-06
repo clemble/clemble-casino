@@ -6,12 +6,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
 
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialConnectionData;
+import com.clemble.casino.player.SocialPlayerProfile;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
@@ -38,7 +40,8 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
         // Step 1. Retrieving facebook profile for associated user
         FacebookProfile facebookProfile = facebook.userOperations().getUserProfile();
         // Step 2. Generating appropriate GameProfile to return
-        return new PlayerProfile()
+        return new SocialPlayerProfile()
+            .addSocialConnection(new ConnectionKey("facebook", facebookProfile.getId()))
             .setFirstName(facebookProfile.getFirstName())
             .setLastName(facebookProfile.getLastName())
             .setBirthDate(readDate(facebookProfile.getBirthday()))

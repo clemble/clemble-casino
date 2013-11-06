@@ -16,7 +16,9 @@ import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.player.PlayerWebMapping;
+import com.wordnik.swagger.annotations.Api;
 
+@Api(value = "player")
 @Controller
 public class PlayerProfileController implements PlayerProfileService {
 
