@@ -1,7 +1,10 @@
 package com.clemble.casino.player.client;
 
+import org.springframework.data.annotation.Id;
+
 public class ClientDetails implements ClientAware {
 
+    @Id
     final private String client;
 
     public ClientDetails(String client) {

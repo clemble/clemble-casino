@@ -1,23 +1,26 @@
 package com.clemble.casino.player.client;
 
+import org.springframework.data.annotation.Id;
+
 import com.clemble.casino.player.PlayerAware;
 
 public class PlayerClient implements PlayerAware, ClientAware {
 
     /**
-     * 
+     * Generate 01/11/13
      */
     private static final long serialVersionUID = -8353426338769515187L;
 
-    final private String player;
+    @Id
     final private String client;
-    final private SignatureAlgorithm signatureAlgorithm;
+    final private String player;
+    final private SignatureType signatureType;
     final private String clientSecret;
 
-    public PlayerClient(String player, String client, SignatureAlgorithm signatureAlgorithm, String clientSecret) {
+    public PlayerClient(String player, String client, SignatureType signatureAlgorithm, String clientSecret) {
         this.player = player;
         this.client = client;
-        this.signatureAlgorithm = signatureAlgorithm;
+        this.signatureType = signatureAlgorithm;
         this.clientSecret = clientSecret;
     }
 
@@ -30,8 +33,8 @@ public class PlayerClient implements PlayerAware, ClientAware {
         return client;
     }
 
-    public SignatureAlgorithm getSignatureAlgorithm() {
-        return signatureAlgorithm;
+    public SignatureType getSignatureAlgorithm() {
+        return signatureType;
     }
 
     public String getClientSecret() {
@@ -45,7 +48,7 @@ public class PlayerClient implements PlayerAware, ClientAware {
         result = prime * result + ((client == null) ? 0 : client.hashCode());
         result = prime * result + ((clientSecret == null) ? 0 : clientSecret.hashCode());
         result = prime * result + ((player == null) ? 0 : player.hashCode());
-        result = prime * result + ((signatureAlgorithm == null) ? 0 : signatureAlgorithm.hashCode());
+        result = prime * result + ((signatureType == null) ? 0 : signatureType.hashCode());
         return result;
     }
 
@@ -73,7 +76,7 @@ public class PlayerClient implements PlayerAware, ClientAware {
                 return false;
         } else if (!player.equals(other.player))
             return false;
-        if (signatureAlgorithm != other.signatureAlgorithm)
+        if (signatureType != other.signatureType)
             return false;
         return true;
     }

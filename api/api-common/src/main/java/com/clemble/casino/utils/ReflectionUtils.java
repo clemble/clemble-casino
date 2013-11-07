@@ -99,8 +99,8 @@ public class ReflectionUtils {
             Class<?> candidateClass = Class.forName(className);
             if (candidateClass.getAnnotation(searchedAnnotation) != null)
                 return candidateClass;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            ;
         }
         return null;
     }

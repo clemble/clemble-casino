@@ -1,5 +1,5 @@
 package com.clemble.casino.player.client;
 
-public enum SignatureAlgorithm {
+public enum SignatureType {
     RSASHA256;
 }
