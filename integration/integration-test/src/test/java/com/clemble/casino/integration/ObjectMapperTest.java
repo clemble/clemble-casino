@@ -30,8 +30,10 @@ import com.clemble.casino.game.account.GameAccount;
 import com.clemble.casino.game.account.InvisibleGameAccount;
 import com.clemble.casino.game.account.VisibleGameAccount;
 import com.clemble.casino.game.configuration.SelectRuleOptions;
+import com.clemble.casino.game.construct.ScheduledGameRequest;
 import com.clemble.casino.game.event.client.BetEvent;
 import com.clemble.casino.game.event.client.surrender.GiveUpEvent;
+import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
 import com.clemble.casino.game.rule.GameRule;
@@ -68,6 +70,8 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void testSpecialSerialization() {
+        Assert.assertNull(checkSerialization(InvitationDeclinedEvent.class));
+        Assert.assertNull(checkSerialization(ScheduledGameRequest.class));
         Assert.assertNull(checkSerialization(GameStartedEvent.class));
         Assert.assertNull(checkSerialization(StubGameState.class));
         Assert.assertNull(checkSerialization(GameAccount.class));
@@ -87,7 +91,7 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void testSimpleSerialization() throws IOException {
-        List<Class<?>> candidates = ReflectionUtils.findCandidates("com.clemble.casino.server", JsonTypeName.class);
+        List<Class<?>> candidates = ReflectionUtils.findCandidates("com.clemble.casino", JsonTypeName.class);
 
         Map<Class<?>, Throwable> errors = new HashMap<Class<?>, Throwable>();
 

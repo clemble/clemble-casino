@@ -67,7 +67,7 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
         if (getClass() != obj.getClass())
             return false;
         GameRequest other = (GameRequest) obj;
-        if (player != other.player)
+        if (!player.equals(other.player))
             return false;
         if (specification == null) {
             if (other.specification != null)

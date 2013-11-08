@@ -16,6 +16,9 @@
 package org.springframework.social.connect;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 // !!! Copy of connection key from spring-social, to make implementations compatibe
 // And to remove additional conversions
 /**
@@ -39,7 +42,8 @@ public final class ConnectionKey implements Serializable {
      * @param providerUserId
      *            id of the provider user account e.g. '125660'
      */
-    public ConnectionKey(String providerId, String providerUserId) {
+    @JsonCreator
+    public ConnectionKey(@JsonProperty("providerId") String providerId, @JsonProperty("providerUserId") String providerUserId) {
         this.providerId = providerId;
         this.providerUserId = providerUserId;
     }

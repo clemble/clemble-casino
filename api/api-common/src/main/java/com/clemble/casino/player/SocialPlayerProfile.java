@@ -35,4 +35,29 @@ public class SocialPlayerProfile extends NativePlayerProfile {
         return this;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((socialConnections == null) ? 0 : socialConnections.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SocialPlayerProfile other = (SocialPlayerProfile) obj;
+        if (socialConnections == null) {
+            if (other.socialConnections != null)
+                return false;
+        } else if (!socialConnections.equals(other.socialConnections))
+            return false;
+        return true;
+    }
+
 }

@@ -40,9 +40,7 @@ public class GameConstructedEvent implements ConstructionEvent {
         if (getClass() != obj.getClass())
             return false;
         GameConstructedEvent other = (GameConstructedEvent) obj;
-        if (session != other.session)
-            return false;
-        return true;
+        return session.equals(other.session);
     }
 
 }

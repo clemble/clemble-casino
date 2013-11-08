@@ -37,8 +37,6 @@ public class PlayerWonOutcome extends GameOutcome {
         if (getClass() != obj.getClass())
             return false;
         PlayerWonOutcome other = (PlayerWonOutcome) obj;
-        if (winner != other.winner)
-            return false;
-        return true;
+        return winner.equals(other.winner);
     }
 }

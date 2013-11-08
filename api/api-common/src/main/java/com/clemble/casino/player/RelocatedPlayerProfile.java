@@ -1,5 +1,6 @@
 package com.clemble.casino.player;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("relocated")
@@ -21,6 +22,7 @@ public class RelocatedPlayerProfile extends PlayerProfile {
     }
 
     @Override
+    @JsonIgnore
     public int getVersion() {
         return 0;
     }

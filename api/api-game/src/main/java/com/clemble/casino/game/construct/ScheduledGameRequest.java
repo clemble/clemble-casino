@@ -40,4 +40,32 @@ public class ScheduledGameRequest extends GameRequest {
         return startTime;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((declineBehavior == null) ? 0 : declineBehavior.hashCode());
+        result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ScheduledGameRequest other = (ScheduledGameRequest) obj;
+        if (declineBehavior != other.declineBehavior)
+            return false;
+        if (startTime == null) {
+            if (other.startTime != null)
+                return false;
+        } else if (!startTime.equals(other.startTime))
+            return false;
+        return true;
+    }
+
 }

@@ -57,9 +57,7 @@ public class PlayerInvitedEvent implements ConstructionEvent {
                 return false;
         } else if (!gameRequest.equals(other.gameRequest))
             return false;
-        if (session != other.session)
-            return false;
-        return true;
+        return session.equals(other.session);
     }
 
 }

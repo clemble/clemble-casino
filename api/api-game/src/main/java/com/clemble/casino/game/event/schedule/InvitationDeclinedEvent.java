@@ -51,7 +51,7 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
         if (getClass() != obj.getClass())
             return false;
         InvitationDeclinedEvent other = (InvitationDeclinedEvent) obj;
-        if (session != other.session)
+        if (!session.equals(other.session))
             return false;
         return player.equals(other.player);
     }

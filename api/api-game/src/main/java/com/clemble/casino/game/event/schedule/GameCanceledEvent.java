@@ -47,7 +47,7 @@ public class GameCanceledEvent implements ConstructionEvent, PlayerAware {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        return session == ((GameCanceledEvent) obj).session;
+        return session.equals(((GameCanceledEvent) obj).session);
     }
 
 }
