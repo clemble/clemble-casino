@@ -8,15 +8,15 @@ import org.apache.commons.lang3.SerializationException;
 import org.springframework.security.oauth.common.OAuthException;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 
-import com.clemble.casino.security.ClembleConsumerDetails;
+import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.couchbase.client.CouchbaseClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ClembleConsumerDetailsService implements ConsumerDetailsService {
 
-    final private CouchbaseClient couchbaseClient;
     final private ObjectMapper objectMapper;
+    final private CouchbaseClient couchbaseClient;
 
     public ClembleConsumerDetailsService(CouchbaseClient couchbaseClient, ObjectMapper objectMapper) {
         this.objectMapper = checkNotNull(objectMapper);

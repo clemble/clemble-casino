@@ -2,25 +2,29 @@ package com.clemble.casino.player.client;
 
 import org.springframework.data.annotation.Id;
 
-public class ClientDetails implements ClientAware {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class ClientDetails implements ConsumerAware {
 
     @Id
-    final private String client;
+    final private String consumerName;
 
-    public ClientDetails(String client) {
-        this.client = client;
+    @JsonCreator
+    public ClientDetails(@JsonProperty("consumerName") String consumerName) {
+        this.consumerName = consumerName;
     }
 
     @Override
-    public String getClient() {
-        return client;
+    public String getConsumerName() {
+        return consumerName;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((client == null) ? 0 : client.hashCode());
+        result = prime * result + ((consumerName == null) ? 0 : consumerName.hashCode());
         return result;
     }
 
@@ -33,10 +37,10 @@ public class ClientDetails implements ClientAware {
         if (getClass() != obj.getClass())
             return false;
         ClientDetails other = (ClientDetails) obj;
-        if (client == null) {
-            if (other.client != null)
+        if (consumerName == null) {
+            if (other.consumerName != null)
                 return false;
-        } else if (!client.equals(other.client))
+        } else if (!consumerName.equals(other.consumerName))
             return false;
         return true;
     }

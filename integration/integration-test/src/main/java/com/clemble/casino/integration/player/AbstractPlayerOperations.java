@@ -11,6 +11,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.integration.game.construction.GameConstructionOperations;
 import com.clemble.casino.integration.player.account.AccountOperations;
@@ -19,9 +20,12 @@ import com.clemble.casino.integration.player.profile.ProfileOperations;
 import com.clemble.casino.integration.player.session.SessionOperations;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.client.ClembleConsumerDetails;
+import com.clemble.casino.player.client.ClientDetails;
 import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.player.security.PlayerIdentity;
+import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
+import com.clemble.test.random.ObjectGenerator;
 
 abstract public class AbstractPlayerOperations implements PlayerOperations, ApplicationContextAware {
 
@@ -60,15 +64,14 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
         // Step 1. Creating RegistrationRequest for processing
         PlayerCredential playerCredential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(30) + "@gmail.com").setPassword(
                 UUID.randomUUID().toString());
-        PlayerIdentity playerIdentity = new PlayerIdentity()
-            .setSecret(UUID.randomUUID().toString())
-            .setDevice(UUID.randomUUID().toString());
-        PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(playerProfile, playerCredential, playerIdentity);
+        
+        ClembleConsumerDetails consumerDetails = new ClembleConsumerDetails(UUID.randomUUID().toString(), "IT", ObjectGenerator.generate(RSAKeySecret.class), null, new ClientDetails("IT"));
+        PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(playerProfile, playerCredential, consumerDetails);
         // Step 2. Forwarding to appropriate method for processing
         return createPlayer(registrationRequest);
     }
 
-    final public Player create(PlayerIdentity playerIdentity, PlayerCredential credential) {
+    final public Player create(PlayerToken playerIdentity, PlayerCredential credential) {
         return new Player(playerIdentity, credential, profileOperations, sessionOperations, accountOperations, listenerOperations, gameConstructionOperations);
     }
 

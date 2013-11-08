@@ -4,7 +4,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.clemble.casino.player.security.PlayerIdentity;
+import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.client.player.service.PlayerSecurityClientService;
 
@@ -15,9 +15,9 @@ public class AndroidPlayerSecurityService implements PlayerSecurityClientService
      */
     private static final long serialVersionUID = -3770963835672665720L;
 
-    final private PlayerIdentity playerIdentity;
+    final private PlayerToken playerIdentity;
 
-    public AndroidPlayerSecurityService(PlayerIdentity playerIdentity) {
+    public AndroidPlayerSecurityService(PlayerToken playerIdentity) {
         this.playerIdentity = playerIdentity;
     }
 

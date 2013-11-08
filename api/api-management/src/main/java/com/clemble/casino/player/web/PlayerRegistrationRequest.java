@@ -1,12 +1,14 @@
 package com.clemble.casino.player.web;
 
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.player.security.PlayerIdentity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PlayerRegistrationRequest extends PlayerLoginRequest {
+
+    private static final long serialVersionUID = -7419091879616342442L;
 
     final private PlayerProfile playerProfile;
 
@@ -14,8 +16,8 @@ public class PlayerRegistrationRequest extends PlayerLoginRequest {
     public PlayerRegistrationRequest(
             @JsonProperty("playerProfile") PlayerProfile playerProfile,
             @JsonProperty("playerCredential") PlayerCredential playerCredential,
-            @JsonProperty("playerIdentity") PlayerIdentity playerIdentity) {
-        super(playerIdentity, playerCredential);
+            @JsonProperty("consumerDetails") ClembleConsumerDetails consumerDetails) {
+        super(consumerDetails, playerCredential);
         this.playerProfile = playerProfile;
     }
 

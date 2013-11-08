@@ -7,7 +7,7 @@ import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Test;
 
 import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.player.security.PlayerIdentity;
+import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.security.PlayerSession;
 
 public class ManagementSchemaGenerator {
@@ -18,7 +18,7 @@ public class ManagementSchemaGenerator {
 
         configuration
             .addAnnotatedClass(PlayerCredential.class)
-            .addAnnotatedClass(PlayerIdentity.class)
+            .addAnnotatedClass(PlayerToken.class)
             .addAnnotatedClass(PlayerSession.class)
             .setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect")
             .setProperty(Environment.DRIVER, "com.mysql.jdbc.Driver");
@@ -36,7 +36,7 @@ public class ManagementSchemaGenerator {
 
         configuration
             .addAnnotatedClass(PlayerCredential.class)
-            .addAnnotatedClass(PlayerIdentity.class)
+            .addAnnotatedClass(PlayerToken.class)
             .addAnnotatedClass(PlayerSession.class)
             //.setProperty(Environment.DIALECT, "org.hibernate.dialect.H2Dialect")
             .setProperty(Environment.DIALECT, "com.clemble.casino.server.spring.common.ImprovedH2Dialect")

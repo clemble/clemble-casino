@@ -1,4 +1,4 @@
-package com.clemble.casino.security;
+package com.clemble.casino.player.client;
 
 import java.io.IOException;
 import java.security.Key;
@@ -33,7 +33,6 @@ public class RSAKeySecretFormat {
     }
 
     final public static String PRIVATE_KEY_TAG = "privateKey";
-
     final public static String PUBLIC_KEY_TAG = "publicKey";
 
     final public static String KEY_ALGORITHM_TAG = "algorithm";

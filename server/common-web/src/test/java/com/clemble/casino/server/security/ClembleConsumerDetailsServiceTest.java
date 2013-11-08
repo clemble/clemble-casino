@@ -12,12 +12,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth.common.signature.SharedConsumerSecretImpl;
-import org.springframework.security.oauth.common.signature.SignatureSecret;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.security.ClembleConsumerDetails;
+import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
@@ -56,12 +54,6 @@ public class ClembleConsumerDetailsServiceTest {
 
     @Test
     public void testSaving() {
-        ObjectGenerator.register(SignatureSecret.class, new AbstractValueGenerator<SignatureSecret>() {
-            @Override
-            public SignatureSecret generate() {
-                return new SharedConsumerSecretImpl("clemble-secret");
-            }
-        });
         ClembleConsumerDetails consumerDetails = ObjectGenerator.generate(ClembleConsumerDetails.class);
         consumerDetailsService.save(consumerDetails);
         ClembleConsumerDetails readConsumerDetails = consumerDetailsService.loadConsumerByConsumerKey(consumerDetails.getConsumerKey());

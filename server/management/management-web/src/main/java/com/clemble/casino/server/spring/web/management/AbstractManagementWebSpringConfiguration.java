@@ -15,17 +15,18 @@ import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
-import com.clemble.casino.server.repository.player.PlayerIdentityRepository;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
+import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
+import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 
 @Configuration
-@Import(value = { OAuth2ServerSpringConfiguration.class, WebCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PlayerJPASpringConfiguration.class, PaymentCommonSpringConfiguration.class })
+@Import(value = { WebCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PlayerJPASpringConfiguration.class, PaymentCommonSpringConfiguration.class, OAuthSpringConfiguration.class })
 abstract public class AbstractManagementWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -42,10 +43,10 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
             PlayerIdGenerator playerIdentifierGenerator,
             @Qualifier("playerProfileRegistrationService") PlayerProfileRegistrationServerService playerProfileRegistrationService,
             PlayerCredentialRepository playerCredentialRepository,
-            PlayerIdentityRepository playerIdentityRepository,
+            ClembleConsumerDetailsService clembleConsumerDetailsService,
             ClembleCasinoValidationService gogomayaValidationService,
             @Qualifier("playerAccountService") PlayerAccountServerService playerAccountService) {
-        return new PlayerRegistrationController(playerIdentifierGenerator, playerProfileRegistrationService, playerCredentialRepository, playerIdentityRepository,
+        return new PlayerRegistrationController(playerIdentifierGenerator, playerProfileRegistrationService, playerCredentialRepository, clembleConsumerDetailsService,
                 gogomayaValidationService, playerAccountService);
     }
 

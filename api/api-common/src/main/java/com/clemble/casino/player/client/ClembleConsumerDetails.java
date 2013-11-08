@@ -1,4 +1,4 @@
-package com.clemble.casino.security;
+package com.clemble.casino.player.client;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ClembleConsumerDetails implements ConsumerDetails {
+public class ClembleConsumerDetails implements ConsumerDetails, ConsumerAware {
 
     /**
      * Generated 06/11/13
@@ -23,6 +23,7 @@ public class ClembleConsumerDetails implements ConsumerDetails {
     final private String consumerName;
     final private RSAKeySecret signatureSecret;
     final private List<GrantedAuthority> authorities;
+    final private ClientDetails clientDetail;
 
     @JsonCreator
     public ClembleConsumerDetails(@JsonProperty("consumerKey") String consumerKey,
@@ -30,11 +31,13 @@ public class ClembleConsumerDetails implements ConsumerDetails {
             @JsonSerialize(using = RSAKeySecretFormat.RSAKeySecretSerializer.class)
             @JsonDeserialize(using = RSAKeySecretFormat.RSAKeySecretDeserializer.class)
             @JsonProperty("signatureSecret") RSAKeySecret signatureSecret,
-            @JsonProperty("authorities") List<GrantedAuthority> authorities) {
+            @JsonProperty("authorities") List<GrantedAuthority> authorities,
+            @JsonProperty("clientDetail") ClientDetails clientDetails) {
         this.consumerKey = consumerKey;
         this.consumerName = consumerName;
         this.signatureSecret = signatureSecret;
         this.authorities = CollectionUtils.immutableList(authorities);
+        this.clientDetail = clientDetails;
     }
 
     @Override
@@ -57,11 +60,16 @@ public class ClembleConsumerDetails implements ConsumerDetails {
         return authorities;
     }
 
+    public ClientDetails getClientDetail() {
+        return clientDetail;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
+        result = prime * result + ((clientDetail == null) ? 0 : clientDetail.hashCode());
         result = prime * result + ((consumerKey == null) ? 0 : consumerKey.hashCode());
         result = prime * result + ((consumerName == null) ? 0 : consumerName.hashCode());
         result = prime * result + ((signatureSecret == null) ? 0 : signatureSecret.hashCode());
@@ -82,6 +90,11 @@ public class ClembleConsumerDetails implements ConsumerDetails {
                 return false;
         } else if (!authorities.equals(other.authorities))
             return false;
+        if (clientDetail == null) {
+            if (other.clientDetail != null)
+                return false;
+        } else if (!clientDetail.equals(other.clientDetail))
+            return false;
         if (consumerKey == null) {
             if (other.consumerKey != null)
                 return false;
@@ -96,16 +109,14 @@ public class ClembleConsumerDetails implements ConsumerDetails {
             if (other.signatureSecret != null)
                 return false;
         } else {
-            if(signatureSecret.getPrivateKey() == null && other.signatureSecret.getPrivateKey() != null) {
+            if(signatureSecret.getPrivateKey() == null && other.signatureSecret.getPrivateKey() != null)
                 return false;
-            } else if(!signatureSecret.getPrivateKey().equals(other.signatureSecret.getPrivateKey())) {
+            else if(!signatureSecret.getPrivateKey().equals(other.signatureSecret.getPrivateKey()))
                 return false;
-            }
-            if(signatureSecret.getPublicKey() == null && other.signatureSecret.getPublicKey() != null) {
-                    return false;
-            } else if(!signatureSecret.getPublicKey().equals(other.signatureSecret.getPublicKey())) {
+            if(signatureSecret.getPublicKey() == null && other.signatureSecret.getPublicKey() != null)
                 return false;
-            }
+            else if(!signatureSecret.getPublicKey().equals(other.signatureSecret.getPublicKey()))
+                return false;
         }
         return true;
     }

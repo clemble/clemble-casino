@@ -6,7 +6,7 @@ import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
 import com.clemble.casino.integration.player.session.SessionOperations;
-import com.clemble.casino.player.security.PlayerIdentity;
+import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
@@ -29,7 +29,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(registrationRequest);
         // Step 1. Performing actual player creation
-        PlayerIdentity playerIdentity = registrationController.createPlayer(registrationRequest);
+        PlayerToken playerIdentity = registrationController.createPlayer(registrationRequest);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
         Player player = super.create(playerIdentity, registrationRequest.getPlayerCredential());
@@ -43,7 +43,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(credential);
         // Step 1. Performing actual player login
-        PlayerIdentity playerIdentity = registrationController.login(credential);
+        PlayerToken playerIdentity = registrationController.login(credential);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
         Player player = super.create(playerIdentity, credential.getPlayerCredential());

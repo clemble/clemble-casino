@@ -28,7 +28,7 @@ import com.clemble.casino.integration.player.session.SessionOperations;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.player.security.PlayerIdentity;
+import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.security.PlayerSession;
 import com.google.common.collect.ImmutableMap;
 
@@ -41,7 +41,7 @@ public class Player implements PlayerAware {
 
     final private String player;
     final private PlayerSession session;
-    final private PlayerIdentity identity;
+    final private PlayerToken identity;
     final private PlayerListenerManager playerListenersManager;
     final private PlayerCredential credential;
 
@@ -51,7 +51,7 @@ public class Player implements PlayerAware {
     final private PlayerAccountOperations playerWalletOperations;
     final private PlayerProfileOperations profileOperations;
 
-    public Player(final PlayerIdentity playerIdentity,
+    public Player(final PlayerToken playerIdentity,
             final PlayerCredential credential,
             final ProfileOperations playerProfileOperations,
             final SessionOperations sessionOperations,
@@ -102,7 +102,7 @@ public class Player implements PlayerAware {
         return this;
     }
 
-    public PlayerIdentity getIdentity() {
+    public PlayerToken getIdentity() {
         return identity;
     }
 

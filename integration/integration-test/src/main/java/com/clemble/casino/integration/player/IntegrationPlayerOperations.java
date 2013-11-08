@@ -8,7 +8,7 @@ import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
 import com.clemble.casino.integration.player.session.SessionOperations;
-import com.clemble.casino.player.security.PlayerIdentity;
+import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.web.management.ManagementWebMapping;
@@ -34,8 +34,8 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(registrationRequest);
         // Step 1. Performing actual player creation
-        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION,
-                registrationRequest, PlayerIdentity.class);
+        PlayerToken playerIdentity = restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION,
+                registrationRequest, PlayerToken.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
         Player player = super.create(playerIdentity, registrationRequest.getPlayerCredential());
@@ -48,8 +48,8 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
         // Step 0. Sanity check
         checkNotNull(credential);
         // Step 1. Performing actual player login
-        PlayerIdentity playerIdentity = restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN,
-                credential, PlayerIdentity.class);
+        PlayerToken playerIdentity = restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN,
+                credential, PlayerToken.class);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
         Player player = super.create(playerIdentity, credential.getPlayerCredential());

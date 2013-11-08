@@ -4,7 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.player.security.PlayerIdentity;
+import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
@@ -22,18 +22,18 @@ public class AndroidPlayerRegistrationService implements PlayerRegistrationServi
     }
 
     @Override
-    public PlayerIdentity login(PlayerLoginRequest playerLoginRequest) {
-        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN, playerLoginRequest, PlayerIdentity.class).getBody();
+    public PlayerToken login(PlayerLoginRequest playerLoginRequest) {
+        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN, playerLoginRequest, PlayerToken.class).getBody();
     }
 
     @Override
-    public PlayerIdentity createPlayer(PlayerRegistrationRequest registrationRequest) {
-        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION, registrationRequest, PlayerIdentity.class).getBody();
+    public PlayerToken createPlayer(PlayerRegistrationRequest registrationRequest) {
+        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION, registrationRequest, PlayerToken.class).getBody();
     }
 
     @Override
-    public PlayerIdentity createSocialPlayer(PlayerSocialRegistrationRequest socialConnectionData) {
-        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, socialConnectionData, PlayerIdentity.class).getBody();
+    public PlayerToken createSocialPlayer(PlayerSocialRegistrationRequest socialConnectionData) {
+        return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, socialConnectionData, PlayerToken.class).getBody();
     }
 
 }

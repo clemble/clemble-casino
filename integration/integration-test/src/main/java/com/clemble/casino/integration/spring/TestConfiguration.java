@@ -4,6 +4,11 @@ import static com.clemble.casino.server.spring.common.SpringConfiguration.INTEGR
 import static com.clemble.casino.server.spring.common.SpringConfiguration.INTEGRATION_DEFAULT;
 import static com.clemble.casino.server.spring.common.SpringConfiguration.INTEGRATION_TEST;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+
+import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +20,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
@@ -51,6 +57,8 @@ import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;
 import com.clemble.casino.server.web.player.PlayerProfileController;
 import com.clemble.casino.server.web.player.account.PlayerAccountController;
+import com.clemble.test.random.AbstractValueGenerator;
+import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
@@ -60,6 +68,24 @@ public class TestConfiguration {
     @Autowired
     @Qualifier("playerOperations")
     public PlayerOperations playerOperations;
+
+    @PostConstruct
+    public void initialize() {
+        ObjectGenerator.register(RSAKeySecret.class, new AbstractValueGenerator<RSAKeySecret>() {
+
+            @Override
+            public RSAKeySecret generate() {
+                try {
+                    KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+                    generator.initialize(1024);
+                    KeyPair keyPair = generator.generateKeyPair();
+                    return new RSAKeySecret(keyPair.getPrivate(), keyPair.getPublic());
+                } catch (NoSuchAlgorithmException algorithmException) {
+                    return null;
+                }
+            }
+        });
+    }
 
     @Bean
     @Singleton

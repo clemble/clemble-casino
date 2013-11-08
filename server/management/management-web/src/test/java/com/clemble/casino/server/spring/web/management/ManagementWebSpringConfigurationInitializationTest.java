@@ -16,6 +16,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
 import com.clemble.casino.server.configuration.SimpleResourceLocationController;
 import com.clemble.casino.server.spring.common.ServerRegistrySpringConfiguration;
+import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,7 +25,7 @@ import com.google.common.collect.ImmutableList;
 public class ManagementWebSpringConfigurationInitializationTest {
 
     @Configuration
-    @Import(ServerRegistrySpringConfiguration.class)
+    @Import({ServerRegistrySpringConfiguration.class, OAuthSpringConfiguration.class})
     public static class TestManagementWebSpringConfiguration extends AbstractManagementWebSpringConfiguration {
 
         @Autowired

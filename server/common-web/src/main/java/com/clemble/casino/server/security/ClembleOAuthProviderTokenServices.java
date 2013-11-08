@@ -15,8 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ClembleOAuthProviderTokenServices extends RandomValueProviderTokenServices {
 
-    final private CouchbaseClient couchbaseClient;
+    // TODO track unused tokens
+
     final private ObjectMapper objectMapper;
+    final private CouchbaseClient couchbaseClient;
 
     public ClembleOAuthProviderTokenServices(CouchbaseClient couchbaseClient, ObjectMapper objectMapper) {
         this.objectMapper = checkNotNull(objectMapper);
