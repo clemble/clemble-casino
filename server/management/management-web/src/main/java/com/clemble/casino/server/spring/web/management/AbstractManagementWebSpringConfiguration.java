@@ -1,5 +1,7 @@
 package com.clemble.casino.server.spring.web.management;
 
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,8 @@ import com.clemble.casino.server.player.UUIDPlayerIdGenerator;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
+import com.clemble.casino.server.player.security.AESPlayerTokenFactory;
+import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
@@ -36,17 +40,21 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     public PlayerIdGenerator playerIdentifierGenerator() {
         return new UUIDPlayerIdGenerator();
     }
+    
+    @Bean
+    public PlayerTokenFactory playerTokenFactory() throws NoSuchAlgorithmException {
+        return new AESPlayerTokenFactory();
+    }
 
     @Bean
     @Autowired
     public PlayerRegistrationController playerRegistrationController(
-            PlayerIdGenerator playerIdentifierGenerator,
             @Qualifier("playerProfileRegistrationService") PlayerProfileRegistrationServerService playerProfileRegistrationService,
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,
             ClembleCasinoValidationService gogomayaValidationService,
-            @Qualifier("playerAccountService") PlayerAccountServerService playerAccountService) {
-        return new PlayerRegistrationController(playerIdentifierGenerator, playerProfileRegistrationService, playerCredentialRepository, clembleConsumerDetailsService,
+            @Qualifier("playerAccountService") PlayerAccountServerService playerAccountService) throws NoSuchAlgorithmException {
+        return new PlayerRegistrationController(playerIdentifierGenerator(), playerTokenFactory(), playerProfileRegistrationService, playerCredentialRepository, clembleConsumerDetailsService,
                 gogomayaValidationService, playerAccountService);
     }
 

@@ -1,6 +1,7 @@
 package com.clemble.casino.server.security;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -12,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -57,6 +59,12 @@ public class ClembleConsumerDetailsServiceTest {
         ClembleConsumerDetails consumerDetails = ObjectGenerator.generate(ClembleConsumerDetails.class);
         consumerDetailsService.save(consumerDetails);
         ClembleConsumerDetails readConsumerDetails = consumerDetailsService.loadConsumerByConsumerKey(consumerDetails.getConsumerKey());
+        assertNull(readConsumerDetails.getSignatureSecret().getPrivateKey());
+        consumerDetails = new ClembleConsumerDetails(consumerDetails.getConsumerKey(), 
+                consumerDetails.getConsumerName(), 
+                new RSAKeySecret(consumerDetails.getSignatureSecret().getPublicKey()),
+                consumerDetails.getAuthorities(),
+                consumerDetails.getClientDetail());
         assertEquals(consumerDetails, readConsumerDetails);
     }
 }

@@ -109,13 +109,15 @@ public class ClembleConsumerDetails implements ConsumerDetails, ConsumerAware {
             if (other.signatureSecret != null)
                 return false;
         } else {
-            if(signatureSecret.getPrivateKey() == null && other.signatureSecret.getPrivateKey() != null)
+            if(signatureSecret.getPrivateKey() == null) { 
+                if (other.signatureSecret.getPrivateKey() != null)
+                    return false;
+            } else if(!signatureSecret.getPrivateKey().equals(other.signatureSecret.getPrivateKey()))
                 return false;
-            else if(!signatureSecret.getPrivateKey().equals(other.signatureSecret.getPrivateKey()))
-                return false;
-            if(signatureSecret.getPublicKey() == null && other.signatureSecret.getPublicKey() != null)
-                return false;
-            else if(!signatureSecret.getPublicKey().equals(other.signatureSecret.getPublicKey()))
+            if(signatureSecret.getPublicKey() == null) { 
+                if (other.signatureSecret.getPublicKey() != null)
+                    return false;
+            } else if(!signatureSecret.getPublicKey().equals(other.signatureSecret.getPublicKey()))
                 return false;
         }
         return true;

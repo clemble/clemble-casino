@@ -14,7 +14,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerRegistrationService;
@@ -24,6 +23,7 @@ import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
+import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import com.clemble.casino.web.management.ManagementWebMapping;
@@ -32,7 +32,9 @@ import com.clemble.casino.web.mapping.WebMapping;
 @Controller
 public class PlayerRegistrationController implements PlayerRegistrationService {
 
+    
     final private PlayerIdGenerator playerIdentifierGenerator;
+    final private PlayerTokenFactory playerTokenFactory;
     final private PlayerCredentialRepository playerCredentialRepository;
     final private PlayerProfileRegistrationServerService playerProfileRegistrationService;
     final private ClembleCasinoValidationService validationService;
@@ -40,10 +42,14 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     final private PlayerAccountServerService playerAccountServerService;
 
     public PlayerRegistrationController(final PlayerIdGenerator playerIdentifierGenerator,
-            final PlayerProfileRegistrationServerService playerProfileRegistrationService, final PlayerCredentialRepository playerCredentialRepository,
-            final ClembleConsumerDetailsService playerIdentityRepository, final ClembleCasinoValidationService validationService,
+            final PlayerTokenFactory playerTokenFactory,
+            final PlayerProfileRegistrationServerService playerProfileRegistrationService,
+            final PlayerCredentialRepository playerCredentialRepository,
+            final ClembleConsumerDetailsService playerIdentityRepository,
+            final ClembleCasinoValidationService validationService,
             final PlayerAccountServerService playerAccountServerService) {
         this.playerIdentifierGenerator = checkNotNull(playerIdentifierGenerator);
+        this.playerTokenFactory = checkNotNull(playerTokenFactory);
         this.playerAccountServerService = checkNotNull(playerAccountServerService);
         this.playerProfileRegistrationService = checkNotNull(playerProfileRegistrationService);
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
@@ -67,7 +73,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
         // Step 4. Everything is fine, return Identity
         consumerDetailsService.save(loginRequest.getConsumerDetails());
-        return generateToken(fetchedCredentials.getPlayer(), loginRequest.getConsumerDetails());
+        return playerTokenFactory.create(fetchedCredentials.getPlayer(), loginRequest.getConsumerDetails());
     }
 
     @Override
@@ -118,7 +124,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         if (fetchedCredentials != null) {
             // Step 2.1 If the password is the same, just return identity to the user
             if (playerCredentials.getPassword().equals(fetchedCredentials.getPassword())) {
-                return generateToken(fetchedCredentials.getPlayer(), loginRequest.getConsumerDetails());
+                return playerTokenFactory.create(fetchedCredentials.getPlayer(), loginRequest.getConsumerDetails());
             } else {
                 // Step 2.2 If password does not match this is an error
                 throw ClembleCasinoException.fromError(ClembleCasinoError.EmailAlreadyRegistered);
@@ -134,11 +140,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(playerProfile.getPlayer());
         playerCredentials = playerCredentialRepository.saveAndFlush(playerCredentials);
         // Step 2. Create new token
-        return generateToken(playerProfile.getPlayer(), loginRequest.getConsumerDetails());
-    }
-
-    private PlayerToken generateToken(String player, ClembleConsumerDetails consumerDetails) {
-        return new PlayerToken(player, "none", "none");
+        return playerTokenFactory.create(playerProfile.getPlayer(), loginRequest.getConsumerDetails());
     }
 
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.SerializationException;
 import org.springframework.security.oauth.common.OAuthException;
+import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 
 import com.clemble.casino.player.client.ClembleConsumerDetails;
@@ -42,6 +43,14 @@ public class ClembleConsumerDetailsService implements ConsumerDetailsService {
         // Step 1. Sanity check
         if (clembleConsumerDetails == null || clembleConsumerDetails.getConsumerKey() == null)
             return;
+        // Step 1.1 Removing private key from consumer details they must not be stored on the server
+        if (clembleConsumerDetails.getSignatureSecret().getPrivateKey() != null) {;
+            clembleConsumerDetails = new ClembleConsumerDetails(clembleConsumerDetails.getConsumerKey(), 
+                    clembleConsumerDetails.getConsumerName(), 
+                    new RSAKeySecret(clembleConsumerDetails.getSignatureSecret().getPublicKey()),
+                    clembleConsumerDetails.getAuthorities(),
+                    clembleConsumerDetails.getClientDetail());
+        }
         // Step 2. Performing actual saving
         try {
             String json = objectMapper.writeValueAsString(clembleConsumerDetails);
