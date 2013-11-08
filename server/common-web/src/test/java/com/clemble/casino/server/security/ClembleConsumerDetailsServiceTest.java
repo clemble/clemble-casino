@@ -17,6 +17,7 @@ import org.springframework.security.oauth.common.signature.SignatureSecret;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.clemble.casino.security.ClembleConsumerDetails;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;

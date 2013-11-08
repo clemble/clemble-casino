@@ -1,4 +1,4 @@
-package com.clemble.casino.server.security;
+package com.clemble.casino.security;
 
 import java.util.List;
 
@@ -6,11 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 
+import com.clemble.casino.utils.CollectionUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.collect.ImmutableList;
 
 public class ClembleConsumerDetails implements ConsumerDetails {
 
@@ -34,7 +34,7 @@ public class ClembleConsumerDetails implements ConsumerDetails {
         this.consumerKey = consumerKey;
         this.consumerName = consumerName;
         this.signatureSecret = signatureSecret;
-        this.authorities = ImmutableList.<GrantedAuthority> copyOf(authorities);
+        this.authorities = CollectionUtils.immutableList(authorities);
     }
 
     @Override

@@ -35,7 +35,7 @@ import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;
 @ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
 public class GameConstructionServerServiceTest {
 
-    final private Random RANDOM = new Random();
+    final private static Random RANDOM = new Random();
 
     final private int NUM_PARTICIPANTS = 50;
 
@@ -106,6 +106,7 @@ public class GameConstructionServerServiceTest {
         @Override
         public GameConstruction call() {
             try {
+                Thread.sleep(RANDOM.nextInt(1000));
                 GameConstruction construct = constructionService.invitationResponsed(new InvitationAcceptedEvent(construction, player));
                 System.out.println(construct.getVersion());
                 return construct;

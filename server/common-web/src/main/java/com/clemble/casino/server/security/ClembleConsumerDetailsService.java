@@ -8,6 +8,7 @@ import org.apache.commons.lang3.SerializationException;
 import org.springframework.security.oauth.common.OAuthException;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 
+import com.clemble.casino.security.ClembleConsumerDetails;
 import com.couchbase.client.CouchbaseClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
