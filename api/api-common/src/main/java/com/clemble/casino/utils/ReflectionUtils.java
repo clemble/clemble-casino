@@ -3,6 +3,11 @@ package com.clemble.casino.utils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -97,8 +102,32 @@ public class ReflectionUtils {
     public static <T extends Annotation> Class<?> checkCandidate(String className, Class<T> searchedAnnotation) {
         try {
             Class<?> candidateClass = Class.forName(className);
-            if (candidateClass.getAnnotation(searchedAnnotation) != null)
-                return candidateClass;
+            Target target = searchedAnnotation.getAnnotation(Target.class);
+            for(ElementType elementType: target.value()) {
+                switch(elementType) {
+                case TYPE:
+                    if (candidateClass.getAnnotation(searchedAnnotation) != null)
+                        return candidateClass;
+                    break;
+                case CONSTRUCTOR:
+                    for(Constructor<?> constructor: candidateClass.getConstructors())
+                        if(constructor.getAnnotation(searchedAnnotation) != null)
+                            return candidateClass;
+                    break;
+                case METHOD:
+                    for(Method method: candidateClass.getMethods())
+                        if(method.getAnnotation(searchedAnnotation) != null)
+                            return candidateClass;
+                    break;
+                case FIELD:
+                    for(Field field: candidateClass.getFields())
+                        if(field.getAnnotation(searchedAnnotation) != null)
+                            return candidateClass;
+                    break;
+                default:
+                    break;
+                }
+            }
         } catch (ClassNotFoundException | NoClassDefFoundError e) {
             ;
         }
