@@ -57,7 +57,8 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
     final private Map<Game, GameConstructionOperations<?>> gameToConstructionOperations;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public ClembleCasinoTemplate(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, RestClientService restClient) throws IOException {
+    public ClembleCasinoTemplate(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, RestClientService restClient)
+            throws IOException {
         super(consumerKey, consumerSecret, accessToken, accessTokenSecret, new RSARequestSigner());
 
         this.player = checkNotNull(restClient).getPlayer();
@@ -86,26 +87,10 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
             GameConstructionService constructionService = new AndroidGameConstructionService(gameRestService);
             GameActionService<?> gameActionService = new AndroidGameActionService<>(gameRestService);
             GameActionOperations<?> actionOperations = new SimpleGameActionOperations<>(player, null, eventListenersManager, gameActionService);
-            GameConstructionOperations<?> constructionOperations = new SimpleGameConstructionOperations(player, game, actionOperations, constructionService, eventListenersManager);
+            GameConstructionOperations<?> constructionOperations = new SimpleGameConstructionOperations(player, game, actionOperations, constructionService,
+                    eventListenersManager);
             this.gameToConstructionOperations.put(game, constructionOperations);
         }
-    }
-    
-    /**
-     * Returns a {@link MappingJackson2HttpMessageConverter} to be used by the internal {@link RestTemplate}.
-     * Override to customize the message converter (for example, to set a custom object mapper or supported media types).
-     * To remove/replace this or any of the other message converters that are registered by default, override the getMessageConverters() method instead.
-     */
-    @Override
-    protected MappingJackson2HttpMessageConverter getJsonMessageConverter() {
-        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
-        jacksonConverter.setObjectMapper(ClembleCasinoConstants.OBJECT_MAPPER);
-        return jacksonConverter;
-    }
-
-    @Override
-    protected void configureRestTemplate(RestTemplate restTemplate) {
-        restTemplate.setErrorHandler(new ClembleCasinoRestErrorHandler(ClembleCasinoConstants.OBJECT_MAPPER));
     }
 
     @Override
@@ -140,4 +125,20 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
         return (GameActionOperations<State>) gameToConstructionOperations.get(session.getGame()).getActionOperations(session);
     }
 
+    /**
+     * Returns a {@link MappingJackson2HttpMessageConverter} to be used by the internal {@link RestTemplate}. Override to customize the message converter (for
+     * example, to set a custom object mapper or supported media types). To remove/replace this or any of the other message converters that are registered by
+     * default, override the getMessageConverters() method instead.
+     */
+    @Override
+    protected MappingJackson2HttpMessageConverter getJsonMessageConverter() {
+        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
+        jacksonConverter.setObjectMapper(ClembleCasinoConstants.OBJECT_MAPPER);
+        return jacksonConverter;
+    }
+
+    @Override
+    protected void configureRestTemplate(RestTemplate restTemplate) {
+        restTemplate.setErrorHandler(new ClembleCasinoRestErrorHandler(ClembleCasinoConstants.OBJECT_MAPPER));
+    }
 }
