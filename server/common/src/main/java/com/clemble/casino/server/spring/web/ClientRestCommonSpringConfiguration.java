@@ -9,8 +9,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.clemble.casino.client.error.ClembleCasinoRestErrorHandler;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
-import com.clemble.casino.server.web.error.ClembleCasinoRestErrorHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration

@@ -42,7 +42,7 @@ public class ClembleConsumerDetailsService implements ConsumerDetailsService {
     public void save(ClembleConsumerDetails clembleConsumerDetails) {
         // Step 1. Sanity check
         if (clembleConsumerDetails == null || clembleConsumerDetails.getConsumerKey() == null)
-            return;
+            throw new IllegalArgumentException("Invalid ClembleConsumerDetails");
         // Step 1.1 Removing private key from consumer details they must not be stored on the server
         if (clembleConsumerDetails.getSignatureSecret().getPrivateKey() != null) {;
             clembleConsumerDetails = new ClembleConsumerDetails(clembleConsumerDetails.getConsumerKey(), 

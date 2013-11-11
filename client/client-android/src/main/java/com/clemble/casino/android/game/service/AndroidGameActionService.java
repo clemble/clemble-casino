@@ -2,14 +2,14 @@ package com.clemble.casino.android.game.service;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.client.game.service.ClientGameActionService;
+import com.clemble.casino.client.game.ClientGameActionOperations;
 import com.clemble.casino.client.service.RestClientService;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.event.client.MadeMove;
 import com.clemble.casino.web.game.GameWebMapping;
 
-public class AndroidGameActionService<State extends GameState> implements ClientGameActionService<State> {
+public class AndroidGameActionService<State extends GameState> implements ClientGameActionOperations<State> {
 
     final private RestClientService restService;
 

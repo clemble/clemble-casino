@@ -10,12 +10,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.ImmutablePair;
+import com.clemble.casino.client.event.EventListener;
+import com.clemble.casino.client.event.EventListenersManager;
+import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.configuration.NotificationConfiguration;
 import com.clemble.casino.event.Event;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.clemble.casino.event.listener.EventListener;
-import com.clemble.casino.event.listener.EventListenersManager;
-import com.clemble.casino.event.listener.EventSelector;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.AMQP.Queue;
 import com.rabbitmq.client.Channel;

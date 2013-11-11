@@ -8,10 +8,14 @@
     </parent>
     <artifactId>common</artifactId>
     <dependencies>
-
         <dependency>
             <groupId>com.clemble.casino</groupId>
             <artifactId>api-management</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.clemble.casino.client</groupId>
+            <artifactId>client-common</artifactId>
         </dependency>
 
         <dependency>

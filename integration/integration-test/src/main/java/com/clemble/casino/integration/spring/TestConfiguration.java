@@ -23,6 +23,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import org.springframework.web.client.RestTemplate;
 
+import com.clemble.casino.client.error.ClembleCasinoRestErrorHandler;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.IntegrationGameSessionPlayerFactory;
@@ -51,7 +52,6 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.clemble.casino.server.spring.web.player.PlayerWebSpringConfiguration;
-import com.clemble.casino.server.web.error.ClembleCasinoRestErrorHandler;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;

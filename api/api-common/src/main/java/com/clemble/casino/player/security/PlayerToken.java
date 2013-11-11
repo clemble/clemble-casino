@@ -26,7 +26,7 @@ public class PlayerToken implements PlayerAware {
     public PlayerToken(@JsonProperty(PlayerAware.JSON_ID) String player,
             @JsonSerialize(using = KeySerializer.class)
             @JsonDeserialize(using = SecretKeyDeserializer.class)
-            @JsonProperty("secret") SecretKey secret,
+            @JsonProperty("secretKey") SecretKey secret,
             @JsonProperty("consumerKey") String consumerKey,
             @JsonProperty("value") String value) {
         this.player = player;
@@ -40,7 +40,7 @@ public class PlayerToken implements PlayerAware {
         return player;
     }
 
-    public SecretKey getSecret() {
+    public SecretKey getSecretKey() {
         return secret;
     }
 

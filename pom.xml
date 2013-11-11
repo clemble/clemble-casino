@@ -45,6 +45,7 @@
         <!-- NoSQL dependencies -->
         <lettuce.version>2.3.3</lettuce.version>
         <!-- Dependencies for Spring Social -->
+        <spring.social.core.version>1.1.0.BUILD-SNAPSHOT</spring.social.core.version>
         <spring.social.version>1.0.3.RELEASE</spring.social.version>
         <spring.social.linkedin.version>1.0.0.RC1</spring.social.linkedin.version>
         <spring.social.facebook.version>1.0.3.RELEASE</spring.social.facebook.version>
@@ -314,7 +315,7 @@
             <dependency>
                 <groupId>org.springframework.social</groupId>
                 <artifactId>spring-social-core</artifactId>
-                <version>${spring.social.version}</version>
+                <version>${spring.social.core.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.social</groupId>
