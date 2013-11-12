@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
-import com.clemble.casino.integration.player.profile.ProfileOperations;
+import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
@@ -21,7 +21,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
     public IntegrationPlayerOperations(final String baseUrl,
             final RestTemplate restTemplate,
             final PlayerListenerOperations listenerOperations,
-            final ProfileOperations playerProfileOperations,
+            final PlayerProfileServiceFactory playerProfileOperations,
             final PlayerSessionService playerSessionOperations,
             final AccountOperations accountOperations) {
         super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);

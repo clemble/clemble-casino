@@ -16,7 +16,7 @@ import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import com.clemble.casino.integration.game.construction.GameConstructionOperations;
 import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
-import com.clemble.casino.integration.player.profile.ProfileOperations;
+import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.client.ClembleConsumerDetails;
@@ -29,14 +29,14 @@ import com.clemble.test.random.ObjectGenerator;
 
 abstract public class AbstractPlayerOperations implements PlayerOperations, ApplicationContextAware {
 
-    final private ProfileOperations profileOperations;
     final private PlayerSessionService sessionOperations;
+    final private PlayerProfileServiceFactory profileOperations;
     final private AccountOperations accountOperations;
     final private PlayerListenerOperations listenerOperations;
     final private Set<GameConstructionOperations<?>> gameConstructionOperations = new HashSet<>();
 
     protected AbstractPlayerOperations(PlayerListenerOperations listenerOperations,
-            ProfileOperations profileOperations,
+            PlayerProfileServiceFactory profileOperations,
             PlayerSessionService sessionOperations,
             AccountOperations accountOperations) {
         this.listenerOperations = checkNotNull(listenerOperations);

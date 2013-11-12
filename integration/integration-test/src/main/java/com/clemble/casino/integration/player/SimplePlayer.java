@@ -10,6 +10,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.clemble.casino.client.player.PlayerProfileOperations;
+import com.clemble.casino.client.player.PlayerProfileTemplate;
 import com.clemble.casino.client.player.PlayerSessionOperations;
 import com.clemble.casino.client.player.PlayerSessionTemplate;
 import com.clemble.casino.game.Game;
@@ -23,8 +25,7 @@ import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.player.account.PlayerAccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerManager;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
-import com.clemble.casino.integration.player.profile.PlayerProfileOperations;
-import com.clemble.casino.integration.player.profile.ProfileOperations;
+import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerSession;
@@ -53,16 +54,17 @@ public class SimplePlayer implements Player {
 
     public SimplePlayer(final PlayerToken playerIdentity, 
             final PlayerCredential credential,
-            final ProfileOperations playerProfileOperations,
+            final PlayerProfileServiceFactory playerProfileServiceFactory,
             final PlayerSessionService sessionOperations,
             final AccountOperations accountOperations,
             final PlayerListenerOperations listenerOperations,
             final Collection<GameConstructionOperations<?>> playerConstructionOperations) {
-        this.profileOperations = new PlayerProfileOperations(this, playerProfileOperations);
+        this.identity = checkNotNull(playerIdentity);
+        this.player = playerIdentity.getPlayer();
+        
+        this.profileOperations = new PlayerProfileTemplate(player, playerProfileServiceFactory.construct(this));
         this.playerAccountOperations = new PlayerAccountOperations(this, accountOperations);
 
-        this.identity = checkNotNull(playerIdentity);
-        this.player = identity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
         this.credential = checkNotNull(credential);
@@ -75,10 +77,12 @@ public class SimplePlayer implements Player {
         this.gameConstructors = ImmutableMap.<Game, PlayerGameConstructionOperations<?>> copyOf(map);
     }
 
+    @Override
     public PlayerSessionOperations getSessionOperations() {
         return playerSessionOperations;
     }
 
+    @Override
     public PlayerProfileOperations getProfileOperations() {
         return profileOperations;
     }
@@ -94,11 +98,11 @@ public class SimplePlayer implements Player {
 
     @SuppressWarnings("unchecked")
     public <T extends PlayerProfile> T getProfile() {
-        return (T) profileOperations.get();
+        return (T) profileOperations.getPlayerProfile();
     }
 
     public Player setProfile(PlayerProfile newProfile) {
-        profileOperations.set(newProfile);
+        profileOperations.updatePlayerProfile(newProfile);
         return this;
     }
 

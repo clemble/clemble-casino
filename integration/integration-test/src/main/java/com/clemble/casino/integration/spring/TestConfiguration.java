@@ -39,9 +39,7 @@ import com.clemble.casino.integration.player.account.IntegrationAccountOperation
 import com.clemble.casino.integration.player.account.WebAccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.listener.SimplePlayerListenerOperations;
-import com.clemble.casino.integration.player.profile.IntegrationProfileOperations;
-import com.clemble.casino.integration.player.profile.ProfileOperations;
-import com.clemble.casino.integration.player.profile.WebProfileOperations;
+import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.integration.player.session.IntegrationSessionOperations;
 import com.clemble.casino.integration.spring.web.management.ManagementWebSpringConfiguration;
 import com.clemble.casino.player.service.PlayerSessionService;
@@ -129,19 +127,13 @@ public class TestConfiguration {
         @Singleton
         public PlayerOperations playerOperations() {
             return new WebPlayerOperations(playerRegistrationController, playerSessionController, accountOperations(), playerListenerOperations(),
-                    playerProfileOperations());
+                    new PlayerProfileServiceFactory.SingletonPlayerProfileServiceFactory(playerProfileController));
         }
 
         @Bean
         @Singleton
         public AccountOperations accountOperations() {
             return new WebAccountOperations(paymentTransactionController, playerAccountController);
-        }
-
-        @Bean
-        @Singleton
-        public ProfileOperations playerProfileOperations() {
-            return new WebProfileOperations(playerProfileController);
         }
 
         @Bean
@@ -214,8 +206,8 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public ProfileOperations playerProfileOperations() {
-            return new IntegrationProfileOperations(restTemplate());
+        public PlayerProfileServiceFactory playerProfileOperations() {
+            return new PlayerProfileServiceFactory.IntegrationPlayerProfileServiceFactory(restTemplate());
         }
 
         @Bean

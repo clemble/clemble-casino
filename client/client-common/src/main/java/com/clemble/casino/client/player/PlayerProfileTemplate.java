@@ -1,6 +1,5 @@
-package com.clemble.casino.android.player;
+package com.clemble.casino.client.player;
 
-import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.service.PlayerProfileService;
 

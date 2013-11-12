@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpEntity;
 
+import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.client.player.PlayerSessionOperations;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
@@ -12,7 +13,6 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.integration.game.GameSessionListener;
 import com.clemble.casino.integration.game.construction.PlayerGameConstructionOperations;
 import com.clemble.casino.integration.player.account.PlayerAccountOperations;
-import com.clemble.casino.integration.player.profile.PlayerProfileOperations;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
