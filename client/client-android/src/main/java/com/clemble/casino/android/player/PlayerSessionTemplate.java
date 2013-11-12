@@ -6,12 +6,12 @@ import com.clemble.casino.client.player.PlayerSessionOperations;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.service.PlayerSessionService;
 
-public class SimplePlayerSessionOperations implements PlayerSessionOperations {
-    
+public class PlayerSessionTemplate implements PlayerSessionOperations {
+
     final private String player;
     final private PlayerSessionService playerSessionService;
-    
-    public SimplePlayerSessionOperations(String player, PlayerSessionService playerSessionService) {
+
+    public PlayerSessionTemplate(String player, PlayerSessionService playerSessionService) {
         this.player = player;
         this.playerSessionService = checkNotNull(playerSessionService);
     }
@@ -27,8 +27,8 @@ public class SimplePlayerSessionOperations implements PlayerSessionOperations {
     }
 
     @Override
-    public PlayerSession endPlayerSession(long sessionId) {
-        return playerSessionService.endPlayerSession(player, sessionId);
+    public void endPlayerSession(long sessionId) {
+        playerSessionService.endPlayerSession(player, sessionId);
     }
 
     @Override

@@ -7,21 +7,24 @@ import java.util.List;
 import com.clemble.casino.client.payment.PaymentTransactionOperations;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.service.PaymentTransactionService;
+import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.service.PaymentService;
 
-public class SimplePaymentTransactionOperations implements PaymentTransactionOperations {
+public class PaymentTransactionTemplate implements PaymentTransactionOperations {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -5498822576528068505L;
 
     final private String player;
-    final private PaymentTransactionService paymentTransactionService;
+    final private PaymentService paymentTransactionService;
 
-    public SimplePaymentTransactionOperations(String player, PaymentTransactionService paymentTransactionService) {
+    public PaymentTransactionTemplate(String player, PaymentService paymentTransactionService) {
         this.player = player;
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
+    }
+
+    @Override
+    public PlayerAccount getAccount() {
+        return paymentTransactionService.get(player);
     }
 
     @Override

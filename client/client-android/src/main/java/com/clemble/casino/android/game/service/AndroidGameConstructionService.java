@@ -1,41 +1,50 @@
 package com.clemble.casino.android.game.service;
 
-import static com.clemble.casino.utils.Preconditions.checkNotNull;
+import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.client.service.RestClientService;
+import com.clemble.casino.ServerRegistry;
+import com.clemble.casino.android.AbstractClembleCasinoOperations;
 import com.clemble.casino.event.ClientEvent;
+import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameRequest;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.web.game.GameWebMapping;
 
-public class AndroidGameConstructionService implements GameConstructionService {
+public class AndroidGameConstructionService<T extends GameState> extends AbstractClembleCasinoOperations implements GameConstructionService {
 
-    final private RestClientService restService;
+    final private RestTemplate restTemplate;
 
-    public AndroidGameConstructionService(RestClientService restService) {
-        this.restService = checkNotNull(restService);
+    public AndroidGameConstructionService(RestTemplate restTemplate, ServerRegistry apiBase) {
+        super(apiBase);
+        this.restTemplate = restTemplate;
     }
 
     @Override
     public GameConstruction construct(String player, GameRequest gameRequest) {
-        return restService.postForEntity(GameWebMapping.GAME_SESSIONS, gameRequest, GameConstruction.class);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public GameConstruction getConstruct(String player, String session) {
-        return restService.getForEntity(GameWebMapping.GAME_SESSIONS_CONSTRUCTION, GameConstruction.class, session);
+        return restTemplate
+            .getForEntity(buildUriById(session, GameWebMapping.GAME_SESSIONS_CONSTRUCTION, "sessionId", session), GameConstruction.class)
+            .getBody();
     }
 
     @Override
     public ClientEvent getResponce(String requester, String session, String player) {
-        return restService.getForEntity(GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, ClientEvent.class, session, player);
+        return restTemplate
+            .getForEntity(buildUriById(session, GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, "sessionId", session, "playerId", player), ClientEvent.class)
+            .getBody();
     }
 
     @Override
-    public GameConstruction reply(String player, String sessionId, InvitationResponseEvent gameRequest) {
-        return restService.postForEntity(GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, gameRequest, GameConstruction.class, sessionId);
+    public GameConstruction reply(String player, String session, InvitationResponseEvent gameRequest) {
+        return restTemplate
+            .postForEntity(buildUriById(session, GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, "sesssionId", session), gameRequest, GameConstruction.class)
+            .getBody();
     }
 
 }

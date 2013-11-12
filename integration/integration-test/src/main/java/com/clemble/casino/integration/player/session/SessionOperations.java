@@ -7,9 +7,9 @@ public interface SessionOperations {
 
     public PlayerSession start(Player player);
 
-    public PlayerSession end(Player player, PlayerSession session);
+    public void end(Player player, PlayerSession session);
 
-    public PlayerSession end(Player player, long session);
+    public void end(Player player, long session);
 
     public PlayerSession refresh(Player player, PlayerSession session);
 

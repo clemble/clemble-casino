@@ -27,8 +27,7 @@ public class PlayerSessionController implements PlayerSessionService {
     final private PlayerSessionRepository sessionRepository;
     final private PlayerPresenceServerService playerPresenceService;
 
-    public PlayerSessionController(final ResourceLocationService resourceLocationService,
-            final PlayerSessionRepository sessionRepository,
+    public PlayerSessionController(final ResourceLocationService resourceLocationService, final PlayerSessionRepository sessionRepository,
             final PlayerPresenceServerService playerPresenceService) {
         this.resourceLocationService = checkNotNull(resourceLocationService);
         this.sessionRepository = checkNotNull(sessionRepository);
@@ -38,7 +37,8 @@ public class PlayerSessionController implements PlayerSessionService {
     @Override
     @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PlayerSession create(@PathVariable("playerId") String playerId) {
+    public @ResponseBody
+    PlayerSession create(@PathVariable("playerId") String playerId) {
         // Step 1. Generated player session
         PlayerSession playerSession = new PlayerSession().setPlayer(playerId);
         // Step 2. Providing result as a Session data
@@ -72,7 +72,7 @@ public class PlayerSessionController implements PlayerSessionService {
     @RequestMapping(method = RequestMethod.DELETE, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    PlayerSession endPlayerSession(@PathVariable("playerId") String player, @PathVariable("sessionId") long sessionId) {
+    void endPlayerSession(@PathVariable("playerId") String player, @PathVariable("sessionId") long sessionId) {
         // Step 1. Fetching player session
         PlayerSession playerSession = getPlayerSession(player, sessionId);
         if (playerSession.expired())
@@ -81,14 +81,13 @@ public class PlayerSessionController implements PlayerSessionService {
         playerPresenceService.markOffline(player);
         // Step 3. Marking player state as ended
         playerSession.markExpired();
-        return sessionRepository.saveAndFlush(playerSession);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerSession
-    getPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") long sessionId) {
+    public @ResponseBody
+    PlayerSession getPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") long sessionId) {
         // Step 2. Reading specific session
         PlayerSession playerSession = sessionRepository.findOne(sessionId);
         if (!playerSession.getPlayer().equals(playerId))

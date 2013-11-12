@@ -8,7 +8,7 @@ public interface PlayerSessionService {
 
     public PlayerSession refreshPlayerSession(String player, long sessionId);
 
-    public PlayerSession endPlayerSession(String player, long sessionId);
+    public void endPlayerSession(String player, long sessionId);
 
     public PlayerSession getPlayerSession(String player, long sessionId);
 

@@ -4,7 +4,7 @@ import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.service.PlayerProfileService;
 
-public class SimplePlayerProfileOperations implements PlayerProfileOperations {
+public class PlayerProfileTemplate implements PlayerProfileOperations {
 
     /**
      * 
@@ -14,7 +14,7 @@ public class SimplePlayerProfileOperations implements PlayerProfileOperations {
     final private String player;
     final private PlayerProfileService playerProfileService;
 
-    public SimplePlayerProfileOperations(String player, PlayerProfileService playerProfileService) {
+    public PlayerProfileTemplate(String player, PlayerProfileService playerProfileService) {
         this.player = player;
         this.playerProfileService = playerProfileService;
     }

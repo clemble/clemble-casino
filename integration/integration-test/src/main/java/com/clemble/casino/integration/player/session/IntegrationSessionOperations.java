@@ -37,13 +37,12 @@ public class IntegrationSessionOperations extends AbstractSessionOperations {
     }
 
     @Override
-    public PlayerSession end(Player player, long session) {
+    public void end(Player player, long session) {
         // Step 1. Generating request
         HttpEntity<Void> requestEntity = player.<Void> sign(null);
         // Step 2. Calling appropriate services
-        return restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, HttpMethod.DELETE, requestEntity,
+        restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, HttpMethod.DELETE, requestEntity,
                 PlayerSession.class, player.getPlayer(), session).getBody();
-
     }
 
     @Override

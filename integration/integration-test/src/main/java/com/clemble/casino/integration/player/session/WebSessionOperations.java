@@ -20,8 +20,8 @@ public class WebSessionOperations extends AbstractSessionOperations {
     }
 
     @Override
-    public PlayerSession end(Player player, long session) {
-        return playerSessionController.endPlayerSession(player.getPlayer(), session);
+    public void end(Player player, long session) {
+        playerSessionController.endPlayerSession(player.getPlayer(), session);
     }
 
     @Override

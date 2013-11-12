@@ -12,11 +12,8 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.event.client.MadeMove;
 import com.clemble.casino.game.service.GameActionService;
 
-public class SimpleGameActionOperations<State extends GameState> implements GameActionOperations<State> {
+public class GameActionTemplate<State extends GameState> implements GameActionOperations<State> {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -2263303118851762598L;
 
     final private String player;
@@ -24,7 +21,7 @@ public class SimpleGameActionOperations<State extends GameState> implements Game
     final private GameActionService<State> gameActionService;
     final private EventListenersManager eventListenersManager;
 
-    public SimpleGameActionOperations(String player, GameSessionKey session, EventListenersManager eventListenersManager, GameActionService<State> gameActionService) {
+    public GameActionTemplate(String player, GameSessionKey session, EventListenersManager eventListenersManager, GameActionService<State> gameActionService) {
         this.player = player;
         this.session = session;
         this.eventListenersManager = checkNotNull(eventListenersManager);
@@ -58,6 +55,6 @@ public class SimpleGameActionOperations<State extends GameState> implements Game
 
     @Override
     public GameActionOperations<State> construct(GameSessionKey sessionKey) {
-        return new SimpleGameActionOperations<>(player, sessionKey, eventListenersManager, gameActionService);
+        return new GameActionTemplate<>(player, sessionKey, eventListenersManager, gameActionService);
     }
 }

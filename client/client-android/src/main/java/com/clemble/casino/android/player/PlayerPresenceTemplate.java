@@ -6,12 +6,12 @@ import com.clemble.casino.client.player.PlayerPresenceOperations;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.service.PlayerPresenceService;
 
-public class SimplePlayerPresenceOperations implements PlayerPresenceOperations {
+public class PlayerPresenceTemplate implements PlayerPresenceOperations {
 
     final private String player;
     final private PlayerPresenceService playerPresenceService;
 
-    public SimplePlayerPresenceOperations(String player, PlayerPresenceService playerPresenceService) {
+    public PlayerPresenceTemplate(String player, PlayerPresenceService playerPresenceService) {
         this.player = player;
         this.playerPresenceService = playerPresenceService;
     }

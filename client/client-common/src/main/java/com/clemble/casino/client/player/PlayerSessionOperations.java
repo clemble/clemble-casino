@@ -8,7 +8,7 @@ public interface PlayerSessionOperations {
 
     public PlayerSession refreshPlayerSession(long sessionId);
 
-    public PlayerSession endPlayerSession(long sessionId);
+    public void endPlayerSession(long sessionId);
 
     public PlayerSession getPlayerSession(long sessionId);
 

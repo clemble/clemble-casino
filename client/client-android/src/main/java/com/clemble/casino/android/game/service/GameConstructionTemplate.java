@@ -18,15 +18,16 @@ import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.service.GameConstructionService;
 
-public class SimpleGameConstructionOperations<T extends GameState> implements GameConstructionOperations<T> {
+public class GameConstructionTemplate<T extends GameState> implements GameConstructionOperations<T> {
 
     final private String player;
+
     final private Game game;
     final private GameActionOperations<T> actionOperations;
     final private EventListenersManager listenersManager;
     final private GameConstructionService constructionService;
 
-    public SimpleGameConstructionOperations(String player, Game game, GameActionOperations<T> serverRegistry, GameConstructionService constructionService, EventListenersManager listenersManager) {
+    public GameConstructionTemplate(String player, Game game, GameActionOperations<T> serverRegistry, GameConstructionService constructionService, EventListenersManager listenersManager) {
         this.player = player;
         this.game = game;
         this.actionOperations = serverRegistry;

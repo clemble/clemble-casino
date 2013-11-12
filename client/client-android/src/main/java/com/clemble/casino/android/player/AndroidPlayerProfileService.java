@@ -2,27 +2,35 @@ package com.clemble.casino.android.player;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.client.service.RestClientService;
+import org.springframework.web.client.RestTemplate;
+
+import com.clemble.casino.ServerRegistry;
+import com.clemble.casino.android.AbstractClembleCasinoOperations;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.web.player.PlayerWebMapping;
 
-public class AndroidPlayerProfileService implements PlayerProfileService {
+public class AndroidPlayerProfileService extends AbstractClembleCasinoOperations implements PlayerProfileService {
 
-    final private RestClientService restService;
+    final private RestTemplate restTemplate;
 
-    public AndroidPlayerProfileService(RestClientService restService) {
-        this.restService = checkNotNull(restService);
+    public AndroidPlayerProfileService(RestTemplate restService, ServerRegistry serverRegistry) {
+        super(serverRegistry);
+        this.restTemplate = checkNotNull(restService);
     }
 
     @Override
     public PlayerProfile getPlayerProfile(String player) {
-        return restService.getForEntity(PlayerWebMapping.PLAYER_PROFILE, PlayerProfile.class, player);
+        return restTemplate
+            .getForEntity(buildUriById(player, PlayerWebMapping.PLAYER_PROFILE, "player", player), PlayerProfile.class)
+            .getBody();
     }
 
     @Override
     public PlayerProfile updatePlayerProfile(String player, PlayerProfile playerProfile) {
-        return restService.putForEntity(PlayerWebMapping.PLAYER_PROFILE, playerProfile, PlayerProfile.class, player);
+        return restTemplate
+            .postForEntity(buildUriById(player, PlayerWebMapping.PLAYER_PROFILE, "player", player), playerProfile, PlayerProfile.class)
+            .getBody();
     }
 
 }
