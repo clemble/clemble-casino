@@ -2,7 +2,7 @@ package com.clemble.casino.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.integration.player.account.AccountOperations;
+import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.security.PlayerToken;
@@ -17,7 +17,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
 
     public WebPlayerOperations(PlayerRegistrationController registrationController,
             PlayerSessionService playerSessionOperations,
-            AccountOperations accountOperations,
+            PaymentServiceFactory accountOperations,
             PlayerListenerOperations listenerOperations,
             PlayerProfileServiceFactory playerProfileOperations) {
         super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);

@@ -34,9 +34,7 @@ import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.player.IntegrationPlayerOperations;
 import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.player.WebPlayerOperations;
-import com.clemble.casino.integration.player.account.AccountOperations;
-import com.clemble.casino.integration.player.account.IntegrationAccountOperations;
-import com.clemble.casino.integration.player.account.WebAccountOperations;
+import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.listener.SimplePlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
@@ -132,8 +130,8 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public AccountOperations accountOperations() {
-            return new WebAccountOperations(paymentTransactionController, playerAccountController);
+        public PaymentServiceFactory accountOperations() {
+            return new PaymentServiceFactory.SingletonPaymentService(paymentTransactionController, playerAccountController);
         }
 
         @Bean
@@ -187,8 +185,8 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public AccountOperations accountOperations() {
-            return new IntegrationAccountOperations(restTemplate());
+        public PaymentServiceFactory accountOperations() {
+            return new PaymentServiceFactory.IntegrationPaymentServiceFactory(restTemplate());
         }
 
         @Bean

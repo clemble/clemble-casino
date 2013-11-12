@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.integration.player.account.AccountOperations;
+import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.security.PlayerToken;
@@ -23,7 +23,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
             final PlayerListenerOperations listenerOperations,
             final PlayerProfileServiceFactory playerProfileOperations,
             final PlayerSessionService playerSessionOperations,
-            final AccountOperations accountOperations) {
+            final PaymentServiceFactory accountOperations) {
         super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);

@@ -1,10 +1,9 @@
-package com.clemble.casino.android.payment;
+package com.clemble.casino.client.payment;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import com.clemble.casino.client.payment.PaymentTransactionOperations;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;

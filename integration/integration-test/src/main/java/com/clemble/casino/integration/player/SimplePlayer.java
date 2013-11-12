@@ -10,6 +10,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.clemble.casino.client.payment.PaymentTransactionOperations;
+import com.clemble.casino.client.payment.PaymentTransactionTemplate;
 import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.client.player.PlayerProfileTemplate;
 import com.clemble.casino.client.player.PlayerSessionOperations;
@@ -21,8 +23,7 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.integration.game.GameSessionListener;
 import com.clemble.casino.integration.game.construction.GameConstructionOperations;
 import com.clemble.casino.integration.game.construction.PlayerGameConstructionOperations;
-import com.clemble.casino.integration.player.account.AccountOperations;
-import com.clemble.casino.integration.player.account.PlayerAccountOperations;
+import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.PlayerListenerManager;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
@@ -49,21 +50,21 @@ public class SimplePlayer implements Player {
     final private Map<Game, PlayerGameConstructionOperations<?>> gameConstructors;
 
     final private PlayerSessionOperations playerSessionOperations;
-    final private PlayerAccountOperations playerAccountOperations;
+    final private PaymentTransactionOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
 
     public SimplePlayer(final PlayerToken playerIdentity, 
             final PlayerCredential credential,
             final PlayerProfileServiceFactory playerProfileServiceFactory,
             final PlayerSessionService sessionOperations,
-            final AccountOperations accountOperations,
+            final PaymentServiceFactory accountOperations,
             final PlayerListenerOperations listenerOperations,
             final Collection<GameConstructionOperations<?>> playerConstructionOperations) {
         this.identity = checkNotNull(playerIdentity);
         this.player = playerIdentity.getPlayer();
-        
+
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileServiceFactory.construct(this));
-        this.playerAccountOperations = new PlayerAccountOperations(this, accountOperations);
+        this.playerAccountOperations = new PaymentTransactionTemplate(player, accountOperations.construct(this));
 
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
@@ -87,7 +88,7 @@ public class SimplePlayer implements Player {
         return profileOperations;
     }
 
-    public PlayerAccountOperations getWalletOperations() {
+    public PaymentTransactionOperations getWalletOperations() {
         return playerAccountOperations;
     }
 

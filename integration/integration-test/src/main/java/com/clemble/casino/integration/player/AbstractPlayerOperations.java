@@ -14,7 +14,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.integration.game.construction.GameConstructionOperations;
-import com.clemble.casino.integration.player.account.AccountOperations;
+import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.NativePlayerProfile;
@@ -31,18 +31,18 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
 
     final private PlayerSessionService sessionOperations;
     final private PlayerProfileServiceFactory profileOperations;
-    final private AccountOperations accountOperations;
+    final private PaymentServiceFactory paymentService;
     final private PlayerListenerOperations listenerOperations;
     final private Set<GameConstructionOperations<?>> gameConstructionOperations = new HashSet<>();
 
     protected AbstractPlayerOperations(PlayerListenerOperations listenerOperations,
             PlayerProfileServiceFactory profileOperations,
             PlayerSessionService sessionOperations,
-            AccountOperations accountOperations) {
+            PaymentServiceFactory accountOperations) {
         this.listenerOperations = checkNotNull(listenerOperations);
         this.sessionOperations = checkNotNull(sessionOperations);
         this.profileOperations = checkNotNull(profileOperations);
-        this.accountOperations = checkNotNull(accountOperations);
+        this.paymentService = checkNotNull(accountOperations);
     }
 
 	@Override
@@ -72,7 +72,7 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
     }
 
     final public Player create(PlayerToken playerIdentity, PlayerCredential credential) {
-        return new SimplePlayer(playerIdentity, credential, profileOperations, sessionOperations, accountOperations, listenerOperations, gameConstructionOperations);
+        return new SimplePlayer(playerIdentity, credential, profileOperations, sessionOperations, paymentService, listenerOperations, gameConstructionOperations);
     }
 
 }

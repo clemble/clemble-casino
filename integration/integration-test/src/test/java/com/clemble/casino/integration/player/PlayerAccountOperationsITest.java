@@ -20,7 +20,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.error.ClembleCasinoError;
-import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.money.MoneySource;
@@ -37,9 +36,6 @@ public class PlayerAccountOperationsITest {
     @Autowired
     public PlayerOperations playerOperations;
 
-    @Autowired
-    public AccountOperations accountOperations;
-
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -55,20 +51,20 @@ public class PlayerAccountOperationsITest {
         assertNotNull(accountA.getMoney(Currency.FakeMoney));
         assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
         // Step 4. Checking that there are some fake moneys in the newly created account, accesed through WalletOperations
-        PlayerAccount accountB = accountOperations.getAccount(player);
+        PlayerAccount accountB = player.getWalletOperations().getAccount();
         assertNotNull(accountB);
         assertNotNull(accountB.getMoney(Currency.FakeMoney));
         assertEquals(accountB, accountA);
         // Step 5. Checking that there are some fake moneys in the newly created account, accesed through another WalletOperations
-        PlayerAccount anotherWallet = accountOperations.getAccount(player, player.getPlayer());
+        PlayerAccount anotherWallet = player.getWalletOperations().getAccount();
         assertNotNull(anotherWallet);
         assertNotNull(anotherWallet.getMoney(Currency.FakeMoney));
         assertEquals(anotherWallet, accountA);
 
-        Player anotherPlayer = playerOperations.createPlayer();
-
-        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerAccountAccessDenied));
-        accountOperations.getAccount(player, anotherPlayer.getPlayer());
+//        Player anotherPlayer = playerOperations.createPlayer();
+//
+//        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerAccountAccessDenied));
+//        player.getWalletOperations().getAccount();
     }
 
     @Ignore // TODO security was temporary disabled
@@ -76,14 +72,14 @@ public class PlayerAccountOperationsITest {
     public void testTransactionsListAccess() {
         // Step 1. Checking player has no transactions to access
         Player player = playerOperations.createPlayer();
-        List<PaymentTransaction> transactions = accountOperations.getTransactions(player);
+        List<PaymentTransaction> transactions = player.getWalletOperations().listPlayerTransaction();
         Assert.assertFalse(transactions.isEmpty());
         // Step 2. Checking no other player can't access the transactions
         Player anotherPlayer = playerOperations.createPlayer();
-        Assert.assertFalse(accountOperations.getTransactions(anotherPlayer).isEmpty());
+        // TODO Assert.assertFalse(player.getWalletOperations().getPaymentTransaction(MoneySource.Registration, player.getPlayer()));
         // Step 3. Checking no other player can access the transactions
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
-        accountOperations.getTransactions(player, anotherPlayer.getPlayer());
+        player.getWalletOperations().getPaymentTransaction(MoneySource.registration, anotherPlayer.getPlayer());
     }
 
     @Test
@@ -91,7 +87,7 @@ public class PlayerAccountOperationsITest {
         // Step 1. Checking player has no transactions to access
         Player player = playerOperations.createPlayer();
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionNotExists));
-        accountOperations.getTransaction(player, MoneySource.TicTacToe, "-1");
+        player.getWalletOperations().getPaymentTransaction(MoneySource.TicTacToe, "-1");
     }
 
 }

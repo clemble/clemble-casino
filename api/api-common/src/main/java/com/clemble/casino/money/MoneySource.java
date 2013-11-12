@@ -9,6 +9,6 @@ public enum MoneySource {
     go,
     num, // Number game for testing
     TicTacToe,
-    Registration;
+    registration;
 
 }

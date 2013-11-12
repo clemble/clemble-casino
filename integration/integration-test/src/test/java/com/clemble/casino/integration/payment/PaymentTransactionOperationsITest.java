@@ -151,7 +151,7 @@ public class PaymentTransactionOperationsITest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer();
         // Step 2. Checking account exists
-        PaymentTransaction paymentTransaction = paymentTransactionOperations.get(player, MoneySource.Registration, player.getPlayer());
+        PaymentTransaction paymentTransaction = paymentTransactionOperations.get(player, MoneySource.registration, player.getPlayer());
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
             if (paymentOperation.getPlayer().equals(player.getPlayer())) {

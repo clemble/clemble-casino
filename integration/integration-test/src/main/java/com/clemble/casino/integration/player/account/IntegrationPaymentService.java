@@ -1,7 +1,5 @@
 package com.clemble.casino.integration.player.account;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,18 +11,26 @@ import com.clemble.casino.configuration.ResourceLocations;
 import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
-public class IntegrationAccountOperations extends AbstractAccountOperations {
+public class IntegrationPaymentService implements PaymentService {
 
     final private RestTemplate restTemplate;
+    final private Player player;
 
-    public IntegrationAccountOperations(RestTemplate restTemplate) {
-        this.restTemplate = checkNotNull(restTemplate);
+    public IntegrationPaymentService(Player player, RestTemplate restTemplate) {
+        this.player = player;
+        this.restTemplate = restTemplate;
+    }
+
+    private String getPaymentEndpoint(Player player) {
+        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
+        return resourceLocations.getServerRegistryConfiguration().getPaymentRegistry().findBase();
     }
 
     @Override
-    public PlayerAccount getAccount(Player player, String playerId) {
+    public PlayerAccount get(String playerId) {
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
@@ -33,28 +39,23 @@ public class IntegrationAccountOperations extends AbstractAccountOperations {
     }
 
     @Override
-    public List<PaymentTransaction> getTransactions(Player player, String playerId) {
+    public PaymentTransaction getPaymentTransaction(String playerId, String source, String transactionId) {
+        // Step 1. Generating request
+        HttpEntity<Void> request = player.<Void> sign(null);
+        // Step 2. Requesting account associated with the playerId
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, request,
+                PaymentTransaction.class, source, transactionId).getBody();
+
+    }
+
+    @Override
+    public List<PaymentTransaction> listPlayerTransaction(String playerId) {
         // Step 1. Generating request
         HttpEntity<Void> request = player.<Void> sign(null);
         // Step 2. Requesting account associated with the playerId
         return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
                 new ParameterizedTypeReference<List<PaymentTransaction>>() {
                 }, playerId).getBody();
-    }
-
-    @Override
-    public PaymentTransaction getTransaction(Player player, String playerId, String moneySource, String transactionId) {
-        // Step 1. Generating request
-        HttpEntity<Void> request = player.<Void> sign(null);
-        // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET,
-                request, PaymentTransaction.class, moneySource, transactionId).getBody();
-
-    }
-    
-    private String getPaymentEndpoint(Player player){
-        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
-        return resourceLocations.getServerRegistryConfiguration().getPaymentRegistry().findBase();
     }
 
 }

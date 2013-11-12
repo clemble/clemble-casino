@@ -36,7 +36,7 @@ public class PlayerAccountServerServiceImpl implements PlayerAccountServerServic
         // Step 2. Creating initial empty
         Money initialBalance = Money.create(Currency.FakeMoney, 500);
         PaymentTransaction initialTransaction = new PaymentTransaction()
-                .setTransactionKey(new PaymentTransactionKey(MoneySource.Registration, player.getPlayer()))
+                .setTransactionKey(new PaymentTransactionKey(MoneySource.registration, player.getPlayer()))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setAmount(initialBalance).setPlayer(player.getPlayer()))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setAmount(initialBalance).setPlayer(PlayerAware.DEFAULT_PLAYER));
         // Step 3. Returning PaymentTransaction
