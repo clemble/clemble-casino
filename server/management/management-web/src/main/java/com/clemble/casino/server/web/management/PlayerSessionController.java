@@ -81,6 +81,8 @@ public class PlayerSessionController implements PlayerSessionService {
         playerPresenceService.markOffline(player);
         // Step 3. Marking player state as ended
         playerSession.markExpired();
+        // Step 4. Saving marked session
+        sessionRepository.saveAndFlush(playerSession);
     }
 
     @Override
