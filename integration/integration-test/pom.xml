@@ -31,6 +31,11 @@
 
         <dependency>
             <groupId>com.clemble.casino.integration</groupId>
+            <artifactId>integration-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.clemble.casino.integration</groupId>
             <artifactId>integration-management-web</artifactId>
         </dependency>
         <dependency>

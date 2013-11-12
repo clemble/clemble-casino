@@ -25,14 +25,13 @@ import com.clemble.casino.integration.player.profile.PlayerProfileOperations;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
 import com.clemble.casino.integration.player.session.PlayerSessionOperations;
 import com.clemble.casino.integration.player.session.SessionOperations;
-import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.security.PlayerSession;
+import com.clemble.casino.player.security.PlayerToken;
 import com.google.common.collect.ImmutableMap;
 
-public class Player implements PlayerAware {
+public class SimplePlayer implements Player {
 
     /**
      * Generated
@@ -48,19 +47,15 @@ public class Player implements PlayerAware {
     final private Map<Game, PlayerGameConstructionOperations<?>> gameConstructors;
 
     final private PlayerSessionOperations playerSessionOperations;
-    final private PlayerAccountOperations playerWalletOperations;
+    final private PlayerAccountOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
 
-    public Player(final PlayerToken playerIdentity,
-            final PlayerCredential credential,
-            final ProfileOperations playerProfileOperations,
-            final SessionOperations sessionOperations,
-            final AccountOperations accountOperations,
-            final PlayerListenerOperations listenerOperations,
+    public SimplePlayer(final PlayerToken playerIdentity, final PlayerCredential credential, final ProfileOperations playerProfileOperations,
+            final SessionOperations sessionOperations, final AccountOperations accountOperations, final PlayerListenerOperations listenerOperations,
             final Collection<GameConstructionOperations<?>> playerConstructionOperations) {
         this.profileOperations = new PlayerProfileOperations(this, playerProfileOperations);
         this.playerSessionOperations = new PlayerSessionOperations(this, sessionOperations);
-        this.playerWalletOperations = new PlayerAccountOperations(this, accountOperations);
+        this.playerAccountOperations = new PlayerAccountOperations(this, accountOperations);
 
         this.identity = checkNotNull(playerIdentity);
         this.player = identity.getPlayer();
@@ -84,7 +79,7 @@ public class Player implements PlayerAware {
     }
 
     public PlayerAccountOperations getWalletOperations() {
-        return playerWalletOperations;
+        return playerAccountOperations;
     }
 
     @Override

@@ -12,6 +12,7 @@
     <modules>
         <module>integration-management-web</module>
         <module>integration-game</module>
+        <module>integration-base</module>
         <module>integration-test</module>
         <module>integration-android</module>
     </modules>
@@ -25,6 +26,16 @@
             <dependency>
                 <groupId>com.clemble.casino.integration</groupId>
                 <artifactId>integration-game</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.integration</groupId>
+                <artifactId>integration-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.integration</groupId>
+                <artifactId>integration-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -19,6 +19,7 @@ import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
+import com.clemble.casino.integration.game.construction.GameConstructionOperations;
 import com.clemble.casino.integration.player.Player;
 
 abstract public class AbstractGameConstructionOperation<State extends GameState> implements GameConstructionOperations<State> {

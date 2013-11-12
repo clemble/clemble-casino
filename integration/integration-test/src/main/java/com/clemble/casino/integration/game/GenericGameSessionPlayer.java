@@ -8,6 +8,7 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.client.GameClientEvent;
 import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.player.Player;
 
 public class GenericGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State> {

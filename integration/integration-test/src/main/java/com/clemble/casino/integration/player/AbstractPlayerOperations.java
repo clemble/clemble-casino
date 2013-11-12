@@ -72,7 +72,7 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
     }
 
     final public Player create(PlayerToken playerIdentity, PlayerCredential credential) {
-        return new Player(playerIdentity, credential, profileOperations, sessionOperations, accountOperations, listenerOperations, gameConstructionOperations);
+        return new SimplePlayer(playerIdentity, credential, profileOperations, sessionOperations, accountOperations, listenerOperations, gameConstructionOperations);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.clemble.casino.integration.player.session;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.player.security.PlayerSession;

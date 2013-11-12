@@ -18,6 +18,7 @@ import com.clemble.casino.game.event.client.surrender.GiveUpEvent;
 import com.clemble.casino.game.event.server.GameServerEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
 import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.player.Player;
 
 abstract public class AbstractGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State>, Closeable {
