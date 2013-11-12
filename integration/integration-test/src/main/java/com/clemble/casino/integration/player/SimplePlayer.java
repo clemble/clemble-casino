@@ -10,6 +10,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.clemble.casino.client.player.PlayerSessionOperations;
+import com.clemble.casino.client.player.PlayerSessionTemplate;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -23,12 +25,11 @@ import com.clemble.casino.integration.player.listener.PlayerListenerManager;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.PlayerProfileOperations;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
-import com.clemble.casino.integration.player.session.PlayerSessionOperations;
-import com.clemble.casino.integration.player.session.SessionOperations;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.player.service.PlayerSessionService;
 import com.google.common.collect.ImmutableMap;
 
 public class SimplePlayer implements Player {
@@ -50,16 +51,20 @@ public class SimplePlayer implements Player {
     final private PlayerAccountOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
 
-    public SimplePlayer(final PlayerToken playerIdentity, final PlayerCredential credential, final ProfileOperations playerProfileOperations,
-            final SessionOperations sessionOperations, final AccountOperations accountOperations, final PlayerListenerOperations listenerOperations,
+    public SimplePlayer(final PlayerToken playerIdentity, 
+            final PlayerCredential credential,
+            final ProfileOperations playerProfileOperations,
+            final PlayerSessionService sessionOperations,
+            final AccountOperations accountOperations,
+            final PlayerListenerOperations listenerOperations,
             final Collection<GameConstructionOperations<?>> playerConstructionOperations) {
         this.profileOperations = new PlayerProfileOperations(this, playerProfileOperations);
-        this.playerSessionOperations = new PlayerSessionOperations(this, sessionOperations);
         this.playerAccountOperations = new PlayerAccountOperations(this, accountOperations);
 
         this.identity = checkNotNull(playerIdentity);
         this.player = identity.getPlayer();
-        this.session = checkNotNull(playerSessionOperations.start());
+        this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
+        this.session = checkNotNull(playerSessionOperations.create());
         this.credential = checkNotNull(credential);
         this.playerListenersManager = new PlayerListenerManager(this, listenerOperations);
 

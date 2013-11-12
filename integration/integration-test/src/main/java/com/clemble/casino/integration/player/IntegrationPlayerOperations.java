@@ -7,8 +7,8 @@ import org.springframework.web.client.RestTemplate;
 import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
-import com.clemble.casino.integration.player.session.SessionOperations;
 import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.web.management.ManagementWebMapping;
@@ -22,7 +22,7 @@ public class IntegrationPlayerOperations extends AbstractPlayerOperations {
             final RestTemplate restTemplate,
             final PlayerListenerOperations listenerOperations,
             final ProfileOperations playerProfileOperations,
-            final SessionOperations playerSessionOperations,
+            final PlayerSessionService playerSessionOperations,
             final AccountOperations accountOperations) {
         super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);
         this.baseUrl = checkNotNull(baseUrl);

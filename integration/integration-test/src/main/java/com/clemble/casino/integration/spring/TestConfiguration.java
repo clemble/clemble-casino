@@ -43,9 +43,8 @@ import com.clemble.casino.integration.player.profile.IntegrationProfileOperation
 import com.clemble.casino.integration.player.profile.ProfileOperations;
 import com.clemble.casino.integration.player.profile.WebProfileOperations;
 import com.clemble.casino.integration.player.session.IntegrationSessionOperations;
-import com.clemble.casino.integration.player.session.SessionOperations;
-import com.clemble.casino.integration.player.session.WebSessionOperations;
 import com.clemble.casino.integration.spring.web.management.ManagementWebSpringConfiguration;
+import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.common.ServerRegistrySpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -129,7 +128,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(playerRegistrationController, sessionOperations(), accountOperations(), playerListenerOperations(),
+            return new WebPlayerOperations(playerRegistrationController, playerSessionController, accountOperations(), playerListenerOperations(),
                     playerProfileOperations());
         }
 
@@ -137,12 +136,6 @@ public class TestConfiguration {
         @Singleton
         public AccountOperations accountOperations() {
             return new WebAccountOperations(paymentTransactionController, playerAccountController);
-        }
-
-        @Bean
-        @Singleton
-        public SessionOperations sessionOperations() {
-            return new WebSessionOperations(playerSessionController);
         }
 
         @Bean
@@ -215,7 +208,7 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public SessionOperations sessionOperations() {
+        public PlayerSessionService sessionOperations() {
             return new IntegrationSessionOperations(restTemplate(), baseUrl);
         }
 

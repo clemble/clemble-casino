@@ -17,27 +17,27 @@ import com.clemble.casino.integration.game.construction.GameConstructionOperatio
 import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
-import com.clemble.casino.integration.player.session.SessionOperations;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.clemble.casino.player.client.ClientDetails;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.test.random.ObjectGenerator;
 
 abstract public class AbstractPlayerOperations implements PlayerOperations, ApplicationContextAware {
 
     final private ProfileOperations profileOperations;
-    final private SessionOperations sessionOperations;
+    final private PlayerSessionService sessionOperations;
     final private AccountOperations accountOperations;
     final private PlayerListenerOperations listenerOperations;
     final private Set<GameConstructionOperations<?>> gameConstructionOperations = new HashSet<>();
 
     protected AbstractPlayerOperations(PlayerListenerOperations listenerOperations,
             ProfileOperations profileOperations,
-            SessionOperations sessionOperations,
+            PlayerSessionService sessionOperations,
             AccountOperations accountOperations) {
         this.listenerOperations = checkNotNull(listenerOperations);
         this.sessionOperations = checkNotNull(sessionOperations);

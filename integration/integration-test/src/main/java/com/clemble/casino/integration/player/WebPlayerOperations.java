@@ -5,8 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.clemble.casino.integration.player.account.AccountOperations;
 import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
 import com.clemble.casino.integration.player.profile.ProfileOperations;
-import com.clemble.casino.integration.player.session.SessionOperations;
 import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
@@ -16,7 +16,7 @@ public class WebPlayerOperations extends AbstractPlayerOperations {
     final private PlayerRegistrationController registrationController;
 
     public WebPlayerOperations(PlayerRegistrationController registrationController,
-            SessionOperations playerSessionOperations,
+            PlayerSessionService playerSessionOperations,
             AccountOperations accountOperations,
             PlayerListenerOperations listenerOperations,
             ProfileOperations playerProfileOperations) {

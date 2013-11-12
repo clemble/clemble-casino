@@ -12,13 +12,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.clemble.casino.client.player.PlayerSessionOperations;
 import com.clemble.casino.error.ClembleCasinoError;
-import com.clemble.casino.integration.player.Player;
-import com.clemble.casino.integration.player.PlayerOperations;
-import com.clemble.casino.integration.player.session.SessionOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.player.security.PlayerSession;
+import com.clemble.casino.player.service.PlayerSessionService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -27,7 +26,7 @@ import com.clemble.casino.player.security.PlayerSession;
 public class PlayerSessionOperationsITest {
 
     @Autowired
-    public SessionOperations sessionOperations;
+    public PlayerSessionService sessionOperations;
 
     @Autowired
     public PlayerOperations playerOperations;
@@ -39,23 +38,25 @@ public class PlayerSessionOperationsITest {
     public void testStart() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
+        PlayerSessionOperations sessionOperations = player.getSessionOperations();
         // Step 2. When player was created he started session
-        PlayerSession currentSession = player.getSession();
-        Assert.assertEquals(currentSession, sessionOperations.get(player, currentSession.getSessionId()));
-        sessionOperations.end(player, currentSession);
-        PlayerSession newSession = sessionOperations.start(player);
-        Assert.assertEquals(newSession, sessionOperations.get(player, newSession.getSessionId()));
+        PlayerSession currentSession = sessionOperations.create();
+        Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
+        sessionOperations.endPlayerSession(currentSession.getSessionId());
+        PlayerSession newSession = sessionOperations.create();
+        Assert.assertEquals(newSession, sessionOperations.getPlayerSession(newSession.getSessionId()));
     }
 
     @Test
     public void testRefresh() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
+        PlayerSessionOperations sessionOperations = player.getSessionOperations();
         // Step 2. When player was created he started session
-        PlayerSession currentSession = player.getSession();
-        Assert.assertEquals(currentSession, sessionOperations.get(player, currentSession.getSessionId()));
+        PlayerSession currentSession = sessionOperations.create();
+        Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
         // Step 3. Refreshing player session
-        PlayerSession refreshedSession = sessionOperations.refresh(player, currentSession.getSessionId());
+        PlayerSession refreshedSession = sessionOperations.refreshPlayerSession(currentSession.getSessionId());
         Assert.assertNotEquals(refreshedSession.getExpirationTime(), currentSession.getExpirationTime());
         Assert.assertEquals(refreshedSession.getPlayer(), currentSession.getPlayer());
         Assert.assertEquals(refreshedSession.getResourceLocations(), currentSession.getResourceLocations());
@@ -66,42 +67,45 @@ public class PlayerSessionOperationsITest {
     public void testEnd() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
+        PlayerSessionOperations sessionOperations = player.getSessionOperations();
         // Step 2. When player was created he started session
-        PlayerSession currentSession = player.getSession();
-        Assert.assertEquals(currentSession, sessionOperations.get(player, currentSession.getSessionId()));
-        sessionOperations.end(player, currentSession);
-        Assert.assertTrue(sessionOperations.get(player, currentSession.getSessionId()).expired());
+        PlayerSession currentSession = sessionOperations.create();
+        Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
+        sessionOperations.endPlayerSession(currentSession.getSessionId());
+        Assert.assertTrue(sessionOperations.getPlayerSession(currentSession.getSessionId()).expired());
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerSessionClosed));
 
-        sessionOperations.end(player, currentSession);
+        sessionOperations.endPlayerSession(currentSession.getSessionId());
     }
 
     @Test
     public void testEndByAnother() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
+        PlayerSessionOperations sessionOperations = player.getSessionOperations();
         Player anotherPlayer = playerOperations.createPlayer();
         // Step 2. When player was created he started session
         PlayerSession currentSession = player.getSession();
-        Assert.assertEquals(currentSession, sessionOperations.get(player, currentSession.getSessionId()));
+        Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotSessionOwner));
 
-        sessionOperations.end(anotherPlayer, currentSession);
+        sessionOperations.endPlayerSession(anotherPlayer.getSession().getSessionId());
     }
 
     @Test
     public void testGetByAnother() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
+        PlayerSessionOperations sessionOperations = player.getSessionOperations();
         Player anotherPlayer = playerOperations.createPlayer();
         // Step 2. When player was created he started session
         PlayerSession currentSession = player.getSession();
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotSessionOwner));
 
-        Assert.assertEquals(currentSession, sessionOperations.get(anotherPlayer, currentSession.getSessionId()));
+        Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(anotherPlayer.getSession().getSessionId()));
     }
 
 }

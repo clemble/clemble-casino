@@ -1,8 +1,7 @@
-package com.clemble.casino.android.player;
+package com.clemble.casino.client.player;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.client.player.PlayerSessionOperations;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.service.PlayerSessionService;
 
