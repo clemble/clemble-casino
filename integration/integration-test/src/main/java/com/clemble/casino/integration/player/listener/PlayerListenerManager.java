@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.clemble.casino.client.event.EventListener;
+import com.clemble.casino.client.event.EventListenerController;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.SessionAware;
@@ -13,19 +15,19 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.integration.game.GameSessionListener;
 import com.clemble.casino.integration.player.Player;
 
-public class PlayerListenerManager implements PlayerListener, Closeable {
+public class PlayerListenerManager implements EventListener, Closeable {
 
     final private Object listenerSync = new Object();
     final private Map<GameSessionKey, Collection<GameSessionListener>> sessionListenersMap = new HashMap<>();
     final private ArrayList<Event> events = new ArrayList<Event>();
-    final private PlayerListenerControl listenerControl;
+    final private EventListenerController listenerControl;
 
     public PlayerListenerManager(Player player, PlayerListenerOperations playerListenerOperations) {
         listenerControl = playerListenerOperations.listen(player.getSession(), this);
     }
 
     @Override
-    public void updated(Event event) {
+    public void onEvent(Event event) {
         synchronized (listenerSync) {
             events.add(event);
             if (event instanceof SessionAware) {

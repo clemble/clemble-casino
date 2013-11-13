@@ -21,6 +21,8 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 
+import com.clemble.casino.client.event.EventListener;
+import com.clemble.casino.client.event.EventListenerController;
 import com.clemble.casino.configuration.NotificationConfiguration;
 import com.clemble.casino.configuration.NotificationHost;
 import com.clemble.casino.event.Event;
@@ -36,13 +38,13 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
     }
 
     @Override
-    public PlayerListenerControl listen(PlayerSession playerSession, final PlayerListener gameListener) {
+    public EventListenerController listen(PlayerSession playerSession, final EventListener gameListener) {
         // Step 1. Creating Server connection
         return listen(playerSession, gameListener, ListenerChannel.values()[Math.abs(playerSession.getPlayer().hashCode() % ListenerChannel.values().length)]);
     }
 
     @Override
-    public PlayerListenerControl listen(PlayerSession playerSession, final PlayerListener gameListener, ListenerChannel listenerChannel) {
+    public EventListenerController listen(PlayerSession playerSession, final EventListener gameListener, ListenerChannel listenerChannel) {
         // Step 1. Setting default value
         listenerChannel = listenerChannel == null ? ListenerChannel.Rabbit : listenerChannel;
         // Step 2. Processing based on listener type
@@ -59,7 +61,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
         throw new IllegalArgumentException("Was not able to construct listener");
     }
 
-    private PlayerListenerControl addRabbitListener(final PlayerSession playerSession, final PlayerListener playerListener) {
+    private EventListenerController addRabbitListener(final PlayerSession playerSession, final EventListener playerListener) {
         // Step 1. Creating Server connection
         NotificationHost rabbitNotification = playerSession.getResourceLocations().getNotificationConfiguration().getRabbitHost();
         ConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitNotification.getHost());
@@ -80,7 +82,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
                     // Step 1. Parsing GameTable
                     Event event = objectMapper.readValue(new String(message.getBody()), Event.class);
                     // Step 2. Updating game table
-                    playerListener.updated(event);
+                    playerListener.onEvent(event);
                 } catch (Throwable e) {
                     e.printStackTrace();
                     throw new RuntimeException(e);
@@ -89,7 +91,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
         });
         listenerContainer.start();
         // Step 4. Returning game listener with possibility to stop listener
-        return new PlayerListenerControl() {
+        return new EventListenerController() {
 
             @Override
             public void close() {
@@ -98,7 +100,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
         };
     }
 
-    private PlayerListenerControl addStompListener(final PlayerSession playerSession, final PlayerListener playerListener) {
+    private EventListenerController addStompListener(final PlayerSession playerSession, final EventListener playerListener) {
         final String channel = "/topic/" + playerSession.getPlayer();
         // Step 1. Creating a game table client
         try {
@@ -114,7 +116,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
                         // Step 1. Reading game table
                         Event event = objectMapper.readValue(message, Event.class);
                         // Step 2. Updating game table
-                        playerListener.updated(event);
+                        playerListener.onEvent(event);
                     } catch (Throwable e) {
                         e.printStackTrace();
                         throw new RuntimeException(e);
@@ -122,7 +124,7 @@ public class SimplePlayerListenerOperations implements PlayerListenerOperations 
                 }
             });
             // Step 4. Returning game listener with possibility to stop STOMP listener
-            return new PlayerListenerControl() {
+            return new EventListenerController() {
 
                 @Override
                 public void close() {

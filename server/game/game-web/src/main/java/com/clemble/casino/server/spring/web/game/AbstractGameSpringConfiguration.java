@@ -37,7 +37,7 @@ import com.clemble.casino.server.repository.game.GameSpecificationRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
-import com.clemble.casino.server.web.game.options.GameConfigurationManagerController;
+import com.clemble.casino.server.web.game.options.GameSpecificationController;
 import com.clemble.casino.server.web.game.session.GameActionController;
 import com.clemble.casino.server.web.game.session.GameConstructionController;
 
@@ -148,8 +148,8 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameConfigurationManagerController picPacPoeConfigurationManagerController() {
-        return new GameConfigurationManagerController(gameSpecificationRegistry);
+    public GameSpecificationController picPacPoeConfigurationManagerController() {
+        return new GameSpecificationController(gameSpecificationRegistry);
     }
 
     @Bean

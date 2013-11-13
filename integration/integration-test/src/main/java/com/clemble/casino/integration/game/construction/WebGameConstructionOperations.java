@@ -12,7 +12,7 @@ import com.clemble.casino.game.construct.GameRequest;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.player.Player;
-import com.clemble.casino.server.web.game.options.GameConfigurationManagerController;
+import com.clemble.casino.server.web.game.options.GameSpecificationController;
 import com.clemble.casino.server.web.game.session.GameConstructionController;
 
 public class WebGameConstructionOperations<State extends GameState> extends AbstractGameConstructionOperation<State> {
@@ -22,12 +22,12 @@ public class WebGameConstructionOperations<State extends GameState> extends Abst
      */
     private static final long serialVersionUID = 1433226228732714413L;
 
-    final private GameConfigurationManagerController configuartionManagerController;
+    final private GameSpecificationController configuartionManagerController;
 
     final private GameConstructionController<State> constructionController;
 
     public WebGameConstructionOperations(final Game game,
-            final GameConfigurationManagerController configurationManagerController,
+            final GameSpecificationController configurationManagerController,
             final GameConstructionController<State> matchController,
             final GameSessionPlayerFactory<State> playerFactory) {
         super(game, playerFactory);

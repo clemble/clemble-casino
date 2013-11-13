@@ -19,11 +19,11 @@ import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.game.GameWebMapping;
 
 @Controller
-public class GameConfigurationManagerController implements GameSpecificationService {
+public class GameSpecificationController implements GameSpecificationService {
 
     final private GameSpecificationRegistry configurationManager;
 
-    public GameConfigurationManagerController(GameSpecificationRegistry configurationManager) {
+    public GameSpecificationController(GameSpecificationRegistry configurationManager) {
         this.configurationManager = checkNotNull(configurationManager);
     }
 

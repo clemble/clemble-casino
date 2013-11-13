@@ -1,11 +1,13 @@
 package com.clemble.casino.integration.player.listener;
 
+import com.clemble.casino.client.event.EventListener;
+import com.clemble.casino.client.event.EventListenerController;
 import com.clemble.casino.player.security.PlayerSession;
 
 public interface PlayerListenerOperations {
 
-    public PlayerListenerControl listen(PlayerSession playerSession, PlayerListener listener);
+    public EventListenerController listen(PlayerSession playerSession, EventListener listener);
 
-    public PlayerListenerControl listen(PlayerSession playerSession, PlayerListener listener, ListenerChannel channel);
+    public EventListenerController listen(PlayerSession playerSession, EventListener listener, ListenerChannel channel);
 
 }
