@@ -3,24 +3,27 @@ package com.clemble.casino.integration.player;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
-import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
+import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class WebPlayerOperations extends AbstractPlayerOperations {
 
     final private PlayerRegistrationController registrationController;
 
-    public WebPlayerOperations(PlayerRegistrationController registrationController,
+    public WebPlayerOperations(
+            ObjectMapper objectMapper,
+            PlayerRegistrationController registrationController,
             PlayerSessionService playerSessionOperations,
             PaymentServiceFactory accountOperations,
-            PlayerListenerOperations listenerOperations,
+            EventListenerOperationsFactory listenerOperations,
             PlayerProfileServiceFactory playerProfileOperations) {
-        super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);
+        super(objectMapper, listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);
         this.registrationController = checkNotNull(registrationController);
     }
 

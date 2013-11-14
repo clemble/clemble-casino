@@ -1,6 +1,6 @@
 package com.clemble.casino.integration.game.construction;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;

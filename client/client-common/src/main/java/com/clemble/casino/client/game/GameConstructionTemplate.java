@@ -4,7 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.event.ConstructionEventSelector;
 import com.clemble.casino.client.event.EventListener;
-import com.clemble.casino.client.event.EventListenersManager;
+import com.clemble.casino.client.event.EventListenerOperation;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
@@ -22,10 +22,10 @@ public class GameConstructionTemplate<T extends GameState> implements GameConstr
 
     final private Game game;
     final private GameActionOperations<T> actionOperations;
-    final private EventListenersManager listenersManager;
+    final private EventListenerOperation listenersManager;
     final private GameConstructionService constructionService;
 
-    public GameConstructionTemplate(String player, Game game, GameActionOperations<T> serverRegistry, GameConstructionService constructionService, EventListenersManager listenersManager) {
+    public GameConstructionTemplate(String player, Game game, GameActionOperations<T> serverRegistry, GameConstructionService constructionService, EventListenerOperation listenersManager) {
         this.player = player;
         this.game = game;
         this.actionOperations = serverRegistry;

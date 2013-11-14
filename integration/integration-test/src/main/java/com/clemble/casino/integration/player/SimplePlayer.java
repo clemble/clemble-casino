@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.clemble.casino.client.event.EventListenerOperation;
 import com.clemble.casino.client.payment.PaymentTransactionOperations;
 import com.clemble.casino.client.payment.PaymentTransactionTemplate;
 import com.clemble.casino.client.player.PlayerProfileOperations;
@@ -24,14 +25,14 @@ import com.clemble.casino.integration.game.GameSessionListener;
 import com.clemble.casino.integration.game.construction.GameConstructionOperations;
 import com.clemble.casino.integration.game.construction.PlayerGameConstructionOperations;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
-import com.clemble.casino.integration.player.listener.PlayerListenerManager;
-import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
+import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerSessionService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 
 public class SimplePlayer implements Player {
@@ -44,7 +45,7 @@ public class SimplePlayer implements Player {
     final private String player;
     final private PlayerSession session;
     final private PlayerToken identity;
-    final private PlayerListenerManager playerListenersManager;
+    final private EventListenerOperation playerListenersManager;
     final private PlayerCredential credential;
 
     final private Map<Game, PlayerGameConstructionOperations<?>> gameConstructors;
@@ -53,12 +54,14 @@ public class SimplePlayer implements Player {
     final private PaymentTransactionOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
 
-    public SimplePlayer(final PlayerToken playerIdentity, 
+    public SimplePlayer(
+            final ObjectMapper objectMapper,
+            final PlayerToken playerIdentity, 
             final PlayerCredential credential,
             final PlayerProfileServiceFactory playerProfileServiceFactory,
             final PlayerSessionService sessionOperations,
             final PaymentServiceFactory accountOperations,
-            final PlayerListenerOperations listenerOperations,
+            final EventListenerOperationsFactory listenerOperations,
             final Collection<GameConstructionOperations<?>> playerConstructionOperations) {
         this.identity = checkNotNull(playerIdentity);
         this.player = playerIdentity.getPlayer();
@@ -69,7 +72,7 @@ public class SimplePlayer implements Player {
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
         this.credential = checkNotNull(credential);
-        this.playerListenersManager = new PlayerListenerManager(this, listenerOperations);
+        this.playerListenersManager = listenerOperations.construct(session.getResourceLocations().getNotificationConfiguration(), objectMapper);
 
         Map<Game, PlayerGameConstructionOperations<?>> map = new HashMap<>();
         for (GameConstructionOperations<?> constructionOperation : playerConstructionOperations) {
@@ -150,11 +153,11 @@ public class SimplePlayer implements Player {
     }
 
     public void listen(GameSessionKey session, GameSessionListener sessionListener) {
-        playerListenersManager.listen(session, sessionListener);
+        playerListenersManager.subscribe(sessionListener);
     }
 
     public void listen(GameConstruction construction, GameSessionListener sessionListener) {
-        playerListenersManager.listen(construction, sessionListener);
+        playerListenersManager.subscribe(sessionListener);
     }
 
     public void close() {

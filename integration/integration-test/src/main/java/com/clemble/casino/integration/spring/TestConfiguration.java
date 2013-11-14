@@ -7,6 +7,7 @@ import static com.clemble.casino.server.spring.common.SpringConfiguration.INTEGR
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
@@ -35,8 +36,7 @@ import com.clemble.casino.integration.player.IntegrationPlayerOperations;
 import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.player.WebPlayerOperations;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
-import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
-import com.clemble.casino.integration.player.listener.SimplePlayerListenerOperations;
+import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.integration.player.session.IntegrationSessionOperations;
 import com.clemble.casino.integration.spring.web.management.ManagementWebSpringConfiguration;
@@ -117,14 +117,18 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public PlayerListenerOperations playerListenerOperations() {
-            return new SimplePlayerListenerOperations(objectMapper);
+        public EventListenerOperationsFactory playerListenerOperations() {
+            if (new Random().nextBoolean()) {
+                return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
+            } else {
+                return new EventListenerOperationsFactory.StompEventListenerServiceFactory();
+            }
         }
 
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(playerRegistrationController, playerSessionController, accountOperations(), playerListenerOperations(),
+            return new WebPlayerOperations(objectMapper, playerRegistrationController, playerSessionController, accountOperations(), playerListenerOperations(),
                     new PlayerProfileServiceFactory.SingletonPlayerProfileServiceFactory(playerProfileController));
         }
 
@@ -164,9 +168,14 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public PlayerListenerOperations playerListenerOperations() {
-            return new SimplePlayerListenerOperations(objectMapper);
+        public EventListenerOperationsFactory playerListenerOperations() {
+            if (new Random().nextBoolean()) {
+                return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
+            } else {
+                return new EventListenerOperationsFactory.StompEventListenerServiceFactory();
+            }
         }
+
 
         @Bean
         @Singleton
@@ -192,7 +201,7 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new IntegrationPlayerOperations(baseUrl, restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
+            return new IntegrationPlayerOperations(baseUrl, objectMapper, restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
                     accountOperations());
         }
 

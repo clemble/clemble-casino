@@ -15,7 +15,7 @@ import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.integration.game.construction.GameConstructionOperations;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
-import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
+import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
@@ -26,19 +26,24 @@ import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.test.random.ObjectGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 abstract public class AbstractPlayerOperations implements PlayerOperations, ApplicationContextAware {
 
+    final private ObjectMapper objectMapper;
     final private PlayerSessionService sessionOperations;
     final private PlayerProfileServiceFactory profileOperations;
     final private PaymentServiceFactory paymentService;
-    final private PlayerListenerOperations listenerOperations;
+    final private EventListenerOperationsFactory listenerOperations;
     final private Set<GameConstructionOperations<?>> gameConstructionOperations = new HashSet<>();
 
-    protected AbstractPlayerOperations(PlayerListenerOperations listenerOperations,
+    protected AbstractPlayerOperations(
+            ObjectMapper objectMapper,
+            EventListenerOperationsFactory listenerOperations,
             PlayerProfileServiceFactory profileOperations,
             PlayerSessionService sessionOperations,
             PaymentServiceFactory accountOperations) {
+        this.objectMapper = checkNotNull(objectMapper);
         this.listenerOperations = checkNotNull(listenerOperations);
         this.sessionOperations = checkNotNull(sessionOperations);
         this.profileOperations = checkNotNull(profileOperations);
@@ -72,7 +77,7 @@ abstract public class AbstractPlayerOperations implements PlayerOperations, Appl
     }
 
     final public Player create(PlayerToken playerIdentity, PlayerCredential credential) {
-        return new SimplePlayer(playerIdentity, credential, profileOperations, sessionOperations, paymentService, listenerOperations, gameConstructionOperations);
+        return new SimplePlayer(objectMapper, playerIdentity, credential, profileOperations, sessionOperations, paymentService, listenerOperations, gameConstructionOperations);
     }
 
 }

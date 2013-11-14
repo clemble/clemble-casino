@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.SingletonRegistry;
-import com.clemble.casino.android.event.listener.RabbitEventListenerManager;
 import com.clemble.casino.android.game.service.AndroidGameActionTemplate;
 import com.clemble.casino.android.game.service.AndroidGameConstructionService;
 import com.clemble.casino.android.game.service.GameActionTemplate;
@@ -24,7 +23,8 @@ import com.clemble.casino.android.player.AndroidPlayerSessionService;
 import com.clemble.casino.android.player.PlayerPresenceTemplate;
 import com.clemble.casino.client.ClembleCasino;
 import com.clemble.casino.client.error.ClembleCasinoRestErrorHandler;
-import com.clemble.casino.client.event.EventListenersManager;
+import com.clemble.casino.client.event.EventListenerOperation;
+import com.clemble.casino.client.event.RabbitEventListenerTemplate;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.game.GameConstructionTemplate;
@@ -48,7 +48,7 @@ import com.clemble.casino.player.service.PlayerProfileService;
 
 public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements ClembleCasino {
 
-    final private EventListenersManager eventListenersManager;
+    final private EventListenerOperation eventListenersManager;
     final private PlayerSessionOperations playerSessionOperations;
     final private PlayerProfileOperations playerProfileOperations;
     final private PlayerPresenceOperations playerPresenceOperations;
@@ -76,7 +76,7 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
         this.paymentTransactionOperations = new PaymentTransactionTemplate(player, paymentTransactionService);
         // Step 4. Creating GameConstruction services
         this.gameToConstructionOperations = new EnumMap<Game, GameConstructionOperations<?>>(Game.class);
-        this.eventListenersManager = new RabbitEventListenerManager(resourceLocations.getNotificationConfiguration(), ClembleCasinoConstants.OBJECT_MAPPER);
+        this.eventListenersManager = new RabbitEventListenerTemplate(resourceLocations.getNotificationConfiguration(), ClembleCasinoConstants.OBJECT_MAPPER);
         for (Game game : resourceLocations.getGames()) {
             ServerRegistry gameRegistry = registryConfiguration.getGameRegistry(game);
             GameConstructionService constructionService = new AndroidGameConstructionService(getRestTemplate(), gameRegistry);

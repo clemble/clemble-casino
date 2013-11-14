@@ -5,26 +5,29 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
-import com.clemble.casino.integration.player.listener.PlayerListenerOperations;
+import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.web.management.ManagementWebMapping;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class IntegrationPlayerOperations extends AbstractPlayerOperations {
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
 
-    public IntegrationPlayerOperations(final String baseUrl,
+    public IntegrationPlayerOperations(
+            final String baseUrl,
+            final ObjectMapper objectMapper,
             final RestTemplate restTemplate,
-            final PlayerListenerOperations listenerOperations,
+            final EventListenerOperationsFactory listenerOperations,
             final PlayerProfileServiceFactory playerProfileOperations,
             final PlayerSessionService playerSessionOperations,
             final PaymentServiceFactory accountOperations) {
-        super(listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);
+        super(objectMapper, listenerOperations, playerProfileOperations, playerSessionOperations, accountOperations);
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);
     }
