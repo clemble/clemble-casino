@@ -27,7 +27,7 @@ import com.clemble.casino.client.error.ClembleCasinoRestErrorHandler;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.IntegrationGameSessionPlayerFactory;
-import com.clemble.casino.integration.game.construction.GameScenarios;
+import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.payment.IntegrationPaymentTransactionOperations;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
@@ -84,8 +84,8 @@ public class TestConfiguration {
 
     @Bean
     @Singleton
-    public GameScenarios gameScenarios() {
-        return new GameScenarios(playerOperations);
+    public SimpleGameScenarios gameScenarios() {
+        return new SimpleGameScenarios(playerOperations);
     }
 
     @Configuration

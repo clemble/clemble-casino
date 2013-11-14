@@ -15,11 +15,11 @@ import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
 
-public class GameScenarios {
+public class SimpleGameScenarios implements GameScenarios {
 
     final private PlayerOperations playerOperations;
 
-    public GameScenarios(PlayerOperations playerOperations) {
+    public SimpleGameScenarios(PlayerOperations playerOperations) {
         this.playerOperations = checkNotNull(playerOperations);
     }
 
@@ -56,7 +56,7 @@ public class GameScenarios {
             constructedGames.add(players.get(i).<State> getGameConstructor(gameName).acceptInvitation(construction));
         }
         // Step 3. Waiting until all will be in sync
-        for(GameSessionPlayer<State> player: constructedGames)
+        for (GameSessionPlayer<State> player : constructedGames)
             player.waitForStart();
         // Step 4. Putting player to move as first
         Collections.sort(constructedGames, new Comparator<GameSessionPlayer<State>>() {

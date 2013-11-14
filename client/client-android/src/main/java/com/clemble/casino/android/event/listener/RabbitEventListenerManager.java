@@ -11,10 +11,13 @@ import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.ImmutablePair;
 import com.clemble.casino.client.event.EventListener;
+import com.clemble.casino.client.event.EventListenerController;
 import com.clemble.casino.client.event.EventListenersManager;
 import com.clemble.casino.client.event.EventSelector;
+import com.clemble.casino.client.event.SessionEventSelector;
 import com.clemble.casino.configuration.NotificationConfiguration;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameSessionKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.AMQP.Queue;
@@ -42,12 +45,26 @@ public class RabbitEventListenerManager implements EventListenersManager, Closea
         this.executor.submit(new StartupTask());
     }
 
-    public void subscribe(EventListener listener) {
-        subscribe(null, listener);
+    @Override
+    public EventListenerController subscribe(EventListener listener) {
+        return subscribe((EventSelector) null, listener);
     }
 
-    public void subscribe(EventSelector selector, EventListener listener) {
-        eventListeners.add(new ImmutablePair<EventSelector, EventListener>(selector, listener));
+    @Override
+    public EventListenerController subscribe(GameSessionKey sessionKey, EventListener listener) {
+        return subscribe(new SessionEventSelector(sessionKey), listener);
+    }
+
+    @Override
+    public EventListenerController subscribe(EventSelector selector, EventListener listener) {
+        final ImmutablePair<EventSelector, EventListener> listenerPair = new ImmutablePair<EventSelector, EventListener>(selector, listener);
+        eventListeners.add(listenerPair);
+        return new EventListenerController() {
+            @Override
+            public void close() {
+                eventListeners.remove(listenerPair);
+            }
+        };
     }
 
     @Override
