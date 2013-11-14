@@ -7,7 +7,7 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.player.PlayerAware;
 
-public interface PaymentTransactionOperations extends PlayerAware {
+public interface PaymentOperations extends PlayerAware {
 
     public PlayerAccount getAccount();
 

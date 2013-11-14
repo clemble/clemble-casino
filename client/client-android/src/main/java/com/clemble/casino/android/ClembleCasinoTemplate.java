@@ -21,15 +21,15 @@ import com.clemble.casino.android.player.AndroidPlayerPresenceService;
 import com.clemble.casino.android.player.AndroidPlayerProfileService;
 import com.clemble.casino.android.player.AndroidPlayerSessionService;
 import com.clemble.casino.android.player.PlayerPresenceTemplate;
-import com.clemble.casino.client.ClembleCasino;
-import com.clemble.casino.client.error.ClembleCasinoRestErrorHandler;
+import com.clemble.casino.client.ClembleCasinoOperation;
+import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
 import com.clemble.casino.client.event.EventListenerOperation;
 import com.clemble.casino.client.event.RabbitEventListenerTemplate;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.game.GameConstructionTemplate;
-import com.clemble.casino.client.payment.PaymentTransactionOperations;
-import com.clemble.casino.client.payment.PaymentTransactionTemplate;
+import com.clemble.casino.client.payment.PaymentOperations;
+import com.clemble.casino.client.payment.PaymentTemplate;
 import com.clemble.casino.client.player.PlayerPresenceOperations;
 import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.client.player.PlayerProfileTemplate;
@@ -46,13 +46,13 @@ import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
 
-public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements ClembleCasino {
+public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements ClembleCasinoOperation {
 
     final private EventListenerOperation eventListenersManager;
     final private PlayerSessionOperations playerSessionOperations;
     final private PlayerProfileOperations playerProfileOperations;
     final private PlayerPresenceOperations playerPresenceOperations;
-    final private PaymentTransactionOperations paymentTransactionOperations;
+    final private PaymentOperations paymentTransactionOperations;
     final private Map<Game, GameConstructionOperations<?>> gameToConstructionOperations;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -73,7 +73,7 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
         // Step 3. Creating PaymentTransaction service
         ServerRegistry paymentServerRegistry = registryConfiguration.getPaymentRegistry();
         PaymentService paymentTransactionService = new AndroidPaymentTransactionService(getRestTemplate(), paymentServerRegistry);
-        this.paymentTransactionOperations = new PaymentTransactionTemplate(player, paymentTransactionService);
+        this.paymentTransactionOperations = new PaymentTemplate(player, paymentTransactionService);
         // Step 4. Creating GameConstruction services
         this.gameToConstructionOperations = new EnumMap<Game, GameConstructionOperations<?>>(Game.class);
         this.eventListenersManager = new RabbitEventListenerTemplate(resourceLocations.getNotificationConfiguration(), ClembleCasinoConstants.OBJECT_MAPPER);
@@ -89,34 +89,34 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
     }
 
     @Override
-    public PlayerProfileOperations getPlayerProfileOperations() {
+    public PlayerProfileOperations profileOperations() {
         return playerProfileOperations;
     }
 
     @Override
-    public PlayerPresenceOperations getPlayerPresenceOperations() {
+    public PlayerPresenceOperations presenceOperations() {
         return playerPresenceOperations;
     }
 
     @Override
-    public PlayerSessionOperations getPlayerSessionOperations() {
+    public PlayerSessionOperations sessionOperations() {
         return playerSessionOperations;
     }
 
     @Override
-    public PaymentTransactionOperations getPaymentTransactionOperations() {
+    public PaymentOperations paymentOperations() {
         return paymentTransactionOperations;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends GameState> GameConstructionOperations<T> getGameConstructionOperations(Game game) {
+    public <T extends GameState> GameConstructionOperations<T> gameConstructionOperations(Game game) {
         return (GameConstructionOperations<T>) gameToConstructionOperations.get(game);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <State extends GameState> GameActionOperations<State> getGameActionOperations(GameSessionKey session) {
+    public <State extends GameState> GameActionOperations<State> gameActionOperations(GameSessionKey session) {
         return (GameActionOperations<State>) gameToConstructionOperations.get(session.getGame()).getActionOperations(session);
     }
 
@@ -134,6 +134,6 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
 
     @Override
     protected void configureRestTemplate(RestTemplate restTemplate) {
-        restTemplate.setErrorHandler(new ClembleCasinoRestErrorHandler(ClembleCasinoConstants.OBJECT_MAPPER));
+        restTemplate.setErrorHandler(new ClembleCasinoErrorHandler(ClembleCasinoConstants.OBJECT_MAPPER));
     }
 }

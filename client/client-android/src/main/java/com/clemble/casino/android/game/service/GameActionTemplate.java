@@ -53,8 +53,4 @@ public class GameActionTemplate<State extends GameState> implements GameActionOp
         return player;
     }
 
-    @Override
-    public GameActionOperations<State> construct(GameSessionKey sessionKey) {
-        return new GameActionTemplate<>(player, sessionKey, eventListenersManager, gameActionService);
-    }
 }

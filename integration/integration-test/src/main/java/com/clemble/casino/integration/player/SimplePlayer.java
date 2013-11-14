@@ -11,8 +11,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.clemble.casino.client.event.EventListenerOperation;
-import com.clemble.casino.client.payment.PaymentTransactionOperations;
-import com.clemble.casino.client.payment.PaymentTransactionTemplate;
+import com.clemble.casino.client.payment.PaymentOperations;
+import com.clemble.casino.client.payment.PaymentTemplate;
 import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.client.player.PlayerProfileTemplate;
 import com.clemble.casino.client.player.PlayerSessionOperations;
@@ -51,7 +51,7 @@ public class SimplePlayer implements Player {
     final private Map<Game, PlayerGameConstructionOperations<?>> gameConstructors;
 
     final private PlayerSessionOperations playerSessionOperations;
-    final private PaymentTransactionOperations playerAccountOperations;
+    final private PaymentOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
 
     public SimplePlayer(
@@ -67,7 +67,7 @@ public class SimplePlayer implements Player {
         this.player = playerIdentity.getPlayer();
 
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileServiceFactory.construct(this));
-        this.playerAccountOperations = new PaymentTransactionTemplate(player, accountOperations.construct(this));
+        this.playerAccountOperations = new PaymentTemplate(player, accountOperations.construct(this));
 
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
@@ -91,7 +91,7 @@ public class SimplePlayer implements Player {
         return profileOperations;
     }
 
-    public PaymentTransactionOperations getWalletOperations() {
+    public PaymentOperations getWalletOperations() {
         return playerAccountOperations;
     }
 

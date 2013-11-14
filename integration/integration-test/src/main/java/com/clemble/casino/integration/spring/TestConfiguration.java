@@ -24,7 +24,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.client.error.ClembleCasinoRestErrorHandler;
+import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.IntegrationGameSessionPlayerFactory;
@@ -188,7 +188,7 @@ public class TestConfiguration {
                 }
             }
 
-            restTemplate.setErrorHandler(new ClembleCasinoRestErrorHandler(objectMapper));
+            restTemplate.setErrorHandler(new ClembleCasinoErrorHandler(objectMapper));
             return restTemplate;
         }
 

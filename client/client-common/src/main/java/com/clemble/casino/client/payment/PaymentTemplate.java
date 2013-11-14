@@ -9,14 +9,14 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.service.PaymentService;
 
-public class PaymentTransactionTemplate implements PaymentTransactionOperations {
+public class PaymentTemplate implements PaymentOperations {
 
     private static final long serialVersionUID = -5498822576528068505L;
 
     final private String player;
     final private PaymentService paymentTransactionService;
 
-    public PaymentTransactionTemplate(String player, PaymentService paymentTransactionService) {
+    public PaymentTemplate(String player, PaymentService paymentTransactionService) {
         this.player = player;
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
     }
