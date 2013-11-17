@@ -16,22 +16,22 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.configuration.GameSpecificationOptions;
 import com.clemble.casino.game.configuration.SelectSpecificationOptions;
 import com.clemble.casino.game.specification.GameSpecification;
-import com.clemble.casino.integration.game.construction.GameConstructionOperations;
+import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.player.PlayerOperations;
 
 public class GameplayEmulator<State extends GameState> {
 
-    final private GameConstructionOperations<State> gameOperations;
     final private PlayerOperations playerOperations;
+    final private GameSessionPlayerFactory sessionPlayerFactory;
     final private GameActor<State> actor;
     final private Map<GameSpecification, Collection<PlayerEmulator<State>>> playerEmulators = new HashMap<GameSpecification, Collection<PlayerEmulator<State>>>();
 
     private ScheduledExecutorService executorService;
 
-    public GameplayEmulator(final PlayerOperations playerOperations, final GameConstructionOperations<State> gameOperations, final GameActor<State> gameActor) {
-        this.gameOperations = checkNotNull(gameOperations);
+    public GameplayEmulator(final PlayerOperations playerOperations, final GameActor<State> gameActor, final GameSessionPlayerFactory sessionPlayerFactory) {
         this.actor = checkNotNull(gameActor);
         this.playerOperations = checkNotNull(playerOperations);
+        this.sessionPlayerFactory = checkNotNull(sessionPlayerFactory);
     }
 
     @PreDestroy
@@ -50,7 +50,7 @@ public class GameplayEmulator<State extends GameState> {
     public void emulate() {
         List<GameSpecification> specifications = new ArrayList<GameSpecification>();
         // Step 1. Fetching specification options for the game
-        GameSpecificationOptions specificatinOptions = gameOperations.getOptions();
+        GameSpecificationOptions specificatinOptions = playerOperations.createPlayer().getGameConstructor(actor.getGame()).get();
         if (specificatinOptions instanceof SelectSpecificationOptions) {
             SelectSpecificationOptions selectSpecificationOptions = (SelectSpecificationOptions) specificatinOptions;
             // Step 1.1 Adding all possible specifications to the list of GameSpecifications
@@ -72,7 +72,7 @@ public class GameplayEmulator<State extends GameState> {
     }
 
     private void createEmulator(GameSpecification specification) {
-        PlayerEmulator<State> playerEmulator = new PlayerEmulator<State>(actor, playerOperations, gameOperations, specification);
+        PlayerEmulator<State> playerEmulator = new PlayerEmulator<State>(actor, playerOperations, sessionPlayerFactory, specification);
         playerEmulators.get(specification).add(playerEmulator);
         executorService.submit(playerEmulator);
     }

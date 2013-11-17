@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
-import com.clemble.casino.integration.game.construction.GameConstructionOperations;
+import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;

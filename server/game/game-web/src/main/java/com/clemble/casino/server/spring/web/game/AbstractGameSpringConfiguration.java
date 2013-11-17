@@ -107,6 +107,11 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
+    public GameConstructionController<State> constructionController() {
+        return new GameConstructionController<State>(gameConstructionRepository, picPacPoeConstructionService(), gameSpecificationRegistry);
+    }
+
+    @Bean
     public GameConstructionServerService picPacPoeConstructionService() {
         return new SimpleGameConstructionServerService(gameIdGenerator, playerAccountService, playerNotificationService, gameConstructionRepository,
                 picPacPoeInitiatorService(), playerLockService, playerStateManager);
@@ -140,11 +145,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Bean
     public GameSessionProcessor<State> picPacPoeSessionProcessor() {
         return new GameSessionProcessor<State>(getGame(), gameSessionFactory(), picPacPoeCacheService(), playerNotificationService);
-    }
-
-    @Bean
-    public GameConstructionController<State> picPacPoeConstructionController() {
-        return new GameConstructionController<State>(getGame(), gameConstructionRepository, picPacPoeConstructionService(), gameSpecificationRegistry);
     }
 
     @Bean

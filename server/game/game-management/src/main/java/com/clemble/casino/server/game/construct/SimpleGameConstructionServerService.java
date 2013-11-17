@@ -75,7 +75,7 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
         GameConstruction construction = new GameConstruction(request);
         construction.setSession(new GameSessionKey(request.getSpecification().getName().getGame(), gameIdGenerator.newId()));
         construction.setState(GameConstructionState.pending);
-        construction.getResponses().put(request.getPlayer(), new InvitationAcceptedEvent(construction.getSession(), request.getPlayer()));
+        construction.getResponses().put(request.getPlayer(), new InvitationAcceptedEvent(request.getPlayer(), construction.getSession()));
         construction = constructionRepository.saveAndFlush(construction);
         // Step 4. Sending invitation to opponents
         if (!construction.getResponses().complete()) {

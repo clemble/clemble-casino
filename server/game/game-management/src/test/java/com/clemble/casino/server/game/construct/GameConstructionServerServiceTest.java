@@ -56,7 +56,7 @@ public class GameConstructionServerServiceTest {
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
 
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
-            constructionService.invitationResponsed(new InvitationAcceptedEvent(construction.getSession(), participants.get(i)));
+            constructionService.invitationResponsed(new InvitationAcceptedEvent(participants.get(i), construction.getSession()));
         }
 
         GameConstruction finalConstructionState = constructionRepository.findOne(construction.getSession());
@@ -107,7 +107,7 @@ public class GameConstructionServerServiceTest {
         public GameConstruction call() {
             try {
                 Thread.sleep(RANDOM.nextInt(1000));
-                GameConstruction construct = constructionService.invitationResponsed(new InvitationAcceptedEvent(construction, player));
+                GameConstruction construct = constructionService.invitationResponsed(new InvitationAcceptedEvent(player, construction));
                 System.out.println(construct.getVersion());
                 return construct;
             } catch (Throwable throwable) {

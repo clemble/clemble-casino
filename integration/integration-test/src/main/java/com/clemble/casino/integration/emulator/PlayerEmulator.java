@@ -11,9 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.GameSessionPlayer;
-import com.clemble.casino.integration.game.construction.GameConstructionOperations;
+import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
 
@@ -23,7 +24,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
 
     final private GameSpecification specification;
     final private PlayerOperations playerOperations;
-    final private GameConstructionOperations<State> gameOperations;
+    final private GameSessionPlayerFactory sessionPlayerFactory;
     final private GameActor<State> actor;
     final private AtomicBoolean continueEmulation = new AtomicBoolean(true);
     final private AtomicLong lastMoved = new AtomicLong();
@@ -31,11 +32,11 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
 
     public PlayerEmulator(final GameActor<State> actor,
             final PlayerOperations playerOperations,
-            final GameConstructionOperations<State> gameOperations,
+            final GameSessionPlayerFactory sessionPlayerFactory,
             final GameSpecification specification) {
         this.specification = checkNotNull(specification);
-        this.gameOperations = checkNotNull(gameOperations);
         this.actor = checkNotNull(actor);
+        this.sessionPlayerFactory = checkNotNull(sessionPlayerFactory);
         this.playerOperations = checkNotNull(playerOperations);
     }
 
@@ -49,7 +50,8 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
             try {
                 Player player = playerOperations.createPlayer();
                 // Step 1. Start player emulator
-                GameSessionPlayer<State> playerState = gameOperations.constructAutomatic(player, specification);
+                GameConstruction playerConstruction = player.getGameConstructor(actor.getGame()).constructAutomatch(specification);
+                GameSessionPlayer<State> playerState = sessionPlayerFactory.construct(player, playerConstruction);
                 logger.info("Registered {} with construction {} ", playerState.getPlayer(), playerState.getSession());
                 currentPlayer.set(playerState);
                 lastMoved.set(System.currentTimeMillis());

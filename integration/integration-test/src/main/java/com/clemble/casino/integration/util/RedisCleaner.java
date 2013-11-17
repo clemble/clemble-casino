@@ -1,4 +1,4 @@
-package com.clemble.casino.integration.test;
+package com.clemble.casino.integration.util;
 
 import java.util.Collection;
 

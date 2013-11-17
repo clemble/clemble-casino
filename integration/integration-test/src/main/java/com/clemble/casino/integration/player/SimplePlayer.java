@@ -11,6 +11,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.clemble.casino.client.event.EventListenerOperation;
+import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.payment.PaymentOperations;
 import com.clemble.casino.client.payment.PaymentTemplate;
 import com.clemble.casino.client.player.PlayerProfileOperations;
@@ -22,8 +23,6 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.integration.game.GameSessionListener;
-import com.clemble.casino.integration.game.construction.GameConstructionOperations;
-import com.clemble.casino.integration.game.construction.PlayerGameConstructionOperations;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
@@ -48,7 +47,7 @@ public class SimplePlayer implements Player {
     final private EventListenerOperation playerListenersManager;
     final private PlayerCredential credential;
 
-    final private Map<Game, PlayerGameConstructionOperations<?>> gameConstructors;
+    final private Map<Game, GameConstructionOperations<?>> gameConstructors;
 
     final private PlayerSessionOperations playerSessionOperations;
     final private PaymentOperations playerAccountOperations;
@@ -74,11 +73,11 @@ public class SimplePlayer implements Player {
         this.credential = checkNotNull(credential);
         this.playerListenersManager = listenerOperations.construct(session.getResourceLocations().getNotificationConfiguration(), objectMapper);
 
-        Map<Game, PlayerGameConstructionOperations<?>> map = new HashMap<>();
+        Map<Game, GameConstructionOperations<?>> map = new HashMap<>();
         for (GameConstructionOperations<?> constructionOperation : playerConstructionOperations) {
-            map.put(constructionOperation.getGame(), new PlayerGameConstructionOperations<>(constructionOperation, this));
+            map.put(constructionOperation.getGame(), constructionOperation);
         }
-        this.gameConstructors = ImmutableMap.<Game, PlayerGameConstructionOperations<?>> copyOf(map);
+        this.gameConstructors = ImmutableMap.<Game, GameConstructionOperations<?>> copyOf(map);
     }
 
     @Override
@@ -123,11 +122,11 @@ public class SimplePlayer implements Player {
     }
 
     @SuppressWarnings("unchecked")
-    public <State extends GameState> PlayerGameConstructionOperations<State> getGameConstructor(Game game) {
-        return (PlayerGameConstructionOperations<State>) gameConstructors.get(game);
+    public <State extends GameState> GameConstructionOperations<State> getGameConstructor(Game game) {
+        return (GameConstructionOperations<State>) gameConstructors.get(game);
     }
 
-    public Map<Game, PlayerGameConstructionOperations<?>> getGameConstructors() {
+    public Map<Game, GameConstructionOperations<?>> getGameConstructors() {
         return gameConstructors;
     }
 

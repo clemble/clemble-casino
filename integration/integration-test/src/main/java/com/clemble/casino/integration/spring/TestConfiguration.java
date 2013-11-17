@@ -28,6 +28,7 @@ import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.IntegrationGameSessionPlayerFactory;
+import com.clemble.casino.integration.game.WebGameSessionPlayerFactory;
 import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.payment.IntegrationPaymentTransactionOperations;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
@@ -39,6 +40,7 @@ import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.integration.player.session.IntegrationSessionOperations;
+import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
 import com.clemble.casino.integration.spring.web.management.ManagementWebSpringConfiguration;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
@@ -47,6 +49,8 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.clemble.casino.server.spring.web.player.PlayerWebSpringConfiguration;
+import com.clemble.casino.server.web.game.session.GameActionController;
+import com.clemble.casino.server.web.game.session.GameConstructionController;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;
@@ -63,6 +67,9 @@ public class TestConfiguration {
     @Autowired
     @Qualifier("playerOperations")
     public PlayerOperations playerOperations;
+
+    @Autowired
+    public GameSessionPlayerFactory sessionPlayerFactory;
 
     @PostConstruct
     public void initialize() {
@@ -85,12 +92,12 @@ public class TestConfiguration {
     @Bean
     @Singleton
     public SimpleGameScenarios gameScenarios() {
-        return new SimpleGameScenarios(playerOperations);
+        return new SimpleGameScenarios(playerOperations, sessionPlayerFactory);
     }
 
     @Configuration
     @Profile(value = SpringConfiguration.DEFAULT)
-    @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, ManagementWebSpringConfiguration.class })
+    @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, ManagementWebSpringConfiguration.class, IntegrationGameWebSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
         @Autowired
@@ -126,10 +133,16 @@ public class TestConfiguration {
         }
 
         @Bean
+        @Autowired
+        public GameSessionPlayerFactory sessionPlayerFactory(GameActionController<?> actionController, GameConstructionController<?> constructionController) {
+            return new WebGameSessionPlayerFactory(actionController, constructionController);
+        }
+
+        @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(objectMapper, playerRegistrationController, playerSessionController, accountOperations(), playerListenerOperations(),
-                    new PlayerProfileServiceFactory.SingletonPlayerProfileServiceFactory(playerProfileController));
+            return new WebPlayerOperations(objectMapper, playerRegistrationController, playerSessionController, accountOperations(),
+                    playerListenerOperations(), new PlayerProfileServiceFactory.SingletonPlayerProfileServiceFactory(playerProfileController));
         }
 
         @Bean
@@ -176,7 +189,6 @@ public class TestConfiguration {
             }
         }
 
-
         @Bean
         @Singleton
         public RestTemplate restTemplate() {
@@ -201,8 +213,8 @@ public class TestConfiguration {
         @Bean
         @Singleton
         public PlayerOperations playerOperations() {
-            return new IntegrationPlayerOperations(baseUrl, objectMapper, restTemplate(), playerListenerOperations(), playerProfileOperations(), sessionOperations(),
-                    accountOperations());
+            return new IntegrationPlayerOperations(baseUrl, objectMapper, restTemplate(), playerListenerOperations(), playerProfileOperations(),
+                    sessionOperations(), accountOperations());
         }
 
         @Bean
@@ -219,14 +231,20 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameSessionPlayerFactory<?> genericGameSessionFactory() {
-            return new IntegrationGameSessionPlayerFactory<>(restTemplate(), getBaseUrl());
+        public GameSessionPlayerFactory genericGameSessionFactory() {
+            return new IntegrationGameSessionPlayerFactory(restTemplate(), getBaseUrl());
         }
 
         @Bean
         @Singleton
         public PaymentTransactionOperations paymentTransactionOperations() {
             return new IntegrationPaymentTransactionOperations(restTemplate(), serverRegistryConfiguration.getPaymentRegistry());
+        }
+
+        @Bean
+        @Autowired
+        public GameSessionPlayerFactory sessionPlayerFactory() {
+            return new IntegrationGameSessionPlayerFactory(restTemplate(), getBaseUrl());
         }
 
     }

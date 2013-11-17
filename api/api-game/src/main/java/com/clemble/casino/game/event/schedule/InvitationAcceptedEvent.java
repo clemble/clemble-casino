@@ -18,7 +18,7 @@ public class InvitationAcceptedEvent implements InvitationResponseEvent {
     final private GameSessionKey session;
 
     @JsonCreator
-    public InvitationAcceptedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty(PlayerAware.JSON_ID) String player) {
+    public InvitationAcceptedEvent(@JsonProperty(PlayerAware.JSON_ID) String player, @JsonProperty("session") GameSessionKey session) {
         this.session = session;
         this.player = player;
     }

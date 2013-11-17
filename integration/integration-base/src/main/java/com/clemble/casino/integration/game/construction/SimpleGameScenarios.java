@@ -10,17 +10,24 @@ import java.util.List;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.configuration.GameSpecificationOptions;
+import com.clemble.casino.game.configuration.SelectSpecificationOptions;
+import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.GameSessionPlayer;
+import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
+import com.clemble.casino.integration.util.RandomUtils;
 
 public class SimpleGameScenarios implements GameScenarios {
 
     final private PlayerOperations playerOperations;
+    final private GameSessionPlayerFactory sessionPlayerFactory;
 
-    public SimpleGameScenarios(PlayerOperations playerOperations) {
+    public SimpleGameScenarios(PlayerOperations playerOperations, GameSessionPlayerFactory sessionPlayerFactory) {
         this.playerOperations = checkNotNull(playerOperations);
+        this.sessionPlayerFactory = checkNotNull(sessionPlayerFactory);
     }
 
     public <State extends GameState> List<GameSessionPlayer<State>> constructGame(Game game) {
@@ -28,7 +35,7 @@ public class SimpleGameScenarios implements GameScenarios {
             throw new IllegalArgumentException("Name must not be null");
         Player randomPlayer = playerOperations.createPlayer();
         // Step 0. Sanity check
-        GameSpecification specification = randomPlayer.getGameConstructor(game).selectSpecification();
+        GameSpecification specification = selectSpecification(randomPlayer, game);
         // Step 1. Selecting specification for the game
         return constructGame(specification);
     }
@@ -36,7 +43,7 @@ public class SimpleGameScenarios implements GameScenarios {
     public <State extends GameState> List<GameSessionPlayer<State>> constructGame(GameSpecification specification) {
         if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
-        Game gameName = specification.getName().getGame();
+        Game game = specification.getName().getGame();
         List<GameSessionPlayer<State>> constructedGames = new ArrayList<>();
         // Step 0. Generating players
         int numPlayers = specification.getNumberRule().getMaxPlayers();
@@ -49,11 +56,14 @@ public class SimpleGameScenarios implements GameScenarios {
             participants.add(participant.getPlayer());
         }
         // Step 2. Creating availability game request
-        GameSessionPlayer<State> sessionPlayer = players.get(0).<State> getGameConstructor(gameName).constructAvailability(specification, participants);
+        GameConstruction construction = players.get(0).<State> getGameConstructor(game).constructAvailability(specification, participants);
+        GameSessionPlayer<State> sessionPlayer = sessionPlayerFactory.construct(players.get(0), construction);
         constructedGames.add(sessionPlayer);
-        GameSessionKey construction = sessionPlayer.getSession();
+        GameSessionKey sessionKey = sessionPlayer.getSession();
         for (int i = 1; i < numPlayers; i++) {
-            constructedGames.add(players.get(i).<State> getGameConstructor(gameName).acceptInvitation(construction));
+            GameConstruction iPlayerConstruction = players.get(i).<State> getGameConstructor(game).accept(sessionKey.getSession());
+            GameSessionPlayer<State> iSessionPlayer = sessionPlayerFactory.construct(players.get(i), iPlayerConstruction);
+            constructedGames.add(iSessionPlayer);
         }
         // Step 3. Waiting until all will be in sync
         for (GameSessionPlayer<State> player : constructedGames)
@@ -67,6 +77,15 @@ public class SimpleGameScenarios implements GameScenarios {
         });
         // Step 5. Returning constructed games
         return constructedGames;
+    }
+
+    private GameSpecification selectSpecification(Player player, Game game) {
+        GameSpecificationOptions specificationOptions = player.getGameConstructor(game).get();
+        if(specificationOptions instanceof SelectSpecificationOptions) {
+            return ((SelectSpecificationOptions) specificationOptions).getSpecifications().get(RandomUtils.RANDOM.nextInt(((SelectSpecificationOptions) specificationOptions).getSpecifications().size()));
+        } else {
+            throw new UnsupportedOperationException("This specification options not supported " + specificationOptions);
+        }
     }
 
 }
