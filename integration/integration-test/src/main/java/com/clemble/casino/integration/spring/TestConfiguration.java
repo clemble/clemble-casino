@@ -212,7 +212,7 @@ public class TestConfiguration {
 
         @Bean
         public PlayerRegistrationService playerRegistrationService() {
-            return new IntegrationPlayerRegistrationService(getBaseUrl(), restTemplate());
+            return new IntegrationPlayerRegistrationService(baseUrl, restTemplate());
         }
 
         @Bean

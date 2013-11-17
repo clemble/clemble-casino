@@ -23,20 +23,26 @@ public class IntegrationPlayerRegistrationService implements PlayerRegistrationS
 
     @Override
     public PlayerToken login(PlayerLoginRequest playerLoginRequest) {
-        return restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN,
-                playerLoginRequest, PlayerToken.class);
+        // Step 1. Generating url
+        String url = baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN;
+        // Step 2. Requesting through Rest
+        return restTemplate.postForObject(url, playerLoginRequest, PlayerToken.class);
     }
 
     @Override
     public PlayerToken createPlayer(PlayerRegistrationRequest registrationRequest) {
-        return restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION,
-                registrationRequest, PlayerToken.class);
+        // Step 1. Generating url
+        String url = baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION;
+        // Step 2. Making rest request
+        return restTemplate.postForObject(url, registrationRequest, PlayerToken.class);
     }
 
     @Override
     public PlayerToken createSocialPlayer(PlayerSocialRegistrationRequest socialConnectionData) {
-        return restTemplate.postForObject(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL,
-                socialConnectionData, PlayerToken.class);
+        // Step 1. Generating url
+        String url = baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL;
+        // Step 2. Making rest request
+        return restTemplate.postForObject(url, socialConnectionData, PlayerToken.class);
     }
 
 }

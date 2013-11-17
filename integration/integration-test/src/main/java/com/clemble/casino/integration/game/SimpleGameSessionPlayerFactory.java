@@ -11,6 +11,7 @@ public class SimpleGameSessionPlayerFactory implements GameSessionPlayerFactory 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <State extends GameState> GameSessionPlayer<State> construct(Player player, GameConstruction construction) {
         // Step 1. Fetching session key
         GameSessionKey sessionKey = construction.getSession();
