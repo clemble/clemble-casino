@@ -27,8 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
-import com.clemble.casino.integration.game.IntegrationGameSessionPlayerFactory;
-import com.clemble.casino.integration.game.WebGameSessionPlayerFactory;
+import com.clemble.casino.integration.game.SimpleGameSessionPlayerFactory;
 import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.payment.IntegrationPaymentTransactionOperations;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
@@ -49,8 +48,6 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.clemble.casino.server.spring.web.player.PlayerWebSpringConfiguration;
-import com.clemble.casino.server.web.game.session.GameActionController;
-import com.clemble.casino.server.web.game.session.GameConstructionController;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;
@@ -95,9 +92,16 @@ public class TestConfiguration {
         return new SimpleGameScenarios(playerOperations, sessionPlayerFactory);
     }
 
+    @Bean
+    @Autowired
+    public GameSessionPlayerFactory sessionPlayerFactory() {
+        return new SimpleGameSessionPlayerFactory();
+    }
+
     @Configuration
     @Profile(value = SpringConfiguration.DEFAULT)
-    @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, ManagementWebSpringConfiguration.class, IntegrationGameWebSpringConfiguration.class })
+    @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, ManagementWebSpringConfiguration.class,
+            IntegrationGameWebSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
         @Autowired
@@ -130,12 +134,6 @@ public class TestConfiguration {
             } else {
                 return new EventListenerOperationsFactory.StompEventListenerServiceFactory();
             }
-        }
-
-        @Bean
-        @Autowired
-        public GameSessionPlayerFactory sessionPlayerFactory(GameActionController<?> actionController, GameConstructionController<?> constructionController) {
-            return new WebGameSessionPlayerFactory(actionController, constructionController);
         }
 
         @Bean
@@ -231,20 +229,8 @@ public class TestConfiguration {
 
         @Bean
         @Singleton
-        public GameSessionPlayerFactory genericGameSessionFactory() {
-            return new IntegrationGameSessionPlayerFactory(restTemplate(), getBaseUrl());
-        }
-
-        @Bean
-        @Singleton
         public PaymentTransactionOperations paymentTransactionOperations() {
             return new IntegrationPaymentTransactionOperations(restTemplate(), serverRegistryConfiguration.getPaymentRegistry());
-        }
-
-        @Bean
-        @Autowired
-        public GameSessionPlayerFactory sessionPlayerFactory() {
-            return new IntegrationGameSessionPlayerFactory(restTemplate(), getBaseUrl());
         }
 
     }
