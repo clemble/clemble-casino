@@ -58,4 +58,13 @@ public class IntegrationPaymentService implements PaymentService {
                 }, playerId).getBody();
     }
 
+    @Override
+    public PaymentTransaction process(PaymentTransaction paymentTransaction) {
+        // Step 1. Generating request
+        HttpEntity<PaymentTransaction> request = player.<PaymentTransaction> sign(paymentTransaction);
+        // Step 2. Requesting account associated with the playerId
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, request,
+                PaymentTransaction.class).getBody();
+    }
+
 }

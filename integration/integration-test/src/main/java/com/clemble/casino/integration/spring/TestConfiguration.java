@@ -32,15 +32,19 @@ import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.payment.IntegrationPaymentTransactionOperations;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
-import com.clemble.casino.integration.player.IntegrationPlayerOperations;
+import com.clemble.casino.integration.player.IntegrationPlayerRegistrationService;
 import com.clemble.casino.integration.player.PlayerOperations;
-import com.clemble.casino.integration.player.WebPlayerOperations;
+import com.clemble.casino.integration.player.SimplePlayerOperations;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.integration.player.session.IntegrationSessionOperations;
 import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
 import com.clemble.casino.integration.spring.web.management.ManagementWebSpringConfiguration;
+import com.clemble.casino.payment.service.PaymentTransactionService;
+import com.clemble.casino.payment.service.PlayerAccountService;
+import com.clemble.casino.player.service.PlayerProfileService;
+import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.common.ServerRegistrySpringConfiguration;
@@ -48,11 +52,6 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.clemble.casino.server.spring.web.player.PlayerWebSpringConfiguration;
-import com.clemble.casino.server.web.management.PlayerRegistrationController;
-import com.clemble.casino.server.web.management.PlayerSessionController;
-import com.clemble.casino.server.web.payment.PaymentTransactionController;
-import com.clemble.casino.server.web.player.PlayerProfileController;
-import com.clemble.casino.server.web.player.account.PlayerAccountController;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -98,6 +97,17 @@ public class TestConfiguration {
         return new SimpleGameSessionPlayerFactory();
     }
 
+    @Bean
+    @Autowired
+    public PlayerOperations playerOperations(ObjectMapper objectMapper,
+            EventListenerOperationsFactory listenerOperations,
+            PlayerRegistrationService registrationService,
+            PlayerProfileServiceFactory profileOperations,
+            PlayerSessionService sessionOperations,
+            PaymentServiceFactory accountOperations) {
+        return new SimplePlayerOperations(objectMapper, listenerOperations, registrationService, profileOperations, sessionOperations, accountOperations);
+    }
+
     @Configuration
     @Profile(value = SpringConfiguration.DEFAULT)
     @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, ManagementWebSpringConfiguration.class,
@@ -110,24 +120,23 @@ public class TestConfiguration {
 
         @Autowired
         @Qualifier("playerRegistrationController")
-        public PlayerRegistrationController playerRegistrationController;
+        public PlayerRegistrationService playerRegistrationController;
 
         @Autowired
         @Qualifier("playerSessionController")
-        public PlayerSessionController playerSessionController;
+        public PlayerSessionService playerSessionController;
 
         @Autowired
         @Qualifier("playerAccountController")
-        public PlayerAccountController playerAccountController;
+        public PlayerAccountService playerAccountController;
 
         @Autowired
-        public PlayerProfileController playerProfileController;
+        public PlayerProfileService playerProfileController;
 
         @Autowired
-        public PaymentTransactionController paymentTransactionController;
+        public PaymentTransactionService paymentTransactionController;
 
         @Bean
-        @Singleton
         public EventListenerOperationsFactory playerListenerOperations() {
             if (new Random().nextBoolean()) {
                 return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
@@ -137,22 +146,18 @@ public class TestConfiguration {
         }
 
         @Bean
-        @Singleton
-        public PlayerOperations playerOperations() {
-            return new WebPlayerOperations(objectMapper, playerRegistrationController, playerSessionController, accountOperations(),
-                    playerListenerOperations(), new PlayerProfileServiceFactory.SingletonPlayerProfileServiceFactory(playerProfileController));
-        }
-
-        @Bean
-        @Singleton
         public PaymentServiceFactory accountOperations() {
             return new PaymentServiceFactory.SingletonPaymentService(paymentTransactionController, playerAccountController);
         }
 
         @Bean
-        @Singleton
         public PaymentTransactionOperations paymentTransactionOperations() {
             return new WebPaymentTransactionOperations(paymentTransactionController);
+        }
+
+        @Bean
+        public PlayerProfileServiceFactory playerProfileOperations() {
+            return new PlayerProfileServiceFactory.SingletonPlayerProfileServiceFactory(playerProfileController);
         }
 
     }
@@ -178,7 +183,6 @@ public class TestConfiguration {
         }
 
         @Bean
-        @Singleton
         public EventListenerOperationsFactory playerListenerOperations() {
             if (new Random().nextBoolean()) {
                 return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
@@ -188,7 +192,6 @@ public class TestConfiguration {
         }
 
         @Bean
-        @Singleton
         public RestTemplate restTemplate() {
             RestTemplate restTemplate = new RestTemplate();
 
@@ -203,32 +206,26 @@ public class TestConfiguration {
         }
 
         @Bean
-        @Singleton
         public PaymentServiceFactory accountOperations() {
             return new PaymentServiceFactory.IntegrationPaymentServiceFactory(restTemplate());
         }
 
         @Bean
-        @Singleton
-        public PlayerOperations playerOperations() {
-            return new IntegrationPlayerOperations(baseUrl, objectMapper, restTemplate(), playerListenerOperations(), playerProfileOperations(),
-                    sessionOperations(), accountOperations());
+        public PlayerRegistrationService playerRegistrationService() {
+            return new IntegrationPlayerRegistrationService(getBaseUrl(), restTemplate());
         }
 
         @Bean
-        @Singleton
         public PlayerSessionService sessionOperations() {
             return new IntegrationSessionOperations(restTemplate(), baseUrl);
         }
 
         @Bean
-        @Singleton
         public PlayerProfileServiceFactory playerProfileOperations() {
             return new PlayerProfileServiceFactory.IntegrationPlayerProfileServiceFactory(restTemplate());
         }
 
         @Bean
-        @Singleton
         public PaymentTransactionOperations paymentTransactionOperations() {
             return new IntegrationPaymentTransactionOperations(restTemplate(), serverRegistryConfiguration.getPaymentRegistry());
         }

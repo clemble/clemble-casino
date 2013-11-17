@@ -44,4 +44,9 @@ public class AndroidPaymentTransactionService extends AbstractClembleCasinoOpera
             .getBody();
     }
 
+    @Override
+    public PaymentTransaction process(PaymentTransaction paymentTransaction) {
+        throw new UnsupportedOperationException();
+    }
+
 }
