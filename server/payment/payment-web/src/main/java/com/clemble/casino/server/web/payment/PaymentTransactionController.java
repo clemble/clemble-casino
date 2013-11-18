@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,18 +44,13 @@ public class PaymentTransactionController implements PaymentTransactionService, 
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, produces = WebMapping.PRODUCES)
-    public @ResponseBody PaymentTransaction getPaymentTransaction(
-            @RequestHeader("playerId") String requesterId,
-            @PathVariable("source") String source,
-            @PathVariable("transactionId") String transactionId) {
+    public @ResponseBody PaymentTransaction getPaymentTransaction(@PathVariable("source") String source,
+            @PathVariable("transaction") String transactionId) {
         // Step 1. Checking payment transaction exists
         PaymentTransactionKey paymentTransactionId = new PaymentTransactionKey(source, transactionId);
         PaymentTransaction paymentTransaction = paymentTransactionRepository.findOne(paymentTransactionId);
         if (paymentTransaction == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionNotExists);
-        // Step 2. Checking player is one of the participants
-        if (!paymentTransaction.isParticipant(requesterId))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionAccessDenied);
         return paymentTransaction;
     }
     
@@ -64,7 +58,7 @@ public class PaymentTransactionController implements PaymentTransactionService, 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PaymentTransaction> listPlayerTransaction(@PathVariable("playerId") String player) {
+    public @ResponseBody List<PaymentTransaction> listPlayerTransaction(@PathVariable("player") String player) {
         // Step 1. Sending transactions
         return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
     }

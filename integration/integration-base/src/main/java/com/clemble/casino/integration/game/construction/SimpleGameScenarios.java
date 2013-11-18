@@ -56,12 +56,12 @@ public class SimpleGameScenarios implements GameScenarios {
             participants.add(participant.getPlayer());
         }
         // Step 2. Creating availability game request
-        GameConstruction construction = players.get(0).<State> getGameConstructor(game).constructAvailability(specification, participants);
+        GameConstruction construction = players.get(0).<State> gameConstructionOperations(game).constructAvailability(specification, participants);
         GameSessionPlayer<State> sessionPlayer = sessionPlayerFactory.construct(players.get(0), construction);
         constructedGames.add(sessionPlayer);
         GameSessionKey sessionKey = sessionPlayer.getSession();
         for (int i = 1; i < numPlayers; i++) {
-            GameConstruction iPlayerConstruction = players.get(i).<State> getGameConstructor(game).accept(sessionKey.getSession());
+            GameConstruction iPlayerConstruction = players.get(i).<State> gameConstructionOperations(game).accept(sessionKey.getSession());
             GameSessionPlayer<State> iSessionPlayer = sessionPlayerFactory.construct(players.get(i), iPlayerConstruction);
             constructedGames.add(iSessionPlayer);
         }
@@ -80,7 +80,7 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     private GameSpecification selectSpecification(Player player, Game game) {
-        GameSpecificationOptions specificationOptions = player.getGameConstructor(game).get();
+        GameSpecificationOptions specificationOptions = player.gameConstructionOperations(game).get();
         if(specificationOptions instanceof SelectSpecificationOptions) {
             return ((SelectSpecificationOptions) specificationOptions).getSpecifications().get(RandomUtils.RANDOM.nextInt(((SelectSpecificationOptions) specificationOptions).getSpecifications().size()));
         } else {

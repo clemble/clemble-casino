@@ -4,14 +4,6 @@ import static com.clemble.casino.server.spring.common.SpringConfiguration.INTEGR
 import static com.clemble.casino.server.spring.common.SpringConfiguration.INTEGRATION_DEFAULT;
 import static com.clemble.casino.server.spring.common.SpringConfiguration.INTEGRATION_TEST;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.util.Random;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,14 +13,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
-import com.clemble.casino.integration.game.GameSessionPlayerFactory;
-import com.clemble.casino.integration.game.SimpleGameSessionPlayerFactory;
-import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
+import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.payment.IntegrationPaymentTransactionOperations;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
@@ -36,7 +25,6 @@ import com.clemble.casino.integration.player.IntegrationPlayerRegistrationServic
 import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.player.SimplePlayerOperations;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
-import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.integration.player.session.IntegrationSessionOperations;
 import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
@@ -52,50 +40,11 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.clemble.casino.server.spring.web.player.PlayerWebSpringConfiguration;
-import com.clemble.test.random.AbstractValueGenerator;
-import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@Import(value = { JsonSpringConfiguration.class, TestConfiguration.LocalTestConfiguration.class, TestConfiguration.IntegrationTestConfiguration.class })
+@Import(value = { BasicSpringConfiguration.class, JsonSpringConfiguration.class, TestConfiguration.LocalTestConfiguration.class, TestConfiguration.IntegrationTestConfiguration.class })
 public class TestConfiguration {
-
-    @Autowired
-    @Qualifier("playerOperations")
-    public PlayerOperations playerOperations;
-
-    @Autowired
-    public GameSessionPlayerFactory sessionPlayerFactory;
-
-    @PostConstruct
-    public void initialize() {
-        ObjectGenerator.register(RSAKeySecret.class, new AbstractValueGenerator<RSAKeySecret>() {
-
-            @Override
-            public RSAKeySecret generate() {
-                try {
-                    KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-                    generator.initialize(1024);
-                    KeyPair keyPair = generator.generateKeyPair();
-                    return new RSAKeySecret(keyPair.getPrivate(), keyPair.getPublic());
-                } catch (NoSuchAlgorithmException algorithmException) {
-                    return null;
-                }
-            }
-        });
-    }
-
-    @Bean
-    @Singleton
-    public SimpleGameScenarios gameScenarios() {
-        return new SimpleGameScenarios(playerOperations, sessionPlayerFactory);
-    }
-
-    @Bean
-    @Autowired
-    public GameSessionPlayerFactory sessionPlayerFactory() {
-        return new SimpleGameSessionPlayerFactory();
-    }
 
     @Bean
     @Autowired
@@ -137,15 +86,6 @@ public class TestConfiguration {
         public PaymentTransactionService paymentTransactionController;
 
         @Bean
-        public EventListenerOperationsFactory playerListenerOperations() {
-            if (new Random().nextBoolean()) {
-                return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
-            } else {
-                return new EventListenerOperationsFactory.StompEventListenerServiceFactory();
-            }
-        }
-
-        @Bean
         public PaymentServiceFactory accountOperations() {
             return new PaymentServiceFactory.SingletonPaymentService(paymentTransactionController, playerAccountController);
         }
@@ -180,15 +120,6 @@ public class TestConfiguration {
         public String getBaseUrl() {
             String base = baseUrl.substring(0, baseUrl.substring(0, baseUrl.length() - 1).lastIndexOf("/") + 1);
             return base;
-        }
-
-        @Bean
-        public EventListenerOperationsFactory playerListenerOperations() {
-            if (new Random().nextBoolean()) {
-                return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
-            } else {
-                return new EventListenerOperationsFactory.StompEventListenerServiceFactory();
-            }
         }
 
         @Bean

@@ -143,4 +143,10 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
     protected void configureRestTemplate(RestTemplate restTemplate) {
         restTemplate.setErrorHandler(new ClembleCasinoErrorHandler(ClembleCasinoConstants.OBJECT_MAPPER));
     }
+
+    @Override
+    public void close() {
+        if(eventListenersManager != null)
+            eventListenersManager.close();
+    }
 }

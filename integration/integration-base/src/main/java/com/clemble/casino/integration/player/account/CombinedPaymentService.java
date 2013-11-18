@@ -26,8 +26,8 @@ public class CombinedPaymentService implements PaymentService {
     }
 
     @Override
-    public PaymentTransaction getPaymentTransaction(String player, String source, String transactionId) {
-        return paymentTransactionService.getPaymentTransaction(player, source, transactionId);
+    public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
+        return paymentTransactionService.getPaymentTransaction(source, transactionId);
     }
 
     @Override

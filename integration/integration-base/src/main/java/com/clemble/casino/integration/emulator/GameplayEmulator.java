@@ -50,7 +50,7 @@ public class GameplayEmulator<State extends GameState> {
     public void emulate() {
         List<GameSpecification> specifications = new ArrayList<GameSpecification>();
         // Step 1. Fetching specification options for the game
-        GameSpecificationOptions specificatinOptions = playerOperations.createPlayer().getGameConstructor(actor.getGame()).get();
+        GameSpecificationOptions specificatinOptions = playerOperations.createPlayer().gameConstructionOperations(actor.getGame()).get();
         if (specificatinOptions instanceof SelectSpecificationOptions) {
             SelectSpecificationOptions selectSpecificationOptions = (SelectSpecificationOptions) specificatinOptions;
             // Step 1.1 Adding all possible specifications to the list of GameSpecifications

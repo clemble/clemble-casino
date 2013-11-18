@@ -16,14 +16,14 @@ public class SimpleGameSessionPlayerFactory implements GameSessionPlayerFactory 
         // Step 1. Fetching session key
         GameSessionKey sessionKey = construction.getSession();
         // Step 2. Processing game session player
-        return (GameSessionPlayer<State>) new SimpleGameSessionPlayer(player, construction, player.getGameConstructor(sessionKey.getGame()).getActionOperations(sessionKey.getSession()));
+        return (GameSessionPlayer<State>) new SimpleGameSessionPlayer<>(player, construction, player.gameConstructionOperations(sessionKey.getGame()).getActionOperations(sessionKey.getSession()));
     }
 
     @Override
     public <State extends GameState> GameSessionPlayer<State> construct(Player player, GameSessionKey sessionKey) {
         // Step 1. Fetching game construction
-        GameConstruction gameConstruction = player.getGameConstructor(sessionKey.getGame()).getConstruct(sessionKey.getSession());
-        // Step 2. Processing to the generic constuctor
+        GameConstruction gameConstruction = player.gameConstructionOperations(sessionKey.getGame()).getConstruct(sessionKey.getSession());
+        // Step 2. Processing to the generic constructor
         return construct(player, gameConstruction);
     }
 

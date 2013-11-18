@@ -38,7 +38,7 @@ public class PlayerSessionOperationsITest {
     public void testStart() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
-        PlayerSessionOperations sessionOperations = player.getSessionOperations();
+        PlayerSessionOperations sessionOperations = player.sessionOperations();
         // Step 2. When player was created he started session
         PlayerSession currentSession = sessionOperations.create();
         Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
@@ -51,7 +51,7 @@ public class PlayerSessionOperationsITest {
     public void testRefresh() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
-        PlayerSessionOperations sessionOperations = player.getSessionOperations();
+        PlayerSessionOperations sessionOperations = player.sessionOperations();
         // Step 2. When player was created he started session
         PlayerSession currentSession = sessionOperations.create();
         Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
@@ -67,7 +67,7 @@ public class PlayerSessionOperationsITest {
     public void testEnd() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
-        PlayerSessionOperations sessionOperations = player.getSessionOperations();
+        PlayerSessionOperations sessionOperations = player.sessionOperations();
         // Step 2. When player was created he started session
         PlayerSession currentSession = sessionOperations.create();
         Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
@@ -83,7 +83,7 @@ public class PlayerSessionOperationsITest {
     public void testEndByAnother() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
-        PlayerSessionOperations sessionOperations = player.getSessionOperations();
+        PlayerSessionOperations sessionOperations = player.sessionOperations();
         Player anotherPlayer = playerOperations.createPlayer();
         // Step 2. When player was created he started session
         PlayerSession currentSession = player.getSession();
@@ -98,7 +98,7 @@ public class PlayerSessionOperationsITest {
     public void testGetByAnother() {
         // Step 1. Creating fake player
         Player player = playerOperations.createPlayer();
-        PlayerSessionOperations sessionOperations = player.getSessionOperations();
+        PlayerSessionOperations sessionOperations = player.sessionOperations();
         Player anotherPlayer = playerOperations.createPlayer();
         // Step 2. When player was created he started session
         PlayerSession currentSession = player.getSession();

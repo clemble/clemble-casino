@@ -46,7 +46,7 @@ public class PlayerAccountController implements PlayerAccountService {
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerAccount get(@PathVariable("playerId") String playerWalletId) {
+    public @ResponseBody PlayerAccount get(@PathVariable("player") String playerWalletId) {
         // Step 1. Returning account from repository
         return playerAccountRepository.findOne(playerWalletId);
     }

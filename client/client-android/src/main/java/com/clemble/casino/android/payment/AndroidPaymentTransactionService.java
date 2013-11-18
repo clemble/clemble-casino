@@ -23,7 +23,7 @@ public class AndroidPaymentTransactionService extends AbstractClembleCasinoOpera
     }
 
     @Override
-    public PaymentTransaction getPaymentTransaction(String player, String source, String transactionId) {
+    public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
         return restTemplate
                 .getForEntity(buildUriWith(PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, source, transactionId), PaymentTransaction.class)
                 .getBody();

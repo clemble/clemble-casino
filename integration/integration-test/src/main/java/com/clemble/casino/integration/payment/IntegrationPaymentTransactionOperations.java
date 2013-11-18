@@ -2,7 +2,6 @@ package com.clemble.casino.integration.payment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,10 +28,8 @@ public class IntegrationPaymentTransactionOperations extends AbstractPaymentTran
 
     @Override
     public PaymentTransaction get(Player player, String source, String transactionId) {
-        // Step 1. Generating empty signed request
-        HttpEntity<Void> signedRequest = player.sign(null);
-        // Step 2. Performing empty signed GET request
-        return restTemplate.exchange(baseUrl.findBase() + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, signedRequest, PaymentTransaction.class, source, transactionId).getBody();
+        // Step 1. Performing empty signed GET request
+        return restTemplate.exchange(baseUrl.findBase() + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, null, PaymentTransaction.class, source, transactionId).getBody();
     }
 
 }

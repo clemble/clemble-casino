@@ -25,10 +25,8 @@ public class IntegrationPlayerProfileService implements PlayerProfileService {
     @Override
     public PlayerProfile getPlayerProfile(String playerId) {
         ResourceLocations resourceLocations = player.getSession().getResourceLocations();
-        // Step 1. Creating signed request
-        HttpEntity<Void> requestEntity = player.<Void>sign(null);
-        // Step 3. Rest template generation
-        return restTemplate.exchange(resourceLocations.getServerRegistryConfiguration().getPlayerRegistry().findById(playerId) + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.GET, requestEntity,
+        // Step 1. Rest template generation
+        return restTemplate.exchange(resourceLocations.getServerRegistryConfiguration().getPlayerRegistry().findById(playerId) + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.GET, null,
                 PlayerProfile.class, playerId).getBody();
     }
 
@@ -36,7 +34,7 @@ public class IntegrationPlayerProfileService implements PlayerProfileService {
     public PlayerProfile updatePlayerProfile(String playerId, PlayerProfile newProfile) {
         ResourceLocations resourceLocations = player.getSession().getResourceLocations();
         // Step 2. Generating request
-        HttpEntity<PlayerProfile> requestEntity = player.<PlayerProfile>sign(newProfile);
+        HttpEntity<PlayerProfile> requestEntity = new HttpEntity<>(newProfile);
         // Step 3. Rest template generation
         return restTemplate.exchange(resourceLocations.getServerRegistryConfiguration().getPlayerRegistry().findById(newProfile.getPlayer()) + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.PUT, requestEntity, PlayerProfile.class, playerId).getBody();
     }

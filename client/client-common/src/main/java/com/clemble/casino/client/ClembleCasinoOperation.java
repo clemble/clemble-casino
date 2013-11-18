@@ -1,5 +1,7 @@
 package com.clemble.casino.client;
 
+import java.io.Closeable;
+
 import org.springframework.social.ApiBinding;
 
 import com.clemble.casino.client.game.GameActionOperations;
@@ -12,7 +14,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 
-public interface ClembleCasinoOperation extends ApiBinding {
+public interface ClembleCasinoOperation extends ApiBinding, Closeable {
 
     public PlayerProfileOperations profileOperations();
 
@@ -26,4 +28,6 @@ public interface ClembleCasinoOperation extends ApiBinding {
 
     public <State extends GameState> GameActionOperations<State> gameActionOperations(GameSessionKey session);
 
+    @Override
+    public void close();
 }

@@ -21,7 +21,7 @@ public class WebPaymentTransactionOperations  extends AbstractPaymentTransaction
 
     @Override
     public PaymentTransaction get(Player player, String source, String transactionId) {
-        return paymentTransactionController.getPaymentTransaction(player.getPlayer(), source, transactionId);
+        return paymentTransactionController.getPaymentTransaction(source, transactionId);
     }
 
 }

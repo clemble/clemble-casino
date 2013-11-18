@@ -12,8 +12,8 @@ public interface PaymentWebMapping extends WebMapping {
     /**
      * Supports GET, that can only be used by the owner
      */
-    final public static String PAYMENT_ACCOUNTS_PLAYER = "/account/{playerId}";
-    final public static String PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS = "/account/{playerId}/transaction";
+    final public static String PAYMENT_ACCOUNTS_PLAYER = "/account/{player}";
+    final public static String PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS = "/account/{player}/transaction";
 
     /**
      * Supports POST, that can only be used by the server
@@ -22,6 +22,6 @@ public interface PaymentWebMapping extends WebMapping {
     /**
      * Supports GET, that can only be used by the owners
      */
-    final public static String PAYMENT_TRANSACTIONS_TRANSACTION = "/transaction/{source}/{transactionId}";
+    final public static String PAYMENT_TRANSACTIONS_TRANSACTION = "/transaction/{source}/{transaction}";
 
 }

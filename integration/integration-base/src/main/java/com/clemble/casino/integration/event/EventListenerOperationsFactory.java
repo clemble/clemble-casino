@@ -1,4 +1,4 @@
-package com.clemble.casino.integration.player.listener;
+package com.clemble.casino.integration.event;
 
 import com.clemble.casino.client.event.EventListenerOperation;
 import com.clemble.casino.client.event.RabbitEventListenerTemplate;

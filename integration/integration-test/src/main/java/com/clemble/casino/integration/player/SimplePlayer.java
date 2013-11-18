@@ -22,8 +22,8 @@ import com.clemble.casino.client.player.PlayerSessionTemplate;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
-import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
@@ -56,7 +56,7 @@ public class SimplePlayer implements Player {
             final ObjectMapper objectMapper,
             final PlayerToken playerIdentity, 
             final PlayerCredential credential,
-            final PlayerProfileServiceFactory playerProfileServiceFactory,
+            final PlayerProfileServiceFactory playerProfileService,
             final PlayerSessionService sessionOperations,
             final PaymentServiceFactory accountOperations,
             final EventListenerOperationsFactory listenerOperations,
@@ -64,7 +64,7 @@ public class SimplePlayer implements Player {
         this.identity = checkNotNull(playerIdentity);
         this.player = playerIdentity.getPlayer();
 
-        this.profileOperations = new PlayerProfileTemplate(player, playerProfileServiceFactory.construct(this));
+        this.profileOperations = new PlayerProfileTemplate(player, playerProfileService.construct(this));
         this.playerAccountOperations = new PaymentTemplate(player, accountOperations.construct(this));
 
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
@@ -80,17 +80,17 @@ public class SimplePlayer implements Player {
     }
 
     @Override
-    public PlayerSessionOperations getSessionOperations() {
+    public PlayerSessionOperations sessionOperations() {
         return playerSessionOperations;
     }
 
     @Override
-    public PlayerProfileOperations getProfileOperations() {
+    public PlayerProfileOperations profileOperations() {
         return profileOperations;
     }
 
     @Override
-    public PaymentOperations getWalletOperations() {
+    public PaymentOperations paymentOperations() {
         return playerAccountOperations;
     }
 
@@ -127,12 +127,12 @@ public class SimplePlayer implements Player {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <State extends GameState> GameConstructionOperations<State> getGameConstructor(Game game) {
+    public <State extends GameState> GameConstructionOperations<State> gameConstructionOperations(Game game) {
         return (GameConstructionOperations<State>) gameConstructors.get(game);
     }
 
     @Override
-    public Map<Game, GameConstructionOperations<?>> getGameConstructors() {
+    public Map<Game, GameConstructionOperations<?>> gameConstructionOperations() {
         return gameConstructors;
     }
 

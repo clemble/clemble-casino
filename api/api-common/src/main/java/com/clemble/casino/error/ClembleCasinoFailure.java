@@ -56,7 +56,7 @@ public class ClembleCasinoFailure implements PlayerAware, SessionAware {
 
     @Override
     public String toString() {
-        return "GogomayaFailure [error = " + error + ", player = " + player + ", session = " + session + "]";
+        return "ClembleCasinoFailure [error = " + error + ", player = " + player + ", session = " + session + "]";
     }
 
     @Override

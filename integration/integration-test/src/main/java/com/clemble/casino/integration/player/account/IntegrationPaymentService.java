@@ -31,37 +31,30 @@ public class IntegrationPaymentService implements PaymentService {
 
     @Override
     public PlayerAccount get(String playerId) {
-        // Step 1. Generating request
-        HttpEntity<Void> request = player.<Void> sign(null);
-        // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, request, PlayerAccount.class,
+        // Step 1. Requesting account associated with the playerId
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, null, PlayerAccount.class,
                 playerId).getBody();
     }
 
     @Override
-    public PaymentTransaction getPaymentTransaction(String playerId, String source, String transactionId) {
-        // Step 1. Generating request
-        HttpEntity<Void> request = player.<Void> sign(null);
-        // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, request,
+    public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
+        // Step 1. Requesting account associated with the playerId
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, null,
                 PaymentTransaction.class, source, transactionId).getBody();
 
     }
 
     @Override
     public List<PaymentTransaction> listPlayerTransaction(String playerId) {
-        // Step 1. Generating request
-        HttpEntity<Void> request = player.<Void> sign(null);
-        // Step 2. Requesting account associated with the playerId
-        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, request,
+        // Step 1. Requesting account associated with the playerId
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<PaymentTransaction>>() {
                 }, playerId).getBody();
     }
 
     @Override
     public PaymentTransaction process(PaymentTransaction paymentTransaction) {
-        // Step 1. Generating request
-        HttpEntity<PaymentTransaction> request = player.<PaymentTransaction> sign(paymentTransaction);
+        HttpEntity<PaymentTransaction> request = new HttpEntity<PaymentTransaction>(paymentTransaction);
         // Step 2. Requesting account associated with the playerId
         return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, request,
                 PaymentTransaction.class).getBody();

@@ -47,9 +47,9 @@ public class PlayerProfileOperationsITest {
     public void testProfileRead() {
         PlayerProfile playerProfile = randomProfile();
         Player player = playerOperations.createPlayer(playerProfile);
-        PlayerProfileOperations playerProfileOperations = player.getProfileOperations();
+        PlayerProfileOperations playerProfileOperations = player.profileOperations();
         Player anotherPlayer = playerOperations.createPlayer();
-        PlayerProfileOperations anotherPlayerProfileOperations = anotherPlayer.getProfileOperations();
+        PlayerProfileOperations anotherPlayerProfileOperations = anotherPlayer.profileOperations();
 
         playerProfile.setPlayer(player.getPlayer());
         Assert.assertEquals(playerProfile, player.getProfile());
@@ -63,7 +63,7 @@ public class PlayerProfileOperationsITest {
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerProfileDoesNotExists));
 
-        player.getProfileOperations().getPlayerProfile("-12345");
+        player.profileOperations().getPlayerProfile("-12345");
     }
 
     @Test
@@ -73,16 +73,16 @@ public class PlayerProfileOperationsITest {
         // Step 2. Saving profile to DB
         Player player = playerOperations.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
-        PlayerProfileOperations playerProfileOperations = player.getProfileOperations();
+        PlayerProfileOperations playerProfileOperations = player.profileOperations();
         Player anotherPlayer = playerOperations.createPlayer();
-        PlayerProfileOperations anotherProfileOperations = anotherPlayer.getProfileOperations();
+        PlayerProfileOperations anotherProfileOperations = anotherPlayer.profileOperations();
         Assert.assertEquals(playerProfile, player.getProfile());
         // Step 3. Updating created player with new Profile value
         NativePlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
         newProfile.setVersion(0);
         // Step 4. Checking saved profile, replaced the old one
-        PlayerProfile savedProfile = player.getProfileOperations().updatePlayerProfile(newProfile);
+        PlayerProfile savedProfile = player.profileOperations().updatePlayerProfile(newProfile);
 
         newProfile.setVersion(savedProfile.getVersion());
         Assert.assertEquals(savedProfile, newProfile);
@@ -160,6 +160,6 @@ public class PlayerProfileOperationsITest {
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotProfileOwner));
 
-        Assert.assertEquals(newProfile, player.getProfileOperations().updatePlayerProfile(newProfile));
+        Assert.assertEquals(newProfile, player.profileOperations().updatePlayerProfile(newProfile));
     }
 }

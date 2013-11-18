@@ -28,12 +28,12 @@ public class PaymentTemplate implements PaymentOperations {
 
     @Override
     public PaymentTransaction getPaymentTransaction(MoneySource source, String transactionId) {
-        return paymentTransactionService.getPaymentTransaction(player, source.name(), transactionId);
+        return paymentTransactionService.getPaymentTransaction(source.name(), transactionId);
     }
 
     @Override
     public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
-        return paymentTransactionService.getPaymentTransaction(player, source, transactionId);
+        return paymentTransactionService.getPaymentTransaction(source, transactionId);
     }
 
     @Override

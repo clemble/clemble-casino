@@ -45,18 +45,18 @@ public class PlayerAccountOperationsITest {
         // Step 1. Creating player
         Player player = playerOperations.createPlayer();
         // Step 2. Checking there is at least one
-        PlayerAccount accountA = player.getWalletOperations().getAccount();
+        PlayerAccount accountA = player.paymentOperations().getAccount();
         // Step 3. Checking that there are some fake moneys in the newly created account
         assertNotNull(accountA);
         assertNotNull(accountA.getMoney(Currency.FakeMoney));
         assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
         // Step 4. Checking that there are some fake moneys in the newly created account, accesed through WalletOperations
-        PlayerAccount accountB = player.getWalletOperations().getAccount();
+        PlayerAccount accountB = player.paymentOperations().getAccount();
         assertNotNull(accountB);
         assertNotNull(accountB.getMoney(Currency.FakeMoney));
         assertEquals(accountB, accountA);
         // Step 5. Checking that there are some fake moneys in the newly created account, accesed through another WalletOperations
-        PlayerAccount anotherWallet = player.getWalletOperations().getAccount();
+        PlayerAccount anotherWallet = player.paymentOperations().getAccount();
         assertNotNull(anotherWallet);
         assertNotNull(anotherWallet.getMoney(Currency.FakeMoney));
         assertEquals(anotherWallet, accountA);
@@ -72,14 +72,14 @@ public class PlayerAccountOperationsITest {
     public void testTransactionsListAccess() {
         // Step 1. Checking player has no transactions to access
         Player player = playerOperations.createPlayer();
-        List<PaymentTransaction> transactions = player.getWalletOperations().listPlayerTransaction();
+        List<PaymentTransaction> transactions = player.paymentOperations().listPlayerTransaction();
         Assert.assertFalse(transactions.isEmpty());
         // Step 2. Checking no other player can't access the transactions
         Player anotherPlayer = playerOperations.createPlayer();
         // TODO Assert.assertFalse(player.getWalletOperations().getPaymentTransaction(MoneySource.Registration, player.getPlayer()));
         // Step 3. Checking no other player can access the transactions
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
-        player.getWalletOperations().getPaymentTransaction(MoneySource.registration, anotherPlayer.getPlayer());
+        player.paymentOperations().getPaymentTransaction(MoneySource.registration, anotherPlayer.getPlayer());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class PlayerAccountOperationsITest {
         // Step 1. Checking player has no transactions to access
         Player player = playerOperations.createPlayer();
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionNotExists));
-        player.getWalletOperations().getPaymentTransaction(MoneySource.TicTacToe, "-1");
+        player.paymentOperations().getPaymentTransaction(MoneySource.TicTacToe, "-1");
     }
 
 }
