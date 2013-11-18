@@ -1,12 +1,13 @@
 package com.clemble.casino.integration.game;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.Closeable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.clemble.casino.ServerRegistry;
+import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.configuration.ResourceLocations;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.event.Event;
@@ -40,10 +41,10 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         this.construction = checkNotNull(construction);
         this.player = player;
 
-        player.listen(construction.getSession(), new GameSessionListener() {
+        player.listen(construction.getSession(), new EventListener() {
             @Override
             @SuppressWarnings("unchecked")
-            public void notify(Event event) {
+            public void onEvent(Event event) {
                 if (event instanceof GameStartedEvent) {
                     GameStartedEvent<?> gameStartedEvent = ((GameStartedEvent<?>) event);
                     session = gameStartedEvent.getSession();

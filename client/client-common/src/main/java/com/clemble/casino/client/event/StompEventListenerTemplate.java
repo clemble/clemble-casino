@@ -1,4 +1,4 @@
-package com.clemble.casino.integration.player.listener;
+package com.clemble.casino.client.event;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
@@ -12,7 +12,6 @@ import javax.security.auth.login.LoginException;
 import net.ser1.stomp.Client;
 import net.ser1.stomp.Listener;
 
-import com.clemble.casino.client.event.AbstractEventListenerTemplate;
 import com.clemble.casino.configuration.NotificationConfiguration;
 import com.clemble.casino.configuration.NotificationHost;
 import com.clemble.casino.event.Event;

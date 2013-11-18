@@ -54,7 +54,7 @@
         <spring.social.google.version>0.0.1-SNAPSHOT</spring.social.google.version>
         <swagger-springmvc.vesion>0.5.3</swagger-springmvc.vesion>
         <!-- Generic dependencies -->
-        <logback.version>1.0.6</logback.version>
+        <logback.version>1.0.13</logback.version>
         <jackson.version>2.2.2</jackson.version>
         <!-- Test dependencies -->
         <com.clemble.test.version>0.1.0</com.clemble.test.version>
@@ -517,6 +517,13 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <dependencies>

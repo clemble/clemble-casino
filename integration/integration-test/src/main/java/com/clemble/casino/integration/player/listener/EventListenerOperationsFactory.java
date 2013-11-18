@@ -2,6 +2,7 @@ package com.clemble.casino.integration.player.listener;
 
 import com.clemble.casino.client.event.EventListenerOperation;
 import com.clemble.casino.client.event.RabbitEventListenerTemplate;
+import com.clemble.casino.client.event.StompEventListenerTemplate;
 import com.clemble.casino.configuration.NotificationConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

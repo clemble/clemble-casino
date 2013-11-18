@@ -1,6 +1,6 @@
 package com.clemble.casino.integration.emulator;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
