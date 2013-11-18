@@ -52,7 +52,7 @@ public class PlayerProfileOperationsITest {
         PlayerProfileOperations anotherPlayerProfileOperations = anotherPlayer.profileOperations();
 
         playerProfile.setPlayer(player.getPlayer());
-        Assert.assertEquals(playerProfile, player.getProfile());
+        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
         Assert.assertEquals(playerProfile, playerProfileOperations.getPlayerProfile(player.getPlayer()));
         Assert.assertEquals(playerProfile, anotherPlayerProfileOperations.getPlayerProfile(player.getPlayer()));
     }
@@ -76,7 +76,7 @@ public class PlayerProfileOperationsITest {
         PlayerProfileOperations playerProfileOperations = player.profileOperations();
         Player anotherPlayer = playerOperations.createPlayer();
         PlayerProfileOperations anotherProfileOperations = anotherPlayer.profileOperations();
-        Assert.assertEquals(playerProfile, player.getProfile());
+        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
         // Step 3. Updating created player with new Profile value
         NativePlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
@@ -87,7 +87,7 @@ public class PlayerProfileOperationsITest {
         newProfile.setVersion(savedProfile.getVersion());
         Assert.assertEquals(savedProfile, newProfile);
 
-        Assert.assertEquals(newProfile, player.getProfile());
+        Assert.assertEquals(newProfile, player.profileOperations().getPlayerProfile());
         Assert.assertEquals(newProfile, playerProfileOperations.getPlayerProfile(player.getPlayer()));
         Assert.assertEquals(newProfile, anotherProfileOperations.getPlayerProfile(player.getPlayer()));
         // Step 5. Repeating steps from 3 to 4 with another new Profile
@@ -100,7 +100,7 @@ public class PlayerProfileOperationsITest {
         newProfile.setVersion(savedProfile.getVersion());
         Assert.assertEquals(savedProfile, newProfile);
 
-        Assert.assertEquals(newProfile, player.getProfile());
+        Assert.assertEquals(newProfile, player.profileOperations().getPlayerProfile());
         Assert.assertEquals(newProfile, playerProfileOperations.getPlayerProfile(player.getPlayer()));
         Assert.assertEquals(newProfile, playerProfileOperations.getPlayerProfile(player.getPlayer()));
     }
@@ -115,7 +115,7 @@ public class PlayerProfileOperationsITest {
         Player player = playerOperations.createPlayer(playerProfile);
         Player anotherPlayer = playerOperations.createPlayer();
         playerProfile.setPlayer(player.getPlayer());
-        Assert.assertEquals(playerProfile, player.getProfile());
+        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
 
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
@@ -135,7 +135,7 @@ public class PlayerProfileOperationsITest {
 
         Player player = playerOperations.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
-        Assert.assertEquals(playerProfile, player.getProfile());
+        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
 
         PlayerProfile newProfile = null;
 
@@ -153,7 +153,7 @@ public class PlayerProfileOperationsITest {
 
         Player player = playerOperations.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
-        Assert.assertEquals(playerProfile, player.getProfile());
+        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
 
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(RandomStringUtils.random(5));

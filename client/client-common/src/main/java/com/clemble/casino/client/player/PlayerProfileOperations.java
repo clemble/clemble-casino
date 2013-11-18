@@ -5,10 +5,10 @@ import com.clemble.casino.player.PlayerProfile;
 
 public interface PlayerProfileOperations extends PlayerAware {
 
-    public PlayerProfile getPlayerProfile();
+    public <T extends PlayerProfile> T getPlayerProfile();
     
-    public PlayerProfile getPlayerProfile(String player);
+    public <T extends PlayerProfile> T getPlayerProfile(String player);
 
-    public PlayerProfile updatePlayerProfile(PlayerProfile playerProfile);
+    public <T extends PlayerProfile> T updatePlayerProfile(PlayerProfile playerProfile);
 
 }

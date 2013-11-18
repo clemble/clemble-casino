@@ -24,19 +24,22 @@ public class PlayerProfileTemplate implements PlayerProfileOperations {
     }
 
     @Override
-    public PlayerProfile getPlayerProfile() {
-        return playerProfileService.getPlayerProfile(player);
+    @SuppressWarnings("unchecked")
+    public <T extends PlayerProfile> T getPlayerProfile() {
+        return (T) playerProfileService.getPlayerProfile(player);
     }
 
     @Override
-    public PlayerProfile getPlayerProfile(String player) {
-        return playerProfileService.getPlayerProfile(player);
+    @SuppressWarnings("unchecked")
+    public <T extends PlayerProfile> T getPlayerProfile(String player) {
+        return (T) playerProfileService.getPlayerProfile(player);
     }
 
     @Override
-    public PlayerProfile updatePlayerProfile(PlayerProfile playerProfile) {
+    @SuppressWarnings("unchecked")
+    public <T extends PlayerProfile> T updatePlayerProfile(PlayerProfile playerProfile) {
         playerProfile.setPlayer(player);
-        return playerProfileService.updatePlayerProfile(player, playerProfile);
+        return (T) playerProfileService.updatePlayerProfile(player, playerProfile);
     }
 
 }

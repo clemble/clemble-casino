@@ -25,7 +25,6 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
-import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.security.PlayerToken;
@@ -97,17 +96,6 @@ public class SimplePlayer implements Player {
     @Override
     public String getPlayer() {
         return player;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends PlayerProfile> T getProfile() {
-        return (T) profileOperations.getPlayerProfile();
-    }
-
-    public Player setProfile(PlayerProfile newProfile) {
-        profileOperations.updatePlayerProfile(newProfile);
-        return this;
     }
 
     @Override

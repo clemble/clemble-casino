@@ -52,11 +52,12 @@ public class PlayerOperationsITest {
         Player player = playerOperations.createPlayer(profile);
 
         assertNotNull(player);
-        assertEquals(player.<NativePlayerProfile>getProfile().getCategory(), PlayerCategory.Amateur);
-        assertEquals(player.<NativePlayerProfile>getProfile().getFirstName(), "Anton");
-        assertEquals(player.<NativePlayerProfile>getProfile().getLastName(), "Oparin");
-        assertEquals(player.<NativePlayerProfile>getProfile().getGender(), PlayerGender.M);
-        assertEquals(player.<NativePlayerProfile>getProfile().getNickName(), "mavarazy");
+        NativePlayerProfile playerProfile = player.profileOperations().<NativePlayerProfile>getPlayerProfile();
+        assertEquals(playerProfile.getCategory(), PlayerCategory.Amateur);
+        assertEquals(playerProfile.getFirstName(), "Anton");
+        assertEquals(playerProfile.getLastName(), "Oparin");
+        assertEquals(playerProfile.getGender(), PlayerGender.M);
+        assertEquals(playerProfile.getNickName(), "mavarazy");
     }
 
     @Test
@@ -72,11 +73,12 @@ public class PlayerOperationsITest {
         Player player = playerOperations.createPlayer(registrationRequest);
 
         assertNotNull(player);
-        assertEquals(player.<NativePlayerProfile>getProfile().getCategory(), PlayerCategory.Amateur);
-        assertEquals(player.<NativePlayerProfile>getProfile().getFirstName(), "Anton");
-        assertEquals(player.<NativePlayerProfile>getProfile().getLastName(), "Oparin");
-        assertEquals(player.<NativePlayerProfile>getProfile().getGender(), PlayerGender.M);
-        assertEquals(player.<NativePlayerProfile>getProfile().getNickName(), "mavarazy");
+        NativePlayerProfile playerProfile = player.profileOperations().<NativePlayerProfile>getPlayerProfile();
+        assertEquals(playerProfile.getCategory(), PlayerCategory.Amateur);
+        assertEquals(playerProfile.getFirstName(), "Anton");
+        assertEquals(playerProfile.getLastName(), "Oparin");
+        assertEquals(playerProfile.getGender(), PlayerGender.M);
+        assertEquals(playerProfile.getNickName(), "mavarazy");
 
         try {
             System.out.println(new ObjectMapper().writeValueAsString(registrationRequest));
@@ -105,7 +107,7 @@ public class PlayerOperationsITest {
         assertEquals(loginPlayer.getCredential().getPassword(), player.getCredential().getPassword());
 
         // TODO put back assertEquals(loginPlayer.getIdentity().getSecret(), playerIdentity.getSecret());
-        assertEquals(loginPlayer.getIdentity().getPlayer(), player.getIdentity().getPlayer());
+        assertEquals(loginPlayer.getPlayer(), player.getPlayer());
 
     }
 }

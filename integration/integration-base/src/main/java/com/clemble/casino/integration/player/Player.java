@@ -11,7 +11,6 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.player.PlayerAware;
-import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.security.PlayerToken;
@@ -23,10 +22,6 @@ public interface Player extends PlayerAware {
     public PlayerProfileOperations profileOperations();
 
     public PaymentOperations paymentOperations();
-
-    public <T extends PlayerProfile> T getProfile();
-
-    public Player setProfile(PlayerProfile newProfile);
 
     public PlayerToken getIdentity();
 
