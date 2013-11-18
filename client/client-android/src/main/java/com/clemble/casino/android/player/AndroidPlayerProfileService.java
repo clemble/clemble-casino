@@ -22,14 +22,14 @@ public class AndroidPlayerProfileService extends AbstractClembleCasinoOperations
     @Override
     public PlayerProfile getPlayerProfile(String player) {
         return restTemplate
-            .getForEntity(buildUriById(player, PlayerWebMapping.PLAYER_PROFILE, "player", player), PlayerProfile.class)
+            .getForEntity(buildUriWith(PlayerWebMapping.PLAYER_PROFILE, player), PlayerProfile.class)
             .getBody();
     }
 
     @Override
     public PlayerProfile updatePlayerProfile(String player, PlayerProfile playerProfile) {
         return restTemplate
-            .postForEntity(buildUriById(player, PlayerWebMapping.PLAYER_PROFILE, "player", player), playerProfile, PlayerProfile.class)
+            .postForEntity(buildUriWith(PlayerWebMapping.PLAYER_PROFILE, player), playerProfile, PlayerProfile.class)
             .getBody();
     }
 

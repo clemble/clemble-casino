@@ -27,19 +27,23 @@ public class AndroidPlayerPresenceService extends AbstractClembleCasinoOperation
 
     @Override
     public PlayerPresence getPresence(String player) {
+        // Step 1. Singleton GET request
         return restTemplate
-            .getForEntity(buildUriById(player, PlayerWebMapping.PLAYER_PRESENCE, "playerId", player), PlayerPresence.class)
+            .getForEntity(buildUriWith(PlayerWebMapping.PLAYER_PRESENCE, player), PlayerPresence.class)
             .getBody();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<PlayerPresence> getPresences(List<String> players) {
+        // Step 1. Sanity check
         if(players == null || players.isEmpty())
             return new ArrayList<>();
+       // Step 2. Generating multivalue query map
        MultiValueMap<String, String> query = new LinkedMultiValueMap<>();
        for(String player: players)
            query.set(PlayerWebMapping.PLAYER_PRESENCES_PARAM, player);
+       // Step 3. Requesting through RestTemplate
        return restTemplate
            .getForEntity(buildUri(PlayerWebMapping.PLAYER_PRESENCES, query), List.class)
            .getBody();

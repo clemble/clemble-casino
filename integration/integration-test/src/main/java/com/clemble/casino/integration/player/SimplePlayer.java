@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventListenerOperation;
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.payment.PaymentOperations;
@@ -21,8 +22,6 @@ import com.clemble.casino.client.player.PlayerSessionTemplate;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.integration.game.GameSessionListener;
 import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.listener.EventListenerOperationsFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
@@ -90,6 +89,7 @@ public class SimplePlayer implements Player {
         return profileOperations;
     }
 
+    @Override
     public PaymentOperations getWalletOperations() {
         return playerAccountOperations;
     }
@@ -100,6 +100,7 @@ public class SimplePlayer implements Player {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T extends PlayerProfile> T getProfile() {
         return (T) profileOperations.getPlayerProfile();
     }
@@ -109,23 +110,28 @@ public class SimplePlayer implements Player {
         return this;
     }
 
+    @Override
     public PlayerToken getIdentity() {
         return identity;
     }
 
+    @Override
     public PlayerCredential getCredential() {
         return credential;
     }
 
+    @Override
     public PlayerSession getSession() {
         return session;
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <State extends GameState> GameConstructionOperations<State> getGameConstructor(Game game) {
         return (GameConstructionOperations<State>) gameConstructors.get(game);
     }
 
+    @Override
     public Map<Game, GameConstructionOperations<?>> getGameConstructors() {
         return gameConstructors;
     }
@@ -151,14 +157,12 @@ public class SimplePlayer implements Player {
         return new HttpEntity<T>(value, header);
     }
 
-    public void listen(GameSessionKey session, GameSessionListener sessionListener) {
+    @Override
+    public void listen(GameSessionKey session, EventListener sessionListener) {
         playerListenersManager.subscribe(sessionListener);
     }
 
-    public void listen(GameConstruction construction, GameSessionListener sessionListener) {
-        playerListenersManager.subscribe(sessionListener);
-    }
-
+    @Override
     public void close() {
         playerListenersManager.close();
     }

@@ -30,21 +30,21 @@ public class AndroidGameConstructionService<T extends GameState> extends Abstrac
     @Override
     public GameConstruction getConstruct(String player, Game game, String session) {
         return restTemplate
-            .getForEntity(buildUriById(session, GameWebMapping.GAME_SESSIONS_CONSTRUCTION, String.valueOf(game), session), GameConstruction.class)
+            .getForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_CONSTRUCTION, game, session), GameConstruction.class)
             .getBody();
     }
 
     @Override
     public ClientEvent getResponce(String requester, Game game, String session, String player) {
         return restTemplate
-            .getForEntity(buildUriById(session, GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, String.valueOf(game), session, "playerId", player), ClientEvent.class)
+            .getForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, game, session, player), ClientEvent.class)
             .getBody();
     }
 
     @Override
     public GameConstruction reply(String player, Game game, String session, InvitationResponseEvent gameRequest) {
         return restTemplate
-            .postForEntity(buildUriById(session, GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, String.valueOf(game), session), gameRequest, GameConstruction.class)
+            .postForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, game, session), gameRequest, GameConstruction.class)
             .getBody();
     }
 

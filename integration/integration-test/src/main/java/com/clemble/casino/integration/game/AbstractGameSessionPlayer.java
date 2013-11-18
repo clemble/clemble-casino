@@ -40,7 +40,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         this.construction = checkNotNull(construction);
         this.player = player;
 
-        player.listen(construction, new GameSessionListener() {
+        player.listen(construction.getSession(), new GameSessionListener() {
             @Override
             @SuppressWarnings("unchecked")
             public void notify(Event event) {

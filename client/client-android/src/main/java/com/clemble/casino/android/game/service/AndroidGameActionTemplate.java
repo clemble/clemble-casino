@@ -25,14 +25,14 @@ public class AndroidGameActionTemplate<State extends GameState> extends Abstract
     @SuppressWarnings("unchecked")
     public State process(String sessionId, ClientEvent move) {
         return (State) restTemplate
-            .postForEntity(buildUriById(sessionId, GameWebMapping.GAME_SESSIONS_ACTIONS, "sessionId", sessionId), move, GameState.class)
+            .postForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_ACTIONS, sessionId), move, GameState.class)
             .getBody();
     }
 
     @Override
     public MadeMove getAction(String sessionId, int actionId) {
         return restTemplate
-            .getForEntity(buildUriById(sessionId, GameWebMapping.GAME_SESSIONS_ACTIONS_ACTION, "sessionId", sessionId, "actionId", String.valueOf(actionId)), MadeMove.class)
+            .getForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_ACTIONS_ACTION, sessionId, actionId), MadeMove.class)
             .getBody();
     }
 

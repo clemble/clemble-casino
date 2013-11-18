@@ -20,7 +20,7 @@ public class AndroidGameSpecificationService extends AbstractClembleCasinoOperat
 
     @Override
     public GameSpecificationOptions getSpecificationOptions(String player, Game game) {
-        return restTemplate.getForEntity(buildUriById(game.name(), GameWebMapping.GAME_SPECIFICATION_OPTIONS), GameSpecificationOptions.class).getBody();
+        return restTemplate.getForEntity(buildUriWith(GameWebMapping.GAME_SPECIFICATION_OPTIONS, game), GameSpecificationOptions.class).getBody();
     }
 
 }

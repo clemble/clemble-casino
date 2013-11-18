@@ -1,6 +1,7 @@
 package com.clemble.casino.android;
 
 import java.net.URI;
+import java.nio.CharBuffer;
 
 import org.springframework.social.support.URIBuilder;
 import org.springframework.util.LinkedMultiValueMap;
@@ -16,7 +17,7 @@ abstract public class AbstractClembleCasinoOperations {
         this.apiBase = apiBase;
     }
 
-    protected URI buildUri(String path){
+    protected URI buildUri(String path) {
         return URIBuilder.fromUri(apiBase.findBase() + path).build();
     }
 
@@ -24,25 +25,45 @@ abstract public class AbstractClembleCasinoOperations {
         return URIBuilder.fromUri(apiBase.findBase() + path).queryParams(parameters).build();
     }
 
-    protected URI buildUriById(String selector, String path) {
-        return buildUriById(selector, path, EMPTY_PARAMETERS);
+    protected URI buildUriWith(String path, Object ... params) {
+        return buildUriWith(path, EMPTY_PARAMETERS, toStringArray(params));
     }
 
-    protected URI buildUriById(String selector, String path, String parameterName, String parameterValue) {
-        return buildUriById(selector, path, EMPTY_PARAMETERS);
-    }
-
-    protected URI buildUriById(String selector, String path, String parameterName, String parameterValue, String paramName2, String paramValue2) {
-        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
-        parameters.set(parameterName, parameterValue);
-        parameters.set(paramName2, paramValue2);
-        return buildUriById(selector, path, parameters);
-    }
-
-    protected URI buildUriById(String selector, String path, MultiValueMap<String, String> parameters) {
-        return URIBuilder.fromUri(apiBase.findById(selector) + path).queryParams(parameters).build();
+    protected URI buildUriWith(String path, MultiValueMap<String, String> queryParams, String ... parameters) {
+        String apiUrl = parameters != null && parameters.length > 1 ? apiBase.findById(parameters[0]) : apiBase.findBase();
+        String url = toUrl(apiUrl, parameters);
+        return URIBuilder.fromUri(url).queryParams(queryParams).build();
     }
 
     private static final LinkedMultiValueMap<String, String> EMPTY_PARAMETERS = new LinkedMultiValueMap<String, String>();
+    private static final String[] EMPTY_PATH_VARIABLES = new String[0];
+
+    private String[] toStringArray(Object[] parameters) {
+        // Step 1. Sanity check
+        if(parameters == null || parameters.length == 0)
+            return EMPTY_PATH_VARIABLES;
+        // Step 2. Generating parameters String list
+        String[] pathVariables = new String[parameters.length];
+        for(int i = 0; i < pathVariables.length; i++) {
+            pathVariables[i] = String.valueOf(parameters[i]);
+        }
+        return pathVariables;
+    }
+    
+    private String toUrl(String url, String ... parameters) {
+        char[] originalUrl = url.toCharArray();
+        int paramPointer = 0;
+        CharBuffer resultUrl = CharBuffer.allocate(originalUrl.length);
+        for (int i = 0; i < originalUrl.length; i++) {
+            if ('{' == originalUrl[i]) {
+                resultUrl.append(parameters[paramPointer]);
+                do {
+                } while (originalUrl[i++] != '}');
+            } else {
+                resultUrl.append(originalUrl[i]);
+            }
+        }
+        return resultUrl.toString();
+    }
 
 }
