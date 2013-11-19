@@ -1,8 +1,9 @@
-package com.clemble.casino.integration.player.account;
+package com.clemble.casino.integration.payment;
 
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.integration.player.Player;
+import com.clemble.casino.integration.player.account.CombinedPaymentService;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.payment.service.PaymentTransactionService;
 import com.clemble.casino.payment.service.PlayerAccountService;

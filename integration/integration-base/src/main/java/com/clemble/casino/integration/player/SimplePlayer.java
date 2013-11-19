@@ -23,7 +23,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
-import com.clemble.casino.integration.player.account.PaymentServiceFactory;
+import com.clemble.casino.integration.payment.PaymentServiceFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerSession;
@@ -60,12 +60,12 @@ public class SimplePlayer implements Player {
             final EventListenerOperationsFactory listenerOperations,
             final Collection<GameConstructionOperations<?>> playerConstructionOperations) {
         this.player = playerIdentity.getPlayer();
+        this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
+        this.session = checkNotNull(playerSessionOperations.create());
 
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileService.construct(this));
         this.playerAccountOperations = new PaymentTemplate(player, accountOperations.construct(this));
 
-        this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
-        this.session = checkNotNull(playerSessionOperations.create());
         this.credential = checkNotNull(credential);
         this.playerListenersManager = listenerOperations.construct(session.getResourceLocations().getNotificationConfiguration(), objectMapper);
 

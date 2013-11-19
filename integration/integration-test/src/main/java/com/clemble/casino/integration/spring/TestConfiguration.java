@@ -17,16 +17,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
-import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.payment.IntegrationPaymentTransactionOperations;
+import com.clemble.casino.integration.payment.PaymentServiceFactory;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.player.IntegrationPlayerRegistrationService;
-import com.clemble.casino.integration.player.PlayerOperations;
-import com.clemble.casino.integration.player.SimplePlayerOperations;
-import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
-import com.clemble.casino.integration.player.session.IntegrationSessionOperations;
+import com.clemble.casino.integration.player.session.IntegrationSessionService;
 import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
 import com.clemble.casino.integration.spring.web.management.IntegrationManagementWebSpringConfiguration;
 import com.clemble.casino.payment.service.PaymentTransactionService;
@@ -46,58 +43,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Import(value = { BasicSpringConfiguration.class, JsonSpringConfiguration.class, TestConfiguration.LocalTestConfiguration.class, TestConfiguration.IntegrationTestConfiguration.class })
 public class TestConfiguration {
 
-    @Bean
-    @Autowired
-    public PlayerOperations playerOperations(ObjectMapper objectMapper,
-            EventListenerOperationsFactory listenerOperations,
-            PlayerRegistrationService registrationService,
-            PlayerProfileServiceFactory profileOperations,
-            PlayerSessionService sessionOperations,
-            PaymentServiceFactory accountOperations) {
-        return new SimplePlayerOperations(objectMapper, listenerOperations, registrationService, profileOperations, sessionOperations, accountOperations);
-    }
-
     @Configuration
     @Profile(value = SpringConfiguration.DEFAULT)
     @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, IntegrationManagementWebSpringConfiguration.class,
             IntegrationGameWebSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
-        @Autowired
-        @Qualifier("objectMapper")
-        public ObjectMapper objectMapper;
-
-        @Autowired
-        @Qualifier("playerRegistrationController")
-        public PlayerRegistrationService playerRegistrationController;
-
-        @Autowired
-        @Qualifier("playerSessionController")
-        public PlayerSessionService playerSessionController;
-
-        @Autowired
-        @Qualifier("playerAccountController")
-        public PlayerAccountService playerAccountController;
-
-        @Autowired
-        public PlayerProfileService playerProfileController;
-
-        @Autowired
-        public PaymentTransactionService paymentTransactionController;
-
         @Bean
-        public PaymentServiceFactory accountOperations() {
+        @Autowired
+        public PaymentServiceFactory accountOperations(PaymentTransactionService paymentTransactionController, PlayerAccountService playerAccountController) {
             return new PaymentServiceFactory.SingletonPaymentService(paymentTransactionController, playerAccountController);
         }
 
         @Bean
-        public PaymentTransactionOperations paymentTransactionOperations() {
-            return new WebPaymentTransactionOperations(paymentTransactionController);
+        @Autowired
+        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionService paymentTransactionService) {
+            return new WebPaymentTransactionOperations(paymentTransactionService);
         }
 
         @Bean
-        public PlayerProfileServiceFactory playerProfileOperations() {
-            return new PlayerProfileServiceFactory.SingletonPlayerProfileServiceFactory(playerProfileController);
+        @Autowired
+        public PlayerProfileServiceFactory playerProfileOperations(PlayerProfileService playerProfileService) {
+            return new PlayerProfileServiceFactory.SingletonPlayerProfileServiceFactory(playerProfileService);
         }
 
     }
@@ -148,7 +115,7 @@ public class TestConfiguration {
 
         @Bean
         public PlayerSessionService sessionOperations() {
-            return new IntegrationSessionOperations(restTemplate(), baseUrl);
+            return new IntegrationSessionService(restTemplate(), baseUrl);
         }
 
         @Bean

@@ -35,7 +35,7 @@ abstract public class PlayerProfileServiceFactory {
 
         @Override
         public PlayerProfileService construct(Player player) {
-            return new IntegrationPlayerProfileService(player, restTemplate);
+            return new IntegrationPlayerProfileService(player.getSession().getResourceLocations().getServerRegistryConfiguration().getPlayerRegistry(), restTemplate);
         }
 
     }

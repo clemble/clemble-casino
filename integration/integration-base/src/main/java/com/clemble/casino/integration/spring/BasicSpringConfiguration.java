@@ -19,9 +19,15 @@ import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.SimpleGameSessionPlayerFactory;
 import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
+import com.clemble.casino.integration.payment.PaymentServiceFactory;
 import com.clemble.casino.integration.player.PlayerOperations;
+import com.clemble.casino.integration.player.SimplePlayerOperations;
+import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
+import com.clemble.casino.player.service.PlayerRegistrationService;
+import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class BasicSpringConfiguration {
@@ -71,5 +77,17 @@ public class BasicSpringConfiguration {
             return new EventListenerOperationsFactory.StompEventListenerServiceFactory();
         }
     }
+    
+    @Bean
+    @Autowired
+    public PlayerOperations playerOperations(ObjectMapper objectMapper,
+            EventListenerOperationsFactory listenerOperations,
+            PlayerRegistrationService registrationService,
+            PlayerProfileServiceFactory profileOperations,
+            PlayerSessionService sessionOperations,
+            PaymentServiceFactory accountOperations) {
+        return new SimplePlayerOperations(objectMapper, listenerOperations, registrationService, profileOperations, sessionOperations, accountOperations);
+    }
+
 
 }

@@ -12,12 +12,12 @@ import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.web.management.ManagementWebMapping;
 
-public class IntegrationSessionOperations implements PlayerSessionService {
+public class IntegrationSessionService implements PlayerSessionService {
 
     final public RestTemplate restTemplate;
     final public String baseUrl;
 
-    public IntegrationSessionOperations(RestTemplate restTemplate, String baseUrl) {
+    public IntegrationSessionService(RestTemplate restTemplate, String baseUrl) {
         this.restTemplate = checkNotNull(restTemplate);
         this.baseUrl = checkNotNull(baseUrl);
     }

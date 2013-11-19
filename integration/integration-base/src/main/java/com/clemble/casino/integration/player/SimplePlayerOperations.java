@@ -15,7 +15,7 @@ import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
-import com.clemble.casino.integration.player.account.PaymentServiceFactory;
+import com.clemble.casino.integration.payment.PaymentServiceFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
@@ -84,8 +84,7 @@ public class SimplePlayerOperations implements PlayerOperations, ApplicationCont
     @Override
     @SuppressWarnings("unchecked")
     final public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        gameConstructionOperations.addAll((Collection<? extends GameConstructionOperations<?>>) (Collection<?>) applicationContext.getBeansOfType(
-                GameConstructionOperations.class).values());
+        gameConstructionOperations.addAll((Collection<? extends GameConstructionOperations<?>>) (Collection<?>) applicationContext.getBeansOfType(GameConstructionOperations.class).values());
     }
 
     @Override

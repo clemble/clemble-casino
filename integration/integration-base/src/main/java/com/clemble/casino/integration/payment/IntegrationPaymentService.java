@@ -1,4 +1,4 @@
-package com.clemble.casino.integration.player.account;
+package com.clemble.casino.integration.payment;
 
 import java.util.List;
 
