@@ -48,6 +48,7 @@ import com.clemble.casino.game.service.GameSpecificationService;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
+import com.clemble.casino.utils.CollectionUtils;
 
 public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements ClembleCasinoOperation {
 
@@ -78,7 +79,7 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
         PaymentService paymentTransactionService = new AndroidPaymentTransactionService(getRestTemplate(), paymentServerRegistry);
         this.paymentTransactionOperations = new PaymentTemplate(player, paymentTransactionService);
         // Step 4. Creating GameConstruction services
-        this.gameToConstructionOperations = new EnumMap<Game, GameConstructionOperations<?>>(Game.class);
+        Map<Game, GameConstructionOperations<?>> gameToConstructor = new EnumMap<Game, GameConstructionOperations<?>>(Game.class);
         this.eventListenersManager = new RabbitEventListenerTemplate(resourceLocations.getNotificationConfiguration(), ClembleCasinoConstants.OBJECT_MAPPER);
         for (Game game : resourceLocations.getGames()) {
             ServerRegistry gameRegistry = registryConfiguration.getGameRegistry(game);
@@ -90,6 +91,7 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
                     specificationService, eventListenersManager);
             this.gameToConstructionOperations.put(game, constructionOperations);
         }
+        this.gameToConstructionOperations = CollectionUtils.immutableMap(gameToConstructor);
     }
 
     @Override
@@ -116,6 +118,11 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
     @SuppressWarnings("unchecked")
     public <T extends GameState> GameConstructionOperations<T> gameConstructionOperations(Game game) {
         return (GameConstructionOperations<T>) gameToConstructionOperations.get(game);
+    }
+
+    @Override
+    public Map<Game, GameConstructionOperations<?>> gameConstructionOperations() {
+        return gameToConstructionOperations;
     }
 
     @Override
@@ -149,4 +156,5 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
         if(eventListenersManager != null)
             eventListenersManager.close();
     }
+
 }

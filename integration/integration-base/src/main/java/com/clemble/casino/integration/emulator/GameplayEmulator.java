@@ -22,13 +22,13 @@ import com.clemble.casino.integration.player.PlayerOperations;
 public class GameplayEmulator<State extends GameState> {
 
     final private PlayerOperations playerOperations;
-    final private GameSessionPlayerFactory sessionPlayerFactory;
+    final private GameSessionPlayerFactory<State> sessionPlayerFactory;
     final private GameActor<State> actor;
     final private Map<GameSpecification, Collection<PlayerEmulator<State>>> playerEmulators = new HashMap<GameSpecification, Collection<PlayerEmulator<State>>>();
 
     private ScheduledExecutorService executorService;
 
-    public GameplayEmulator(final PlayerOperations playerOperations, final GameActor<State> gameActor, final GameSessionPlayerFactory sessionPlayerFactory) {
+    public GameplayEmulator(final PlayerOperations playerOperations, final GameActor<State> gameActor, final GameSessionPlayerFactory<State> sessionPlayerFactory) {
         this.actor = checkNotNull(gameActor);
         this.playerOperations = checkNotNull(playerOperations);
         this.sessionPlayerFactory = checkNotNull(sessionPlayerFactory);

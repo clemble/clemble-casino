@@ -13,7 +13,6 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerSession;
-import com.clemble.casino.player.security.PlayerToken;
 
 public interface Player extends PlayerAware {
 
@@ -23,15 +22,13 @@ public interface Player extends PlayerAware {
 
     public PaymentOperations paymentOperations();
 
-    public PlayerToken getIdentity();
+    public <State extends GameState> GameConstructionOperations<State> gameConstructionOperations(Game game);
+
+    public Map<Game, GameConstructionOperations<?>> gameConstructionOperations();
 
     public PlayerCredential getCredential();
 
     public PlayerSession getSession();
-
-    public <State extends GameState> GameConstructionOperations<State> gameConstructionOperations(Game game);
-
-    public Map<Game, GameConstructionOperations<?>> gameConstructionOperations();
 
     public void listen(GameSessionKey session, EventListener sessionListener);
 

@@ -28,7 +28,7 @@ import com.clemble.casino.integration.player.account.PaymentServiceFactory;
 import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
 import com.clemble.casino.integration.player.session.IntegrationSessionOperations;
 import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
-import com.clemble.casino.integration.spring.web.management.ManagementWebSpringConfiguration;
+import com.clemble.casino.integration.spring.web.management.IntegrationManagementWebSpringConfiguration;
 import com.clemble.casino.payment.service.PaymentTransactionService;
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.player.service.PlayerProfileService;
@@ -59,7 +59,7 @@ public class TestConfiguration {
 
     @Configuration
     @Profile(value = SpringConfiguration.DEFAULT)
-    @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, ManagementWebSpringConfiguration.class,
+    @Import(value = { PaymentWebSpringConfiguration.class, PlayerWebSpringConfiguration.class, IntegrationManagementWebSpringConfiguration.class,
             IntegrationGameWebSpringConfiguration.class })
     public static class LocalTestConfiguration {
 

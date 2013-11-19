@@ -19,8 +19,8 @@ import com.google.common.collect.ImmutableList;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class,
-        ManagementWebSpringConfiguration.DefaultAndTest.class, ManagementWebSpringConfiguration.Cloud.class, ManagementWebSpringConfiguration.Integration.class })
-public class ManagementWebSpringConfiguration extends AbstractManagementWebSpringConfiguration {
+        IntegrationManagementWebSpringConfiguration.DefaultAndTest.class, IntegrationManagementWebSpringConfiguration.Cloud.class, IntegrationManagementWebSpringConfiguration.Integration.class })
+public class IntegrationManagementWebSpringConfiguration extends AbstractManagementWebSpringConfiguration {
 
     @Configuration
     @Profile({ UNIT_TEST, DEFAULT, INTEGRATION_DEFAULT })

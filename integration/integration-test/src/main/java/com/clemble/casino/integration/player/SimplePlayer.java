@@ -41,7 +41,6 @@ public class SimplePlayer implements Player {
 
     final private String player;
     final private PlayerSession session;
-    final private PlayerToken identity;
     final private EventListenerOperation playerListenersManager;
     final private PlayerCredential credential;
 
@@ -60,7 +59,6 @@ public class SimplePlayer implements Player {
             final PaymentServiceFactory accountOperations,
             final EventListenerOperationsFactory listenerOperations,
             final Collection<GameConstructionOperations<?>> playerConstructionOperations) {
-        this.identity = checkNotNull(playerIdentity);
         this.player = playerIdentity.getPlayer();
 
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileService.construct(this));
@@ -96,11 +94,6 @@ public class SimplePlayer implements Player {
     @Override
     public String getPlayer() {
         return player;
-    }
-
-    @Override
-    public PlayerToken getIdentity() {
-        return identity;
     }
 
     @Override

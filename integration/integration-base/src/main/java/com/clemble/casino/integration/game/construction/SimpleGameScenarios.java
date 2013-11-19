@@ -3,44 +3,48 @@ package com.clemble.casino.integration.game.construction;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.configuration.GameSpecificationOptions;
-import com.clemble.casino.game.configuration.SelectSpecificationOptions;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
-import com.clemble.casino.integration.util.RandomUtils;
 
-public class SimpleGameScenarios implements GameScenarios {
+public class SimpleGameScenarios implements GameScenarios, ApplicationContextAware {
 
     final private PlayerOperations playerOperations;
-    final private GameSessionPlayerFactory sessionPlayerFactory;
+    final private Map<Game, GameSessionPlayerFactory<?>> gameToSessionPlayerFactory = new HashMap<>();
 
-    public SimpleGameScenarios(PlayerOperations playerOperations, GameSessionPlayerFactory sessionPlayerFactory) {
+    public SimpleGameScenarios(PlayerOperations playerOperations) {
         this.playerOperations = checkNotNull(playerOperations);
-        this.sessionPlayerFactory = checkNotNull(sessionPlayerFactory);
     }
 
-    public <State extends GameState> List<GameSessionPlayer<State>> constructGame(Game game) {
+    public <State extends GameState> List<GameSessionPlayer<State>> construct(Game game) {
         if (game == null)
             throw new IllegalArgumentException("Name must not be null");
         Player randomPlayer = playerOperations.createPlayer();
         // Step 0. Sanity check
-        GameSpecification specification = selectSpecification(randomPlayer, game);
+        GameSpecification specification = GameScenariosUtils.random(randomPlayer.gameConstructionOperations(game).get());
         // Step 1. Selecting specification for the game
-        return constructGame(specification);
+        return construct(specification);
     }
 
-    public <State extends GameState> List<GameSessionPlayer<State>> constructGame(GameSpecification specification) {
+    @SuppressWarnings("unchecked")
+    public <State extends GameState> List<GameSessionPlayer<State>> construct(GameSpecification specification) {
         if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         Game game = specification.getName().getGame();
@@ -57,12 +61,12 @@ public class SimpleGameScenarios implements GameScenarios {
         }
         // Step 2. Creating availability game request
         GameConstruction construction = players.get(0).<State> gameConstructionOperations(game).constructAvailability(specification, participants);
-        GameSessionPlayer<State> sessionPlayer = sessionPlayerFactory.construct(players.get(0), construction);
+        GameSessionPlayer<State> sessionPlayer = (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(game).construct(players.get(0), construction);
         constructedGames.add(sessionPlayer);
         GameSessionKey sessionKey = sessionPlayer.getSession();
         for (int i = 1; i < numPlayers; i++) {
             GameConstruction iPlayerConstruction = players.get(i).<State> gameConstructionOperations(game).accept(sessionKey.getSession());
-            GameSessionPlayer<State> iSessionPlayer = sessionPlayerFactory.construct(players.get(i), iPlayerConstruction);
+            GameSessionPlayer<State> iSessionPlayer = (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(game).construct(players.get(i), iPlayerConstruction);
             constructedGames.add(iSessionPlayer);
         }
         // Step 3. Waiting until all will be in sync
@@ -79,13 +83,54 @@ public class SimpleGameScenarios implements GameScenarios {
         return constructedGames;
     }
 
-    private GameSpecification selectSpecification(Player player, Game game) {
-        GameSpecificationOptions specificationOptions = player.gameConstructionOperations(game).get();
-        if(specificationOptions instanceof SelectSpecificationOptions) {
-            return ((SelectSpecificationOptions) specificationOptions).getSpecifications().get(RandomUtils.RANDOM.nextInt(((SelectSpecificationOptions) specificationOptions).getSpecifications().size()));
-        } else {
-            throw new UnsupportedOperationException("This specification options not supported " + specificationOptions);
-        }
+    @Override
+    public <State extends GameState> GameSessionPlayer<State> construct(Game game, Player initiator) {
+        return construct(GameScenariosUtils.random(initiator, game), initiator);
     }
 
+    @Override
+    public <State extends GameState> GameSessionPlayer<State> construct(GameSpecification specification, Player initiator) {
+        if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
+            throw new IllegalArgumentException("Specification is invalid");
+        Game game = specification.getName().getGame();
+        // Step 2. Creating availability game request
+        GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAutomatch(specification);
+        GameSessionPlayer<State> sessionPlayer = (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(game).construct(initiator, construction);
+        // Step 3. Returning constructed player
+        return sessionPlayer;
+    }
+
+    @Override
+    public <State extends GameState> GameSessionPlayer<State> construct(Game game, Player initiator, String... participants) {
+        return construct(GameScenariosUtils.random(initiator, game), initiator);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <State extends GameState> GameSessionPlayer<State> construct(GameSpecification specification, Player initiator, String... participants) {
+        if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
+            throw new IllegalArgumentException("Specification is invalid");
+        Game game = specification.getName().getGame();
+        // Step 2. Creating availability game request
+        GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAvailability(specification, Arrays.asList(participants));
+        GameSessionPlayer<State> sessionPlayer = (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(game).construct(initiator, construction);
+        // Step 3. Returning constructed player
+        return sessionPlayer;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <State extends GameState> GameSessionPlayer<State> accept(GameSessionKey sessionKey, Player participant) {
+        // Step 1. Fetching construction
+        GameConstruction construction = participant.gameConstructionOperations(sessionKey.getGame()).accept(sessionKey.getSession());
+        // Step 2. Generating GameSessionPlayer
+        return (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(sessionKey.getGame()).construct(participant, construction);
+    }
+
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        for(GameSessionPlayerFactory<?> sessionPlayerFactory: applicationContext.getBeansOfType(GameSessionPlayerFactory.class).values())
+            gameToSessionPlayerFactory.put(sessionPlayerFactory.getGame(), sessionPlayerFactory);
+    }
 }

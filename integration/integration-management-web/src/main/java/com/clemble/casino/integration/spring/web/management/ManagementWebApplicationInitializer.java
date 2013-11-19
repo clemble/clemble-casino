@@ -15,7 +15,7 @@ public class ManagementWebApplicationInitializer extends AbstractWebApplicationI
     protected void doInit(ServletContext container) throws ServletException {
         // Step 1. Create the 'root' Spring application context
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(ManagementWebSpringConfiguration.class);
+        rootContext.register(IntegrationManagementWebSpringConfiguration.class);
         // Step 2. Registering appropriate Dispatcher
         ServletRegistration.Dynamic dispatcher = container.addServlet("integration-management", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);

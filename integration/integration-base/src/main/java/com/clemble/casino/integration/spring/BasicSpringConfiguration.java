@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
+import com.clemble.casino.game.GameState;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.SimpleGameSessionPlayerFactory;
@@ -53,13 +54,13 @@ public class BasicSpringConfiguration {
     @Bean
     @Singleton
     public SimpleGameScenarios gameScenarios() {
-        return new SimpleGameScenarios(playerOperations, sessionPlayerFactory);
+        return new SimpleGameScenarios(playerOperations);
     }
 
     @Bean
     @Autowired
-    public GameSessionPlayerFactory sessionPlayerFactory() {
-        return new SimpleGameSessionPlayerFactory();
+    public GameSessionPlayerFactory<GameState> sessionPlayerFactory() {
+        return new SimpleGameSessionPlayerFactory<GameState>();
     }
 
     @Bean

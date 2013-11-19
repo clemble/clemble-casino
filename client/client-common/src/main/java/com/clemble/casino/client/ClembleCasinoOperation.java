@@ -1,8 +1,10 @@
 package com.clemble.casino.client;
 
 import java.io.Closeable;
+import java.util.Map;
 
 import org.springframework.social.ApiBinding;
+import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameConstructionOperations;
@@ -26,7 +28,12 @@ public interface ClembleCasinoOperation extends ApiBinding, Closeable {
 
     public <T extends GameState> GameConstructionOperations<T> gameConstructionOperations(Game game);
 
+    public Map<Game, GameConstructionOperations<?>> gameConstructionOperations();
+
     public <State extends GameState> GameActionOperations<State> gameActionOperations(GameSessionKey session);
+
+    // TODO safety concern, since RestTemplate is reused all over the place, make a deep copy of returned rest template
+    public RestTemplate getRestTemplate();
 
     @Override
     public void close();
