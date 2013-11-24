@@ -6,7 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.ServerRegistry;
-import com.clemble.casino.integration.player.Player;
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
@@ -27,7 +27,7 @@ public class IntegrationPaymentTransactionOperations extends AbstractPaymentTran
     }
 
     @Override
-    public PaymentTransaction get(Player player, String source, String transactionId) {
+    public PaymentTransaction get(ClembleCasinoOperations player, String source, String transactionId) {
         // Step 1. Performing empty signed GET request
         return restTemplate.exchange(baseUrl.findBase() + PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, HttpMethod.GET, null, PaymentTransaction.class, source, transactionId).getBody();
     }

@@ -1,7 +1,6 @@
 package com.clemble.casino.android;
 
 import java.net.URI;
-import java.nio.CharBuffer;
 
 import org.springframework.social.support.URIBuilder;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,7 +29,7 @@ abstract public class AbstractClembleCasinoOperations {
     }
 
     protected URI buildUriWith(String path, MultiValueMap<String, String> queryParams, String ... parameters) {
-        String apiUrl = parameters != null && parameters.length > 1 ? apiBase.findById(parameters[0]) : apiBase.findBase();
+        String apiUrl = (parameters != null && parameters.length > 0 ? apiBase.findById(parameters[0]) : apiBase.findBase()) + path;
         String url = toUrl(apiUrl, parameters);
         return URIBuilder.fromUri(url).queryParams(queryParams).build();
     }
@@ -53,12 +52,12 @@ abstract public class AbstractClembleCasinoOperations {
     private String toUrl(String url, String ... parameters) {
         char[] originalUrl = url.toCharArray();
         int paramPointer = 0;
-        CharBuffer resultUrl = CharBuffer.allocate(originalUrl.length);
+        StringBuilder resultUrl = new StringBuilder();
         for (int i = 0; i < originalUrl.length; i++) {
             if ('{' == originalUrl[i]) {
-                resultUrl.append(parameters[paramPointer]);
+                resultUrl.append(parameters[paramPointer++]);
                 do {
-                } while (originalUrl[i++] != '}');
+                } while (originalUrl[++i] != '}');
             } else {
                 resultUrl.append(originalUrl[i]);
             }

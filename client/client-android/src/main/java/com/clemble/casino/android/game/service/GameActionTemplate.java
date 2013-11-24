@@ -3,7 +3,7 @@ package com.clemble.casino.android.game.service;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.event.EventListener;
-import com.clemble.casino.client.event.EventListenerOperation;
+import com.clemble.casino.client.event.EventListenerOperations;
 import com.clemble.casino.client.event.SessionEventSelector;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.ClientEvent;
@@ -19,9 +19,9 @@ public class GameActionTemplate<State extends GameState> implements GameActionOp
     final private String player;
     final private GameSessionKey session;
     final private GameActionService<State> gameActionService;
-    final private EventListenerOperation eventListenersManager;
+    final private EventListenerOperations eventListenersManager;
 
-    public GameActionTemplate(String player, GameSessionKey session, EventListenerOperation eventListenersManager, GameActionService<State> gameActionService) {
+    public GameActionTemplate(String player, GameSessionKey session, EventListenerOperations eventListenersManager, GameActionService<State> gameActionService) {
         this.player = player;
         this.session = session;
         this.eventListenersManager = checkNotNull(eventListenersManager);

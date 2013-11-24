@@ -10,12 +10,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
-import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
 
 public class PlayerEmulator<State extends GameState> implements Runnable {
@@ -24,7 +24,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
 
     final private GameSpecification specification;
     final private PlayerOperations playerOperations;
-    final private GameSessionPlayerFactory sessionPlayerFactory;
+    final private GameSessionPlayerFactory<State> sessionPlayerFactory;
     final private GameActor<State> actor;
     final private AtomicBoolean continueEmulation = new AtomicBoolean(true);
     final private AtomicLong lastMoved = new AtomicLong();
@@ -32,7 +32,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
 
     public PlayerEmulator(final GameActor<State> actor,
             final PlayerOperations playerOperations,
-            final GameSessionPlayerFactory sessionPlayerFactory,
+            final GameSessionPlayerFactory<State> sessionPlayerFactory,
             final GameSpecification specification) {
         this.specification = checkNotNull(specification);
         this.actor = checkNotNull(actor);
@@ -48,7 +48,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     public void run() {
         while (continueEmulation.get()) {
             try {
-                Player player = playerOperations.createPlayer();
+                ClembleCasinoOperations player = playerOperations.createPlayer();
                 // Step 1. Start player emulator
                 GameConstruction playerConstruction = player.gameConstructionOperations(actor.getGame()).constructAutomatch(specification);
                 GameSessionPlayer<State> playerState = sessionPlayerFactory.construct(player, playerConstruction);

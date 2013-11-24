@@ -63,6 +63,16 @@
             <groupId>de.roderick</groupId>
             <artifactId>weberknecht</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -85,6 +95,10 @@
             </activation>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
@@ -160,19 +174,23 @@
                                 <configuration>
                                     <daemon>true</daemon>
                                     <contextHandlers>
-                                        <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                        <contextHandler
+                                            implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/player-web.war</war>
                                             <contextPath>/player-web</contextPath>
                                         </contextHandler>
-                                        <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                        <contextHandler
+                                            implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/payment-web.war</war>
                                             <contextPath>/payment-web</contextPath>
                                         </contextHandler>
-                                        <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                        <contextHandler
+                                            implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/integration-management-web.war</war>
                                             <contextPath>/integration-management-web</contextPath>
                                         </contextHandler>
-                                        <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                        <contextHandler
+                                            implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/integration-game.war</war>
                                             <contextPath>/integration-game</contextPath>
                                         </contextHandler>

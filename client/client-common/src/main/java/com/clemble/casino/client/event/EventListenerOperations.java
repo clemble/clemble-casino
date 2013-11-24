@@ -4,7 +4,7 @@ import java.io.Closeable;
 
 import com.clemble.casino.game.GameSessionKey;
 
-public interface EventListenerOperation extends Closeable {
+public interface EventListenerOperations extends Closeable {
 
     public EventListenerController subscribe(EventListener listener);
 

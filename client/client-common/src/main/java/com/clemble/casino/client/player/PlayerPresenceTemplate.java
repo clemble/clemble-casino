@@ -1,8 +1,7 @@
-package com.clemble.casino.android.player;
+package com.clemble.casino.client.player;
 
 import java.util.List;
 
-import com.clemble.casino.client.player.PlayerPresenceOperations;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.service.PlayerPresenceService;
 

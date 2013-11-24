@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import com.clemble.casino.client.event.ConstructionEventSelector;
 import com.clemble.casino.client.event.EventListener;
-import com.clemble.casino.client.event.EventListenerOperation;
+import com.clemble.casino.client.event.EventListenerOperations;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
@@ -34,12 +34,12 @@ public class GameConstructionTemplate<T extends GameState> implements GameConstr
 
     final private Game game;
     final private GameActionOperationsFactory actionOperationFactory;
-    final private EventListenerOperation listenersManager;
+    final private EventListenerOperations listenersManager;
     final private GameSpecificationService specificationService;
     final private GameConstructionService constructionService;
 
     public GameConstructionTemplate(String player, Game game, GameActionOperationsFactory actionOperations, GameConstructionService constructionService,
-            GameSpecificationService specificationService, EventListenerOperation listenersManager) {
+            GameSpecificationService specificationService, EventListenerOperations listenersManager) {
         this.player = checkNotNull(player);
         this.game = checkNotNull(game);
         this.actionOperationFactory = checkNotNull(actionOperations);

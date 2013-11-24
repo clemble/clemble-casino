@@ -2,17 +2,17 @@ package com.clemble.casino.integration.game;
 
 import java.io.Closeable;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.SessionAware;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.client.GameClientEvent;
 import com.clemble.casino.game.specification.GameSpecificationAware;
-import com.clemble.casino.integration.player.Player;
 
 public interface GameSessionPlayer<State extends GameState> extends SessionAware, Closeable, GameSpecificationAware {
 
-    public Player getPlayer();
+    public ClembleCasinoOperations getPlayer();
 
     public GameConstruction getConstructionInfo();
 

@@ -4,12 +4,13 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.integration.player.Player;
+import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.service.PlayerProfileService;
 
 abstract public class PlayerProfileServiceFactory {
 
-    abstract public PlayerProfileService construct(Player player);
+    abstract public PlayerProfileService construct(ClembleCasinoOperations player);
 
     public static class SingletonPlayerProfileServiceFactory extends PlayerProfileServiceFactory {
 
@@ -20,7 +21,7 @@ abstract public class PlayerProfileServiceFactory {
         }
 
         @Override
-        public PlayerProfileService construct(Player player) {
+        public PlayerProfileService construct(ClembleCasinoOperations player) {
             return playerProfileService;
         }
     }
@@ -34,8 +35,9 @@ abstract public class PlayerProfileServiceFactory {
         }
 
         @Override
-        public PlayerProfileService construct(Player player) {
-            return new IntegrationPlayerProfileService(player.getSession().getResourceLocations().getServerRegistryConfiguration().getPlayerRegistry(), restTemplate);
+        public PlayerProfileService construct(ClembleCasinoOperations player) {
+            PlayerSession session = player.sessionOperations().create();
+            return new IntegrationPlayerProfileService(session.getResourceLocations().getServerRegistryConfiguration().getPlayerRegistry(), restTemplate);
         }
 
     }

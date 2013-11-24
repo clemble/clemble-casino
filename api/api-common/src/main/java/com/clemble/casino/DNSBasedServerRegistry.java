@@ -27,17 +27,17 @@ public class DNSBasedServerRegistry implements ServerRegistry {
 
     @Override
     public String findBase() {
-        return getBaseUrl();
+        return baseUrl;
     }
 
     @Override
     public String findById(String identifier) {
-        return String.format(getIdUrl(), identifier.substring(0, getPrefixLength()));
+        return String.format(idUrl, identifier.substring(0, prefixLength));
     }
 
     @Override
     public String findByIdAndType(String identifier, Object type) {
-        return String.format(getIdAndTypeUrl(), identifier.substring(0, getPrefixLength()), String.valueOf(type));
+        return String.format(idAndTypeUrl, identifier.substring(0, prefixLength), String.valueOf(type));
     }
 
     public int getPrefixLength() {

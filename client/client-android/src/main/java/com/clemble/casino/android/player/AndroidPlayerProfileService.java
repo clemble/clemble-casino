@@ -2,6 +2,8 @@ package com.clemble.casino.android.player;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
+import java.net.URI;
+
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.ServerRegistry;
@@ -21,16 +23,18 @@ public class AndroidPlayerProfileService extends AbstractClembleCasinoOperations
 
     @Override
     public PlayerProfile getPlayerProfile(String player) {
-        return restTemplate
-            .getForEntity(buildUriWith(PlayerWebMapping.PLAYER_PROFILE, player), PlayerProfile.class)
-            .getBody();
+        // Step 1. Generating player Uri
+        URI playerUri = buildUriWith(PlayerWebMapping.PLAYER_PROFILE, player);
+        // Step 2. Sending PlayerProfile request 
+        return restTemplate.getForEntity(playerUri, PlayerProfile.class).getBody();
     }
 
     @Override
     public PlayerProfile updatePlayerProfile(String player, PlayerProfile playerProfile) {
-        return restTemplate
-            .postForEntity(buildUriWith(PlayerWebMapping.PLAYER_PROFILE, player), playerProfile, PlayerProfile.class)
-            .getBody();
+        // Step 1. Generating player URI
+        URI playerUri = buildUriWith(PlayerWebMapping.PLAYER_PROFILE, player);
+        // Step 2. Post to Player URI
+        return restTemplate.postForEntity(playerUri, playerProfile, PlayerProfile.class).getBody();
     }
 
 }

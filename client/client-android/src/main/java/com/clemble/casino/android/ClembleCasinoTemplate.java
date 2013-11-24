@@ -21,10 +21,9 @@ import com.clemble.casino.android.payment.AndroidPaymentTransactionService;
 import com.clemble.casino.android.player.AndroidPlayerPresenceService;
 import com.clemble.casino.android.player.AndroidPlayerProfileService;
 import com.clemble.casino.android.player.AndroidPlayerSessionService;
-import com.clemble.casino.android.player.PlayerPresenceTemplate;
-import com.clemble.casino.client.ClembleCasinoOperation;
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
-import com.clemble.casino.client.event.EventListenerOperation;
+import com.clemble.casino.client.event.EventListenerOperations;
 import com.clemble.casino.client.event.RabbitEventListenerTemplate;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameActionOperationsFactory;
@@ -33,6 +32,7 @@ import com.clemble.casino.client.game.GameConstructionTemplate;
 import com.clemble.casino.client.payment.PaymentOperations;
 import com.clemble.casino.client.payment.PaymentTemplate;
 import com.clemble.casino.client.player.PlayerPresenceOperations;
+import com.clemble.casino.client.player.PlayerPresenceTemplate;
 import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.client.player.PlayerProfileTemplate;
 import com.clemble.casino.client.player.PlayerSessionOperations;
@@ -50,9 +50,15 @@ import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.utils.CollectionUtils;
 
-public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements ClembleCasinoOperation {
+public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements ClembleCasinoOperations {
 
-    final private EventListenerOperation eventListenersManager;
+    /**
+     * Generated 19/11/13
+     */
+    private static final long serialVersionUID = 103204849955372481L;
+
+    final private String player;
+    final private EventListenerOperations eventListenersManager;
     final private PlayerSessionOperations playerSessionOperations;
     final private PlayerProfileOperations playerProfileOperations;
     final private PlayerPresenceOperations playerPresenceOperations;
@@ -60,10 +66,16 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
     final private Map<Game, GameConstructionOperations<?>> gameToConstructionOperations;
 
     @SuppressWarnings({ "rawtypes" })
-    public ClembleCasinoTemplate(String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret, String player, String managementUrl)
+    public ClembleCasinoTemplate(
+            String consumerKey,
+            String consumerSecret, String accessToken,
+            String accessTokenSecret,
+            String player,
+            String managementUrl)
             throws IOException {
         super(consumerKey, consumerSecret, accessToken, accessTokenSecret, new RSARequestSigner());
 
+        this.player = player;
         this.playerSessionOperations = new PlayerSessionTemplate(player, new AndroidPlayerSessionService(getRestTemplate(), new SingletonRegistry(managementUrl)));
         ResourceLocations resourceLocations = checkNotNull(playerSessionOperations.create().getResourceLocations());
         ServerRegistryConfiguration registryConfiguration = resourceLocations.getServerRegistryConfiguration();
@@ -85,11 +97,11 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
             ServerRegistry gameRegistry = registryConfiguration.getGameRegistry(game);
             GameConstructionService constructionService = new AndroidGameConstructionService(getRestTemplate(), gameRegistry);
             GameSpecificationService specificationService = new AndroidGameSpecificationService(getRestTemplate(), gameRegistry);
-            GameActionService<?> actionService = new AndroidGameActionTemplate<>(getRestTemplate(), gameRegistry);
+            GameActionService<?> actionService = new AndroidGameActionTemplate(getRestTemplate(), gameRegistry);
             GameActionOperationsFactory actionOperationsFactory = new GameActionTemplateFactory(player, eventListenersManager, actionService);
             GameConstructionOperations<?> constructionOperations = new GameConstructionTemplate(player, game, actionOperationsFactory, constructionService,
                     specificationService, eventListenersManager);
-            this.gameToConstructionOperations.put(game, constructionOperations);
+            gameToConstructor.put(game, constructionOperations);
         }
         this.gameToConstructionOperations = CollectionUtils.immutableMap(gameToConstructor);
     }
@@ -134,6 +146,16 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
         return constructionOperations.getActionOperations(session.getSession());
     }
 
+    @Override
+    public String getPlayer() {
+        return player;
+    }
+
+    @Override
+    public EventListenerOperations listenerOperations() {
+        return eventListenersManager;
+    }
+
     /**
      * Returns a {@link MappingJackson2HttpMessageConverter} to be used by the internal {@link RestTemplate}. Override to customize the message converter (for
      * example, to set a custom object mapper or supported media types). To remove/replace this or any of the other message converters that are registered by
@@ -156,5 +178,4 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
         if(eventListenersManager != null)
             eventListenersManager.close();
     }
-
 }

@@ -13,6 +13,22 @@
             <artifactId>client-common</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.clemble.casino.client</groupId>
+            <artifactId>client-android</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>
+                        spring-android-rest-template
+                    </artifactId>
+                    <groupId>org.springframework.android</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <scope>provided</scope>
@@ -20,6 +36,15 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android-test</artifactId>
+            <version>4.1.1.4</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

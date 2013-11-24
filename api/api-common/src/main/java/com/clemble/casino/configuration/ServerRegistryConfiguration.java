@@ -18,10 +18,10 @@ public class ServerRegistryConfiguration {
     }
 
     public ServerRegistryConfiguration(String playerNotificationBaseUrl, String playerBaseUrl, String paymentBaseUrl, String gameBaseUrl) {
-        this.playerNotificationBaseUrl = new DNSBasedServerRegistry(3, null, playerNotificationBaseUrl, null);
-        this.paymentBaseUrl = new DNSBasedServerRegistry(3, paymentBaseUrl, null, null);
-        this.playerRegistry = new DNSBasedServerRegistry(3, null, playerBaseUrl, null);
-        this.gameRegistry = new DNSBasedServerRegistry(3, "game." + gameBaseUrl, null, "%s.game." + gameBaseUrl);
+        this.playerNotificationBaseUrl = new DNSBasedServerRegistry(3, playerNotificationBaseUrl, playerNotificationBaseUrl, playerNotificationBaseUrl);
+        this.paymentBaseUrl = new DNSBasedServerRegistry(3, paymentBaseUrl, paymentBaseUrl, paymentBaseUrl);
+        this.playerRegistry = new DNSBasedServerRegistry(3, playerBaseUrl, playerBaseUrl, playerBaseUrl);
+        this.gameRegistry = new DNSBasedServerRegistry(3, gameBaseUrl, gameBaseUrl, gameBaseUrl);
     }
 
     @JsonCreator

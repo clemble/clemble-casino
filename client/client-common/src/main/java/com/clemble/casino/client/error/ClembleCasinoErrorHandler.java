@@ -25,8 +25,9 @@ public class ClembleCasinoErrorHandler implements ResponseErrorHandler {
 
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
+        int contentLength = Math.max(response.getBody().available(), (int) response.getHeaders().getContentLength()); 
         // Step 1. Reading error string
-        byte[] buffer = new byte[response.getBody().available()];
+        byte[] buffer = new byte[contentLength];
         response.getBody().read(buffer);
         String errorMessage = new String(buffer);
         // Step 2. Checking that response is of JSON type

@@ -51,7 +51,7 @@ public class PlayerSessionController implements PlayerSessionService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody
     PlayerSession refreshPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") long sessionId) {

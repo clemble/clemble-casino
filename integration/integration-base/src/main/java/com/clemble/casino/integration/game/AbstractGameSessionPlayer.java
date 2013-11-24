@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.clemble.casino.ServerRegistry;
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
-import com.clemble.casino.configuration.ResourceLocations;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
@@ -19,8 +19,6 @@ import com.clemble.casino.game.event.client.surrender.GiveUpEvent;
 import com.clemble.casino.game.event.server.GameServerEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
 import com.clemble.casino.game.specification.GameSpecification;
-import com.clemble.casino.integration.game.GameSessionPlayer;
-import com.clemble.casino.integration.player.Player;
 
 abstract public class AbstractGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State>, Closeable {
 
@@ -29,7 +27,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
      */
     private static final long serialVersionUID = -8412015352988124245L;
 
-    final private Player player;
+    final private ClembleCasinoOperations player;
     final private GameConstruction construction;
     final private Object versionLock = new Object();
     final private AtomicBoolean keepAlive = new AtomicBoolean(true);
@@ -37,11 +35,11 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     private GameSessionKey session;
 
-    public AbstractGameSessionPlayer(final Player player, GameConstruction construction) {
+    public AbstractGameSessionPlayer(final ClembleCasinoOperations player, GameConstruction construction) {
         this.construction = checkNotNull(construction);
         this.player = player;
 
-        player.listen(construction.getSession(), new EventListener() {
+        player.listenerOperations().subscribe(construction.getSession(), new EventListener() {
             @Override
             @SuppressWarnings("unchecked")
             public void onEvent(Event event) {
@@ -71,7 +69,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    final public Player getPlayer() {
+    final public ClembleCasinoOperations getPlayer() {
         return player;
     }
 
@@ -178,11 +176,9 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     public void perform(GameClientEvent gameAction) {
-        ResourceLocations resourceLocations =  player.getSession().getResourceLocations();
-        ServerRegistry gameRegistry = resourceLocations.getServerRegistryConfiguration().getGameRegistry(construction.getSession().getGame());
-        setState(perform(player, gameRegistry, session, gameAction));
+        player.gameActionOperations(construction.getSession()).process(gameAction);
     }
 
-    abstract public State perform(Player player, ServerRegistry resourse, GameSessionKey session, GameClientEvent clientEvent);
+    abstract public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameClientEvent clientEvent);
 
 }

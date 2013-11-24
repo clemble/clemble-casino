@@ -2,13 +2,12 @@ package com.clemble.casino.integration.payment;
 
 import java.util.List;
 
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.configuration.ResourceLocations;
-import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.service.PaymentService;
@@ -17,15 +16,15 @@ import com.clemble.casino.web.payment.PaymentWebMapping;
 public class IntegrationPaymentService implements PaymentService {
 
     final private RestTemplate restTemplate;
-    final private Player player;
+    final private ClembleCasinoOperations player;
 
-    public IntegrationPaymentService(Player player, RestTemplate restTemplate) {
+    public IntegrationPaymentService(ClembleCasinoOperations player, RestTemplate restTemplate) {
         this.player = player;
         this.restTemplate = restTemplate;
     }
 
-    private String getPaymentEndpoint(Player player) {
-        ResourceLocations resourceLocations = player.getSession().getResourceLocations();
+    private String getPaymentEndpoint(ClembleCasinoOperations player) {
+        ResourceLocations resourceLocations = player.sessionOperations().create().getResourceLocations();
         return resourceLocations.getServerRegistryConfiguration().getPaymentRegistry().findBase();
     }
 
@@ -45,11 +44,10 @@ public class IntegrationPaymentService implements PaymentService {
     }
 
     @Override
+    @SuppressWarnings({ "unchecked" })
     public List<PaymentTransaction> listPlayerTransaction(String playerId) {
         // Step 1. Requesting account associated with the playerId
-        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<PaymentTransaction>>() {
-                }, playerId).getBody();
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, null, List.class , playerId).getBody();
     }
 
     @Override

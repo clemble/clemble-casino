@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.spring.TestConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
@@ -43,7 +44,7 @@ public class PlayerAccountOperationsITest {
     @Test
     public void testAmountAfterRegistration() {
         // Step 1. Creating player
-        Player player = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer();
         // Step 2. Checking there is at least one
         PlayerAccount accountA = player.paymentOperations().getAccount();
         // Step 3. Checking that there are some fake moneys in the newly created account
@@ -71,11 +72,11 @@ public class PlayerAccountOperationsITest {
     @Test
     public void testTransactionsListAccess() {
         // Step 1. Checking player has no transactions to access
-        Player player = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer();
         List<PaymentTransaction> transactions = player.paymentOperations().listPlayerTransaction();
         Assert.assertFalse(transactions.isEmpty());
         // Step 2. Checking no other player can't access the transactions
-        Player anotherPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
         // TODO Assert.assertFalse(player.getWalletOperations().getPaymentTransaction(MoneySource.Registration, player.getPlayer()));
         // Step 3. Checking no other player can access the transactions
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
@@ -85,7 +86,7 @@ public class PlayerAccountOperationsITest {
     @Test
     public void testAccessNonExistent() {
         // Step 1. Checking player has no transactions to access
-        Player player = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer();
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionNotExists));
         player.paymentOperations().getPaymentTransaction(MoneySource.TicTacToe, "-1");
     }

@@ -41,7 +41,7 @@ public class PlayerProfileController implements PlayerProfileService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.PUT, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
     public @ResponseBody PlayerProfile updatePlayerProfile(@PathVariable("playerId") String player, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (playerProfile == null)

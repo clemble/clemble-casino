@@ -13,7 +13,7 @@ import com.clemble.casino.ImmutablePair;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
 
-abstract public class AbstractEventListenerTemplate implements EventListenerOperation, Closeable {
+abstract public class AbstractEventListenerTemplate implements EventListenerOperations, Closeable {
 
     final protected Set<Entry<EventSelector, EventListener>> eventListeners = new HashSet<>();
     final protected ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();

@@ -14,6 +14,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -21,7 +22,6 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
-import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
 
 public class SimpleGameScenarios implements GameScenarios, ApplicationContextAware {
@@ -36,7 +36,7 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     public <State extends GameState> List<GameSessionPlayer<State>> construct(Game game) {
         if (game == null)
             throw new IllegalArgumentException("Name must not be null");
-        Player randomPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations randomPlayer = playerOperations.createPlayer();
         // Step 0. Sanity check
         GameSpecification specification = GameScenariosUtils.random(randomPlayer.gameConstructionOperations(game).get());
         // Step 1. Selecting specification for the game
@@ -52,10 +52,10 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
         // Step 0. Generating players
         int numPlayers = specification.getNumberRule().getMaxPlayers();
         // Step 1. Generating players
-        List<Player> players = new ArrayList<>();
+        List<ClembleCasinoOperations> players = new ArrayList<>();
         List<String> participants = new ArrayList<>();
         for (int i = 0; i < numPlayers; i++) {
-            Player participant = playerOperations.createPlayer();
+            ClembleCasinoOperations participant = playerOperations.createPlayer();
             players.add(participant);
             participants.add(participant.getPlayer());
         }
@@ -84,12 +84,12 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     }
 
     @Override
-    public <State extends GameState> GameSessionPlayer<State> construct(Game game, Player initiator) {
+    public <State extends GameState> GameSessionPlayer<State> construct(Game game, ClembleCasinoOperations initiator) {
         return construct(GameScenariosUtils.random(initiator, game), initiator);
     }
 
     @Override
-    public <State extends GameState> GameSessionPlayer<State> construct(GameSpecification specification, Player initiator) {
+    public <State extends GameState> GameSessionPlayer<State> construct(GameSpecification specification, ClembleCasinoOperations initiator) {
         if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         Game game = specification.getName().getGame();
@@ -101,13 +101,13 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     }
 
     @Override
-    public <State extends GameState> GameSessionPlayer<State> construct(Game game, Player initiator, String... participants) {
+    public <State extends GameState> GameSessionPlayer<State> construct(Game game, ClembleCasinoOperations initiator, String... participants) {
         return construct(GameScenariosUtils.random(initiator, game), initiator);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <State extends GameState> GameSessionPlayer<State> construct(GameSpecification specification, Player initiator, String... participants) {
+    public <State extends GameState> GameSessionPlayer<State> construct(GameSpecification specification, ClembleCasinoOperations initiator, String... participants) {
         if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         Game game = specification.getName().getGame();
@@ -120,7 +120,7 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
 
     @Override
     @SuppressWarnings("unchecked")
-    public <State extends GameState> GameSessionPlayer<State> accept(GameSessionKey sessionKey, Player participant) {
+    public <State extends GameState> GameSessionPlayer<State> accept(GameSessionKey sessionKey, ClembleCasinoOperations participant) {
         // Step 1. Fetching construction
         GameConstruction construction = participant.gameConstructionOperations(sessionKey.getGame()).accept(sessionKey.getSession());
         // Step 2. Generating GameSessionPlayer

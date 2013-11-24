@@ -2,7 +2,7 @@ package com.clemble.casino.integration.payment;
 
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.integration.player.Player;
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.integration.player.account.CombinedPaymentService;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.payment.service.PaymentTransactionService;
@@ -10,7 +10,7 @@ import com.clemble.casino.payment.service.PlayerAccountService;
 
 abstract public class PaymentServiceFactory {
 
-    abstract public PaymentService construct(Player player);
+    abstract public PaymentService construct(ClembleCasinoOperations player);
 
     public static class SingletonPaymentService extends PaymentServiceFactory {
 
@@ -23,7 +23,7 @@ abstract public class PaymentServiceFactory {
         }
 
         @Override
-        public PaymentService construct(Player player) {
+        public PaymentService construct(ClembleCasinoOperations player) {
             return new CombinedPaymentService(paymentTransactionService, playerAccountService);
         }
 
@@ -38,7 +38,7 @@ abstract public class PaymentServiceFactory {
         }
 
         @Override
-        public PaymentService construct(Player player) {
+        public PaymentService construct(ClembleCasinoOperations player) {
             return new IntegrationPaymentService(player, restTemplate);
         }
 

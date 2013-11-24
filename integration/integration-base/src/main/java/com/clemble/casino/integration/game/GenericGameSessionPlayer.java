@@ -2,14 +2,13 @@ package com.clemble.casino.integration.game;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.client.GameClientEvent;
 import com.clemble.casino.game.specification.GameSpecification;
-import com.clemble.casino.integration.game.GameSessionPlayer;
-import com.clemble.casino.integration.player.Player;
 
 public class GenericGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State> {
 
@@ -25,7 +24,7 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
-    public Player getPlayer() {
+    public ClembleCasinoOperations getPlayer() {
         return actualPlayer.getPlayer();
     }
 

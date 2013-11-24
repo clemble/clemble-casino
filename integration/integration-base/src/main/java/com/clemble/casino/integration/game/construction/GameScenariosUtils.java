@@ -1,15 +1,15 @@
 package com.clemble.casino.integration.game.construction;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.configuration.GameSpecificationOptions;
 import com.clemble.casino.game.configuration.SelectSpecificationOptions;
 import com.clemble.casino.game.specification.GameSpecification;
-import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.util.RandomUtils;
 
 public class GameScenariosUtils {
 
-    public static GameSpecification random(Player player, Game game) {
+    public static GameSpecification random(ClembleCasinoOperations player, Game game) {
         return random(player.gameConstructionOperations(game).get());
     }
 

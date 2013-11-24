@@ -17,8 +17,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.error.ClembleCasinoError;
-import com.clemble.casino.integration.player.Player;
 import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.spring.TestConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
@@ -34,7 +34,7 @@ import com.clemble.casino.payment.money.Operation;
 @WebAppConfiguration
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
-public class PaymentTransactionOperationsITest {
+public class PaymentTransactionOperationsTest {
 
     @Autowired
     public PaymentTransactionOperations paymentTransactionOperations;
@@ -58,8 +58,8 @@ public class PaymentTransactionOperationsITest {
 
     @Test
     public void testInValidPaymentTransaction() {
-        Player player = playerOperations.createPlayer();
-        Player anotherPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer();
+        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
@@ -77,8 +77,8 @@ public class PaymentTransactionOperationsITest {
 
     @Test
     public void testValidTransaction() {
-        Player player = playerOperations.createPlayer();
-        Player anotherPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer();
+        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
@@ -99,8 +99,8 @@ public class PaymentTransactionOperationsITest {
         String source = MoneySource.TicTacToe.name();
         long transactionId = 2323;
 
-        Player player = playerOperations.createPlayer();
-        Player anotherPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer();
+        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(source, transactionId))
@@ -114,8 +114,8 @@ public class PaymentTransactionOperationsITest {
         PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
 
         assertEquals(savedPaymentTransaction, paymentTransaction);
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(player, source, String.valueOf(transactionId)));
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(anotherPlayer, source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, player.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, player.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
     }
 
     // TODO restore @Test
@@ -123,9 +123,9 @@ public class PaymentTransactionOperationsITest {
         String source = MoneySource.TicTacToe.name();
         long transactionId = 2323;
 
-        Player player = playerOperations.createPlayer();
-        Player anotherPlayer = playerOperations.createPlayer();
-        Player therdPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer();
+        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations therdPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(source, transactionId))
@@ -139,19 +139,19 @@ public class PaymentTransactionOperationsITest {
         PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
 
         assertEquals(savedPaymentTransaction, paymentTransaction);
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(player, source, String.valueOf(transactionId)));
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(anotherPlayer, source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, player.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, anotherPlayer.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
-        assertEquals(paymentTransaction, paymentTransactionOperations.get(therdPlayer, source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, therdPlayer.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
     }
 
     @Test
     public void testRegistrationTransaction() {
         // Step 1. Creating player
-        Player player = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer();
         // Step 2. Checking account exists
-        PaymentTransaction paymentTransaction = paymentTransactionOperations.get(player, MoneySource.registration, player.getPlayer());
+        PaymentTransaction paymentTransaction = player.paymentOperations().getPaymentTransaction(MoneySource.registration, player.getPlayer());
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
             if (paymentOperation.getPlayer().equals(player.getPlayer())) {

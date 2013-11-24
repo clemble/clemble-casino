@@ -2,7 +2,7 @@ package com.clemble.casino.android.game.service;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.client.event.EventListenerOperation;
+import com.clemble.casino.client.event.EventListenerOperations;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameActionOperationsFactory;
 import com.clemble.casino.game.GameSessionKey;
@@ -12,10 +12,10 @@ import com.clemble.casino.game.service.GameActionService;
 public class GameActionTemplateFactory implements GameActionOperationsFactory {
 
     final private String player;
-    final private EventListenerOperation eventListenerOperation;
+    final private EventListenerOperations eventListenerOperation;
     final private GameActionService<?> actionService;
 
-    public GameActionTemplateFactory(String player, EventListenerOperation eventListenerOperation, GameActionService<?> actionService) {
+    public GameActionTemplateFactory(String player, EventListenerOperations eventListenerOperation, GameActionService<?> actionService) {
         this.player = checkNotNull(player);
         this.actionService = checkNotNull(actionService);
         this.eventListenerOperation = checkNotNull(eventListenerOperation);

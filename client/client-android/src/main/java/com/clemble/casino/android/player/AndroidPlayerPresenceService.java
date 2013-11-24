@@ -38,9 +38,9 @@ public class AndroidPlayerPresenceService extends AbstractClembleCasinoOperation
     public List<PlayerPresence> getPresences(List<String> players) {
         // Step 1. Sanity check
         if(players == null || players.isEmpty())
-            return new ArrayList<>();
+            return new ArrayList<PlayerPresence>();
        // Step 2. Generating multivalue query map
-       MultiValueMap<String, String> query = new LinkedMultiValueMap<>();
+       MultiValueMap<String, String> query = new LinkedMultiValueMap<String, String>();
        for(String player: players)
            query.set(PlayerWebMapping.PLAYER_PRESENCES_PARAM, player);
        // Step 3. Requesting through RestTemplate

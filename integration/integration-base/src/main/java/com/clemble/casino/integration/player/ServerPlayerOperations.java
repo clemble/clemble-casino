@@ -13,16 +13,18 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
-import com.clemble.casino.integration.payment.PaymentServiceFactory;
-import com.clemble.casino.integration.player.profile.PlayerProfileServiceFactory;
+import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.clemble.casino.player.client.ClientDetails;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.player.service.PlayerPresenceService;
+import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
@@ -30,55 +32,54 @@ import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class SimplePlayerOperations implements PlayerOperations, ApplicationContextAware {
+public class ServerPlayerOperations implements PlayerOperations, ApplicationContextAware {
 
     final private ObjectMapper objectMapper;
     final private PlayerRegistrationService registrationService;
+    final private PlayerProfileService profileOperations;
+    final private PlayerPresenceService presenceService;
     final private PlayerSessionService sessionOperations;
-    final private PlayerProfileServiceFactory profileOperations;
-    final private PaymentServiceFactory paymentService;
+    final private PaymentService paymentService;
     final private EventListenerOperationsFactory listenerOperations;
     final private Set<GameConstructionOperations<?>> gameConstructionOperations = new HashSet<>();
 
-    public SimplePlayerOperations(ObjectMapper objectMapper,
+    public ServerPlayerOperations(ObjectMapper objectMapper,
             EventListenerOperationsFactory listenerOperations,
             PlayerRegistrationService registrationService,
-            PlayerProfileServiceFactory profileOperations,
+            PlayerProfileService profileOperations,
             PlayerSessionService sessionOperations,
-            PaymentServiceFactory accountOperations) {
+            PaymentService accountOperations,
+            PlayerPresenceService presenceService) {
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
         this.listenerOperations = checkNotNull(listenerOperations);
         this.sessionOperations = checkNotNull(sessionOperations);
         this.profileOperations = checkNotNull(profileOperations);
         this.paymentService = checkNotNull(accountOperations);
+        this.presenceService = checkNotNull(presenceService);
     }
 
     @Override
-    public Player createPlayer(PlayerRegistrationRequest registrationRequest) {
+    public ClembleCasinoOperations createPlayer(PlayerRegistrationRequest registrationRequest) {
         // Step 0. Sanity check
         checkNotNull(registrationRequest);
         // Step 1. Performing actual player creation
         PlayerToken playerIdentity = registrationService.createPlayer(registrationRequest);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from created request
-        Player player = create(playerIdentity, registrationRequest.getPlayerCredential());
-        // Step 3. Returning player session result
-        return player;
+        return create(playerIdentity, registrationRequest.getPlayerCredential());
 
     }
 
     @Override
-    public Player login(PlayerLoginRequest credential) {
+    public ClembleCasinoOperations login(PlayerLoginRequest credential) {
         // Step 0. Sanity check
         checkNotNull(credential);
         // Step 1. Performing actual player login
         PlayerToken playerIdentity = registrationService.login(credential);
         checkNotNull(playerIdentity);
         // Step 2. Generating Player from credentials
-        Player player = create(playerIdentity, credential.getPlayerCredential());
-        // Step 3. Returning player session result
-        return player;
+        return create(playerIdentity, credential.getPlayerCredential());
     }
 
     @Override
@@ -88,13 +89,13 @@ public class SimplePlayerOperations implements PlayerOperations, ApplicationCont
     }
 
     @Override
-    final public Player createPlayer() {
+    final public ClembleCasinoOperations createPlayer() {
         return createPlayer(new NativePlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10)).setLastName(RandomStringUtils.randomAlphabetic(10))
                 .setNickName(RandomStringUtils.randomAlphabetic(10)));
     }
 
     @Override
-    final public Player createPlayer(PlayerProfile playerProfile) {
+    final public ClembleCasinoOperations createPlayer(PlayerProfile playerProfile) {
         // Step 0. Sanity check
         checkNotNull(playerProfile);
         // Step 1. Creating RegistrationRequest for processing
@@ -108,9 +109,9 @@ public class SimplePlayerOperations implements PlayerOperations, ApplicationCont
         return createPlayer(registrationRequest);
     }
 
-    final public Player create(PlayerToken playerIdentity, PlayerCredential credential) {
-        return new SimplePlayer(objectMapper, playerIdentity, credential, profileOperations, sessionOperations, paymentService, listenerOperations,
-                gameConstructionOperations);
+    final public ClembleCasinoOperations create(PlayerToken playerIdentity, PlayerCredential credential) {
+        return new ServerPlayer(objectMapper, playerIdentity, credential, profileOperations, sessionOperations, paymentService, listenerOperations,
+                presenceService, gameConstructionOperations);
     }
 
 }

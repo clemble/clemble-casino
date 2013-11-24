@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.spring.TestConfiguration;
@@ -46,9 +47,9 @@ public class PlayerProfileOperationsITest {
     @Test
     public void testProfileRead() {
         PlayerProfile playerProfile = randomProfile();
-        Player player = playerOperations.createPlayer(playerProfile);
+        ClembleCasinoOperations player = playerOperations.createPlayer(playerProfile);
         PlayerProfileOperations playerProfileOperations = player.profileOperations();
-        Player anotherPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
         PlayerProfileOperations anotherPlayerProfileOperations = anotherPlayer.profileOperations();
 
         playerProfile.setPlayer(player.getPlayer());
@@ -59,7 +60,7 @@ public class PlayerProfileOperationsITest {
 
     @Test
     public void testProfileReadNonExistent() {
-        Player player = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer();
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerProfileDoesNotExists));
 
@@ -71,10 +72,10 @@ public class PlayerProfileOperationsITest {
         // Step 1. Generating and saving layer with random profile
         PlayerProfile playerProfile = randomProfile();
         // Step 2. Saving profile to DB
-        Player player = playerOperations.createPlayer(playerProfile);
+        ClembleCasinoOperations player = playerOperations.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
         PlayerProfileOperations playerProfileOperations = player.profileOperations();
-        Player anotherPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
         PlayerProfileOperations anotherProfileOperations = anotherPlayer.profileOperations();
         Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
         // Step 3. Updating created player with new Profile value
@@ -112,8 +113,8 @@ public class PlayerProfileOperationsITest {
         PlayerProfile playerProfile = randomProfile();
         playerProfile.setPlayer(RandomStringUtils.random(5));
 
-        Player player = playerOperations.createPlayer(playerProfile);
-        Player anotherPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations player = playerOperations.createPlayer(playerProfile);
+        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
         playerProfile.setPlayer(player.getPlayer());
         Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
 
@@ -133,7 +134,7 @@ public class PlayerProfileOperationsITest {
         PlayerProfile playerProfile = randomProfile();
         playerProfile.setPlayer("0");
 
-        Player player = playerOperations.createPlayer(playerProfile);
+        ClembleCasinoOperations player = playerOperations.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
         Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
 
@@ -151,7 +152,7 @@ public class PlayerProfileOperationsITest {
         PlayerProfile playerProfile = randomProfile();
         playerProfile.setPlayer(RandomStringUtils.random(5));
 
-        Player player = playerOperations.createPlayer(playerProfile);
+        ClembleCasinoOperations player = playerOperations.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
         Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
 
