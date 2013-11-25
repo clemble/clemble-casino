@@ -5,6 +5,6 @@ import com.clemble.casino.game.construct.GameRequest;
 
 public interface GameConstructionManager<C extends GameRequest> {
 
-    public GameConstruction register(C request);
+    public GameConstruction register(C request, String id);
 
 }

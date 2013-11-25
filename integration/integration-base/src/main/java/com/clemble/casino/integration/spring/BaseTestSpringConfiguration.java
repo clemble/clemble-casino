@@ -17,8 +17,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.service.GameActionService;
+import com.clemble.casino.game.service.GameConstructionService;
+import com.clemble.casino.game.service.GameSpecificationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
-import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.SimpleGameSessionPlayerFactory;
 import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
@@ -69,8 +71,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
     }
 
     @Bean
-    @Autowired
-    public GameSessionPlayerFactory<GameState> sessionPlayerFactory() {
+    public SimpleGameSessionPlayerFactory<? extends GameState> sessionPlayerFactory() {
         return new SimpleGameSessionPlayerFactory<GameState>();
     }
 
@@ -102,8 +103,11 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
                 PlayerProfileService profileOperations,
                 PlayerSessionService sessionOperations,
                 PaymentService accountOperations,
-                PlayerPresenceService presenceService) {
-            return new ServerPlayerOperations(objectMapper, listenerOperations, registrationService, profileOperations, sessionOperations, accountOperations, presenceService);
+                PlayerPresenceService presenceService,
+                GameConstructionService constructionService,
+                GameSpecificationService specificationService,
+                GameActionService<?> actionService) {
+            return new ServerPlayerOperations(objectMapper, listenerOperations, registrationService, profileOperations, sessionOperations, accountOperations, presenceService, constructionService, specificationService, actionService);
         }
 
         @Bean

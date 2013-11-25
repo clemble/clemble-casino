@@ -21,7 +21,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.error.ClembleCasinoError;
-import com.clemble.casino.integration.spring.TestConfiguration;
+import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentTransaction;
@@ -30,7 +30,7 @@ import com.clemble.casino.payment.money.Currency;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = { TestConfiguration.class })
+@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
 public class PlayerAccountOperationsITest {
 

@@ -33,8 +33,8 @@ import com.clemble.casino.server.web.payment.PaymentTransactionController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@Import(value = { BaseTestSpringConfiguration.class, JsonSpringConfiguration.class, TestConfiguration.LocalTestConfiguration.class, TestConfiguration.IntegrationTestConfiguration.class })
-public class TestConfiguration implements TestSpringConfiguration {
+@Import(value = { BaseTestSpringConfiguration.class, JsonSpringConfiguration.class, IntegrationTestSpringConfiguration.LocalTestConfiguration.class, IntegrationTestSpringConfiguration.IntegrationTestConfiguration.class })
+public class IntegrationTestSpringConfiguration implements TestSpringConfiguration {
 
     @Configuration
     @Profile(DEFAULT)

@@ -2,19 +2,15 @@ package com.clemble.casino.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.client.game.GameConstructionOperations;
+import com.clemble.casino.game.service.GameActionService;
+import com.clemble.casino.game.service.GameConstructionService;
+import com.clemble.casino.game.service.GameSpecificationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.NativePlayerProfile;
@@ -32,7 +28,7 @@ import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ServerPlayerOperations implements PlayerOperations, ApplicationContextAware {
+public class ServerPlayerOperations implements PlayerOperations {
 
     final private ObjectMapper objectMapper;
     final private PlayerRegistrationService registrationService;
@@ -41,7 +37,9 @@ public class ServerPlayerOperations implements PlayerOperations, ApplicationCont
     final private PlayerSessionService sessionOperations;
     final private PaymentService paymentService;
     final private EventListenerOperationsFactory listenerOperations;
-    final private Set<GameConstructionOperations<?>> gameConstructionOperations = new HashSet<>();
+    final private GameConstructionService gameConstructionService;
+    final private GameSpecificationService specificationService;
+    final private GameActionService<?> actionService;
 
     public ServerPlayerOperations(ObjectMapper objectMapper,
             EventListenerOperationsFactory listenerOperations,
@@ -49,7 +47,10 @@ public class ServerPlayerOperations implements PlayerOperations, ApplicationCont
             PlayerProfileService profileOperations,
             PlayerSessionService sessionOperations,
             PaymentService accountOperations,
-            PlayerPresenceService presenceService) {
+            PlayerPresenceService presenceService,
+            GameConstructionService gameConstructionService,
+            GameSpecificationService specificationService,
+            GameActionService<?> actionService) {
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
         this.listenerOperations = checkNotNull(listenerOperations);
@@ -57,6 +58,9 @@ public class ServerPlayerOperations implements PlayerOperations, ApplicationCont
         this.profileOperations = checkNotNull(profileOperations);
         this.paymentService = checkNotNull(accountOperations);
         this.presenceService = checkNotNull(presenceService);
+        this.gameConstructionService = checkNotNull(gameConstructionService);
+        this.specificationService = checkNotNull(specificationService);
+        this.actionService = checkNotNull(actionService);
     }
 
     @Override
@@ -83,12 +87,6 @@ public class ServerPlayerOperations implements PlayerOperations, ApplicationCont
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    final public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        gameConstructionOperations.addAll((Collection<? extends GameConstructionOperations<?>>) (Collection<?>) applicationContext.getBeansOfType(GameConstructionOperations.class).values());
-    }
-
-    @Override
     final public ClembleCasinoOperations createPlayer() {
         return createPlayer(new NativePlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10)).setLastName(RandomStringUtils.randomAlphabetic(10))
                 .setNickName(RandomStringUtils.randomAlphabetic(10)));
@@ -111,7 +109,7 @@ public class ServerPlayerOperations implements PlayerOperations, ApplicationCont
 
     final public ClembleCasinoOperations create(PlayerToken playerIdentity, PlayerCredential credential) {
         return new ServerPlayer(objectMapper, playerIdentity, credential, profileOperations, sessionOperations, paymentService, listenerOperations,
-                presenceService, gameConstructionOperations);
+                presenceService, gameConstructionService, specificationService, actionService);
     }
 
 }

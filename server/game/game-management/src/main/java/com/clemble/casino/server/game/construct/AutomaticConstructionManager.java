@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -75,7 +76,8 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
     final private PlayerLockService playerLockService;
     final private PlayerPresenceServerService playerStateManager;
 
-    public AutomaticConstructionManager(final GameInitiatorService initiatorService,
+    public AutomaticConstructionManager(
+            final GameInitiatorService initiatorService,
             final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService,
             final PlayerPresenceServerService playerStateManager) {
@@ -86,7 +88,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
     }
 
     @Override
-    public GameConstruction register(AutomaticGameRequest request) {
+    public GameConstruction register(AutomaticGameRequest request, String id) {
         // Step 1. Sanity check
         if (request == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState);
@@ -117,7 +119,9 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
             pendingConstuction = specificationQueue.poll();
             if (pendingConstuction == null) {
                 // Step 3.1 Construction was not present, creating new one
-                GameConstruction construction = constructionRepository.saveAndFlush(new GameConstruction(request));
+                GameConstruction construction = new GameConstruction(request);
+                construction.setSession(new GameSessionKey(request.getSpecification().getName().getGame(), id));
+                construction = constructionRepository.saveAndFlush(construction);
 
                 pendingConstuction = new AutomaticGameConstruction(construction);
                 playerConstructions.put(player, pendingConstuction);

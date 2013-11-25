@@ -19,7 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.error.ClembleCasinoError;
-import com.clemble.casino.integration.spring.TestConfiguration;
+import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
@@ -27,7 +27,7 @@ import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = { TestConfiguration.class })
+@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
 public class PlayerProfileOperationsITest {
 

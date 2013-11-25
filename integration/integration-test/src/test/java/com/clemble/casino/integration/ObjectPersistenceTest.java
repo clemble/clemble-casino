@@ -24,7 +24,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.ScheduledGame;
-import com.clemble.casino.integration.spring.TestConfiguration;
+import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.repository.game.GameScheduleRepository;
 import com.clemble.casino.server.spring.game.GameJPASpringConfiguration;
@@ -34,7 +34,7 @@ import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = { TestConfiguration.class, GameJPASpringConfiguration.class, PlayerJPASpringConfiguration.class, PaymentJPASpringConfiguration.class })
+@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class, GameJPASpringConfiguration.class, PlayerJPASpringConfiguration.class, PaymentJPASpringConfiguration.class })
 public class ObjectPersistenceTest extends ObjectTest implements ApplicationContextAware {
 
     @SuppressWarnings("rawtypes")

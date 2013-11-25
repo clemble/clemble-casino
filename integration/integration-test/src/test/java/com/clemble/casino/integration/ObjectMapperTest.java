@@ -39,7 +39,7 @@ import com.clemble.casino.game.event.server.GameStartedEvent;
 import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.NumberState;
-import com.clemble.casino.integration.spring.TestConfiguration;
+import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.utils.ReflectionUtils;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -50,7 +50,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = { TestConfiguration.class })
+@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class ObjectMapperTest extends ObjectTest {
 
     @Autowired

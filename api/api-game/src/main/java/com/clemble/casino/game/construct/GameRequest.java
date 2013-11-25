@@ -1,5 +1,6 @@
 package com.clemble.casino.game.construct;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import com.clemble.casino.game.specification.GameSpecification;
@@ -17,7 +18,7 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
     private static final long serialVersionUID = 4949060894194971610L;
 
     final private String player;
-    final private Collection<String> participants;
+    final private Collection<String> participants; // TODO use ImmutableSet here instead
 
     final private GameSpecification specification;
 
@@ -25,13 +26,14 @@ abstract public class GameRequest implements PlayerAware, GameSpecificationAware
         this(player, specification, CollectionUtils.immutableSet(player));
     }
 
-    public GameRequest(String player, GameSpecification specification, Collection<String> participants) {
+    public GameRequest(String player, GameSpecification specification, Collection<String> players) {
         this.player = player;
         this.specification = specification;
 
-        if (!participants.contains(player))
-            participants.add(player);
-        this.participants = participants;
+        players = new ArrayList<>(players);
+        if (!players.contains(player))
+            players.add(player);
+        this.participants = players;
     }
 
     @Override

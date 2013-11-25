@@ -102,7 +102,7 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
 
     @Override
     public <State extends GameState> GameSessionPlayer<State> construct(Game game, ClembleCasinoOperations initiator, String... participants) {
-        return construct(GameScenariosUtils.random(initiator, game), initiator);
+        return construct(GameScenariosUtils.random(initiator, game), initiator, participants);
     }
 
     @Override

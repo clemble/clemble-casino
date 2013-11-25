@@ -2,16 +2,16 @@ package com.clemble.casino.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.client.RestTemplate;
 
+import com.clemble.casino.android.game.service.GameActionTemplateFactory;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListenerOperations;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameConstructionOperations;
+import com.clemble.casino.client.game.GameConstructionTemplate;
 import com.clemble.casino.client.payment.PaymentOperations;
 import com.clemble.casino.client.payment.PaymentTemplate;
 import com.clemble.casino.client.player.PlayerPresenceOperations;
@@ -23,6 +23,9 @@ import com.clemble.casino.client.player.PlayerSessionTemplate;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.service.GameActionService;
+import com.clemble.casino.game.service.GameConstructionService;
+import com.clemble.casino.game.service.GameSpecificationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.security.PlayerCredential;
@@ -32,7 +35,9 @@ import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 public class ServerPlayer implements ClembleCasinoOperations {
 
@@ -46,17 +51,35 @@ public class ServerPlayer implements ClembleCasinoOperations {
     final private EventListenerOperations playerListenersManager;
     final private PlayerCredential credential;
 
-    final private Map<Game, GameConstructionOperations<?>> gameConstructors;
+    final private GameSpecificationService specificationService;
+    final private GameConstructionService constructionService;
+    final private GameActionService<?> actionService;
+    final private LoadingCache<Game, GameConstructionOperations<?>> gameConstructors = CacheBuilder.newBuilder().build(new CacheLoader<Game, GameConstructionOperations<?>>(){
+
+        @Override
+        public GameConstructionOperations<?> load(Game key) throws Exception {
+            return new GameConstructionTemplate<>(player, key, new GameActionTemplateFactory(player, playerListenersManager, actionService), constructionService, specificationService, playerListenersManager);
+        }
+
+    });
 
     final private PlayerPresenceOperations playerPresenceOperations;
     final private PlayerSessionOperations playerSessionOperations;
     final private PaymentOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
 
-    public ServerPlayer(final ObjectMapper objectMapper, final PlayerToken playerIdentity, final PlayerCredential credential,
-            final PlayerProfileService playerProfileService, final PlayerSessionService sessionOperations, final PaymentService accountOperations,
-            final EventListenerOperationsFactory listenerOperations, final PlayerPresenceService playerPresenceService,
-            final Collection<GameConstructionOperations<?>> playerConstructionOperations) {
+    public ServerPlayer(
+            final ObjectMapper objectMapper,
+            final PlayerToken playerIdentity,
+            final PlayerCredential credential,
+            final PlayerProfileService playerProfileService,
+            final PlayerSessionService sessionOperations,
+            final PaymentService accountOperations,
+            final EventListenerOperationsFactory listenerOperations,
+            final PlayerPresenceService playerPresenceService,
+            final GameConstructionService gameConstructionService,
+            final GameSpecificationService specificationService,
+            final GameActionService<?> actionService) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
@@ -69,11 +92,9 @@ public class ServerPlayer implements ClembleCasinoOperations {
         this.credential = checkNotNull(credential);
         this.playerListenersManager = listenerOperations.construct(session.getResourceLocations().getNotificationConfiguration(), objectMapper);
 
-        Map<Game, GameConstructionOperations<?>> map = new HashMap<>();
-        for (GameConstructionOperations<?> constructionOperation : playerConstructionOperations) {
-            map.put(constructionOperation.getGame(), constructionOperation);
-        }
-        this.gameConstructors = ImmutableMap.<Game, GameConstructionOperations<?>> copyOf(map);
+        this.constructionService = checkNotNull(gameConstructionService);
+        this.specificationService = checkNotNull(specificationService);
+        this.actionService = checkNotNull(actionService);
     }
 
     @Override
@@ -99,12 +120,12 @@ public class ServerPlayer implements ClembleCasinoOperations {
     @SuppressWarnings("unchecked")
     @Override
     public <State extends GameState> GameConstructionOperations<State> gameConstructionOperations(Game game) {
-        return (GameConstructionOperations<State>) gameConstructors.get(game);
+        return (GameConstructionOperations<State>) gameConstructors.getUnchecked(game);
     }
 
     @Override
     public Map<Game, GameConstructionOperations<?>> gameConstructionOperations() {
-        return gameConstructors;
+        return gameConstructors.asMap();
     }
 
     @Override
@@ -120,7 +141,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
     @Override
     @SuppressWarnings("unchecked")
     public <State extends GameState> GameActionOperations<State> gameActionOperations(GameSessionKey session) {
-        return (GameActionOperations<State>) gameConstructors.get(session.getGame()).<State> getActionOperations(session.getSession());
+        return (GameActionOperations<State>) gameConstructors.getUnchecked(session.getGame()).getActionOperations(session.getSession());
     }
 
     @Override
