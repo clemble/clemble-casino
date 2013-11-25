@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.android.game.service.GameActionTemplateFactory;
 import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventListenerOperations;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameConstructionOperations;
@@ -20,6 +21,7 @@ import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.client.player.PlayerProfileTemplate;
 import com.clemble.casino.client.player.PlayerSessionOperations;
 import com.clemble.casino.client.player.PlayerSessionTemplate;
+import com.clemble.casino.event.Event;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -91,6 +93,12 @@ public class ServerPlayer implements ClembleCasinoOperations {
 
         this.credential = checkNotNull(credential);
         this.playerListenersManager = listenerOperations.construct(session.getResourceLocations().getNotificationConfiguration(), objectMapper);
+        this.playerListenersManager.subscribe(new EventListener() {
+            @Override
+            public void onEvent(Event event) {
+                System.out.println(player + " >> " + event);
+            }
+        });
 
         this.constructionService = checkNotNull(gameConstructionService);
         this.specificationService = checkNotNull(specificationService);
@@ -160,3 +168,4 @@ public class ServerPlayer implements ClembleCasinoOperations {
     }
 
 }
+

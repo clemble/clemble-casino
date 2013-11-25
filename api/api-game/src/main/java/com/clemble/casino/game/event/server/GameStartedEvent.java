@@ -47,4 +47,9 @@ public class GameStartedEvent<State extends GameState> extends GameServerEvent<S
         return true;
     }
 
+    @Override
+    public String toString(){
+        return "started:" + getSession().getGame() + ":" + getSession().getSession();
+    }
+
 }

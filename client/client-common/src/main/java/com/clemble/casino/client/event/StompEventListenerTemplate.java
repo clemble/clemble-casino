@@ -71,7 +71,6 @@ public class StompEventListenerTemplate extends AbstractEventListenerTemplate {
                 // Step 1. Reading and notifying of the message
                 update(objectMapper.readValue(message, Event.class));
             } catch (Throwable e) {
-                // TODO add processing e.printStackTrace();
                 throw new RuntimeException(e);
             }
         }

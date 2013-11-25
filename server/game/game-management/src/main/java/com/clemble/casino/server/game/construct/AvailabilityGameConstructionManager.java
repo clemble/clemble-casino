@@ -85,15 +85,16 @@ public class AvailabilityGameConstructionManager implements GameConstructionMana
             // Step 2. Checking if player is part of the game
             ActionLatch responseLatch = construction.getResponses();
             responseLatch.put(response.getPlayer(), response);
-            // Step 3. Checking if latch is full
+            // Step 3. Notifying of applied response
+            construction = constructionRepository.saveAndFlush(construction);
+            playerNotificationService.notify(responseLatch.fetchParticipants(), response);
+            // Step 4. Checking if latch is full
             if (response instanceof InvitationDeclinedEvent) {
                 // Step 4.1. In case declined send game canceled notification
                 construction.setState(GameConstructionState.canceled);
             } else if (responseLatch.complete()) {
                 construction = constructionComplete(construction);
             }
-            construction = constructionRepository.saveAndFlush(construction);
-            playerNotificationService.notify(responseLatch.fetchParticipants(), response);
             return construction;
         } catch (ConcurrencyFailureException concurrencyFailureException) {
             return tryAcceptResponce(response);

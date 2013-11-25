@@ -56,4 +56,9 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
         return player.equals(other.player);
     }
 
+    @Override
+    public String toString(){
+        return "declined:" + player;
+    }
+
 }

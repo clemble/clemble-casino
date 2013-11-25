@@ -78,7 +78,11 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
         }
 
         public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-            update(objectMapper.readValue(body, Event.class));
+            try {
+                update(objectMapper.readValue(body, Event.class));
+            } catch(Throwable throwable) {
+                throwable.printStackTrace();
+            }
         }
     }
 

@@ -59,5 +59,10 @@ public class PlayerInvitedEvent implements ConstructionEvent {
             return false;
         return session.equals(other.session);
     }
+    
+    @Override
+    public String toString() {
+        return "invited:" + session.getGame() + ":" + session.getSession();
+    }
 
 }

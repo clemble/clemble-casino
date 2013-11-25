@@ -43,4 +43,9 @@ public class GameConstructedEvent implements ConstructionEvent {
         return session.equals(other.session);
     }
 
+    @Override
+    public String toString() {
+        return "constructed:" + session.getGame() + ":" + session.getSession();
+    }
+
 }

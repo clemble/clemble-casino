@@ -50,4 +50,9 @@ public class GameCanceledEvent implements ConstructionEvent, PlayerAware {
         return session.equals(((GameCanceledEvent) obj).session);
     }
 
+    @Override
+    public String toString() {
+        return "canceled:" + session.getGame() + ":" + session.getSession();
+    }
+
 }
