@@ -9,6 +9,8 @@ import com.clemble.casino.player.PlayerAware;
 
 public interface GameActionOperations<State extends GameState> extends SessionAware, PlayerAware {
 
+    public State getState();
+
     public State process(ClientEvent move);
 
     public MadeMove getAction(int actionId);

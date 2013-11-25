@@ -59,6 +59,10 @@ public class GameSessionProcessor<State extends GameState> implements GameAware 
         return session;
     }
 
+    public State get(GameSessionKey session) {
+        return cacheService.get(session).getSession().getState();
+    }
+
     public State process(GameSessionKey session, ClientEvent move) {
         // Step 1. Sanity check
         if (move == null)

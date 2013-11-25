@@ -3,7 +3,9 @@ package com.clemble.casino.integration.player;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang3.concurrent.AtomicInitializer;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.android.game.service.GameActionTemplateFactory;
@@ -94,9 +96,12 @@ public class ServerPlayer implements ClembleCasinoOperations {
         this.credential = checkNotNull(credential);
         this.playerListenersManager = listenerOperations.construct(session.getResourceLocations().getNotificationConfiguration(), objectMapper);
         this.playerListenersManager.subscribe(new EventListener() {
+
+            final private AtomicInteger messageNum = new AtomicInteger();
+
             @Override
             public void onEvent(Event event) {
-                System.out.println(player + " >> " + event);
+                System.out.println(messageNum.incrementAndGet() + " >> " + player + " >> " + event);
             }
         });
 

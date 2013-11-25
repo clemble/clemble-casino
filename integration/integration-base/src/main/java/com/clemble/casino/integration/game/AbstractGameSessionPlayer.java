@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
+import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
@@ -29,29 +30,29 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     final private ClembleCasinoOperations player;
     final private GameConstruction construction;
+    final private GameActionOperations<State> actionOperations; 
     final private Object versionLock = new Object();
     final private AtomicBoolean keepAlive = new AtomicBoolean(true);
     final private AtomicReference<State> currentState = new AtomicReference<State>();
 
-    private GameSessionKey session;
-
     public AbstractGameSessionPlayer(final ClembleCasinoOperations player, GameConstruction construction) {
         this.construction = checkNotNull(construction);
         this.player = player;
+        this.actionOperations = this.player.gameActionOperations(construction.getSession());
 
-        player.listenerOperations().subscribe(construction.getSession(), new EventListener() {
+        this.actionOperations.subscribe(new EventListener() {
             @Override
             @SuppressWarnings("unchecked")
             public void onEvent(Event event) {
                 if (event instanceof GameStartedEvent) {
                     GameStartedEvent<?> gameStartedEvent = ((GameStartedEvent<?>) event);
-                    session = gameStartedEvent.getSession();
                 }
                 if (event instanceof GameServerEvent) {
                     setState(((GameServerEvent<State>) event).getState());
                 }
             }
         });
+        setState(this.actionOperations.getState());
     }
 
     final public GameConstruction getConstructionInfo() {
@@ -80,9 +81,12 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     final private void setState(State newState) {
         synchronized (versionLock) {
-            if (newState != null && this.currentState.get() == null || this.currentState.get().getVersion() < newState.getVersion()) {
-                this.currentState.set(newState);
-                this.versionLock.notifyAll();
+            if (newState != null) {
+                System.out.println("updating >> " + this.player.getPlayer() + " >> " + this.construction.getSession() + " >> " + newState.getVersion());
+                if (this.currentState.get() == null || this.currentState.get().getVersion() < newState.getVersion()) {
+                    this.currentState.set(newState);
+                    this.versionLock.notifyAll();
+                }
             }
         }
     }
@@ -133,7 +137,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
             }
         }
         if (currentState.get() == null)
-            throw new RuntimeException("Game was not started in " + timeout);
+            throw new RuntimeException(construction.getSession() + " was not started after " + timeout);
     }
 
     final public void waitForTurn() {
@@ -176,7 +180,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     public void perform(GameClientEvent gameAction) {
-        player.gameActionOperations(construction.getSession()).process(gameAction);
+        setState((State) player.gameActionOperations(construction.getSession()).process(gameAction));
     }
 
     abstract public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameClientEvent clientEvent);

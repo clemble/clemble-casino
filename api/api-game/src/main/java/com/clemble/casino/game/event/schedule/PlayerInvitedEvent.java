@@ -62,7 +62,7 @@ public class PlayerInvitedEvent implements ConstructionEvent {
     
     @Override
     public String toString() {
-        return "invited:" + session.getGame() + ":" + session.getSession();
+        return "invited:" + session;
     }
 
 }

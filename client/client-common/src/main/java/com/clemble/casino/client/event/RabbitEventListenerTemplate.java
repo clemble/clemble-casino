@@ -5,6 +5,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.clemble.casino.configuration.NotificationConfiguration;
 import com.clemble.casino.event.Event;
@@ -16,6 +17,8 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.ShutdownListener;
+import com.rabbitmq.client.ShutdownSignalException;
 
 public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
 
@@ -45,17 +48,27 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
                     factory.setPort(configurations.getRabbitHost().getPort());
                     // Step 2. Creating connection
                     final Connection rabbitConnection = factory.newConnection(executor);
+                    final AtomicBoolean keepClosed = new AtomicBoolean(false);
                     // Step 3. Creating new Channel
                     Channel channel = rabbitConnection.createChannel();
+                    channel.addShutdownListener(new ShutdownListener() {
+                        @Override
+                        public void shutdownCompleted(ShutdownSignalException cause) {
+                            if (!keepClosed.get()) {
+                                cause.printStackTrace();
+                                executor.schedule(new StartupTask(configurations, objectMapper), 30, TimeUnit.SECONDS);
+                            }
+                        }
+                    });
                     // Step 4. Creating new Queue that will be used for listening of player updates
                     Queue.DeclareOk queue = channel.queueDeclare();
-                    channel.queueBind(queue.getQueue(), "amq/topic", configurations.getRoutingKey());
+                    channel.queueBind(queue.getQueue(), "amq.topic", configurations.getRoutingKey());
                     channel.basicConsume(queue.getQueue(), new AndroidRabbitDefaultConsumer(channel, objectMapper));
                     // Step 5. Updating Closeable in the parent
                     connectionCleaner.set(new Closeable() {
-                        
                         @Override
                         public void close() throws IOException {
+                            keepClosed.set(true);
                             rabbitConnection.close();
                         }
                     });

@@ -4,7 +4,6 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventListenerOperations;
-import com.clemble.casino.client.event.SessionEventSelector;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSessionKey;
@@ -29,6 +28,11 @@ public class GameActionTemplate<State extends GameState> implements GameActionOp
     }
 
     @Override
+    public State getState(){
+        return gameActionService.getState(session.getSession());
+    }
+
+    @Override
     public State process(ClientEvent move) {
         return gameActionService.process(session.getSession(), move);
     }
@@ -40,7 +44,7 @@ public class GameActionTemplate<State extends GameState> implements GameActionOp
 
     @Override
     public void subscribe(EventListener eventListener) {
-        eventListenersManager.subscribe(new SessionEventSelector(session), eventListener);
+        eventListenersManager.subscribe(session, eventListener);
     }
 
     @Override

@@ -52,7 +52,7 @@ public class GameCanceledEvent implements ConstructionEvent, PlayerAware {
 
     @Override
     public String toString() {
-        return "canceled:" + session.getGame() + ":" + session.getSession();
+        return "canceled:" + session;
     }
 
 }

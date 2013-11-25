@@ -36,6 +36,16 @@ public class GameActionController<State extends GameState> implements GameAction
     }
 
     @Override
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_STATE, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody State getState(@PathVariable("session") String session){
+        GameSessionKey sessionKey = new GameSessionKey(game, session);
+        if (sessionRepository.findOne(sessionKey) == null)
+            return null;
+        return sessionProcessor.get(sessionKey);
+    }
+
+    @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_ACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody State process(@PathVariable("sessionId") String session, @RequestBody ClientEvent move) {

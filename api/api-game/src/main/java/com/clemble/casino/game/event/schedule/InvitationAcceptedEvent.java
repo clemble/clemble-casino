@@ -52,7 +52,7 @@ public class InvitationAcceptedEvent implements InvitationResponseEvent {
 
     @Override
     public String toString(){
-        return "accepted:" + player;
+        return "accepted:" + player + ":" + session;
     }
 
 }

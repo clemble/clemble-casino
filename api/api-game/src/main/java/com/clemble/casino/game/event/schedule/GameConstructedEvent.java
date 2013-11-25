@@ -45,7 +45,7 @@ public class GameConstructedEvent implements ConstructionEvent {
 
     @Override
     public String toString() {
-        return "constructed:" + session.getGame() + ":" + session.getSession();
+        return "constructed:" + session;
     }
 
 }

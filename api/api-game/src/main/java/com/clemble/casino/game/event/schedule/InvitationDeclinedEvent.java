@@ -58,7 +58,7 @@ public class InvitationDeclinedEvent implements InvitationResponseEvent {
 
     @Override
     public String toString(){
-        return "declined:" + player;
+        return "declined:" + player + ":" + session;
     }
 
 }

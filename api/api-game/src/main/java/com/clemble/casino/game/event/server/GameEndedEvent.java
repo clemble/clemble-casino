@@ -57,4 +57,9 @@ public class GameEndedEvent<State extends GameState> extends GameServerEvent<Sta
             return false;
         return true;
     }
+
+    @Override
+    public String toString(){
+        return  "ended:" + getSession();
+    }
 }

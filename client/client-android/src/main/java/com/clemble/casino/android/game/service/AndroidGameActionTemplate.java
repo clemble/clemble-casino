@@ -23,6 +23,14 @@ public class AndroidGameActionTemplate<State extends GameState> extends Abstract
 
     @Override
     @SuppressWarnings("unchecked")
+    public State getState(String session) {
+        return (State) restTemplate
+                .getForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_STATE, session), GameState.class)
+                .getBody();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public State process(String sessionId, ClientEvent move) {
         return (State) restTemplate
             .postForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_ACTIONS, sessionId), move, GameState.class)
