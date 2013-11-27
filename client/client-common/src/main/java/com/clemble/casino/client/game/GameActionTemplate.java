@@ -1,10 +1,9 @@
-package com.clemble.casino.android.game.service;
+package com.clemble.casino.client.game;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventListenerOperations;
-import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;

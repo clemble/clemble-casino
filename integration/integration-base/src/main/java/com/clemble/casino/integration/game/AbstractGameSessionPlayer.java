@@ -106,6 +106,10 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         if (this.currentState.get() != null && this.currentState.get().getVersion() >= expectedVersion)
             return;
 
+        if (this.currentState.get() == null) {
+            setState(actionOperations.getState());
+        }
+
         synchronized (versionLock) {
             while (this.currentState.get() != null && this.currentState.get().getVersion() < expectedVersion) {
                 try {
@@ -127,6 +131,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     final public void waitForStart(long timeout) {
         long expirationTime = System.currentTimeMillis() + timeout;
+        if (currentState.get() == null)
+            setState(this.actionOperations.getState());
         synchronized (versionLock) {
             while ((keepAlive.get() && currentState.get() == null) && expirationTime > System.currentTimeMillis()) {
                 try {
@@ -137,7 +143,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
             }
         }
         if (currentState.get() == null)
-            throw new RuntimeException(construction.getSession() + " was not started after " + timeout);
+            throw new RuntimeException(player.getPlayer() + " " + construction.getSession() + " was not started after " + timeout);
     }
 
     final public void waitForTurn() {

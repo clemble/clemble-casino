@@ -14,7 +14,7 @@ import com.clemble.casino.configuration.ResourceLocationService;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
-import com.clemble.casino.server.configuration.SimpleResourceLocationController;
+import com.clemble.casino.server.configuration.SimpleResourceLocationService;
 import com.clemble.casino.server.spring.common.ServerRegistrySpringConfiguration;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.google.common.collect.ImmutableList;
@@ -35,7 +35,7 @@ public class ManagementWebSpringConfigurationInitializationTest {
         public ResourceLocationService resourceLocationService() {
             SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest",
                     serverRegistryConfiguration.getPlayerNotificationRegistry());
-            return new SimpleResourceLocationController(configurationService, serverRegistryConfiguration, ImmutableList.<Game> of(Game.num));
+            return new SimpleResourceLocationService(configurationService, serverRegistryConfiguration, ImmutableList.<Game> of(Game.num));
         }
     }
 

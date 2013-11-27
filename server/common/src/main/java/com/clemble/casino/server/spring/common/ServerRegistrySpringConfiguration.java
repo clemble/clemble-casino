@@ -29,10 +29,8 @@ public class ServerRegistrySpringConfiguration implements SpringConfiguration {
     public static class IntegrationTest {
 
         @Bean
-        public ServerRegistryConfiguration serverRegistryConfiguration(
-                @Value("#{systemProperties['clemble.casino.management.url'] ?: 'localhost'}") String baseUrl) {
-            return new ServerRegistryConfiguration("localhost", "http://localhost:8080/player-web/", "http://localhost:8080/payment-web/",
-                    "http://localhost:8080/integration-game");
+        public ServerRegistryConfiguration serverRegistryConfiguration(@Value("#{systemProperties['clemble.casino.management.url'] ?: 'localhost'}") String baseUrl) {
+            return new ServerRegistryConfiguration("localhost", "http://localhost:8080/player-web/", "http://localhost:8080/payment-web/", "http://localhost:8080/integration-game");
         }
     }
 

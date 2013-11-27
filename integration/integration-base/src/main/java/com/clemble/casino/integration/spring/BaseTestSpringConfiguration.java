@@ -16,16 +16,20 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
+import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.game.service.GameSpecificationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.game.SimpleGameSessionPlayerFactory;
+import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
+import com.clemble.casino.integration.game.construction.SimplePlayerScenarios;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.player.PlayerOperations;
+import com.clemble.casino.integration.player.ServerClembleCasinoRegistrationOperations;
 import com.clemble.casino.integration.player.ServerPlayerOperations;
 import com.clemble.casino.integration.player.account.CombinedPaymentService;
 import com.clemble.casino.payment.service.PaymentService;
@@ -75,6 +79,12 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         return new SimpleGameSessionPlayerFactory<GameState>();
     }
 
+    @Bean
+    @Autowired
+    public PlayerScenarios playerScenarios(ClembleCasinoRegistrationOperations registrationOperations) {
+        return new SimplePlayerScenarios(registrationOperations);
+    }
+
 
     @Configuration
     @Profile({UNIT_TEST, DEFAULT})
@@ -116,6 +126,20 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             return new WebPaymentTransactionOperations(paymentTransactionController);
         }
 
+        @Bean
+        public ClembleCasinoRegistrationOperations registrationOperations(ObjectMapper objectMapper,
+                EventListenerOperationsFactory listenerOperations,
+                PlayerRegistrationService registrationService,
+                PlayerProfileService profileOperations,
+                PlayerSessionService sessionOperations,
+                PaymentService accountOperations,
+                PlayerPresenceService presenceService,
+                GameConstructionService constructionService,
+                GameSpecificationService specificationService,
+                GameActionService<?> actionService) {
+            return new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, sessionOperations, accountOperations, presenceService, constructionService, specificationService, actionService);
+        }
+        
     }
 
 }

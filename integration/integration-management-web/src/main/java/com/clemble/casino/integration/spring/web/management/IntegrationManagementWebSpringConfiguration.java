@@ -10,7 +10,7 @@ import com.clemble.casino.configuration.ResourceLocationService;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
-import com.clemble.casino.server.configuration.SimpleResourceLocationController;
+import com.clemble.casino.server.configuration.SimpleResourceLocationService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
@@ -33,7 +33,7 @@ public class IntegrationManagementWebSpringConfiguration extends AbstractManagem
         @Bean
         public ResourceLocationService resourceLocationService() {
             SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
-            return new SimpleResourceLocationController(configurationService,
+            return new SimpleResourceLocationService(configurationService,
                     serverRegistryConfiguration,
                     ImmutableList.<Game> of(Game.num));
         }
@@ -50,7 +50,7 @@ public class IntegrationManagementWebSpringConfiguration extends AbstractManagem
         @Bean
         public ResourceLocationService resourceLocationService() {
             SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
-            return new SimpleResourceLocationController(configurationService,
+            return new SimpleResourceLocationService(configurationService,
                     serverRegistryConfiguration,
                     ImmutableList.<Game> of(Game.num));
         }
@@ -67,7 +67,7 @@ public class IntegrationManagementWebSpringConfiguration extends AbstractManagem
         @Bean
         public ResourceLocationService resourceLocationService() {
             SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
-            return new SimpleResourceLocationController(configurationService,
+            return new SimpleResourceLocationService(configurationService,
                     serverRegistryConfiguration,
                     ImmutableList.<Game> of(Game.num));
         }

@@ -10,13 +10,13 @@ import com.clemble.casino.configuration.ResourceLocations;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.game.Game;
 
-public class SimpleResourceLocationController implements ResourceLocationService {
+public class SimpleResourceLocationService implements ResourceLocationService {
 
     final private NotificationConfigurationService notificationConfigurationService;
     final private ServerRegistryConfiguration serverRegistryConfiguration;
     final private List<Game> gameLocations;
 
-    public SimpleResourceLocationController(NotificationConfigurationService notificationConfigurationService,
+    public SimpleResourceLocationService(NotificationConfigurationService notificationConfigurationService,
             ServerRegistryConfiguration serverRegistryConfiguration,
             List<Game> gameLocations) {
         this.notificationConfigurationService = checkNotNull(notificationConfigurationService);

@@ -16,7 +16,6 @@ import com.clemble.casino.SingletonRegistry;
 import com.clemble.casino.android.game.service.AndroidGameActionTemplate;
 import com.clemble.casino.android.game.service.AndroidGameConstructionService;
 import com.clemble.casino.android.game.service.AndroidGameSpecificationService;
-import com.clemble.casino.android.game.service.GameActionTemplateFactory;
 import com.clemble.casino.android.payment.AndroidPaymentTransactionService;
 import com.clemble.casino.android.player.AndroidPlayerPresenceService;
 import com.clemble.casino.android.player.AndroidPlayerProfileService;
@@ -27,6 +26,7 @@ import com.clemble.casino.client.event.EventListenerOperations;
 import com.clemble.casino.client.event.RabbitEventListenerTemplate;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameActionOperationsFactory;
+import com.clemble.casino.client.game.GameActionTemplateFactory;
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.game.GameConstructionTemplate;
 import com.clemble.casino.client.payment.PaymentOperations;
@@ -68,7 +68,8 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
     @SuppressWarnings({ "rawtypes" })
     public ClembleCasinoTemplate(
             String consumerKey,
-            String consumerSecret, String accessToken,
+            String consumerSecret,
+            String accessToken,
             String accessTokenSecret,
             String player,
             String managementUrl)

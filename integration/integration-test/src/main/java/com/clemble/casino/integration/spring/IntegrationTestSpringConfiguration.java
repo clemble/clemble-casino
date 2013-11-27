@@ -14,12 +14,14 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.clemble.casino.android.AndroidCasinoRegistrationTemplate;
+import com.clemble.casino.android.player.AndroidPlayerRegistrationService;
+import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.player.IntegrationPlayerOperations;
-import com.clemble.casino.integration.player.IntegrationPlayerRegistrationService;
 import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
 import com.clemble.casino.integration.spring.web.management.IntegrationManagementWebSpringConfiguration;
@@ -79,8 +81,13 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         }
 
         @Bean
+        public ClembleCasinoRegistrationOperations registrationOperations() {
+            return new AndroidCasinoRegistrationTemplate(baseUrl);
+        }
+
+        @Bean
         public PlayerRegistrationService playerRegistrationService() {
-            return new IntegrationPlayerRegistrationService(baseUrl, restTemplate());
+            return new AndroidPlayerRegistrationService(baseUrl);
         }
 
         @Bean
