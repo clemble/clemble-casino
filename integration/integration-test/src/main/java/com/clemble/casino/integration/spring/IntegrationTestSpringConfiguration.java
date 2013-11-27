@@ -21,8 +21,6 @@ import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
-import com.clemble.casino.integration.player.IntegrationPlayerOperations;
-import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
 import com.clemble.casino.integration.spring.web.management.IntegrationManagementWebSpringConfiguration;
 import com.clemble.casino.player.service.PlayerRegistrationService;
@@ -88,12 +86,6 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         @Bean
         public PlayerRegistrationService playerRegistrationService() {
             return new AndroidPlayerRegistrationService(baseUrl);
-        }
-
-        @Bean
-        @Autowired
-        public PlayerOperations playerOperations(PlayerRegistrationService registrationService) {
-            return new IntegrationPlayerOperations(baseUrl, registrationService);
         }
 
     }

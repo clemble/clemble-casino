@@ -17,18 +17,18 @@ import com.clemble.casino.game.configuration.GameSpecificationOptions;
 import com.clemble.casino.game.configuration.SelectSpecificationOptions;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
-import com.clemble.casino.integration.player.PlayerOperations;
+import com.clemble.casino.integration.game.construction.PlayerScenarios;
 
 public class GameplayEmulator<State extends GameState> {
 
-    final private PlayerOperations playerOperations;
+    final private PlayerScenarios playerOperations;
     final private GameSessionPlayerFactory<State> sessionPlayerFactory;
     final private GameActor<State> actor;
     final private Map<GameSpecification, Collection<PlayerEmulator<State>>> playerEmulators = new HashMap<GameSpecification, Collection<PlayerEmulator<State>>>();
 
     private ScheduledExecutorService executorService;
 
-    public GameplayEmulator(final PlayerOperations playerOperations, final GameActor<State> gameActor, final GameSessionPlayerFactory<State> sessionPlayerFactory) {
+    public GameplayEmulator(final PlayerScenarios playerOperations, final GameActor<State> gameActor, final GameSessionPlayerFactory<State> sessionPlayerFactory) {
         this.actor = checkNotNull(gameActor);
         this.playerOperations = checkNotNull(playerOperations);
         this.sessionPlayerFactory = checkNotNull(sessionPlayerFactory);

@@ -13,6 +13,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerCategory;
@@ -31,7 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PlayerOperationsITest {
 
     @Autowired
-    public PlayerOperations playerOperations;
+    public PlayerScenarios playerOperations;
 
     @Test
     public void createRandomPlayer() {

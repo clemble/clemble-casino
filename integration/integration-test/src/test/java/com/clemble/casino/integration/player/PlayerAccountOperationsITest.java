@@ -21,6 +21,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.money.MoneySource;
@@ -35,7 +36,7 @@ import com.clemble.casino.payment.money.Currency;
 public class PlayerAccountOperationsITest {
 
     @Autowired
-    public PlayerOperations playerOperations;
+    public PlayerScenarios playerOperations;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();

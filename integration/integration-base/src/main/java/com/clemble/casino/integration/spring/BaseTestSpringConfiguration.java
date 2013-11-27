@@ -9,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,9 +27,7 @@ import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.game.construction.SimplePlayerScenarios;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
-import com.clemble.casino.integration.player.PlayerOperations;
 import com.clemble.casino.integration.player.ServerClembleCasinoRegistrationOperations;
-import com.clemble.casino.integration.player.ServerPlayerOperations;
 import com.clemble.casino.integration.player.account.CombinedPaymentService;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.payment.service.PaymentTransactionService;
@@ -48,8 +45,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BaseTestSpringConfiguration implements TestSpringConfiguration {
 
     @Autowired
-    @Qualifier("playerOperations")
-    public PlayerOperations playerOperations;
+    public PlayerScenarios playerOperations;
 
     @PostConstruct
     public void initialize() {
@@ -103,21 +99,6 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         @Autowired
         public PaymentService paymentService(PaymentTransactionService transactionService, PlayerAccountService accountService) {
             return new CombinedPaymentService(transactionService, accountService);
-        }
-
-        @Bean
-        @Autowired
-        public PlayerOperations playerOperations(ObjectMapper objectMapper,
-                EventListenerOperationsFactory listenerOperations,
-                PlayerRegistrationService registrationService,
-                PlayerProfileService profileOperations,
-                PlayerSessionService sessionOperations,
-                PaymentService accountOperations,
-                PlayerPresenceService presenceService,
-                GameConstructionService constructionService,
-                GameSpecificationService specificationService,
-                GameActionService<?> actionService) {
-            return new ServerPlayerOperations(objectMapper, listenerOperations, registrationService, profileOperations, sessionOperations, accountOperations, presenceService, constructionService, specificationService, actionService);
         }
 
         @Bean

@@ -16,14 +16,14 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
-import com.clemble.casino.integration.player.PlayerOperations;
+import com.clemble.casino.integration.game.construction.PlayerScenarios;
 
 public class PlayerEmulator<State extends GameState> implements Runnable {
 
     final private Logger logger = LoggerFactory.getLogger(PlayerEmulator.class);
 
     final private GameSpecification specification;
-    final private PlayerOperations playerOperations;
+    final private PlayerScenarios playerOperations;
     final private GameSessionPlayerFactory<State> sessionPlayerFactory;
     final private GameActor<State> actor;
     final private AtomicBoolean continueEmulation = new AtomicBoolean(true);
@@ -31,7 +31,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     final private AtomicReference<GameSessionPlayer<State>> currentPlayer = new AtomicReference<GameSessionPlayer<State>>();
 
     public PlayerEmulator(final GameActor<State> actor,
-            final PlayerOperations playerOperations,
+            final PlayerScenarios playerOperations,
             final GameSessionPlayerFactory<State> sessionPlayerFactory,
             final GameSpecification specification) {
         this.specification = checkNotNull(specification);

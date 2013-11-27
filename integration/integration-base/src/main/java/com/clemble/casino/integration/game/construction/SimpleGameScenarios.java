@@ -22,14 +22,13 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
-import com.clemble.casino.integration.player.PlayerOperations;
 
 public class SimpleGameScenarios implements GameScenarios, ApplicationContextAware {
 
-    final private PlayerOperations playerOperations;
+    final private PlayerScenarios playerOperations;
     final private Map<Game, GameSessionPlayerFactory<?>> gameToSessionPlayerFactory = new HashMap<>();
 
-    public SimpleGameScenarios(PlayerOperations playerOperations) {
+    public SimpleGameScenarios(PlayerScenarios playerOperations) {
         this.playerOperations = checkNotNull(playerOperations);
     }
 
