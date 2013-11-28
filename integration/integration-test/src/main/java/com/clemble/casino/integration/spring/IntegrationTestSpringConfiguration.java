@@ -18,14 +18,12 @@ import com.clemble.casino.android.AndroidCasinoRegistrationTemplate;
 import com.clemble.casino.android.player.AndroidPlayerRegistrationService;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
-import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
 import com.clemble.casino.integration.spring.web.management.IntegrationManagementWebSpringConfiguration;
 import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
-import com.clemble.casino.server.spring.common.ServerRegistrySpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.payment.PaymentWebSpringConfiguration;
 import com.clemble.casino.server.spring.web.player.PlayerWebSpringConfiguration;
@@ -51,18 +49,15 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
 
     @Configuration
     @Profile({ INTEGRATION_TEST, INTEGRATION_CLOUD, INTEGRATION_DEFAULT })
-    @Import({ ClientRestCommonSpringConfiguration.class, ServerRegistrySpringConfiguration.class })
+    @Import({ ClientRestCommonSpringConfiguration.class })
     public static class IntegrationTestConfiguration {
 
         @Autowired
         @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
-        @Value("#{systemProperties['clemble.casino.management.url'] ?: 'http://localhost:8080/integration-management-web/'}")
+        @Value("#{systemProperties['clemble.casino.management.url'] ?: 'http://ec2-54-201-45-95.us-west-2.compute.amazonaws.com:8080/management/'}")
         public String baseUrl;
-
-        @Autowired
-        public ServerRegistryConfiguration serverRegistryConfiguration;
 
         @Bean
         public RestTemplate restTemplate() {

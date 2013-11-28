@@ -106,17 +106,16 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         if (this.currentState.get() != null && this.currentState.get().getVersion() >= expectedVersion)
             return;
 
-        if (this.currentState.get() == null) {
-            setState(actionOperations.getState());
-        }
-
         synchronized (versionLock) {
             while (this.currentState.get() != null && this.currentState.get().getVersion() < expectedVersion) {
                 try {
-                    versionLock.wait();
+                    versionLock.wait(1500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                // TODO this should not happen
+                if(this.currentState.get().getVersion() < expectedVersion)
+                    setState(actionOperations.getState());
             }
         }
     }

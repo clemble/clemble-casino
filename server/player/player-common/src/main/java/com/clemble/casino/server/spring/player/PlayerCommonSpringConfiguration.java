@@ -15,46 +15,20 @@ import com.clemble.casino.server.player.registration.RestPlayerProfileRegistrati
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PlayerPresenceSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration.IntegrationCloudPlayerConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration.IntegrationPlayerConfiguration;
-import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration.IntegrationTestPlayerConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration.TestPlayerConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 
 @Configuration
 @Import({ CommonSpringConfiguration.class,
     PlayerCouchbaseSpringConfiguration.class,
-    IntegrationCloudPlayerConfiguration.class,
-    IntegrationTestPlayerConfiguration.class,
     IntegrationPlayerConfiguration.class,
     TestPlayerConfiguration.class,
     PlayerPresenceSpringConfiguration.class })
 public class PlayerCommonSpringConfiguration implements SpringConfiguration {
 
-    @Configuration
-    @Profile(value = SpringConfiguration.INTEGRATION_CLOUD)
-    public static class IntegrationCloudPlayerConfiguration extends IntegrationPlayerConfiguration {
-
-        @Override
-        public String getBaseUrl() {
-            return "http://ec2-50-16-93-157.compute-1.amazonaws.com/gogomaya/";
-        }
-
-    }
-
-    @Configuration
-    @Profile(value = { SpringConfiguration.INTEGRATION_TEST })
-    public static class IntegrationTestPlayerConfiguration extends IntegrationPlayerConfiguration {
-
-        @Override
-        public String getBaseUrl() {
-            return "http://localhost:8080/";
-        }
-
-    }
-
     @Import(ClientRestCommonSpringConfiguration.class)
-    @Profile(value = { DEFAULT })
+    @Profile(value = { DEFAULT, INTEGRATION_TEST, INTEGRATION_CLOUD, CLOUD })
     public static class IntegrationPlayerConfiguration {
 
         @Autowired(required = false)
@@ -62,14 +36,13 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
         public PlayerProfileRegistrationServerService realPlayerProfileRegistrationService;
 
         public String getBaseUrl() {
-            return "http://localhost:8080/";
+            return "http://127.0.0.1:8080/player/";
         }
 
         @Bean
         @Autowired
         public PlayerProfileRegistrationServerService playerProfileRegistrationService(RestTemplate restTemplate) {
-            return realPlayerProfileRegistrationService == null ? new RestPlayerProfileRegistrationServerService(getBaseUrl(), restTemplate)
-                    : realPlayerProfileRegistrationService;
+            return realPlayerProfileRegistrationService == null ? new RestPlayerProfileRegistrationServerService(getBaseUrl(), restTemplate) : realPlayerProfileRegistrationService;
         }
 
     }

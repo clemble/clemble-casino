@@ -33,7 +33,7 @@ public class GameSpecificationConfigurationManager implements GameSpecificationC
 
     @Override
     public GameSpecificationOptions getSpecificationOptions() {
-        return new SelectSpecificationOptions(Game.pic, specificationRepository.findByGame(game));
+        return new SelectSpecificationOptions(game, specificationRepository.findByGame(game));
     }
 
 }

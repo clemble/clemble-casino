@@ -8,8 +8,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameAware;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -21,33 +19,19 @@ import com.clemble.casino.server.game.cache.GameCache;
 import com.clemble.casino.server.game.cache.GameCacheService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
-public class GameSessionProcessor<State extends GameState> implements GameAware {
-
-    /**
-     * Generated 27/07/13
-     */
-    private static final long serialVersionUID = 1688637028016268305L;
-
-    final private Game game;
+public class GameSessionProcessor<State extends GameState> {
 
     final private GameCacheService<State> cacheService;
     final private GameSessionFactory<State> sessionFactory;
     final private PlayerNotificationService<Event> notificationService;
 
     public GameSessionProcessor(
-            final Game game,
             final GameSessionFactory<State> sessionFactory,
             final GameCacheService<State> cacheService,
             final PlayerNotificationService<Event> notificationService) {
-        this.game = game;
         this.notificationService = checkNotNull(notificationService);
         this.sessionFactory = checkNotNull(sessionFactory);
         this.cacheService = checkNotNull(cacheService);
-    }
-
-    @Override
-    public Game getGame() {
-        return game;
     }
 
     public GameSession<State> start(GameInitiation initiation) {

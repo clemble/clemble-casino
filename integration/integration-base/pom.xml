@@ -51,5 +51,10 @@
             <artifactId>junit</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.clemble.test</groupId>
+            <artifactId>object-generator</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

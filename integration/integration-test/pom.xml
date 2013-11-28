@@ -114,8 +114,7 @@
                             <includes>
                                 <include>**/*ITest.java</include>
                             </includes>
-                            <argLine>-Dspring.profiles.active=int_test
-                                -Dclemble.casino.management.url=http://localhost:8080/integration-management-web/</argLine>
+                            <argLine>-Dspring.profiles.active=int_test -Dclemble.casino.management.url=http://localhost:8080/management/</argLine>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -177,22 +176,22 @@
                                         <contextHandler
                                             implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/player-web.war</war>
-                                            <contextPath>/player-web</contextPath>
+                                            <contextPath>/player</contextPath>
                                         </contextHandler>
                                         <contextHandler
                                             implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/payment-web.war</war>
-                                            <contextPath>/payment-web</contextPath>
+                                            <contextPath>/payment</contextPath>
                                         </contextHandler>
                                         <contextHandler
                                             implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/integration-management-web.war</war>
-                                            <contextPath>/integration-management-web</contextPath>
+                                            <contextPath>/management</contextPath>
                                         </contextHandler>
                                         <contextHandler
                                             implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                             <war>${project.build.directory}/wars-to-be-tested/integration-game.war</war>
-                                            <contextPath>/integration-game</contextPath>
+                                            <contextPath>/game</contextPath>
                                         </contextHandler>
                                     </contextHandlers>
                                 </configuration>
@@ -214,7 +213,7 @@
                                 </systemProperty>
                                 <systemProperty>
                                     <name>clemble.casino.management.url</name>
-                                    <value>http://localhost:9999/integration-management-web/</value>
+                                    <value>http://localhost:8080/management/</value>
                                 </systemProperty>
                                 <systemProperty>
                                     <name>spring.profiles.active</name>

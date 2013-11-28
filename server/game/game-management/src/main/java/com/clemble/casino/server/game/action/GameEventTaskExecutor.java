@@ -3,8 +3,6 @@ package com.clemble.casino.server.game.action;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -14,11 +12,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import com.clemble.casino.event.ClientEvent;
-import com.clemble.casino.game.Game;
 
 public class GameEventTaskExecutor implements BeanPostProcessor {
 
-    final private Map<Game, GameSessionProcessor<?>> gameToProcessor = new HashMap<>();
+    private GameSessionProcessor<?> sessionProcessor;
     final private ConcurrentHashMap<GameEventTask, ScheduledFuture<?>> concurrentHashMap = new ConcurrentHashMap<>();
 
     final private ScheduledExecutorService scheduledExecutorService;
@@ -59,7 +56,7 @@ public class GameEventTaskExecutor implements BeanPostProcessor {
         public void run() {
             Collection<ClientEvent> events = eventTask.execute();
             for (ClientEvent event : events) {
-                GameEventTaskExecutor.this.gameToProcessor.get(eventTask.getSession().getGame()).process(eventTask.getSession(), event);
+                GameEventTaskExecutor.this.sessionProcessor.process(eventTask.getSession(), event);
             }
             reschedule(eventTask);
         }
@@ -73,10 +70,7 @@ public class GameEventTaskExecutor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof GameSessionProcessor) {
-            GameSessionProcessor<?> processor = (GameSessionProcessor<?>) bean;
-            if (gameToProcessor.containsKey(processor.getGame()))
-                throw new IllegalArgumentException("Can't be 2 processors for the same game " + processor.getGame() + " / " + processor);
-            gameToProcessor.put(processor.getGame(), processor);
+            sessionProcessor = (GameSessionProcessor<?>) bean;
         }
         return bean;
     }

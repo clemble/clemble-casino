@@ -47,7 +47,7 @@ public class GameConstructionController<State extends GameState> implements Game
     @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameConstruction construct(@RequestHeader("playerId") final String playerId, @RequestBody final GameRequest gameRequest) {
+    public @ResponseBody GameConstruction construct(@RequestBody final GameRequest gameRequest) {
         // Step 1. Checking that provided specification was valid
         if (!configurationManager.getSpecificationOptions(gameRequest.getSpecification().getName().getGame()).valid(gameRequest.getSpecification()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
@@ -59,7 +59,7 @@ public class GameConstructionController<State extends GameState> implements Game
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    GameConstruction getConstruct(@RequestHeader("playerId") final String playerId, @PathVariable("game") final Game game, @PathVariable("sessionId") final String session) {
+    GameConstruction getConstruct(@PathVariable("game") final Game game, @PathVariable("sessionId") final String session) {
         // Step 1. Searching for construction
         GameConstruction construction = constructionRepository.findOne(new GameSessionKey(game, session));
         // Step 2. Sending error in case resource not found
@@ -72,14 +72,14 @@ public class GameConstructionController<State extends GameState> implements Game
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody ClientEvent getResponce(@RequestHeader("playerId") final String requester, @PathVariable("game") final Game game, @PathVariable("sessionId") final String session, @PathVariable("playerId") final String player) {
+    public @ResponseBody ClientEvent getResponce(@PathVariable("game") final Game game, @PathVariable("sessionId") final String session, @PathVariable("playerId") final String player) {
         return (ClientEvent) constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().fetchAction(player);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameConstruction reply(@RequestHeader("playerId") final String playerId, @PathVariable("game") final Game game, @PathVariable("sessionId") String sessionId, @RequestBody final InvitationResponseEvent gameRequest) {
+    public @ResponseBody GameConstruction reply(@PathVariable("game") final Game game, @PathVariable("sessionId") String sessionId, @RequestBody final InvitationResponseEvent gameRequest) {
         // Step 1. Invoking actual matching service
         return constructionService.invitationResponsed(gameRequest);
     }

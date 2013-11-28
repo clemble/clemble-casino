@@ -23,7 +23,7 @@ import com.clemble.casino.game.construct.GameDeclineBehavior;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;
+import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(profiles = SpringConfiguration.UNIT_TEST)
-@ContextConfiguration(classes = { GameManagementSpringConfiguration.class })
+@ContextConfiguration(classes = { SimpleGameSpringConfiguration.class })
 public class GameConstructionRepositoryTest {
 
     @Autowired

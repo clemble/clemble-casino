@@ -71,6 +71,7 @@
         <maven.war.plugin.version>2.4</maven.war.plugin.version>
         <maven.install.plugin.version>2.4</maven.install.plugin.version>
         <maven.jar.plugin.version>2.4</maven.jar.plugin.version>
+        <maven.source.plugin.version>2.2.1</maven.source.plugin.version>
         <java.version>1.7</java.version>
         <jbehave.version>3.7.5</jbehave.version>
         <jetty.version>9.1.0.M0</jetty.version>
@@ -476,6 +477,11 @@
                 <version>${junit.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.clemble.test</groupId>
+                <artifactId>object-generator</artifactId>
+                <version>${com.clemble.test.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.ning</groupId>
                 <artifactId>async-http-client</artifactId>
                 <version>${async-http-client.version}</version>
@@ -807,6 +813,20 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>${maven.war.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven.source.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

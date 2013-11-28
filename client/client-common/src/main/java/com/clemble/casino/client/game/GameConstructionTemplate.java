@@ -60,7 +60,7 @@ public class GameConstructionTemplate<T extends GameState> implements GameConstr
 
     @Override
     public GameConstruction construct(GameRequest gameRequest) {
-        return constructionService.construct(player, gameRequest);
+        return constructionService.construct(gameRequest);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class GameConstructionTemplate<T extends GameState> implements GameConstr
 
     @Override
     public GameConstruction getConstruct(String session) {
-        return constructionService.getConstruct(player, game, session);
+        return constructionService.getConstruct(game, session);
     }
 
     @Override
@@ -96,12 +96,12 @@ public class GameConstructionTemplate<T extends GameState> implements GameConstr
 
     @Override
     public GameConstruction response(String session, InvitationResponseEvent responce) {
-        return constructionService.reply(player, game, session, responce);
+        return constructionService.reply(game, session, responce);
     }
 
     @Override
     public ClientEvent getResponce(String session, String fromPlayer) {
-        return constructionService.getResponce(player, game, session, fromPlayer);
+        return constructionService.getResponce(game, session, fromPlayer);
     }
 
     @Override

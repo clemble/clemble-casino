@@ -46,7 +46,7 @@ public class ServerRegistryConfiguration {
         return paymentBaseUrl;
     }
 
-    public ServerRegistry getGameRegistry(Game game) {
+    public ServerRegistry getGameRegistry() {
         return gameRegistry;
     }
 

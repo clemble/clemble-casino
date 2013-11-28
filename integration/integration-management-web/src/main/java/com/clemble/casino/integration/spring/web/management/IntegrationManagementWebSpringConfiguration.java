@@ -18,54 +18,22 @@ import com.clemble.casino.server.spring.web.management.AbstractManagementWebSpri
 import com.google.common.collect.ImmutableList;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class,
-        IntegrationManagementWebSpringConfiguration.DefaultAndTest.class, IntegrationManagementWebSpringConfiguration.Cloud.class, IntegrationManagementWebSpringConfiguration.Integration.class })
+@Import(value = { CommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class, IntegrationManagementWebSpringConfiguration.DefaultAndTest.class })
 public class IntegrationManagementWebSpringConfiguration extends AbstractManagementWebSpringConfiguration {
 
     @Configuration
-    @Profile({ UNIT_TEST, DEFAULT, INTEGRATION_DEFAULT })
+    @Profile({ UNIT_TEST, DEFAULT, INTEGRATION_DEFAULT, INTEGRATION_TEST, INTEGRATION_CLOUD })
     public static class DefaultAndTest {
 
-        @Autowired
-        public ServerRegistryConfiguration serverRegistryConfiguration;
-
-
         @Bean
-        public ResourceLocationService resourceLocationService() {
-            SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
-            return new SimpleResourceLocationService(configurationService,
-                    serverRegistryConfiguration,
-                    ImmutableList.<Game> of(Game.num));
+        public ServerRegistryConfiguration serverRegistryConfiguration() {
+            return new ServerRegistryConfiguration("localhost", "http://localhost:8080/player/", "http://localhost:8080/payment/", "http://localhost:8080/game/");
         }
 
-    }
-
-    @Configuration
-    @Profile(INTEGRATION_TEST)
-    public static class Integration {
-
-        @Autowired
-        public ServerRegistryConfiguration serverRegistryConfiguration;
 
         @Bean
-        public ResourceLocationService resourceLocationService() {
-            SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
-            return new SimpleResourceLocationService(configurationService,
-                    serverRegistryConfiguration,
-                    ImmutableList.<Game> of(Game.num));
-        }
-
-    }
-
-    @Configuration
-    @Profile(CLOUD)
-    public static class Cloud {
-        
         @Autowired
-        public ServerRegistryConfiguration serverRegistryConfiguration;
-
-        @Bean
-        public ResourceLocationService resourceLocationService() {
+        public ResourceLocationService resourceLocationService(ServerRegistryConfiguration serverRegistryConfiguration) {
             SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
             return new SimpleResourceLocationService(configurationService,
                     serverRegistryConfiguration,

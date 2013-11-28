@@ -28,17 +28,17 @@ public class GameActionTemplate<State extends GameState> implements GameActionOp
 
     @Override
     public State getState(){
-        return gameActionService.getState(session.getSession());
+        return gameActionService.getState(session.getGame(), session.getSession());
     }
 
     @Override
     public State process(ClientEvent move) {
-        return gameActionService.process(session.getSession(), move);
+        return gameActionService.process(session.getGame(), session.getSession(), move);
     }
 
     @Override
     public MadeMove getAction(int actionId) {
-        return gameActionService.getAction(session.getSession(), actionId);
+        return gameActionService.getAction(session.getGame(), session.getSession(), actionId);
     }
 
     @Override

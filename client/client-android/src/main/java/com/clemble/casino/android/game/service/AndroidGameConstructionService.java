@@ -23,26 +23,28 @@ public class AndroidGameConstructionService<T extends GameState> extends Abstrac
     }
 
     @Override
-    public GameConstruction construct(String player, GameRequest gameRequest) {
-        throw new UnsupportedOperationException();
+    public GameConstruction construct(GameRequest gameRequest) {
+        return restTemplate
+                .postForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS), gameRequest, GameConstruction.class)
+                .getBody();
     }
 
     @Override
-    public GameConstruction getConstruct(String player, Game game, String session) {
+    public GameConstruction getConstruct(Game game, String session) {
         return restTemplate
             .getForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_CONSTRUCTION, game, session), GameConstruction.class)
             .getBody();
     }
 
     @Override
-    public ClientEvent getResponce(String requester, Game game, String session, String player) {
+    public ClientEvent getResponce(Game game, String session, String player) {
         return restTemplate
             .getForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES_PLAYER, game, session, player), ClientEvent.class)
             .getBody();
     }
 
     @Override
-    public GameConstruction reply(String player, Game game, String session, InvitationResponseEvent gameRequest) {
+    public GameConstruction reply(Game game, String session, InvitationResponseEvent gameRequest) {
         return restTemplate
             .postForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS_CONSTRUCTION_RESPONSES, game, session), gameRequest, GameConstruction.class)
             .getBody();

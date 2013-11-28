@@ -2,7 +2,6 @@ package com.clemble.casino.server.spring.web.management;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -15,7 +14,6 @@ import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
 import com.clemble.casino.server.configuration.SimpleResourceLocationService;
-import com.clemble.casino.server.spring.common.ServerRegistrySpringConfiguration;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.google.common.collect.ImmutableList;
 
@@ -25,16 +23,17 @@ import com.google.common.collect.ImmutableList;
 public class ManagementWebSpringConfigurationInitializationTest {
 
     @Configuration
-    @Import({ServerRegistrySpringConfiguration.class, OAuthSpringConfiguration.class})
+    @Import({OAuthSpringConfiguration.class})
     public static class TestManagementWebSpringConfiguration extends AbstractManagementWebSpringConfiguration {
-
-        @Autowired
-        public ServerRegistryConfiguration serverRegistryConfiguration;
+        
+        @Bean
+        public ServerRegistryConfiguration serverRegistryConfiguration() {
+            return new ServerRegistryConfiguration("localhost");
+        }
 
         @Bean
-        public ResourceLocationService resourceLocationService() {
-            SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest",
-                    serverRegistryConfiguration.getPlayerNotificationRegistry());
+        public ResourceLocationService resourceLocationService(ServerRegistryConfiguration serverRegistryConfiguration) {
+            SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
             return new SimpleResourceLocationService(configurationService, serverRegistryConfiguration, ImmutableList.<Game> of(Game.num));
         }
     }

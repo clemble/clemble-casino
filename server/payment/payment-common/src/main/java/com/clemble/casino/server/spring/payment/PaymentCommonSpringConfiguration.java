@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.configuration.ServerRegistryConfiguration;
+import com.clemble.casino.DNSBasedServerRegistry;
+import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Money;
@@ -20,7 +21,6 @@ import com.clemble.casino.server.payment.RestPaymentTransactionServerService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.account.RestPlayerAccountServerService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.common.ServerRegistrySpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 
@@ -29,12 +29,9 @@ import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
     @Configuration
-    @Import({ ClientRestCommonSpringConfiguration.class, ServerRegistrySpringConfiguration.class })
+    @Import({ ClientRestCommonSpringConfiguration.class })
     @Profile(value = { DEFAULT, INTEGRATION_CLOUD, CLOUD, INTEGRATION_TEST })
     public static class Integration {
-
-        @Autowired
-        public ServerRegistryConfiguration serverRegistryConfiguration;
 
         @Autowired
         public RestTemplate restTemplate;
@@ -48,16 +45,15 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
         public PlayerAccountServerService realPlayerAccountService;
 
         @Bean
-        @Autowired
         public PaymentTransactionServerService paymentTransactionService() {
-            return realPaymentTransactionService == null ? new RestPaymentTransactionServerService(serverRegistryConfiguration.getPaymentRegistry(), restTemplate)
-                    : realPaymentTransactionService;
+            ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/");
+            return realPaymentTransactionService == null ? new RestPaymentTransactionServerService(paymentRegistry, restTemplate) : realPaymentTransactionService;
         }
 
         @Bean
-        @Autowired
         public PlayerAccountServerService playerAccountService() {
-            return realPlayerAccountService == null ? new RestPlayerAccountServerService(serverRegistryConfiguration.getPaymentRegistry(), restTemplate) : realPlayerAccountService;
+            ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/");
+            return realPlayerAccountService == null ? new RestPlayerAccountServerService(paymentRegistry, restTemplate) : realPlayerAccountService;
         }
     }
 

@@ -95,10 +95,10 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
         Map<Game, GameConstructionOperations<?>> gameToConstructor = new EnumMap<Game, GameConstructionOperations<?>>(Game.class);
         this.eventListenersManager = new RabbitEventListenerTemplate(resourceLocations.getNotificationConfiguration(), ClembleCasinoConstants.OBJECT_MAPPER);
         for (Game game : resourceLocations.getGames()) {
-            ServerRegistry gameRegistry = registryConfiguration.getGameRegistry(game);
+            ServerRegistry gameRegistry = registryConfiguration.getGameRegistry();
             GameConstructionService constructionService = new AndroidGameConstructionService(getRestTemplate(), gameRegistry);
             GameSpecificationService specificationService = new AndroidGameSpecificationService(getRestTemplate(), gameRegistry);
-            GameActionService<?> actionService = new AndroidGameActionTemplate(getRestTemplate(), gameRegistry);
+            GameActionService<?> actionService = new AndroidGameActionTemplate(gameRegistry, getRestTemplate());
             GameActionOperationsFactory actionOperationsFactory = new GameActionTemplateFactory(player, eventListenersManager, actionService);
             GameConstructionOperations<?> constructionOperations = new GameConstructionTemplate(player, game, actionOperationsFactory, constructionService,
                     specificationService, eventListenersManager);
