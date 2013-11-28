@@ -106,6 +106,9 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         if (this.currentState.get() != null && this.currentState.get().getVersion() >= expectedVersion)
             return;
 
+        if(this.currentState.get() == null)
+            setState(actionOperations.getState());
+
         synchronized (versionLock) {
             while (this.currentState.get() != null && this.currentState.get().getVersion() < expectedVersion) {
                 try {
@@ -113,9 +116,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                // TODO this should not happen
-                if(this.currentState.get().getVersion() < expectedVersion)
-                    setState(actionOperations.getState());
+                setState(actionOperations.getState());
             }
         }
     }
