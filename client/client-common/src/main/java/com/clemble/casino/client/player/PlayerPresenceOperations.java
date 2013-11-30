@@ -11,6 +11,8 @@ public interface PlayerPresenceOperations {
 
     public PlayerPresence getPresence(String player);
 
+    public List<PlayerPresence> getPresences(String ... players);
+
     public List<PlayerPresence> getPresences(List<String> players);
 
     public void subscribe(String player, EventListener listener);

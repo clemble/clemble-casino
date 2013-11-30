@@ -17,6 +17,8 @@ public interface EventListenerOperations extends PlayerAware, Closeable {
 
     public EventListenerController subscribe(String channel, EventSelector selector, EventListener listener);
 
+    public boolean isAlive();
+
     @Override
     public void close();
 

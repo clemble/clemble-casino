@@ -3,6 +3,7 @@ package com.clemble.casino.android.player;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +28,11 @@ public class AndroidPlayerPresenceService extends AbstractClembleCasinoOperation
 
     @Override
     public PlayerPresence getPresence(String player) {
+        URI presenceURI = buildUriWith(PlayerWebMapping.PLAYER_PRESENCE, player);
         // Step 1. Singleton GET request
         return restTemplate
-            .getForEntity(buildUriWith(PlayerWebMapping.PLAYER_PRESENCE, player), PlayerPresence.class)
-            .getBody();
+                .getForEntity(presenceURI, PlayerPresence.class)
+                .getBody();
     }
 
     @Override

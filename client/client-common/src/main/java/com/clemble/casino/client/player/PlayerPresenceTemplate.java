@@ -2,6 +2,7 @@ package com.clemble.casino.client.player;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.clemble.casino.client.event.EventListener;
@@ -33,6 +34,11 @@ public class PlayerPresenceTemplate implements PlayerPresenceOperations {
     }
 
     @Override
+    public List<PlayerPresence> getPresences(String... players) {
+        return getPresences(Arrays.asList(players));
+    }
+
+    @Override
     public List<PlayerPresence> getPresences(List<String> players) {
         return playerPresenceService.getPresences(players);
     }
@@ -49,4 +55,5 @@ public class PlayerPresenceTemplate implements PlayerPresenceOperations {
         for(String player: players)
             subscribe(player, listener);
     }
+
 }

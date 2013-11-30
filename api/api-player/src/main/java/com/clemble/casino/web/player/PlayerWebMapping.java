@@ -4,8 +4,6 @@ import com.clemble.casino.web.mapping.WebMapping;
 
 public interface PlayerWebMapping extends WebMapping {
 
-    final public static String PLAYER_PREFIX = "/player";
-
     final public static String PLAYER_PROFILE_REGISTRATION = "/player/";
     final public static String PLAYER_PROFILE_REGISTRATION_SOCIAL = "/social/";
 

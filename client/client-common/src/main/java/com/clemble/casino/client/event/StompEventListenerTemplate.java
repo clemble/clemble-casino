@@ -25,40 +25,45 @@ public class StompEventListenerTemplate extends AbstractEventListenerTemplate {
      */
     private static final long serialVersionUID = -3708639830312251122L;
 
-    final private AtomicReference<Client> client = new AtomicReference<Client>();
     final private StompListener listener;
-    final private NotificationConfiguration notificationConfiguration;
+    final private AtomicReference<Client> client = new AtomicReference<Client>();
 
     public StompEventListenerTemplate(String player, NotificationConfiguration configuration, ObjectMapper objectMapper) {
         super(player);
-        this.notificationConfiguration = checkNotNull(configuration);
         this.listener = new StompListener(objectMapper);
-        this.executor.schedule(new StompStartupRunnable(), 0, TimeUnit.SECONDS);
+        this.executor.schedule(new StompStartupRunnable(configuration, objectMapper), 0, TimeUnit.SECONDS);
     }
 
-    public class StompStartupRunnable implements Runnable {
+    final public class StompStartupRunnable implements Runnable {
+
+        final private NotificationConfiguration configuration;
+        final private ObjectMapper objectMapper;
+
+        public StompStartupRunnable(NotificationConfiguration configurations, ObjectMapper objectMapper) {
+            this.configuration = configurations;
+            this.objectMapper = objectMapper;
+        }
 
         @Override
         public void run() {
             // Step 1. Creating a game table client
             try {
-                final NotificationHost stompNotification = notificationConfiguration.getStompHost();
-                final Client stompClient = new Client(stompNotification.getHost(), stompNotification.getPort(), notificationConfiguration.getUser(), notificationConfiguration.getPassword());
-                // Step 4. Returning game listener with possibility to stop STOMP listener
+                final NotificationHost stompNotification = configuration.getStompHost();
+                final Client stompClient = new Client(stompNotification.getHost(), stompNotification.getPort(), configuration.getUser(),
+                        configuration.getPassword());
+                // Step 2. Returning game listener with possibility to stop STOMP listener
                 connectionCleaner.set(new Closeable() {
-
                     @Override
                     public void close() throws IOException {
                         stompClient.disconnect();
                     }
-
                 });
                 client.set(stompClient);
-                subscribe(notificationConfiguration.getRoutingKey());
+                refreshSubscription();
             } catch (LoginException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                executor.schedule(new StompStartupRunnable(configuration, objectMapper), 30, TimeUnit.SECONDS);
             }
         }
     }
@@ -74,17 +79,24 @@ public class StompEventListenerTemplate extends AbstractEventListenerTemplate {
         @Override
         public void message(@SuppressWarnings("rawtypes") Map parameters, String message) {
             try {
+                Event event = objectMapper.readValue(message, Event.class);
                 // Step 1. Reading and notifying of the message
-                update(String.valueOf(parameters.get("routingKey")), objectMapper.readValue(message, Event.class));
+                update(String.valueOf(parameters.get("destination")).substring(7), event);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
-        
     }
 
     @Override
     public void subscribe(String channel) {
-        client.get().subscribe("/topic/" + channel, listener);
+        if (client.get() != null)
+            client.get().subscribe("/topic/" + channel, listener);
     }
+
+    @Override
+    public boolean isAlive() {
+        return client.get() != null;
+    }
+
 }

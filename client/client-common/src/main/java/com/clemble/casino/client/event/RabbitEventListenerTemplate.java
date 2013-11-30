@@ -73,7 +73,6 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
                     });
                     // Step 4. Creating new Queue that will be used for listening of player updates
                     Queue.DeclareOk queue = channel.queueDeclare();
-                    channel.queueBind(queue.getQueue(), "amq.topic", configurations.getRoutingKey());
                     channel.basicConsume(queue.getQueue(), new AndroidRabbitDefaultConsumer(channel, objectMapper));
                     rabbitQueue.set(new ImmutablePair<Channel, Queue.DeclareOk>(channel, queue));
                     // Step 5. Updating Closeable in the parent
@@ -84,6 +83,7 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
                             rabbitConnection.close();
                         }
                     });
+                    refreshSubscription();
                 }
             } catch (Throwable e) {
                 e.printStackTrace();
@@ -105,7 +105,7 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
         public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
             try {
                 update(envelope.getRoutingKey(), objectMapper.readValue(body, Event.class));
-            } catch(Throwable throwable) {
+            } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
         }
@@ -113,13 +113,20 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
 
     @Override
     public void subscribe(String routingKey) {
-        Channel channel = rabbitQueue.get().getKey();
-        Queue.DeclareOk queue = rabbitQueue.get().getValue();
-        try {
-            channel.queueBind(queue.getQueue(), "amq.topic", routingKey);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (isAlive()) {
+            Channel channel = rabbitQueue.get().getKey();
+            Queue.DeclareOk queue = rabbitQueue.get().getValue();
+            try {
+                channel.queueBind(queue.getQueue(), "amq.topic", routingKey);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    @Override
+    public boolean isAlive() {
+        return rabbitQueue.get() != null;
     }
 
 }

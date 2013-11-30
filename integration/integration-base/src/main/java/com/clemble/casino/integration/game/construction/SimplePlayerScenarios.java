@@ -28,7 +28,8 @@ public class SimplePlayerScenarios implements PlayerScenarios {
     public ClembleCasinoOperations createPlayer() {
         ClembleCasinoOperations player = registrationOperations.createPlayer(
                 new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.randomAlphanumeric(10)),
-                new NativePlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10)).setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10)));
+                new NativePlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10)).setLastName(RandomStringUtils.randomAlphabetic(10))
+                        .setNickName(RandomStringUtils.randomAlphabetic(10)));
 
         return initialize(player);
 
@@ -45,7 +46,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
 
     @Override
     public ClembleCasinoOperations createPlayer(SocialConnectionData socialConnectionData) {
-        ClembleCasinoOperations player =  registrationOperations.createSocialPlayer(
+        ClembleCasinoOperations player = registrationOperations.createSocialPlayer(
                 new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.randomAlphanumeric(10)),
                 socialConnectionData);
 
@@ -54,19 +55,27 @@ public class SimplePlayerScenarios implements PlayerScenarios {
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerRegistrationRequest playerRegistrationRequest) {
-        ClembleCasinoOperations player = registrationOperations.createPlayer(playerRegistrationRequest.getPlayerCredential(), playerRegistrationRequest.getPlayerProfile());
+        ClembleCasinoOperations player = registrationOperations.createPlayer(playerRegistrationRequest.getPlayerCredential(),
+                playerRegistrationRequest.getPlayerProfile());
 
         return initialize(player);
     }
-    
+
     private ClembleCasinoOperations initialize(final ClembleCasinoOperations player) {
         player.listenerOperations().subscribe(new EventListener() {
             final private AtomicInteger messageNum = new AtomicInteger();
+
             @Override
             public void onEvent(Event event) {
-                System.out.println("event >> " + messageNum + " >> " + player.getPlayer() + " >> " + event);
+                System.out.println("event >> " + messageNum.incrementAndGet() + " >> " + player.getPlayer() + " >> " + event);
             }
         });
+        while (!player.listenerOperations().isAlive()) {
+            try {
+                Thread.sleep(100);
+            } catch (Throwable throwable) {
+            }
+        }
         return player;
     }
 

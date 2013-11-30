@@ -2,6 +2,8 @@ package com.clemble.casino.server.player.presence;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -10,6 +12,8 @@ import com.clemble.casino.server.player.notification.PlayerNotificationListener;
 import com.clemble.casino.player.Presence;
 
 public class PresenceListenerWrapper implements MessageListener {
+
+    final private Logger LOGGER = LoggerFactory.getLogger(PresenceListenerWrapper.class);
 
     final private RedisSerializer<String> stringRedisSerializer;
     final private PlayerNotificationListener<Presence> playerStateListener;
@@ -21,10 +25,12 @@ public class PresenceListenerWrapper implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
+        LOGGER.debug("processing: {}", message);
         // Step 1. Reading channel and message
         String deserializedChannel = stringRedisSerializer.deserialize(message.getChannel());
         String deserializedMessage = stringRedisSerializer.deserialize(message.getBody());
         // Step 2. Notifying associated PlayerStateListener
+        LOGGER.debug("channel: {}, message: {}", deserializedChannel, deserializedMessage);
         playerStateListener.onUpdate(deserializedChannel, Presence.valueOf(deserializedMessage));
 
     }

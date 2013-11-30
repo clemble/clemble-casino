@@ -71,7 +71,7 @@ public class GameSessionKey implements GameAware, Serializable {
         if (getClass() != obj.getClass())
             return false;
         GameSessionKey other = (GameSessionKey) obj;
-        return game == other.game && session.equals(other.session);
+        return game == other.game && (session == other.session || session.equals(other.session));
     }
 
     @Override

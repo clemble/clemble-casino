@@ -25,7 +25,7 @@ abstract public class AbstractEventListenerTemplate implements EventListenerOper
     private static final long serialVersionUID = 6661393998011634474L;
 
     final private String player;
-    
+
     final protected Map<String, Set<Entry<EventSelector, EventListener>>> eventListeners = new HashMap<String, Set<Entry<EventSelector, EventListener>>>();
     final protected ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     final protected AtomicReference<Closeable> connectionCleaner = new AtomicReference<>();
@@ -87,6 +87,11 @@ abstract public class AbstractEventListenerTemplate implements EventListenerOper
                 eventListeners.remove(listenerPair);
             }
         };
+    }
+
+    protected void refreshSubscription(){
+        for(String channel: eventListeners.keySet())
+            subscribe(channel);
     }
 
     abstract public void subscribe(String channel);

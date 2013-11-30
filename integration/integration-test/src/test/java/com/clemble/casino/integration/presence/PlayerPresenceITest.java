@@ -27,7 +27,7 @@ import com.clemble.casino.player.PlayerPresence;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class PresenceStatusITest {
+public class PlayerPresenceITest {
 
     @Autowired
     public PlayerScenarios playerScenarios;
@@ -47,12 +47,13 @@ public class PresenceStatusITest {
             // Step 2. Checking B presence of B is the same for A & B
             assertEquals(B.presenceOperations().getPresence(), B.presenceOperations().getPresence(B.getPlayer()));
             assertEquals(B.presenceOperations().getPresence(), A.presenceOperations().getPresence(B.getPlayer()));
+            A.presenceOperations().getPresences(A.getPlayer(), B.getPlayer());
         } finally {
             A.close();
             B.close();
         }
     }
-    
+
     @Test
     public void testPresenceUpdate() throws InterruptedException {
         // Step 1. Creating player A & B
