@@ -174,6 +174,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
 
     @Override
     public void subscribe(Collection<String> players, PlayerNotificationListener<Presence> messageListener) {
+        LOGGER.debug("Subscribing {} for changes from {}", players, messageListener);
         // Step 1. Add message listener
         listenerContainer.addMessageListener(new PresenceListenerWrapper(redisTemplate.getStringSerializer(), messageListener), toTopics(players));
         // Step 2. Checking if listener container is alive, and starting it if needed
@@ -188,6 +189,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
 
     @Override
     public void unsubscribe(Collection<String> players, PlayerNotificationListener<Presence> playerStateListener) {
+        LOGGER.debug("Unsubscribing {} for changes from {}", players, playerStateListener);
         listenerContainer.removeMessageListener(new PresenceListenerWrapper(stringRedisSerializer, playerStateListener), toTopics(players));
     }
 
@@ -203,13 +205,13 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         Long numUpdatedClients = redisTemplate.execute(new RedisCallback<Long>() {
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
                 // Step 1. Generating channel byte array from player identifier
-                byte[] channel = redisTemplate.getStringSerializer().serialize(String.valueOf(newPresence.getPlayer()));
+                byte[] channel = redisTemplate.getStringSerializer().serialize(newPresence.getPlayer());
                 byte[] message = redisTemplate.getStringSerializer().serialize(newPresence.getPresence().name());
                 // Step 2. Performing actual publish
                 return connection.publish(channel, message);
             }
         });
-        LOGGER.debug("Notified of change in {} state {} listeners", newPresence.getPlayer(), numUpdatedClients);
+        LOGGER.debug("{} update to {}, notified {} listeners", newPresence.getPlayer(), newPresence.getPresence(), numUpdatedClients);
         presenceNotification.notify(newPresence.getPlayer(), newPresence);
     }
 

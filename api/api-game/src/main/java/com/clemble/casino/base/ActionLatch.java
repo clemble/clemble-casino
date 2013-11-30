@@ -2,7 +2,6 @@ package com.clemble.casino.base;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -23,32 +22,41 @@ public class ActionLatch implements Serializable {
     final private Map<String, ClientEvent> actions = new HashMap<String, ClientEvent>();
     final private Class<?> expectedClass;
 
-    public ActionLatch(final String participant, final String action) {
-        this(Collections.singleton(participant), action);
-    }
-
-    public ActionLatch(final Collection<String> participants, final String action) {
-        this(participants, action, null);
-    }
-
-    public ActionLatch(final Collection<String> participants, final String action, final Class<?> expectedClass) {
-        this.expectedClass = expectedClass;
-        for (String participant : participants) {
-            actions.put(participant, new ExpectedAction(participant, action));
-        }
-    }
-
-    public ActionLatch(final String[] participants, final String action, final Class<?> expectedClass) {
-        this.expectedClass = expectedClass;
-        for (String participant : participants) {
-            actions.put(participant, new ExpectedAction(participant, action));
-        }
+    public ActionLatch(final String player, final String action) {
+        this(player, action, null);
     }
 
     public ActionLatch(final String player, String action, Class<?> expectedClass) {
         this.actions.put(player, new ExpectedAction(player, action));
         this.expectedClass = expectedClass;
     }
+
+    public ActionLatch(final Collection<String> participants, final String action) {
+        for (String participant : participants) {
+            this.actions.put(participant, new ExpectedAction(participant, action));
+        }
+        this.expectedClass = null;
+    }
+
+    public ActionLatch(final Collection<String> participants, final String action, Class<?> expectedClass) {
+        for (String participant : participants) {
+            this.actions.put(participant, new ExpectedAction(participant, action));
+        }
+        this.expectedClass = expectedClass;
+    }
+
+    public ActionLatch(final String player, final Collection<String> participants, final String action) {
+        this(player, participants, action, null);
+    }
+    
+    public ActionLatch(final String player, final Collection<String> participants, final String action, final Class<?> expectedClass) {
+        this.expectedClass = expectedClass;
+        this.actions.put(player, new ExpectedAction(player, action));
+        for (String participant : participants) {
+            this.actions.put(participant, new ExpectedAction(participant, action));
+        }
+    }
+
 
     @JsonCreator
     public ActionLatch(@JsonProperty("actions") final Collection<ClientEvent> expectedActions) {

@@ -81,19 +81,19 @@ public class ClembleCasinoTemplate extends AbstractOAuth1ApiBinding implements C
         ResourceLocations resourceLocations = checkNotNull(playerSessionOperations.create().getResourceLocations());
         ServerRegistryConfiguration registryConfiguration = resourceLocations.getServerRegistryConfiguration();
 
+        this.eventListenersManager = new RabbitEventListenerTemplate(player, resourceLocations.getNotificationConfiguration(), ClembleCasinoConstants.OBJECT_MAPPER);
         // Step 1. Creating PlayerProfile service
         PlayerProfileService playerProfileService = new AndroidPlayerProfileService(getRestTemplate(), registryConfiguration.getPlayerRegistry());
         this.playerProfileOperations = new PlayerProfileTemplate(player, playerProfileService);
         // Step 2. Creating PlayerPresence service
         PlayerPresenceService playerPresenceService = new AndroidPlayerPresenceService(getRestTemplate(), registryConfiguration.getPlayerRegistry());
-        this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService);
+        this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, eventListenersManager);
         // Step 3. Creating PaymentTransaction service
         ServerRegistry paymentServerRegistry = registryConfiguration.getPaymentRegistry();
         PaymentService paymentTransactionService = new AndroidPaymentTransactionService(getRestTemplate(), paymentServerRegistry);
         this.paymentTransactionOperations = new PaymentTemplate(player, paymentTransactionService);
         // Step 4. Creating GameConstruction services
         Map<Game, GameConstructionOperations<?>> gameToConstructor = new EnumMap<Game, GameConstructionOperations<?>>(Game.class);
-        this.eventListenersManager = new RabbitEventListenerTemplate(resourceLocations.getNotificationConfiguration(), ClembleCasinoConstants.OBJECT_MAPPER);
         for (Game game : resourceLocations.getGames()) {
             ServerRegistry gameRegistry = registryConfiguration.getGameRegistry();
             GameConstructionService constructionService = new AndroidGameConstructionService(getRestTemplate(), gameRegistry);

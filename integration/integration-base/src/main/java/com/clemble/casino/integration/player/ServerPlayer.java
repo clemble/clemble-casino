@@ -3,12 +3,10 @@ package com.clemble.casino.integration.player;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventListenerOperations;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameActionTemplateFactory;
@@ -22,7 +20,6 @@ import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.client.player.PlayerProfileTemplate;
 import com.clemble.casino.client.player.PlayerSessionOperations;
 import com.clemble.casino.client.player.PlayerSessionTemplate;
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -86,23 +83,14 @@ public class ServerPlayer implements ClembleCasinoOperations {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
+        this.playerListenersManager = listenerOperations.construct(player, session.getResourceLocations().getNotificationConfiguration(), objectMapper);
 
-        this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService);
+        this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, playerListenersManager);
 
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileService);
         this.playerAccountOperations = new PaymentTemplate(player, accountOperations);
 
         this.credential = checkNotNull(credential);
-        this.playerListenersManager = listenerOperations.construct(session.getResourceLocations().getNotificationConfiguration(), objectMapper);
-        this.playerListenersManager.subscribe(new EventListener() {
-
-            final private AtomicInteger messageNum = new AtomicInteger();
-
-            @Override
-            public void onEvent(Event event) {
-                System.out.println(messageNum.incrementAndGet() + " >> " + player + " >> " + event);
-            }
-        });
 
         this.constructionService = checkNotNull(gameConstructionService);
         this.specificationService = checkNotNull(specificationService);

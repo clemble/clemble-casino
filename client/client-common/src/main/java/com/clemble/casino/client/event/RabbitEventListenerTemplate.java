@@ -4,9 +4,12 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
+import com.clemble.casino.ImmutablePair;
 import com.clemble.casino.configuration.NotificationConfiguration;
 import com.clemble.casino.event.Event;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +25,15 @@ import com.rabbitmq.client.ShutdownSignalException;
 
 public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
 
-    public RabbitEventListenerTemplate(NotificationConfiguration configurations, ObjectMapper objectMapper) {
+    /**
+     * Generated 29/11/13
+     */
+    private static final long serialVersionUID = 5524090397307090488L;
+
+    final private AtomicReference<Entry<Channel, Queue.DeclareOk>> rabbitQueue = new AtomicReference<>();
+
+    public RabbitEventListenerTemplate(String player, NotificationConfiguration configurations, ObjectMapper objectMapper) {
+        super(player);
         this.executor.submit(new StartupTask(configurations, objectMapper));
     }
 
@@ -64,6 +75,7 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
                     Queue.DeclareOk queue = channel.queueDeclare();
                     channel.queueBind(queue.getQueue(), "amq.topic", configurations.getRoutingKey());
                     channel.basicConsume(queue.getQueue(), new AndroidRabbitDefaultConsumer(channel, objectMapper));
+                    rabbitQueue.set(new ImmutablePair<Channel, Queue.DeclareOk>(channel, queue));
                     // Step 5. Updating Closeable in the parent
                     connectionCleaner.set(new Closeable() {
                         @Override
@@ -74,7 +86,7 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
                     });
                 }
             } catch (Throwable e) {
-                // TODO add error processing
+                e.printStackTrace();
                 executor.schedule(new StartupTask(configurations, objectMapper), 30, TimeUnit.SECONDS);
             }
         }
@@ -92,10 +104,21 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
 
         public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
             try {
-                update(objectMapper.readValue(body, Event.class));
+                update(envelope.getRoutingKey(), objectMapper.readValue(body, Event.class));
             } catch(Throwable throwable) {
                 throwable.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void subscribe(String routingKey) {
+        Channel channel = rabbitQueue.get().getKey();
+        Queue.DeclareOk queue = rabbitQueue.get().getValue();
+        try {
+            channel.queueBind(queue.getQueue(), "amq.topic", routingKey);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

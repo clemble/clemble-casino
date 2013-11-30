@@ -74,6 +74,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
             RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(serverRegistry.findById(player));
             rabbitTemplate.send(String.valueOf(player) + postfix, message);
         } catch (Throwable e) {
+            e.printStackTrace();
             return false;
         }
         return true;

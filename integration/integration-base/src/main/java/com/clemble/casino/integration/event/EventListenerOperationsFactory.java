@@ -8,13 +8,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 abstract public class EventListenerOperationsFactory {
 
-    abstract public EventListenerOperations construct(NotificationConfiguration configuration, ObjectMapper objectMapper);
+    abstract public EventListenerOperations construct(String player, NotificationConfiguration configuration, ObjectMapper objectMapper);
 
     public static class RabbitEventListenerServiceFactory extends EventListenerOperationsFactory {
 
         @Override
-        public EventListenerOperations construct(NotificationConfiguration configuration, ObjectMapper objectMapper) {
-            return new RabbitEventListenerTemplate(configuration, objectMapper);
+        public EventListenerOperations construct(String player, NotificationConfiguration configuration, ObjectMapper objectMapper) {
+            return new RabbitEventListenerTemplate(player, configuration, objectMapper);
         }
 
     }
@@ -22,8 +22,8 @@ abstract public class EventListenerOperationsFactory {
     public static class StompEventListenerServiceFactory extends EventListenerOperationsFactory {
 
         @Override
-        public EventListenerOperations construct(NotificationConfiguration configuration, ObjectMapper objectMapper) {
-            return new StompEventListenerTemplate(configuration, objectMapper);
+        public EventListenerOperations construct(String player, NotificationConfiguration configuration, ObjectMapper objectMapper) {
+            return new StompEventListenerTemplate(player, configuration, objectMapper);
         }
 
     }

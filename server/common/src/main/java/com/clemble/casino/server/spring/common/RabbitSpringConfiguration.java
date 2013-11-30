@@ -30,7 +30,7 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     public ObjectMapper objectMapper;
 
     public ServerRegistry playerNotificationRegistry(){
-        return new DNSBasedServerRegistry(0, "127.0.0,1", "127.0.0,1", "127.0.0,1");
+        return new DNSBasedServerRegistry(0, "127.0.0.1", "127.0.0.1", "127.0.0.1");
     }
 
     @Bean

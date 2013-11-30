@@ -2,10 +2,14 @@ package com.clemble.casino.integration.game.construction;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
+import com.clemble.casino.client.event.EventListener;
+import com.clemble.casino.event.Event;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialConnectionData;
@@ -22,29 +26,48 @@ public class SimplePlayerScenarios implements PlayerScenarios {
 
     @Override
     public ClembleCasinoOperations createPlayer() {
-        return registrationOperations.createPlayer(
+        ClembleCasinoOperations player = registrationOperations.createPlayer(
                 new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.randomAlphanumeric(10)),
                 new NativePlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10)).setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10)));
+
+        return initialize(player);
 
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerProfile playerProfile) {
-        return registrationOperations.createPlayer(
+        ClembleCasinoOperations player = registrationOperations.createPlayer(
                 new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.randomAlphanumeric(10)),
                 playerProfile);
+
+        return initialize(player);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(SocialConnectionData socialConnectionData) {
-        return registrationOperations.createSocialPlayer(
+        ClembleCasinoOperations player =  registrationOperations.createSocialPlayer(
                 new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.randomAlphanumeric(10)),
                 socialConnectionData);
+
+        return initialize(player);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerRegistrationRequest playerRegistrationRequest) {
-        return registrationOperations.createPlayer(playerRegistrationRequest.getPlayerCredential(), playerRegistrationRequest.getPlayerProfile());
+        ClembleCasinoOperations player = registrationOperations.createPlayer(playerRegistrationRequest.getPlayerCredential(), playerRegistrationRequest.getPlayerProfile());
+
+        return initialize(player);
+    }
+    
+    private ClembleCasinoOperations initialize(final ClembleCasinoOperations player) {
+        player.listenerOperations().subscribe(new EventListener() {
+            final private AtomicInteger messageNum = new AtomicInteger();
+            @Override
+            public void onEvent(Event event) {
+                System.out.println("event >> " + messageNum + " >> " + player.getPlayer() + " >> " + event);
+            }
+        });
+        return player;
     }
 
 }

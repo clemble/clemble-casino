@@ -32,6 +32,11 @@ public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
                     if (initiatorService.initiate(initiation))
                         playerPresenceService.unsubscribe(participants, this);
                 }
+
+                @Override
+                public String toString(){
+                    return initiation.getSession().toString();
+                }
             });
         }
     }

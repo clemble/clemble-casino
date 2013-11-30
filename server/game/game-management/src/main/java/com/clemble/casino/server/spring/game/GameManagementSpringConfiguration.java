@@ -4,7 +4,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -45,14 +44,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
         GameManagementSpringConfiguration.Test.class })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("paymentTransactionService")
-    public PaymentTransactionServerService paymentTransactionService;
-
-    @Autowired
-    @Qualifier("playerStateManager")
-    public PlayerPresenceServerService playerStateManager;
-
     @Bean
     public GameIdGenerator gameIdGenerator() {
         return new UUIDGameIdGenerator();
@@ -80,9 +71,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public GameManagementAspect gameManagementAspectFactory(GameIdGenerator idGenerator,
-            GameInitiatorService initiatorService,
-            GameConstructionRepository constructionRepository){
+    public GameManagementAspect gameManagementAspectFactory(GameIdGenerator idGenerator, GameInitiatorService initiatorService,
+            GameConstructionRepository constructionRepository) {
         return new GameSequenceManagementAspect(idGenerator, initiatorService, constructionRepository);
     }
 
@@ -118,28 +108,13 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Profile(value = { UNIT_TEST })
     public static class Test {
 
-        @Autowired
-        public PlayerLockService playerLockService;
-
-        @Autowired
-        public PlayerPresenceServerService playerStateManager;
-
-        @Autowired
-        public PlayerNotificationService<Event> playerNotificationService;
-
-        @Autowired
-        public GameConstructionRepository constructionRepository;
-
-        @Autowired
-        public PlayerAccountServerService playerAccountService;
-
-        @Autowired
-        public GameIdGenerator gameIdGenerator;
-
         @Bean
-        public GameConstructionServerService gameConstructionService() {
+        @Autowired
+        public GameConstructionServerService gameConstructionService(GameIdGenerator gameIdGenerator, PlayerAccountServerService playerAccountService,
+                PlayerNotificationService<Event> playerNotificationService, GameConstructionRepository constructionRepository,
+                GameInitiatorService initiatorService, PlayerLockService playerLockService, PlayerPresenceServerService playerStateManager) {
             return new SimpleGameConstructionServerService(gameIdGenerator, playerAccountService, playerNotificationService, constructionRepository,
-                    initiatorService(), playerLockService, playerStateManager);
+                    initiatorService, playerLockService, playerStateManager);
         }
 
         @Bean
