@@ -8,7 +8,9 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameSessionAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
+@JsonTypeName("presence")
 public class PlayerPresence implements Event, PlayerAware, GameSessionAware, PresenceAware {
 
     /**
@@ -63,6 +65,45 @@ public class PlayerPresence implements Event, PlayerAware, GameSessionAware, Pre
         for (String player : players)
             playerPresences.add(playing(player, session));
         return playerPresences;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((playerId == null) ? 0 : playerId.hashCode());
+        result = prime * result + ((presence == null) ? 0 : presence.hashCode());
+        result = prime * result + ((session == null) ? 0 : session.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PlayerPresence other = (PlayerPresence) obj;
+        if (playerId == null) {
+            if (other.playerId != null)
+                return false;
+        } else if (!playerId.equals(other.playerId))
+            return false;
+        if (presence != other.presence)
+            return false;
+        if (session == null) {
+            if (other.session != null)
+                return false;
+        } else if (!session.equals(other.session))
+            return false;
+        return true;
+    }
+    
+    @Override
+    public String toString() {
+        return playerId + ":" + presence + ":" + session;
     }
 
 }

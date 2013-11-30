@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventListenerOperations;
-import com.clemble.casino.client.event.PresenceEventSelector;
+import com.clemble.casino.event.NotificationMapping;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.service.PlayerPresenceService;
 
@@ -41,7 +41,7 @@ public class PlayerPresenceTemplate implements PlayerPresenceOperations {
     public void subscribe(String player, EventListener listener) {
         if(player == null || listener == null)
             throw new IllegalArgumentException();
-        listenerOperations.subscribe(new PresenceEventSelector(player), listener);
+        listenerOperations.subscribe(player + NotificationMapping.PLAYER_PRESENCE_NOTIFICATION, listener);
     }
 
     @Override
