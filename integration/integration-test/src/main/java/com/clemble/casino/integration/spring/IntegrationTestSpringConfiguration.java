@@ -56,7 +56,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
-        @Value("#{systemProperties['clemble.casino.management.url'] ?: 'http://ec2-54-201-45-95.us-west-2.compute.amazonaws.com:8080/management/'}")
+        @Value("#{systemProperties['clemble.casino.management.url'] ?: 'http://54.201.45.95:8080/management/'}")
         public String baseUrl;
 
         @Bean

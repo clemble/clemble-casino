@@ -15,7 +15,7 @@ import com.clemble.casino.game.configuration.GameSpecificationOptions;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameRequest;
+import com.clemble.casino.game.construct.PlayerGameConstructionRequest;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
@@ -59,14 +59,14 @@ public class GameConstructionTemplate<T extends GameState> implements GameConstr
     }
 
     @Override
-    public GameConstruction construct(GameRequest gameRequest) {
+    public GameConstruction construct(PlayerGameConstructionRequest gameRequest) {
         return constructionService.construct(gameRequest);
     }
 
     @Override
     public GameConstruction constructAutomatch(GameSpecification specification) {
         // Step 1. Constructing automatic request
-        GameRequest automaticGameRequest = new AutomaticGameRequest(player, specification);
+        PlayerGameConstructionRequest automaticGameRequest = new AutomaticGameRequest(player, specification);
         // Step 2. Making actual construction
         return construct(automaticGameRequest);
     }
@@ -74,7 +74,7 @@ public class GameConstructionTemplate<T extends GameState> implements GameConstr
     @Override
     public GameConstruction constructAvailability(GameSpecification specification, Collection<String> participants) {
         // Step 1. Constructing availability request
-        GameRequest availabilityGameRequest = new AvailabilityGameRequest(player, specification, participants);
+        PlayerGameConstructionRequest availabilityGameRequest = new AvailabilityGameRequest(player, specification, participants);
         // Step 2. Making actual construction
         return construct(availabilityGameRequest);
     }

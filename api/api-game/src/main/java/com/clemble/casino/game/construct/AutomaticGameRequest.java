@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("automatic")
-public class AutomaticGameRequest extends GameRequest {
+public class AutomaticGameRequest extends PlayerGameConstructionRequest {
 
     /**
      * Generated 25/06/13

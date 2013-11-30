@@ -6,11 +6,11 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.game.specification.GameSpecificationAware;
 
-public class GameInitiation implements GameOpponentsAware, GameSpecificationAware, SessionAware {
+public class GameInitiation implements GameOpponentsAware, GameSpecificationAware, GameSessionAware {
 
     /**
      * Generated 10/07/13
@@ -26,8 +26,7 @@ public class GameInitiation implements GameOpponentsAware, GameSpecificationAwar
         this.session = construction.getSession();
 
         final Collection<String> accpectedParticipants = construction.fetchAcceptedParticipants();
-        this.participants = accpectedParticipants instanceof LinkedHashSet ? (LinkedHashSet<String>) accpectedParticipants : new LinkedHashSet<String>(
-                accpectedParticipants);
+        this.participants = accpectedParticipants instanceof LinkedHashSet ? (LinkedHashSet<String>) accpectedParticipants : new LinkedHashSet<String>(accpectedParticipants);
     }
 
     public GameInitiation(GameSessionKey session, Collection<String> participants, GameSpecification specification) {

@@ -3,7 +3,7 @@ package com.clemble.casino.error;
 import com.clemble.casino.error.ClembleCasinoErrorFormat.ClembleCasinoFailureDeserializer;
 import com.clemble.casino.error.ClembleCasinoErrorFormat.ClembleCasinoFailureSerializer;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize(using = ClembleCasinoFailureSerializer.class)
 @JsonDeserialize(using = ClembleCasinoFailureDeserializer.class)
-public class ClembleCasinoFailure implements PlayerAware, SessionAware {
+public class ClembleCasinoFailure implements PlayerAware, GameSessionAware {
 
     /**
      * Generated 12/06/13
@@ -24,11 +24,11 @@ public class ClembleCasinoFailure implements PlayerAware, SessionAware {
     final private GameSessionKey session;
 
     public ClembleCasinoFailure(final ClembleCasinoError error) {
-        this(error, PlayerAware.DEFAULT_PLAYER, SessionAware.DEFAULT_SESSION);
+        this(error, PlayerAware.DEFAULT_PLAYER, GameSessionAware.DEFAULT_SESSION);
     }
 
     public ClembleCasinoFailure(final ClembleCasinoError error, final String playerId) {
-        this(error, playerId, SessionAware.DEFAULT_SESSION);
+        this(error, playerId, GameSessionAware.DEFAULT_SESSION);
     }
 
     @JsonCreator

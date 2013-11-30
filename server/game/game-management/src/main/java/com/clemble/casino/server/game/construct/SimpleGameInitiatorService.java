@@ -7,8 +7,8 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.construct.GameConstructionRequest;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.construct.GameRequest;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 
@@ -30,7 +30,7 @@ public class SimpleGameInitiatorService implements GameInitiatorService {
 
     @Override
     public void initiate(GameConstruction construction) {
-        GameRequest request = construction.getRequest();
+        GameConstructionRequest request = construction.getRequest();
         if (request instanceof AutomaticGameRequest) {
             throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCriticalError);
         } else if (request instanceof AvailabilityGameRequest) {

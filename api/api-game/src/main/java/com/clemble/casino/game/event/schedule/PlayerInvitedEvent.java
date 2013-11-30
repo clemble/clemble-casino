@@ -2,7 +2,7 @@ package com.clemble.casino.game.event.schedule;
 
 import com.clemble.casino.event.ConstructionEvent;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.construct.GameRequest;
+import com.clemble.casino.game.construct.PlayerGameConstructionRequest;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -17,10 +17,10 @@ public class PlayerInvitedEvent implements ConstructionEvent {
 
     final private GameSessionKey session;
 
-    final private GameRequest gameRequest;
+    final private PlayerGameConstructionRequest gameRequest;
 
     @JsonCreator
-    public PlayerInvitedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("gameRequest") GameRequest request) {
+    public PlayerInvitedEvent(@JsonProperty("session") GameSessionKey session, @JsonProperty("gameRequest") PlayerGameConstructionRequest request) {
         this.session = session;
         this.gameRequest = request;
     }
@@ -30,7 +30,7 @@ public class PlayerInvitedEvent implements ConstructionEvent {
         return session;
     }
 
-    public GameRequest getGameRequest() {
+    public PlayerGameConstructionRequest getGameRequest() {
         return gameRequest;
     }
 

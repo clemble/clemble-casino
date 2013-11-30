@@ -5,9 +5,9 @@ import java.util.Collection;
 import org.springframework.scheduling.Trigger;
 
 import com.clemble.casino.event.ClientEvent;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 
-public interface GameEventTask extends Trigger, SessionAware {
+public interface GameEventTask extends Trigger, GameSessionAware {
 
     public Collection<ClientEvent> execute();
 

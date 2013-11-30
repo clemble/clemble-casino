@@ -5,11 +5,11 @@ import java.util.Collection;
 
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PlayerPresence implements Event, PlayerAware, SessionAware, PresenceAware {
+public class PlayerPresence implements Event, PlayerAware, GameSessionAware, PresenceAware {
 
     /**
      * Generated
@@ -43,11 +43,11 @@ public class PlayerPresence implements Event, PlayerAware, SessionAware, Presenc
     }
 
     public static PlayerPresence offline(String player) {
-        return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, Presence.offline);
+        return new PlayerPresence(player, GameSessionAware.DEFAULT_SESSION, Presence.offline);
     }
 
     public static PlayerPresence online(String player) {
-        return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, Presence.online);
+        return new PlayerPresence(player, GameSessionAware.DEFAULT_SESSION, Presence.online);
     }
 
     public static PlayerPresence playing(String player, GameSessionKey session) {
@@ -55,7 +55,7 @@ public class PlayerPresence implements Event, PlayerAware, SessionAware, Presenc
     }
 
     public static PlayerPresence create(String player, Presence presence) {
-        return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, presence);
+        return new PlayerPresence(player, GameSessionAware.DEFAULT_SESSION, presence);
     }
 
     public static Collection<PlayerPresence> playing(Collection<String> players, GameSessionKey session) {

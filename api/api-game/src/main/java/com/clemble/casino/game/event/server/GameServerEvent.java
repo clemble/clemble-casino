@@ -6,11 +6,11 @@ import com.clemble.casino.event.ServerEvent;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-abstract public class GameServerEvent<State extends GameState> implements SessionAware, ServerEvent, Serializable {
+abstract public class GameServerEvent<State extends GameState> implements GameSessionAware, ServerEvent, Serializable {
 
     /**
      * Generated 07/05/13

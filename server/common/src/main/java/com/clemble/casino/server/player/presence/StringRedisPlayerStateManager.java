@@ -27,7 +27,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.player.notification.PlayerNotificationListener;
@@ -60,18 +60,18 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         if (session == null)
             return null;
         if (session.length() == 1)
-            return SessionAware.DEFAULT_SESSION;
+            return GameSessionAware.DEFAULT_SESSION;
         String[] splittedSession = session.split(":");
-        return splittedSession[0].equals("") ? SessionAware.DEFAULT_SESSION : new GameSessionKey(Game.valueOf(splittedSession[0]), splittedSession[1]);
+        return splittedSession[0].equals("") ? GameSessionAware.DEFAULT_SESSION : new GameSessionKey(Game.valueOf(splittedSession[0]), splittedSession[1]);
     }
 
     @Override
     public PlayerPresence getPresence(String player) {
         GameSessionKey session = getActiveSession(player);
         if (session == null) {
-            return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, Presence.offline);
-        } else if (session.equals(SessionAware.DEFAULT_SESSION)) {
-            return new PlayerPresence(player, SessionAware.DEFAULT_SESSION, Presence.online);
+            return new PlayerPresence(player, GameSessionAware.DEFAULT_SESSION, Presence.offline);
+        } else if (session.equals(GameSessionAware.DEFAULT_SESSION)) {
+            return new PlayerPresence(player, GameSessionAware.DEFAULT_SESSION, Presence.online);
         }
         return new PlayerPresence(player, session, Presence.playing);
     }
@@ -89,7 +89,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         // Step 1. Fetch active session
         GameSessionKey activePlayerSession = getActiveSession(player);
         // Step 2. Only if player has session 0, it is available
-        return activePlayerSession != null && activePlayerSession.equals(SessionAware.DEFAULT_SESSION);
+        return activePlayerSession != null && activePlayerSession.equals(GameSessionAware.DEFAULT_SESSION);
     }
 
     @Override

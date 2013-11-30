@@ -16,7 +16,6 @@ import com.clemble.casino.server.game.action.GameSessionFactory;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.game.action.GameStateFactory;
 import com.clemble.casino.server.game.aspect.bet.GameBetAspectFactory;
-import com.clemble.casino.server.game.aspect.outcome.GameOutcomeAspectFactory;
 import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
@@ -67,19 +66,15 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Autowired
     @Qualifier("gameBetAspectFactory")
-    public GameBetAspectFactory gameBetAspectFactory;
+    public GameBetAspectFactory betAspectFactory;
 
     @Autowired
     @Qualifier("gameSecurityAspectFactory")
-    public GameSecurityAspectFactory gameSecurityAspectFactory;
-
-    @Autowired
-    @Qualifier("gameOutcomeAspectFactory")
-    public GameOutcomeAspectFactory gameOutcomeAspectFactory;
+    public GameSecurityAspectFactory securityAspectFactory;
 
     @Autowired
     @Qualifier("gameTimeAspectFactory")
-    public GameTimeAspectFactory gameTimeAspectFactory;
+    public GameTimeAspectFactory timeAspectFactory;
 
     @Autowired
     @Qualifier("playerAccountService")
@@ -102,8 +97,9 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     abstract public Game getGame();
 
     @Bean
-    public GameSessionFactory<State> gameSessionFactory() {
-        return new GameSessionFactory<State>(ticTacToeStateFactory(), gameSessionRepository);
+    @Autowired
+    public GameSessionFactory<State> gameSessionFactory(GameStateFactory<State> gameStateFactory) {
+        return new GameSessionFactory<State>(gameStateFactory, gameSessionRepository);
     }
 
     @Bean
@@ -123,9 +119,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    abstract public GameStateFactory<State> ticTacToeStateFactory();
-
-    @Bean
     @DependsOn("gameSpecificationRepository")
     public GameSpecificationConfigurationManager picPacPoeConfigurationManager() {
         return new GameSpecificationConfigurationManager(getGame(), gameSpecificationRepository);
@@ -133,12 +126,12 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public GameProcessorFactory<State> picPacPoeProcessorFactory() {
-        return new GameProcessorFactory<State>(gameSecurityAspectFactory, gameBetAspectFactory, gamePriceAspectFactory, gameTimeAspectFactory, gameOutcomeAspectFactory);
+        return new GameProcessorFactory<State>();
     }
 
     @Bean
-    public GameCacheService<State> picPacPoeCacheService() {
-        return new GameCacheService<State>(gameConstructionRepository, gameSessionRepository, picPacPoeProcessorFactory(), ticTacToeStateFactory());
+    public GameCacheService<State> picPacPoeCacheService(GameStateFactory<State> gameStateFactory) {
+        return new GameCacheService<State>(gameConstructionRepository, gameSessionRepository, picPacPoeProcessorFactory(), gameStateFactory);
     }
 
     @Bean

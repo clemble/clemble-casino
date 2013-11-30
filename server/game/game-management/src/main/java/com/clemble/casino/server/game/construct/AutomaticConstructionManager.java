@@ -36,7 +36,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
         public AutomaticGameConstruction(GameConstruction construction) {
             this.construction = construction;
             this.specification = construction.getRequest().getSpecification();
-            this.participants.add(construction.getRequest().getPlayer());
+            this.participants.add(((AutomaticGameRequest) construction.getRequest()).getPlayer());
         }
 
         public GameConstruction getConstruction() {

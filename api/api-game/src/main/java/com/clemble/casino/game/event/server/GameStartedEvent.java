@@ -3,13 +3,13 @@ package com.clemble.casino.game.event.server;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("started")
-public class GameStartedEvent<State extends GameState> extends GameServerEvent<State> implements SessionAware {
+public class GameStartedEvent<State extends GameState> extends GameServerEvent<State> implements GameSessionAware {
 
     /**
      * Generated

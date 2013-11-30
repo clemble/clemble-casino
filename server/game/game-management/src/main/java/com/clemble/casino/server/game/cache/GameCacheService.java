@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.cache;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameProcessor;
@@ -47,7 +47,7 @@ public class GameCacheService<State extends GameState> {
         this.sessionRepository = sessionRepository;
     }
 
-    public GameCache<State> get(SessionAware sessionAware) {
+    public GameCache<State> get(GameSessionAware sessionAware) {
         return gameCache.getUnchecked(sessionAware.getSession());
     }
 

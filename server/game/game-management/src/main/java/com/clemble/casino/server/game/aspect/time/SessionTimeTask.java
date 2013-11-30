@@ -8,12 +8,12 @@ import org.springframework.scheduling.TriggerContext;
 
 import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.server.game.action.GameEventTask;
 
-public class SessionTimeTask implements GameEventTask, SessionAware {
+public class SessionTimeTask implements GameEventTask, GameSessionAware {
 
     /**
      * Generated

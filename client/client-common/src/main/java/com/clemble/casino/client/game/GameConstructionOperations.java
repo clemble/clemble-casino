@@ -7,7 +7,7 @@ import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameAware;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameRequest;
+import com.clemble.casino.game.construct.PlayerGameConstructionRequest;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.specification.GameSpecification;
 
@@ -17,7 +17,7 @@ public interface GameConstructionOperations<T extends GameState> extends GameSpe
 
     public ClientEvent getResponce(final String session, final String player);
 
-    public GameConstruction construct(final GameRequest gameRequest);
+    public GameConstruction construct(final PlayerGameConstructionRequest gameRequest);
 
     public GameConstruction constructAutomatch(final GameSpecification specification);
 

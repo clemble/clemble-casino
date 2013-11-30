@@ -17,13 +17,13 @@ import org.hibernate.annotations.Type;
 import com.clemble.casino.VersionAware;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.event.ClientEvent;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 
 @Entity
 @Table(name = "GAME_SESSION_CONSTRUCTION")
-public class GameConstruction implements SessionAware, VersionAware {
+public class GameConstruction implements GameSessionAware, VersionAware {
 
     /**
      * Generated 10/07/13
@@ -35,7 +35,7 @@ public class GameConstruction implements SessionAware, VersionAware {
 
     @Type(type = "com.clemble.casino.game.construct.GameRequestHibernate")
     @Column(name = "REQUEST", length = 8192, nullable = false)
-    private GameRequest request;
+    private GameConstructionRequest request;
 
     @Column(name = "STATE", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -51,10 +51,9 @@ public class GameConstruction implements SessionAware, VersionAware {
     public GameConstruction() {
     }
 
-    public GameConstruction(GameRequest request) {
+    public GameConstruction(GameConstructionRequest request) {
         this.request = request;
         this.state = GameConstructionState.pending;
-        this.responses = new ActionLatch(((GameOpponentsAware) request).getParticipants(), "response");
     }
 
     @Override
@@ -67,11 +66,11 @@ public class GameConstruction implements SessionAware, VersionAware {
         return this;
     }
 
-    public GameRequest getRequest() {
+    public GameConstructionRequest getRequest() {
         return request;
     }
 
-    public GameConstruction setRequest(GameRequest gameRequest) {
+    public GameConstruction setRequest(GameConstructionRequest gameRequest) {
         this.request = gameRequest;
         return this;
     }

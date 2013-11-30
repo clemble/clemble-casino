@@ -19,20 +19,15 @@ import com.clemble.casino.server.spring.web.game.AbstractGameSpringConfiguration
 @Import({ GameManagementSpringConfiguration.class, WebCommonSpringConfiguration.class })
 public class IntegrationGameWebSpringConfiguration extends AbstractGameSpringConfiguration<NumberState> {
 
-    @Autowired
-    public GameConstructionRepository constructionRepository;
-
-    @Autowired
-    public GameProcessorFactory<NumberState> processorFactory;
-
     @Override
     public Game getGame() {
         return Game.num;
     }
 
     @Bean
-    @Override
-    public GameStateFactory<NumberState> ticTacToeStateFactory() {
+    @Autowired
+    public GameStateFactory<NumberState> ticTacToeStateFactory(GameConstructionRepository constructionRepository,
+            GameProcessorFactory<NumberState> processorFactory) {
         return new NumberStateFactory(constructionRepository, processorFactory);
     }
 

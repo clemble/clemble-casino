@@ -29,7 +29,7 @@ import com.clemble.casino.game.specification.GameSpecificationAware;
 
 @Entity
 @Table(name = "GAME_SESSION")
-public class GameSession<State extends GameState> implements GameSpecificationAware, SessionAware, VersionAware, Serializable {
+public class GameSession<State extends GameState> implements GameSpecificationAware, GameSessionAware, VersionAware, Serializable {
 
     /**
      * Generated 16/02/13

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("scheduled")
-public class ScheduledGameRequest extends GameRequest {
+public class ScheduledGameRequest extends PlayerGameConstructionRequest {
 
     /**
      * Generated 10/06/13
@@ -27,7 +27,7 @@ public class ScheduledGameRequest extends GameRequest {
             @JsonProperty("participants") Collection<String> participants,
             @JsonProperty("declineBehavior") GameDeclineBehavior declineBehavior,
             @JsonProperty("startTime") Date startTime) {
-        super(player, specification, participants);
+        super(player, specification);
         this.declineBehavior = declineBehavior != null ? declineBehavior : GameDeclineBehavior.invalidate;
         this.startTime = startTime;
     }

@@ -10,7 +10,7 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameRequest;
+import com.clemble.casino.game.construct.PlayerGameConstructionRequest;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.payment.money.Money;
@@ -39,7 +39,7 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
     }
 
     @Transactional
-    final public GameConstruction construct(GameRequest request) {
+    final public GameConstruction construct(PlayerGameConstructionRequest request) {
         // Step 1. Sanity check
         if (request == null || request.getSpecification() == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidRequest);

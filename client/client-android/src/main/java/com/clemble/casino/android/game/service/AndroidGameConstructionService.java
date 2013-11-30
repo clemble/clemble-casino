@@ -8,7 +8,7 @@ import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameRequest;
+import com.clemble.casino.game.construct.PlayerGameConstructionRequest;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.web.game.GameWebMapping;
@@ -23,7 +23,7 @@ public class AndroidGameConstructionService<T extends GameState> extends Abstrac
     }
 
     @Override
-    public GameConstruction construct(GameRequest gameRequest) {
+    public GameConstruction construct(PlayerGameConstructionRequest gameRequest) {
         return restTemplate
                 .postForEntity(buildUriWith(GameWebMapping.GAME_SESSIONS), gameRequest, GameConstruction.class)
                 .getBody();

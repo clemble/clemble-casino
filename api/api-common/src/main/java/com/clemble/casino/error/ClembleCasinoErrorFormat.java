@@ -5,7 +5,7 @@ import java.util.Date;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -86,7 +86,7 @@ public class ClembleCasinoErrorFormat {
                 jsonGenerator.writeNumber(failure.getPlayer());
             }
 
-            if (failure.getSession() != SessionAware.DEFAULT_SESSION) {
+            if (failure.getSession() != GameSessionAware.DEFAULT_SESSION) {
                 jsonGenerator.writeFieldName("session");
                 jsonGenerator.writeStartObject();
                 jsonGenerator.writeFieldName("game");
@@ -108,7 +108,7 @@ public class ClembleCasinoErrorFormat {
             String code = null;
             JsonToken token = null;
             String player = PlayerAware.DEFAULT_PLAYER;
-            GameSessionKey session = SessionAware.DEFAULT_SESSION;
+            GameSessionKey session = GameSessionAware.DEFAULT_SESSION;
             do {
                 if (jp.getCurrentName() == "code") {
                     code = jp.getValueAsString();

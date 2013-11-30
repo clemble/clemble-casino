@@ -7,14 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "PLAYER_SCHEDULED_EVENT")
-public class PlayerScheduleEvent implements PlayerAware, SessionAware, Comparable<PlayerScheduleEvent> {
+public class PlayerScheduleEvent implements PlayerAware, GameSessionAware, Comparable<PlayerScheduleEvent> {
 
     /**
      * Generated 19/06/13

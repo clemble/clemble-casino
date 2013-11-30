@@ -16,8 +16,10 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.id.UUIDGameIdGenerator;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
+import com.clemble.casino.server.game.aspect.GameManagementAspect;
 import com.clemble.casino.server.game.aspect.bet.GameBetAspectFactory;
-import com.clemble.casino.server.game.aspect.outcome.GameOutcomeAspectFactory;
+import com.clemble.casino.server.game.aspect.management.GameSequenceManagementAspect;
+import com.clemble.casino.server.game.aspect.outcome.GameOutcomeAspect;
 import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
@@ -72,8 +74,16 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GameOutcomeAspectFactory gameOutcomeAspectFactory() {
-        return new GameOutcomeAspectFactory(paymentTransactionService, playerStateManager);
+    public GameOutcomeAspect gameOutcomeAspectFactory(PlayerPresenceServerService playerStateManager, PaymentTransactionServerService paymentTransactionService) {
+        return new GameOutcomeAspect(playerStateManager, paymentTransactionService);
+    }
+
+    @Bean
+    @Autowired
+    public GameManagementAspect gameManagementAspectFactory(GameIdGenerator idGenerator,
+            GameInitiatorService initiatorService,
+            GameConstructionRepository constructionRepository){
+        return new GameSequenceManagementAspect(idGenerator, initiatorService, constructionRepository);
     }
 
     @Bean

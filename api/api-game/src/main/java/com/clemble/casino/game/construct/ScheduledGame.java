@@ -6,11 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.SessionAware;
+import com.clemble.casino.game.GameSessionAware;
 
 @Entity
 @Table(name = "GAME_SCHEDULE")
-public class ScheduledGame implements SessionAware {
+public class ScheduledGame implements GameSessionAware {
 
     /**
      * Generated 10/07/13
