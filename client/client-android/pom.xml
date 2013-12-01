@@ -22,6 +22,11 @@
             <artifactId>client-common</artifactId>
         </dependency>
         <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.android</groupId>
             <artifactId>spring-android-rest-template</artifactId>
         </dependency>

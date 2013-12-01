@@ -1,6 +1,7 @@
 package com.clemble.casino.android;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -60,7 +61,7 @@ public class AndroidCasinoRegistrationTemplate implements ClembleCasinoRegistrat
 
     private ClembleCasinoTemplate casinoTemplate(PlayerToken token, ClembleConsumerDetails consumerDetails) {
         String consumerKey = token.getConsumerKey();
-        String consumerSecret = Base64.encodeBase64String(consumerDetails.getSignatureSecret().getPrivateKey().getEncoded());
+        String consumerSecret = new String(Base64.encodeBase64(consumerDetails.getSignatureSecret().getPrivateKey().getEncoded()), Charset.forName("UTF-8"));
         String accessToken = token.getValue();
         String accessTokenSecret = String.valueOf(token.getSecretKey().getEncoded());
         String player = token.getPlayer();

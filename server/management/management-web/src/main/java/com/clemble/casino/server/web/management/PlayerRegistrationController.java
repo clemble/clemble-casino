@@ -32,7 +32,6 @@ import com.clemble.casino.web.mapping.WebMapping;
 @Controller
 public class PlayerRegistrationController implements PlayerRegistrationService {
 
-    
     final private PlayerIdGenerator playerIdentifierGenerator;
     final private PlayerTokenFactory playerTokenFactory;
     final private PlayerCredentialRepository playerCredentialRepository;

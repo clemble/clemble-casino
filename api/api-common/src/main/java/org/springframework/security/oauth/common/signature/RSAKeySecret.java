@@ -170,7 +170,7 @@ public class RSAKeySecret implements SignatureSecret {
             return null;
         }
 
-        return Base64.decodeBase64(value);
+        return Base64.decodeBase64(value.getBytes());
     }
 
     /**
