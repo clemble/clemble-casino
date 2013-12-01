@@ -17,14 +17,13 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.service.PaymentTransactionService;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
 @Controller
-public class PaymentTransactionController implements PaymentTransactionService, PaymentTransactionServerService {
+public class PaymentTransactionController implements PaymentTransactionServerService {
 
     final private PaymentTransactionServerService paymentTransactionService;
     final private PaymentTransactionRepository paymentTransactionRepository;
@@ -58,7 +57,7 @@ public class PaymentTransactionController implements PaymentTransactionService, 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PaymentTransaction> listPlayerTransaction(@PathVariable("player") String player) {
+    public @ResponseBody List<PaymentTransaction> getPaymentTransactions(@PathVariable("player") String player) {
         // Step 1. Sending transactions
         return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
     }

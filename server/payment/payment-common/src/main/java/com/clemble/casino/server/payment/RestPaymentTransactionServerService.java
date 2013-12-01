@@ -2,6 +2,8 @@ package com.clemble.casino.server.payment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.List;
+
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.ServerRegistry;
@@ -26,6 +28,16 @@ public class RestPaymentTransactionServerService implements PaymentTransactionSe
         // Step 2. Generating url for payment transaction processing
         String url = paymentServerRegistry.findByIdAndType(transactionKey.getTransaction(), transactionKey.getSource()) + PaymentWebMapping.PAYMENT_TRANSACTIONS;
         return restTemplate.postForEntity(url, paymentTransaction, PaymentTransaction.class).getBody();
+    }
+
+    @Override
+    public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<PaymentTransaction> getPaymentTransactions(String player) {
+        throw new UnsupportedOperationException();
     }
 
 }

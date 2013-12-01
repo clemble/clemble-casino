@@ -31,7 +31,7 @@ public class AndroidPaymentTransactionService extends AbstractClembleCasinoOpera
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<PaymentTransaction> listPlayerTransaction(String player) {
+    public List<PaymentTransaction> getPaymentTransactions(String player) {
         return restTemplate
             .getForEntity(buildUriWith(PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, player), List.class)
             .getBody();
@@ -42,11 +42,6 @@ public class AndroidPaymentTransactionService extends AbstractClembleCasinoOpera
         return restTemplate
             .getForEntity(buildUriWith(PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, player), PlayerAccount.class)
             .getBody();
-    }
-
-    @Override
-    public PaymentTransaction process(PaymentTransaction paymentTransaction) {
-        throw new UnsupportedOperationException();
     }
 
 }

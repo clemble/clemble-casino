@@ -11,9 +11,10 @@ import com.clemble.casino.configuration.ResourceLocations;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.service.PaymentService;
+import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
-public class IntegrationPaymentService implements PaymentService {
+public class IntegrationPaymentService implements PaymentService, PaymentTransactionServerService {
 
     final private RestTemplate restTemplate;
     final private ClembleCasinoOperations player;
@@ -45,7 +46,7 @@ public class IntegrationPaymentService implements PaymentService {
 
     @Override
     @SuppressWarnings({ "unchecked" })
-    public List<PaymentTransaction> listPlayerTransaction(String playerId) {
+    public List<PaymentTransaction> getPaymentTransactions(String playerId) {
         // Step 1. Requesting account associated with the playerId
         return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, HttpMethod.GET, null, List.class , playerId).getBody();
     }

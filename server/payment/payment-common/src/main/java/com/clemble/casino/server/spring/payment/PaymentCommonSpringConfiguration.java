@@ -1,6 +1,7 @@
 package com.clemble.casino.server.spring.payment;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -89,6 +90,16 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
                 @Override
                 public PaymentTransaction process(PaymentTransaction paymentTransaction) {
                     return paymentTransaction;
+                }
+
+                @Override
+                public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
+                    return null;
+                }
+
+                @Override
+                public List<PaymentTransaction> getPaymentTransactions(String player) {
+                    return null;
                 }
             };
         }

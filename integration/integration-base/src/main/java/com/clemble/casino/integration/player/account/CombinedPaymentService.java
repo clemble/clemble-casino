@@ -31,13 +31,8 @@ public class CombinedPaymentService implements PaymentService {
     }
 
     @Override
-    public List<PaymentTransaction> listPlayerTransaction(String player) {
-        return paymentTransactionService.listPlayerTransaction(player);
-    }
-
-    @Override
-    public PaymentTransaction process(PaymentTransaction paymentTransaction) {
-        return paymentTransactionService.process(paymentTransaction);
+    public List<PaymentTransaction> getPaymentTransactions(String player) {
+        return paymentTransactionService.getPaymentTransactions(player);
     }
 
 }

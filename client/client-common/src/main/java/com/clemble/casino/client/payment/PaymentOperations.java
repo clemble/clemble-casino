@@ -11,10 +11,10 @@ public interface PaymentOperations extends PlayerAware {
 
     public PlayerAccount getAccount();
 
+    public List<PaymentTransaction> getPaymentTransactions();
+
     public PaymentTransaction getPaymentTransaction(MoneySource source, String transactionId);
 
     public PaymentTransaction getPaymentTransaction(String source, String transactionId);
-
-    public List<PaymentTransaction> listPlayerTransaction();
 
 }

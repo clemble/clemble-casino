@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
+import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
@@ -63,5 +65,16 @@ public class PaymentTransactionServerServiceImpl implements PaymentTransactionSe
         // Step 3. Saving account transaction
         return paymentTransactionRepository.save(paymentTransaction);
 
+    }
+
+    @Override
+    public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
+        PaymentTransactionKey transactionKey = new PaymentTransactionKey(source, transactionId);
+        return paymentTransactionRepository.findOne(transactionKey);
+    }
+
+    @Override
+    public List<PaymentTransaction> getPaymentTransactions(String player) {
+        return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
     }
 }

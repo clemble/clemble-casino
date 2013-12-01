@@ -37,8 +37,8 @@ public class PaymentTemplate implements PaymentOperations {
     }
 
     @Override
-    public List<PaymentTransaction> listPlayerTransaction() {
-        return paymentTransactionService.listPlayerTransaction(player);
+    public List<PaymentTransaction> getPaymentTransactions() {
+        return paymentTransactionService.getPaymentTransactions(player);
     }
 
     @Override

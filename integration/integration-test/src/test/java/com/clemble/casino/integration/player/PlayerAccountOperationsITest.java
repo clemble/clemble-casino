@@ -74,7 +74,7 @@ public class PlayerAccountOperationsITest {
     public void testTransactionsListAccess() {
         // Step 1. Checking player has no transactions to access
         ClembleCasinoOperations player = playerOperations.createPlayer();
-        List<PaymentTransaction> transactions = player.paymentOperations().listPlayerTransaction();
+        List<PaymentTransaction> transactions = player.paymentOperations().getPaymentTransactions();
         Assert.assertFalse(transactions.isEmpty());
         // Step 2. Checking no other player can't access the transactions
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();

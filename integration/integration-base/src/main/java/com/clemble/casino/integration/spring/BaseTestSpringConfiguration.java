@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -36,6 +37,7 @@ import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.service.PlayerSessionService;
+import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -97,13 +99,13 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
 
         @Bean
         @Autowired
-        public PaymentService paymentService(PaymentTransactionService transactionService, PlayerAccountService accountService) {
+        public PaymentService paymentService(@Qualifier("paymentTransactionController") PaymentTransactionService transactionService, PlayerAccountService accountService) {
             return new CombinedPaymentService(transactionService, accountService);
         }
 
         @Bean
         @Autowired
-        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionService paymentTransactionController) {
+        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionServerService paymentTransactionController) {
             return new WebPaymentTransactionOperations(paymentTransactionController);
         }
 
