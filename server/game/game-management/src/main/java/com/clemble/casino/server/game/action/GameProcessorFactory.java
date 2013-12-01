@@ -15,11 +15,11 @@ import com.clemble.casino.game.event.server.GameServerEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 import com.clemble.casino.server.game.aspect.GameManagementAspect;
-import com.clemble.casino.server.game.aspect.management.GameSequenceManagementAspect;
+import com.clemble.casino.server.game.aspect.GameManagementAspecteFactory;
 
 public class GameProcessorFactory<State extends GameState> implements BeanPostProcessor {
 
-    private Collection<GameManagementAspect> managementAspects = new HashSet<>();
+    private Collection<GameManagementAspecteFactory> managementAspects = new HashSet<>();
     private Collection<GameAspectFactory> aspectFactories = new HashSet<>();
 
     public GameProcessor<State> create(GameInitiation initiation) {
@@ -27,17 +27,20 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
         for (GameAspectFactory aspectFactory : aspectFactories) {
             gameAspects.add(aspectFactory.<State> construct(initiation));
         }
-        return new AggregatedGameProcessor<State>(gameAspects, managementAspects);
+        Collection<GameManagementAspect> gameManagementAspects = new ArrayList<>(managementAspects.size());
+        for(GameManagementAspecteFactory managementAspecteFactory: managementAspects)
+            gameManagementAspects.add(managementAspecteFactory.construct(initiation));
+        return new AggregatedGameProcessor<State>(gameAspects, gameManagementAspects);
     }
 
     public static class AggregatedGameProcessor<State extends GameState> implements GameProcessor<State> {
-        final private GameSequenceManagementAspect[] managementListenerArray;
+        final private GameManagementAspect[] managementListenerArray;
         final private GameAspect<State>[] listenerArray;
 
         @SuppressWarnings("unchecked")
         public AggregatedGameProcessor(Collection<GameAspect<State>> listeners, Collection<GameManagementAspect> managerListeners) {
             this.listenerArray = listeners.toArray(new GameAspect[0]);
-            this.managementListenerArray = managerListeners.toArray(new GameSequenceManagementAspect[0]);
+            this.managementListenerArray = managerListeners.toArray(new GameManagementAspect[0]);
         }
 
         @Override
@@ -74,8 +77,8 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof GameAspectFactory)
             aspectFactories.add((GameAspectFactory) bean);
-        if (bean instanceof GameSequenceManagementAspect)
-            managementAspects.add((GameSequenceManagementAspect) bean);
+        if (bean instanceof GameManagementAspecteFactory)
+            managementAspects.add((GameManagementAspecteFactory) bean);
         return bean;
     }
 

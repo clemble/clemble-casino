@@ -26,7 +26,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Signature secret for RSA.
@@ -170,7 +170,7 @@ public class RSAKeySecret implements SignatureSecret {
             return null;
         }
 
-        return DatatypeConverter.parseBase64Binary(value);
+        return Base64.decodeBase64(value);
     }
 
     /**

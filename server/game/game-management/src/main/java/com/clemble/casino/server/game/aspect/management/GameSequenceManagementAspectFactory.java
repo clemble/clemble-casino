@@ -13,16 +13,17 @@ import com.clemble.casino.game.construct.ManagerGameConstructionRequest;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.server.game.aspect.GameManagementAspect;
+import com.clemble.casino.server.game.aspect.GameManagementAspecteFactory;
 import com.clemble.casino.server.game.construct.GameInitiatorService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 
-public class  GameSequenceManagementAspect implements GameManagementAspect {
+public class  GameSequenceManagementAspectFactory implements GameManagementAspecteFactory {
 
     final private GameIdGenerator idGenerator;
     final private GameConstructionRepository constructionRepository;
     final private GameInitiatorService initiatorService;
 
-    public GameSequenceManagementAspect(GameIdGenerator idGenerator,
+    public GameSequenceManagementAspectFactory(GameIdGenerator idGenerator,
             GameInitiatorService initiatorService,
             GameConstructionRepository constructionRepository) {
         this.initiatorService = checkNotNull(initiatorService);
@@ -30,8 +31,7 @@ public class  GameSequenceManagementAspect implements GameManagementAspect {
         this.constructionRepository = checkNotNull(constructionRepository);
     }
 
-    @Override
-    public <State extends GameState> void afterGame(GameSession<State> session) {
+    public <State extends GameState> void startNew(GameSession<State> session) {
         GameSessionKey sessionKey = session.getSession();
         Collection<String> participants = session.getPlayers();
         GameSpecification specification = session.getSpecification();
@@ -43,6 +43,16 @@ public class  GameSequenceManagementAspect implements GameManagementAspect {
         // Step 3. Initiating new game
         GameInitiation initiation = new GameInitiation(construction.getSession(), participants, specification);
         initiatorService.initiate(initiation);
+    }
+
+    @Override
+    public GameManagementAspect construct(GameInitiation initiation) {
+        return new GameManagementAspect() {
+            @Override
+            public <State extends GameState> void afterGame(GameSession<State> session) {
+                startNew(session);
+            }
+        };
     }
 
 }

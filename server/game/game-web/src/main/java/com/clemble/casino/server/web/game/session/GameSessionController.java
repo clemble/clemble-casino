@@ -32,7 +32,7 @@ public class GameSessionController<State extends GameState> {
 
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameSession<State> get(@RequestHeader("playerId") String playerId, @PathVariable("sessionId") String session) {
+    public @ResponseBody GameSession<State> get(@RequestHeader("playerId") String playerId, @PathVariable("session") String session) {
         return sessionRepository.findOne(new GameSessionKey(game, session));
     }
 }
