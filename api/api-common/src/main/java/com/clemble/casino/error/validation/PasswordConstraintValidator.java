@@ -12,7 +12,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<Password
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return !value.equals("123456");
+        return value != null && !value.equals("123456");
     }
 
 }

@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,13 +16,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
+import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
@@ -39,8 +42,11 @@ public class PlayerAccountOperationsITest {
     @Autowired
     public GameScenarios gameOperations;
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Test
-    public void testInitialAmount(){
+    public void testInitialAmount() {
         // Step 1. Creating random player A
         ClembleCasinoOperations A = playerOperations.createPlayer();
         // Step 2. Fetching account and precondition
@@ -52,20 +58,22 @@ public class PlayerAccountOperationsITest {
         PaymentTransaction transaction = A.paymentOperations().getPaymentTransaction(MoneySource.registration, A.getPlayer());
         Set<PaymentOperation> paymentOperations = transaction.getPaymentOperations();
         Money transactionAmmount = paymentOperations.iterator().next().getAmount();
-        
+
         assertEquals(transactionAmmount, accountA.getMoney(Currency.FakeMoney));
     }
 
-    // TODO restore
+    @Test
     @Ignore
-    @Test(expected = ClembleCasinoException.class)
+    // TODO restore
     public void runingOutOfMoney() {
         ClembleCasinoOperations A = playerOperations.createPlayer();
         ClembleCasinoOperations B = playerOperations.createPlayer();
 
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GameConstructionInsufficientMoney));
+
         do {
-            GameSessionPlayer<GameState> AvsB = gameOperations.<GameState>construct(Game.num, A, B.getPlayer());
-            GameSessionPlayer<GameState> BvsA = gameOperations.<GameState>accept(AvsB.getSession(), B);
+            GameSessionPlayer<GameState> AvsB = gameOperations.<GameState> construct(Game.num, A, B.getPlayer());
+            GameSessionPlayer<GameState> BvsA = gameOperations.<GameState> accept(AvsB.getSession(), B);
 
             AvsB.waitForStart();
             BvsA.waitForStart();

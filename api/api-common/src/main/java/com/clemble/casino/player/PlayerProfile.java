@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-public class PlayerProfile implements PlayerAware, CountryAware, VersionAware {
+abstract public class PlayerProfile implements PlayerAware, CountryAware, VersionAware {
 
     /**
      * Generated 25/01/13

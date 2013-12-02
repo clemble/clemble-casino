@@ -12,7 +12,11 @@
             <groupId>com.clemble.casino</groupId>
             <artifactId>api-management</artifactId>
         </dependency>
-        
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.clemble.casino.client</groupId>
             <artifactId>client-common</artifactId>

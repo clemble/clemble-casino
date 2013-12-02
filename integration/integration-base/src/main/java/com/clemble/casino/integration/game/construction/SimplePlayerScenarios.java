@@ -79,4 +79,19 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         return player;
     }
 
+    @Override
+    public ClembleCasinoOperations login(PlayerCredential playerCredentials) {
+        return registrationOperations.login(playerCredentials);
+    }
+
+    @Override
+    public ClembleCasinoOperations createPlayer(PlayerCredential playerCredential, PlayerProfile playerProfile) {
+        return registrationOperations.createPlayer(playerCredential, playerProfile);
+    }
+
+    @Override
+    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
+        return registrationOperations.createSocialPlayer(playerCredential, socialConnectionData);
+    }
+
 }

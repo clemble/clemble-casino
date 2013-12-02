@@ -2,7 +2,6 @@ package com.clemble.casino.configuration;
 
 import com.clemble.casino.DNSBasedServerRegistry;
 import com.clemble.casino.ServerRegistry;
-import com.clemble.casino.game.Game;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

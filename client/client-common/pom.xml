@@ -8,6 +8,10 @@
     </parent>
     <artifactId>client-common</artifactId>
     <dependencies>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
         <!-- Abstraction of RESTTemplate -->
         <dependency>
             <groupId>org.springframework.android</groupId>

@@ -38,21 +38,16 @@ public class AndroidPlayerRegistrationService implements PlayerRegistrationServi
 
     @Override
     public PlayerToken login(PlayerLoginRequest playerLoginRequest) {
-        ClembleCasinoConstants.VALIDATION_SERVICE.validate(playerLoginRequest.getPlayerCredential());
         return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN, playerLoginRequest, PlayerToken.class).getBody();
     }
 
     @Override
     public PlayerToken createPlayer(PlayerRegistrationRequest registrationRequest) {
-        ClembleCasinoConstants.VALIDATION_SERVICE.validate(registrationRequest.getPlayerCredential());
-        ClembleCasinoConstants.VALIDATION_SERVICE.validate(registrationRequest.getPlayerProfile());
         return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION, registrationRequest, PlayerToken.class).getBody();
     }
 
     @Override
     public PlayerToken createSocialPlayer(PlayerSocialRegistrationRequest socialConnectionData) {
-        ClembleCasinoConstants.VALIDATION_SERVICE.validate(socialConnectionData.getSocialConnectionData());
-        ClembleCasinoConstants.VALIDATION_SERVICE.validate(socialConnectionData.getPlayerCredential());
         return restTemplate.postForEntity(managementUrl + ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, socialConnectionData, PlayerToken.class).getBody();
     }
 

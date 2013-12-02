@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -30,6 +32,8 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
         }
 
     });
+    
+    final private static Logger LOG = LoggerFactory.getLogger(RabbitPlayerNotificationService.class);
 
     final private String postfix;
     final private MessageConverter messageConverter;
@@ -63,6 +67,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
 
     @Override
     public boolean notify(String player, T event) {
+        LOG.trace("{} with {}", player, event);
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
         // Step 2. Notifying specific player
@@ -74,7 +79,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
             RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(serverRegistry.findById(player));
             rabbitTemplate.send(String.valueOf(player) + postfix, message);
         } catch (Throwable e) {
-            e.printStackTrace();
+            LOG.trace("Notification of {} failed", player, message);
             return false;
         }
         return true;
