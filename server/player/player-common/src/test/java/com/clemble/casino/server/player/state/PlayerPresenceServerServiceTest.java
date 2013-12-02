@@ -26,6 +26,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.player.notification.PlayerNotificationListener;
+import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
@@ -39,6 +40,9 @@ public class PlayerPresenceServerServiceTest {
 
     @Autowired
     public PlayerPresenceServerService playerPresenceService;
+
+    @Autowired
+    public PlayerPresenceListenerService presenceListenerService;
 
     @Test
     public void testMarkAvailable() {
@@ -116,7 +120,7 @@ public class PlayerPresenceServerServiceTest {
         final AtomicInteger numLocksReceived = new AtomicInteger(0);
 
         final PlayerListener playerListener = new PlayerListener(1);
-        playerPresenceService.subscribe(genericPlayer, playerListener);
+        presenceListenerService.subscribe(genericPlayer, playerListener);
 
         try {
             Thread.sleep(10);
@@ -171,7 +175,7 @@ public class PlayerPresenceServerServiceTest {
         String player = ObjectGenerator.generate(String.class);
 
         PlayerListener playerListener = new PlayerListener(1);
-        playerPresenceService.subscribe(player, playerListener);
+        presenceListenerService.subscribe(player, playerListener);
         // There is a timeout between listen
         try {
             Thread.sleep(10);
@@ -193,7 +197,7 @@ public class PlayerPresenceServerServiceTest {
         String player = ObjectGenerator.generate(String.class);
 
         PlayerListener playerListener = new PlayerListener(3);
-        playerPresenceService.subscribe(player, playerListener);
+        presenceListenerService.subscribe(player, playerListener);
         // There is a timeout between listen
 
         Thread.sleep(50);

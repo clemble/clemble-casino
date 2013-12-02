@@ -6,14 +6,14 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.player.notification.PlayerNotificationListener;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
 
 public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
 
-    final private PlayerPresenceServerService playerPresenceService;
+    final private PlayerPresenceListenerService playerPresenceService;
     final private GameInitiatorService initiatorService;
 
-    public AvailabilityGameInitiatorManager(final PlayerPresenceServerService playerPresenceService, final GameInitiatorService initiatorService) {
+    public AvailabilityGameInitiatorManager(final PlayerPresenceListenerService playerPresenceService, final GameInitiatorService initiatorService) {
         this.playerPresenceService = playerPresenceService;
         this.initiatorService = initiatorService;
     }

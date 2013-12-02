@@ -4,10 +4,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import com.clemble.casino.server.player.notification.PlayerNotificationListener;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
-import com.clemble.casino.player.Presence;
 
 public interface PlayerPresenceServerService {
 
@@ -26,13 +24,5 @@ public interface PlayerPresenceServerService {
     public boolean markPlaying(String player, GameSessionKey session);
 
     public boolean markPlaying(Collection<String> players, GameSessionKey session);
-
-    public void subscribe(String playerId, PlayerNotificationListener<Presence> messageListener);
-
-    public void subscribe(Collection<String> players, PlayerNotificationListener<Presence> messageListener);
-
-    public void unsubscribe(String player, PlayerNotificationListener<Presence> messageListener);
-
-    public void unsubscribe(Collection<String> players, PlayerNotificationListener<Presence> playerStateListener);
 
 }

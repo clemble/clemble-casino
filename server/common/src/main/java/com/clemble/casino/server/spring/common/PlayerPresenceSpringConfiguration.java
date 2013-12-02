@@ -11,11 +11,13 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.StringRedisPlayerPresenceListenerService;
 import com.clemble.casino.server.player.presence.StringRedisPlayerStateManager;
 
 @Configuration
-@Import({RabbitSpringConfiguration.class})
+@Import({ RabbitSpringConfiguration.class })
 public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
 
     @Autowired
@@ -23,8 +25,20 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public PlayerPresenceServerService playerStateManager(RedisConnectionFactory redisConnectionFactory, RedisMessageListenerContainer playerStateListenerContainer) {
-        return new StringRedisPlayerStateManager(new StringRedisTemplate(redisConnectionFactory), playerStateListenerContainer, playerPresenceNotificationService);
+    public StringRedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        return new StringRedisTemplate(redisConnectionFactory);
+    }
+
+    @Bean
+    @Autowired
+    public PlayerPresenceServerService playerStateManager(StringRedisTemplate redisTemplate, RedisMessageListenerContainer playerStateListenerContainer) {
+        return new StringRedisPlayerStateManager(redisTemplate, playerStateListenerContainer, playerPresenceNotificationService);
+    }
+
+    @Bean
+    @Autowired
+    public PlayerPresenceListenerService presenceListenerService(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer) {
+        return new StringRedisPlayerPresenceListenerService(redisTemplate, listenerContainer);
     }
 
     @Bean
@@ -36,7 +50,7 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory(){
+    public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory();
     }
 

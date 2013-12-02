@@ -10,20 +10,22 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionRequest;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
+import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 
 public class SimpleGameInitiatorService implements GameInitiatorService {
 
-    final private PlayerPresenceServerService playerStateManager;
+    final private PlayerPresenceServerService presenceService;
 
     final private GameSessionProcessor<?> processor;
 
     final private AvailabilityGameInitiatorManager availabilityGameInitiatorManager;
 
     public SimpleGameInitiatorService(final GameSessionProcessor<?> stateFactory,
-            final PlayerPresenceServerService playerPresenceService) {
+            final PlayerPresenceServerService presenceService,
+            final PlayerPresenceListenerService playerPresenceService) {
         this.processor = checkNotNull(stateFactory);
-        this.playerStateManager = checkNotNull(playerPresenceService);
+        this.presenceService = checkNotNull(presenceService);
 
         this.availabilityGameInitiatorManager = new AvailabilityGameInitiatorManager(checkNotNull(playerPresenceService), this);
     }
@@ -42,7 +44,7 @@ public class SimpleGameInitiatorService implements GameInitiatorService {
 
     @Override
     public boolean initiate(GameInitiation initiation) {
-        if (playerStateManager.markPlaying(initiation.getParticipants(), initiation.getSession())) {
+        if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSession())) {
             processor.start(initiation);
             return true;
         }
