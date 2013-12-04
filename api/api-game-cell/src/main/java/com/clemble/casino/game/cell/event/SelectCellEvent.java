@@ -1,4 +1,4 @@
-package com.clemble.casino.game.event.client.generic;
+package com.clemble.casino.game.cell.event;
 
 import com.clemble.casino.game.cell.Cell;
 import com.clemble.casino.game.event.client.GameClientEvent;

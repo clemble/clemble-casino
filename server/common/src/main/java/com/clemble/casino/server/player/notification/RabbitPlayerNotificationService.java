@@ -47,6 +47,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
 
     @Override
     public boolean notify(final Collection<String> players, final T event) {
+        LOG.trace("Sending {} to {}", event, players);
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
         // Step 2. Notifying specific player
@@ -67,7 +68,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
 
     @Override
     public boolean notify(String player, T event) {
-        LOG.trace("{} with {}", player, event);
+        LOG.trace("Sending {} to {}", event, player);
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
         // Step 2. Notifying specific player
@@ -79,7 +80,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
             RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(serverRegistry.findById(player));
             rabbitTemplate.send(String.valueOf(player) + postfix, message);
         } catch (Throwable e) {
-            LOG.trace("Notification of {} failed", player, message);
+            LOG.trace("Failed notification of {} with {}", player, message);
             return false;
         }
         return true;

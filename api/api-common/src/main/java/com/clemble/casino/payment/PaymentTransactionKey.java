@@ -38,7 +38,7 @@ public class PaymentTransactionKey implements Serializable {
     public PaymentTransactionKey(String source, String transactionId) {
         this(MoneySource.valueOf(source), transactionId);
     }
-    
+
     public PaymentTransactionKey(MoneySource source, String transactionId) {
         this.source = source;
         this.transaction = transactionId;
@@ -87,7 +87,7 @@ public class PaymentTransactionKey implements Serializable {
 
     @Override
     public String toString() {
-        return "PaymentTransactionId [transaction=" + transaction + ", source=" + source + "]";
+        return "transaction:" + source + ":" + transaction;
     }
 
 }

@@ -41,8 +41,8 @@ import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.player.PlayerPresence;
-import com.clemble.casino.utils.ReflectionUtils;
 import com.clemble.test.random.ObjectGenerator;
+import com.clemble.test.reflection.AnnotationReflectionUtils;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -75,7 +75,6 @@ public class ObjectMapperTest extends ObjectTest {
         Assert.assertNull(checkSerialization(InvitationDeclinedEvent.class));
         Assert.assertNull(checkSerialization(ScheduledGameRequest.class));
         Assert.assertNull(checkSerialization(GameStartedEvent.class));
-        Assert.assertNull(checkSerialization(StubGameState.class));
         Assert.assertNull(checkSerialization(GameAccount.class));
         Assert.assertNull(checkSerialization(VisibleGameAccount.class));
         Assert.assertNull(checkSerialization(InvisibleGameAccount.class));
@@ -93,7 +92,7 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void testSimpleSerialization() throws IOException {
-        List<Class<?>> candidates = ReflectionUtils.findCandidates("com.clemble.casino", JsonTypeName.class);
+        List<Class<?>> candidates = AnnotationReflectionUtils.findCandidates("com.clemble.casino", JsonTypeName.class);
 
         Map<Class<?>, Throwable> errors = new HashMap<Class<?>, Throwable>();
 

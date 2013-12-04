@@ -161,19 +161,6 @@ public class ObjectTest {
             }
 
         });
-        ObjectGenerator.register(StubGameState.class, new AbstractValueGenerator<StubGameState>() {
-
-            @Override
-            public StubGameState generate() {
-                String playerA = RandomStringUtils.random(5);
-                String playerB = RandomStringUtils.random(5);
-                GameAccount account = GameAccountFactory.create(new GameInitiation(new GameSessionKey(Game.pac, "1"), ImmutableList.<String> of(playerA, playerB), GameSpecification.DEFAULT));
-                ActionLatch actionLatch = new ActionLatch(ImmutableList.<String> of(playerA, playerB), "stub");
-                GameOutcome outcome = new NoOutcome();
-                return new StubGameState(account, actionLatch, outcome, 1);
-            }
-
-        });
         ObjectGenerator.register(NumberState.class, new AbstractValueGenerator<NumberState>() {
 
             @Override

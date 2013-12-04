@@ -13,7 +13,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.clemble.casino.json.ObjectMapperUtils;
-import com.clemble.casino.utils.ReflectionUtils;
+import com.clemble.test.reflection.AnnotationReflectionUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,8 +35,8 @@ public class ObjectSchemaGenerator {
     public void generateSchema() throws IOException {
         Map<String, Set<Class<?>>> mappedCandidates = new HashMap<>();
 
-        mapCandidates(ReflectionUtils.findCandidates("com.clemble.casino", JsonTypeName.class), mappedCandidates);
-        mapCandidates(ReflectionUtils.findCandidates("com.clemble.casino", JsonCreator.class), mappedCandidates);
+        mapCandidates(AnnotationReflectionUtils.findCandidates("com.clemble.casino", JsonTypeName.class), mappedCandidates);
+        mapCandidates(AnnotationReflectionUtils.findCandidates("com.clemble.casino", JsonCreator.class), mappedCandidates);
 
         new File("./target/generated-schema/").mkdirs();
         for (String packageName : mappedCandidates.keySet()) {
@@ -65,7 +65,7 @@ public class ObjectSchemaGenerator {
     }
 
     private void mapCandidates(List<Class<?>> candidates, Map<String, Set<Class<?>>> mappedCandidates) {
-        for (Class<?> candidate : ReflectionUtils.findCandidates("com.clemble.casino", JsonTypeName.class)) {
+        for (Class<?> candidate : AnnotationReflectionUtils.findCandidates("com.clemble.casino", JsonTypeName.class)) {
             String packageName = candidate.getPackage().getName();
             if (!mappedCandidates.containsKey(packageName)) {
                 mappedCandidates.put(packageName, new HashSet<Class<?>>());

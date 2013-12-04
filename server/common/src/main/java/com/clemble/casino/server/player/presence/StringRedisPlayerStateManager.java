@@ -31,7 +31,7 @@ import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class StringRedisPlayerStateManager implements PlayerPresenceServerService {
 
-    final private Logger LOGGER = LoggerFactory.getLogger(StringRedisPlayerStateManager.class);
+    final private Logger LOG = LoggerFactory.getLogger(StringRedisPlayerStateManager.class);
 
     final private long EXPIRATION_TIME = TimeUnit.MINUTES.toMillis(20);
     final private String ZERO_SESSION = ":";
@@ -170,7 +170,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
                 return connection.publish(channel, message);
             }
         });
-        LOGGER.debug("{} update to {}, notified {} listeners", newPresence.getPlayer(), newPresence.getPresence(), numUpdatedClients);
+        LOG.debug("{} update to {}, notified {} listeners", newPresence.getPlayer(), newPresence.getPresence(), numUpdatedClients);
         presenceNotification.notify(newPresence.getPlayer(), newPresence);
     }
 

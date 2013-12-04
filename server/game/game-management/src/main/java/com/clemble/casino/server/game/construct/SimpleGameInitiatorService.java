@@ -2,6 +2,9 @@ package com.clemble.casino.server.game.construct;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
@@ -14,6 +17,8 @@ import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 
 public class SimpleGameInitiatorService implements GameInitiatorService {
+
+    final private Logger LOG = LoggerFactory.getLogger(SimpleGameInitiatorService.class);
 
     final private PlayerPresenceServerService presenceService;
 
@@ -45,9 +50,11 @@ public class SimpleGameInitiatorService implements GameInitiatorService {
     @Override
     public boolean initiate(GameInitiation initiation) {
         if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSession())) {
+            LOG.trace("Successfully updated presences, starting a new game");
             processor.start(initiation);
             return true;
         }
+        LOG.trace("Failed to update presences");
         return false;
     }
 

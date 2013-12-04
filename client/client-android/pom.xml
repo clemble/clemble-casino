@@ -48,6 +48,16 @@
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.test</groupId>
+            <artifactId>spring-android</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -13,5 +13,10 @@
             <groupId>commons-codec</groupId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

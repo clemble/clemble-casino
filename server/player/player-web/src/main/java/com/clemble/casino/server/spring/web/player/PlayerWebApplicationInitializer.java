@@ -1,13 +1,12 @@
 package com.clemble.casino.server.spring.web.player;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-
+import com.clemble.casino.server.spring.web.AbstractWebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.clemble.casino.server.spring.web.AbstractWebApplicationInitializer;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
 public class PlayerWebApplicationInitializer extends AbstractWebApplicationInitializer {
 
