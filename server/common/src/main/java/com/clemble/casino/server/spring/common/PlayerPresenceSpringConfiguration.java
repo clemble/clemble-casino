@@ -1,5 +1,10 @@
 package com.clemble.casino.server.spring.common;
 
+import com.clemble.casino.player.PlayerPresence;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
+import com.clemble.casino.server.player.presence.JedisPlayerPresenceListenerService;
+import com.clemble.casino.server.player.presence.JedisPlayerPresenceServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,13 +13,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-
-import com.clemble.casino.player.PlayerPresence;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
-import com.clemble.casino.server.player.presence.StringRedisPlayerPresenceListenerService;
-import com.clemble.casino.server.player.presence.StringRedisPlayerStateManager;
+import redis.clients.jedis.JedisPool;
 
 @Configuration
 @Import({ RabbitSpringConfiguration.class })
@@ -31,14 +30,15 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public PlayerPresenceServerService playerStateManager(StringRedisTemplate redisTemplate, RedisMessageListenerContainer playerStateListenerContainer) {
-        return new StringRedisPlayerStateManager(redisTemplate, playerStateListenerContainer, playerPresenceNotificationService);
+    public JedisPlayerPresenceServerService playerPresenceServerService(JedisPool jedisPool) {
+        return new JedisPlayerPresenceServerService(jedisPool, playerPresenceNotificationService);
     }
 
     @Bean
     @Autowired
-    public PlayerPresenceListenerService presenceListenerService(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer) {
-        return new StringRedisPlayerPresenceListenerService(redisTemplate, listenerContainer);
+    public PlayerPresenceListenerService presenceListenerService(JedisPool jedisPool) {
+        JedisPlayerPresenceListenerService listenerService = new JedisPlayerPresenceListenerService(jedisPool);
+        return listenerService;
     }
 
     @Bean
@@ -50,8 +50,13 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    public RedisConnectionFactory letucceRedisConnectionFactory() {
         return new LettuceConnectionFactory();
+    }
+
+    @Bean
+    public JedisPool jedisPool() {
+        return new JedisPool("127.0.0.1");
     }
 
 }

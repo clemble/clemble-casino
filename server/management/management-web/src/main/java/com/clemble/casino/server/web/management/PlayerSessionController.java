@@ -69,10 +69,9 @@ public class PlayerSessionController implements PlayerSessionService {
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.DELETE, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.DELETE, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    void endPlayerSession(@PathVariable("playerId") String player, @PathVariable("sessionId") long sessionId) {
+    public @ResponseBody void endPlayerSession(@PathVariable("playerId") String player, @PathVariable("sessionId") long sessionId) {
         // Step 1. Fetching player session
         PlayerSession playerSession = getPlayerSession(player, sessionId);
         if (playerSession.expired())

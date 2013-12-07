@@ -50,6 +50,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.jayway.facebooktestjavaapi</groupId>
+            <artifactId>facebook-test-java-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
@@ -72,12 +77,18 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.2.5</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.clemble.test</groupId>
+            <artifactId>common-spring</artifactId>
+            <version>${com.clemble.test.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

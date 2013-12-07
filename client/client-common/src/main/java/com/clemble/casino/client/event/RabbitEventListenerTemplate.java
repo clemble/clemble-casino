@@ -87,6 +87,7 @@ public class RabbitEventListenerTemplate extends AbstractEventListenerTemplate {
                 }
             } catch (Throwable e) {
                 e.printStackTrace();
+
                 executor.schedule(new StartupTask(configurations, objectMapper), 30, TimeUnit.SECONDS);
             }
         }

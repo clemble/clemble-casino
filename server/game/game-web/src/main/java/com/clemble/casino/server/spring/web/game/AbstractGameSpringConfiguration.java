@@ -82,7 +82,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     public PlayerAccountServerService playerAccountService;
 
     @Autowired
-    @Qualifier("playerStateManager")
     public PlayerPresenceServerService playerStateManager;
 
     @Autowired

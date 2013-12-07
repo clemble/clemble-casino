@@ -2,6 +2,7 @@ package com.clemble.casino.server.player.state;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -36,6 +39,7 @@ import com.google.common.collect.ImmutableList;
 @ContextConfiguration(classes = { PlayerCommonSpringConfiguration.class })
 public class PlayerPresenceServerServiceTest {
 
+    final private Logger LOG = LoggerFactory.getLogger(PlayerPresenceServerServiceTest.class);
     final private Random RANDOM = new Random();
 
     @Autowired
@@ -95,7 +99,7 @@ public class PlayerPresenceServerServiceTest {
             assertTrue(playerPresenceService.isAvailable(player));
         }
 
-        playerPresenceService.markPlaying(players, new GameSessionKey(Game.pic, session));
+        assertTrue(playerPresenceService.markPlaying(players, new GameSessionKey(Game.pic, session)));
 
         assertFalse("None of the players supposed to be available ", playerPresenceService.areAvailable(players));
         for (String player : players) {
@@ -107,12 +111,12 @@ public class PlayerPresenceServerServiceTest {
     /**
      * Tests that allocation of specific player is only possible once
      */
-    final private int MARK_ACTIVE_IN_PARRALLEL_THREADS = 100;
+    final private int MARK_ACTIVE_IN_PARRALLEL_THREADS = 10;
 
     @Test
-    public void testMarkActiveInParrallel() {
+    public void testMarkActiveInParrallel() throws InterruptedException {
         final String genericPlayer = ObjectGenerator.generate(String.class);
-        playerPresenceService.markOnline(genericPlayer);
+        assertNotNull(playerPresenceService.markOnline(genericPlayer));
         assertTrue(playerPresenceService.isAvailable(genericPlayer));
 
         final CountDownLatch startLatch = new CountDownLatch(MARK_ACTIVE_IN_PARRALLEL_THREADS);
@@ -122,27 +126,31 @@ public class PlayerPresenceServerServiceTest {
         final PlayerListener playerListener = new PlayerListener(1);
         presenceListenerService.subscribe(genericPlayer, playerListener);
 
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e1) {
-        }
-
         for (int i = 0; i < MARK_ACTIVE_IN_PARRALLEL_THREADS; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        String anotherPlayer = String.valueOf(RANDOM.nextLong());
-                        playerPresenceService.markOnline(anotherPlayer);
-                        assertTrue(playerPresenceService.isAvailable(anotherPlayer));
-
-                        List<String> participants = ImmutableList.<String> of(genericPlayer, anotherPlayer);
                         String randomSession = String.valueOf(RANDOM.nextLong());
-                        startLatch.countDown();
-                        startLatch.await();
+                        List<String> participants = ImmutableList.<String> of();
+                        try {
+                            String anotherPlayer = ObjectGenerator.generate(String.class);
+                            assertNotNull(playerPresenceService.markOnline(anotherPlayer));
+                            assertTrue(playerPresenceService.isAvailable(anotherPlayer));
 
-                        if (playerPresenceService.markPlaying(participants, new GameSessionKey(Game.pic, randomSession)))
+                            participants = ImmutableList.<String> of(genericPlayer, anotherPlayer);
+                        } catch (Throwable throwable) {
+                            LOG.error("Failed to process", throwable);
+                        } finally {
+                            startLatch.countDown();
+                        }
+                        startLatch.await(10, TimeUnit.SECONDS);
+
+                        GameSessionKey sessionKey = new GameSessionKey(Game.pic, randomSession);
+                        if (playerPresenceService.markPlaying(participants, sessionKey)) {
+                            LOG.info("Success on mark playing with {}", sessionKey);
                             numLocksReceived.incrementAndGet();
+                        }
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
                     } finally {
@@ -150,19 +158,13 @@ public class PlayerPresenceServerServiceTest {
                     }
                 }
             }).start();
-            ;
         }
 
-        try {
-            endLatch.await();
-        } catch (InterruptedException e) {
-        }
+        endLatch.await(10, TimeUnit.SECONDS);
         assertEquals("Expected single lock, but got " + numLocksReceived.get(), 1, numLocksReceived.get());
 
-        try {
-            playerListener.countDownLatch.await(1, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-        }
+
+        playerListener.countDownLatch.await(10, TimeUnit.SECONDS);
 
         assertEquals("Message did not reach listener ", playerListener.countDownLatch.getCount(), 0);
         Entry<String, Presence> calledPresence = playerListener.calls.poll();
@@ -177,10 +179,7 @@ public class PlayerPresenceServerServiceTest {
         PlayerListener playerListener = new PlayerListener(1);
         presenceListenerService.subscribe(player, playerListener);
         // There is a timeout between listen
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e1) {
-        }
+        Thread.sleep(10);
 
         playerPresenceService.markOnline(player);
 

@@ -14,6 +14,7 @@ import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 
+import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
@@ -36,8 +37,9 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     public PlayerProfileRepository playerProfileRepository;
 
     @Bean
-    public SocialConnectionDataAdapter socialConnectionDataAdapter() {
-        return new SocialConnectionDataAdapter(connectionFactoryLocator(), usersConnectionRepository(), socialAdapterRegistry());
+    @Autowired
+    public SocialConnectionDataAdapter socialConnectionDataAdapter(UsersConnectionRepository usersConnectionRepository) {
+        return new SocialConnectionDataAdapter(connectionFactoryLocator(), usersConnectionRepository, socialAdapterRegistry());
     }
 
     @Bean
@@ -49,7 +51,7 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public FacebookConnectionFactory facebookConnectionFactory() {
-        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory("486714778051999", "cd4976a1ae74d3e70e804e1ae82b7eb6");
+        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
         return facebookConnectionFactory;
     }
 
@@ -61,14 +63,16 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ConnectionSignUp connectionSignUp() {
-        return new SocialPlayerProfileCreator(socialAdapterRegistry());
+    @Autowired
+    public ConnectionSignUp connectionSignUp(PlayerIdGenerator idGenerator, PlayerProfileRepository profileRepository, SocialConnectionAdapterRegistry socialAdapterRegistry) {
+        return new SocialPlayerProfileCreator(idGenerator, profileRepository, socialAdapterRegistry);
     }
 
     @Bean
-    public UsersConnectionRepository usersConnectionRepository() {
+    @Autowired
+    public UsersConnectionRepository usersConnectionRepository(ConnectionSignUp connectionSignUp) {
         JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator(), Encryptors.noOpText());
-        repository.setConnectionSignUp(connectionSignUp());
+        repository.setConnectionSignUp(connectionSignUp);
         return repository;
     }
 

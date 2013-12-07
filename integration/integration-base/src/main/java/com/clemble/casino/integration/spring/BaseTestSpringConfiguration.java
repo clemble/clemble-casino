@@ -28,6 +28,7 @@ import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.game.construction.SimplePlayerScenarios;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
+import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.integration.player.ServerClembleCasinoRegistrationOperations;
 import com.clemble.casino.integration.player.account.CombinedPaymentService;
 import com.clemble.casino.payment.service.PaymentService;
@@ -40,6 +41,7 @@ import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
+import com.clemble.test.spring.listener.TestContextListenerRegistrator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
@@ -110,6 +112,12 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         }
 
         @Bean
+        @Autowired
+        public TestContextListenerRegistrator testContextListener(){
+            return new TestContextListenerRegistrator();
+        }
+
+        @Bean
         public ClembleCasinoRegistrationOperations registrationOperations(ObjectMapper objectMapper,
                 EventListenerOperationsFactory listenerOperations,
                 PlayerRegistrationService registrationService,
@@ -120,7 +128,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
                 GameConstructionService constructionService,
                 GameSpecificationService specificationService,
                 GameActionService<?> actionService) {
-            return new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, sessionOperations, accountOperations, presenceService, constructionService, specificationService, actionService);
+            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, sessionOperations, accountOperations, presenceService, constructionService, specificationService, actionService);
+            return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
         
     }

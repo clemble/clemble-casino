@@ -7,12 +7,18 @@ import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionSignUp;
 
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.server.player.PlayerIdGenerator;
+import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 
 public class SocialPlayerProfileCreator implements ConnectionSignUp {
 
+    final private PlayerIdGenerator idGenerator;
+    final private PlayerProfileRepository profileRepository;
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
 
-    public SocialPlayerProfileCreator(final SocialConnectionAdapterRegistry socialAdapterRegistry) {
+    public SocialPlayerProfileCreator(final PlayerIdGenerator idGenerator, final PlayerProfileRepository profileRepository, final SocialConnectionAdapterRegistry socialAdapterRegistry) {
+        this.idGenerator = checkNotNull(idGenerator);
+        this.profileRepository = checkNotNull(profileRepository);
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
     }
 
@@ -29,6 +35,8 @@ public class SocialPlayerProfileCreator implements ConnectionSignUp {
             throw new IllegalArgumentException("No SocialAdapter exists for Connection");
         // Step 3. Generating gamer profile based on SocialConnection
         PlayerProfile playerProfile = socialAdapter.fetchGamerProfile(connection.getApi());
+        playerProfile.setPlayer(idGenerator.newId());
+        playerProfile = profileRepository.save(playerProfile);
         // Step 4. Returning playerIdentity as a result
         return String.valueOf(playerProfile.getPlayer());
     }

@@ -12,7 +12,6 @@ import com.clemble.casino.configuration.ResourceLocationService;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.PlayerIdGenerator;
-import com.clemble.casino.server.player.UUIDPlayerIdGenerator;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
@@ -37,11 +36,6 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     public ServerRegistryConfiguration paymentEndpointRegistry;
 
     @Bean
-    public PlayerIdGenerator playerIdentifierGenerator() {
-        return new UUIDPlayerIdGenerator();
-    }
-    
-    @Bean
     public PlayerTokenFactory playerTokenFactory() throws NoSuchAlgorithmException {
         return new AESPlayerTokenFactory();
     }
@@ -50,11 +44,12 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     @Autowired
     public PlayerRegistrationController playerRegistrationController(
             @Qualifier("playerProfileRegistrationService") PlayerProfileRegistrationServerService playerProfileRegistrationService,
+            PlayerIdGenerator idGenerator,
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,
             ClembleCasinoValidationService gogomayaValidationService,
             @Qualifier("playerAccountService") PlayerAccountServerService playerAccountService) throws NoSuchAlgorithmException {
-        return new PlayerRegistrationController(playerIdentifierGenerator(), playerTokenFactory(), playerProfileRegistrationService, playerCredentialRepository, clembleConsumerDetailsService,
+        return new PlayerRegistrationController(idGenerator, playerTokenFactory(), playerProfileRegistrationService, playerCredentialRepository, clembleConsumerDetailsService,
                 gogomayaValidationService, playerAccountService);
     }
 

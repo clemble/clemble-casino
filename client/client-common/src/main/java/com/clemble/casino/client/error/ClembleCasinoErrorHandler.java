@@ -2,13 +2,12 @@ package com.clemble.casino.client.error;
 
 import java.io.IOException;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoFailureDescription;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ClembleCasinoErrorHandler implements ResponseErrorHandler {
 
@@ -31,7 +30,6 @@ public class ClembleCasinoErrorHandler implements ResponseErrorHandler {
         response.getBody().read(buffer);
         String errorMessage = new String(buffer);
         // Step 2. Checking that response is of JSON type
-        assert response.getHeaders().getContentType().toString().contains(MediaType.APPLICATION_JSON_VALUE) : errorMessage;
         ClembleCasinoFailureDescription description = objectMapper.readValue(errorMessage, ClembleCasinoFailureDescription.class);
         // Step 3. Generating GogomayaException
         throw ClembleCasinoException.fromDescription(description);

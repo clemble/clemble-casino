@@ -1,11 +1,11 @@
 package com.clemble.casino.server.player.presence;
 
+import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.player.PlayerPresence;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.player.PlayerPresence;
 
 public interface PlayerPresenceServerService {
 
@@ -23,6 +23,6 @@ public interface PlayerPresenceServerService {
 
     public boolean markPlaying(String player, GameSessionKey session);
 
-    public boolean markPlaying(Collection<String> players, GameSessionKey session);
+    public boolean markPlaying(Collection<String> players, GameSessionKey sessionKey);
 
 }

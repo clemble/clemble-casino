@@ -36,7 +36,6 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     public ClembleCasinoValidationService gogomayaValidationService;
 
     @Autowired
-    @Qualifier("playerStateManager")
     public PlayerPresenceServerService playerPresenceServerService;
 
     @Bean
