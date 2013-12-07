@@ -6,10 +6,7 @@
     <version>0.5.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>api</module>
-        <module>client</module>
         <module>server</module>
-
         <module>integration</module>
     </modules>
     <properties>
