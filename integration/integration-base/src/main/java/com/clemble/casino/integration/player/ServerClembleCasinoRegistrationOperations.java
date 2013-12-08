@@ -10,6 +10,7 @@ import com.clemble.casino.game.service.GameSpecificationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.clemble.casino.player.security.PlayerCredential;
@@ -20,6 +21,7 @@ import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
+import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -80,6 +82,14 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         ClembleConsumerDetails consumerDetails = ClembleConsumerDetailUtils.generateDetails();
         PlayerSocialRegistrationRequest loginRequest = new PlayerSocialRegistrationRequest(consumerDetails, playerCredential, socialConnectionData);
         PlayerToken token = registrationService.createSocialPlayer(loginRequest);
+        return create(token, playerCredential);
+    }
+
+    @Override
+    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
+        ClembleConsumerDetails consumerDetails = ClembleConsumerDetailUtils.generateDetails();
+        PlayerSocialGrantRegistrationRequest loginRequest = new PlayerSocialGrantRegistrationRequest(consumerDetails, playerCredential, accessGrant);
+        PlayerToken token = registrationService.createSocialGrantPlayer(loginRequest);
         return create(token, playerCredential);
     }
 

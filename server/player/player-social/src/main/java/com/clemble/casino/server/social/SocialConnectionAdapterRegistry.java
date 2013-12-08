@@ -3,6 +3,9 @@ package com.clemble.casino.server.social;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
+
 public class SocialConnectionAdapterRegistry {
 
     final private Map<String, SocialConnectionAdapter<?>> ADAPTERS_MAP = new HashMap<String, SocialConnectionAdapter<?>>();
@@ -15,7 +18,13 @@ public class SocialConnectionAdapterRegistry {
     }
 
     public SocialConnectionAdapter<?> getSocialAdapter(String providerId) {
-        return ADAPTERS_MAP.get(providerId);
+        // Step 1. Fetching SocialConnectionAdapter
+        SocialConnectionAdapter<?> connectionAdapter = ADAPTERS_MAP.get(providerId);
+        // Step 2. Sanity check
+        if (connectionAdapter == null)
+            throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionProviderNotSupported);
+        // Step 3. Returning found ConnectionAdapters
+        return connectionAdapter;
     }
 
 }

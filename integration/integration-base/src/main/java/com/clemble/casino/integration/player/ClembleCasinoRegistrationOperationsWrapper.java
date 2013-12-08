@@ -8,6 +8,7 @@ import org.springframework.test.context.support.AbstractTestExecutionListener;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.security.PlayerCredential;
 
@@ -42,6 +43,13 @@ public class ClembleCasinoRegistrationOperationsWrapper extends AbstractTestExec
     }
 
     @Override
+    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
+        ClembleCasinoOperations casinoOperations = delegate.createSocialPlayer(playerCredential, accessGrant);
+        initializedOperations.add(casinoOperations);
+        return casinoOperations;
+    }
+
+    @Override
     public void afterTestMethod(TestContext testContext) throws Exception {
         ClembleCasinoOperations createdContext;
         while((createdContext = initializedOperations.poll()) != null){
@@ -52,4 +60,5 @@ public class ClembleCasinoRegistrationOperationsWrapper extends AbstractTestExec
             }
         }
     }
+
 }

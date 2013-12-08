@@ -13,6 +13,7 @@ import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
+import com.clemble.casino.server.game.aspect.BasicGameManagementAspect;
 import com.clemble.casino.server.game.aspect.GameManagementAspect;
 import com.clemble.casino.server.game.aspect.GameManagementAspecteFactory;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
@@ -55,7 +56,7 @@ public class GameOutcomeManagementAspectFactory implements GameManagementAspecte
 
     @Override
     public GameManagementAspect construct(GameInitiation initiation) {
-        return new GameManagementAspect() {
+        return new BasicGameManagementAspect() {
             @Override
             public <State extends GameState> void afterGame(GameSession<State> state) {
                 processPayment(state);

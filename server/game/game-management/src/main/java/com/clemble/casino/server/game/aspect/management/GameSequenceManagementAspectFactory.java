@@ -12,6 +12,7 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.construct.ManagerGameConstructionRequest;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.server.game.aspect.BasicGameManagementAspect;
 import com.clemble.casino.server.game.aspect.GameManagementAspect;
 import com.clemble.casino.server.game.aspect.GameManagementAspecteFactory;
 import com.clemble.casino.server.game.construct.GameInitiatorService;
@@ -47,7 +48,7 @@ public class  GameSequenceManagementAspectFactory implements GameManagementAspec
 
     @Override
     public GameManagementAspect construct(GameInitiation initiation) {
-        return new GameManagementAspect() {
+        return new BasicGameManagementAspect() {
             @Override
             public <State extends GameState> void afterGame(GameSession<State> session) {
                 startNew(session);

@@ -1,27 +1,34 @@
 package com.clemble.casino.server.social.adapter;
 
+import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.Calendar;
 import java.util.Date;
 
+import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.SocialPlayerProfile;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
 
-    public FacebookSocialAdapter() {
+    final private FacebookConnectionFactory facebookConnectionFactory;
+
+    public FacebookSocialAdapter(FacebookConnectionFactory facebookConnectionFactory) {
         super("facebook");
+        this.facebookConnectionFactory = checkNotNull(facebookConnectionFactory);
     }
-    
+
     private Date readDate(String facebookBirthDate) {
         if (!isNullOrEmpty(facebookBirthDate)) {
             String[] date = facebookBirthDate.split("/");
@@ -48,6 +55,14 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
             .setGender(PlayerGender.parse(facebookProfile.getGender()))
             .setImageUrl("http://graph.facebook.com/" + facebookProfile.getId() + "/picture")
             .setNickName(facebookProfile.getUsername());
+    }
+
+    @Override
+    public ConnectionData toConnectionData(SocialAccessGrant accessGrant) {
+        // Step 1. Establishing connection with Facebook
+        Connection<Facebook> connection = facebookConnectionFactory.createConnection(accessGrant.toAccessGrant());
+        // Step 2. Generating appropriate ConnectionData
+        return connection.createData();
     }
 
     @Override

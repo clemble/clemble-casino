@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
 import com.clemble.casino.server.player.registration.RestPlayerProfileRegistrationServerService;
@@ -63,6 +64,11 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
                 @Override
                 public PlayerProfile createPlayerProfile(PlayerProfile playerProfile) {
                     return playerProfile;
+                }
+
+                @Override
+                public PlayerProfile createPlayerProfile(SocialAccessGrant accessGrant) {
+                    return null;
                 }
             };
         }

@@ -19,6 +19,7 @@ import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
+import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
@@ -108,6 +109,20 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         PlayerProfile playerProfile = playerProfileRegistrationService.createPlayerProfile(socialRegistrationRequest.getSocialConnectionData());
         // Step 4. Register new user and identity
         return register(socialRegistrationRequest, playerProfile);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public @ResponseBody PlayerToken createSocialGrantPlayer(PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
+        // Step 1. Checking if this user already exists
+        PlayerToken playerIdentity = restoreUser(grantRegistrationRequest);
+        if (playerIdentity != null)
+            return playerIdentity;
+        // Step 2. Registering player with SocialConnection
+        PlayerProfile playerProfile = playerProfileRegistrationService.createPlayerProfile(grantRegistrationRequest.getAccessGrant());
+        // Step 3. Register new user and identity
+        return register(grantRegistrationRequest, playerProfile);
     }
 
     private PlayerToken restoreUser(PlayerLoginRequest loginRequest) {

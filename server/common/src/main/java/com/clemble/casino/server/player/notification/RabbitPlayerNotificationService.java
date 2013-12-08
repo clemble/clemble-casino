@@ -58,6 +58,14 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
     }
 
     @Override
+    public boolean notify(final String player, final Collection<T> events) {
+        boolean fullSuccess = true;
+        for(T event: events)
+            fullSuccess = notify(player, event) & fullSuccess;
+        return fullSuccess;
+    }
+
+    @Override
     public boolean notify(final Collection<String> players, final Collection<? extends T> events) {
         // Step 1. Notifying each event one after another
         boolean fullSuccess = true;

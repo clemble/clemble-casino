@@ -2,10 +2,13 @@ package com.clemble.casino.server.player.registration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.springframework.social.oauth2.AccessGrant;
+
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.SocialPlayerProfile;
 import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
@@ -41,6 +44,15 @@ public class SimplePlayerProfileRegistrationServerService implements PlayerProfi
         validationService.validate(socialConnectionData);
         // Step 1. Registering player with SocialConnection
         String player = socialConnectionDataAdapter.register(socialConnectionData);
+        // Step 2. Fetch Player identity information
+        return playerProfileRepository.findOne(player);
+    }
+
+    @Override
+    public PlayerProfile createPlayerProfile(SocialAccessGrant accessGrant) {
+        validationService.validate(accessGrant);
+        // Step 1. Registering player with SocialConnection
+        String player = socialConnectionDataAdapter.register(accessGrant);
         // Step 2. Fetch Player identity information
         return playerProfileRepository.findOne(player);
     }

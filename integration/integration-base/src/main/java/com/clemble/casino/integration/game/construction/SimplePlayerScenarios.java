@@ -12,6 +12,7 @@ import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
@@ -92,6 +93,11 @@ public class SimplePlayerScenarios implements PlayerScenarios {
     @Override
     public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
         return registrationOperations.createSocialPlayer(playerCredential, socialConnectionData);
+    }
+
+    @Override
+    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
+        return registrationOperations.createSocialPlayer(playerCredential, accessGrant);
     }
 
 }

@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.web.player.PlayerWebMapping;
 
@@ -26,6 +27,11 @@ public class RestPlayerProfileRegistrationServerService implements PlayerProfile
     @Override
     public PlayerProfile createPlayerProfile(SocialConnectionData socialConnectionData) {
         return restTemplate.postForEntity(baseUrl + PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_SOCIAL, socialConnectionData, PlayerProfile.class).getBody();
+    }
+
+    @Override
+    public PlayerProfile createPlayerProfile(SocialAccessGrant accessGrant) {
+        return restTemplate.postForEntity(baseUrl + PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_GRANT, accessGrant, PlayerProfile.class).getBody();
     }
 
 }

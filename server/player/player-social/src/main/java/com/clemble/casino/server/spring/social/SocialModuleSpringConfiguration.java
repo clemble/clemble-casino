@@ -38,8 +38,8 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public SocialConnectionDataAdapter socialConnectionDataAdapter(UsersConnectionRepository usersConnectionRepository) {
-        return new SocialConnectionDataAdapter(connectionFactoryLocator(), usersConnectionRepository, socialAdapterRegistry());
+    public SocialConnectionDataAdapter socialConnectionDataAdapter(UsersConnectionRepository usersConnectionRepository, SocialConnectionAdapterRegistry socialConnectionAdapterRegistry) {
+        return new SocialConnectionDataAdapter(connectionFactoryLocator(), usersConnectionRepository, socialConnectionAdapterRegistry);
     }
 
     @Bean
@@ -56,9 +56,10 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public SocialConnectionAdapterRegistry socialAdapterRegistry() {
+    @Autowired
+    public SocialConnectionAdapterRegistry socialAdapterRegistry(FacebookConnectionFactory facebookConnectionFactory) {
         SocialConnectionAdapterRegistry socialAdapterRegistry = new SocialConnectionAdapterRegistry();
-        socialAdapterRegistry.register(new FacebookSocialAdapter());
+        socialAdapterRegistry.register(new FacebookSocialAdapter(facebookConnectionFactory));
         return socialAdapterRegistry;
     }
 
