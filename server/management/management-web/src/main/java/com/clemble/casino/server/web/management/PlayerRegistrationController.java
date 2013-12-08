@@ -114,7 +114,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
     @Override
     @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PlayerToken createSocialGrantPlayer(PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
+    public @ResponseBody PlayerToken createSocialGrantPlayer(@RequestBody PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
         // Step 1. Checking if this user already exists
         PlayerToken playerIdentity = restoreUser(grantRegistrationRequest);
         if (playerIdentity != null)

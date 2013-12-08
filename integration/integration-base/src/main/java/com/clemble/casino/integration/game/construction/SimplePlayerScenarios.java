@@ -27,39 +27,59 @@ public class SimplePlayerScenarios implements PlayerScenarios {
 
     @Override
     public ClembleCasinoOperations createPlayer() {
-        ClembleCasinoOperations player = registrationOperations.createPlayer(
-                new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.randomAlphanumeric(10)),
-                new NativePlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10)).setLastName(RandomStringUtils.randomAlphabetic(10))
-                        .setNickName(RandomStringUtils.randomAlphabetic(10)));
-
-        return initialize(player);
-
+        PlayerCredential credential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
+                RandomStringUtils.randomAlphanumeric(10));
+        PlayerProfile playerProfile = new NativePlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10))
+                .setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10));
+        return createPlayer(credential, playerProfile);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerProfile playerProfile) {
-        ClembleCasinoOperations player = registrationOperations.createPlayer(
-                new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.randomAlphanumeric(10)),
-                playerProfile);
-
-        return initialize(player);
+        PlayerCredential credential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
+                RandomStringUtils.randomAlphanumeric(10));
+        return createPlayer(credential, playerProfile);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(SocialConnectionData socialConnectionData) {
-        ClembleCasinoOperations player = registrationOperations.createSocialPlayer(
-                new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.randomAlphanumeric(10)),
-                socialConnectionData);
+        PlayerCredential credential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
+                RandomStringUtils.randomAlphanumeric(10));
+        return createSocialPlayer(credential, socialConnectionData);
+    }
 
-        return initialize(player);
+    @Override
+    public ClembleCasinoOperations createPlayer(SocialAccessGrant socialConnectionData) {
+        // Step 1. Generating random PlayerCredentials
+        PlayerCredential credential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
+                RandomStringUtils.randomAlphanumeric(10));
+        // Step 2. Create SocialPlayer profile
+        return createSocialPlayer(credential, socialConnectionData);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerRegistrationRequest playerRegistrationRequest) {
-        ClembleCasinoOperations player = registrationOperations.createPlayer(playerRegistrationRequest.getPlayerCredential(),
-                playerRegistrationRequest.getPlayerProfile());
+        return createPlayer(playerRegistrationRequest.getPlayerCredential(), playerRegistrationRequest.getPlayerProfile());
+    }
 
-        return initialize(player);
+    @Override
+    public ClembleCasinoOperations login(PlayerCredential playerCredentials) {
+        return initialize(registrationOperations.login(playerCredentials));
+    }
+
+    @Override
+    public ClembleCasinoOperations createPlayer(PlayerCredential playerCredential, PlayerProfile playerProfile) {
+        return initialize(registrationOperations.createPlayer(playerCredential, playerProfile));
+    }
+
+    @Override
+    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
+        return initialize(registrationOperations.createSocialPlayer(playerCredential, socialConnectionData));
+    }
+
+    @Override
+    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
+        return initialize(registrationOperations.createSocialPlayer(playerCredential, accessGrant));
     }
 
     private ClembleCasinoOperations initialize(final ClembleCasinoOperations player) {
@@ -79,25 +99,4 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         }
         return player;
     }
-
-    @Override
-    public ClembleCasinoOperations login(PlayerCredential playerCredentials) {
-        return registrationOperations.login(playerCredentials);
-    }
-
-    @Override
-    public ClembleCasinoOperations createPlayer(PlayerCredential playerCredential, PlayerProfile playerProfile) {
-        return registrationOperations.createPlayer(playerCredential, playerProfile);
-    }
-
-    @Override
-    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
-        return registrationOperations.createSocialPlayer(playerCredential, socialConnectionData);
-    }
-
-    @Override
-    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
-        return registrationOperations.createSocialPlayer(playerCredential, accessGrant);
-    }
-
 }

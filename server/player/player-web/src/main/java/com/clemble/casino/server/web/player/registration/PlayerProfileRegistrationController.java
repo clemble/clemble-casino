@@ -43,7 +43,7 @@ public class PlayerProfileRegistrationController implements PlayerProfileRegistr
     @Override
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_GRANT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PlayerProfile createPlayerProfile(SocialAccessGrant accessGrant) {
+    public @ResponseBody PlayerProfile createPlayerProfile(@RequestBody SocialAccessGrant accessGrant) {
         return playerProfileRegistrationServerService.createPlayerProfile(accessGrant);
     }
 
