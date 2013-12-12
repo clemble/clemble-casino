@@ -1,5 +1,7 @@
 package com.clemble.casino.integration.player;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -32,7 +34,7 @@ import com.jayway.facebooktestjavaapi.testuser.impl.HttpClientFacebookTestUserSt
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class SocialUserRegistrationITest {
+public class FacebookRegistrationITest {
 
     @Autowired
     public ObjectMapper objectMapper;
@@ -58,6 +60,29 @@ public class SocialUserRegistrationITest {
         SocialPlayerProfile socialProfile = (SocialPlayerProfile) profile;
         assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", fb.get("id").asText())));
     }
+    
+    @Test
+    public void testSocialDataLogin() throws JsonParseException, JsonMappingException, IOException{
+        // Step 1. Generating Facebook test user
+        FacebookTestUserStore facebookStore = new HttpClientFacebookTestUserStore("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
+        FacebookTestUserAccount fbAccount = facebookStore.createTestUser(true, "email");
+        JsonNode fb = objectMapper.readValue(fbAccount.getUserDetails(), JsonNode.class);
+        assertNotNull(fbAccount);
+        assertNotNull(fb);
+        // Step 2. Converting to SocialConnectionData
+        SocialConnectionData connectionData = new SocialConnectionData("facebook", fb.get("id").asText(),  fbAccount.accessToken(), "", "", System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
+        ClembleCasinoOperations A = playerScenarios.createPlayer(connectionData);
+        assertNotNull(A);
+        PlayerProfile profile = A.profileOperations().getPlayerProfile();
+        assertNotNull(profile);
+        assertTrue(profile instanceof SocialPlayerProfile);
+        SocialPlayerProfile socialProfile = (SocialPlayerProfile) profile;
+        assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", fb.get("id").asText())));
+        // Step 3. Registering again with the same SocialAccessGrant
+        ClembleCasinoOperations B = playerScenarios.createPlayer(connectionData);
+        assertNotEquals(B, A);
+        assertEquals(B.getPlayer(), A.getPlayer());
+    }
 
     @Test
     public void testSocialGrantRegistration() throws JsonParseException, JsonMappingException, IOException{
@@ -78,4 +103,27 @@ public class SocialUserRegistrationITest {
         assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", fb.get("id").asText())));
     }
 
+    @Test
+    public void testSocialGrantLogin() throws JsonParseException, JsonMappingException, IOException{
+        // Step 1. Generating Facebook test user
+        FacebookTestUserStore facebookStore = new HttpClientFacebookTestUserStore("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
+        FacebookTestUserAccount fbAccount = facebookStore.createTestUser(true, "email");
+        JsonNode fb = objectMapper.readValue(fbAccount.getUserDetails(), JsonNode.class);
+        assertNotNull(fbAccount);
+        assertNotNull(fb);
+        // Step 2. Converting to SocialConnectionData
+        SocialAccessGrant accessGrant = new SocialAccessGrant("facebook", fbAccount.accessToken());
+        ClembleCasinoOperations A = playerScenarios.createPlayer(accessGrant);
+        assertNotNull(A);
+        PlayerProfile profile = A.profileOperations().getPlayerProfile();
+        assertNotNull(profile);
+        assertTrue(profile instanceof SocialPlayerProfile);
+        SocialPlayerProfile socialProfile = (SocialPlayerProfile) profile;
+        assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", fb.get("id").asText())));
+        // Step 3. Registering again with the same SocialAccessGrant
+        ClembleCasinoOperations B = playerScenarios.createPlayer(accessGrant);
+        assertNotEquals(B, A);
+        assertEquals(B.getPlayer(), A.getPlayer());
+    }
+    
 }

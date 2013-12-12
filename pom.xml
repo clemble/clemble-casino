@@ -47,9 +47,9 @@
         <spring.social.version>1.0.3.RELEASE</spring.social.version>
         <spring.social.linkedin.version>1.0.0.RC1</spring.social.linkedin.version>
         <spring.social.facebook.version>1.1.0.M4</spring.social.facebook.version>
-        <spring.social.twitter.version>1.0.5.RELEASE</spring.social.twitter.version>
+        <spring.social.twitter.version>1.1.0.M4</spring.social.twitter.version>
         <spring.social.vkontakte.version>1.0.4</spring.social.vkontakte.version>
-        <spring.social.google.version>0.0.1-SNAPSHOT</spring.social.google.version>
+        <spring.social.google.version>1.1.0.M4</spring.social.google.version>
         <swagger-springmvc.vesion>0.5.3</swagger-springmvc.vesion>
         <!-- Generic dependencies -->
         <logback.version>1.0.13</logback.version>
