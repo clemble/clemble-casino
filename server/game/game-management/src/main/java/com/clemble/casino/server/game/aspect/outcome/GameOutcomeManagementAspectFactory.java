@@ -2,6 +2,8 @@ package com.clemble.casino.server.game.aspect.outcome;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Date;
+
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionState;
 import com.clemble.casino.game.GameState;
@@ -39,7 +41,9 @@ public class GameOutcomeManagementAspectFactory implements GameManagementAspecte
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             Money price = session.getSpecification().getPrice();
             // Step 2. Generating payment transaction
-            PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(session.getSession().toPaymentTransactionKey());
+            PaymentTransaction paymentTransaction = new PaymentTransaction()
+                .setTransactionKey(session.getSession().toPaymentTransactionKey())
+                .setTransactionDate(new Date());
             for (GamePlayerAccount playerState : session.getState().getAccount().getPlayerAccounts()) {
                 if (!playerState.getPlayer().equals(winnerId)) {
                     paymentTransaction
