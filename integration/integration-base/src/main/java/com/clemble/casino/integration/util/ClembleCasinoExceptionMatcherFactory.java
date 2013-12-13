@@ -11,6 +11,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.error.ClembleCasinoFailureDescription;
+import com.clemble.casino.server.error.ClembleCasinoServerException;
 import com.clemble.casino.utils.CollectionUtils;
 
 public class ClembleCasinoExceptionMatcherFactory {
@@ -50,7 +51,9 @@ public class ClembleCasinoExceptionMatcherFactory {
 
             @Override
             public boolean matches(Object item) {
-                // Step 1. Sanity check
+                // Step 1. Unwrapping exception
+                if (item instanceof ClembleCasinoServerException)
+                    item = ((ClembleCasinoServerException) item).getCasinoException();
                 if (!(item instanceof ClembleCasinoException))
                     return false;
                 // Step 2. Checking value

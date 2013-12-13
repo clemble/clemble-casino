@@ -29,7 +29,7 @@ import com.clemble.casino.server.game.construct.SimpleGameInitiatorService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
+import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
@@ -115,7 +115,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     @Autowired
-    public GameInitiatorService picPacPoeInitiatorService(GameSessionProcessor sessionProcessor, PlayerPresenceServerService presenceServerService, PlayerPresenceListenerService presenceListenerService) {
+    public GameInitiatorService picPacPoeInitiatorService(GameSessionProcessor sessionProcessor, PlayerPresenceServerService presenceServerService, SystemNotificationServiceListener presenceListenerService) {
         return new SimpleGameInitiatorService(sessionProcessor, presenceServerService, presenceListenerService);
     }
 

@@ -2,16 +2,14 @@ package com.clemble.casino.server.player.registration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.springframework.social.oauth2.AccessGrant;
-
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.PlayerType;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.SocialPlayerProfile;
-import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 

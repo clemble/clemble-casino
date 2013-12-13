@@ -22,7 +22,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
-import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Currency;
@@ -78,7 +77,7 @@ public class PlayerAccountOperationsITest {
         // TODO Assert.assertFalse(player.getWalletOperations().getPaymentTransaction(MoneySource.Registration, player.getPlayer()));
         // Step 3. Checking no other player can access the transactions
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
-        player.paymentOperations().getPaymentTransaction(MoneySource.registration, anotherPlayer.getPlayer());
+        player.paymentOperations().getPaymentTransaction("registration", anotherPlayer.getPlayer());
     }
 
     @Test
@@ -86,7 +85,7 @@ public class PlayerAccountOperationsITest {
         // Step 1. Checking player has no transactions to access
         ClembleCasinoOperations player = playerOperations.createPlayer();
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionNotExists));
-        player.paymentOperations().getPaymentTransaction(MoneySource.TicTacToe, "-1");
+        player.paymentOperations().getPaymentTransaction("TicTacToe", "-1");
     }
 
 }

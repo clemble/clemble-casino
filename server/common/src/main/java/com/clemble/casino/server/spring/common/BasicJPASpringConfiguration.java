@@ -23,6 +23,8 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import com.clemble.casino.server.error.ClembleConstraintExceptionResolver;
+
 @Configuration
 @Import(value = { BasicJPASpringConfiguration.DefaultAndTest.class })
 public class BasicJPASpringConfiguration implements SpringConfiguration {
@@ -37,7 +39,7 @@ public class BasicJPASpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PersistenceExceptionTranslator persistenceExceptionTranslator() {
-        return new HibernateExceptionTranslator();
+        return new ClembleConstraintExceptionResolver();
     }
 
     @Configuration

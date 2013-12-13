@@ -14,6 +14,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.PlayerType;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerRegistrationService;
@@ -153,7 +154,10 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         // Step 1. Create new credentials
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(playerProfile.getPlayer());
         playerCredentials = playerCredentialRepository.saveAndFlush(playerCredentials);
-        // Step 2. Create new token
+        // Step 2. Specifying player type
+        playerProfile.setType(PlayerType.free);
+
+        // Step 3. Create new token
         return playerTokenFactory.create(playerProfile.getPlayer(), loginRequest.getConsumerDetails());
     }
 

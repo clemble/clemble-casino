@@ -49,7 +49,6 @@ public class ServerPlayer implements ClembleCasinoOperations {
     final private String player;
     final private PlayerSession session;
     final private EventListenerOperations playerListenersManager;
-    final private PlayerCredential credential;
 
     final private GameSpecificationService specificationService;
     final private GameConstructionService constructionService;
@@ -89,8 +88,6 @@ public class ServerPlayer implements ClembleCasinoOperations {
 
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileService);
         this.playerAccountOperations = new PaymentTemplate(player, accountOperations);
-
-        this.credential = checkNotNull(credential);
 
         this.constructionService = checkNotNull(gameConstructionService);
         this.specificationService = checkNotNull(specificationService);

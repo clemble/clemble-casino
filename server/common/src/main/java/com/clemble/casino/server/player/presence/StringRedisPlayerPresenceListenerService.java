@@ -14,47 +14,53 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.Topic;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
-import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.player.notification.PlayerNotificationListener;
+import com.clemble.casino.client.event.EventSelector;
+import com.clemble.casino.server.event.SystemEvent;
+import com.clemble.casino.server.player.notification.SystemNotificationListener;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class StringRedisPlayerPresenceListenerService implements PlayerPresenceListenerService {
+public class StringRedisPlayerPresenceListenerService implements SystemNotificationServiceListener {
 
     final private Logger LOGGER = LoggerFactory.getLogger(StringRedisPlayerPresenceListenerService.class);
 
+    final private ObjectMapper objectMapper;
     final private StringRedisTemplate redisTemplate;
     final private RedisSerializer<String> stringRedisSerializer;
     final private RedisMessageListenerContainer listenerContainer;
 
-    public StringRedisPlayerPresenceListenerService(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer) {
+    public StringRedisPlayerPresenceListenerService(ObjectMapper objectMapper, StringRedisTemplate redisTemplate,
+            RedisMessageListenerContainer listenerContainer) {
         this.redisTemplate = checkNotNull(redisTemplate);
+        this.objectMapper = checkNotNull(objectMapper);
         this.stringRedisSerializer = checkNotNull(redisTemplate).getStringSerializer();
         this.listenerContainer = checkNotNull(listenerContainer);
     }
 
     @Override
-    public void subscribe(final String player, final PlayerNotificationListener<Presence> messageListener) {
+    public void subscribe(final String player, final SystemNotificationListener<? extends SystemEvent> messageListener) {
         subscribe(Collections.singleton(player), messageListener);
     }
 
     @Override
-    public void subscribe(Collection<String> players, PlayerNotificationListener<Presence> messageListener) {
+    public void subscribe(Collection<String> players, SystemNotificationListener<? extends SystemEvent> messageListener) {
         LOGGER.debug("Subscribing {} for changes from {}", players, messageListener);
         // Step 1. Add message listener
-        listenerContainer.addMessageListener(new PresenceListenerWrapper(redisTemplate.getStringSerializer(), messageListener), toTopics(players));
+        listenerContainer
+                .addMessageListener(new PresenceListenerWrapper(redisTemplate.getStringSerializer(), messageListener, objectMapper), toTopics(players));
         // Step 2. Checking if listener container is alive, and starting it if needed
         if (!listenerContainer.isActive() || !listenerContainer.isRunning())
             listenerContainer.start();
     }
 
     @Override
-    public void unsubscribe(final String player, final PlayerNotificationListener<Presence> messageListener) {
+    public void unsubscribe(final String player, final SystemNotificationListener<? extends SystemEvent> messageListener) {
         unsubscribe(Collections.singleton(player), messageListener);
     }
 
     @Override
-    public void unsubscribe(Collection<String> players, PlayerNotificationListener<Presence> playerStateListener) {
+    public void unsubscribe(Collection<String> players, SystemNotificationListener<? extends SystemEvent> playerStateListener) {
         LOGGER.debug("Unsubscribing {} for changes from {}", players, playerStateListener);
-        listenerContainer.removeMessageListener(new PresenceListenerWrapper(stringRedisSerializer, playerStateListener), toTopics(players));
+        listenerContainer.removeMessageListener(new PresenceListenerWrapper(stringRedisSerializer, playerStateListener, objectMapper), toTopics(players));
     }
 
     private Collection<Topic> toTopics(Collection<String> players) {
@@ -62,6 +68,16 @@ public class StringRedisPlayerPresenceListenerService implements PlayerPresenceL
         for (String player : players)
             playerTopics.add(new ChannelTopic(player));
         return playerTopics;
+    }
+
+    @Override
+    public void subscribe(EventSelector eventSelector, SystemNotificationListener<? extends SystemEvent> messageListener) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void unsubscribe(EventSelector eventSelector, SystemNotificationListener<? extends SystemEvent> playerStateListener) {
+        throw new UnsupportedOperationException();
     }
 
 }

@@ -1,28 +1,30 @@
 package com.clemble.casino.server.player.presence;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
+import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Created with IntelliJ IDEA.
- * User: mavarazy
- * Date: 05/12/13
- * Time: 06:54
- * To change this template use File | Settings | File Templates.
  */
 public class JedisPlayerPresenceServerService implements PlayerPresenceServerService {
 
@@ -33,13 +35,16 @@ public class JedisPlayerPresenceServerService implements PlayerPresenceServerSer
 
     final private String UPDATE_SCRIPT;
     final private JedisPool jedisPool;
+    final private SystemNotificationService systemNotificationService;
     final private PlayerNotificationService<PlayerPresence> presenceNotification;
 
     public JedisPlayerPresenceServerService(
             JedisPool jedisPool,
-            PlayerNotificationService<PlayerPresence> presenceNotification) {
+            PlayerNotificationService<PlayerPresence> presenceNotification,
+            SystemNotificationService systemNotificationService) {
         this.jedisPool = checkNotNull(jedisPool);
         this.presenceNotification = checkNotNull(presenceNotification);
+        this.systemNotificationService = checkNotNull(systemNotificationService);
         Jedis jedis = jedisPool.getResource();
         try {
             this.UPDATE_SCRIPT = jedis.scriptLoad(
@@ -117,19 +122,20 @@ public class JedisPlayerPresenceServerService implements PlayerPresenceServerSer
     @Override
     public boolean markPlaying(final Collection<String> players, final GameSessionKey sessionKey) {
         Jedis jedis = jedisPool.getResource();
+        boolean updated = false;
         try {
-            Boolean updated = Boolean.valueOf(String.valueOf(jedis.evalsha(UPDATE_SCRIPT, new ArrayList<>(players), Collections.singletonList(sessionKey.toString()))));
-            // Step 2. If atomic update success, then move on
-            if (updated) {
-                for(String player: players) {
-                    notifyStateChange(PlayerPresence.playing(player, sessionKey), jedis);
-                }
-            }
-            // Step 3. Returning result of operation
-            return updated;
+            updated = Boolean.valueOf(String.valueOf(jedis.evalsha(UPDATE_SCRIPT, new ArrayList<>(players), Collections.singletonList(sessionKey.toString()))));
         } finally {
             jedisPool.returnResource(jedis);
         }
+        // Step 2. If atomic update success, then move on
+        if (updated) {
+            for(String player: players) {
+                notifyStateChange(PlayerPresence.playing(player, sessionKey));
+            }
+        }
+        // Step 3. Returning result of operation
+        return updated;
     }
 
     @Override
@@ -138,36 +144,33 @@ public class JedisPlayerPresenceServerService implements PlayerPresenceServerSer
         try {
             // Step 1. Removing associated key from the list
             jedis.del(player);
-            // Step 2. Notifying listeners of state change
-            notifyStateChange(PlayerPresence.offline(player), jedis);
         } finally {
             jedisPool.returnResource(jedis);
         }
+        // Step 2. Notifying listeners of state change
+        notifyStateChange(PlayerPresence.offline(player));
     }
 
     @Override
     public Date markOnline(final String player) {
+        Date newExpirationTime = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
         Jedis jedis = jedisPool.getResource();
-        LOG.trace("Online connection + {}", jedis);
         try {
             // Step 1. Setting new expiration time
-            Date newExpirationTime = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
             jedis.set(player, ZERO_SESSION);
             jedis.expireAt(player, newExpirationTime.getTime());
-            // Step 2. Sending notification, for player state update
-            notifyStateChange(PlayerPresence.online(player), jedis);
-            return newExpirationTime;
         } finally {
-            LOG.trace("Online connection - {}", jedis);
             jedisPool.returnResource(jedis);
         }
+        // Step 2. Sending notification, for player state update
+        notifyStateChange(PlayerPresence.online(player));
+        return newExpirationTime;
     }
 
-    private void notifyStateChange(final PlayerPresence newPresence, Jedis jedis) {
+    private void notifyStateChange(final PlayerPresence newPresence) {
         // Step 1. Notifying through native Redis mechanisms
-        Long numUpdatedClients = jedis.publish(newPresence.getPlayer(), newPresence.getPresence().name());
+        systemNotificationService.notify(newPresence.getPlayer(), new PlayerPresenceChangedEvent(newPresence));
         // Step 2. Notifying through native Rabbit mechanisms
-        Boolean notified = presenceNotification.notify(newPresence.getPlayer(), newPresence);
-        LOG.info("{} update to {}, notified {} Redis listeners, and notified Rabbit {}", newPresence.getPlayer(), newPresence.getPresence(), numUpdatedClients, notified);
+        presenceNotification.notify(newPresence.getPlayer(), newPresence);
     }
 }

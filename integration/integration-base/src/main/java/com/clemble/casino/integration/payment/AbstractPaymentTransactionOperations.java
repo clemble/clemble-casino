@@ -8,7 +8,7 @@ abstract public class AbstractPaymentTransactionOperations implements PaymentTra
 
     @Override
     final public PaymentTransaction get(ClembleCasinoOperations player, MoneySource source, String transactionId) {
-        return get(player, source.name(), transactionId);
+        return get(player, source, transactionId);
     }
 
 }

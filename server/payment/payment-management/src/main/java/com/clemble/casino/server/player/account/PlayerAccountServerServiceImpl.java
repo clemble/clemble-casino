@@ -3,6 +3,7 @@ package com.clemble.casino.server.player.account;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
+import java.util.Date;
 
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentOperation;
@@ -15,7 +16,6 @@ import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 
 public class PlayerAccountServerServiceImpl implements PlayerAccountServerService {
@@ -37,6 +37,7 @@ public class PlayerAccountServerServiceImpl implements PlayerAccountServerServic
         Money initialBalance = Money.create(Currency.FakeMoney, 500);
         PaymentTransaction initialTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(MoneySource.registration, player.getPlayer()))
+                .setTransactionDate(new Date())
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setAmount(initialBalance).setPlayer(player.getPlayer()))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setAmount(initialBalance).setPlayer(PlayerAware.DEFAULT_PLAYER));
         // Step 3. Returning PaymentTransaction

@@ -6,8 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.payment.PaymentTransactionServerServiceImpl;
+import com.clemble.casino.server.payment.bonus.DailyBonusService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.account.PlayerAccountServerServiceImpl;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
@@ -19,22 +22,23 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 @Import({CommonSpringConfiguration.class, PaymentJPASpringConfiguration.class})
 public class PaymentManagementSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("playerAccountRepository")
-    public PlayerAccountRepository playerAccountRepository;
-
-    @Autowired
-    @Qualifier("paymentTransactionRepository")
-    public PaymentTransactionRepository paymentTransactionRepository;
-
     @Bean
-    public PlayerAccountServerService realPlayerAccountService() {
-        return new PlayerAccountServerServiceImpl(playerAccountRepository, realPaymentTransactionService());
+    @Autowired
+    public PlayerAccountServerService realPlayerAccountService(PlayerAccountRepository playerAccountRepository, @Qualifier("realPaymentTransactionService") PaymentTransactionServerService realPaymentTransactionService) {
+        return new PlayerAccountServerServiceImpl(playerAccountRepository, realPaymentTransactionService);
     }
 
     @Bean
-    public PaymentTransactionServerService realPaymentTransactionService() {
+    @Autowired
+    public PaymentTransactionServerService realPaymentTransactionService(PaymentTransactionRepository paymentTransactionRepository, PlayerAccountRepository playerAccountRepository) {
         return new PaymentTransactionServerServiceImpl(paymentTransactionRepository, playerAccountRepository);
+    }
+
+    @Bean
+    @Autowired
+    public DailyBonusService dailyBonusService(PaymentTransactionRepository paymentTransactionRepository, @Qualifier("realPaymentTransactionService") PaymentTransactionServerService realPaymentTransactionService) {
+        Money bonus = new Money(Currency.FakeMoney, 100);
+        return new DailyBonusService(paymentTransactionRepository, realPaymentTransactionService, bonus);
     }
 
 }

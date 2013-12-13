@@ -3,8 +3,9 @@ package com.clemble.casino.server.player.notification;
 import java.util.Collection;
 
 import com.clemble.casino.event.Event;
+import com.clemble.casino.server.NotificationService;
 
-public interface PlayerNotificationService<T extends Event> {
+public interface PlayerNotificationService<T extends Event> extends NotificationService {
 
     public boolean notify(final String path, final T gameEvent);
 

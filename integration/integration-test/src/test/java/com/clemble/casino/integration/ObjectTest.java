@@ -29,7 +29,6 @@ import com.clemble.casino.game.rule.time.MoveTimeRule;
 import com.clemble.casino.game.rule.time.TotalTimeRule;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.integration.game.NumberState;
-import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
@@ -84,7 +83,9 @@ public class ObjectTest {
             @Override
             public PaymentTransaction generate() {
                 return new PaymentTransaction()
-                        .setTransactionKey(new PaymentTransactionKey().setSource(MoneySource.TicTacToe).setTransaction(RandomStringUtils.random(5)))
+                        .setTransactionKey(new PaymentTransactionKey().setSource("TicTacToe").setTransaction(RandomStringUtils.random(5)))
+                        .setTransactionDate(new Date())
+                        .setProcessingDate(new Date())
                         .addPaymentOperation(
                                 new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayer(RandomStringUtils.random(5)))
                         .addPaymentOperation(

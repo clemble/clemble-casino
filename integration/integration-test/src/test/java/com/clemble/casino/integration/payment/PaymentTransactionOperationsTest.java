@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -22,7 +23,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
-import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
@@ -47,7 +47,7 @@ public class PaymentTransactionOperationsTest {
 
     @Test
     public void testFakePaymentTransaction() {
-        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
+        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(new PaymentTransactionKey("TicTacToe", 2432))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayer("-1").setAmount(Money.create(Currency.FakeMoney, 50)))
                 .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayer("-2").setAmount(Money.create(Currency.FakeMoney, 50)));
 
@@ -62,7 +62,9 @@ public class PaymentTransactionOperationsTest {
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
+                .setTransactionKey(new PaymentTransactionKey("TicTacToe", 2432))
+                .setTransactionDate(new Date())
+                .setProcessingDate(new Date())
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 60)))
@@ -70,7 +72,7 @@ public class PaymentTransactionOperationsTest {
                         new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)));
 
-        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionInvalid));
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionDebitAndCreditNotMatched));
 
         paymentTransactionOperations.perform(paymentTransaction);
     }
@@ -81,7 +83,8 @@ public class PaymentTransactionOperationsTest {
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(new PaymentTransactionKey(MoneySource.TicTacToe.name(), 2432))
+                .setTransactionKey(new PaymentTransactionKey("TicTacToe", 2432))
+                .setTransactionDate(new Date())
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)))
@@ -96,7 +99,7 @@ public class PaymentTransactionOperationsTest {
 
     @Test
     public void testValidTransactionAccess() {
-        String source = MoneySource.TicTacToe.name();
+        String source = "TicTacToe";
         long transactionId = 2323;
 
         ClembleCasinoOperations player = playerOperations.createPlayer();
@@ -104,6 +107,7 @@ public class PaymentTransactionOperationsTest {
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(source, transactionId))
+                .setTransactionDate(new Date())
                 .addPaymentOperation(
                         new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)))
@@ -120,7 +124,7 @@ public class PaymentTransactionOperationsTest {
 
     // TODO restore @Test
     public void testInValidTransactionAccess() {
-        String source = MoneySource.TicTacToe.name();
+        String source = "TicTacToe";
         long transactionId = 2323;
 
         ClembleCasinoOperations player = playerOperations.createPlayer();
@@ -151,7 +155,7 @@ public class PaymentTransactionOperationsTest {
         // Step 1. Creating player
         ClembleCasinoOperations player = playerOperations.createPlayer();
         // Step 2. Checking account exists
-        PaymentTransaction paymentTransaction = player.paymentOperations().getPaymentTransaction(MoneySource.registration, player.getPlayer());
+        PaymentTransaction paymentTransaction = player.paymentOperations().getPaymentTransaction("registration", player.getPlayer());
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
             if (paymentOperation.getPlayer().equals(player.getPlayer())) {

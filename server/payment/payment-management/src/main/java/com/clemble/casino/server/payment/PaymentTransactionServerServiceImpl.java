@@ -16,7 +16,6 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Operation;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 
@@ -31,14 +30,11 @@ public class PaymentTransactionServerServiceImpl implements PaymentTransactionSe
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public PaymentTransaction process(PaymentTransaction paymentTransaction) {
         // Step 1. Sanity check
         if (paymentTransaction == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionEmpty);
-        if (!paymentTransaction.valid()) {
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionInvalid);
-        }
         // Step 2. Processing payment transactions
         return processTransaction(paymentTransaction);
     }

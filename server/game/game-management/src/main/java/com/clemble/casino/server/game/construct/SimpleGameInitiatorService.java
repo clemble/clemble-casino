@@ -13,7 +13,7 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionRequest;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
-import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
+import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 
 public class SimpleGameInitiatorService implements GameInitiatorService {
@@ -28,7 +28,7 @@ public class SimpleGameInitiatorService implements GameInitiatorService {
 
     public SimpleGameInitiatorService(final GameSessionProcessor<?> stateFactory,
             final PlayerPresenceServerService presenceService,
-            final PlayerPresenceListenerService playerPresenceService) {
+            final SystemNotificationServiceListener playerPresenceService) {
         this.processor = checkNotNull(stateFactory);
         this.presenceService = checkNotNull(presenceService);
 

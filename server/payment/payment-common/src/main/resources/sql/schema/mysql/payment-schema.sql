@@ -16,10 +16,11 @@
     drop table if exists PLAYER_ACCOUNT_AMOUNT;
 
     create table PAYMENT_TRANSACTION (
-        MONEY_SOURCE varchar(255) not null,
+        TRANSACTION_SOURCE varchar(255) not null,
         TRANSACTION_ID varchar(255) not null,
+        TRANSACTION_PROCESSING_DATE datetime,
         TRANSACTION_DATE datetime,
-        primary key (MONEY_SOURCE, TRANSACTION_ID)
+        primary key (TRANSACTION_SOURCE, TRANSACTION_ID)
     ) ENGINE=InnoDB;
 
     create table PAYMENT_TRANSACTION_OPERATION (
@@ -46,7 +47,7 @@
         add index FK_jys2g64i2unkwh385gs3x7k1 (TRANSACTION_ID, MONEY_SOURCE), 
         add constraint FK_jys2g64i2unkwh385gs3x7k1 
         foreign key (TRANSACTION_ID, MONEY_SOURCE) 
-        references PAYMENT_TRANSACTION (MONEY_SOURCE, TRANSACTION_ID);
+        references PAYMENT_TRANSACTION (TRANSACTION_SOURCE, TRANSACTION_ID);
 
     alter table PLAYER_ACCOUNT_AMOUNT 
         add index FK_fbj51f8hoakoj2ark4h34igxj (PLAYER_ID), 

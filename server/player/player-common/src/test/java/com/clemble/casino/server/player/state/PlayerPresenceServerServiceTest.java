@@ -28,8 +28,9 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.player.notification.PlayerNotificationListener;
-import com.clemble.casino.server.player.presence.PlayerPresenceListenerService;
+import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
+import com.clemble.casino.server.player.notification.SystemNotificationListener;
+import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
@@ -46,7 +47,7 @@ public class PlayerPresenceServerServiceTest {
     public PlayerPresenceServerService playerPresenceService;
 
     @Autowired
-    public PlayerPresenceListenerService presenceListenerService;
+    public SystemNotificationServiceListener presenceListenerService;
 
     @Test
     public void testMarkAvailable() {
@@ -215,7 +216,7 @@ public class PlayerPresenceServerServiceTest {
         }
     }
 
-    private class PlayerListener implements PlayerNotificationListener<Presence> {
+    private class PlayerListener implements SystemNotificationListener<PlayerPresenceChangedEvent> {
         final public CountDownLatch countDownLatch;
         final public ArrayBlockingQueue<Entry<String, Presence>> calls;
 
@@ -225,9 +226,9 @@ public class PlayerPresenceServerServiceTest {
         }
 
         @Override
-        public void onUpdate(String player, Presence state) {
+        public void onUpdate(String player, PlayerPresenceChangedEvent state) {
             try {
-                calls.put(new ImmutablePair<String, Presence>(player, state));
+                calls.put(new ImmutablePair<String, Presence>(player, state.getPresence()));
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             } finally {

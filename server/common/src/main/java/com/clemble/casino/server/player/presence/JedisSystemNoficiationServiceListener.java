@@ -1,5 +1,8 @@
 package com.clemble.casino.server.player.presence;
 
+import static com.clemble.casino.utils.Preconditions.checkNotNull;
+
+import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -15,37 +18,36 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
 
-import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.player.notification.PlayerNotificationListener;
+import com.clemble.casino.client.event.EventSelector;
+import com.clemble.casino.server.event.SystemEvent;
+import com.clemble.casino.server.player.notification.SystemNotificationListener;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
- * Created with IntelliJ IDEA.
- * User: mavarazy
- * Date: 05/12/13
- * Time: 13:21
- * To change this template use File | Settings | File Templates.
  */
-public class JedisPlayerPresenceListenerService extends JedisPubSub implements PlayerPresenceListenerService, Runnable {
+public class JedisSystemNoficiationServiceListener extends JedisPubSub implements SystemNotificationServiceListener, Runnable {
 
-    private Logger LOG = LoggerFactory.getLogger(JedisPlayerPresenceListenerService.class);
+    static final private Logger LOG = LoggerFactory.getLogger(JedisSystemNoficiationServiceListener.class);
 
     static final private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1, new ThreadFactoryBuilder().setNameFormat("Presence Listener").build());
 
     final private JedisPool jedisPool;
+    final private ObjectMapper objectMapper;
     final private ReentrantLock lock = new ReentrantLock();
-    final private ConcurrentHashMap<String, Collection<PlayerNotificationListener<Presence>>> subscribers = new ConcurrentHashMap<>();
+    final private ConcurrentHashMap<String, Collection<SystemNotificationListener<? extends SystemEvent>>> subscribers = new ConcurrentHashMap<>();
 
-    public JedisPlayerPresenceListenerService(JedisPool jedis) {
-        this.jedisPool = jedis;
-        this.scheduledExecutorService.execute(this);
+    public JedisSystemNoficiationServiceListener(JedisPool jedis, ObjectMapper objectMapper) {
+        this.jedisPool = checkNotNull(jedis);
+        this.objectMapper = checkNotNull(objectMapper);
+        JedisSystemNoficiationServiceListener.scheduledExecutorService.execute(this);
     }
 
     @Override
-    public void subscribe(String playerId, PlayerNotificationListener<Presence> messageListener) {
+    public void subscribe(String playerId, SystemNotificationListener<? extends SystemEvent> messageListener) {
         // Step 1. Initializing subscription
         if(!subscribers.containsKey(playerId)) {
-            if(subscribers.putIfAbsent(playerId, new LinkedBlockingQueue<PlayerNotificationListener<Presence>>()) == null){
+            if(subscribers.putIfAbsent(playerId, new LinkedBlockingQueue<SystemNotificationListener<? extends SystemEvent>>()) == null){
                 lock.lock();
                 try {
                     subscribe(playerId);
@@ -59,14 +61,14 @@ public class JedisPlayerPresenceListenerService extends JedisPubSub implements P
     }
 
     @Override
-    public void subscribe(Collection<String> players, PlayerNotificationListener<Presence> messageListener) {
+    public void subscribe(Collection<String> players, SystemNotificationListener<? extends SystemEvent> messageListener) {
         for(String player: players) {
             subscribe(player, messageListener);
         }
     }
 
     @Override
-    public void unsubscribe(String player, PlayerNotificationListener<Presence> messageListener) {
+    public void unsubscribe(String player, SystemNotificationListener<? extends SystemEvent> messageListener) {
         // Step 1. Removing specific listener
         subscribers.get(player).remove(messageListener);
         // Step 2. If there is nothing to subscribe to for the player remove entry and unsubscribe
@@ -78,17 +80,24 @@ public class JedisPlayerPresenceListenerService extends JedisPubSub implements P
     }
 
     @Override
-    public void unsubscribe(Collection<String> players, PlayerNotificationListener<Presence> playerStateListener) {
+    public void unsubscribe(Collection<String> players, SystemNotificationListener<? extends SystemEvent> playerStateListener) {
         for(String player: players)
             unsubscribe(player, playerStateListener);
     }
 
     @Override
-    public void onMessage(String player, String presence) {
-        Collection<PlayerNotificationListener<Presence>> playerPresenceListeners = subscribers.get(player);
+    public void onMessage(String player, String serializedEvent) {
+        Collection<SystemNotificationListener<? extends SystemEvent>> playerPresenceListeners = subscribers.get(player);
+        SystemEvent event;
+        try {
+            event = objectMapper.readValue(serializedEvent, SystemEvent.class);
+        } catch (IOException e) {
+            LOG.error("Failed to read \"{}\"", serializedEvent);
+            throw new RuntimeException(e); // TODO change
+        }
         if (playerPresenceListeners != null) {
-            for(PlayerNotificationListener notificationListener: playerPresenceListeners) {
-                notificationListener.onUpdate(player, Presence.valueOf(presence));
+            for(SystemNotificationListener notificationListener: playerPresenceListeners) {
+                notificationListener.onUpdate(player, event);
             }
         }
     }
@@ -114,13 +123,6 @@ public class JedisPlayerPresenceListenerService extends JedisPubSub implements P
     public void onPSubscribe(String s, int i) {
     }
 
-//    @Override
-//    public void subscribe(String... channels) {
-//        synchronized (subscribers) {
-//            super.subscribe(channels);
-//        }
-//    }
-
     @Override
     public void run(){
         LOG.info("Starting listener");
@@ -137,10 +139,20 @@ public class JedisPlayerPresenceListenerService extends JedisPubSub implements P
             LOG.info("Failed to start because of {}", jedis);
         } catch(Throwable throwable) {
             LOG.error("Failed to start because of", throwable);
-            this.scheduledExecutorService.schedule(this, 30, TimeUnit.SECONDS);
+            JedisSystemNoficiationServiceListener.scheduledExecutorService.schedule(this, 30, TimeUnit.SECONDS);
         } finally {
             jedisPool.returnBrokenResource(jedis);
         }
+    }
+
+    @Override
+    public void subscribe(EventSelector eventSelector, SystemNotificationListener<? extends SystemEvent> messageListener) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void unsubscribe(EventSelector eventSelector, SystemNotificationListener<? extends SystemEvent> playerStateListener) {
+        throw new UnsupportedOperationException();
     }
 
 }

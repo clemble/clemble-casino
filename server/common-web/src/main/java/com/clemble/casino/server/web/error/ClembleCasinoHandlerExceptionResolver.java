@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoFailureDescription;
+import com.clemble.casino.server.error.ClembleCasinoServerException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
@@ -39,9 +40,11 @@ public class ClembleCasinoHandlerExceptionResolver implements HandlerExceptionRe
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         LOGGER.error("Error while processing {} with {}", request, handler);
         LOGGER.error("Log trace ", ex);
-        ClembleCasinoFailureDescription gogomayaFailure = null;
+        ClembleCasinoFailureDescription clembleFailure = null;
         if (ex instanceof ClembleCasinoException) {
-            gogomayaFailure = ((ClembleCasinoException) ex).getFailureDescription();
+            clembleFailure = ((ClembleCasinoException) ex).getFailureDescription();
+        } else if(ex instanceof ClembleCasinoServerException) {
+            clembleFailure = ((ClembleCasinoServerException) ex).getCasinoException().getFailureDescription();
         } else if (ex instanceof ServletRequestBindingException) {
             Collection<ClembleCasinoError> errors = new ArrayList<ClembleCasinoError>();
             ServletRequestBindingException bindingException = (ServletRequestBindingException) ex;
@@ -55,15 +58,15 @@ public class ClembleCasinoHandlerExceptionResolver implements HandlerExceptionRe
                 errors.add(ClembleCasinoError.BadRequestTableIdHeaderMissing);
             }
             if(errors.size() > 0)
-                gogomayaFailure = new ClembleCasinoFailureDescription().setErrors(errors);
+                clembleFailure = new ClembleCasinoFailureDescription().setErrors(errors);
         }
 
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setHeader("Content-Type", "application/json");
-        gogomayaFailure = gogomayaFailure == null ? ClembleCasinoFailureDescription.SERVER_ERROR : gogomayaFailure;
+        clembleFailure = clembleFailure == null ? ClembleCasinoFailureDescription.SERVER_ERROR : clembleFailure;
 
         try {
-            objectMapper.writeValue(response.getOutputStream(), gogomayaFailure);
+            objectMapper.writeValue(response.getOutputStream(), clembleFailure);
         } catch (IOException ignore) {
             ignore.printStackTrace();
         }

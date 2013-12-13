@@ -8,10 +8,11 @@
     drop table PLAYER_ACCOUNT_AMOUNT if exists;
 
     create table PAYMENT_TRANSACTION (
-        MONEY_SOURCE varchar(255) not null,
+        TRANSACTION_SOURCE varchar(255) not null,
         TRANSACTION_ID varchar(255) not null,
+        TRANSACTION_PROCESSING_DATE timestamp,
         TRANSACTION_DATE timestamp,
-        primary key (MONEY_SOURCE, TRANSACTION_ID)
+        primary key (TRANSACTION_SOURCE, TRANSACTION_ID)
     );
 
     create table PAYMENT_TRANSACTION_OPERATION (

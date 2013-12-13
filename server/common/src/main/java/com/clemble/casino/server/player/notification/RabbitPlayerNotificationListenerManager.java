@@ -19,12 +19,12 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.support.converter.MessageConverter;
 
 import com.clemble.casino.ServerRegistry;
-import com.clemble.casino.event.Event;
+import com.clemble.casino.server.event.SystemEvent;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class RabbitPlayerNotificationManager<T extends Event> implements PlayerNotificationListenerManger<T> {
+public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> implements PlayerNotificationListenerManger<T> {
 
     final private LoadingCache<String, RabbitListenerControl> RABBIT_CONTROL_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<String, RabbitListenerControl>() {
 
@@ -36,24 +36,24 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
 
     });
 
-    final private ConcurrentHashMap<String, Collection<PlayerNotificationListener<T>>> listeners = new ConcurrentHashMap<>();
+    final private ConcurrentHashMap<String, Collection<SystemNotificationListener<T>>> listeners = new ConcurrentHashMap<>();
 
     final private String postfix;
     final private MessageConverter messageConverter;
     final private ServerRegistry serverRegistry;
 
-    public RabbitPlayerNotificationManager(final String postfix, final MessageConverter messageConverter, final ServerRegistry serverRegistry) {
+    public RabbitPlayerNotificationListenerManager(final String postfix, final MessageConverter messageConverter, final ServerRegistry serverRegistry) {
         this.postfix = checkNotNull(postfix);
         this.messageConverter = checkNotNull(messageConverter);
         this.serverRegistry = checkNotNull(serverRegistry);
     }
 
     @Override
-    public void subscribe(String player, PlayerNotificationListener<T> messageListener) {
+    public void subscribe(String player, SystemNotificationListener<T> messageListener) {
         if (messageListener == null)
             return;
         // Step 1. Checking that there is something
-        listeners.putIfAbsent(player, new CopyOnWriteArraySet<PlayerNotificationListener<T>>());
+        listeners.putIfAbsent(player, new CopyOnWriteArraySet<SystemNotificationListener<T>>());
         listeners.get(player).add(messageListener);
         // Step 2. Figuring out involved notification server
         String notificationServer = serverRegistry.findById(player);
@@ -63,18 +63,18 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
     }
 
     @Override
-    public void subscribe(Collection<String> players, PlayerNotificationListener<T> messageListener) {
+    public void subscribe(Collection<String> players, SystemNotificationListener<T> messageListener) {
         for (String player : players) {
             subscribe(player, messageListener);
         }
     }
 
     @Override
-    public void unsubscribe(String player, PlayerNotificationListener<T> messageListener) {
+    public void unsubscribe(String player, SystemNotificationListener<T> messageListener) {
         if (messageListener == null)
             return;
         // Step 1. Checking that there is something
-        Collection<PlayerNotificationListener<T>> notifications = listeners.get(player);
+        Collection<SystemNotificationListener<T>> notifications = listeners.get(player);
         if (notifications != null)
             notifications.remove(messageListener);
         if (notifications.isEmpty()) {
@@ -87,7 +87,7 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
     }
 
     @Override
-    public void unsubscribe(Collection<String> players, PlayerNotificationListener<T> messageListener) {
+    public void unsubscribe(Collection<String> players, SystemNotificationListener<T> messageListener) {
         for (String player : players)
             unsubscribe(player, messageListener);
     }
@@ -111,7 +111,7 @@ public class RabbitPlayerNotificationManager<T extends Event> implements PlayerN
                     T event = (T) messageConverter.fromMessage(message);
                     String routingKey = message.getMessageProperties().getReceivedRoutingKey();
                     String player = routingKey.substring(0, routingKey.length() - postfix.length());
-                    for(PlayerNotificationListener<T> playerStateListener: listeners.get(player)) {
+                    for(SystemNotificationListener<T> playerStateListener: listeners.get(player)) {
                         playerStateListener.onUpdate(player, event);
                     }
                 }

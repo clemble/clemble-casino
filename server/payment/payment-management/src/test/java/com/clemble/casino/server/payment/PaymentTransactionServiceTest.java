@@ -1,5 +1,6 @@
 package com.clemble.casino.server.payment;
 
+import java.util.Date;
 import java.util.Random;
 
 import org.junit.Assert;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
@@ -18,7 +18,6 @@ import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 
@@ -51,11 +50,13 @@ public class PaymentTransactionServiceTest {
     public void testWalletUpdate() {
         Money amount = Money.create(Currency.FakeMoney, RANDOM.nextInt(100));
 
-        PaymentTransactionKey transactionId = new PaymentTransactionKey().setSource(MoneySource.TicTacToe).setTransaction("1");
+        PaymentTransactionKey transactionKey = new PaymentTransactionKey().setSource("TicTacToe").setTransaction("1");
 
-        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(transactionId)
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayer(playerFrom).setAmount(amount))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayer(playerTo).setAmount(amount));
+        PaymentTransaction paymentTransaction = new PaymentTransaction()
+            .setTransactionKey(transactionKey)
+            .setTransactionDate(new Date())
+            .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayer(playerFrom).setAmount(amount))
+            .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayer(playerTo).setAmount(amount));
 
         paymentTransactionService.process(paymentTransaction);
 

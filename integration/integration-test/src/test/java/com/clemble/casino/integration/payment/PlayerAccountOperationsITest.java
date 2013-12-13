@@ -24,7 +24,6 @@ import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
-import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
@@ -55,7 +54,7 @@ public class PlayerAccountOperationsITest {
         assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
         // Step 3. Processing next transactions
         A.paymentOperations().getPaymentTransactions();
-        PaymentTransaction transaction = A.paymentOperations().getPaymentTransaction(MoneySource.registration, A.getPlayer());
+        PaymentTransaction transaction = A.paymentOperations().getPaymentTransaction("registration", A.getPlayer());
         Set<PaymentOperation> paymentOperations = transaction.getPaymentOperations();
         Money transactionAmmount = paymentOperations.iterator().next().getAmount();
 
