@@ -1,6 +1,7 @@
 package com.clemble.casino.integration.payment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -151,6 +153,7 @@ public class PaymentTransactionOperationsTest {
     }
 
     @Test
+    @Repeat(100)
     public void testRegistrationTransaction() {
         // Step 1. Creating player
         ClembleCasinoOperations player = playerOperations.createPlayer();
@@ -165,7 +168,7 @@ public class PaymentTransactionOperationsTest {
         // Step 3. Checking there is at list one operation available
         Assert.assertTrue(associatedOperation.size() > 0);
         for (PaymentOperation operation : associatedOperation)
-            assertEquals(player.paymentOperations().getAccount().getMoney(operation.getAmount().getCurrency()), operation.getAmount());
+            assertTrue(player.paymentOperations().getAccount().getMoney(operation.getAmount().getCurrency()).getAmount() >= operation.getAmount().getAmount());
     }
 
 }

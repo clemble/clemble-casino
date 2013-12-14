@@ -29,7 +29,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
-import com.clemble.casino.server.player.notification.SystemNotificationListener;
+import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
@@ -216,7 +216,7 @@ public class PlayerPresenceServerServiceTest {
         }
     }
 
-    private class PlayerListener implements SystemNotificationListener<PlayerPresenceChangedEvent> {
+    private class PlayerListener implements SystemEventListener<PlayerPresenceChangedEvent> {
         final public CountDownLatch countDownLatch;
         final public ArrayBlockingQueue<Entry<String, Presence>> calls;
 
@@ -226,7 +226,7 @@ public class PlayerPresenceServerServiceTest {
         }
 
         @Override
-        public void onUpdate(String player, PlayerPresenceChangedEvent state) {
+        public void onEvent(String player, PlayerPresenceChangedEvent state) {
             try {
                 calls.put(new ImmutablePair<String, Presence>(player, state.getPresence()));
             } catch (Throwable throwable) {

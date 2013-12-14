@@ -20,12 +20,10 @@ import redis.clients.jedis.JedisPubSub;
 
 import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.player.notification.SystemNotificationListener;
+import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
-/**
- */
 public class JedisSystemNoficiationServiceListener extends JedisPubSub implements SystemNotificationServiceListener, Runnable {
 
     static final private Logger LOG = LoggerFactory.getLogger(JedisSystemNoficiationServiceListener.class);
@@ -35,7 +33,7 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
     final private JedisPool jedisPool;
     final private ObjectMapper objectMapper;
     final private ReentrantLock lock = new ReentrantLock();
-    final private ConcurrentHashMap<String, Collection<SystemNotificationListener<? extends SystemEvent>>> subscribers = new ConcurrentHashMap<>();
+    final private ConcurrentHashMap<String, Collection<SystemEventListener<? extends SystemEvent>>> subscribers = new ConcurrentHashMap<>();
 
     public JedisSystemNoficiationServiceListener(JedisPool jedis, ObjectMapper objectMapper) {
         this.jedisPool = checkNotNull(jedis);
@@ -44,13 +42,14 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
     }
 
     @Override
-    public void subscribe(String playerId, SystemNotificationListener<? extends SystemEvent> messageListener) {
+    public void subscribe(String playerId, SystemEventListener<? extends SystemEvent> messageListener) {
         // Step 1. Initializing subscription
         if(!subscribers.containsKey(playerId)) {
-            if(subscribers.putIfAbsent(playerId, new LinkedBlockingQueue<SystemNotificationListener<? extends SystemEvent>>()) == null){
+            if(subscribers.putIfAbsent(playerId, new LinkedBlockingQueue<SystemEventListener<? extends SystemEvent>>()) == null){
                 lock.lock();
                 try {
-                    subscribe(playerId);
+                    if(isSubscribed())
+                        subscribe(playerId);
                 } finally {
                     lock.unlock();
                 }
@@ -61,14 +60,14 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
     }
 
     @Override
-    public void subscribe(Collection<String> players, SystemNotificationListener<? extends SystemEvent> messageListener) {
+    public void subscribe(Collection<String> players, SystemEventListener<? extends SystemEvent> messageListener) {
         for(String player: players) {
             subscribe(player, messageListener);
         }
     }
 
     @Override
-    public void unsubscribe(String player, SystemNotificationListener<? extends SystemEvent> messageListener) {
+    public void unsubscribe(String player, SystemEventListener<? extends SystemEvent> messageListener) {
         // Step 1. Removing specific listener
         subscribers.get(player).remove(messageListener);
         // Step 2. If there is nothing to subscribe to for the player remove entry and unsubscribe
@@ -80,14 +79,14 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
     }
 
     @Override
-    public void unsubscribe(Collection<String> players, SystemNotificationListener<? extends SystemEvent> playerStateListener) {
+    public void unsubscribe(Collection<String> players, SystemEventListener<? extends SystemEvent> playerStateListener) {
         for(String player: players)
             unsubscribe(player, playerStateListener);
     }
 
     @Override
     public void onMessage(String player, String serializedEvent) {
-        Collection<SystemNotificationListener<? extends SystemEvent>> playerPresenceListeners = subscribers.get(player);
+        Collection<SystemEventListener<? extends SystemEvent>> playerPresenceListeners = subscribers.get(player);
         SystemEvent event;
         try {
             event = objectMapper.readValue(serializedEvent, SystemEvent.class);
@@ -96,8 +95,8 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
             throw new RuntimeException(e); // TODO change
         }
         if (playerPresenceListeners != null) {
-            for(SystemNotificationListener notificationListener: playerPresenceListeners) {
-                notificationListener.onUpdate(player, event);
+            for(SystemEventListener notificationListener: playerPresenceListeners) {
+                notificationListener.onEvent(player, event);
             }
         }
     }
@@ -146,12 +145,12 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
     }
 
     @Override
-    public void subscribe(EventSelector eventSelector, SystemNotificationListener<? extends SystemEvent> messageListener) {
+    public void subscribe(EventSelector eventSelector, SystemEventListener<? extends SystemEvent> messageListener) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void unsubscribe(EventSelector eventSelector, SystemNotificationListener<? extends SystemEvent> playerStateListener) {
+    public void unsubscribe(EventSelector eventSelector, SystemEventListener<? extends SystemEvent> playerStateListener) {
         throw new UnsupportedOperationException();
     }
 

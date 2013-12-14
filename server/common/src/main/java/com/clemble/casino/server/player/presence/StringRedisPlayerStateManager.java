@@ -8,6 +8,7 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -30,9 +31,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     final private StringRedisTemplate redisTemplate;
     final private PlayerNotificationService<PlayerPresence> presenceNotification;
 
-    public StringRedisPlayerStateManager(
-            StringRedisTemplate redisTemplate,
-            RedisMessageListenerContainer listenerContainer,
+    public StringRedisPlayerStateManager(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer,
             PlayerNotificationService<PlayerPresence> presenceNotification) {
         this.redisTemplate = checkNotNull(redisTemplate);
         this.presenceNotification = checkNotNull(presenceNotification);
@@ -122,7 +121,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         });
         // Step 2. If atomic update success, then move on
         if (updated) {
-            for(String player: players) {
+            for (String player : players) {
                 notifyStateChange(PlayerPresence.playing(player, sessionKey));
             }
         }
@@ -136,6 +135,11 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
         redisTemplate.delete(player);
         // Step 2. Notifying listeners of state change
         notifyStateChange(PlayerPresence.offline(player));
+    }
+
+    @Override
+    public Date markAvailable(String player) {
+        return markOnline(player);
     }
 
     @Override

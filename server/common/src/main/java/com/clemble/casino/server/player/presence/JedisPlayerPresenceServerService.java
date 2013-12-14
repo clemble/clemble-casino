@@ -21,11 +21,11 @@ import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
+import com.clemble.casino.server.event.PlayerEnteredEvent;
+import com.clemble.casino.server.event.PlayerLeftEvent;
 import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
-/**
- */
 public class JedisPlayerPresenceServerService implements PlayerPresenceServerService {
 
     final private Logger LOG = LoggerFactory.getLogger(JedisPlayerPresenceServerService.class);
@@ -38,30 +38,19 @@ public class JedisPlayerPresenceServerService implements PlayerPresenceServerSer
     final private SystemNotificationService systemNotificationService;
     final private PlayerNotificationService<PlayerPresence> presenceNotification;
 
-    public JedisPlayerPresenceServerService(
-            JedisPool jedisPool,
-            PlayerNotificationService<PlayerPresence> presenceNotification,
+    public JedisPlayerPresenceServerService(JedisPool jedisPool, PlayerNotificationService<PlayerPresence> presenceNotification,
             SystemNotificationService systemNotificationService) {
         this.jedisPool = checkNotNull(jedisPool);
         this.presenceNotification = checkNotNull(presenceNotification);
         this.systemNotificationService = checkNotNull(systemNotificationService);
         Jedis jedis = jedisPool.getResource();
         try {
-            this.UPDATE_SCRIPT = jedis.scriptLoad(
-            " for i = 1,table.getn(KEYS) do " +
-                " local state = redis.call('get', KEYS[i])" +
-                " if (state ~= ':') then " +
-                    " redis.log(redis.LOG_DEBUG, ARGV[1] .. ' > ' .. KEYS[i] .. ' is in ' .. state); " +
-                    " return 'false'" +
-                " end " +
-            " end " +
-            " redis.log(redis.LOG_DEBUG, 'Starting ' .. ARGV[1]) " +
-            " for i = 1,table.getn(KEYS) do " +
-                " redis.call('set', KEYS[i], ARGV[1])" +
-            " end " +
-            " return 'true'");
+            this.UPDATE_SCRIPT = jedis.scriptLoad(" for i = 1,table.getn(KEYS) do " + " local state = redis.call('get', KEYS[i])" + " if (state ~= ':') then "
+                    + " redis.log(redis.LOG_DEBUG, ARGV[1] .. ' > ' .. KEYS[i] .. ' is in ' .. state); " + " return 'false'" + " end " + " end "
+                    + " redis.log(redis.LOG_DEBUG, 'Starting ' .. ARGV[1]) " + " for i = 1,table.getn(KEYS) do " + " redis.call('set', KEYS[i], ARGV[1])"
+                    + " end " + " return 'true'");
         } finally {
-          jedisPool.returnResource(jedis);
+            jedisPool.returnResource(jedis);
         }
     }
 
@@ -130,7 +119,7 @@ public class JedisPlayerPresenceServerService implements PlayerPresenceServerSer
         }
         // Step 2. If atomic update success, then move on
         if (updated) {
-            for(String player: players) {
+            for (String player : players) {
                 notifyStateChange(PlayerPresence.playing(player, sessionKey));
             }
         }
@@ -149,6 +138,16 @@ public class JedisPlayerPresenceServerService implements PlayerPresenceServerSer
         }
         // Step 2. Notifying listeners of state change
         notifyStateChange(PlayerPresence.offline(player));
+        // Step 3. Notifying player left event
+        systemNotificationService.notify("left", new PlayerLeftEvent(player));
+    }
+
+    @Override
+    public Date markAvailable(String player) {
+        // Step 1. Notifying player entered event
+        systemNotificationService.notify("entered", new PlayerEnteredEvent(player));
+        // Step 2. Generating expiration date
+        return markOnline(player);
     }
 
     @Override
@@ -173,4 +172,5 @@ public class JedisPlayerPresenceServerService implements PlayerPresenceServerSer
         // Step 2. Notifying through native Rabbit mechanisms
         presenceNotification.notify(newPresence.getPlayer(), newPresence);
     }
+
 }

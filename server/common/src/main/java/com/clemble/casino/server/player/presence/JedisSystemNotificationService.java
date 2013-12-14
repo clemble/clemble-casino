@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import com.clemble.casino.event.Event;
+import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,7 +25,7 @@ public class JedisSystemNotificationService implements SystemNotificationService
     }
 
     @Override
-    public void notify(String channel, Event event) {
+    public void notify(String channel, SystemEvent event) {
         // Step 1. Fetching jedis connection
         Jedis jedis = jedisPool.getResource();
         try {

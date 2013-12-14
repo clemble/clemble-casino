@@ -9,7 +9,7 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.player.notification.SystemNotificationListener;
+import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 
 public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
@@ -35,10 +35,10 @@ public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
         LOG.debug("Constructed initiation {}", initiation);
         if (!initiatorService.initiate(initiation)) {
             // Step 2.1 Pretty naive implementation of MessageListener functionality
-            playerPresenceService.subscribe(participants, new SystemNotificationListener<SystemEvent>() {
+            playerPresenceService.subscribe(participants, new SystemEventListener<SystemEvent>() {
 
                 @Override
-                public void onUpdate(String player, SystemEvent event) {
+                public void onEvent(String player, SystemEvent event) {
                     if (event instanceof PlayerPresenceChangedEvent) {
                         if (initiatorService.initiate(initiation))
                             playerPresenceService.unsubscribe(participants, this);

@@ -5,53 +5,65 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
-import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PaymentTransactionKey;
+import com.clemble.casino.payment.bonus.PaymentBonusKey;
+import com.clemble.casino.payment.bonus.PaymentBonusMarker;
+import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.server.event.PlayerEnteredEvent;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 
-public class DailyBonusService implements BonusService {
+public class DailyBonusService implements BonusService<PlayerEnteredEvent> {
 
-    final private DateFormat DATE_FORMAT = new SimpleDateFormat("dd/mm/yy");
+    final private static PaymentBonusSource BONUS_SOURCE = PaymentBonusSource.dailybonus;
+    final private static DateFormat DATE_FORMAT = new SimpleDateFormat("ddmmyy");
 
     final private Money bonusAmount;
+    final private BonusPolicy bonusPolicy;
+    final private PlayerAccountRepository accountRepository;
     final private PaymentTransactionRepository transactionRepository;
-    final private PaymentTransactionServerService transactionService;
+    final private PaymentTransactionServerService transactionServerService;
 
-    public DailyBonusService(PaymentTransactionRepository transactionRepository,
-            PaymentTransactionServerService transactionService,
+    public DailyBonusService(PlayerAccountRepository accountRepository,
+            PaymentTransactionRepository transactionRepository,
+            PaymentTransactionServerService transactionServerService,
+            BonusPolicy bonusPolicy,
             Money bonusAmount) {
-        this.transactionRepository = checkNotNull(transactionRepository);
-        this.transactionService = checkNotNull(transactionService);
         this.bonusAmount = checkNotNull(bonusAmount);
+        this.bonusPolicy = checkNotNull(bonusPolicy);
+        this.accountRepository = checkNotNull(accountRepository);
+        this.transactionServerService = checkNotNull(transactionServerService);
+        this.transactionRepository = checkNotNull(transactionRepository);
     }
 
     @Override
-    public void entered(String player) {
-        // Step 1. Generating latest transaction id
-        PaymentTransactionKey transactionKey = new PaymentTransactionKey(MoneySource.dailybonus, player);
-        PaymentTransaction lastBonus = transactionRepository.findOne(transactionKey);
-        // Step 2. Checking player eligible for bonus
-        if (lastBonus == null || TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastBonus.getTransactionDate().getTime()) > 0){
-            // Step 3. Updating transaction
-            if(lastBonus != null) {
-                lastBonus.getTransactionKey().setSource(transactionKey.getSource() + "_" + DATE_FORMAT.format(lastBonus.getTransactionDate()));
-                transactionRepository.saveAndFlush(lastBonus);
-            }
-            // Step 4. Creating new transaction
-            PaymentTransaction bonusTransaction = new PaymentTransaction()
-                .setTransactionKey(transactionKey).setTransactionDate(new Date())
+    public void onEvent(String channel, PlayerEnteredEvent event) {
+        // Step 1. Sanity check
+        if (event == null || channel == null)
+            return;
+        // Step 2. Checking last bonus marker
+        String player = event.getPlayer();
+        PaymentBonusKey bonusKey = new PaymentBonusKey(player, BONUS_SOURCE);
+        PaymentBonusMarker bonusMarker = new PaymentBonusMarker(bonusKey, DATE_FORMAT.format(new Date()));
+        // Step 3. If day passed since last bonus change bonus 
+        if (!transactionRepository.exists(bonusMarker.toTransactionKey())) {
+            // Step 4. Updating payment transaction
+            PaymentTransaction transaction = new PaymentTransaction()
+                .setTransactionKey(bonusMarker.toTransactionKey())
+                .setTransactionDate(new Date())
                 .addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, bonusAmount, Operation.Credit))
                 .addPaymentOperation(new PaymentOperation(player, bonusAmount, Operation.Debit));
-            // Step 5. Processing transaction
-            transactionService.process(bonusTransaction);
+            if(bonusPolicy.eligible(accountRepository.findOne(player), transaction)) {
+                // Step 5. Processing new transaction and updating bonus marker
+                transactionServerService.process(transaction);
+            }
         }
     }
 

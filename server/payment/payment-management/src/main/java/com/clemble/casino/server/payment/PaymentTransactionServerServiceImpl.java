@@ -64,13 +64,17 @@ public class PaymentTransactionServerServiceImpl implements PaymentTransactionSe
     }
 
     @Override
-    public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
-        PaymentTransactionKey transactionKey = new PaymentTransactionKey(source, transactionId);
-        return paymentTransactionRepository.findOne(transactionKey);
+    public PaymentTransaction getTransaction(String source, String transactionId) {
+        return paymentTransactionRepository.findOne(new PaymentTransactionKey(source, transactionId));
     }
 
     @Override
-    public List<PaymentTransaction> getPaymentTransactions(String player) {
+    public List<PaymentTransaction> getPlayerTransactions(String player) {
         return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
+    }
+
+    @Override
+    public List<PaymentTransaction> getPlayerTransactionsWithSource(String player, String source) {
+        return paymentTransactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, source + "%");
     }
 }

@@ -43,7 +43,7 @@ public class PaymentTransactionController implements PaymentTransactionServerSer
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_TRANSACTIONS_TRANSACTION, produces = WebMapping.PRODUCES)
-    public @ResponseBody PaymentTransaction getPaymentTransaction(@PathVariable("source") String source,
+    public @ResponseBody PaymentTransaction getTransaction(@PathVariable("source") String source,
             @PathVariable("transaction") String transactionId) {
         // Step 1. Checking payment transaction exists
         PaymentTransactionKey paymentTransactionId = new PaymentTransactionKey(source, transactionId);
@@ -57,9 +57,16 @@ public class PaymentTransactionController implements PaymentTransactionServerSer
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PaymentTransaction> getPaymentTransactions(@PathVariable("player") String player) {
+    public @ResponseBody List<PaymentTransaction> getPlayerTransactions(@PathVariable("player") String player) {
         // Step 1. Sending transactions
         return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTION_SOURCE, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<PaymentTransaction> getPlayerTransactionsWithSource(@PathVariable("player") String player, @PathVariable("source") String source) {
+        return paymentTransactionService.getPlayerTransactionsWithSource(player, source);
     }
 
 }

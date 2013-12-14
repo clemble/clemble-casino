@@ -36,7 +36,7 @@ public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> impl
 
     });
 
-    final private ConcurrentHashMap<String, Collection<SystemNotificationListener<T>>> listeners = new ConcurrentHashMap<>();
+    final private ConcurrentHashMap<String, Collection<SystemEventListener<T>>> listeners = new ConcurrentHashMap<>();
 
     final private String postfix;
     final private MessageConverter messageConverter;
@@ -49,11 +49,11 @@ public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> impl
     }
 
     @Override
-    public void subscribe(String player, SystemNotificationListener<T> messageListener) {
+    public void subscribe(String player, SystemEventListener<T> messageListener) {
         if (messageListener == null)
             return;
         // Step 1. Checking that there is something
-        listeners.putIfAbsent(player, new CopyOnWriteArraySet<SystemNotificationListener<T>>());
+        listeners.putIfAbsent(player, new CopyOnWriteArraySet<SystemEventListener<T>>());
         listeners.get(player).add(messageListener);
         // Step 2. Figuring out involved notification server
         String notificationServer = serverRegistry.findById(player);
@@ -63,18 +63,18 @@ public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> impl
     }
 
     @Override
-    public void subscribe(Collection<String> players, SystemNotificationListener<T> messageListener) {
+    public void subscribe(Collection<String> players, SystemEventListener<T> messageListener) {
         for (String player : players) {
             subscribe(player, messageListener);
         }
     }
 
     @Override
-    public void unsubscribe(String player, SystemNotificationListener<T> messageListener) {
+    public void unsubscribe(String player, SystemEventListener<T> messageListener) {
         if (messageListener == null)
             return;
         // Step 1. Checking that there is something
-        Collection<SystemNotificationListener<T>> notifications = listeners.get(player);
+        Collection<SystemEventListener<T>> notifications = listeners.get(player);
         if (notifications != null)
             notifications.remove(messageListener);
         if (notifications.isEmpty()) {
@@ -87,7 +87,7 @@ public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> impl
     }
 
     @Override
-    public void unsubscribe(Collection<String> players, SystemNotificationListener<T> messageListener) {
+    public void unsubscribe(Collection<String> players, SystemEventListener<T> messageListener) {
         for (String player : players)
             unsubscribe(player, messageListener);
     }
@@ -111,8 +111,8 @@ public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> impl
                     T event = (T) messageConverter.fromMessage(message);
                     String routingKey = message.getMessageProperties().getReceivedRoutingKey();
                     String player = routingKey.substring(0, routingKey.length() - postfix.length());
-                    for(SystemNotificationListener<T> playerStateListener: listeners.get(player)) {
-                        playerStateListener.onUpdate(player, event);
+                    for(SystemEventListener<T> playerStateListener: listeners.get(player)) {
+                        playerStateListener.onEvent(player, event);
                     }
                 }
             });

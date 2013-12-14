@@ -21,7 +21,7 @@ public class WebPaymentTransactionOperations  extends AbstractPaymentTransaction
 
     @Override
     public PaymentTransaction get(ClembleCasinoOperations player, String source, String transactionId) {
-        return paymentTransactionController.getPaymentTransaction(source, transactionId);
+        return paymentTransactionController.getTransaction(source, transactionId);
     }
 
 }

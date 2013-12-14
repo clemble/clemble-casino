@@ -26,17 +26,23 @@ public class RestPaymentTransactionServerService implements PaymentTransactionSe
         // Step 1. Processing transaction key
         PaymentTransactionKey transactionKey = paymentTransaction.getTransactionKey();
         // Step 2. Generating url for payment transaction processing
-        String url = paymentServerRegistry.findByIdAndType(transactionKey.getTransaction(), transactionKey.getSource()) + PaymentWebMapping.PAYMENT_TRANSACTIONS;
+        String url = paymentServerRegistry.findByIdAndType(transactionKey.getTransaction(), transactionKey.getSource())
+                + PaymentWebMapping.PAYMENT_TRANSACTIONS;
         return restTemplate.postForEntity(url, paymentTransaction, PaymentTransaction.class).getBody();
     }
 
     @Override
-    public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
+    public PaymentTransaction getTransaction(String source, String transactionId) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<PaymentTransaction> getPaymentTransactions(String player) {
+    public List<PaymentTransaction> getPlayerTransactions(String player) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<PaymentTransaction> getPlayerTransactionsWithSource(String player, String source) {
         throw new UnsupportedOperationException();
     }
 

@@ -11,7 +11,7 @@ import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.player.notification.SystemNotificationListener;
+import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PresenceListenerWrapper implements MessageListener {
@@ -20,11 +20,11 @@ public class PresenceListenerWrapper implements MessageListener {
 
     final private ObjectMapper objectMapper;
     final private RedisSerializer<String> stringRedisSerializer;
-    final private SystemNotificationListener<SystemEvent> playerStateListener;
+    final private SystemEventListener<SystemEvent> playerStateListener;
 
-    public PresenceListenerWrapper(RedisSerializer<String> stringRedisSerializer, SystemNotificationListener<? extends SystemEvent> playerStateListener, ObjectMapper objectMapper) {
+    public PresenceListenerWrapper(RedisSerializer<String> stringRedisSerializer, SystemEventListener<? extends SystemEvent> playerStateListener, ObjectMapper objectMapper) {
         this.stringRedisSerializer = checkNotNull(stringRedisSerializer);
-        this.playerStateListener = (SystemNotificationListener<SystemEvent>) checkNotNull(playerStateListener);
+        this.playerStateListener = (SystemEventListener<SystemEvent>) checkNotNull(playerStateListener);
         this.objectMapper = checkNotNull(objectMapper);
     }
 
@@ -37,7 +37,7 @@ public class PresenceListenerWrapper implements MessageListener {
         // Step 2. Notifying associated PlayerStateListener
         LOG.debug("channel: {}, message: {}", deserializedChannel, deserializedMessage);
         try {
-            playerStateListener.onUpdate(deserializedChannel, objectMapper.readValue(deserializedMessage, SystemEvent.class));
+            playerStateListener.onEvent(deserializedChannel, objectMapper.readValue(deserializedMessage, SystemEvent.class));
         } catch (IOException ioException) {
             LOG.error("Failed to deserialize {}", deserializedMessage);
         }

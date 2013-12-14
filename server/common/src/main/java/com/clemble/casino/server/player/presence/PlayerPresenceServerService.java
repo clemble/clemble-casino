@@ -1,11 +1,11 @@
 package com.clemble.casino.server.player.presence;
 
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.player.PlayerPresence;
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.player.PlayerPresence;
 
 public interface PlayerPresenceServerService {
 
@@ -16,6 +16,8 @@ public interface PlayerPresenceServerService {
     public PlayerPresence getPresence(String player);
 
     public List<PlayerPresence> getPresences(Collection<String> presences);
+
+    public Date markAvailable(String player);
 
     public Date markOnline(String player);
 

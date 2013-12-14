@@ -47,13 +47,16 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         public PaymentTransactionServerService paymentTransactionService() {
-            ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/");
-            return realPaymentTransactionService == null ? new RestPaymentTransactionServerService(paymentRegistry, restTemplate) : realPaymentTransactionService;
+            ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/",
+                    "http://127.0.0.1:8080/payment/");
+            return realPaymentTransactionService == null ? new RestPaymentTransactionServerService(paymentRegistry, restTemplate)
+                    : realPaymentTransactionService;
         }
 
         @Bean
         public PlayerAccountServerService playerAccountService() {
-            ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/");
+            ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/",
+                    "http://127.0.0.1:8080/payment/");
             return realPlayerAccountService == null ? new RestPlayerAccountServerService(paymentRegistry, restTemplate) : realPlayerAccountService;
         }
     }
@@ -93,12 +96,17 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
                 }
 
                 @Override
-                public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
+                public PaymentTransaction getTransaction(String source, String transactionId) {
                     return null;
                 }
 
                 @Override
-                public List<PaymentTransaction> getPaymentTransactions(String player) {
+                public List<PaymentTransaction> getPlayerTransactions(String player) {
+                    return null;
+                }
+
+                @Override
+                public List<PaymentTransaction> getPlayerTransactionsWithSource(String player, String source) {
                     return null;
                 }
             };

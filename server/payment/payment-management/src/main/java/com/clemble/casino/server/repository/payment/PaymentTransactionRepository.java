@@ -12,7 +12,9 @@ import com.clemble.casino.payment.PaymentTransactionKey;
 public interface PaymentTransactionRepository extends JpaRepository<PaymentTransaction, PaymentTransactionKey> {
 
     public List<PaymentTransaction> findByPaymentOperationsPlayer(String player);
-    
-    public List<PaymentTransaction> findByPaymentOperationsPlayerAndTransactionIdSource(String player, String source);
+
+    public List<PaymentTransaction> findByPaymentOperationsPlayerAndTransactionKeySource(String player, String source);
+
+    public List<PaymentTransaction> findByPaymentOperationsPlayerAndTransactionKeySourceLike(String player, String source);
 
 }

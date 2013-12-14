@@ -57,8 +57,12 @@ public class PlayerAccountOperationsITest {
         PaymentTransaction transaction = A.paymentOperations().getPaymentTransaction("registration", A.getPlayer());
         Set<PaymentOperation> paymentOperations = transaction.getPaymentOperations();
         Money transactionAmmount = paymentOperations.iterator().next().getAmount();
+        // Step 4. Processing bonus transaction
+        PaymentTransaction bonusTransaction = A.paymentOperations().getPaymentTransactions("dailybonus").get(0);
+        paymentOperations = bonusTransaction.getPaymentOperations();
+        Money bonusAmmount = paymentOperations.iterator().next().getAmount();
 
-        assertEquals(transactionAmmount, accountA.getMoney(Currency.FakeMoney));
+        assertEquals(transactionAmmount.add(bonusAmmount.getAmount()), accountA.getMoney(Currency.FakeMoney));
     }
 
     @Test

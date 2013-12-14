@@ -1,7 +1,8 @@
 package com.clemble.casino.server.payment.bonus;
 
-public interface BonusService {
+import com.clemble.casino.server.event.SystemEvent;
+import com.clemble.casino.server.player.notification.SystemEventListener;
 
-    public void entered(String player);
+public interface BonusService<S extends SystemEvent> extends SystemEventListener<S>{
 
 }

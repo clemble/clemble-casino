@@ -42,7 +42,7 @@ public class PlayerSessionController implements PlayerSessionService {
         // Step 1. Generated player session
         PlayerSession playerSession = new PlayerSession().setPlayer(playerId);
         // Step 2. Providing result as a Session data
-        playerSession.setExpirationTime(playerPresenceService.markOnline(playerId));
+        playerSession.setExpirationTime(playerPresenceService.markAvailable(playerId));
         playerSession = sessionRepository.saveAndFlush(playerSession);
         // Step 3. Specifying player resources
         playerSession.setResourceLocations(resourceLocationService.getResources(playerId));

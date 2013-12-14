@@ -16,7 +16,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 
 import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.player.notification.SystemNotificationListener;
+import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class StringRedisPlayerPresenceListenerService implements SystemNotificationServiceListener {
@@ -37,12 +37,12 @@ public class StringRedisPlayerPresenceListenerService implements SystemNotificat
     }
 
     @Override
-    public void subscribe(final String player, final SystemNotificationListener<? extends SystemEvent> messageListener) {
+    public void subscribe(final String player, final SystemEventListener<? extends SystemEvent> messageListener) {
         subscribe(Collections.singleton(player), messageListener);
     }
 
     @Override
-    public void subscribe(Collection<String> players, SystemNotificationListener<? extends SystemEvent> messageListener) {
+    public void subscribe(Collection<String> players, SystemEventListener<? extends SystemEvent> messageListener) {
         LOGGER.debug("Subscribing {} for changes from {}", players, messageListener);
         // Step 1. Add message listener
         listenerContainer
@@ -53,12 +53,12 @@ public class StringRedisPlayerPresenceListenerService implements SystemNotificat
     }
 
     @Override
-    public void unsubscribe(final String player, final SystemNotificationListener<? extends SystemEvent> messageListener) {
+    public void unsubscribe(final String player, final SystemEventListener<? extends SystemEvent> messageListener) {
         unsubscribe(Collections.singleton(player), messageListener);
     }
 
     @Override
-    public void unsubscribe(Collection<String> players, SystemNotificationListener<? extends SystemEvent> playerStateListener) {
+    public void unsubscribe(Collection<String> players, SystemEventListener<? extends SystemEvent> playerStateListener) {
         LOGGER.debug("Unsubscribing {} for changes from {}", players, playerStateListener);
         listenerContainer.removeMessageListener(new PresenceListenerWrapper(stringRedisSerializer, playerStateListener, objectMapper), toTopics(players));
     }
@@ -71,12 +71,12 @@ public class StringRedisPlayerPresenceListenerService implements SystemNotificat
     }
 
     @Override
-    public void subscribe(EventSelector eventSelector, SystemNotificationListener<? extends SystemEvent> messageListener) {
+    public void subscribe(EventSelector eventSelector, SystemEventListener<? extends SystemEvent> messageListener) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void unsubscribe(EventSelector eventSelector, SystemNotificationListener<? extends SystemEvent> playerStateListener) {
+    public void unsubscribe(EventSelector eventSelector, SystemEventListener<? extends SystemEvent> playerStateListener) {
         throw new UnsupportedOperationException();
     }
 

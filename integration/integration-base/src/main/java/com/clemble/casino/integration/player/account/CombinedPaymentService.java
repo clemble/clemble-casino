@@ -26,13 +26,18 @@ public class CombinedPaymentService implements PaymentService {
     }
 
     @Override
-    public PaymentTransaction getPaymentTransaction(String source, String transactionId) {
-        return paymentTransactionService.getPaymentTransaction(source, transactionId);
+    public PaymentTransaction getTransaction(String source, String transactionId) {
+        return paymentTransactionService.getTransaction(source, transactionId);
     }
 
     @Override
-    public List<PaymentTransaction> getPaymentTransactions(String player) {
-        return paymentTransactionService.getPaymentTransactions(player);
+    public List<PaymentTransaction> getPlayerTransactions(String player) {
+        return paymentTransactionService.getPlayerTransactions(player);
+    }
+
+    @Override
+    public List<PaymentTransaction> getPlayerTransactionsWithSource(String player, String source) {
+        return paymentTransactionService.getPlayerTransactionsWithSource(player, source);
     }
 
 }
