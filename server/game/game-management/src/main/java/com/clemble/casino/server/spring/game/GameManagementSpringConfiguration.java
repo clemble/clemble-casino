@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.id.GameIdGenerator;
@@ -110,7 +109,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Bean
         @Autowired
         public GameConstructionServerService gameConstructionService(GameIdGenerator gameIdGenerator, PlayerAccountServerService playerAccountService,
-                PlayerNotificationService<Event> playerNotificationService, GameConstructionRepository constructionRepository,
+                PlayerNotificationService playerNotificationService, GameConstructionRepository constructionRepository,
                 GameInitiatorService initiatorService, PlayerLockService playerLockService, PlayerPresenceServerService playerStateManager) {
             return new SimpleGameConstructionServerService(gameIdGenerator, playerAccountService, playerNotificationService, constructionRepository,
                     initiatorService, playerLockService, playerStateManager);

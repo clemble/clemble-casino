@@ -36,9 +36,9 @@ public class JedisPlayerPresenceServerService implements PlayerPresenceServerSer
     final private String UPDATE_SCRIPT;
     final private JedisPool jedisPool;
     final private SystemNotificationService systemNotificationService;
-    final private PlayerNotificationService<PlayerPresence> presenceNotification;
+    final private PlayerNotificationService presenceNotification;
 
-    public JedisPlayerPresenceServerService(JedisPool jedisPool, PlayerNotificationService<PlayerPresence> presenceNotification,
+    public JedisPlayerPresenceServerService(JedisPool jedisPool, PlayerNotificationService presenceNotification,
             SystemNotificationService systemNotificationService) {
         this.jedisPool = checkNotNull(jedisPool);
         this.presenceNotification = checkNotNull(presenceNotification);

@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
@@ -27,12 +26,12 @@ public class AvailabilityGameConstructionManager implements GameConstructionMana
 
     final private PlayerAccountServerService playerAccountService;
     final private GameConstructionRepository constructionRepository;
-    final private PlayerNotificationService<Event> playerNotificationService;
+    final private PlayerNotificationService playerNotificationService;
     final private GameInitiatorService initiatorService;
 
     public AvailabilityGameConstructionManager(PlayerAccountServerService accountServerService,
             GameConstructionRepository constructionRepository,
-            PlayerNotificationService<Event> notificationService,
+            PlayerNotificationService notificationService,
             GameInitiatorService initiatorService) {
         this.playerAccountService = checkNotNull(accountServerService);
         this.constructionRepository = checkNotNull(constructionRepository);

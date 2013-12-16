@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.id.GameIdGenerator;
@@ -29,8 +28,8 @@ import com.clemble.casino.server.game.construct.SimpleGameInitiatorService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
 import com.clemble.casino.server.repository.game.GameSpecificationRepository;
@@ -59,7 +58,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Autowired
     @Qualifier("playerNotificationService")
-    public PlayerNotificationService<Event> playerNotificationService;
+    public PlayerNotificationService playerNotificationService;
 
     @Autowired
     @Qualifier("gamePriceAspectFactory")

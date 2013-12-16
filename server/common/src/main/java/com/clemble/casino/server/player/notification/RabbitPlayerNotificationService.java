@@ -14,11 +14,12 @@ import org.springframework.amqp.support.converter.MessageConverter;
 
 import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.player.PlayerAware;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class RabbitPlayerNotificationService<T extends Event>  implements PlayerNotificationService<T> {
+public class RabbitPlayerNotificationService implements PlayerNotificationService {
 
     final private LoadingCache<String, RabbitTemplate> RABBIT_CACHE = CacheBuilder.newBuilder().build(new CacheLoader<String, RabbitTemplate>() {
 
@@ -32,7 +33,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
         }
 
     });
-    
+
     final private static Logger LOG = LoggerFactory.getLogger(RabbitPlayerNotificationService.class);
 
     final private String postfix;
@@ -46,7 +47,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
     }
 
     @Override
-    public boolean notify(final Collection<String> players, final T event) {
+    public <T extends Event> boolean notify(final Collection<String> players, final T event) {
         LOG.trace("Sending {} to {}", event, players);
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
@@ -58,15 +59,15 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
     }
 
     @Override
-    public boolean notify(final String player, final Collection<T> events) {
+    public <T extends Event> boolean notify(final String player, final Collection<T> events) {
         boolean fullSuccess = true;
-        for(T event: events)
+        for (T event : events)
             fullSuccess = notify(player, event) & fullSuccess;
         return fullSuccess;
     }
 
     @Override
-    public boolean notify(final Collection<String> players, final Collection<? extends T> events) {
+    public <T extends Event> boolean notify(final Collection<String> players, final Collection<? extends T> events) {
         // Step 1. Notifying each event one after another
         boolean fullSuccess = true;
         for (T event : events)
@@ -75,7 +76,7 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
     }
 
     @Override
-    public boolean notify(String player, T event) {
+    public <T extends Event> boolean notify(String player, T event) {
         LOG.trace("Sending {} to {}", event, player);
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
@@ -92,6 +93,24 @@ public class RabbitPlayerNotificationService<T extends Event>  implements Player
             return false;
         }
         return true;
+    }
+
+    @Override
+    public <T extends PlayerAware & Event> boolean notify(Collection<T> events) {
+        // Step 1. Sanity check
+        if (events == null || events.size() == 0)
+            return true;
+        // Step 2. Checking values in Event
+        boolean notifiedAll = true;
+        for (T event : events) {
+            notifiedAll = notify(event) & notifiedAll;
+        }
+        return notifiedAll;
+    }
+
+    @Override
+    public <T extends PlayerAware & Event> boolean notify(T event) {
+        return event != null ? notify(event.getPlayer(), event) : true;
     }
 
 }

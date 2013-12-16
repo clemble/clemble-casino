@@ -15,6 +15,7 @@ import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.payment.bonus.policy.NoBonusPolicy;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.account.PlayerAccountServerServiceImpl;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
@@ -35,20 +36,24 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
 
     @Bean
     @Autowired
-    public PaymentTransactionServerService realPaymentTransactionService(PaymentTransactionRepository paymentTransactionRepository,
+    public PaymentTransactionServerService realPaymentTransactionService(
+            PaymentTransactionRepository paymentTransactionRepository,
+            PlayerNotificationService playerNotificationService,
             PlayerAccountRepository playerAccountRepository) {
-        return new PaymentTransactionServerServiceImpl(paymentTransactionRepository, playerAccountRepository);
+        return new PaymentTransactionServerServiceImpl(paymentTransactionRepository, playerAccountRepository, playerNotificationService);
     }
 
     @Bean
     @Autowired
-    public DailyBonusService dailyBonusService(PlayerAccountRepository accountRepository,
+    public DailyBonusService dailyBonusService(
+            PlayerNotificationService playerNotificationService,
+            PlayerAccountRepository accountRepository,
             PaymentTransactionRepository transactionRepository,
             @Qualifier("realPaymentTransactionService") PaymentTransactionServerService transactionServerService,
             BonusPolicy bonusPolicy,
             SystemNotificationServiceListener notificationServiceListener) {
         Money bonus = new Money(Currency.FakeMoney, 100);
-        DailyBonusService dailyBonusService = new DailyBonusService(accountRepository, transactionRepository, transactionServerService, bonusPolicy, bonus);
+        DailyBonusService dailyBonusService = new DailyBonusService(playerNotificationService, accountRepository, transactionRepository, transactionServerService, bonusPolicy, bonus);
         notificationServiceListener.subscribe("entered", dailyBonusService);
         return dailyBonusService;
     }

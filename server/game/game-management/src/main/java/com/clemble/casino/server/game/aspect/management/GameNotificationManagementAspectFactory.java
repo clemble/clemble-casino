@@ -17,9 +17,9 @@ import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class GameNotificationManagementAspectFactory implements GameManagementAspecteFactory {
 
-    final private PlayerNotificationService<Event> notificationService;
+    final private PlayerNotificationService notificationService;
 
-    public GameNotificationManagementAspectFactory(PlayerNotificationService<Event> notificationService) {
+    public GameNotificationManagementAspectFactory(PlayerNotificationService notificationService) {
         this.notificationService = checkNotNull(notificationService);
     }
 
@@ -38,9 +38,9 @@ public class GameNotificationManagementAspectFactory implements GameManagementAs
     final private static class PrivateNotificationManagementAspect extends BasicGameManagementAspect {
 
         final private Collection<String> participants;
-        final private PlayerNotificationService<Event> notificationService;
+        final private PlayerNotificationService notificationService;
 
-        public PrivateNotificationManagementAspect(GameInitiation initiation, PlayerNotificationService<Event> notificationService) {
+        public PrivateNotificationManagementAspect(GameInitiation initiation, PlayerNotificationService notificationService) {
             this.participants = checkNotNull(initiation.getParticipants());
             this.notificationService = checkNotNull(notificationService);
         }
@@ -56,9 +56,9 @@ public class GameNotificationManagementAspectFactory implements GameManagementAs
 
         final private GameSessionKey sessionKey;
         final private Collection<String> participants;
-        final private PlayerNotificationService<Event> notificationService;
+        final private PlayerNotificationService notificationService;
 
-        public PublicNotificationManagementAspect(GameInitiation initiation, PlayerNotificationService<Event> notificationService) {
+        public PublicNotificationManagementAspect(GameInitiation initiation, PlayerNotificationService notificationService) {
             this.sessionKey = checkNotNull(initiation.getSession());
             this.participants = checkNotNull(initiation.getParticipants());
             this.notificationService = checkNotNull(notificationService);

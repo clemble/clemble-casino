@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -28,7 +27,7 @@ public class SimpleGameSpringConfiguration {
     @Bean
     @Autowired
     public GameSessionProcessor<?> gameProcessor(GameSessionFactory sessionFactory, GameCacheService cacheService,
-            @Qualifier("playerNotificationService") PlayerNotificationService<Event> notificationService) {
+            @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new GameSessionProcessor(sessionFactory, cacheService, notificationService);
     }
 

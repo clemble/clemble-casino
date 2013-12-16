@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Import;
 
 import redis.clients.jedis.JedisPool;
 
-import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.JedisPlayerPresenceServerService;
 import com.clemble.casino.server.player.presence.JedisSystemNoficiationServiceListener;
@@ -28,7 +27,7 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public JedisPlayerPresenceServerService playerPresenceServerService(JedisPool jedisPool, PlayerNotificationService<PlayerPresence> playerPresenceNotificationService, SystemNotificationService systemNotificationService) {
+    public JedisPlayerPresenceServerService playerPresenceServerService(JedisPool jedisPool, PlayerNotificationService playerPresenceNotificationService, SystemNotificationService systemNotificationService) {
         return new JedisPlayerPresenceServerService(jedisPool, playerPresenceNotificationService, systemNotificationService);
     }
 

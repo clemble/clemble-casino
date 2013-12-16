@@ -7,7 +7,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.ClientEvent;
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -23,12 +22,12 @@ public class GameSessionProcessor<State extends GameState> {
 
     final private GameCacheService<State> cacheService;
     final private GameSessionFactory<State> sessionFactory;
-    final private PlayerNotificationService<Event> notificationService;
+    final private PlayerNotificationService notificationService;
 
     public GameSessionProcessor(
             final GameSessionFactory<State> sessionFactory,
             final GameCacheService<State> cacheService,
-            final PlayerNotificationService<Event> notificationService) {
+            final PlayerNotificationService notificationService) {
         this.notificationService = checkNotNull(notificationService);
         this.sessionFactory = checkNotNull(sessionFactory);
         this.cacheService = checkNotNull(cacheService);

@@ -29,10 +29,10 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     final private String ZERO_SESSION = ":";
 
     final private StringRedisTemplate redisTemplate;
-    final private PlayerNotificationService<PlayerPresence> presenceNotification;
+    final private PlayerNotificationService presenceNotification;
 
     public StringRedisPlayerStateManager(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer,
-            PlayerNotificationService<PlayerPresence> presenceNotification) {
+            PlayerNotificationService presenceNotification) {
         this.redisTemplate = checkNotNull(redisTemplate);
         this.presenceNotification = checkNotNull(presenceNotification);
     }

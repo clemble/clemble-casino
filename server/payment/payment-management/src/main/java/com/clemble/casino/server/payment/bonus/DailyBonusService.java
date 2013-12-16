@@ -17,6 +17,7 @@ import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.PlayerEnteredEvent;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 
@@ -27,11 +28,14 @@ public class DailyBonusService implements BonusService<PlayerEnteredEvent> {
 
     final private Money bonusAmount;
     final private BonusPolicy bonusPolicy;
+    final private PlayerNotificationService notificationService;
     final private PlayerAccountRepository accountRepository;
     final private PaymentTransactionRepository transactionRepository;
     final private PaymentTransactionServerService transactionServerService;
 
-    public DailyBonusService(PlayerAccountRepository accountRepository,
+    public DailyBonusService(
+            PlayerNotificationService notificationService,
+            PlayerAccountRepository accountRepository,
             PaymentTransactionRepository transactionRepository,
             PaymentTransactionServerService transactionServerService,
             BonusPolicy bonusPolicy,
@@ -41,6 +45,7 @@ public class DailyBonusService implements BonusService<PlayerEnteredEvent> {
         this.accountRepository = checkNotNull(accountRepository);
         this.transactionServerService = checkNotNull(transactionServerService);
         this.transactionRepository = checkNotNull(transactionRepository);
+        this.notificationService = checkNotNull(notificationService);
     }
 
     @Override
@@ -63,6 +68,7 @@ public class DailyBonusService implements BonusService<PlayerEnteredEvent> {
             if(bonusPolicy.eligible(accountRepository.findOne(player), transaction)) {
                 // Step 5. Processing new transaction and updating bonus marker
                 transactionServerService.process(transaction);
+                // Step 6. Sending bonus notification
             }
         }
     }

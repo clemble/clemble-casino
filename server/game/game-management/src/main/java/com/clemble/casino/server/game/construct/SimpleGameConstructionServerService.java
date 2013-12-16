@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
@@ -29,7 +28,7 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
     final private PlayerAccountServerService playerAccountService;
 
     public SimpleGameConstructionServerService(final GameIdGenerator gameIdGenerator, final PlayerAccountServerService playerAccountService,
-            final PlayerNotificationService<Event> playerNotificationService, final GameConstructionRepository constructionRepository,
+            final PlayerNotificationService playerNotificationService, final GameConstructionRepository constructionRepository,
             final GameInitiatorService initiatorService, final PlayerLockService playerLockService, final PlayerPresenceServerService playerStateManager) {
         this.gameIdGenerator = checkNotNull(gameIdGenerator);
         this.playerAccountService = checkNotNull(playerAccountService);

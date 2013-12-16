@@ -15,18 +15,26 @@ import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.event.FinishedPaymentEvent;
+import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.payment.money.Operation;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 
 public class PaymentTransactionServerServiceImpl implements PaymentTransactionServerService {
 
     final private PlayerAccountRepository playerAccountRepository;
+    final private PlayerNotificationService notificationService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PaymentTransactionServerServiceImpl(PaymentTransactionRepository paymentTransactionRepository, PlayerAccountRepository playerWalletRepository) {
+    public PaymentTransactionServerServiceImpl(
+            PaymentTransactionRepository paymentTransactionRepository,
+            PlayerAccountRepository playerWalletRepository,
+            PlayerNotificationService notificationService) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
         this.playerAccountRepository = checkNotNull(playerWalletRepository);
+        this.notificationService = checkNotNull(notificationService);
     }
 
     @Override
@@ -40,8 +48,9 @@ public class PaymentTransactionServerServiceImpl implements PaymentTransactionSe
     }
 
     private PaymentTransaction processTransaction(PaymentTransaction paymentTransaction) {
+        Collection<PaymentEvent> paymentEvents = new ArrayList<>();
         // Step 1. Processing payment transactions
-        Collection<PlayerAccount> updatedWallets = new ArrayList<>(paymentTransaction.getPaymentOperations().size());
+        Collection<PlayerAccount> updatedAccounts = new ArrayList<>(paymentTransaction.getPaymentOperations().size());
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
             PlayerAccount associatedWallet = playerAccountRepository.findOne(paymentOperation.getPlayer());
             if (associatedWallet == null) {
@@ -53,13 +62,17 @@ public class PaymentTransactionServerServiceImpl implements PaymentTransactionSe
             } else {
                 throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionInvalid);
             }
-            updatedWallets.add(associatedWallet);
+            updatedAccounts.add(associatedWallet);
+            paymentEvents.add(new FinishedPaymentEvent(paymentTransaction.getTransactionKey(), paymentOperation));
         }
         // Step 2. Performing all account operations at a batch
-        playerAccountRepository.save(updatedWallets);
+        playerAccountRepository.save(updatedAccounts);
         playerAccountRepository.flush();
         // Step 3. Saving account transaction
-        return paymentTransactionRepository.save(paymentTransaction);
+        PaymentTransaction transaction = paymentTransactionRepository.save(paymentTransaction);
+        // Step 4. Sending PaymentEvent notification
+        notificationService.notify(paymentEvents);
+        return transaction;
 
     }
 

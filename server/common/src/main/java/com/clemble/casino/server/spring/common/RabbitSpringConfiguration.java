@@ -14,9 +14,7 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.DNSBasedServerRegistry;
 import com.clemble.casino.ServerRegistry;
-import com.clemble.casino.event.Event;
 import com.clemble.casino.event.NotificationMapping;
-import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.RabbitPlayerNotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,13 +56,13 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerNotificationService<Event> playerNotificationService() {
-        return new RabbitPlayerNotificationService<Event>(NotificationMapping.PLAYER_NOTIFICATION, jsonMessageConverter(), playerNotificationRegistry());
+    public PlayerNotificationService playerNotificationService() {
+        return new RabbitPlayerNotificationService(NotificationMapping.PLAYER_NOTIFICATION, jsonMessageConverter(), playerNotificationRegistry());
     }
 
     @Bean
-    public PlayerNotificationService<PlayerPresence> playerPresenceNotificationService() {
-        return new RabbitPlayerNotificationService<PlayerPresence>(NotificationMapping.PLAYER_PRESENCE_NOTIFICATION, jsonMessageConverter(), playerNotificationRegistry());
+    public PlayerNotificationService playerPresenceNotificationService() {
+        return new RabbitPlayerNotificationService(NotificationMapping.PLAYER_PRESENCE_NOTIFICATION, jsonMessageConverter(), playerNotificationRegistry());
     }
 
 }
