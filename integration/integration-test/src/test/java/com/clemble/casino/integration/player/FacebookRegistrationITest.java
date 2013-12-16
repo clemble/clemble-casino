@@ -6,8 +6,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +47,19 @@ public class FacebookRegistrationITest {
     @Autowired
     public PlayerScenarios playerScenarios;
 
+    @Before
+    public void setup() {
+        try {
+            URLConnection connection = new URL("http://www.google.com").openConnection();
+            InputStream is = connection.getInputStream();
+            is.close();
+        } catch (Throwable throwable) {
+            Assume.assumeTrue("Connection to google is missing", false);
+        }
+    }
+
     @Test
-    public void testSocialDataRegistration() throws JsonParseException, JsonMappingException, IOException{
+    public void testSocialDataRegistration() throws JsonParseException, JsonMappingException, IOException {
         // Step 1. Generating Facebook test user
         FacebookTestUserStore facebookStore = new HttpClientFacebookTestUserStore("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
         FacebookTestUserAccount fbAccount = facebookStore.createTestUser(true, "email");
@@ -51,7 +67,8 @@ public class FacebookRegistrationITest {
         assertNotNull(fbAccount);
         assertNotNull(fb);
         // Step 2. Converting to SocialConnectionData
-        SocialConnectionData connectionData = new SocialConnectionData("facebook", fb.get("id").asText(),  fbAccount.accessToken(), "", "", System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
+        SocialConnectionData connectionData = new SocialConnectionData("facebook", fb.get("id").asText(), fbAccount.accessToken(), "", "",
+                System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
         ClembleCasinoOperations casinoOperations = playerScenarios.createPlayer(connectionData);
         assertNotNull(casinoOperations);
         PlayerProfile profile = casinoOperations.profileOperations().getPlayerProfile();
@@ -60,9 +77,9 @@ public class FacebookRegistrationITest {
         SocialPlayerProfile socialProfile = (SocialPlayerProfile) profile;
         assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", fb.get("id").asText())));
     }
-    
+
     @Test
-    public void testSocialDataLogin() throws JsonParseException, JsonMappingException, IOException{
+    public void testSocialDataLogin() throws JsonParseException, JsonMappingException, IOException {
         // Step 1. Generating Facebook test user
         FacebookTestUserStore facebookStore = new HttpClientFacebookTestUserStore("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
         FacebookTestUserAccount fbAccount = facebookStore.createTestUser(true, "email");
@@ -70,7 +87,8 @@ public class FacebookRegistrationITest {
         assertNotNull(fbAccount);
         assertNotNull(fb);
         // Step 2. Converting to SocialConnectionData
-        SocialConnectionData connectionData = new SocialConnectionData("facebook", fb.get("id").asText(),  fbAccount.accessToken(), "", "", System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
+        SocialConnectionData connectionData = new SocialConnectionData("facebook", fb.get("id").asText(), fbAccount.accessToken(), "", "",
+                System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
         ClembleCasinoOperations A = playerScenarios.createPlayer(connectionData);
         assertNotNull(A);
         PlayerProfile profile = A.profileOperations().getPlayerProfile();
@@ -85,7 +103,7 @@ public class FacebookRegistrationITest {
     }
 
     @Test
-    public void testSocialGrantRegistration() throws JsonParseException, JsonMappingException, IOException{
+    public void testSocialGrantRegistration() throws JsonParseException, JsonMappingException, IOException {
         // Step 1. Generating Facebook test user
         FacebookTestUserStore facebookStore = new HttpClientFacebookTestUserStore("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
         FacebookTestUserAccount fbAccount = facebookStore.createTestUser(true, "email");
@@ -104,7 +122,7 @@ public class FacebookRegistrationITest {
     }
 
     @Test
-    public void testSocialGrantLogin() throws JsonParseException, JsonMappingException, IOException{
+    public void testSocialGrantLogin() throws JsonParseException, JsonMappingException, IOException {
         // Step 1. Generating Facebook test user
         FacebookTestUserStore facebookStore = new HttpClientFacebookTestUserStore("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
         FacebookTestUserAccount fbAccount = facebookStore.createTestUser(true, "email");
@@ -125,5 +143,5 @@ public class FacebookRegistrationITest {
         assertNotEquals(B, A);
         assertEquals(B.getPlayer(), A.getPlayer());
     }
-    
+
 }

@@ -48,7 +48,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
 
     final private String player;
     final private PlayerSession session;
-    final private EventListenerOperations playerListenersManager;
+    final private EventListenerOperations listenerOperations;
 
     final private GameSpecificationService specificationService;
     final private GameConstructionService constructionService;
@@ -57,7 +57,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
 
         @Override
         public GameConstructionOperations<?> load(Game key) throws Exception {
-            return new GameConstructionTemplate<>(player, key, new GameActionTemplateFactory(player, playerListenersManager, actionService), constructionService, specificationService, playerListenersManager);
+            return new GameConstructionTemplate<>(player, key, new GameActionTemplateFactory(player, listenerOperations, actionService), constructionService, specificationService, listenerOperations);
         }
 
     });
@@ -74,7 +74,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
             final PlayerProfileService playerProfileService,
             final PlayerSessionService sessionOperations,
             final PaymentService accountOperations,
-            final EventListenerOperationsFactory listenerOperations,
+            final EventListenerOperationsFactory listenerOperationsFactory,
             final PlayerPresenceService playerPresenceService,
             final GameConstructionService gameConstructionService,
             final GameSpecificationService specificationService,
@@ -82,12 +82,12 @@ public class ServerPlayer implements ClembleCasinoOperations {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
-        this.playerListenersManager = listenerOperations.construct(player, session.getResourceLocations().getNotificationConfiguration(), objectMapper);
+        this.listenerOperations = listenerOperationsFactory.construct(player, session.getResourceLocations().getNotificationConfiguration(), objectMapper);
 
-        this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, playerListenersManager);
+        this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, listenerOperations);
 
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileService);
-        this.playerAccountOperations = new PaymentTemplate(player, accountOperations);
+        this.playerAccountOperations = new PaymentTemplate(player, accountOperations, listenerOperations);
 
         this.constructionService = checkNotNull(gameConstructionService);
         this.specificationService = checkNotNull(specificationService);
@@ -127,7 +127,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
 
     @Override
     public void close() {
-        playerListenersManager.close();
+        listenerOperations.close();
     }
 
     @Override
@@ -153,7 +153,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
 
     @Override
     public EventListenerOperations listenerOperations() {
-        return playerListenersManager;
+        return listenerOperations;
     }
 
 }
