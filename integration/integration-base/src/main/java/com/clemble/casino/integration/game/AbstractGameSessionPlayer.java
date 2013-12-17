@@ -55,6 +55,11 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         setState(this.actionOperations.getState());
     }
 
+    @Override
+    public String getPlayer(){
+        return player.getPlayer();
+    }
+
     final public GameConstruction getConstructionInfo() {
         return construction;
     }
@@ -70,7 +75,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    final public ClembleCasinoOperations getPlayer() {
+    final public ClembleCasinoOperations playerOperations() {
         return player;
     }
 

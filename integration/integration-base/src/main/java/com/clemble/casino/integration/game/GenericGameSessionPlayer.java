@@ -24,8 +24,13 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
-    public ClembleCasinoOperations getPlayer() {
+    public String getPlayer(){
         return actualPlayer.getPlayer();
+    }
+
+    @Override
+    public ClembleCasinoOperations playerOperations() {
+        return actualPlayer.playerOperations();
     }
 
     @Override
