@@ -30,11 +30,12 @@ public class PlayerProfileController implements PlayerProfileService {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
-    public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("playerId") String playerId) {
+    public @ResponseBody
+    PlayerProfile getPlayerProfile(@PathVariable("playerId") String playerId) {
         // Step 1. Fetching playerProfile
         PlayerProfile playerProfile = profileRepository.findOne(playerId);
         // Step 2. Checking profile
-        if(playerProfile == null)
+        if (playerProfile == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileDoesNotExists);
         // Step 3. Returning profile
         return playerProfile;
@@ -42,13 +43,18 @@ public class PlayerProfileController implements PlayerProfileService {
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
-    public @ResponseBody PlayerProfile updatePlayerProfile(@PathVariable("playerId") String player, @RequestBody PlayerProfile playerProfile) {
+    public @ResponseBody
+    PlayerProfile updatePlayerProfile(@PathVariable("playerId") String player, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (playerProfile == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileInvalid);
         if (!playerProfile.getPlayer().equals(player))
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerNotProfileOwner);
         playerProfile.setPlayer(player);
+        // Step 1.1. Checking player does not try to add additional Social Connections
+        PlayerProfile existingProfile = profileRepository.findOne(player);
+        if (!existingProfile.getSocialConnections().equals(playerProfile.getSocialConnections()))
+            throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileSocialCantBeEdited);
         // Step 2. Updating Profile
         return profileRepository.save(playerProfile);
     }

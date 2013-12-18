@@ -17,7 +17,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.test.random.ObjectGenerator;
@@ -37,7 +36,7 @@ public class PlayerRegistrationTest {
         PlayerCredential credential = new PlayerCredential()
             .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
             .setPassword(RandomStringUtils.random(10));
-        PlayerProfile playerProfile = ObjectGenerator.generate(NativePlayerProfile.class)
+        PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class)
                 .setBirthDate(new Date(0))
                 .setImageUrl(null);
         // Step 2. Creating CasinoOperations with this credentials and Profile

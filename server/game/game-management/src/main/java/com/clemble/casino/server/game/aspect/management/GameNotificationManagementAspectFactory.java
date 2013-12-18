@@ -47,6 +47,7 @@ public class GameNotificationManagementAspectFactory implements GameManagementAs
 
         @Override
         public <State extends GameState> void changed(State state, Collection<Event> events) {
+            // Step 1. Sending only to participants
             notificationService.notify(participants, events);
         }
 
@@ -54,20 +55,23 @@ public class GameNotificationManagementAspectFactory implements GameManagementAs
 
     final private static class PublicNotificationManagementAspect extends BasicGameManagementAspect {
 
+        final private String tableChannel;
         final private GameSessionKey sessionKey;
         final private Collection<String> participants;
         final private PlayerNotificationService notificationService;
 
         public PublicNotificationManagementAspect(GameInitiation initiation, PlayerNotificationService notificationService) {
             this.sessionKey = checkNotNull(initiation.getSession());
+            this.tableChannel = NotificationMapping.toTable(sessionKey);
             this.participants = checkNotNull(initiation.getParticipants());
             this.notificationService = checkNotNull(notificationService);
         }
 
         @Override
         public <State extends GameState> void changed(State state, Collection<Event> events) {
-            String tableNotification = sessionKey.getSession().substring(0, 5) + NotificationMapping.TABLE_NOTIFICATION;
-            notificationService.notify(tableNotification, events);
+            // Step 1. Making public notification
+            notificationService.notify(tableChannel, events);
+            // Step 2. Sending to exact participants
             notificationService.notify(participants, events);
         }
 

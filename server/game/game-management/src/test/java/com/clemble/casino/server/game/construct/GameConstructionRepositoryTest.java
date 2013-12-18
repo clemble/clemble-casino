@@ -49,6 +49,7 @@ public class GameConstructionRepositoryTest {
             ActionLatch readLatch = objectMapper.readValue(serializedLatch, ActionLatch.class);
             Assert.assertEquals("Failed to deserialize: " + serializedLatch, readLatch, randomLatch);
         } catch (JsonMappingException mappingException) {
+            mappingException.printStackTrace();
             Assert.fail("Failed to instantiate: " + serializedLatch);
         }
     }

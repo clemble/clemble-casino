@@ -57,12 +57,12 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerNotificationService playerNotificationService() {
-        return new RabbitPlayerNotificationService(NotificationMapping.PLAYER_NOTIFICATION, jsonMessageConverter(), playerNotificationRegistry());
+        return new RabbitPlayerNotificationService(NotificationMapping.PLAYER_CHANNEL_POSTFIX, jsonMessageConverter(), playerNotificationRegistry());
     }
 
     @Bean
     public PlayerNotificationService playerPresenceNotificationService() {
-        return new RabbitPlayerNotificationService(NotificationMapping.PLAYER_PRESENCE_NOTIFICATION, jsonMessageConverter(), playerNotificationRegistry());
+        return new RabbitPlayerNotificationService(NotificationMapping.PRESENCE_CHANNEL_POSTFIX, jsonMessageConverter(), playerNotificationRegistry());
     }
 
 }

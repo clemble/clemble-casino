@@ -10,7 +10,6 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
@@ -29,15 +28,16 @@ public class SimplePlayerScenarios implements PlayerScenarios {
     public ClembleCasinoOperations createPlayer() {
         PlayerCredential credential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
                 RandomStringUtils.randomAlphanumeric(10));
-        PlayerProfile playerProfile = new NativePlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10))
+        PlayerProfile playerProfile = new PlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10))
                 .setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10));
         return createPlayer(credential, playerProfile);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerProfile playerProfile) {
-        PlayerCredential credential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
-                RandomStringUtils.randomAlphanumeric(10));
+        PlayerCredential credential = new PlayerCredential()
+            .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
+            .setPassword( RandomStringUtils.randomAlphanumeric(10));
         return createPlayer(credential, playerProfile);
     }
 

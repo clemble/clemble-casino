@@ -15,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
@@ -44,7 +43,7 @@ public class PlayerProfileRepositoryTest {
 
     @Test
     public void testSave() {
-        NativePlayerProfile playerProfile = ObjectGenerator.generate(NativePlayerProfile.class);
+        PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class);
         playerProfile.setImageUrl("http://" + RandomStringUtils.random(10) + ".com/");
         playerProfile.setBirthDate(new Date(0));
         playerProfile.setVersion(0);
@@ -58,7 +57,7 @@ public class PlayerProfileRepositoryTest {
 
     @Test
     public void testSaveMultiple() {
-        NativePlayerProfile playerA = (NativePlayerProfile) new NativePlayerProfile().setFirstName("User A").setLastName("Userius")
+        PlayerProfile playerA = new PlayerProfile().setFirstName("User A").setLastName("Userius")
                 .setCategory(PlayerCategory.Novice).setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedPlayerA = playerProfileRepository.save(playerA);
         playerA.setPlayer(savedPlayerA.getPlayer());
@@ -68,7 +67,7 @@ public class PlayerProfileRepositoryTest {
         Assert.assertEquals(foundPlayerA, playerA);
         Assert.assertEquals(foundPlayerA, savedPlayerA);
 
-        NativePlayerProfile playerB = (NativePlayerProfile) new NativePlayerProfile().setFirstName("User B").setLastName("Userius")
+        PlayerProfile playerB = new PlayerProfile().setFirstName("User B").setLastName("Userius")
                 .setCategory(PlayerCategory.Amateur).setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedPlayerB = playerProfileRepository.save(playerB);
         playerB.setPlayer(savedPlayerB.getPlayer());

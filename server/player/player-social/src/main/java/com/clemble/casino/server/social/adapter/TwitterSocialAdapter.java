@@ -3,7 +3,7 @@ package com.clemble.casino.server.social.adapter;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.player.SocialPlayerProfile;
+import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
@@ -32,7 +32,7 @@ public class TwitterSocialAdapter extends SocialConnectionAdapter<Twitter>{
     @Override
     public PlayerProfile fetchGamerProfile(Twitter api) {
         TwitterProfile twitterProfile = api.userOperations().getUserProfile();
-        return new SocialPlayerProfile()
+        return new PlayerProfile()
                 .addSocialConnection(new ConnectionKey("twitter", String.valueOf(twitterProfile.getId())))
                 .setImageUrl(twitterProfile.getProfileImageUrl())
                 .setNickName(twitterProfile.getName());  //To change body of implemented methods use File | Settings | File Templates.

@@ -17,7 +17,7 @@ import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.player.SocialPlayerProfile;
+import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
@@ -47,7 +47,7 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
         // Step 1. Retrieving facebook profile for associated user
         FacebookProfile facebookProfile = facebook.userOperations().getUserProfile();
         // Step 2. Generating appropriate GameProfile to return
-        return new SocialPlayerProfile()
+        return new PlayerProfile()
             .addSocialConnection(new ConnectionKey("facebook", facebookProfile.getId()))
             .setFirstName(facebookProfile.getFirstName())
             .setLastName(facebookProfile.getLastName())

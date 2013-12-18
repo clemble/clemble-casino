@@ -15,7 +15,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.player.NativePlayerProfile;
 import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
@@ -43,13 +42,13 @@ public class PlayerOperationsITest {
 
     @Test
     public void createPlayerUsingProfileTest() {
-        PlayerProfile profile = new NativePlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
+        PlayerProfile profile = new PlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
                 .setNickName("mavarazy");
 
         ClembleCasinoOperations player = playerOperations.createPlayer(profile);
 
         assertNotNull(player);
-        NativePlayerProfile playerProfile = player.profileOperations().<NativePlayerProfile>getPlayerProfile();
+        PlayerProfile playerProfile = player.profileOperations().getPlayerProfile();
         assertEquals(playerProfile.getCategory(), PlayerCategory.Amateur);
         assertEquals(playerProfile.getFirstName(), "Anton");
         assertEquals(playerProfile.getLastName(), "Oparin");
@@ -59,7 +58,7 @@ public class PlayerOperationsITest {
 
     @Test
     public void createPlayerUsingRegistrationRequest() {
-        PlayerProfile profile = new NativePlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
+        PlayerProfile profile = new PlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
                 .setNickName("mavarazy");
 
         PlayerCredential playerCredential = new PlayerCredential().setEmail("mavarazy@gmail.com").setPassword("23443545");
@@ -70,7 +69,7 @@ public class PlayerOperationsITest {
         ClembleCasinoOperations player = playerOperations.createPlayer(registrationRequest);
 
         assertNotNull(player);
-        NativePlayerProfile playerProfile = player.profileOperations().<NativePlayerProfile>getPlayerProfile();
+        PlayerProfile playerProfile = player.profileOperations().getPlayerProfile();
         assertEquals(playerProfile.getCategory(), PlayerCategory.Amateur);
         assertEquals(playerProfile.getFirstName(), "Anton");
         assertEquals(playerProfile.getLastName(), "Oparin");

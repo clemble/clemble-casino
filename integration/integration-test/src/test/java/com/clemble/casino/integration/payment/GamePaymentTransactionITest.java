@@ -29,7 +29,7 @@ import com.clemble.casino.payment.event.PaymentEvent;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class GamePaymentTransactionTest {
+public class GamePaymentTransactionITest {
 
     @Autowired
     public GameScenarios gameScenarios;

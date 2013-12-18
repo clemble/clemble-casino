@@ -27,7 +27,7 @@ import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.player.SocialPlayerProfile;
+import com.clemble.casino.player.PlayerProfile;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -73,8 +73,8 @@ public class FacebookRegistrationITest {
         assertNotNull(casinoOperations);
         PlayerProfile profile = casinoOperations.profileOperations().getPlayerProfile();
         assertNotNull(profile);
-        assertTrue(profile instanceof SocialPlayerProfile);
-        SocialPlayerProfile socialProfile = (SocialPlayerProfile) profile;
+        assertTrue(profile instanceof PlayerProfile);
+        PlayerProfile socialProfile = (PlayerProfile) profile;
         assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", fb.get("id").asText())));
     }
 
@@ -93,8 +93,8 @@ public class FacebookRegistrationITest {
         assertNotNull(A);
         PlayerProfile profile = A.profileOperations().getPlayerProfile();
         assertNotNull(profile);
-        assertTrue(profile instanceof SocialPlayerProfile);
-        SocialPlayerProfile socialProfile = (SocialPlayerProfile) profile;
+        assertTrue(profile instanceof PlayerProfile);
+        PlayerProfile socialProfile = (PlayerProfile) profile;
         assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", fb.get("id").asText())));
         // Step 3. Registering again with the same SocialAccessGrant
         ClembleCasinoOperations B = playerScenarios.createPlayer(connectionData);
@@ -116,8 +116,8 @@ public class FacebookRegistrationITest {
         assertNotNull(casinoOperations);
         PlayerProfile profile = casinoOperations.profileOperations().getPlayerProfile();
         assertNotNull(profile);
-        assertTrue(profile instanceof SocialPlayerProfile);
-        SocialPlayerProfile socialProfile = (SocialPlayerProfile) profile;
+        assertTrue(profile instanceof PlayerProfile);
+        PlayerProfile socialProfile = (PlayerProfile) profile;
         assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", fb.get("id").asText())));
     }
 
@@ -135,8 +135,8 @@ public class FacebookRegistrationITest {
         assertNotNull(A);
         PlayerProfile profile = A.profileOperations().getPlayerProfile();
         assertNotNull(profile);
-        assertTrue(profile instanceof SocialPlayerProfile);
-        SocialPlayerProfile socialProfile = (SocialPlayerProfile) profile;
+        assertTrue(profile instanceof PlayerProfile);
+        PlayerProfile socialProfile = (PlayerProfile) profile;
         assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", fb.get("id").asText())));
         // Step 3. Registering again with the same SocialAccessGrant
         ClembleCasinoOperations B = playerScenarios.createPlayer(accessGrant);

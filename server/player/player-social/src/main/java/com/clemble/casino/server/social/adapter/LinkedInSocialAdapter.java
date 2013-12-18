@@ -11,7 +11,7 @@ import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.player.SocialPlayerProfile;
+import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 /**
@@ -35,7 +35,7 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
         // Step 1. Fetching LinkedInProfileFull
         LinkedInProfileFull linkedInProfile = api.profileOperations().getUserProfileFull();
         // Step 2. Generating SocialPlayerProfile
-        return new SocialPlayerProfile()
+        return new PlayerProfile()
             .addSocialConnection(new ConnectionKey("linkedin", linkedInProfile.getId()))
             .setFirstName(linkedInProfile.getFirstName())
             .setLastName(linkedInProfile.getLastName())
