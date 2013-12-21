@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.ClientEvent;
+import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -71,8 +71,8 @@ public class GameConstructionController<State extends GameState> implements Game
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONSTRUCTION_RESPONSES_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody ClientEvent getResponce(@PathVariable("game") final Game game, @PathVariable("session") final String session, @PathVariable("playerId") final String player) {
-        return (ClientEvent) constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().fetchAction(player);
+    public @ResponseBody PlayerAwareEvent getResponce(@PathVariable("game") final Game game, @PathVariable("session") final String session, @PathVariable("playerId") final String player) {
+        return constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().fetchAction(player);
     }
 
     @Override

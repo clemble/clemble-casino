@@ -8,7 +8,7 @@ import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.event.client.GameClientEvent;
+import com.clemble.casino.game.event.client.GameAction;
 
 public class SimpleGameSessionPlayer<State extends GameState> extends AbstractGameSessionPlayer<State> {
 
@@ -25,7 +25,7 @@ public class SimpleGameSessionPlayer<State extends GameState> extends AbstractGa
     }
 
     @Override
-    public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameClientEvent clientEvent) {
+    public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameAction clientEvent) {
         // Step 1. Processing action by controller
         return (State) gameEngineController.process(clientEvent);
     }

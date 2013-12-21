@@ -7,11 +7,11 @@ import java.util.HashSet;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
-import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.event.server.GameServerEvent;
+import com.clemble.casino.game.event.client.GameAction;
+import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 import com.clemble.casino.server.game.aspect.GameManagementAspect;
@@ -44,14 +44,14 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
         }
 
         @Override
-        public GameServerEvent<State> process(GameSession<State> session, ClientEvent move) {
+        public GameManagementEvent<State> process(GameSession<State> session, GameAction move) {
             State state = session.getState();
             // Step 1. Before move notification
             for (GameAspect<State> listener : listenerArray) {
                 listener.beforeMove(state, move);
             }
             // Step 2. Processing in core
-            GameServerEvent<State> event = state.process(session, move);
+            GameManagementEvent<State> event = state.process(session, move);
             if (session.getState().getOutcome() != null) {
                 // Step 3.1 After game notification
                 for (GameManagementAspect listener : managementListenerArray) {

@@ -5,13 +5,13 @@ import java.util.Collection;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.account.GameAccount;
-import com.clemble.casino.game.event.client.surrender.SurrenderEvent;
+import com.clemble.casino.game.event.client.GameAction;
+import com.clemble.casino.game.event.client.surrender.SurrenderAction;
 import com.clemble.casino.game.event.server.GameEndedEvent;
-import com.clemble.casino.game.event.server.GameServerEvent;
+import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.iterator.GamePlayerIterator;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class NumberState implements GameState {
 
     /**
-     * 
+     * Generated 20/12/13
      */
     private static final long serialVersionUID = 6467228372170341563L;
 
@@ -53,20 +53,19 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public <State extends GameState> GameServerEvent<State> process(GameSession<State> session, ClientEvent clientEvent) {
+    public <State extends GameState> GameManagementEvent<State> process(GameSession<State> session, GameAction action) {
         // Step 1. Processing Select cell move
         if (outcome != null) {
             throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayGameEnded);
         }
 
-        GameServerEvent<State> resultEvent = null;
+        GameManagementEvent<State> resultEvent = null;
 
-        if (clientEvent instanceof SelectNumberEvent) {
-            actionLatch.put(clientEvent.getPlayer(), clientEvent);
+        if (action instanceof SelectNumberAction) {
+            actionLatch.put(action);
             if (actionLatch.complete()) {
                 int maxBet = 0;
-                for (ClientEvent madeMove : actionLatch.fetchActionsMap().values()) {
-                    SelectNumberEvent selectNumberEvent = (SelectNumberEvent) madeMove;
+                for (SelectNumberAction selectNumberEvent : actionLatch.<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
                         outcome = new PlayerWonOutcome(selectNumberEvent.getPlayer());
@@ -76,9 +75,9 @@ public class NumberState implements GameState {
                 }
             }
             resultEvent = new GameEndedEvent<>(session, outcome);
-        } else if (clientEvent instanceof SurrenderEvent) {
+        } else if (action instanceof SurrenderAction) {
             // Step 1. Fetching player identifier
-            String looser = ((SurrenderEvent) clientEvent).getPlayer();
+            String looser = ((SurrenderAction) action).getPlayer();
             Collection<String> opponents = playerIterator.whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table

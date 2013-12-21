@@ -7,7 +7,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.clemble.casino.VersionAware;
 import com.clemble.casino.base.ActionLatch;
-import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.configuration.GameRuleOptions;
@@ -15,8 +14,9 @@ import com.clemble.casino.game.configuration.SelectRuleOptions;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
-import com.clemble.casino.game.event.client.BetEvent;
-import com.clemble.casino.game.event.client.surrender.GiveUpEvent;
+import com.clemble.casino.game.event.client.BetAction;
+import com.clemble.casino.game.event.client.GameAction;
+import com.clemble.casino.game.event.client.surrender.GiveUpAction;
 import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.rule.bet.BetRule;
 import com.clemble.casino.game.rule.bet.FixedBetRule;
@@ -60,16 +60,16 @@ public class ObjectTest {
                 return FixedBetRule.create(new long[] { 10 });
             }
         });
-        ObjectGenerator.register(ClientEvent.class, new AbstractValueGenerator<ClientEvent>() {
+        ObjectGenerator.register(GameAction.class, new AbstractValueGenerator<GameAction>() {
             @Override
-            public ClientEvent generate() {
-                return new GiveUpEvent(RandomStringUtils.random(5));
+            public GameAction generate() {
+                return new GiveUpAction(RandomStringUtils.random(5));
             }
         });
-        ObjectGenerator.register(BetEvent.class, new AbstractValueGenerator<BetEvent>() {
+        ObjectGenerator.register(BetAction.class, new AbstractValueGenerator<BetAction>() {
             @Override
-            public BetEvent generate() {
-                return new BetEvent(RandomStringUtils.random(5), 100);
+            public BetAction generate() {
+                return new BetAction(RandomStringUtils.random(5), 100);
             }
         });
         ObjectGenerator.register(PlayerAccount.class, new AbstractValueGenerator<PlayerAccount>() {

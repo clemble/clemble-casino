@@ -55,7 +55,7 @@ public class AvailabilityGameConstructionManager implements GameConstructionMana
         construction.setSession(new GameSessionKey(request.getSpecification().getName().getGame(), id));
         construction.setState(GameConstructionState.pending);
         ActionLatch responses = new ActionLatch(request.getPlayer(), request.getParticipants(), "response");
-        responses.put(request.getPlayer(), new InvitationAcceptedEvent(request.getPlayer(), construction.getSession()));
+        responses.put(new InvitationAcceptedEvent(request.getPlayer(), construction.getSession()));
         construction.setResponses(responses);
         construction = constructionRepository.saveAndFlush(construction);
         // Step 4. Sending invitation to opponents
@@ -85,7 +85,7 @@ public class AvailabilityGameConstructionManager implements GameConstructionMana
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState);
             // Step 2. Checking if player is part of the game
             ActionLatch responseLatch = construction.getResponses();
-            responseLatch.put(response.getPlayer(), response);
+            responseLatch.put(response);
             // Step 3. Notifying of applied response
             construction = constructionRepository.saveAndFlush(construction);
             playerNotificationService.notify(responseLatch.fetchParticipants(), response);

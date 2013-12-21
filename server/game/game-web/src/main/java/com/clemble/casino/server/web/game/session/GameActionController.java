@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.event.client.GameAction;
 import com.clemble.casino.game.event.client.MadeMove;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
@@ -46,7 +46,7 @@ public class GameActionController<State extends GameState> implements GameAction
     @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_ACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody State process(@PathVariable("game") Game game, @PathVariable("session") String session, @RequestBody ClientEvent move) {
+    public @ResponseBody State process(@PathVariable("game") Game game, @PathVariable("session") String session, @RequestBody GameAction move) {
         // Step 1. Retrieving associated table
         return sessionProcessor.process(new GameSessionKey(game, session), move);
     }

@@ -50,7 +50,7 @@ public class FacebookRegistrationITest {
     @Before
     public void setup() {
         try {
-            URLConnection connection = new URL("http://www.google.com").openConnection();
+            URLConnection connection = new URL("http://graph.facebook.com").openConnection();
             InputStream is = connection.getInputStream();
             is.close();
         } catch (Throwable throwable) {

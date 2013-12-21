@@ -3,11 +3,11 @@ package com.clemble.casino.integration.game;
 import java.io.Closeable;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.event.ClientEvent;
-import com.clemble.casino.game.GameState;
+import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionAware;
+import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.event.client.GameClientEvent;
+import com.clemble.casino.game.event.client.GameAction;
 import com.clemble.casino.game.specification.GameSpecificationAware;
 import com.clemble.casino.player.PlayerAware;
 
@@ -33,9 +33,9 @@ public interface GameSessionPlayer<State extends GameState> extends GameSessionA
 
     public boolean isToMove();
 
-    public ClientEvent getNextMove();
+    public Event getNextMove();
 
-    public void perform(GameClientEvent gameAction);
+    public void perform(GameAction gameAction);
 
     public void giveUp();
 

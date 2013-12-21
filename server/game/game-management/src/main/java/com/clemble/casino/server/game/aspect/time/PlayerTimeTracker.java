@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import com.clemble.casino.event.ClientEvent;
+import com.clemble.casino.game.event.client.GameAction;
 import com.clemble.casino.game.rule.time.TimeRule;
 import com.clemble.casino.player.PlayerAware;
 
@@ -56,7 +56,7 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
         }
     }
 
-    public void appendBreachEvent(Collection<ClientEvent> events) {
+    public void appendBreachEvent(Collection<GameAction> events) {
         if (System.currentTimeMillis() >= breachTime)
             events.add(timeRule.toTimeBreachedEvent(player));
     }

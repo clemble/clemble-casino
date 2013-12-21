@@ -25,14 +25,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.clemble.casino.event.ClientEvent;
+import com.clemble.casino.event.Event;
 import com.clemble.casino.game.account.GameAccount;
 import com.clemble.casino.game.account.InvisibleGameAccount;
 import com.clemble.casino.game.account.VisibleGameAccount;
 import com.clemble.casino.game.configuration.SelectRuleOptions;
 import com.clemble.casino.game.construct.ScheduledGameRequest;
-import com.clemble.casino.game.event.client.BetEvent;
-import com.clemble.casino.game.event.client.surrender.GiveUpEvent;
+import com.clemble.casino.game.event.client.BetAction;
+import com.clemble.casino.game.event.client.surrender.GiveUpAction;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
@@ -78,15 +78,15 @@ public class ObjectMapperTest extends ObjectTest {
         Assert.assertNull(checkSerialization(GameAccount.class));
         Assert.assertNull(checkSerialization(VisibleGameAccount.class));
         Assert.assertNull(checkSerialization(InvisibleGameAccount.class));
-        Assert.assertNull(checkSerialization(BetEvent.class));
+        Assert.assertNull(checkSerialization(BetAction.class));
         Assert.assertNull(checkSerialization(NumberState.class));
     }
 
     @Test
     public void testGiveUpReadWrite() throws JsonParseException, JsonMappingException, IOException {
-        GiveUpEvent event = new GiveUpEvent(RandomStringUtils.random(5));
+        GiveUpAction event = new GiveUpAction(RandomStringUtils.random(5));
         String stringEvent = objectMapper.writeValueAsString(event);
-        GiveUpEvent readEvent = (GiveUpEvent) objectMapper.readValue(stringEvent, ClientEvent.class);
+        GiveUpAction readEvent = (GiveUpAction) objectMapper.readValue(stringEvent, Event.class);
         Assert.assertEquals(event, readEvent);
     }
 

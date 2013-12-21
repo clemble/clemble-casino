@@ -6,10 +6,10 @@ import java.util.Date;
 
 import org.springframework.scheduling.TriggerContext;
 
-import com.clemble.casino.event.ClientEvent;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameSessionAware;
+import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.event.client.GameAction;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.server.game.action.GameEventTask;
 
@@ -43,7 +43,7 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
         return session;
     }
 
-    public void markMoved(ClientEvent move) {
+    public void markMoved(GameAction move) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
             if (playerTimeTracker.getPlayer().equals(move.getPlayer())) {
                 playerTimeTracker.markMoved();
@@ -51,7 +51,7 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
         }
     }
 
-    public void markToMove(ClientEvent nextMove) {
+    public void markToMove(GameAction nextMove) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
             if (playerTimeTracker.getPlayer().equals(nextMove.getPlayer())) {
                 playerTimeTracker.markToMove();
@@ -69,8 +69,8 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
         return breachTime;
     }
 
-    public Collection<ClientEvent> execute() {
-        Collection<ClientEvent> breachEvents = new ArrayList<>();
+    public Collection<GameAction> execute() {
+        Collection<GameAction> breachEvents = new ArrayList<>();
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers)
             playerTimeTracker.appendBreachEvent(breachEvents);
         return breachEvents;

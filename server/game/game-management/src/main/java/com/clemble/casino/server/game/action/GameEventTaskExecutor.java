@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
-import com.clemble.casino.event.ClientEvent;
+import com.clemble.casino.game.event.client.GameAction;
 
 public class GameEventTaskExecutor implements BeanPostProcessor {
 
@@ -54,8 +54,8 @@ public class GameEventTaskExecutor implements BeanPostProcessor {
 
         @Override
         public void run() {
-            Collection<ClientEvent> events = eventTask.execute();
-            for (ClientEvent event : events) {
+            Collection<GameAction> events = eventTask.execute();
+            for (GameAction event : events) {
                 GameEventTaskExecutor.this.sessionProcessor.process(eventTask.getSession(), event);
             }
             reschedule(eventTask);

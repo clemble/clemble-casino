@@ -19,7 +19,7 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.NumberState;
-import com.clemble.casino.integration.game.SelectNumberEvent;
+import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.PaymentTransactionKey;
@@ -43,8 +43,8 @@ public class GamePaymentTransactionITest {
         A.playerOperations().paymentOperations().subscribe(paymentListener);
         GameSessionPlayer<NumberState> B = sessionPlayers.get(1);
         // Step 2. Make a surrender by player B
-        A.perform(new SelectNumberEvent(A.getPlayer(), 2));
-        B.perform(new SelectNumberEvent(B.getPlayer(), 1));
+        A.perform(new SelectNumberAction(A.getPlayer(), 2));
+        B.perform(new SelectNumberAction(B.getPlayer(), 1));
         // Step 3. Synching players
         B.syncWith(A);
         // Step 4. Checking payment transaction complete

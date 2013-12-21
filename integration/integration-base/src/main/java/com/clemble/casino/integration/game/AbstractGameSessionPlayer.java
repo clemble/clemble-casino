@@ -10,14 +10,13 @@ import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.game.GameActionOperations;
-import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.event.client.GameClientEvent;
-import com.clemble.casino.game.event.client.surrender.GiveUpEvent;
-import com.clemble.casino.game.event.server.GameServerEvent;
+import com.clemble.casino.game.event.client.GameAction;
+import com.clemble.casino.game.event.client.surrender.GiveUpAction;
+import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
 import com.clemble.casino.game.specification.GameSpecification;
 
@@ -47,8 +46,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
                 if (event instanceof GameStartedEvent) {
                     GameStartedEvent<?> gameStartedEvent = ((GameStartedEvent<?>) event);
                 }
-                if (event instanceof GameServerEvent) {
-                    setState(((GameServerEvent<State>) event).getState());
+                if (event instanceof GameManagementEvent) {
+                    setState(((GameManagementEvent<State>) event).getState());
                 }
             }
         });
@@ -126,7 +125,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         }
     }
 
-    final public ClientEvent getNextMove() {
+    final public Event getNextMove() {
         return getState().getActionLatch().fetchAction(player.getPlayer());
     }
 
@@ -163,7 +162,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     public void giveUp() {
         // Step 1. Giving up if needed
         if (isAlive()) {
-            perform(new GiveUpEvent(player.getPlayer()));
+            perform(new GiveUpAction(player.getPlayer()));
         }
     }
 
@@ -190,10 +189,10 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    public void perform(GameClientEvent gameAction) {
+    public void perform(GameAction gameAction) {
         setState((State) player.gameActionOperations(construction.getSession()).process(gameAction));
     }
 
-    abstract public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameClientEvent clientEvent);
+    abstract public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameAction clientEvent);
 
 }

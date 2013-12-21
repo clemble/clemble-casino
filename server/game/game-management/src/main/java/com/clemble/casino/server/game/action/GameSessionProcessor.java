@@ -6,13 +6,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.ClientEvent;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.event.client.surrender.SurrenderEvent;
-import com.clemble.casino.game.event.server.GameServerEvent;
+import com.clemble.casino.game.event.client.GameAction;
+import com.clemble.casino.game.event.client.surrender.SurrenderAction;
+import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
 import com.clemble.casino.server.game.cache.GameCache;
 import com.clemble.casino.server.game.cache.GameCacheService;
@@ -46,7 +46,7 @@ public class GameSessionProcessor<State extends GameState> {
         return cacheService.get(session).getSession().getState();
     }
 
-    public State process(GameSessionKey session, ClientEvent move) {
+    public State process(GameSessionKey session, GameAction move) {
         // Step 1. Sanity check
         if (move == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayMoveUndefined);
@@ -55,7 +55,7 @@ public class GameSessionProcessor<State extends GameState> {
         // Step 3. Checking
         switch (cache.getSession().getSessionState()) {
         case finished:
-            if (!(move instanceof SurrenderEvent)) {
+            if (!(move instanceof SurrenderAction)) {
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayGameEnded);
             }
             return cache.getSession().getState();
@@ -69,7 +69,7 @@ public class GameSessionProcessor<State extends GameState> {
             // Step 4. Retrieving game processor based on session identifier
             GameProcessor<State> processor = cache.getProcessor();
             // Step 5. Processing movement
-            GameServerEvent<State> event = processor.process(cache.getSession(), move);
+            GameManagementEvent<State> event = processor.process(cache.getSession(), move);
             // Step 6. Invoking appropriate notification
             notificationService.notify(cache.getPlayerIds(), event);
             // Step 7. Returning state of the game
