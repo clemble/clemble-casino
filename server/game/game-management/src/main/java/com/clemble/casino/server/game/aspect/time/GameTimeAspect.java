@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.event.client.GameAction;
+import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.aspect.GameAspect;

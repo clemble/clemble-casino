@@ -9,7 +9,7 @@
         @TypeDef(name = "moveTime", typeClass = com.clemble.casino.game.rule.time.MoveTimeRuleHibernate.class, defaultForType = com.clemble.casino.game.rule.time.MoveTimeRule.class),
         @TypeDef(name = "money", typeClass = com.clemble.casino.payment.money.MoneyHibernate.class, defaultForType = com.clemble.casino.payment.money.Money.class),
         @TypeDef(name = "betRule", typeClass = com.clemble.casino.game.rule.bet.BetRuleHibernate.class, defaultForType = com.clemble.casino.game.rule.bet.BetRule.class),
-        @TypeDef(name = "gameMove", typeClass = com.clemble.casino.event.ClientEventHibernate.class, defaultForType = com.clemble.casino.game.event.client.GameAction.class) })
+        @TypeDef(name = "gameMove", typeClass = com.clemble.casino.event.ClientEventHibernate.class, defaultForType = com.clemble.casino.game.action.GameAction.class) })
 package com.clemble.casino.game;
 
 import org.hibernate.annotations.TypeDef;

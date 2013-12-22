@@ -8,8 +8,8 @@ import org.springframework.scheduling.TriggerContext;
 
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.event.client.GameAction;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.server.game.action.GameEventTask;
 

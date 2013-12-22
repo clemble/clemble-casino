@@ -1,6 +1,6 @@
 package com.clemble.casino.integration.game;
 
-import com.clemble.casino.game.event.client.GameAction;
+import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

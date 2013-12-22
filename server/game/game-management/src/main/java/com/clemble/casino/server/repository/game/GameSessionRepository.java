@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.event.client.MadeMove;
+import com.clemble.casino.game.action.MadeMove;
 
 @Repository
 public interface GameSessionRepository<State extends GameState> extends JpaRepository<GameSession<State>, GameSessionKey> {

@@ -4,9 +4,9 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.account.GamePlayerAccount;
-import com.clemble.casino.game.event.client.BetAction;
-import com.clemble.casino.game.event.client.GameAction;
-import com.clemble.casino.game.event.client.surrender.SurrenderAction;
+import com.clemble.casino.game.action.BetAction;
+import com.clemble.casino.game.action.GameAction;
+import com.clemble.casino.game.action.surrender.SurrenderAction;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
 public class GamePriceAspect<State extends GameState> extends BasicGameAspect<State> {

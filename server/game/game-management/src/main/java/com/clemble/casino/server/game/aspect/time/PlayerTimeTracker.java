@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import com.clemble.casino.game.event.client.GameAction;
+import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.rule.time.TimeRule;
 import com.clemble.casino.player.PlayerAware;
 

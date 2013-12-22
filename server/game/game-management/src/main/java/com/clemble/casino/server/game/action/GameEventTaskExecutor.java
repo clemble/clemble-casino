@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
-import com.clemble.casino.game.event.client.GameAction;
+import com.clemble.casino.game.action.GameAction;
 
 public class GameEventTaskExecutor implements BeanPostProcessor {
 

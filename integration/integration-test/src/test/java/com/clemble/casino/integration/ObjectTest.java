@@ -9,14 +9,15 @@ import com.clemble.casino.VersionAware;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.action.BetAction;
+import com.clemble.casino.game.action.GameAction;
+import com.clemble.casino.game.action.surrender.GiveUpAction;
+import com.clemble.casino.game.cell.Cell;
 import com.clemble.casino.game.configuration.GameRuleOptions;
 import com.clemble.casino.game.configuration.SelectRuleOptions;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
-import com.clemble.casino.game.event.client.BetAction;
-import com.clemble.casino.game.event.client.GameAction;
-import com.clemble.casino.game.event.client.surrender.GiveUpAction;
 import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.rule.bet.BetRule;
 import com.clemble.casino.game.rule.bet.FixedBetRule;
@@ -28,6 +29,7 @@ import com.clemble.casino.game.rule.giveup.GiveUpRule;
 import com.clemble.casino.game.rule.time.MoveTimeRule;
 import com.clemble.casino.game.rule.time.TotalTimeRule;
 import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
@@ -52,6 +54,12 @@ public class ObjectTest {
             @Override
             public GameSessionKey generate() {
                 return new GameSessionKey(ObjectGenerator.generate(Game.class), ObjectGenerator.generate(String.class));
+            }
+        });
+        ObjectGenerator.register(GameUnit.class, new AbstractValueGenerator<GameUnit>() {
+            @Override
+            public GameUnit generate() {
+                return Cell.create(0, 0);
             }
         });
         ObjectGenerator.register(FixedBetRule.class, new AbstractValueGenerator<FixedBetRule>() {
@@ -86,25 +94,26 @@ public class ObjectTest {
                         .setTransactionDate(new Date())
                         .setProcessingDate(new Date())
                         .addPaymentOperation(
-                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit).setPlayer(RandomStringUtils.random(5)))
+                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit)
+                                        .setPlayer(RandomStringUtils.random(5)))
                         .addPaymentOperation(
-                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit).setPlayer(RandomStringUtils.random(5)));
+                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit)
+                                        .setPlayer(RandomStringUtils.random(5)));
             }
         });
         ObjectGenerator.register(PlayerCredential.class, new AbstractValueGenerator<PlayerCredential>() {
             @Override
             public PlayerCredential generate() {
-                return new PlayerCredential()
-                    .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
-                    .setPassword(RandomStringUtils.random(10))
-                    .setPlayer(RandomStringUtils.random(5));
+                return new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(RandomStringUtils.random(10))
+                        .setPlayer(RandomStringUtils.random(5));
             }
         });
         ObjectGenerator.register(PlayerProfile.class, new AbstractValueGenerator<PlayerProfile>() {
             @Override
             public PlayerProfile generate() {
                 return new PlayerProfile().setBirthDate(new Date(0)).setCategory(PlayerCategory.Amateur).setFirstName(RandomStringUtils.randomAlphabetic(10))
-                        .setGender(PlayerGender.M).setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10)).setPlayer(RandomStringUtils.random(5));
+                        .setGender(PlayerGender.M).setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10))
+                        .setPlayer(RandomStringUtils.random(5));
             }
         });
         ObjectGenerator.register(GameRule.class, new AbstractValueGenerator<GameRule>() {
@@ -116,11 +125,10 @@ public class ObjectTest {
         ObjectGenerator.register(GameConstruction.class, new AbstractValueGenerator<GameConstruction>() {
             @Override
             public GameConstruction generate() {
-                return new GameConstruction()
-                    .setSession(new GameSessionKey(Game.pic, "0"))
-                    .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), GameSpecification.DEFAULT))
-                    .setResponses(new ActionLatch(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
-                    .setState(GameConstructionState.pending);
+                return new GameConstruction().setSession(new GameSessionKey(Game.pic, "0"))
+                        .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), GameSpecification.DEFAULT))
+                        .setResponses(new ActionLatch(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
+                        .setState(GameConstructionState.pending);
             }
         });
         ObjectGenerator.register(SelectRuleOptions.class, new AbstractValueGenerator<SelectRuleOptions>() {
@@ -154,10 +162,12 @@ public class ObjectTest {
             public Integer generate() {
                 return 0;
             }
+
             @Override
             public int scope() {
                 return 1;
             }
+
             public ValueGenerator<Integer> clone() {
                 return this;
             }
