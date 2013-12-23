@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
+import com.clemble.casino.server.ExternalController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.player.PlayerWebMapping;
 
 @Controller
-public class PlayerPresenceController implements PlayerPresenceService {
+public class PlayerPresenceController implements PlayerPresenceService, ExternalController {
 
     final private PlayerPresenceServerService presenceServerService;
 

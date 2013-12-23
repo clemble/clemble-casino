@@ -50,6 +50,7 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
         return new PlayerProfile()
             .addSocialConnection(new ConnectionKey("facebook", facebookProfile.getId()))
             .setFirstName(facebookProfile.getFirstName())
+            .setNickName(facebookProfile.getName())
             .setLastName(facebookProfile.getLastName())
             .setBirthDate(readDate(facebookProfile.getBirthday()))
             .setGender(PlayerGender.parse(facebookProfile.getGender()))

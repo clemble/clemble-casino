@@ -2,6 +2,7 @@ package com.clemble.casino.server.web.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.server.ExternalController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.player.PlayerWebMapping;
 
-public class PlayerSocialProfileController implements PlayerSocialProfileService {
+public class PlayerSocialProfileController implements PlayerSocialProfileService, ExternalController {
 
     final private SocialConnectionDataAdapter socialConnectionDataAdapter;
 

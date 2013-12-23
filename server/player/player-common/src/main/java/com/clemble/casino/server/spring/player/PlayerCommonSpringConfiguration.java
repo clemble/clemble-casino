@@ -1,5 +1,7 @@
 package com.clemble.casino.server.spring.player;
 
+import com.clemble.casino.server.player.registration.ProfileRegistrationService;
+import com.clemble.casino.server.player.registration.RestProfileRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
-import com.clemble.casino.server.player.registration.RestPlayerProfileRegistrationServerService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PlayerPresenceSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -34,7 +34,7 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
 
         @Autowired(required = false)
         @Qualifier("realPlayerProfileRegistrationService")
-        public PlayerProfileRegistrationServerService realPlayerProfileRegistrationService;
+        public ProfileRegistrationService realPlayerProfileRegistrationService;
 
         public String getBaseUrl() {
             return "http://127.0.0.1:8080/player/";
@@ -42,8 +42,8 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Autowired
-        public PlayerProfileRegistrationServerService playerProfileRegistrationService(RestTemplate restTemplate) {
-            return realPlayerProfileRegistrationService == null ? new RestPlayerProfileRegistrationServerService(getBaseUrl(), restTemplate) : realPlayerProfileRegistrationService;
+        public ProfileRegistrationService playerProfileRegistrationService(RestTemplate restTemplate) {
+            return realPlayerProfileRegistrationService == null ? new RestProfileRegistrationService(getBaseUrl(), restTemplate) : realPlayerProfileRegistrationService;
         }
 
     }
@@ -53,21 +53,21 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
     public static class TestPlayerConfiguration {
 
         @Bean
-        public PlayerProfileRegistrationServerService playerProfileRegistrationService() {
-            return new PlayerProfileRegistrationServerService() {
+        public ProfileRegistrationService playerProfileRegistrationService() {
+            return new ProfileRegistrationService() {
 
                 @Override
-                public PlayerProfile createPlayerProfile(SocialConnectionData socialConnectionData) {
+                public PlayerProfile create(SocialConnectionData socialConnectionData) {
                     return null;
                 }
 
                 @Override
-                public PlayerProfile createPlayerProfile(PlayerProfile playerProfile) {
+                public PlayerProfile create(PlayerProfile playerProfile) {
                     return playerProfile;
                 }
 
                 @Override
-                public PlayerProfile createPlayerProfile(SocialAccessGrant accessGrant) {
+                public PlayerProfile create(SocialAccessGrant accessGrant) {
                     return null;
                 }
             };

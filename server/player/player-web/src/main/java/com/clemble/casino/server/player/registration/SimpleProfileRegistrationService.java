@@ -11,22 +11,22 @@ import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 
-public class SimplePlayerProfileRegistrationServerService implements PlayerProfileRegistrationServerService {
+public class SimpleProfileRegistrationService implements ProfileRegistrationService {
 
     final private PlayerProfileRepository playerProfileRepository;
     final private SocialConnectionDataAdapter socialConnectionDataAdapter;
     final private ClembleCasinoValidationService validationService;
 
-    public SimplePlayerProfileRegistrationServerService(final ClembleCasinoValidationService validationService,
-            final PlayerProfileRepository playerProfileRepository,
-            final SocialConnectionDataAdapter socialConnectionDataAdapter) {
+    public SimpleProfileRegistrationService(final ClembleCasinoValidationService validationService,
+                                            final PlayerProfileRepository playerProfileRepository,
+                                            final SocialConnectionDataAdapter socialConnectionDataAdapter) {
         this.validationService = checkNotNull(validationService);
         this.playerProfileRepository = checkNotNull(playerProfileRepository);
         this.socialConnectionDataAdapter = checkNotNull(socialConnectionDataAdapter);
     }
 
     @Override
-    public PlayerProfile createPlayerProfile(final PlayerProfile playerProfile) {
+    public PlayerProfile create(final PlayerProfile playerProfile) {
         if (playerProfile == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileInvalid);
         if (playerProfile.getSocialConnections() != null && !playerProfile.getSocialConnections().isEmpty())
@@ -38,7 +38,7 @@ public class SimplePlayerProfileRegistrationServerService implements PlayerProfi
     }
 
     @Override
-    public PlayerProfile createPlayerProfile(SocialConnectionData socialConnectionData) {
+    public PlayerProfile create(SocialConnectionData socialConnectionData) {
         validationService.validate(socialConnectionData);
         // Step 1. Registering player with SocialConnection
         String player = socialConnectionDataAdapter.register(socialConnectionData);
@@ -47,7 +47,7 @@ public class SimplePlayerProfileRegistrationServerService implements PlayerProfi
     }
 
     @Override
-    public PlayerProfile createPlayerProfile(SocialAccessGrant accessGrant) {
+    public PlayerProfile create(SocialAccessGrant accessGrant) {
         validationService.validate(accessGrant);
         // Step 1. Registering player with SocialConnection
         String player = socialConnectionDataAdapter.register(accessGrant);

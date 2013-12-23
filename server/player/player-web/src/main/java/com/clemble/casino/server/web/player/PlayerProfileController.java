@@ -2,6 +2,7 @@ package com.clemble.casino.server.web.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.server.ExternalController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ import com.wordnik.swagger.annotations.Api;
 
 @Api(value = "player")
 @Controller
-public class PlayerProfileController implements PlayerProfileService {
+public class PlayerProfileController implements PlayerProfileService, ExternalController {
 
     final private PlayerProfileRepository profileRepository;
 

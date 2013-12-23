@@ -39,6 +39,7 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
             .addSocialConnection(new ConnectionKey("linkedin", linkedInProfile.getId()))
             .setFirstName(linkedInProfile.getFirstName())
             .setLastName(linkedInProfile.getLastName())
+            .setNickName(linkedInProfile.getFirstName())
             .setImageUrl(linkedInProfile.getProfilePictureUrl())
             .setCategory(PlayerCategory.Novice);
     }

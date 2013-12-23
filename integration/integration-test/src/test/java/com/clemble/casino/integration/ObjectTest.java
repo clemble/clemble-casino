@@ -3,6 +3,7 @@ package com.clemble.casino.integration;
 import java.util.Collections;
 import java.util.Date;
 
+import com.clemble.casino.game.cell.CellState;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.clemble.casino.VersionAware;
@@ -54,6 +55,12 @@ public class ObjectTest {
             @Override
             public GameSessionKey generate() {
                 return new GameSessionKey(ObjectGenerator.generate(Game.class), ObjectGenerator.generate(String.class));
+            }
+        });
+        ObjectGenerator.register(CellState.class, new AbstractValueGenerator<CellState>() {
+            @Override
+            public CellState generate() {
+                return new CellState();
             }
         });
         ObjectGenerator.register(GameUnit.class, new AbstractValueGenerator<GameUnit>() {

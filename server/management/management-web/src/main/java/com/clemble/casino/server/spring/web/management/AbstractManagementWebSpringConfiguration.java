@@ -2,6 +2,7 @@ package com.clemble.casino.server.spring.web.management;
 
 import java.security.NoSuchAlgorithmException;
 
+import com.clemble.casino.server.player.registration.ProfileRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,6 @@ import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
-import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
 import com.clemble.casino.server.player.security.AESPlayerTokenFactory;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
@@ -43,7 +43,7 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     @Bean
     @Autowired
     public PlayerRegistrationController playerRegistrationController(
-            @Qualifier("playerProfileRegistrationService") PlayerProfileRegistrationServerService playerProfileRegistrationService,
+            @Qualifier("playerProfileRegistrationService") ProfileRegistrationService playerProfileRegistrationService,
             PlayerIdGenerator idGenerator,
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,

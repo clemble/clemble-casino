@@ -2,6 +2,7 @@ package com.clemble.casino.server.web.management;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.server.ExternalController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,7 @@ import com.clemble.casino.web.management.ManagementWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
-public class PlayerSessionController implements PlayerSessionService {
+public class PlayerSessionController implements PlayerSessionService, ExternalController {
 
     final private ResourceLocationService resourceLocationService;
     final private PlayerSessionRepository sessionRepository;

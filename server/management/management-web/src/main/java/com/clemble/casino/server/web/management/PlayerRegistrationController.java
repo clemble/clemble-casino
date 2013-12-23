@@ -2,6 +2,8 @@ package com.clemble.casino.server.web.management;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.server.ExternalController;
+import com.clemble.casino.server.player.registration.ProfileRegistrationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +26,6 @@ import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
-import com.clemble.casino.server.player.registration.PlayerProfileRegistrationServerService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
@@ -32,19 +33,19 @@ import com.clemble.casino.web.management.ManagementWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
-public class PlayerRegistrationController implements PlayerRegistrationService {
+public class PlayerRegistrationController implements PlayerRegistrationService, ExternalController {
 
     final private PlayerIdGenerator playerIdentifierGenerator;
     final private PlayerTokenFactory playerTokenFactory;
     final private PlayerCredentialRepository playerCredentialRepository;
-    final private PlayerProfileRegistrationServerService playerProfileRegistrationService;
+    final private ProfileRegistrationService playerProfileRegistrationService;
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
     final private PlayerAccountServerService playerAccountServerService;
 
     public PlayerRegistrationController(final PlayerIdGenerator playerIdentifierGenerator,
             final PlayerTokenFactory playerTokenFactory,
-            final PlayerProfileRegistrationServerService playerProfileRegistrationService,
+            final ProfileRegistrationService playerProfileRegistrationService,
             final PlayerCredentialRepository playerCredentialRepository,
             final ClembleConsumerDetailsService playerIdentityRepository,
             final ClembleCasinoValidationService validationService,
@@ -90,7 +91,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         // Step 2. Creating appropriate PlayerProfile
         PlayerProfile savedProfile = registrationRequest.getPlayerProfile();
         savedProfile.setPlayer(playerIdentifierGenerator.newId());
-        savedProfile = playerProfileRegistrationService.createPlayerProfile(savedProfile);
+        savedProfile = playerProfileRegistrationService.create(savedProfile);
         // Step 3. Registration done through separate registration service
         return register(registrationRequest, savedProfile);
     }
@@ -107,7 +108,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         // Step 2. Creating appropriate PlayerProfile
         validationService.validate(socialRegistrationRequest.getSocialConnectionData());
         // Step 3. Registering player with SocialConnection
-        PlayerProfile playerProfile = playerProfileRegistrationService.createPlayerProfile(socialRegistrationRequest.getSocialConnectionData());
+        PlayerProfile playerProfile = playerProfileRegistrationService.create(socialRegistrationRequest.getSocialConnectionData());
         // Step 4. Register new user and identity
         return register(socialRegistrationRequest, playerProfile);
     }
@@ -121,7 +122,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService {
         if (playerIdentity != null)
             return playerIdentity;
         // Step 2. Registering player with SocialConnection
-        PlayerProfile playerProfile = playerProfileRegistrationService.createPlayerProfile(grantRegistrationRequest.getAccessGrant());
+        PlayerProfile playerProfile = playerProfileRegistrationService.create(grantRegistrationRequest.getAccessGrant());
         // Step 3. Register new user and identity
         return register(grantRegistrationRequest, playerProfile);
     }
