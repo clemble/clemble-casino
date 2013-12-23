@@ -59,6 +59,7 @@
         GAME_NAME varchar(255) not null,
         SPECIFICATION_NAME varchar(255) not null,
         BET_RULE varchar(255),
+        DRAW varchar(255),
         GIVE_UP varchar(255),
         MOVE_TIME_LIMIT bigint,
         MOVE_TIME_PUNISHMENT varchar(255),
@@ -69,6 +70,7 @@
         TOTAL_TIME_LIMIT bigint,
         TOTAL_TIME_PUNISHMENT varchar(255),
         VISIBILITY varchar(255),
+        WON varchar(255),
         primary key (GAME_NAME, SPECIFICATION_NAME)
     );
 

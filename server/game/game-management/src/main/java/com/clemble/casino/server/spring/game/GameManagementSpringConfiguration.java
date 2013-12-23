@@ -18,7 +18,9 @@ import com.clemble.casino.server.game.aspect.GameManagementAspecteFactory;
 import com.clemble.casino.server.game.aspect.bet.GameBetAspectFactory;
 import com.clemble.casino.server.game.aspect.management.GameNotificationManagementAspectFactory;
 import com.clemble.casino.server.game.aspect.management.GameSequenceManagementAspectFactory;
-import com.clemble.casino.server.game.aspect.outcome.GameOutcomeManagementAspectFactory;
+import com.clemble.casino.server.game.aspect.outcome.DrawRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.outcome.WonRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.presence.GamePresenceAspectFactory;
 import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
@@ -65,8 +67,21 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GameOutcomeManagementAspectFactory gameOutcomeAspectFactory(PlayerPresenceServerService playerStateManager, PaymentTransactionServerService paymentTransactionService) {
-        return new GameOutcomeManagementAspectFactory(playerStateManager, paymentTransactionService);
+    @Autowired
+    public WonRuleAspectFactory wonRuleAspectFactory(PaymentTransactionServerService paymentTransactionService) {
+        return new WonRuleAspectFactory(paymentTransactionService);
+    }
+
+    @Bean
+    @Autowired
+    public DrawRuleAspectFactory drawRuleAspectFactory(PaymentTransactionServerService paymentTransactionService) {
+        return new DrawRuleAspectFactory(paymentTransactionService);
+    }
+
+    @Bean
+    @Autowired
+    public GamePresenceAspectFactory gamePresenceAspectFactory(PlayerPresenceServerService presenceService){
+        return new GamePresenceAspectFactory(presenceService);
     }
 
     @Bean

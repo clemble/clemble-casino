@@ -21,7 +21,7 @@ public class GamePriceAspect<State extends GameState> extends BasicGameAspect<St
             // Step 3. Checking that move
             if (move instanceof BetAction) {
                 GamePlayerAccount gamePlayerState = state.getAccount().getPlayerAccount(move.getPlayer());
-                if (((BetAction) move).getBet() > gamePlayerState.getMoneyLeft())
+                if (((BetAction) move).getBet() > gamePlayerState.getLeft())
                     throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayBetOverflow);
             }
         }
