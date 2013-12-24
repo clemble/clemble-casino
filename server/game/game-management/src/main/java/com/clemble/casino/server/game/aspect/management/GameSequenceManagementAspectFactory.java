@@ -18,7 +18,7 @@ import com.clemble.casino.server.game.aspect.GameManagementAspecteFactory;
 import com.clemble.casino.server.game.construct.GameInitiatorService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 
-public class  GameSequenceManagementAspectFactory implements GameManagementAspecteFactory {
+public class GameSequenceManagementAspectFactory implements GameManagementAspecteFactory {
 
     final private GameIdGenerator idGenerator;
     final private GameConstructionRepository constructionRepository;

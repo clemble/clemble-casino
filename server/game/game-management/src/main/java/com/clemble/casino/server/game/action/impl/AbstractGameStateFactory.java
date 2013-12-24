@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.MadeMove;
@@ -32,8 +33,11 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
         }
         GameConstruction construction = constructionRepository.findOne(session.getSession());
         // Step 2. Re creating state
-        State restoredState = constructState(session.toInitiation());
-        GameProcessor<State> processor = processorFactory.create(new GameInitiation(construction));
+        GameInitiation initiation = session.toInitiation();
+        // TODO define politics for restart, all time track is lost here
+        GameContext context = new GameContext(initiation);
+        State restoredState = constructState(initiation, context);
+        GameProcessor<State> processor = processorFactory.create(initiation, context);
         // Step 2.1 To prevent population of original session with duplicated events
         GameSession<State> tmpSession = new GameSession<State>();
         tmpSession.setState(restoredState);

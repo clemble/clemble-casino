@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+import com.clemble.casino.game.GameContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -22,10 +23,10 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
     private Collection<GameManagementAspecteFactory> managementAspects = new HashSet<>();
     private Collection<GameAspectFactory> aspectFactories = new HashSet<>();
 
-    public GameProcessor<State> create(GameInitiation initiation) {
-        Collection<GameAspect<State>> gameAspects = new ArrayList<>(aspectFactories.size());
+    public GameProcessor<State> create(GameInitiation initiation, GameContext context) {
+        Collection<GameAspect> gameAspects = new ArrayList<>(aspectFactories.size());
         for (GameAspectFactory aspectFactory : aspectFactories) {
-            gameAspects.add(aspectFactory.<State> construct(initiation));
+            gameAspects.add(aspectFactory.construct(initiation, context));
         }
         Collection<GameManagementAspect> gameManagementAspects = new ArrayList<>(managementAspects.size());
         for(GameManagementAspecteFactory managementAspecteFactory: managementAspects)
@@ -35,10 +36,10 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
 
     public static class AggregatedGameProcessor<State extends GameState> implements GameProcessor<State> {
         final private GameManagementAspect[] managementListenerArray;
-        final private GameAspect<State>[] listenerArray;
+        final private GameAspect[] listenerArray;
 
         @SuppressWarnings("unchecked")
-        public AggregatedGameProcessor(Collection<GameAspect<State>> listeners, Collection<GameManagementAspect> managerListeners) {
+        public AggregatedGameProcessor(Collection<GameAspect> listeners, Collection<GameManagementAspect> managerListeners) {
             this.listenerArray = listeners.toArray(new GameAspect[0]);
             this.managementListenerArray = managerListeners.toArray(new GameManagementAspect[0]);
         }
@@ -47,8 +48,8 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
         public GameManagementEvent<State> process(GameSession<State> session, GameAction move) {
             State state = session.getState();
             // Step 1. Before move notification
-            for (GameAspect<State> listener : listenerArray) {
-                listener.beforeMove(state, move);
+            for (GameAspect listener : listenerArray) {
+                listener.onEvent(move);
             }
             // Step 2. Processing in core
             GameManagementEvent<State> event = state.process(session, move);
@@ -57,12 +58,11 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
                 for (GameManagementAspect listener : managementListenerArray) {
                     listener.afterGame(session);
                 }
-            } else {
-                // Step 3.2 After move notification
-                for (GameAspect<State> listener : listenerArray) {
-                    listener.afterMove(session.getState(), event);
-                }
-            } 
+            }
+            // Step 3.2 After move notification
+            for (GameAspect listener : listenerArray) {
+                listener.onEvent(event);
+            }
             return event;
         }
 

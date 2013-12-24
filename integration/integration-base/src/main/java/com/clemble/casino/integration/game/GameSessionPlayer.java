@@ -25,6 +25,8 @@ public interface GameSessionPlayer<State extends GameState> extends GameSessionA
 
     public void waitForStart();
 
+    public void waitForStart(long timeout);
+
     public void waitForTurn();
 
     public int getVersion();

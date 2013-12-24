@@ -3,6 +3,7 @@ package com.clemble.casino.server.spring.game;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,6 @@ import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.id.UUIDGameIdGenerator;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.aspect.GameManagementAspecteFactory;
-import com.clemble.casino.server.game.aspect.bet.GameBetAspectFactory;
 import com.clemble.casino.server.game.aspect.management.GameNotificationManagementAspectFactory;
 import com.clemble.casino.server.game.aspect.management.GameSequenceManagementAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.DrawRuleAspectFactory;
@@ -57,8 +57,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GameBetAspectFactory gameBetAspectFactory() {
-        return new GameBetAspectFactory();
+    public BetRuleAspectFactory gameBetAspectFactory() {
+        return new BetRuleAspectFactory();
     }
 
     @Bean

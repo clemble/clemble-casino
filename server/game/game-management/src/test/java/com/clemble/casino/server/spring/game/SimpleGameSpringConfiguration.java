@@ -1,5 +1,6 @@
 package com.clemble.casino.server.spring.game;
 
+import com.clemble.casino.game.GameContext;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,7 +55,7 @@ public class SimpleGameSpringConfiguration {
         return new GameStateFactory() {
 
             @Override
-            public GameState constructState(GameInitiation initiation) {
+            public GameState constructState(GameInitiation initiation, GameContext context) {
                 throw new UnsupportedOperationException();
             }
 

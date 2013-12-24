@@ -1,22 +1,29 @@
 package com.clemble.casino.server.game.aspect;
 
-import com.clemble.casino.game.GameSession;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.action.GameAction;
-import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.client.event.EventSelector;
+import com.clemble.casino.event.Event;
 
-public class BasicGameAspect<State extends GameState> implements GameAspect<State>{
+/**
+ * Created by mavarazy on 24/12/13.
+ */
+abstract public class BasicGameAspect implements GameAspect {
 
-    @Override
-    public void beforeMove(State session, GameAction move) {
+    final private EventSelector selector;
+
+    public BasicGameAspect(EventSelector selector) {
+        this.selector = selector;
     }
 
     @Override
-    public void afterMove(State state, GameManagementEvent<State> events) {
+    public void onEvent(Event event) {
+        if(selector.filter(event))
+            doEvent(event);
     }
+
+    abstract public void doEvent(Event event);
 
     @Override
-    public void afterGame(GameSession<State> session, GameManagementEvent<State> events) {
+    public EventSelector getSelector() {
+        return selector;
     }
-
 }

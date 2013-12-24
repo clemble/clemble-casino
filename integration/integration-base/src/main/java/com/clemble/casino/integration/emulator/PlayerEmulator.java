@@ -55,6 +55,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
                 logger.info("Registered {} with construction {} ", playerState.playerOperations(), playerState.getSession());
                 currentPlayer.set(playerState);
                 lastMoved.set(System.currentTimeMillis());
+                playerState.waitForStart(0);
                 while (playerState.getState().getOutcome() == null) {
                     // Step 2. Waiting for player turn
                     playerState.waitForTurn();

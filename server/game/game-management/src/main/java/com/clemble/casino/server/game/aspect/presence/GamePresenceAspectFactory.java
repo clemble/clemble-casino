@@ -28,7 +28,7 @@ public class GamePresenceAspectFactory implements GameManagementAspecteFactory {
         @Override
         public <State extends GameState> void afterGame(GameSession<State> session) {
             session.setSessionState(GameSessionState.finished);
-            for (String player : session.getState().getPlayerIterator().getPlayers())
+            for (String player : session.getState().getContext().getPlayerIterator().getPlayers())
                 presenceService.markOnline(player);
         }
     };

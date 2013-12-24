@@ -1,6 +1,8 @@
 package com.clemble.casino.server.spring.common;
 
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 import javax.sql.DataSource;
 
@@ -77,9 +79,9 @@ public class BasicJPASpringConfiguration implements SpringConfiguration {
             for (Resource schema : applicationContext.getResources("classpath*:/sql/schema/h2/*.sql")) {
                 databasePopulator.addScript(schema);
             }
-            // Step 2. Searching for data script files
-            for (Resource schema : applicationContext.getResources("classpath*:/sql/data/*.sql")) {
-                databasePopulator.addScript(schema);
+            // Step 2. Searching for data script files, adding order to support test override of default values
+            for (Resource data : applicationContext.getResources("classpath*:/sql/data/*.sql")) {
+                databasePopulator.addScript(data);
             }
             // Step 3. Returning aggregated script
             return databasePopulator;

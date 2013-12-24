@@ -1,5 +1,6 @@
 package com.clemble.casino.server.spring.web.game;
 
+import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,6 @@ import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.GameSessionFactory;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.game.action.GameStateFactory;
-import com.clemble.casino.server.game.aspect.bet.GameBetAspectFactory;
 import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
@@ -66,7 +66,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Autowired
     @Qualifier("gameBetAspectFactory")
-    public GameBetAspectFactory betAspectFactory;
+    public BetRuleAspectFactory betAspectFactory;
 
     @Autowired
     @Qualifier("gameSecurityAspectFactory")

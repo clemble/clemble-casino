@@ -3,7 +3,9 @@ package com.clemble.casino.integration;
 import java.util.Collections;
 import java.util.Date;
 
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.cell.CellState;
+import com.clemble.casino.game.construct.GameInitiation;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.clemble.casino.VersionAware;
@@ -134,7 +136,7 @@ public class ObjectTest {
             public GameConstruction generate() {
                 return new GameConstruction().setSession(new GameSessionKey(Game.pic, "0"))
                         .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), GameSpecification.DEFAULT))
-                        .setResponses(new ActionLatch(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
+                        .setResponses(new ActionLatch().expectNext(ImmutableList.<String>of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
                         .setState(GameConstructionState.pending);
             }
         });
@@ -161,7 +163,9 @@ public class ObjectTest {
         ObjectGenerator.register(NumberState.class, new AbstractValueGenerator<NumberState>() {
             @Override
             public NumberState generate() {
-                return new NumberState(null, null, null);
+                GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), GameSpecification.DEFAULT);
+                GameContext context = new GameContext(initiation);
+                return new NumberState(context, null, 0);
             }
         });
         ObjectGenerator.register(VersionAware.class, "version", new ValueGenerator<Integer>() {

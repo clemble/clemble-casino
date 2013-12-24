@@ -36,7 +36,7 @@ public class WonBySpentRuleAspect extends BasicGameManagementAspect {
             PaymentTransaction paymentTransaction = new PaymentTransaction()
                     .setTransactionKey(session.getSession().toPaymentTransactionKey())
                     .setTransactionDate(new Date());
-            for (GamePlayerAccount playerState : session.getState().getAccount().getPlayerAccounts()) {
+            for (GamePlayerAccount playerState : session.getState().getContext().getAccount().getPlayerAccounts()) {
                 if (!playerState.getPlayer().equals(winnerId)) {
                     Money spent = Money.create(currency, playerState.getSpent());
                     paymentTransaction

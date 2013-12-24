@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.clemble.casino.base.ActionLatch;
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.account.GameAccount;
 import com.clemble.casino.game.account.GamePlayerAccount;
 import com.clemble.casino.game.account.VisibleGameAccount;
@@ -21,18 +22,8 @@ public class NumberStateFactory extends AbstractGameStateFactory<NumberState> {
     }
 
     @Override
-    public NumberState constructState(GameInitiation initiation) {
-        SequentialPlayerIterator playerIterator = new SequentialPlayerIterator(initiation.getParticipants());
-        ActionLatch expectedActions = new ActionLatch(initiation.getParticipants(), "selectNumber");
-
-        Money price = initiation.getSpecification().getPrice();
-        Collection<GamePlayerAccount> playerAccounts = new ArrayList<>();
-        for (String participant : initiation.getParticipants()) {
-            playerAccounts.add(new GamePlayerAccount(participant, price.getAmount()));
-        }
-
-        GameAccount gameAccount = new VisibleGameAccount(price, playerAccounts);
-        return new NumberState(expectedActions, gameAccount, playerIterator);
+    public NumberState constructState(GameInitiation initiation, GameContext context) {
+        return new NumberState(context, null, 0);
     }
 
 }

@@ -2,6 +2,7 @@ package com.clemble.casino.server.game.action;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionState;
 import com.clemble.casino.game.GameState;
@@ -28,7 +29,7 @@ public class GameSessionFactory<State extends GameState> {
         session.setSpecification(specification);
         session.setSessionState(GameSessionState.active);
         session.setPlayers(initiation.getParticipants());
-        session.setState(stateFactory.constructState(initiation));
+        session.setState(stateFactory.constructState(initiation, new GameContext(initiation)));
 
         return sessionRepository.saveAndFlush(session);
     }

@@ -44,7 +44,7 @@ public class GameConstructionRepositoryTest {
     public void testActionLatchSerialization() throws JsonParseException, JsonMappingException, IOException {
         String serializedLatch = null;
         try {
-            ActionLatch randomLatch = new ActionLatch(ImmutableList.<String>of("1", "2"), "test");
+            ActionLatch randomLatch = new ActionLatch().expectNext(ImmutableList.<String>of("1", "2"), "test");
             serializedLatch = objectMapper.writeValueAsString(randomLatch);
             ActionLatch readLatch = objectMapper.readValue(serializedLatch, ActionLatch.class);
             Assert.assertEquals("Failed to deserialize: " + serializedLatch, readLatch, randomLatch);
@@ -61,7 +61,7 @@ public class GameConstructionRepositoryTest {
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         construction.setState(GameConstructionState.pending);
-        construction.setResponses(new ActionLatch("1", "answer"));
+        construction.setResponses(new ActionLatch().expectNext("1", "answer"));
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
         Assert.assertNotNull(construction.getResponses());
@@ -74,7 +74,7 @@ public class GameConstructionRepositoryTest {
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setState(GameConstructionState.pending);
         construction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
-        construction.setResponses(new ActionLatch("1", "answer"));
+        construction.setResponses(new ActionLatch().expectNext("1", "answer"));
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
         Assert.assertNotNull(construction.getResponses());
@@ -82,7 +82,7 @@ public class GameConstructionRepositoryTest {
         GameConstruction anotherConstruction = new GameConstruction(availabilityGameRequest);
         anotherConstruction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         anotherConstruction.setState(GameConstructionState.pending);
-        anotherConstruction.setResponses(new ActionLatch("1", "answer"));
+        anotherConstruction.setResponses(new ActionLatch().expectNext("1", "answer"));
         Assert.assertNotNull(anotherConstruction.getResponses());
         anotherConstruction = constructionRepository.saveAndFlush(anotherConstruction);
         Assert.assertNotNull(anotherConstruction.getResponses());

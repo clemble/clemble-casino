@@ -1,9 +1,6 @@
 package com.clemble.casino.server.game.cache;
 
-import com.clemble.casino.game.GameSession;
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.GameSessionAware;
+import com.clemble.casino.game.*;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameProcessor;
@@ -26,7 +23,9 @@ public class GameCacheService<State extends GameState> {
             // Step 2. Creating new StateFactory based on retrieved session
             session.setState(stateFactory.constructState(session));
             // Step 3. Creating new StateFactory based on retrieved session
-            GameProcessor<State> processor = processorFactory.create(new GameInitiation(construction));
+            GameInitiation initiation = new GameInitiation(construction);
+            GameContext context = new GameContext(initiation);
+            GameProcessor<State> processor = processorFactory.create(initiation, context);
             // Step 4. Retrieving associated table
             return new GameCache<State>(session, processor, session.getPlayers());
         }

@@ -69,6 +69,11 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
+    final public void waitForStart(long timeout) {
+        actualPlayer.waitForStart(timeout);
+    }
+
+    @Override
     final public void waitForTurn() {
         actualPlayer.waitForTurn();
     }

@@ -37,7 +37,7 @@ public class DrawByOwnedRuleAspect extends BasicGameManagementAspect {
             PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(session.getSession().toPaymentTransactionKey())
                 .setTransactionDate(new Date());
-            for (GamePlayerAccount playerState : session.getState().getAccount().getPlayerAccounts()) {
+            for (GamePlayerAccount playerState : session.getState().getContext().getAccount().getPlayerAccounts()) {
                 paymentTransaction
                     .addPaymentOperation(new PaymentOperation(playerState.getPlayer(), Money.create(currency, playerState.getOwned()), Operation.Debit))
                     .addPaymentOperation(new PaymentOperation(playerState.getPlayer(), Money.create(currency, playerState.getSpent()), Operation.Credit));

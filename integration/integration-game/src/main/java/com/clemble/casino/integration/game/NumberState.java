@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.account.GameAccount;
@@ -29,27 +30,20 @@ public class NumberState implements GameState {
      */
     private static final long serialVersionUID = 6467228372170341563L;
 
-    final private ActionLatch actionLatch;
-    final private GameAccount gameAccount;
-    final private GamePlayerIterator playerIterator;
+    final private GameContext context;
 
     private GameOutcome outcome;
     private int version;
 
-    public NumberState(ActionLatch expectedActions, GameAccount gameAccount, GamePlayerIterator playerIterator) {
-        this(expectedActions, gameAccount, playerIterator, null, 0);
-    }
-
     @JsonCreator
-    public NumberState(@JsonProperty("actionLatch") ActionLatch expectedActions,
-            @JsonProperty("account") GameAccount gameAccount,
-            @JsonProperty("playerIterator") GamePlayerIterator playerIterator,
+    public NumberState(@JsonProperty("context") GameContext context,
             @JsonProperty("outcome") GameOutcome outcome,
             @JsonProperty("version") int version) {
-        this.actionLatch = expectedActions;
-        this.gameAccount = gameAccount;
-        this.playerIterator = playerIterator;
+        this.context = context;
+        this.context.getActionLatch().expectNext(context.getPlayerIterator().getPlayers(), "selectNumber", SelectNumberAction.class);
+
         this.outcome = outcome;
+        this.version = version;
     }
 
     @Override
@@ -62,10 +56,10 @@ public class NumberState implements GameState {
         GameManagementEvent<State> resultEvent = null;
 
         if (action instanceof SelectNumberAction) {
-            actionLatch.put(action);
-            if (actionLatch.complete()) {
+            context.getActionLatch().put(action);
+            if (context.getActionLatch().complete()) {
                 int maxBet = 0;
-                for (SelectNumberAction selectNumberEvent : actionLatch.<SelectNumberAction>getActions()) {
+                for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
                         outcome = new PlayerWonOutcome(selectNumberEvent.getPlayer());
@@ -78,7 +72,7 @@ public class NumberState implements GameState {
         } else if (action instanceof SurrenderAction) {
             // Step 1. Fetching player identifier
             String looser = ((SurrenderAction) action).getPlayer();
-            Collection<String> opponents = playerIterator.whoIsOpponents(looser);
+            Collection<String> opponents = context.getPlayerIterator().whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
                 outcome = new NoOutcome();
@@ -99,18 +93,8 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public GameAccount getAccount() {
-        return gameAccount;
-    }
-
-    @Override
-    public GamePlayerIterator getPlayerIterator() {
-        return playerIterator;
-    }
-
-    @Override
-    public ActionLatch getActionLatch() {
-        return actionLatch;
+    public GameContext getContext() {
+        return context;
     }
 
     @Override
@@ -124,49 +108,24 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((actionLatch == null) ? 0 : actionLatch.hashCode());
-        result = prime * result + ((gameAccount == null) ? 0 : gameAccount.hashCode());
-        result = prime * result + ((outcome == null) ? 0 : outcome.hashCode());
-        result = prime * result + ((playerIterator == null) ? 0 : playerIterator.hashCode());
-        result = prime * result + version;
-        return result;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        NumberState other = (NumberState) obj;
-        if (actionLatch == null) {
-            if (other.actionLatch != null)
-                return false;
-        } else if (!actionLatch.equals(other.actionLatch))
-            return false;
-        if (gameAccount == null) {
-            if (other.gameAccount != null)
-                return false;
-        } else if (!gameAccount.equals(other.gameAccount))
-            return false;
-        if (outcome == null) {
-            if (other.outcome != null)
-                return false;
-        } else if (!outcome.equals(other.outcome))
-            return false;
-        if (playerIterator == null) {
-            if (other.playerIterator != null)
-                return false;
-        } else if (!playerIterator.equals(other.playerIterator))
-            return false;
-        if (version != other.version)
-            return false;
+        NumberState that = (NumberState) o;
+
+        if (version != that.version) return false;
+        if (context != null ? !context.equals(that.context) : that.context != null) return false;
+        if (outcome != null ? !outcome.equals(that.outcome) : that.outcome != null) return false;
+
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        int result = context != null ? context.hashCode() : 0;
+        result = 31 * result + (outcome != null ? outcome.hashCode() : 0);
+        result = 31 * result + version;
+        return result;
+    }
 }

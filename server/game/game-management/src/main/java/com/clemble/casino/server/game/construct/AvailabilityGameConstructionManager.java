@@ -54,7 +54,7 @@ public class AvailabilityGameConstructionManager implements GameConstructionMana
         GameConstruction construction = new GameConstruction(request);
         construction.setSession(new GameSessionKey(request.getSpecification().getName().getGame(), id));
         construction.setState(GameConstructionState.pending);
-        ActionLatch responses = new ActionLatch(request.getPlayer(), request.getParticipants(), "response");
+        ActionLatch responses = new ActionLatch().expectNext(request.getPlayer(), request.getParticipants(), "response");
         responses.put(new InvitationAcceptedEvent(request.getPlayer(), construction.getSession()));
         construction.setResponses(responses);
         construction = constructionRepository.saveAndFlush(construction);

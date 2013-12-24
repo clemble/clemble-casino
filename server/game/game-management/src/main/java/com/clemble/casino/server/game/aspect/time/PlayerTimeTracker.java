@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.clemble.casino.game.GamePlayerClock;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.rule.time.TimeRule;
 import com.clemble.casino.player.PlayerAware;
@@ -15,24 +16,19 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
      */
     private static final long serialVersionUID = 1732050292805695127L;
 
-    final public static long DEFAULT_BREACH_TIME = Long.MAX_VALUE;
+    final private static long MOVE_TIMEOUT = 5_000;
 
-    final private String player;
     final private TimeRule timeRule;
+    final private GamePlayerClock playerClock;
 
-    private long moveStartTime;
-    private long totalSpentTime;
-    private long breachTime;
-
-    public PlayerTimeTracker(String player, TimeRule timeRule) {
-        this.player = player;
+    public PlayerTimeTracker(GamePlayerClock playerClock, TimeRule timeRule) {
         this.timeRule = checkNotNull(timeRule);
-        this.breachTime = Long.MAX_VALUE;
+        this.playerClock = playerClock;
     }
 
     @Override
     public String getPlayer() {
-        return player;
+        return playerClock.getPlayer();
     }
 
     /**
@@ -40,44 +36,29 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
      * If it was marked before, no action taken
      */
     public void markToMove() {
-        if (breachTime == DEFAULT_BREACH_TIME) {
-            this.moveStartTime = System.currentTimeMillis();
-            this.breachTime = System.currentTimeMillis() + timeRule.getBreachTime(totalSpentTime);
-        }
+        playerClock.markToMove(MOVE_TIMEOUT);
     }
 
     /**
      * Marks player, as already moved, all subsequent calls are ignored, until it's marked to move
      */
     public void markMoved() {
-        if (breachTime != DEFAULT_BREACH_TIME) {
-            this.totalSpentTime += System.currentTimeMillis() - moveStartTime;
-            this.breachTime = DEFAULT_BREACH_TIME;
-        }
+        playerClock.markMoved();
+    }
+
+    public long getBreachTime(){
+        long timeUntilBreach = timeRule.timeUntilBreach(playerClock);
+        return timeUntilBreach < Long.MAX_VALUE ? System.currentTimeMillis() + timeUntilBreach : timeUntilBreach;
     }
 
     public void appendBreachEvent(Collection<GameAction> events) {
-        if (System.currentTimeMillis() >= breachTime)
-            events.add(timeRule.toTimeBreachedEvent(player));
-    }
-
-    public long getBreachTime() {
-        return breachTime;
+        if (timeRule.timeUntilBreach(playerClock) <= 0)
+            events.add(timeRule.toTimeBreachedEvent(playerClock.getPlayer()));
     }
 
     @Override
     public int compareTo(PlayerTimeTracker o) {
-        return Long.compare(breachTime, o.breachTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (player == null ? 0 : player.hashCode());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return player == ((PlayerAware) obj).getPlayer();
+        return Long.compare(timeRule.timeUntilBreach(playerClock), timeRule.timeUntilBreach(o.playerClock));
     }
 
 }

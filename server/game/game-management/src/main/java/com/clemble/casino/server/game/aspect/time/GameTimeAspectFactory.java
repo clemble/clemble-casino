@@ -1,5 +1,6 @@
 package com.clemble.casino.server.game.aspect.time;
 
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
@@ -15,8 +16,8 @@ public class GameTimeAspectFactory implements GameAspectFactory {
     }
 
     @Override
-    public <T extends GameState> GameAspect<T> construct(GameInitiation initiation) {
-        return new GameTimeAspect<>(new SessionTimeTask(initiation), eventTaskExecutor);
+    public GameAspect construct(GameInitiation initiation, GameContext context) {
+        return new GameTimeAspect(initiation, context, eventTaskExecutor);
     }
 
 }

@@ -126,7 +126,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     final public Event getNextMove() {
-        return getState().getActionLatch().fetchAction(player.getPlayer());
+        return getState().getContext().getActionLatch().fetchAction(player.getPlayer());
     }
 
     final public void waitForStart() {
@@ -134,13 +134,17 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     final public void waitForStart(long timeout) {
-        long expirationTime = System.currentTimeMillis() + timeout;
+        long expirationTime = timeout > 0 ? System.currentTimeMillis() + timeout : Long.MAX_VALUE;
         if (currentState.get() == null)
             setState(this.actionOperations.getState());
         synchronized (versionLock) {
             while ((keepAlive.get() && currentState.get() == null) && expirationTime > System.currentTimeMillis()) {
                 try {
-                    versionLock.wait(timeout);
+                    if(timeout > 0) {
+                        versionLock.wait(timeout);
+                    } else {
+                        versionLock.wait();
+                    }
                 } catch (InterruptedException ignore) {
                     throw new RuntimeException(ignore);
                 }
@@ -156,7 +160,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     final public boolean isToMove() {
-        return !getState().getActionLatch().acted(player.getPlayer());
+        return !getState().getContext().getActionLatch().acted(player.getPlayer());
     }
 
     public void giveUp() {
