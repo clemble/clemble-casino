@@ -39,7 +39,7 @@ public class GameActionController<State extends GameState> implements GameAction
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody State getState(@PathVariable("game") Game game, @PathVariable("session") String session){
         GameSessionKey sessionKey = new GameSessionKey(game, session);
-        if (sessionRepository.findOne(sessionKey) == null)
+        if (!sessionRepository.exists(sessionKey))
             return null;
         return sessionProcessor.get(sessionKey);
     }
