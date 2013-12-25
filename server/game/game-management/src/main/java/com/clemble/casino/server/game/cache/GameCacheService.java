@@ -17,17 +17,22 @@ public class GameCacheService<State extends GameState> {
     final private LoadingCache<GameSessionKey, GameCache<State>> gameCache = CacheBuilder.newBuilder().build(new CacheLoader<GameSessionKey, GameCache<State>>() {
         @Override
         public GameCache<State> load(GameSessionKey sessionId) throws Exception {
-            GameConstruction construction = constructionRepository.findOne(sessionId);
-            // Step 1. Searching for appropriate session in repository
-            GameSession<State> session = sessionRepository.findOne(sessionId);
-            // Step 2. Creating new StateFactory based on retrieved session
-            // Step 3. Creating new StateFactory based on retrieved session
-            GameInitiation initiation = new GameInitiation(construction);
-            GameContext context = new GameContext(initiation);
-            GameProcessor<State> processor = processorFactory.create(initiation, context);
-            session.setState(stateFactory.constructState(initiation, context));
-            // Step 4. Retrieving associated table
-            return new GameCache<State>(session, processor, session.getPlayers());
+            try {
+                // Step 1. Searching for appropriate session in repository
+                GameSession<State> session = sessionRepository.findOne(sessionId);
+                // Step 2. Creating new StateFactory based on retrieved session
+                // Step 3. Creating new StateFactory based on retrieved session
+                GameInitiation initiation = session.toInitiation();
+                GameContext context = new GameContext(initiation);
+                GameProcessor<State> processor = processorFactory.create(initiation, context);
+                State newState = stateFactory.constructState(initiation, context);
+                session.setState(newState);
+                // Step 4. Retrieving associated table
+                return new GameCache<State>(session, processor, session.getPlayers());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                throw new RuntimeException(throwable);
+            }
         }
     });
 
