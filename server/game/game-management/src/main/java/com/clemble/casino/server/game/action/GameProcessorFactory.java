@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-import com.clemble.casino.game.GameContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
@@ -45,14 +45,14 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
         }
 
         @Override
-        public GameManagementEvent<State> process(GameSession<State> session, GameAction move) {
+        public GameManagementEvent process(GameSession<State> session, GameAction move) {
             State state = session.getState();
             // Step 1. Before move notification
             for (GameAspect listener : listenerArray) {
                 listener.onEvent(move);
             }
             // Step 2. Processing in core
-            GameManagementEvent<State> event = state.process(session, move);
+            GameManagementEvent event = state.process(session, move);
             if (session.getState().getOutcome() != null) {
                 // Step 3.1 After game notification
                 for (GameManagementAspect listener : managementListenerArray) {

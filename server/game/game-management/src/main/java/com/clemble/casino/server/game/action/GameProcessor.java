@@ -7,6 +7,6 @@ import com.clemble.casino.game.event.server.GameManagementEvent;
 
 public interface GameProcessor<State extends GameState> {
 
-    public GameManagementEvent<State> process(final GameSession<State> session, final GameAction move);
+    public GameManagementEvent process(final GameSession<State> session, final GameAction move);
 
 }

@@ -18,6 +18,7 @@ import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
+import com.clemble.casino.game.event.server.GameStateManagementEvent;
 import com.clemble.casino.game.specification.GameSpecification;
 
 abstract public class AbstractGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State>, Closeable {
@@ -46,8 +47,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
                 if (event instanceof GameStartedEvent) {
                     GameStartedEvent<?> gameStartedEvent = ((GameStartedEvent<?>) event);
                 }
-                if (event instanceof GameManagementEvent) {
-                    setState(((GameManagementEvent<State>) event).getState());
+                if (event instanceof GameStateManagementEvent) {
+                    setState(((GameStateManagementEvent<State>) event).getState());
                 }
             }
         });
@@ -86,8 +87,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     final private void setState(State newState) {
         synchronized (versionLock) {
             if (newState != null) {
-                System.out.println("updating >> " + this.player.getPlayer() + " >> " + this.construction.getSession() + " >> " + newState.getVersion());
                 if (this.currentState.get() == null || this.currentState.get().getVersion() < newState.getVersion()) {
+                    System.out.println("updating >> " + this.player.getPlayer() + " >> " + this.construction.getSession() + " >> " + newState.getVersion());
                     this.currentState.set(newState);
                     this.versionLock.notifyAll();
                 }
@@ -116,7 +117,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         synchronized (versionLock) {
             while (this.currentState.get() != null && this.currentState.get().getVersion() < expectedVersion) {
                 try {
-                    versionLock.wait(1500);
+                    versionLock.wait(15000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

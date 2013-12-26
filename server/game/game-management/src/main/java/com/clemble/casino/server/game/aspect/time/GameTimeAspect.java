@@ -2,26 +2,21 @@ package com.clemble.casino.server.game.aspect.time;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
+import java.util.Date;
+
 import com.clemble.casino.base.ActionLatch;
-import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameSession;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.event.server.GameStateChangedEvent;
 import com.clemble.casino.game.event.server.PlayerMovedEvent;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.construct.GameInitiatorManager;
-
-import java.util.Collection;
-import java.util.Date;
 
 public class GameTimeAspect extends BasicGameAspect {
 
@@ -46,8 +41,11 @@ public class GameTimeAspect extends BasicGameAspect {
         if(move instanceof GameEndedEvent) {
             gameEventTaskExecutor.cancel(sessionTimeTracker);
         } else {
-            if(move instanceof PlayerMovedEvent){
-                sessionTimeTracker.markMoved(((PlayerMovedEvent) move).getMadeMove());
+            if(move instanceof GameStateChangedEvent){
+                for(String player: participants)
+                    sessionTimeTracker.markMoved(player);
+            }else if(move instanceof PlayerMovedEvent) {
+                sessionTimeTracker.markMoved((PlayerAware) move);
             }
             ActionLatch latch = context.getActionLatch();
             for (String player: participants) {

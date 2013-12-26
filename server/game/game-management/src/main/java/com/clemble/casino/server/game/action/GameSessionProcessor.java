@@ -69,7 +69,7 @@ public class GameSessionProcessor<State extends GameState> {
             // Step 4. Retrieving game processor based on session identifier
             GameProcessor<State> processor = cache.getProcessor();
             // Step 5. Processing movement
-            GameManagementEvent<State> event = processor.process(cache.getSession(), move);
+            GameManagementEvent event = processor.process(cache.getSession(), move);
             // Step 6. Invoking appropriate notification
             notificationService.notify(cache.getPlayerIds(), event);
             // Step 7. Returning state of the game

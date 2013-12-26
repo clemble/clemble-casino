@@ -13,6 +13,7 @@ import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.SurrenderAction;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.event.server.PlayerMovedEvent;
 import com.clemble.casino.game.iterator.GamePlayerIterator;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
@@ -47,13 +48,13 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public <State extends GameState> GameManagementEvent<State> process(GameSession<State> session, GameAction action) {
+    public <State extends GameState> GameManagementEvent process(GameSession<State> session, GameAction action) {
         // Step 1. Processing Select cell move
         if (outcome != null) {
             throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayGameEnded);
         }
 
-        GameManagementEvent<State> resultEvent = null;
+        GameManagementEvent resultEvent = null;
 
         if (action instanceof SelectNumberAction) {
             context.getActionLatch().put(action);
@@ -67,8 +68,10 @@ public class NumberState implements GameState {
                         outcome = new DrawOutcome();
                     }
                 }
+                resultEvent = new GameEndedEvent<>(session, outcome);
+            } else {
+                resultEvent = new PlayerMovedEvent(session.getSession(), action.getPlayer());
             }
-            resultEvent = new GameEndedEvent<>(session, outcome);
         } else if (action instanceof SurrenderAction) {
             // Step 1. Fetching player identifier
             String looser = ((SurrenderAction) action).getPlayer();
