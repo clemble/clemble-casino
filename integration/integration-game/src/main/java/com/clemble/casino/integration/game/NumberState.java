@@ -36,7 +36,7 @@ public class NumberState implements GameState {
 
     @JsonCreator
     public NumberState(@JsonProperty("context") GameContext context,
-            @JsonProperty("parent") GameUnit parent,
+            @JsonProperty("root") GameUnit parent,
             @JsonProperty("outcome") GameOutcome outcome,
             @JsonProperty("version") int version) {
         this.context = context;
@@ -47,7 +47,7 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public GameUnit getParent() {
+    public GameUnit getRoot() {
         return null;
     }
 

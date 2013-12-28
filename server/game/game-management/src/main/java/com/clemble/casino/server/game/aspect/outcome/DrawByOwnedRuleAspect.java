@@ -2,10 +2,10 @@ package com.clemble.casino.server.game.aspect.outcome;
 
 import java.util.Date;
 
+import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.account.GamePlayerAccount;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.payment.PaymentOperation;
@@ -39,8 +39,8 @@ public class DrawByOwnedRuleAspect extends BasicGameManagementAspect {
             for (GamePlayerContext playerContext : session.getState().getContext().getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();
                 paymentTransaction
-                    .addPaymentOperation(new PaymentOperation(playerAccount.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))
-                    .addPaymentOperation(new PaymentOperation(playerAccount.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
+                    .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))
+                    .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
             }
             // Step 3. Processing payment transaction
             transactionService.process(paymentTransaction);

@@ -18,17 +18,19 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
 
     final private static long MOVE_TIMEOUT = 5_000;
 
+    final private String player;
     final private TimeRule timeRule;
     final private GamePlayerClock playerClock;
 
-    public PlayerTimeTracker(GamePlayerClock playerClock, TimeRule timeRule) {
+    public PlayerTimeTracker(String player, GamePlayerClock playerClock, TimeRule timeRule) {
         this.timeRule = checkNotNull(timeRule);
         this.playerClock = playerClock;
+        this.player = player;
     }
 
     @Override
     public String getPlayer() {
-        return playerClock.getPlayer();
+        return player;
     }
 
     /**
@@ -53,7 +55,7 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
 
     public void appendBreachEvent(Collection<GameAction> events) {
         if (timeRule.timeUntilBreach(playerClock) <= 0)
-            events.add(timeRule.toTimeBreachedEvent(playerClock.getPlayer()));
+            events.add(timeRule.toTimeBreachedEvent(player));
     }
 
     @Override

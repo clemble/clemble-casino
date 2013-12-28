@@ -33,8 +33,8 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
 
         this.playerTimeTrackers = new ArrayList<PlayerTimeTracker>();
         for (GamePlayerContext playerContext : context.getPlayerContexts()) {
-            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getClock(), specification.getTotalTimeRule()));
-            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getClock(), specification.getMoveTimeRule()));
+            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getTotalTimeRule()));
+            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getMoveTimeRule()));
         }
     }
 
