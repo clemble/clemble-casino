@@ -10,6 +10,7 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.rule.construct.PrivacyRule;
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.aspect.BasicGameManagementAspect;
 import com.clemble.casino.server.game.aspect.GameManagementAspect;
 import com.clemble.casino.server.game.aspect.GameManagementAspecteFactory;
@@ -37,18 +38,18 @@ public class GameNotificationManagementAspectFactory implements GameManagementAs
 
     final private static class PrivateNotificationManagementAspect extends BasicGameManagementAspect {
 
-        final private Collection<String> participants;
+        final private Collection<? extends PlayerAware> participants;
         final private PlayerNotificationService notificationService;
 
         public PrivateNotificationManagementAspect(GameInitiation initiation, PlayerNotificationService notificationService) {
-            this.participants = checkNotNull(initiation.getParticipants());
+            this.participants = initiation.getParticipants();
             this.notificationService = checkNotNull(notificationService);
         }
 
         @Override
         public <State extends GameState> void changed(State state, Collection<Event> events) {
             // Step 1. Sending only to participants
-            notificationService.notify(participants, events);
+            notificationService.notifyAll(participants, events);
         }
 
     }
@@ -57,13 +58,13 @@ public class GameNotificationManagementAspectFactory implements GameManagementAs
 
         final private String tableChannel;
         final private GameSessionKey sessionKey;
-        final private Collection<String> participants;
+        final private Collection<? extends PlayerAware> participants;
         final private PlayerNotificationService notificationService;
 
         public PublicNotificationManagementAspect(GameInitiation initiation, PlayerNotificationService notificationService) {
             this.sessionKey = checkNotNull(initiation.getSession());
             this.tableChannel = NotificationMapping.toTable(sessionKey);
-            this.participants = checkNotNull(initiation.getParticipants());
+            this.participants = initiation.getParticipants();
             this.notificationService = checkNotNull(notificationService);
         }
 
@@ -72,7 +73,7 @@ public class GameNotificationManagementAspectFactory implements GameManagementAs
             // Step 1. Making public notification
             notificationService.notify(tableChannel, events);
             // Step 2. Sending to exact participants
-            notificationService.notify(participants, events);
+            notificationService.notifyAll(participants, events);
         }
 
     }

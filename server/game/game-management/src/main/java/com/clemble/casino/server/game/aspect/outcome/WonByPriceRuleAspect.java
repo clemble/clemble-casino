@@ -1,5 +1,6 @@
 package com.clemble.casino.server.game.aspect.outcome;
 
+import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.account.GamePlayerAccount;
@@ -35,10 +36,11 @@ public class WonByPriceRuleAspect extends BasicGameManagementAspect{
             PaymentTransaction paymentTransaction = new PaymentTransaction()
                     .setTransactionKey(session.getSession().toPaymentTransactionKey())
                     .setTransactionDate(new Date());
-            for (GamePlayerAccount playerState : session.getState().getContext().getAccount().getPlayerAccounts()) {
-                if (!playerState.getPlayer().equals(winnerId)) {
+            for (GamePlayerContext playerContext : session.getState().getContext().getPlayerContexts()) {
+                GamePlayerAccount playerAccount = playerContext.getAccount();
+                if (!playerAccount.getPlayer().equals(winnerId)) {
                     paymentTransaction
-                        .addPaymentOperation(new PaymentOperation(playerState.getPlayer(), price, Operation.Credit))
+                        .addPaymentOperation(new PaymentOperation(playerAccount.getPlayer(), price, Operation.Credit))
                         .addPaymentOperation(new PaymentOperation(winnerId, price, Operation.Debit));
                 }
             }

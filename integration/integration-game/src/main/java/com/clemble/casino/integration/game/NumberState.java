@@ -2,23 +2,21 @@ package com.clemble.casino.integration.game;
 
 import java.util.Collection;
 
-import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.account.GameAccount;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.SurrenderAction;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.PlayerMovedEvent;
-import com.clemble.casino.game.iterator.GamePlayerIterator;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.NoOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
+import com.clemble.casino.game.unit.GameUnit;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -38,6 +36,7 @@ public class NumberState implements GameState {
 
     @JsonCreator
     public NumberState(@JsonProperty("context") GameContext context,
+            @JsonProperty("parent") GameUnit parent,
             @JsonProperty("outcome") GameOutcome outcome,
             @JsonProperty("version") int version) {
         this.context = context;
@@ -45,6 +44,11 @@ public class NumberState implements GameState {
 
         this.outcome = outcome;
         this.version = version;
+    }
+
+    @Override
+    public GameUnit getParent() {
+        return null;
     }
 
     @Override

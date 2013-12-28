@@ -15,6 +15,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.player.PlayerAwareUtils;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -111,6 +112,16 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     @Override
     public <T extends PlayerAware & Event> boolean notify(T event) {
         return event != null ? notify(event.getPlayer(), event) : true;
+    }
+
+    @Override
+    public <T extends Event> boolean notifyAll(Collection<? extends PlayerAware> players, T event) {
+        return notify(PlayerAwareUtils.toPlayerList(players), event);
+    }
+
+    @Override
+    public <T extends Event> boolean notifyAll(Collection<? extends PlayerAware> players, Collection<? extends T> events) {
+        return notify(PlayerAwareUtils.toPlayerList(players), events);
     }
 
 }

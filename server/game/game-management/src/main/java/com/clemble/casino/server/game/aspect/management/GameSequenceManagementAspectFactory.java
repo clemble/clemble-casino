@@ -2,7 +2,7 @@ package com.clemble.casino.server.game.aspect.management;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameSessionKey;
@@ -34,7 +34,7 @@ public class GameSequenceManagementAspectFactory implements GameManagementAspect
 
     public <State extends GameState> void startNew(GameSession<State> session) {
         GameSessionKey sessionKey = session.getSession();
-        Collection<String> participants = session.getPlayers();
+        List<String> participants = session.getPlayers();
         GameSpecification specification = session.getSpecification();
         // Step 1. Generating game construction
         GameConstruction construction = new GameConstruction(new ManagerGameConstructionRequest(participants, sessionKey, specification));

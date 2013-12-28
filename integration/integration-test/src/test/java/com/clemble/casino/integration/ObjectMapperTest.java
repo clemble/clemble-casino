@@ -26,9 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.account.GameAccount;
-import com.clemble.casino.game.account.InvisibleGameAccount;
-import com.clemble.casino.game.account.VisibleGameAccount;
 import com.clemble.casino.game.action.BetAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.configuration.SelectRuleOptions;
@@ -75,9 +72,6 @@ public class ObjectMapperTest extends ObjectTest {
         Assert.assertNull(checkSerialization(InvitationDeclinedEvent.class));
         Assert.assertNull(checkSerialization(ScheduledGameRequest.class));
         Assert.assertNull(checkSerialization(GameStartedEvent.class));
-        Assert.assertNull(checkSerialization(GameAccount.class));
-        Assert.assertNull(checkSerialization(VisibleGameAccount.class));
-        Assert.assertNull(checkSerialization(InvisibleGameAccount.class));
         Assert.assertNull(checkSerialization(BetAction.class));
         Assert.assertNull(checkSerialization(NumberState.class));
     }

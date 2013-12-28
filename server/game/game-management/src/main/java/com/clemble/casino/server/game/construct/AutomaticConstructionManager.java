@@ -2,7 +2,8 @@ package com.clemble.casino.server.game.construct;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -17,6 +18,7 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.game.specification.GameSpecificationKey;
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.player.lock.PlayerLockService;
@@ -31,7 +33,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
     final public static class AutomaticGameConstruction {
         final private GameConstruction construction;
         final private GameSpecification specification;
-        final private LinkedHashSet<String> participants = new LinkedHashSet<>();
+        final private List<String> participants = new ArrayList<>();
 
         public AutomaticGameConstruction(GameConstruction construction) {
             this.construction = construction;
@@ -131,8 +133,8 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
                 if (pendingConstuction.append(request)) {
                     GameInitiation initiation = pendingConstuction.toInitiation();
                     if (initiatorService.initiate(initiation)) {
-                        for (String participant : initiation.getParticipants())
-                            playerConstructions.remove(participant);
+                        for (PlayerAware participant : initiation.getParticipants())
+                            playerConstructions.remove(participant.getPlayer());
                     }
                 } else {
                     playerConstructions.put(player, pendingConstuction);

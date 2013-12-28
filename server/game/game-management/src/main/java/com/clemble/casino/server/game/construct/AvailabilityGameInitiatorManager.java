@@ -24,14 +24,13 @@ public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
         this.initiatorService = initiatorService;
     }
 
-    public void register(final GameConstruction availabilityRequest) {
-        LOG.trace("Registering {}", availabilityRequest);
+    public void register(final GameConstruction request) {
+        LOG.trace("Registering {}", request);
         // Step 1. Checking all users are active
-        final Collection<String> participants = availabilityRequest.fetchAcceptedParticipants();
+        final Collection<String> participants = request.fetchAcceptedParticipants();
         LOG.trace("Participants {}", participants);
         // Step 2. Checking all participants are available
-        final GameInitiation initiation = new GameInitiation(availabilityRequest.getSession(), participants, availabilityRequest.getRequest()
-                .getSpecification());
+        final GameInitiation initiation = new GameInitiation(request);
         LOG.debug("Constructed initiation {}", initiation);
         if (!initiatorService.initiate(initiation)) {
             // Step 2.1 Pretty naive implementation of MessageListener functionality

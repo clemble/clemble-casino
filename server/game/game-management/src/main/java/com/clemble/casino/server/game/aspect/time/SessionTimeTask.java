@@ -4,24 +4,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GamePlayerClock;
-import com.clemble.casino.player.PlayerAware;
 import org.springframework.scheduling.TriggerContext;
 
+import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.GameEventTask;
-import org.springframework.web.servlet.tags.ParamAware;
-import sun.security.krb5.internal.PAData;
 
 public class SessionTimeTask implements GameEventTask, GameSessionAware {
 
     /**
-     * Generated
+     * Generated 29/12/13
      */
     private static final long serialVersionUID = -7157994014672627030L;
 
@@ -33,12 +31,10 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
 
         final GameSpecification specification = initiation.getSpecification();
 
-        final Collection<GamePlayerClock> clocks = context.getClock().getClocks();
-        this.playerTimeTrackers = new ArrayList<PlayerTimeTracker>(clocks.size());
-
-        for (GamePlayerClock clock: clocks) {
-            playerTimeTrackers.add(new PlayerTimeTracker(clock, specification.getTotalTimeRule()));
-            playerTimeTrackers.add(new PlayerTimeTracker(clock, specification.getMoveTimeRule()));
+        this.playerTimeTrackers = new ArrayList<PlayerTimeTracker>();
+        for (GamePlayerContext playerContext : context.getPlayerContexts()) {
+            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getClock(), specification.getTotalTimeRule()));
+            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getClock(), specification.getMoveTimeRule()));
         }
     }
 

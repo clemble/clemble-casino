@@ -12,6 +12,7 @@ import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionRequest;
 import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
@@ -49,7 +50,7 @@ public class SimpleGameInitiatorService implements GameInitiatorService {
 
     @Override
     public boolean initiate(GameInitiation initiation) {
-        if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSession())) {
+        if (presenceService.markPlaying(PlayerAwareUtils.toPlayerList(initiation.getParticipants()), initiation.getSession())) {
             LOG.trace("Successfully updated presences, starting a new game");
             processor.start(initiation);
             return true;

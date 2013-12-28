@@ -20,4 +20,8 @@ public interface PlayerNotificationService extends NotificationService {
 
     public <T extends Event> boolean notify(final Collection<String> players, final Collection<? extends T> event);
 
+    public <T extends Event> boolean notifyAll(final Collection<? extends PlayerAware> players, final T event);
+
+    public <T extends Event> boolean notifyAll(final Collection<? extends PlayerAware> players, final Collection<? extends T> event);
+
 }

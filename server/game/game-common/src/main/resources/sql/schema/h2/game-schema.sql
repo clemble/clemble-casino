@@ -67,6 +67,7 @@
         CURRENCY integer,
         PRICE bigint,
         PRIVACY_RULE varchar(255),
+        ROLES varchar(255),
         TOTAL_TIME_LIMIT bigint,
         TOTAL_TIME_PUNISHMENT varchar(255),
         VISIBILITY varchar(255),

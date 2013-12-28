@@ -15,6 +15,7 @@ import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStateChangedEvent;
 import com.clemble.casino.game.event.server.PlayerMovedEvent;
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
@@ -28,7 +29,7 @@ public class GameTimeAspect extends BasicGameAspect {
     public GameTimeAspect(GameInitiation initiation, GameContext context, GameEventTaskExecutor gameEventTaskExecutor) {
         super(new EventTypeSelector(GameManagementEvent.class));
         this.context  = context;
-        this.participants = initiation.getParticipants();
+        this.participants = PlayerAwareUtils.toPlayerList(initiation.getParticipants());
         this.sessionTimeTracker = new SessionTimeTask(initiation, context);
         this.gameEventTaskExecutor = checkNotNull(gameEventTaskExecutor);
 
