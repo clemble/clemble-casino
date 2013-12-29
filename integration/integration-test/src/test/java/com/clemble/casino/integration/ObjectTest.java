@@ -3,24 +3,24 @@ package com.clemble.casino.integration;
 import java.util.Collections;
 import java.util.Date;
 
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.cell.CellState;
-import com.clemble.casino.game.construct.GameInitiation;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.clemble.casino.VersionAware;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.game.Game;
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.action.BetAction;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.cell.Cell;
+import com.clemble.casino.game.cell.CellState;
 import com.clemble.casino.game.configuration.GameRuleOptions;
 import com.clemble.casino.game.configuration.SelectRuleOptions;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
+import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.rule.bet.BetRule;
 import com.clemble.casino.game.rule.bet.FixedBetRule;
@@ -62,7 +62,7 @@ public class ObjectTest {
         ObjectGenerator.register(CellState.class, new AbstractValueGenerator<CellState>() {
             @Override
             public CellState generate() {
-                return new CellState();
+                return CellState.DEFAULT;
             }
         });
         ObjectGenerator.register(GameUnit.class, new AbstractValueGenerator<GameUnit>() {
