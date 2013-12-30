@@ -165,7 +165,7 @@ public class ObjectTest {
             public NumberState generate() {
                 GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), GameSpecification.DEFAULT);
                 GameContext context = new GameContext(initiation);
-                return new NumberState(context, null, null, 0);
+                return new NumberState(context, null, 0);
             }
         });
         ObjectGenerator.register(VersionAware.class, "version", new ValueGenerator<Integer>() {

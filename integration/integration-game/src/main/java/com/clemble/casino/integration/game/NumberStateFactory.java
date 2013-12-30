@@ -14,7 +14,7 @@ public class NumberStateFactory extends AbstractGameStateFactory<NumberState> {
 
     @Override
     public NumberState constructState(GameInitiation initiation, GameContext context) {
-        return new NumberState(context, null, null, 0);
+        return new NumberState(context, null, 0);
     }
 
 }

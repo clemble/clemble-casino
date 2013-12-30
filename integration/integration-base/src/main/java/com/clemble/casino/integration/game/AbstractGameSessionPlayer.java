@@ -16,9 +16,10 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.GameStartedEvent;
 import com.clemble.casino.game.event.server.GameStateManagementEvent;
+import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameSpecification;
 
 abstract public class AbstractGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State>, Closeable {
@@ -34,22 +35,21 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     final private Object versionLock = new Object();
     final private AtomicBoolean keepAlive = new AtomicBoolean(true);
     final private AtomicReference<State> currentState = new AtomicReference<State>();
+    final private AtomicReference<GameOutcome> isAlive = new AtomicReference<>();
 
     public AbstractGameSessionPlayer(final ClembleCasinoOperations player, GameConstruction construction) {
         this.construction = checkNotNull(construction);
         this.player = player;
         this.actionOperations = this.player.gameActionOperations(construction.getSession());
 
-        this.actionOperations.subscribe(new EventListener() {
+        this.actionOperations.subscribe(new EventListener<GameManagementEvent>() {
             @Override
             @SuppressWarnings("unchecked")
-            public void onEvent(Event event) {
-                if (event instanceof GameStartedEvent) {
-                    GameStartedEvent<?> gameStartedEvent = ((GameStartedEvent<?>) event);
-                }
-                if (event instanceof GameStateManagementEvent) {
+            public void onEvent(GameManagementEvent event) {
+                if (event instanceof GameStateManagementEvent)
                     setState(((GameStateManagementEvent<State>) event).getState());
-                }
+                if (event instanceof GameEndedEvent<?>)
+                    isAlive.set(((GameEndedEvent<?>) event).getOutcome());
             }
         });
         setState(this.actionOperations.getState());
@@ -98,7 +98,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     final public boolean isAlive() {
-        return keepAlive.get() && currentState.get() != null && currentState.get().getOutcome() == null;
+        return keepAlive.get() && isAlive.get() != null;
     }
 
     @Override
@@ -156,7 +156,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     final public void waitForTurn() {
-        while (keepAlive.get() && !isToMove() && currentState.get().getOutcome() == null)
+        while (keepAlive.get() && !isToMove() && isAlive())
             waitVersion(getState().getVersion() + 1);
     }
 
@@ -200,4 +200,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     abstract public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameAction clientEvent);
 
+    public GameOutcome getOutcome(){
+        return isAlive.get();
+    }
 }

@@ -1,9 +1,11 @@
 package com.clemble.casino.integration.player;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -27,6 +29,7 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.PlayerType;
 import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,10 +45,11 @@ public class PlayerProfileOperationsITest {
     public ExpectedException expectedException = ExpectedException.none();
 
     private PlayerProfile randomProfile() {
-        PlayerProfile randomProfile = ObjectGenerator.generate(PlayerProfile.class);
-        randomProfile.setImageUrl("http://" + RandomStringUtils.randomAlphabetic(10) + ".com/");
-        randomProfile.setBirthDate(new Date(0));
-        randomProfile.setSocialConnections(new HashSet<ConnectionKey>());
+        PlayerProfile randomProfile = ObjectGenerator.generate(PlayerProfile.class)
+            .setImageUrl("http://" + RandomStringUtils.randomAlphabetic(10) + ".com/")
+            .setType(PlayerType.free)
+            .setBirthDate(new Date(0))
+            .setSocialConnections(new HashSet<ConnectionKey>());
         return randomProfile;
     }
 
@@ -53,6 +57,7 @@ public class PlayerProfileOperationsITest {
     public void testProfileRead() {
         PlayerProfile playerProfile = randomProfile();
         ClembleCasinoOperations player = playerScenarios.createPlayer(playerProfile);
+        playerProfile.setPlayer(player.getPlayer());
         PlayerProfileOperations playerProfileOperations = player.profileOperations();
         ClembleCasinoOperations anotherPlayer = playerScenarios.createPlayer();
         PlayerProfileOperations anotherPlayerProfileOperations = anotherPlayer.profileOperations();
@@ -62,6 +67,29 @@ public class PlayerProfileOperationsITest {
         Assert.assertEquals(playerProfile, playerProfileOperations.getPlayerProfile(player.getPlayer()));
         Assert.assertEquals(playerProfile, anotherPlayerProfileOperations.getPlayerProfile(player.getPlayer()));
         assertTrue(player.profileOperations().getPlayerProfile() instanceof PlayerProfile);
+    }
+
+    @Test
+    public void testMultipleProfileRead() {
+        // Step 1. Creating 3 random profiles
+        ClembleCasinoOperations A = playerScenarios.createPlayer(randomProfile());
+        ClembleCasinoOperations B = playerScenarios.createPlayer(randomProfile());
+        ClembleCasinoOperations C = playerScenarios.createPlayer(randomProfile());
+        // Step 2. Trying to read 2 profiles B & C from A
+        List<PlayerProfile> BCfromA = A.profileOperations().getPlayerProfile(B.getPlayer(), C.getPlayer());
+        assertEquals(BCfromA.size(), 2);
+        assertTrue(BCfromA.contains(B.profileOperations().getPlayerProfile()));
+        assertTrue(BCfromA.contains(C.profileOperations().getPlayerProfile()));
+        // Step 2.1 Trying to read 2 profiles A & C from B
+        List<PlayerProfile> ACfromB = B.profileOperations().getPlayerProfile(A.getPlayer(), C.getPlayer());
+        assertEquals(ACfromB.size(), 2);
+        assertTrue(ACfromB.contains(A.profileOperations().getPlayerProfile()));
+        assertTrue(ACfromB.contains(C.profileOperations().getPlayerProfile()));
+        // Step 2.2 Trying to read 2 profiles A & B from C
+        List<PlayerProfile> ABfromC = C.profileOperations().getPlayerProfile(A.getPlayer(), B.getPlayer());
+        assertEquals(ABfromC.size(), 2);
+        assertTrue(ABfromC.contains(A.profileOperations().getPlayerProfile()));
+        assertTrue(ABfromC.contains(B.profileOperations().getPlayerProfile()));
     }
 
     @Test

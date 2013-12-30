@@ -1,12 +1,14 @@
 package com.clemble.casino.server.game.cache;
 
-import com.clemble.casino.game.*;
-import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.GameSession;
+import com.clemble.casino.game.GameSessionAware;
+import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameProcessor;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.GameStateFactory;
-import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -39,13 +41,10 @@ public class GameCacheService<State extends GameState> {
     final private GameStateFactory<State> stateFactory;
     final private GameProcessorFactory<State> processorFactory;
     final private GameSessionRepository<State> sessionRepository;
-    final private GameConstructionRepository constructionRepository;
 
-    public GameCacheService(final GameConstructionRepository constructionRepository,
-            final GameSessionRepository<State> sessionRepository,
+    public GameCacheService(final GameSessionRepository<State> sessionRepository,
             final GameProcessorFactory<State> processorFactory,
             final GameStateFactory<State> stateFactory) {
-        this.constructionRepository = constructionRepository;
         this.stateFactory = stateFactory;
         this.processorFactory = processorFactory;
         this.sessionRepository = sessionRepository;

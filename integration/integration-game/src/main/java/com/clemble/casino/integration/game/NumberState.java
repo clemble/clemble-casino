@@ -13,7 +13,6 @@ import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.PlayerMovedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
-import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.NoOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.game.unit.GameUnit;
@@ -31,18 +30,15 @@ public class NumberState implements GameState {
 
     final private GameContext context;
 
-    private GameOutcome outcome;
     private int version;
 
     @JsonCreator
     public NumberState(@JsonProperty("context") GameContext context,
             @JsonProperty("root") GameUnit parent,
-            @JsonProperty("outcome") GameOutcome outcome,
             @JsonProperty("version") int version) {
         this.context = context;
         this.context.getActionLatch().expectNext(context.getPlayerIterator().getPlayers(), "selectNumber", SelectNumberAction.class);
 
-        this.outcome = outcome;
         this.version = version;
     }
 
@@ -54,10 +50,6 @@ public class NumberState implements GameState {
     @Override
     public <State extends GameState> GameManagementEvent process(GameSession<State> session, GameAction action) {
         // Step 1. Processing Select cell move
-        if (outcome != null) {
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayGameEnded);
-        }
-
         GameManagementEvent resultEvent = null;
 
         if (action instanceof SelectNumberAction) {
@@ -67,12 +59,11 @@ public class NumberState implements GameState {
                 for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
-                        outcome = new PlayerWonOutcome(selectNumberEvent.getPlayer());
+                        resultEvent = new GameEndedEvent<>(session, new PlayerWonOutcome(selectNumberEvent.getPlayer()));
                     } else if (selectNumberEvent.getNumber() == maxBet) {
-                        outcome = new DrawOutcome();
+                        resultEvent = new GameEndedEvent<>(session, new DrawOutcome());
                     }
                 }
-                resultEvent = new GameEndedEvent<>(session, outcome);
             } else {
                 resultEvent = new PlayerMovedEvent(session.getSession(), action.getPlayer());
             }
@@ -82,13 +73,11 @@ public class NumberState implements GameState {
             Collection<String> opponents = context.getPlayerIterator().whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
-                outcome = new NoOutcome();
-                resultEvent = new GameEndedEvent<>(session, outcome);
+                resultEvent = new GameEndedEvent<>(session, new NoOutcome());
             } else {
                 String winner = opponents.iterator().next();
-                outcome = new PlayerWonOutcome(winner);
                 // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
-                resultEvent = new GameEndedEvent<>(session, outcome);
+                resultEvent = new GameEndedEvent<>(session, new PlayerWonOutcome(winner));
             }
         }
         // Step 3. Sanity check
@@ -105,11 +94,6 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public GameOutcome getOutcome() {
-        return outcome;
-    }
-
-    @Override
     public int getVersion() {
         return version;
     }
@@ -123,7 +107,6 @@ public class NumberState implements GameState {
 
         if (version != that.version) return false;
         if (context != null ? !context.equals(that.context) : that.context != null) return false;
-        if (outcome != null ? !outcome.equals(that.outcome) : that.outcome != null) return false;
 
         return true;
     }
@@ -131,7 +114,6 @@ public class NumberState implements GameState {
     @Override
     public int hashCode() {
         int result = context != null ? context.hashCode() : 0;
-        result = 31 * result + (outcome != null ? outcome.hashCode() : 0);
         result = 31 * result + version;
         return result;
     }

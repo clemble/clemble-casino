@@ -8,6 +8,7 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameSpecification;
 
 public class GenericGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State> {
@@ -111,5 +112,10 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     @Override
     public void waitVersion(int version) {
         actualPlayer.waitVersion(version);
+    }
+
+    @Override
+    public GameOutcome getOutcome() {
+        return actualPlayer.getOutcome();
     }
 }

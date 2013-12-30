@@ -6,7 +6,7 @@ import com.clemble.casino.event.Event;
 /**
  * Created by mavarazy on 24/12/13.
  */
-abstract public class BasicGameAspect implements GameAspect {
+abstract public class BasicGameAspect<T extends Event> implements GameAspect<T> {
 
     final private EventSelector selector;
 
@@ -15,12 +15,12 @@ abstract public class BasicGameAspect implements GameAspect {
     }
 
     @Override
-    public void onEvent(Event event) {
+    public void onEvent(T event) {
         if(selector.filter(event))
             doEvent(event);
     }
 
-    abstract public void doEvent(Event event);
+    abstract public void doEvent(T event);
 
     @Override
     public EventSelector getSelector() {

@@ -9,9 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -24,20 +22,20 @@ import com.clemble.test.random.ObjectGenerator;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
-public class PlayerRegistrationTest {
+public class PlayerRegistrationServiceITest {
 
     @Autowired
     public PlayerScenarios playerScenarios;
 
     @Test
-    public void test(){
+    public void createAndLogin(){
         // Step 1. Generating player credential & profile
         PlayerCredential credential = new PlayerCredential()
             .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
             .setPassword(RandomStringUtils.random(10));
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class)
                 .setBirthDate(new Date(0))
+                .setSocialConnections(null)
                 .setImageUrl(null);
         // Step 2. Creating CasinoOperations with this credentials and Profile
         ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
@@ -48,5 +46,23 @@ public class PlayerRegistrationTest {
         assertEquals(origA.profileOperations().getPlayerProfile(), origB.profileOperations().getPlayerProfile());
         assertEquals(origA.presenceOperations().getPresence(), origB.presenceOperations().getPresence());
         assertEquals(origA.paymentOperations().getAccount(), origB.paymentOperations().getAccount());
+    }
+
+    @Test
+    public void createWithoutNick(){
+        String nick = RandomStringUtils.randomAlphabetic(10);
+        // Step 1. Generating player credential & profile
+        PlayerCredential credential = new PlayerCredential()
+            .setEmail(nick + "@gmail.com")
+            .setPassword(RandomStringUtils.random(10));
+        PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class)
+                .setNickName(null)
+                .setBirthDate(new Date(0))
+                .setSocialConnections(null)
+                .setImageUrl(null);
+        // Step 2. Creating CasinoOperations with this credentials and Profile
+        ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
+        // Step 3. Checking nick matches
+        assertEquals(nick, origA.profileOperations().getPlayerProfile().getNickName());
     }
 }

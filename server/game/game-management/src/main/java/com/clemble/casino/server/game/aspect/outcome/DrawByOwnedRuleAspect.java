@@ -2,41 +2,46 @@ package com.clemble.casino.server.game.aspect.outcome;
 
 import java.util.Date;
 
+import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
-import com.clemble.casino.game.GameSession;
-import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
+import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
-import com.clemble.casino.server.game.aspect.BasicGameManagementAspect;
+import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.payment.PaymentTransactionServerService;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class DrawByOwnedRuleAspect extends BasicGameManagementAspect {
+public class DrawByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
     final private PaymentTransactionServerService transactionService;
+    final private GameSpecification specification;
 
-    public DrawByOwnedRuleAspect(PaymentTransactionServerService transactionService) {
+    public DrawByOwnedRuleAspect(PaymentTransactionServerService transactionService, GameSpecification specification) {
+        super(new EventTypeSelector(GameEndedEvent.class));
         this.transactionService = transactionService;
+        this.specification = specification;
     }
 
     @Override
-    public <State extends GameState> void afterGame(GameSession<State> session) {
-        GameOutcome outcome = session.getState().getOutcome();
+    public void doEvent(GameEndedEvent<?> event) {
+        // TODO Auto-generated method stub
+        GameOutcome outcome = event.getOutcome();
         if (outcome instanceof DrawOutcome) {
-            Currency currency = session.getSpecification().getPrice().getCurrency();
+            Currency currency = specification.getPrice().getCurrency();
             // Step 2. Generating payment transaction
             PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(session.getSession().toPaymentTransactionKey())
+                .setTransactionKey(event.getSession().toPaymentTransactionKey())
                 .setTransactionDate(new Date());
-            for (GamePlayerContext playerContext : session.getState().getContext().getPlayerContexts()) {
+            for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();
                 paymentTransaction
                     .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))

@@ -4,7 +4,7 @@ import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionAware;
 
-abstract public class GameSessionListener implements EventListener {
+abstract public class GameSessionListener implements EventListener<Event> {
 
     public GameSessionListener() {
     }

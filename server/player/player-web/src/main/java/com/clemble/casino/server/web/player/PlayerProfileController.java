@@ -2,11 +2,15 @@ package com.clemble.casino.server.web.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clemble.casino.error.ClembleCasinoError;
@@ -56,6 +60,12 @@ public class PlayerProfileController implements PlayerProfileService, ExternalCo
             throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileSocialCantBeEdited);
         // Step 2. Updating Profile
         return profileRepository.save(playerProfile);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILES, produces = WebMapping.PRODUCES)
+    public @ResponseBody List<PlayerProfile> getPlayerProfile(@RequestParam("player") Collection<String> players) {
+        return profileRepository.findAll(players);
     }
 
 }

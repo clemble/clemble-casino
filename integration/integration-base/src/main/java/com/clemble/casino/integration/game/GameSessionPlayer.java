@@ -8,6 +8,7 @@ import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameSpecificationAware;
 import com.clemble.casino.player.PlayerAware;
 
@@ -38,6 +39,8 @@ public interface GameSessionPlayer<State extends GameState> extends GameSessionA
     public Event getNextMove();
 
     public void perform(GameAction gameAction);
+
+    public GameOutcome getOutcome();
 
     public void giveUp();
 

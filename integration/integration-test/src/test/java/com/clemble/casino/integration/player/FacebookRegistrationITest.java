@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ import com.jayway.facebooktestjavaapi.testuser.FacebookTestUserAccount;
 import com.jayway.facebooktestjavaapi.testuser.FacebookTestUserStore;
 import com.jayway.facebooktestjavaapi.testuser.impl.HttpClientFacebookTestUserStore;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
@@ -147,11 +149,11 @@ public class FacebookRegistrationITest {
         ClembleCasinoOperations A = playerScenarios.createPlayer(grantA);
         ClembleCasinoOperations B = playerScenarios.createPlayer(grantB);
         // Step 3. Checking connection were mapped internally 
-        List<String> conA = A.connectionOperations().getConnections();
+        List<String> conA = A.connectionOperations().getConnectionIds();
         assertEquals(conA.size(), 1);
         assertEquals(conA.get(0), B.getPlayer());
         
-        List<String> conB = B.connectionOperations().getConnections();
+        List<String> conB = B.connectionOperations().getConnectionIds();
         assertEquals(conB.size(), 1);
         assertEquals(conB.get(0), A.getPlayer());
 

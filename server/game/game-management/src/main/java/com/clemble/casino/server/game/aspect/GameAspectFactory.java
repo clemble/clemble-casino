@@ -1,11 +1,11 @@
 package com.clemble.casino.server.game.aspect;
 
+import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
 
-public interface GameAspectFactory {
+public interface GameAspectFactory<T extends Event> {
 
-    public GameAspect construct(GameInitiation initiation, GameContext construction);
+    public GameAspect<T> construct(GameInitiation initiation, GameContext construction);
 
 }

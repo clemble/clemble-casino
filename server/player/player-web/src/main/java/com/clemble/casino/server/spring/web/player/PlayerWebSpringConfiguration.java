@@ -1,6 +1,6 @@
 package com.clemble.casino.server.spring.web.player;
 
-import com.clemble.casino.server.player.registration.SimpleProfileRegistrationService;
+import com.clemble.casino.server.player.registration.ProfileRegistrationServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,13 +47,13 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public SimpleProfileRegistrationService realPlayerProfileRegistrationService(PlayerSocialNetworkRepository socialNetworkRepository) {
-        return new SimpleProfileRegistrationService(gogomayaValidationService, playerProfileRepository, socialConnectionDataAdapter, socialNetworkRepository);
+    public ProfileRegistrationServiceImpl realPlayerProfileRegistrationService(PlayerSocialNetworkRepository socialNetworkRepository) {
+        return new ProfileRegistrationServiceImpl(gogomayaValidationService, playerProfileRepository, socialConnectionDataAdapter, socialNetworkRepository);
     }
 
     @Bean
     @Autowired
-    public ProfileRegistrationController playerProfileRegistrationController(SimpleProfileRegistrationService realPlayerProfileRegistrationService) {
+    public ProfileRegistrationController playerProfileRegistrationController(ProfileRegistrationServiceImpl realPlayerProfileRegistrationService) {
         return new ProfileRegistrationController(realPlayerProfileRegistrationService);
     }
 

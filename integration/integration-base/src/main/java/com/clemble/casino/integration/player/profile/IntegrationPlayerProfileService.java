@@ -2,6 +2,9 @@ package com.clemble.casino.integration.player.profile;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +36,11 @@ public class IntegrationPlayerProfileService implements PlayerProfileService {
         HttpEntity<PlayerProfile> requestEntity = new HttpEntity<>(newProfile);
         // Step 2. Rest template generation
         return restTemplate.exchange(playerRegistry.findById(newProfile.getPlayer()) + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.PUT, requestEntity, PlayerProfile.class, player).getBody();
+    }
+
+    @Override
+    public List<PlayerProfile> getPlayerProfile(Collection<String> players) {
+        throw new UnsupportedOperationException();
     }
 
 }

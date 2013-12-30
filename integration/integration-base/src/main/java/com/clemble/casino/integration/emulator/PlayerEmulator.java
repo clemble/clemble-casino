@@ -56,7 +56,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
                 currentPlayer.set(playerState);
                 lastMoved.set(System.currentTimeMillis());
                 playerState.waitForStart(0);
-                while (playerState.getState().getOutcome() == null) {
+                while (playerState.isAlive()) {
                     // Step 2. Waiting for player turn
                     playerState.waitForTurn();
                     // Step 3. Performing action
@@ -70,8 +70,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     }
 
     public boolean isAlive() {
-        Boolean isAlive = currentPlayer.get().isAlive();
-        return (isAlive == null || isAlive) || (lastMoved.get() + TimeUnit.MINUTES.toMillis(15) < System.currentTimeMillis());
+        return currentPlayer.get().isAlive() || (lastMoved.get() + TimeUnit.MINUTES.toMillis(15) < System.currentTimeMillis());
     }
 
     public void stop() {

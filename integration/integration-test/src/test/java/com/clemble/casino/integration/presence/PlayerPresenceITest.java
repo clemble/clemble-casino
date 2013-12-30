@@ -75,16 +75,16 @@ public class PlayerPresenceITest {
             assertEquals(C.presenceOperations().getPresence(), C.presenceOperations().getPresence(C.getPlayer()));
             // Step 4. Listening for presence updates from B and C
             final BlockingQueue<PlayerPresence> BtoApresence = new ArrayBlockingQueue<>(3);
-            A.presenceOperations().subscribe(B.getPlayer(), new EventListener() {
+            A.presenceOperations().subscribe(B.getPlayer(), new EventListener<PlayerPresence>() {
                 @Override
-                public void onEvent(Event event) {
-                    BtoApresence.add((PlayerPresence) event);
+                public void onEvent(PlayerPresence event) {
+                    BtoApresence.add(event);
                 }
             });
             final BlockingQueue<PlayerPresence> CtoApresence = new ArrayBlockingQueue<>(5);
-            A.presenceOperations().subscribe(C.getPlayer(), new EventListener() {
+            A.presenceOperations().subscribe(C.getPlayer(), new EventListener<PlayerPresence>() {
                 @Override
-                public void onEvent(Event event) {
+                public void onEvent(PlayerPresence event) {
                     CtoApresence.add((PlayerPresence) event);
                 }
             });

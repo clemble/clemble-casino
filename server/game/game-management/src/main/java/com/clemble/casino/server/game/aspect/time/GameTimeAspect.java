@@ -7,7 +7,6 @@ import java.util.Date;
 
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
@@ -19,7 +18,7 @@ import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
-public class GameTimeAspect extends BasicGameAspect {
+public class GameTimeAspect extends BasicGameAspect<GameManagementEvent> {
 
     final private GameContext context;
     final private Collection<String> participants;
@@ -36,30 +35,26 @@ public class GameTimeAspect extends BasicGameAspect {
     }
 
     @Override
-    public void doEvent(Event move) {
+    public void doEvent(GameManagementEvent move) {
         // Step 1. To check if we need rescheduling, first calculate time before
         Date breachTimeBeforeMove = sessionTimeTracker.nextExecutionTime(null);
         if(move instanceof GameEndedEvent) {
             gameEventTaskExecutor.cancel(sessionTimeTracker);
         } else {
+            ActionLatch latch = context.getActionLatch();
             if(move instanceof GameStateChangedEvent){
                 for(String player: participants)
                     sessionTimeTracker.markMoved(player);
-            }else if(move instanceof PlayerMovedEvent) {
+                for (String player: latch.fetchParticipants()) {
+                    sessionTimeTracker.markToMove(player);
+                }
+            } else if(move instanceof PlayerMovedEvent) {
                 sessionTimeTracker.markMoved((PlayerAware) move);
             }
-            ActionLatch latch = context.getActionLatch();
-            for (String player: participants) {
-                if (latch.acted(player)) {
-                    sessionTimeTracker.markMoved(latch.fetchAction(player));
-                } else {
-                    sessionTimeTracker.markToMove(latch.fetchAction(player));
-                }
-            }
-        }
             // Step 3. Re scheduling if needed
-        if (!sessionTimeTracker.nextExecutionTime(null).equals(breachTimeBeforeMove)) {
-            gameEventTaskExecutor.reschedule(sessionTimeTracker);
+            if (!sessionTimeTracker.nextExecutionTime(null).equals(breachTimeBeforeMove)) {
+                gameEventTaskExecutor.reschedule(sessionTimeTracker);
+            }
         }
     }
 

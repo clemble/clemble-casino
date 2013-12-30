@@ -60,6 +60,7 @@ public class SocialConnectionDataAdapter {
             // Step 2. Creating connection appropriate for the provided data
             Connection<?> connection = connectionFactoryLocator.getConnectionFactory(connectionData.getProviderId()).createConnection(connectionData);
             // Step 5. Checking if the provided connection was valid
+            // TODO need to check that this access was provided for this application
             if (connection.test()) {
                 // Step 6. Retrieving associated user identifiers
                 player = existingUsers.iterator().next();

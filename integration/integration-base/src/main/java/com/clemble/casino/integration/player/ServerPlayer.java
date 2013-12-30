@@ -89,10 +89,10 @@ public class ServerPlayer implements ClembleCasinoOperations {
         this.session = checkNotNull(playerSessionOperations.create());
         this.listenerOperations = listenerOperationsFactory.construct(player, session.getResourceLocations().getNotificationConfiguration(), objectMapper);
 
-        this.connectionOperations = new PlayerConnectionTemplate(player, playerConnectionService);
         this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, listenerOperations);
 
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileService);
+        this.connectionOperations = new PlayerConnectionTemplate(player, playerConnectionService, profileOperations);
         this.playerAccountOperations = new PaymentTemplate(player, accountOperations, listenerOperations);
 
         this.constructionService = checkNotNull(gameConstructionService);

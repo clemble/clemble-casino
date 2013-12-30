@@ -83,7 +83,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
     }
 
     private ClembleCasinoOperations initialize(final ClembleCasinoOperations player) {
-        player.listenerOperations().subscribe(new EventListener() {
+        player.listenerOperations().subscribe(new EventListener<Event>() {
             final private AtomicInteger messageNum = new AtomicInteger();
 
             @Override

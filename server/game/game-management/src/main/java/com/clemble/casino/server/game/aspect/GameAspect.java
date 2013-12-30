@@ -2,12 +2,9 @@ package com.clemble.casino.server.game.aspect;
 
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventSelector;
-import com.clemble.casino.game.GameSession;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.action.GameAction;
-import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.event.Event;
 
-public interface GameAspect extends EventListener {
+public interface GameAspect<T extends Event> extends EventListener<T> {
 
     public EventSelector getSelector();
 

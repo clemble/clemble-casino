@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.player.registration.ProfileRegistrationService;
-import com.clemble.casino.server.player.registration.SimpleProfileRegistrationService;
+import com.clemble.casino.server.player.registration.ProfileRegistrationServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,31 +22,31 @@ import com.clemble.casino.web.player.PlayerWebMapping;
 @Controller
 public class ProfileRegistrationController implements ProfileRegistrationService, ExternalController {
 
-    final private SimpleProfileRegistrationService playerProfileRegistrationServerService;
+    final private ProfileRegistrationServiceImpl registrationService;
 
-    public ProfileRegistrationController(final SimpleProfileRegistrationService playerProfileRegistrationServerService) {
-        this.playerProfileRegistrationServerService = checkNotNull(playerProfileRegistrationServerService);
+    public ProfileRegistrationController(final ProfileRegistrationServiceImpl playerProfileRegistrationServerService) {
+        this.registrationService = checkNotNull(playerProfileRegistrationServerService);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE_REGISTRATION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerProfile create(@RequestBody final PlayerProfile playerProfile) {
-        return playerProfileRegistrationServerService.create(playerProfile);
+        return registrationService.create(playerProfile);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerProfile create(@RequestBody SocialConnectionData socialConnectionData) {
-        return playerProfileRegistrationServerService.create(socialConnectionData);
+        return registrationService.create(socialConnectionData);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_GRANT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerProfile create(@RequestBody SocialAccessGrant accessGrant) {
-        return playerProfileRegistrationServerService.create(accessGrant);
+        return registrationService.create(accessGrant);
     }
 
 }

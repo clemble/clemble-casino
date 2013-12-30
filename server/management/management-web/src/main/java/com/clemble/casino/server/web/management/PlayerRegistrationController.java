@@ -91,6 +91,10 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         // Step 2. Creating appropriate PlayerProfile
         PlayerProfile savedProfile = registrationRequest.getPlayerProfile();
         savedProfile.setPlayer(playerIdentifierGenerator.newId());
+        if(savedProfile.getNickName() == null) {
+            String email = registrationRequest.getPlayerCredential().getEmail();
+            savedProfile.setNickName(email.substring(0, email.indexOf("@")));
+        }
         savedProfile = playerProfileRegistrationService.create(savedProfile);
         // Step 3. Registration done through separate registration service
         return register(registrationRequest, savedProfile);

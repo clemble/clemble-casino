@@ -56,8 +56,12 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
     }
 
     public void markToMove(PlayerAware nextMove) {
+        markToMove(nextMove.getPlayer());
+    }
+
+    public void markToMove(String player) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
-            if (playerTimeTracker.getPlayer().equals(nextMove.getPlayer())) {
+            if (playerTimeTracker.getPlayer().equals(player)) {
                 playerTimeTracker.markToMove();
             }
         }

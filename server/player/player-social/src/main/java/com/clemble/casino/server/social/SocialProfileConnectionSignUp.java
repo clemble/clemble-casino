@@ -12,14 +12,14 @@ import com.clemble.casino.server.player.PlayerSocialNetwork;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 
-public class SocialPlayerProfileCreator implements ConnectionSignUp {
+public class SocialProfileConnectionSignUp implements ConnectionSignUp {
 
     final private PlayerIdGenerator idGenerator;
     final private PlayerProfileRepository profileRepository;
     final private PlayerSocialNetworkRepository socialNetworkRepository;
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
 
-    public SocialPlayerProfileCreator(final PlayerIdGenerator idGenerator,
+    public SocialProfileConnectionSignUp(final PlayerIdGenerator idGenerator,
             final PlayerProfileRepository profileRepository,
             final SocialConnectionAdapterRegistry socialAdapterRegistry,
             final PlayerSocialNetworkRepository socialNetworkRepository) {

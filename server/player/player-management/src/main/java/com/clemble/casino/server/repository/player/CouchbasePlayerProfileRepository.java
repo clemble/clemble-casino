@@ -3,18 +3,26 @@ package com.clemble.casino.server.repository.player;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import net.spy.memcached.internal.OperationFuture;
 
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.utils.CollectionUtils;
 import com.couchbase.client.CouchbaseClient;
 import com.couchbase.client.protocol.views.Query;
 import com.couchbase.client.protocol.views.View;
 import com.couchbase.client.protocol.views.ViewResponse;
 import com.couchbase.client.protocol.views.ViewRow;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class CouchbasePlayerProfileRepository implements PlayerProfileRepository {
 
@@ -76,6 +84,19 @@ public class CouchbasePlayerProfileRepository implements PlayerProfileRepository
             total += Long.valueOf(row.getValue());
         }
         return total;
+    }
+
+    @Override
+    public List<PlayerProfile> findAll(Iterable<String> players) {
+        try {
+            Map<String, Object> profiles = client.getBulk(players.iterator());
+            List<PlayerProfile> resultProfile = new ArrayList<>(profiles.size());
+            for(Object profile: profiles.values())
+                resultProfile.add(objectMapper.readValue(String.valueOf(profile), PlayerProfile.class));
+            return resultProfile;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -3,14 +3,12 @@ package com.clemble.casino.server.game.aspect.price;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.action.BetAction;
-import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
-public class GamePriceAspect extends BasicGameAspect {
+public class GamePriceAspect extends BasicGameAspect<BetAction> {
 
     final private GameContext account;
 
@@ -20,9 +18,9 @@ public class GamePriceAspect extends BasicGameAspect {
     }
 
     @Override
-    public void doEvent(Event move) {
-        GamePlayerAccount gamePlayerState = account.getPlayerContext(((PlayerAware) move).getPlayer()).getAccount();
-        if (((BetAction) move).getBet() > gamePlayerState.getLeft())
+    public void doEvent(BetAction move) {
+        GamePlayerAccount gamePlayerState = account.getPlayerContext(move.getPlayer()).getAccount();
+        if (move.getBet() > gamePlayerState.getLeft())
             throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayBetOverflow);
     }
 

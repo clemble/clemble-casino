@@ -3,7 +3,6 @@ package com.clemble.casino.server.spring.game;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,15 +11,17 @@ import org.springframework.context.annotation.Profile;
 
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.id.UUIDGameIdGenerator;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
-import com.clemble.casino.server.game.aspect.GameManagementAspecteFactory;
-import com.clemble.casino.server.game.aspect.management.GameNotificationManagementAspectFactory;
-import com.clemble.casino.server.game.aspect.management.GameSequenceManagementAspectFactory;
+import com.clemble.casino.server.game.aspect.GameAspectFactory;
+import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.management.NextGameConstructionAspectFactory;
+import com.clemble.casino.server.game.aspect.management.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.DrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.WonRuleAspectFactory;
-import com.clemble.casino.server.game.aspect.presence.GamePresenceAspectFactory;
+import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
@@ -80,20 +81,20 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public GamePresenceAspectFactory gamePresenceAspectFactory(PlayerPresenceServerService presenceService){
-        return new GamePresenceAspectFactory(presenceService);
+    public GameEndPresenceAspectFactory gamePresenceAspectFactory(PlayerPresenceServerService presenceService){
+        return new GameEndPresenceAspectFactory(presenceService);
     }
 
     @Bean
     @Autowired
-    public GameManagementAspecteFactory gameManagementAspectFactory(GameIdGenerator idGenerator, GameInitiatorService initiatorService, GameConstructionRepository constructionRepository) {
-        return new GameSequenceManagementAspectFactory(idGenerator, initiatorService, constructionRepository);
+    public GameAspectFactory<GameEndedEvent<?>> gameManagementAspectFactory(GameIdGenerator idGenerator, GameInitiatorService initiatorService, GameConstructionRepository constructionRepository) {
+        return new NextGameConstructionAspectFactory(idGenerator, initiatorService, constructionRepository);
     }
     
     @Bean
     @Autowired
-    public GameNotificationManagementAspectFactory gameNotificationManagementAspectFactory(PlayerNotificationService playerNotificationService){
-        return new GameNotificationManagementAspectFactory(playerNotificationService);
+    public PlayerNotificationRuleAspectFactory gameNotificationManagementAspectFactory(PlayerNotificationService playerNotificationService){
+        return new PlayerNotificationRuleAspectFactory(playerNotificationService);
     }
 
     @Bean

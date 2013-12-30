@@ -131,7 +131,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public GameCacheService<State> picPacPoeCacheService(GameStateFactory<State> gameStateFactory) {
-        return new GameCacheService<State>(gameConstructionRepository, gameSessionRepository, picPacPoeProcessorFactory(), gameStateFactory);
+        return new GameCacheService<State>(gameSessionRepository, picPacPoeProcessorFactory(), gameStateFactory);
     }
 
     @Bean
