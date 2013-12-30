@@ -14,6 +14,8 @@ import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.game.GameConstructionTemplate;
 import com.clemble.casino.client.payment.PaymentOperations;
 import com.clemble.casino.client.payment.PaymentTemplate;
+import com.clemble.casino.client.player.PlayerConnectionOperations;
+import com.clemble.casino.client.player.PlayerConnectionTemplate;
 import com.clemble.casino.client.player.PlayerPresenceOperations;
 import com.clemble.casino.client.player.PlayerPresenceTemplate;
 import com.clemble.casino.client.player.PlayerProfileOperations;
@@ -31,6 +33,7 @@ import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.player.service.PlayerSessionService;
@@ -63,6 +66,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
     });
 
     final private PlayerPresenceOperations playerPresenceOperations;
+    final private PlayerConnectionOperations connectionOperations;
     final private PlayerSessionOperations playerSessionOperations;
     final private PaymentOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
@@ -72,6 +76,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
             final PlayerToken playerIdentity,
             final PlayerCredential credential,
             final PlayerProfileService playerProfileService,
+            final PlayerConnectionService playerConnectionService,
             final PlayerSessionService sessionOperations,
             final PaymentService accountOperations,
             final EventListenerOperationsFactory listenerOperationsFactory,
@@ -84,6 +89,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
         this.session = checkNotNull(playerSessionOperations.create());
         this.listenerOperations = listenerOperationsFactory.construct(player, session.getResourceLocations().getNotificationConfiguration(), objectMapper);
 
+        this.connectionOperations = new PlayerConnectionTemplate(player, playerConnectionService);
         this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, listenerOperations);
 
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileService);
@@ -104,6 +110,11 @@ public class ServerPlayer implements ClembleCasinoOperations {
         return profileOperations;
     }
 
+    @Override
+    public PlayerConnectionOperations connectionOperations(){
+        return connectionOperations;
+    }
+    
     @Override
     public PaymentOperations paymentOperations() {
         return playerAccountOperations;

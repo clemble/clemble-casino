@@ -16,6 +16,7 @@ import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.social.SocialModuleSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
+import com.clemble.casino.server.web.player.PlayerConnectionController;
 import com.clemble.casino.server.web.player.PlayerPresenceController;
 import com.clemble.casino.server.web.player.PlayerProfileController;
 import com.clemble.casino.server.web.player.registration.ProfileRegistrationController;
@@ -60,5 +61,12 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     public PlayerPresenceController playerPresenceController() {
         return new PlayerPresenceController(playerPresenceServerService);
     }
+
+    @Bean
+    @Autowired
+    public PlayerConnectionController playerConnectionController(PlayerSocialNetworkRepository socialNetworkRepository) {
+        return new PlayerConnectionController(socialNetworkRepository);
+    }
+    
 
 }

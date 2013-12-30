@@ -72,7 +72,7 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
             for(String facebookId: friends)
                 socialNetwork.addConnection(toConnectionKey(facebookId));
             pagingParameters = friends.getNextPage();
-        } while(pagingParameters.getLimit() > pagingParameters.getOffset());
+        } while(pagingParameters != null && (pagingParameters.getLimit() > pagingParameters.getOffset()));
         // Step 3. Returning created PlayerProfile
         return socialNetwork;
     }
