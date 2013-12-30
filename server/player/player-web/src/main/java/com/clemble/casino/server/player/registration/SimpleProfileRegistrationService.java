@@ -8,25 +8,30 @@ import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
+import com.clemble.casino.server.player.PlayerSocialNetwork;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
+import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 
 public class SimpleProfileRegistrationService implements ProfileRegistrationService {
 
     final private PlayerProfileRepository playerProfileRepository;
     final private SocialConnectionDataAdapter socialConnectionDataAdapter;
+    final private PlayerSocialNetworkRepository socialNetworkRepository;
     final private ClembleCasinoValidationService validationService;
 
     public SimpleProfileRegistrationService(final ClembleCasinoValidationService validationService,
                                             final PlayerProfileRepository playerProfileRepository,
-                                            final SocialConnectionDataAdapter socialConnectionDataAdapter) {
+                                            final SocialConnectionDataAdapter socialConnectionDataAdapter,
+                                            final PlayerSocialNetworkRepository socialNetworkRepository) {
         this.validationService = checkNotNull(validationService);
         this.playerProfileRepository = checkNotNull(playerProfileRepository);
         this.socialConnectionDataAdapter = checkNotNull(socialConnectionDataAdapter);
+        this.socialNetworkRepository = checkNotNull(socialNetworkRepository);
     }
 
     @Override
-    public PlayerProfile create(final PlayerProfile playerProfile) {
+    public PlayerProfile create(PlayerProfile playerProfile) {
         if (playerProfile == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileInvalid);
         if (playerProfile.getSocialConnections() != null && !playerProfile.getSocialConnections().isEmpty())
@@ -34,7 +39,11 @@ public class SimpleProfileRegistrationService implements ProfileRegistrationServ
         // Step 1. Validating input data prior to any actions
         validationService.validate(playerProfile);
         // Step 2. Registration done through separate registration service
-        return playerProfileRepository.save(playerProfile);
+        playerProfile = playerProfileRepository.save(playerProfile);
+        // Step 3. Creating empty social network
+        socialNetworkRepository.save(new PlayerSocialNetwork(playerProfile.getPlayer()));
+        // Step 4. Returning created PlayerProfile
+        return playerProfile;
     }
 
     @Override

@@ -8,6 +8,12 @@
     </parent>
     <artifactId>integration-test</artifactId>
     <dependencies>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>common</artifactId>
@@ -56,6 +62,12 @@
         <dependency>
             <groupId>com.jayway.facebooktestjavaapi</groupId>
             <artifactId>facebook-test-java-api</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -135,7 +147,8 @@
                             <includes>
                                 <include>**/*ITest.java</include>
                             </includes>
-                            <argLine>-Dspring.profiles.active=int_test -Dclemble.casino.management.url=http://localhost:8080/management/</argLine>
+                            <argLine>-Dspring.profiles.active=int_test
+                                -Dclemble.casino.management.url=http://localhost:8080/management/</argLine>
                         </configuration>
                     </plugin>
                     <plugin>

@@ -2,7 +2,6 @@ package com.clemble.casino.server.web.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.server.ExternalController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +13,11 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.service.PlayerProfileService;
+import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.player.PlayerWebMapping;
-import com.wordnik.swagger.annotations.Api;
 
-@Api(value = "player")
 @Controller
 public class PlayerProfileController implements PlayerProfileService, ExternalController {
 

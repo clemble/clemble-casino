@@ -1,6 +1,7 @@
 package com.clemble.casino.server.spring.web.player;
 
 import com.clemble.casino.server.player.registration.SimpleProfileRegistrationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
+import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.social.SocialModuleSpringConfiguration;
@@ -43,15 +45,17 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public SimpleProfileRegistrationService realPlayerProfileRegistrationService() {
-        return new SimpleProfileRegistrationService(gogomayaValidationService, playerProfileRepository, socialConnectionDataAdapter);
+    @Autowired
+    public SimpleProfileRegistrationService realPlayerProfileRegistrationService(PlayerSocialNetworkRepository socialNetworkRepository) {
+        return new SimpleProfileRegistrationService(gogomayaValidationService, playerProfileRepository, socialConnectionDataAdapter, socialNetworkRepository);
     }
 
     @Bean
-    public ProfileRegistrationController playerProfileRegistrationController() {
-        return new ProfileRegistrationController(realPlayerProfileRegistrationService());
+    @Autowired
+    public ProfileRegistrationController playerProfileRegistrationController(SimpleProfileRegistrationService realPlayerProfileRegistrationService) {
+        return new ProfileRegistrationController(realPlayerProfileRegistrationService);
     }
-    
+
     @Bean
     public PlayerPresenceController playerPresenceController() {
         return new PlayerPresenceController(playerPresenceServerService);

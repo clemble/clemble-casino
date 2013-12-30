@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
+import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerManagementSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
@@ -29,6 +30,9 @@ public class PlayerProfileRepositoryTest {
 
     @Autowired
     public PlayerProfileRepository playerProfileRepository;
+
+    @Autowired
+    public PlayerSocialNetworkRepository playerRelationsRepository;
 
     @Before
     @After

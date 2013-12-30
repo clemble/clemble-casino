@@ -6,8 +6,11 @@ import javax.sql.DataSource;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -22,7 +25,8 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 @Import(BasicJPASpringConfiguration.class)
 @EnableJpaRepositories(basePackages = "com.clemble.casino.server.repository.player",
     entityManagerFactoryRef = "playerEntityManagerFactory",
-    transactionManagerRef = "playerTransactionManager")
+    transactionManagerRef = "playerTransactionManager",
+    includeFilters = { @Filter(value = JpaRepository.class, type = FilterType.ASSIGNABLE_TYPE) })
 public class PlayerJPASpringConfiguration implements SpringConfiguration {
 
     @Autowired

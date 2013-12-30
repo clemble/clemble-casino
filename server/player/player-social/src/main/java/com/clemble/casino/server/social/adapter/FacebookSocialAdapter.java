@@ -8,16 +8,17 @@ import java.util.Date;
 
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
-import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
+import org.springframework.social.facebook.api.PagedList;
+import org.springframework.social.facebook.api.PagingParameters;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.server.player.PlayerSocialNetwork;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
@@ -43,12 +44,12 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
     }
 
     @Override
-    public PlayerProfile fetchGamerProfile(Facebook facebook) {
+    public PlayerProfile fetchPlayerProfile(Facebook facebook) {
         // Step 1. Retrieving facebook profile for associated user
         FacebookProfile facebookProfile = facebook.userOperations().getUserProfile();
         // Step 2. Generating appropriate GameProfile to return
         return new PlayerProfile()
-            .addSocialConnection(new ConnectionKey("facebook", facebookProfile.getId()))
+            .addSocialConnection(toConnectionKey(facebookProfile.getId()))
             .setFirstName(facebookProfile.getFirstName())
             .setNickName(facebookProfile.getName())
             .setLastName(facebookProfile.getLastName())
@@ -56,6 +57,24 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
             .setGender(PlayerGender.parse(facebookProfile.getGender()))
             .setImageUrl("http://graph.facebook.com/" + facebookProfile.getId() + "/picture")
             .setNickName(facebookProfile.getUsername());
+    }
+
+    @Override
+    public PlayerSocialNetwork fetchPlayerNetwork(PlayerProfile playerProfile, Facebook api) {
+        // Step 1. Creating owned social network
+        PlayerSocialNetwork socialNetwork = new PlayerSocialNetwork()
+            .addOwned(playerProfile.getSocialConnection(getProviderId()))
+            .setPlayer(playerProfile.getPlayer());;
+        // Step 2. Fetching all friend connections
+        PagingParameters pagingParameters = null;
+        PagedList<String> friends = api.friendOperations().getFriendIds();
+        do {
+            for(String facebookId: friends)
+                socialNetwork.addConnection(toConnectionKey(facebookId));
+            pagingParameters = friends.getNextPage();
+        } while(pagingParameters.getLimit() > pagingParameters.getOffset());
+        // Step 3. Returning created PlayerProfile
+        return socialNetwork;
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.clemble.casino.server.spring.common;
 
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.TreeSet;
 
 import javax.sql.DataSource;
 

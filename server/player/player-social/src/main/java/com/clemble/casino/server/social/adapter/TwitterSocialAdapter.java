@@ -1,17 +1,17 @@
 package com.clemble.casino.server.social.adapter;
 
-import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.SocialAccessGrant;
-import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.server.social.SocialConnectionAdapter;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
-
-import org.springframework.social.connect.ConnectionKey;
+import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
+
+import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.SocialAccessGrant;
+import com.clemble.casino.player.SocialConnectionData;
+import com.clemble.casino.server.player.PlayerSocialNetwork;
+import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,12 +30,27 @@ public class TwitterSocialAdapter extends SocialConnectionAdapter<Twitter>{
     }
 
     @Override
-    public PlayerProfile fetchGamerProfile(Twitter api) {
+    public PlayerProfile fetchPlayerProfile(Twitter api) {
         TwitterProfile twitterProfile = api.userOperations().getUserProfile();
         return new PlayerProfile()
-                .addSocialConnection(new ConnectionKey("twitter", String.valueOf(twitterProfile.getId())))
+                .addSocialConnection(toConnectionKey(String.valueOf(twitterProfile.getId())))
                 .setImageUrl(twitterProfile.getProfileImageUrl())
                 .setNickName(twitterProfile.getName());  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public PlayerSocialNetwork fetchPlayerNetwork(PlayerProfile playerProfile, Twitter api) {
+        // Step 1. Creating owned social network
+        PlayerSocialNetwork socialNetwork = new PlayerSocialNetwork()
+            .addOwned(playerProfile.getSocialConnection(getProviderId()))
+            .setPlayer(playerProfile.getPlayer());;
+        // Step 2. Fetching all twitter connections (5000)
+        // TODO check if this ever fails
+        CursoredList<Long> friends = api.friendOperations().getFriendIds();
+        for(Long twitterId: friends)
+            socialNetwork.addConnection(toConnectionKey(String.valueOf(twitterId)));
+        // Step 3. Returning created PlayerProfile
+        return socialNetwork;
     }
 
     @Override
@@ -57,4 +72,5 @@ public class TwitterSocialAdapter extends SocialConnectionAdapter<Twitter>{
                 connectionData.getExpireTime());
 
     }
+
 }

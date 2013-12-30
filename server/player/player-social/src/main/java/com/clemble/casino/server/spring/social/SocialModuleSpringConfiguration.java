@@ -2,6 +2,7 @@ package com.clemble.casino.server.spring.social;
 
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
+import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.social.SocialPlayerProfileCreator;
@@ -89,8 +90,8 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public ConnectionSignUp connectionSignUp(PlayerIdGenerator idGenerator, PlayerProfileRepository profileRepository, SocialConnectionAdapterRegistry socialAdapterRegistry) {
-        return new SocialPlayerProfileCreator(idGenerator, profileRepository, socialAdapterRegistry);
+    public ConnectionSignUp connectionSignUp(PlayerIdGenerator idGenerator, PlayerProfileRepository profileRepository, SocialConnectionAdapterRegistry socialAdapterRegistry, PlayerSocialNetworkRepository socialNetworkRepository) {
+        return new SocialPlayerProfileCreator(idGenerator, profileRepository, socialAdapterRegistry, socialNetworkRepository);
     }
 
     @Bean
