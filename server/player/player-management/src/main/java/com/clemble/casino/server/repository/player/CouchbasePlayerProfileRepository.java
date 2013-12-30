@@ -3,6 +3,8 @@ package com.clemble.casino.server.repository.player;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import net.spy.memcached.internal.OperationFuture;
@@ -76,6 +78,18 @@ public class CouchbasePlayerProfileRepository implements PlayerProfileRepository
             total += Long.valueOf(row.getValue());
         }
         return total;
+    }
+
+    @Override
+    // TODO needs to be impovef
+    public List<PlayerProfile> findAll(Iterable<String> players) {
+        List<PlayerProfile> profiles = new ArrayList<>();
+        for(String player: players) {
+            PlayerProfile profile = findOne(player);
+            if (profile != null)
+                profiles.add(profile);
+        }
+        return profiles;
     }
 
 }
