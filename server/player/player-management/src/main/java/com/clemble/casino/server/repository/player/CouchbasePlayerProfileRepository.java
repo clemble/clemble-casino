@@ -4,7 +4,6 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -12,17 +11,13 @@ import java.util.concurrent.ExecutionException;
 import net.spy.memcached.internal.OperationFuture;
 
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.utils.CollectionUtils;
 import com.couchbase.client.CouchbaseClient;
 import com.couchbase.client.protocol.views.Query;
 import com.couchbase.client.protocol.views.View;
 import com.couchbase.client.protocol.views.ViewResponse;
 import com.couchbase.client.protocol.views.ViewRow;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.MapType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class CouchbasePlayerProfileRepository implements PlayerProfileRepository {
 
