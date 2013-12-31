@@ -70,9 +70,7 @@ public class GameSessionProcessor<State extends GameState> {
             GameProcessor<State> processor = cache.getProcessor();
             // Step 5. Processing movement
             GameManagementEvent event = processor.process(cache.getSession(), move);
-            // Step 6. Invoking appropriate notification
-            notificationService.notify(cache.getPlayerIds(), event);
-            // Step 7. Returning state of the game
+            // Step 6. Returning state of the game
             return cache.getSession().getState();
         } finally {
             reentrantLock.unlock();

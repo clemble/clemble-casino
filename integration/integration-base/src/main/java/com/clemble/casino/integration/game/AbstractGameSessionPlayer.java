@@ -3,6 +3,7 @@ package com.clemble.casino.integration.game;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.Closeable;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -46,10 +47,10 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
             @Override
             @SuppressWarnings("unchecked")
             public void onEvent(GameManagementEvent event) {
-                if (event instanceof GameStateManagementEvent)
-                    setState(((GameStateManagementEvent<State>) event).getState());
                 if (event instanceof GameEndedEvent<?>)
                     isAlive.set(((GameEndedEvent<?>) event).getOutcome());
+                if (event instanceof GameStateManagementEvent)
+                    setState(((GameStateManagementEvent<State>) event).getState());
             }
         });
         setState(this.actionOperations.getState());
@@ -60,6 +61,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         return player.getPlayer();
     }
 
+    @Override
     final public GameConstruction getConstructionInfo() {
         return construction;
     }
@@ -98,7 +100,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     final public boolean isAlive() {
-        return keepAlive.get() && isAlive.get() != null;
+        return keepAlive.get() && isAlive.get() == null && currentState.get() != null;
     }
 
     @Override
@@ -126,14 +128,30 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         }
     }
 
+    @Override
     final public Event getNextMove() {
         return getState().getContext().getActionLatch().fetchAction(player.getPlayer());
     }
 
+    @Override
+    final public void waitForEnd() {
+        long expirationTime = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(15);
+        synchronized (versionLock) {
+            while(isAlive.get() == null && expirationTime > System.currentTimeMillis()) {
+                try {
+                    versionLock.wait(TimeUnit.SECONDS.toMillis(15));
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+    }
+
+    @Override
     final public void waitForStart() {
         waitForStart(15_000);
     }
 
+    @Override
     final public void waitForStart(long timeout) {
         long expirationTime = timeout > 0 ? System.currentTimeMillis() + timeout : Long.MAX_VALUE;
         if (currentState.get() == null)
@@ -155,15 +173,18 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
             throw new RuntimeException(player.getPlayer() + " " + construction.getSession() + " was not started after " + timeout);
     }
 
+    @Override
     final public void waitForTurn() {
         while (keepAlive.get() && !isToMove() && isAlive())
             waitVersion(getState().getVersion() + 1);
     }
 
+    @Override
     final public boolean isToMove() {
         return !getState().getContext().getActionLatch().acted(player.getPlayer());
     }
 
+    @Override
     public void giveUp() {
         // Step 1. Giving up if needed
         if (isAlive()) {
@@ -200,7 +221,9 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     abstract public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameAction clientEvent);
 
+    @Override
     public GameOutcome getOutcome(){
         return isAlive.get();
     }
+
 }

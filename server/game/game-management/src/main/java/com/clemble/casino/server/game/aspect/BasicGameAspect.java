@@ -1,5 +1,7 @@
 package com.clemble.casino.server.game.aspect;
 
+import org.springframework.core.Ordered;
+
 import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.event.Event;
 
@@ -16,7 +18,7 @@ abstract public class BasicGameAspect<T extends Event> implements GameAspect<T> 
 
     @Override
     public void onEvent(T event) {
-        if(selector.filter(event))
+        if (selector.filter(event))
             doEvent(event);
     }
 
@@ -26,4 +28,5 @@ abstract public class BasicGameAspect<T extends Event> implements GameAspect<T> 
     public EventSelector getSelector() {
         return selector;
     }
+
 }

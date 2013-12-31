@@ -24,6 +24,8 @@ public interface GameSessionPlayer<State extends GameState> extends GameSessionA
 
     public void syncWith(GameSessionPlayer<State> anotherState);
 
+    public void waitForEnd();
+
     public void waitForStart();
 
     public void waitForStart(long timeout);

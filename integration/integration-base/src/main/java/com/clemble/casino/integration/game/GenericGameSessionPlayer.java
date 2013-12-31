@@ -75,6 +75,11 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
+    public void waitForEnd() {
+        actualPlayer.waitForEnd();
+    }
+
+    @Override
     final public void waitForTurn() {
         actualPlayer.waitForTurn();
     }
@@ -118,4 +123,5 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     public GameOutcome getOutcome() {
         return actualPlayer.getOutcome();
     }
+
 }

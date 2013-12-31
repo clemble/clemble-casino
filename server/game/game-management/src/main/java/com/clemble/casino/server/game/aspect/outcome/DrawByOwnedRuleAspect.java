@@ -2,6 +2,8 @@ package com.clemble.casino.server.game.aspect.outcome;
 
 import java.util.Date;
 
+import org.springframework.core.Ordered;
+
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;

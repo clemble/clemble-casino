@@ -25,7 +25,8 @@ public class WonByPriceRuleAspect extends BasicGameAspect<GameEndedEvent<?>>{
     final private GameSpecification specification;
     final private PaymentTransactionServerService transactionService;
 
-    public WonByPriceRuleAspect(GameSpecification specification,
+    public WonByPriceRuleAspect(
+            GameSpecification specification,
             PaymentTransactionServerService transactionService) {
         super(new EventTypeSelector(GameEndedEvent.class));
         this.transactionService = checkNotNull(transactionService);

@@ -2,12 +2,15 @@ package com.clemble.casino.server.game.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.OrderComparator;
 
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSession;
@@ -20,7 +23,7 @@ import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
 public class GameProcessorFactory<State extends GameState> implements ApplicationContextAware {
 
-    final private Set<GameAspectFactory> aspectFactories = new HashSet<>();
+    final private List<GameAspectFactory> aspectFactories = new ArrayList<>();
 
     public GameProcessor<State> create(GameInitiation initiation, GameContext context) {
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
@@ -58,6 +61,7 @@ public class GameProcessorFactory<State extends GameState> implements Applicatio
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         aspectFactories.addAll(applicationContext.getBeansOfType(GameAspectFactory.class).values());
+        Collections.sort(aspectFactories, OrderComparator.INSTANCE);
     }
 
 }

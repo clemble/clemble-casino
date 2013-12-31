@@ -1,5 +1,7 @@
 package com.clemble.casino.server.game.aspect.outcome;
 
+import org.springframework.core.Ordered;
+
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameContext;
@@ -33,4 +35,10 @@ public class DrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         }
     }
+
+    @Override
+    public int getOrder(){
+        return Ordered.LOWEST_PRECEDENCE - 2;
+    }
+
 }

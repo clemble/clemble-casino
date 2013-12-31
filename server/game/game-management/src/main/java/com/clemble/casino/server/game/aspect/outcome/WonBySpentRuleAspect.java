@@ -55,6 +55,6 @@ public class WonBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
             // Step 3. Processing payment transaction
             transactionService.process(paymentTransaction);
         }
-
     }
+
 }

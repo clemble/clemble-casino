@@ -1,5 +1,7 @@
 package com.clemble.casino.server.game.aspect.security;
 
+import org.springframework.core.Ordered;
+
 import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -12,6 +14,11 @@ public class GameSecurityAspectFactory implements GameAspectFactory<PlayerAwareE
     @Override
     public GameAspect<PlayerAwareEvent> construct(GameInitiation initiation, GameContext context) {
         return new GameSecurityAspect(PlayerAwareUtils.toPlayerList(initiation.getParticipants()));
+    }
+
+    @Override
+    public int getOrder(){
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 
 }

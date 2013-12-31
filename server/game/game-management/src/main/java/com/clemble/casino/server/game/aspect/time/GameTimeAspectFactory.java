@@ -1,5 +1,7 @@
 package com.clemble.casino.server.game.aspect.time;
 
+import org.springframework.core.Ordered;
+
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
@@ -18,6 +20,11 @@ public class GameTimeAspectFactory implements GameAspectFactory<GameManagementEv
     @Override
     public GameAspect<GameManagementEvent> construct(GameInitiation initiation, GameContext context) {
         return new GameTimeAspect(initiation, context, eventTaskExecutor);
+    }
+
+    @Override
+    public int getOrder(){
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 
 }
