@@ -1,7 +1,7 @@
 package com.clemble.casino.server.spring.player;
 
-import com.clemble.casino.server.player.registration.ProfileRegistrationService;
-import com.clemble.casino.server.player.registration.RestProfileRegistrationService;
+import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
+import com.clemble.casino.server.player.registration.RestServerProfileRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +34,7 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
 
         @Autowired(required = false)
         @Qualifier("realPlayerProfileRegistrationService")
-        public ProfileRegistrationService realPlayerProfileRegistrationService;
+        public ServerProfileRegistrationService realPlayerProfileRegistrationService;
 
         public String getBaseUrl() {
             return "http://127.0.0.1:8080/player/";
@@ -42,8 +42,8 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Autowired
-        public ProfileRegistrationService playerProfileRegistrationService(RestTemplate restTemplate) {
-            return realPlayerProfileRegistrationService == null ? new RestProfileRegistrationService(getBaseUrl(), restTemplate) : realPlayerProfileRegistrationService;
+        public ServerProfileRegistrationService playerProfileRegistrationService(RestTemplate restTemplate) {
+            return realPlayerProfileRegistrationService == null ? new RestServerProfileRegistrationService(getBaseUrl(), restTemplate) : realPlayerProfileRegistrationService;
         }
 
     }
@@ -53,8 +53,8 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
     public static class TestPlayerConfiguration {
 
         @Bean
-        public ProfileRegistrationService playerProfileRegistrationService() {
-            return new ProfileRegistrationService() {
+        public ServerProfileRegistrationService playerProfileRegistrationService() {
+            return new ServerProfileRegistrationService() {
 
                 @Override
                 public PlayerProfile create(SocialConnectionData socialConnectionData) {

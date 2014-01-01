@@ -31,7 +31,7 @@ import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
 import com.google.common.collect.ImmutableList;
@@ -44,7 +44,7 @@ public class PlayerPresenceServerServiceTest {
     final private Random RANDOM = new Random();
 
     @Autowired
-    public PlayerPresenceServerService playerPresenceService;
+    public ServerPlayerPresenceService playerPresenceService;
 
     @Autowired
     public SystemNotificationServiceListener presenceListenerService;

@@ -22,13 +22,13 @@ import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 
-public class PaymentTransactionServerServiceImpl implements PaymentTransactionServerService {
+public class BasicServerPaymentTransactionService implements ServerPaymentTransactionService {
 
     final private PlayerAccountRepository playerAccountRepository;
     final private PlayerNotificationService notificationService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PaymentTransactionServerServiceImpl(
+    public BasicServerPaymentTransactionService(
             PaymentTransactionRepository paymentTransactionRepository,
             PlayerAccountRepository playerWalletRepository,
             PlayerNotificationService notificationService) {

@@ -26,9 +26,9 @@ import com.clemble.casino.server.event.PlayerLeftEvent;
 import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
-public class JedisPlayerPresenceServerService implements PlayerPresenceServerService {
+public class JedisServerPlayerPresenceService implements ServerPlayerPresenceService {
 
-    final private Logger LOG = LoggerFactory.getLogger(JedisPlayerPresenceServerService.class);
+    final private Logger LOG = LoggerFactory.getLogger(JedisServerPlayerPresenceService.class);
 
     final private int EXPIRATION_TIME = (int) TimeUnit.MINUTES.toMillis(20);
     final private String ZERO_SESSION = ":";
@@ -38,7 +38,7 @@ public class JedisPlayerPresenceServerService implements PlayerPresenceServerSer
     final private SystemNotificationService systemNotificationService;
     final private PlayerNotificationService presenceNotification;
 
-    public JedisPlayerPresenceServerService(JedisPool jedisPool, PlayerNotificationService presenceNotification,
+    public JedisServerPlayerPresenceService(JedisPool jedisPool, PlayerNotificationService presenceNotification,
             SystemNotificationService systemNotificationService) {
         this.jedisPool = checkNotNull(jedisPool);
         this.presenceNotification = checkNotNull(presenceNotification);

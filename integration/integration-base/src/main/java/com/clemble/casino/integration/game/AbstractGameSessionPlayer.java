@@ -3,6 +3,7 @@ package com.clemble.casino.integration.game;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.Closeable;
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -12,16 +13,17 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameSessionAwareEvent;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GameEndedEvent;
-import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStateManagementEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.integration.event.EventAccumulator;
 
 abstract public class AbstractGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State>, Closeable {
 
@@ -34,8 +36,9 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     final private GameConstruction construction;
     final private GameActionOperations<State> actionOperations; 
     final private Object versionLock = new Object();
+    final private EventAccumulator<GameSessionAwareEvent> eventAccumulator = new EventAccumulator<GameSessionAwareEvent>();
     final private AtomicBoolean keepAlive = new AtomicBoolean(true);
-    final private AtomicReference<State> currentState = new AtomicReference<State>();
+    final private AtomicReference<State> currentState = new AtomicReference<>();
     final private AtomicReference<GameOutcome> isAlive = new AtomicReference<>();
 
     public AbstractGameSessionPlayer(final ClembleCasinoOperations player, GameConstruction construction) {
@@ -43,16 +46,17 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         this.player = player;
         this.actionOperations = this.player.gameActionOperations(construction.getSession());
 
-        this.actionOperations.subscribe(new EventListener<GameManagementEvent>() {
+        this.actionOperations.subscribe(new EventListener<GameSessionAwareEvent>() {
             @Override
             @SuppressWarnings("unchecked")
-            public void onEvent(GameManagementEvent event) {
+            public void onEvent(GameSessionAwareEvent event) {
                 if (event instanceof GameEndedEvent<?>)
                     isAlive.set(((GameEndedEvent<?>) event).getOutcome());
                 if (event instanceof GameStateManagementEvent)
                     setState(((GameStateManagementEvent<State>) event).getState());
             }
         });
+        this.actionOperations.subscribe(eventAccumulator);
         setState(this.actionOperations.getState());
     }
 
@@ -131,6 +135,11 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     @Override
     final public Event getNextMove() {
         return getState().getContext().getActionLatch().fetchAction(player.getPlayer());
+    }
+
+    @Override
+    public Collection<GameSessionAwareEvent> getEvents(){
+        return eventAccumulator.toList();
     }
 
     @Override

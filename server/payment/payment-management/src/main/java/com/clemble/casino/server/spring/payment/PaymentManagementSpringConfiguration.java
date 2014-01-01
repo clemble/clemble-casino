@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
-import com.clemble.casino.server.payment.PaymentTransactionServerServiceImpl;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
+import com.clemble.casino.server.payment.BasicServerPaymentTransactionService;
 import com.clemble.casino.server.payment.bonus.DailyBonusService;
 import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.payment.bonus.policy.NoBonusPolicy;
@@ -30,17 +30,17 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
     @Bean
     @Autowired
     public PlayerAccountServerService realPlayerAccountService(PlayerAccountRepository playerAccountRepository,
-            @Qualifier("realPaymentTransactionService") PaymentTransactionServerService realPaymentTransactionService) {
+            @Qualifier("realPaymentTransactionService") ServerPaymentTransactionService realPaymentTransactionService) {
         return new PlayerAccountServerServiceImpl(playerAccountRepository, realPaymentTransactionService);
     }
 
     @Bean
     @Autowired
-    public PaymentTransactionServerService realPaymentTransactionService(
+    public ServerPaymentTransactionService realPaymentTransactionService(
             PaymentTransactionRepository paymentTransactionRepository,
             PlayerNotificationService playerNotificationService,
             PlayerAccountRepository playerAccountRepository) {
-        return new PaymentTransactionServerServiceImpl(paymentTransactionRepository, playerAccountRepository, playerNotificationService);
+        return new BasicServerPaymentTransactionService(paymentTransactionRepository, playerAccountRepository, playerNotificationService);
     }
 
     @Bean
@@ -49,7 +49,7 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
             PlayerNotificationService playerNotificationService,
             PlayerAccountRepository accountRepository,
             PaymentTransactionRepository transactionRepository,
-            @Qualifier("realPaymentTransactionService") PaymentTransactionServerService transactionServerService,
+            @Qualifier("realPaymentTransactionService") ServerPaymentTransactionService transactionServerService,
             BonusPolicy bonusPolicy,
             SystemNotificationServiceListener notificationServiceListener) {
         Money bonus = new Money(Currency.FakeMoney, 100);

@@ -8,12 +8,12 @@ import org.springframework.web.client.RestTemplate;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class RestProfileRegistrationService implements ProfileRegistrationService {
+public class RestServerProfileRegistrationService implements ServerProfileRegistrationService {
 
     final private String baseUrl;
     final private RestTemplate restTemplate;
 
-    public RestProfileRegistrationService(String baseUrl, RestTemplate restTemplate) {
+    public RestServerProfileRegistrationService(String baseUrl, RestTemplate restTemplate) {
         this.baseUrl = checkNotNull(baseUrl);
         this.restTemplate = checkNotNull(restTemplate);
     }

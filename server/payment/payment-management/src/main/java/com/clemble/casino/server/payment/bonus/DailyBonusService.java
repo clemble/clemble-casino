@@ -15,7 +15,7 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.PlayerEnteredEvent;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
@@ -31,13 +31,13 @@ public class DailyBonusService implements BonusService<PlayerEnteredEvent> {
     final private PlayerNotificationService notificationService;
     final private PlayerAccountRepository accountRepository;
     final private PaymentTransactionRepository transactionRepository;
-    final private PaymentTransactionServerService transactionServerService;
+    final private ServerPaymentTransactionService transactionServerService;
 
     public DailyBonusService(
             PlayerNotificationService notificationService,
             PlayerAccountRepository accountRepository,
             PaymentTransactionRepository transactionRepository,
-            PaymentTransactionServerService transactionServerService,
+            ServerPaymentTransactionService transactionServerService,
             BonusPolicy bonusPolicy,
             Money bonusAmount) {
         this.bonusAmount = checkNotNull(bonusAmount);

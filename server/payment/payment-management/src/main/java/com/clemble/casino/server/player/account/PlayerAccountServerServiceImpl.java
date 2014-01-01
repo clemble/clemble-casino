@@ -15,15 +15,15 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 
 public class PlayerAccountServerServiceImpl implements PlayerAccountServerService {
 
     final private PlayerAccountRepository playerAccountRepository;
-    final private PaymentTransactionServerService paymentTransactionService;
+    final private ServerPaymentTransactionService paymentTransactionService;
 
-    public PlayerAccountServerServiceImpl(final PlayerAccountRepository playerWalletRepository, final PaymentTransactionServerService paymentTransactionService) {
+    public PlayerAccountServerServiceImpl(final PlayerAccountRepository playerWalletRepository, final ServerPaymentTransactionService paymentTransactionService) {
         this.playerAccountRepository = checkNotNull(playerWalletRepository);
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
     }

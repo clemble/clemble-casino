@@ -16,7 +16,7 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 
 public class SimpleGameConstructionServerService implements GameConstructionServerService {
@@ -29,7 +29,7 @@ public class SimpleGameConstructionServerService implements GameConstructionServ
 
     public SimpleGameConstructionServerService(final GameIdGenerator gameIdGenerator, final PlayerAccountServerService playerAccountService,
             final PlayerNotificationService playerNotificationService, final GameConstructionRepository constructionRepository,
-            final GameInitiatorService initiatorService, final PlayerLockService playerLockService, final PlayerPresenceServerService playerStateManager) {
+            final GameInitiatorService initiatorService, final PlayerLockService playerLockService, final ServerPlayerPresenceService playerStateManager) {
         this.gameIdGenerator = checkNotNull(gameIdGenerator);
         this.playerAccountService = checkNotNull(playerAccountService);
 

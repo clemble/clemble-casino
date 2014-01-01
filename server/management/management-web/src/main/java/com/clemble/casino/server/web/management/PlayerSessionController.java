@@ -16,7 +16,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.service.PlayerSessionService;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
 import com.clemble.casino.web.management.ManagementWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
@@ -26,10 +26,10 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
 
     final private ResourceLocationService resourceLocationService;
     final private PlayerSessionRepository sessionRepository;
-    final private PlayerPresenceServerService playerPresenceService;
+    final private ServerPlayerPresenceService playerPresenceService;
 
     public PlayerSessionController(final ResourceLocationService resourceLocationService, final PlayerSessionRepository sessionRepository,
-            final PlayerPresenceServerService playerPresenceService) {
+            final ServerPlayerPresenceService playerPresenceService) {
         this.resourceLocationService = checkNotNull(resourceLocationService);
         this.sessionRepository = checkNotNull(sessionRepository);
         this.playerPresenceService = checkNotNull(playerPresenceService);

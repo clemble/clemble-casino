@@ -11,16 +11,16 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
 public class WonRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>> {
 
-    final private PaymentTransactionServerService transactionService;
+    final private ServerPaymentTransactionService transactionService;
 
-    public WonRuleAspectFactory(PaymentTransactionServerService transactionService) {
+    public WonRuleAspectFactory(ServerPaymentTransactionService transactionService) {
         this.transactionService = checkNotNull(transactionService);
     }
 

@@ -15,20 +15,20 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
 public class SimpleGameInitiatorService implements GameInitiatorService {
 
     final private Logger LOG = LoggerFactory.getLogger(SimpleGameInitiatorService.class);
 
-    final private PlayerPresenceServerService presenceService;
+    final private ServerPlayerPresenceService presenceService;
 
     final private GameSessionProcessor<?> processor;
 
     final private AvailabilityGameInitiatorManager availabilityGameInitiatorManager;
 
     public SimpleGameInitiatorService(final GameSessionProcessor<?> stateFactory,
-            final PlayerPresenceServerService presenceService,
+            final ServerPlayerPresenceService presenceService,
             final SystemNotificationServiceListener playerPresenceService) {
         this.processor = checkNotNull(stateFactory);
         this.presenceService = checkNotNull(presenceService);

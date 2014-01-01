@@ -17,17 +17,17 @@ import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
 public class DrawByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
-    final private PaymentTransactionServerService transactionService;
+    final private ServerPaymentTransactionService transactionService;
     final private GameSpecification specification;
 
-    public DrawByOwnedRuleAspect(PaymentTransactionServerService transactionService, GameSpecification specification) {
+    public DrawByOwnedRuleAspect(ServerPaymentTransactionService transactionService, GameSpecification specification) {
         super(new EventTypeSelector(GameEndedEvent.class));
         this.transactionService = transactionService;
         this.specification = specification;

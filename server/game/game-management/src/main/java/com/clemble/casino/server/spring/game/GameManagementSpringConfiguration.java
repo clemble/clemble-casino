@@ -29,11 +29,11 @@ import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
 import com.clemble.casino.server.game.construct.GameConstructionServerService;
 import com.clemble.casino.server.game.construct.GameInitiatorService;
 import com.clemble.casino.server.game.construct.SimpleGameConstructionServerService;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -69,19 +69,19 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public WonRuleAspectFactory wonRuleAspectFactory(PaymentTransactionServerService paymentTransactionService) {
+    public WonRuleAspectFactory wonRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
         return new WonRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean
     @Autowired
-    public DrawRuleAspectFactory drawRuleAspectFactory(PaymentTransactionServerService paymentTransactionService) {
+    public DrawRuleAspectFactory drawRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
         return new DrawRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean
     @Autowired
-    public GameEndPresenceAspectFactory gamePresenceAspectFactory(PlayerPresenceServerService presenceService){
+    public GameEndPresenceAspectFactory gamePresenceAspectFactory(ServerPlayerPresenceService presenceService){
         return new GameEndPresenceAspectFactory(presenceService);
     }
 
@@ -133,7 +133,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Autowired
         public GameConstructionServerService gameConstructionService(GameIdGenerator gameIdGenerator, PlayerAccountServerService playerAccountService,
                 PlayerNotificationService playerNotificationService, GameConstructionRepository constructionRepository,
-                GameInitiatorService initiatorService, PlayerLockService playerLockService, PlayerPresenceServerService playerStateManager) {
+                GameInitiatorService initiatorService, PlayerLockService playerLockService, ServerPlayerPresenceService playerStateManager) {
             return new SimpleGameConstructionServerService(gameIdGenerator, playerAccountService, playerNotificationService, constructionRepository,
                     initiatorService, playerLockService, playerStateManager);
         }

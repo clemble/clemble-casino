@@ -3,7 +3,7 @@ package com.clemble.casino.server.web.management;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.player.registration.ProfileRegistrationService;
+import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,14 +38,14 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     final private PlayerIdGenerator playerIdentifierGenerator;
     final private PlayerTokenFactory playerTokenFactory;
     final private PlayerCredentialRepository playerCredentialRepository;
-    final private ProfileRegistrationService playerProfileRegistrationService;
+    final private ServerProfileRegistrationService playerProfileRegistrationService;
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
     final private PlayerAccountServerService playerAccountServerService;
 
     public PlayerRegistrationController(final PlayerIdGenerator playerIdentifierGenerator,
             final PlayerTokenFactory playerTokenFactory,
-            final ProfileRegistrationService playerProfileRegistrationService,
+            final ServerProfileRegistrationService playerProfileRegistrationService,
             final PlayerCredentialRepository playerCredentialRepository,
             final ClembleConsumerDetailsService playerIdentityRepository,
             final ClembleCasinoValidationService validationService,

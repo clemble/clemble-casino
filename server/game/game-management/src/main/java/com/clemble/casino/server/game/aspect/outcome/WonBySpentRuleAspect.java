@@ -17,7 +17,7 @@ import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 /**
  * Created by mavarazy on 23/12/13.
@@ -25,9 +25,9 @@ import com.clemble.casino.server.payment.PaymentTransactionServerService;
 public class WonBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
     final private GameSpecification specification;
-    final private PaymentTransactionServerService transactionService;
+    final private ServerPaymentTransactionService transactionService;
 
-    public WonBySpentRuleAspect(GameSpecification specification, PaymentTransactionServerService transactionService) {
+    public WonBySpentRuleAspect(GameSpecification specification, ServerPaymentTransactionService transactionService) {
         super(new EventTypeSelector(GameEndedEvent.class));
         this.specification = checkNotNull(specification);
         this.transactionService = checkNotNull(transactionService);

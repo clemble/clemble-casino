@@ -38,7 +38,7 @@ public class GamePaymentTransactionITest {
     public void testAvailabilityConstruction(){
         List<GameSessionPlayer<NumberState>> sessionPlayers = gameScenarios.construct(Game.num);
         // Step 1. Preparing game session listener
-        EventAccumulator paymentListener = new EventAccumulator();
+        EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
         GameSessionPlayer<NumberState> A = sessionPlayers.get(0);
         A.playerOperations().paymentOperations().subscribe(paymentListener);
         GameSessionPlayer<NumberState> B = sessionPlayers.get(1);

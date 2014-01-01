@@ -17,8 +17,8 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
-import com.clemble.casino.server.payment.RestPaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
+import com.clemble.casino.server.payment.RestServerPaymentTransactionService;
 import com.clemble.casino.server.player.account.PlayerAccountServerService;
 import com.clemble.casino.server.player.account.RestPlayerAccountServerService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
@@ -39,17 +39,17 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Autowired(required = false)
         @Qualifier("realPaymentTransactionService")
-        public PaymentTransactionServerService realPaymentTransactionService;
+        public ServerPaymentTransactionService realPaymentTransactionService;
 
         @Autowired(required = false)
         @Qualifier("realPlayerAccountService")
         public PlayerAccountServerService realPlayerAccountService;
 
         @Bean
-        public PaymentTransactionServerService paymentTransactionService() {
+        public ServerPaymentTransactionService paymentTransactionService() {
             ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/",
                     "http://127.0.0.1:8080/payment/");
-            return realPaymentTransactionService == null ? new RestPaymentTransactionServerService(paymentRegistry, restTemplate)
+            return realPaymentTransactionService == null ? new RestServerPaymentTransactionService(paymentRegistry, restTemplate)
                     : realPaymentTransactionService;
         }
 
@@ -87,8 +87,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public PaymentTransactionServerService paymentTransactionService() {
-            return new PaymentTransactionServerService() {
+        public ServerPaymentTransactionService paymentTransactionService() {
+            return new ServerPaymentTransactionService() {
 
                 @Override
                 public PaymentTransaction process(PaymentTransaction paymentTransaction) {

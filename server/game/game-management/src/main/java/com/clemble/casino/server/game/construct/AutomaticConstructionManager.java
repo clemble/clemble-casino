@@ -22,7 +22,7 @@ import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.player.lock.PlayerLockService;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -76,13 +76,13 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
     final private GameInitiatorService initiatorService;
 
     final private PlayerLockService playerLockService;
-    final private PlayerPresenceServerService playerStateManager;
+    final private ServerPlayerPresenceService playerStateManager;
 
     public AutomaticConstructionManager(
             final GameInitiatorService initiatorService,
             final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService,
-            final PlayerPresenceServerService playerStateManager) {
+            final ServerPlayerPresenceService playerStateManager) {
         this.initiatorService = checkNotNull(initiatorService);
         this.constructionRepository = checkNotNull(constructionRepository);
         this.playerLockService = checkNotNull(playerLockService);

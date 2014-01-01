@@ -31,7 +31,7 @@ public class PaymentTransactionServiceTest {
     public PlayerAccountRepository playerAccountRepository;
 
     @Autowired
-    public PaymentTransactionServerService paymentTransactionService;
+    public ServerPaymentTransactionService paymentTransactionService;
 
     private String playerFrom = String.valueOf(RANDOM.nextLong());
     private String playerTo = String.valueOf(RANDOM.nextLong());

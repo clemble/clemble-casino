@@ -4,13 +4,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 public class WebPaymentTransactionOperations  extends AbstractPaymentTransactionOperations {
 
-    final private PaymentTransactionServerService paymentTransactionController;
+    final private ServerPaymentTransactionService paymentTransactionController;
 
-    public WebPaymentTransactionOperations(PaymentTransactionServerService paymentTransactionController) {
+    public WebPaymentTransactionOperations(ServerPaymentTransactionService paymentTransactionController) {
         this.paymentTransactionController = checkNotNull(paymentTransactionController);
     }
 

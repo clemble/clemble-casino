@@ -11,10 +11,10 @@ import com.clemble.casino.configuration.ResourceLocations;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.service.PaymentService;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
-public class IntegrationPaymentService implements PaymentService, PaymentTransactionServerService {
+public class IntegrationPaymentService implements PaymentService, ServerPaymentTransactionService {
 
     final private RestTemplate restTemplate;
     final private ClembleCasinoOperations player;

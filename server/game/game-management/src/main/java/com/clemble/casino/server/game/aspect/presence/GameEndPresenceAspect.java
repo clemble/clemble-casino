@@ -5,13 +5,13 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
 public class GameEndPresenceAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
-    final private PlayerPresenceServerService presenceService;
+    final private ServerPlayerPresenceService presenceService;
 
-    public GameEndPresenceAspect(PlayerPresenceServerService presenceService) {
+    public GameEndPresenceAspect(ServerPlayerPresenceService presenceService) {
         super(new EventTypeSelector(GameEndedEvent.class));
         this.presenceService = checkNotNull(presenceService);
     }

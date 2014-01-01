@@ -39,7 +39,7 @@ import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.service.PlayerSessionService;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.clemble.test.spring.listener.TestContextListenerRegistrator;
@@ -108,7 +108,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
 
         @Bean
         @Autowired
-        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionServerService paymentTransactionController) {
+        public PaymentTransactionOperations paymentTransactionOperations(ServerPaymentTransactionService paymentTransactionController) {
             return new WebPaymentTransactionOperations(paymentTransactionController);
         }
 

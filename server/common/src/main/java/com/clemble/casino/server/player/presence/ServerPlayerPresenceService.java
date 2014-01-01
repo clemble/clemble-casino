@@ -6,8 +6,9 @@ import java.util.List;
 
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
+import com.clemble.casino.server.ServerService;
 
-public interface PlayerPresenceServerService {
+public interface ServerPlayerPresenceService extends ServerService {
 
     public boolean isAvailable(String player);
 

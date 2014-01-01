@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class StringRedisPlayerStateManager implements PlayerPresenceServerService {
+public class RedisServerPlayerPresenceService implements ServerPlayerPresenceService {
 
-    final private Logger LOG = LoggerFactory.getLogger(StringRedisPlayerStateManager.class);
+    final private Logger LOG = LoggerFactory.getLogger(RedisServerPlayerPresenceService.class);
 
     final private long EXPIRATION_TIME = TimeUnit.MINUTES.toMillis(20);
     final private String ZERO_SESSION = ":";
@@ -31,7 +31,7 @@ public class StringRedisPlayerStateManager implements PlayerPresenceServerServic
     final private StringRedisTemplate redisTemplate;
     final private PlayerNotificationService presenceNotification;
 
-    public StringRedisPlayerStateManager(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer,
+    public RedisServerPlayerPresenceService(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer,
             PlayerNotificationService presenceNotification) {
         this.redisTemplate = checkNotNull(redisTemplate);
         this.presenceNotification = checkNotNull(presenceNotification);

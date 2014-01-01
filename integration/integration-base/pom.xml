@@ -10,17 +10,11 @@
     <dependencies>
         <dependency>
             <groupId>com.clemble.casino.client</groupId>
-            <artifactId>client-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.client</groupId>
             <artifactId>client-android</artifactId>
             <exclusions>
                 <exclusion>
-                    <artifactId>
-                        spring-android-rest-template
-                    </artifactId>
                     <groupId>org.springframework.android</groupId>
+                    <artifactId>spring-android-rest-template</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -31,15 +25,6 @@
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>payment-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>

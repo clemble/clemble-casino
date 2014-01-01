@@ -7,13 +7,13 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
 public class GameEndPresenceAspectFactory implements GameAspectFactory<GameEndedEvent<?>> {
 
     final private GameEndPresenceAspect endPresenceAspect;
 
-    public GameEndPresenceAspectFactory(PlayerPresenceServerService presenceService) {
+    public GameEndPresenceAspectFactory(ServerPlayerPresenceService presenceService) {
         this.endPresenceAspect = new GameEndPresenceAspect(presenceService);
     }
 

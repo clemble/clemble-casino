@@ -11,12 +11,12 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
-public class RestPaymentTransactionServerService implements PaymentTransactionServerService {
+public class RestServerPaymentTransactionService implements ServerPaymentTransactionService {
 
     final private RestTemplate restTemplate;
     final private ServerRegistry paymentServerRegistry;
 
-    public RestPaymentTransactionServerService(ServerRegistry serverRegistryService, RestTemplate restTemplate) {
+    public RestServerPaymentTransactionService(ServerRegistry serverRegistryService, RestTemplate restTemplate) {
         this.paymentServerRegistry = checkNotNull(serverRegistryService);
         this.restTemplate = checkNotNull(restTemplate);
     }

@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.service.PlayerPresenceService;
-import com.clemble.casino.server.player.presence.PlayerPresenceServerService;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.player.PlayerWebMapping;
 
 @Controller
 public class PlayerPresenceController implements PlayerPresenceService, ExternalController {
 
-    final private PlayerPresenceServerService presenceServerService;
+    final private ServerPlayerPresenceService presenceServerService;
 
-    public PlayerPresenceController(PlayerPresenceServerService playerPresenceServerService) {
+    public PlayerPresenceController(ServerPlayerPresenceService playerPresenceServerService) {
         this.presenceServerService = checkNotNull(playerPresenceServerService);
     }
 

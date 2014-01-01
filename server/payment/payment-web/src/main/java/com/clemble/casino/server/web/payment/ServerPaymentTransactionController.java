@@ -18,19 +18,19 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
 @Controller
-public class PaymentTransactionController implements PaymentTransactionServerService, ExternalController {
+public class ServerPaymentTransactionController implements ServerPaymentTransactionService, ExternalController {
 
-    final private PaymentTransactionServerService paymentTransactionService;
+    final private ServerPaymentTransactionService paymentTransactionService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PaymentTransactionController(final PaymentTransactionRepository paymentTransactionRepository,
-            final PaymentTransactionServerService paymentTransactionService) {
+    public ServerPaymentTransactionController(final PaymentTransactionRepository paymentTransactionRepository,
+            final ServerPaymentTransactionService paymentTransactionService) {
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
     }

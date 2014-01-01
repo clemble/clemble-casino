@@ -1,10 +1,12 @@
 package com.clemble.casino.integration.game;
 
 import java.io.Closeable;
+import java.util.Collection;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionAware;
+import com.clemble.casino.game.GameSessionAwareEvent;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameConstruction;
@@ -23,6 +25,8 @@ public interface GameSessionPlayer<State extends GameState> extends GameSessionA
     public boolean isAlive();
 
     public void syncWith(GameSessionPlayer<State> anotherState);
+
+    public Collection<GameSessionAwareEvent> getEvents();
 
     public void waitForEnd();
 

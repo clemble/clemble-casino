@@ -3,8 +3,8 @@ package com.clemble.casino.server.web.player.registration;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.player.registration.ProfileRegistrationService;
-import com.clemble.casino.server.player.registration.ProfileRegistrationServiceImpl;
+import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
+import com.clemble.casino.server.player.registration.BasicServerProfileRegistrationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,11 +20,11 @@ import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.player.PlayerWebMapping;
 
 @Controller
-public class ProfileRegistrationController implements ProfileRegistrationService, ExternalController {
+public class ServerProfileRegistrationController implements ServerProfileRegistrationService, ExternalController {
 
-    final private ProfileRegistrationServiceImpl registrationService;
+    final private BasicServerProfileRegistrationService registrationService;
 
-    public ProfileRegistrationController(final ProfileRegistrationServiceImpl playerProfileRegistrationServerService) {
+    public ServerProfileRegistrationController(final BasicServerProfileRegistrationService playerProfileRegistrationServerService) {
         this.registrationService = checkNotNull(playerProfileRegistrationServerService);
     }
 

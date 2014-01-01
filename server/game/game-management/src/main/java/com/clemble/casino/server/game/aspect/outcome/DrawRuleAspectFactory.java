@@ -9,7 +9,7 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
-import com.clemble.casino.server.payment.PaymentTransactionServerService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 /**
  * Created by mavarazy on 23/12/13.
@@ -17,9 +17,9 @@ import com.clemble.casino.server.payment.PaymentTransactionServerService;
 public class DrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>> {
 
     // TODO enable caching for DrawRule
-    final private PaymentTransactionServerService transactionService;
+    final private ServerPaymentTransactionService transactionService;
 
-    public DrawRuleAspectFactory(PaymentTransactionServerService transactionService) {
+    public DrawRuleAspectFactory(ServerPaymentTransactionService transactionService) {
         this.transactionService = transactionService;
     }
 

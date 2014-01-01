@@ -13,14 +13,14 @@ import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 
-public class ProfileRegistrationServiceImpl implements ProfileRegistrationService {
+public class BasicServerProfileRegistrationService implements ServerProfileRegistrationService {
 
     final private PlayerProfileRepository playerProfileRepository;
     final private SocialConnectionDataAdapter socialConnectionDataAdapter;
     final private PlayerSocialNetworkRepository socialNetworkRepository;
     final private ClembleCasinoValidationService validationService;
 
-    public ProfileRegistrationServiceImpl(final ClembleCasinoValidationService validationService,
+    public BasicServerProfileRegistrationService(final ClembleCasinoValidationService validationService,
                                             final PlayerProfileRepository playerProfileRepository,
                                             final SocialConnectionDataAdapter socialConnectionDataAdapter,
                                             final PlayerSocialNetworkRepository socialNetworkRepository) {
