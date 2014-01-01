@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.clemble.casino.android.AndroidCasinoRegistrationTemplate;
 import com.clemble.casino.android.player.AndroidPlayerRegistrationService;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
-import com.clemble.casino.client.error.ClembleCasinoErrorHandler;
+import com.clemble.casino.client.error.ClembleCasinoResponseErrorHandler;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
@@ -70,7 +70,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
             messageConverters.add(jackson2HttpMessageConverter);
 
             restTemplate.setMessageConverters(messageConverters);
-            restTemplate.setErrorHandler(new ClembleCasinoErrorHandler(objectMapper));
+            restTemplate.setErrorHandler(new ClembleCasinoResponseErrorHandler(objectMapper));
             return restTemplate;
         }
 
