@@ -20,10 +20,11 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
+import com.clemble.casino.player.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.PlayerEnteredEvent;
 import com.clemble.casino.server.event.PlayerLeftEvent;
-import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
+import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class JedisServerPlayerPresenceService implements ServerPlayerPresenceService {
@@ -168,9 +169,9 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
 
     private void notifyStateChange(final PlayerPresence newPresence) {
         // Step 1. Notifying through native Redis mechanisms
-        systemNotificationService.notify(newPresence.getPlayer(), new PlayerPresenceChangedEvent(newPresence));
+        systemNotificationService.notify(newPresence.getPlayer(), new SystemPlayerPresenceChangedEvent(newPresence));
         // Step 2. Notifying through native Rabbit mechanisms
-        presenceNotification.notify(newPresence.getPlayer(), newPresence);
+        presenceNotification.notify(newPresence.getPlayer(), new PlayerPresenceChangedEvent(newPresence));
     }
 
 }

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes(value = {
         @JsonSubTypes.Type(name = "entered", value = PlayerEnteredEvent.class),
         @JsonSubTypes.Type(name = "left", value = PlayerLeftEvent.class),
-        @JsonSubTypes.Type(name = "presenceChanged", value = PlayerPresenceChangedEvent.class)
+        @JsonSubTypes.Type(name = "presenceChanged", value = SystemPlayerPresenceChangedEvent.class)
 })
 public interface SystemEvent extends Event {
 

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
+import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
@@ -38,7 +38,7 @@ public class AvailabilityGameInitiatorManager implements GameInitiatorManager {
 
                 @Override
                 public void onEvent(String player, SystemEvent event) {
-                    if (event instanceof PlayerPresenceChangedEvent) {
+                    if (event instanceof SystemPlayerPresenceChangedEvent) {
                         if (initiatorService.initiate(initiation))
                             playerPresenceService.unsubscribe(participants, this);
                     }

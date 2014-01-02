@@ -3,6 +3,7 @@ package com.clemble.casino.server.web.game.session;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.ExternalController;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.MadeMove;
+import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
@@ -47,7 +49,7 @@ public class GameActionController<State extends GameState> implements GameAction
     @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS_ACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody State process(@PathVariable("game") Game game, @PathVariable("session") String session, @RequestBody GameAction move) {
+    public @ResponseBody GameManagementEvent process(@PathVariable("game") Game game, @PathVariable("session") String session, @RequestBody GameAction move) {
         // Step 1. Retrieving associated table
         return sessionProcessor.process(new GameSessionKey(game, session), move);
     }

@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.server.repository.player.CouchbasePlayerProfileRepository;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
+import com.clemble.casino.server.spring.Neo4JSpringConfiguration;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.CouchbaseSpringConfiguration;
-import com.clemble.casino.server.spring.common.Neo4JSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.couchbase.client.CouchbaseClient;
 import com.fasterxml.jackson.databind.ObjectMapper;

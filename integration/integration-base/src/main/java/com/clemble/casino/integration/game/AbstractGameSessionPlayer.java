@@ -4,6 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.Closeable;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,6 +21,7 @@ import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStateManagementEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameSpecification;
@@ -138,7 +140,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    public Collection<GameSessionAwareEvent> getEvents(){
+    public List<GameSessionAwareEvent> getEvents(){
         return eventAccumulator.toList();
     }
 
@@ -224,8 +226,11 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void perform(GameAction gameAction) {
-        setState((State) player.gameActionOperations(construction.getSession()).process(gameAction));
+        GameManagementEvent managementEvent = player.gameActionOperations(construction.getSession()).process(gameAction);
+        if(managementEvent instanceof GameStateManagementEvent)
+            setState(((GameStateManagementEvent<State>) managementEvent).getState());
     }
 
     abstract public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameAction clientEvent);

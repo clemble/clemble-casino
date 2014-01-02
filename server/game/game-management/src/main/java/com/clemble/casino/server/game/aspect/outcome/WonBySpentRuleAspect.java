@@ -40,20 +40,22 @@ public class WonBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
             Currency currency = specification.getPrice().getCurrency();
-            PaymentTransaction paymentTransaction = new PaymentTransaction()
+            PaymentTransaction transaction = new PaymentTransaction()
                     .setTransactionKey(event.getSession().toPaymentTransactionKey())
                     .setTransactionDate(new Date());
             for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();
                 if (!playerContext.getPlayer().equals(winnerId)) {
                     Money spent = Money.create(currency, playerAccount.getSpent());
-                    paymentTransaction
+                    transaction
                             .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), spent, Operation.Credit))
                             .addPaymentOperation(new PaymentOperation(winnerId, spent, Operation.Debit));
                 }
             }
             // Step 3. Processing payment transaction
-            transactionService.process(paymentTransaction);
+            transactionService.process(transaction);
+            // Step 4. Specifying transaction in response
+            event.setTransaction(transaction);
         }
     }
 

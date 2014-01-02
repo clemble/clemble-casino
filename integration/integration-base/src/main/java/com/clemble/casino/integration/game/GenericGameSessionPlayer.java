@@ -2,7 +2,7 @@ package com.clemble.casino.integration.game;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.event.Event;
@@ -128,7 +128,7 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
-    public Collection<GameSessionAwareEvent> getEvents() {
+    public List<GameSessionAwareEvent> getEvents() {
         return actualPlayer.getEvents();
     }
 

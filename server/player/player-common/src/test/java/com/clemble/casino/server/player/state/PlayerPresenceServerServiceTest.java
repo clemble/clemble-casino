@@ -28,7 +28,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.event.PlayerPresenceChangedEvent;
+import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
@@ -216,7 +216,7 @@ public class PlayerPresenceServerServiceTest {
         }
     }
 
-    private class PlayerListener implements SystemEventListener<PlayerPresenceChangedEvent> {
+    private class PlayerListener implements SystemEventListener<SystemPlayerPresenceChangedEvent> {
         final public CountDownLatch countDownLatch;
         final public ArrayBlockingQueue<Entry<String, Presence>> calls;
 
@@ -226,7 +226,7 @@ public class PlayerPresenceServerServiceTest {
         }
 
         @Override
-        public void onEvent(String player, PlayerPresenceChangedEvent state) {
+        public void onEvent(String player, SystemPlayerPresenceChangedEvent state) {
             try {
                 calls.put(new ImmutablePair<String, Presence>(player, state.getPresence()));
             } catch (Throwable throwable) {

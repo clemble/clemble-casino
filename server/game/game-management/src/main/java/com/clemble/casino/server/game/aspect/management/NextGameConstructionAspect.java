@@ -3,8 +3,6 @@ package com.clemble.casino.server.game.aspect.management;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.core.Ordered;
-
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerRole;
 import com.clemble.casino.game.GameSessionKey;

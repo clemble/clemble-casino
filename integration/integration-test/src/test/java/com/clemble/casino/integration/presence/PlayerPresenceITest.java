@@ -15,7 +15,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.integration.game.GameSessionPlayer;
@@ -23,6 +22,7 @@ import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.player.PlayerPresence;
+import com.clemble.casino.player.PlayerPresenceChangedEvent;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -75,16 +75,16 @@ public class PlayerPresenceITest {
             assertEquals(C.presenceOperations().getPresence(), C.presenceOperations().getPresence(C.getPlayer()));
             // Step 4. Listening for presence updates from B and C
             final BlockingQueue<PlayerPresence> BtoApresence = new ArrayBlockingQueue<>(3);
-            A.presenceOperations().subscribe(B.getPlayer(), new EventListener<PlayerPresence>() {
+            A.presenceOperations().subscribe(B.getPlayer(), new EventListener<PlayerPresenceChangedEvent>() {
                 @Override
-                public void onEvent(PlayerPresence event) {
+                public void onEvent(PlayerPresenceChangedEvent event) {
                     BtoApresence.add(event);
                 }
             });
             final BlockingQueue<PlayerPresence> CtoApresence = new ArrayBlockingQueue<>(5);
-            A.presenceOperations().subscribe(C.getPlayer(), new EventListener<PlayerPresence>() {
+            A.presenceOperations().subscribe(C.getPlayer(), new EventListener<PlayerPresenceChangedEvent>() {
                 @Override
-                public void onEvent(PlayerPresence event) {
+                public void onEvent(PlayerPresenceChangedEvent event) {
                     CtoApresence.add((PlayerPresence) event);
                 }
             });

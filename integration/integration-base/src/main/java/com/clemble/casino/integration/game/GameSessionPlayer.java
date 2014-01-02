@@ -2,6 +2,7 @@ package com.clemble.casino.integration.game;
 
 import java.io.Closeable;
 import java.util.Collection;
+import java.util.List;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.event.Event;
@@ -26,7 +27,7 @@ public interface GameSessionPlayer<State extends GameState> extends GameSessionA
 
     public void syncWith(GameSessionPlayer<State> anotherState);
 
-    public Collection<GameSessionAwareEvent> getEvents();
+    public List<GameSessionAwareEvent> getEvents();
 
     public void waitForEnd();
 

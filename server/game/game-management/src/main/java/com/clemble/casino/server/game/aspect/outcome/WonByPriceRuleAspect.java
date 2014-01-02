@@ -40,18 +40,20 @@ public class WonByPriceRuleAspect extends BasicGameAspect<GameEndedEvent<?>>{
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             Money price = specification.getPrice();
             // Step 2. Generating payment transaction
-            PaymentTransaction paymentTransaction = new PaymentTransaction()
+            PaymentTransaction transaction = new PaymentTransaction()
                     .setTransactionKey(event.getSession().toPaymentTransactionKey())
                     .setTransactionDate(new Date());
             for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
                 if (!playerContext.getPlayer().equals(winnerId)) {
-                    paymentTransaction
+                    transaction
                         .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), price, Operation.Credit))
                         .addPaymentOperation(new PaymentOperation(winnerId, price, Operation.Debit));
                 }
             }
             // Step 3. Processing payment transaction
-            transactionService.process(paymentTransaction);
+            transactionService.process(transaction);
+            // Step 4. Specifying transaction in response
+            event.setTransaction(transaction);
         }
     }
 

@@ -2,8 +2,6 @@ package com.clemble.casino.server.game.aspect.outcome;
 
 import java.util.Date;
 
-import org.springframework.core.Ordered;
-
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
@@ -51,6 +49,8 @@ public class DrawByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
             }
             // Step 3. Processing payment transaction
             transactionService.process(paymentTransaction);
+            // Step 4. Specifying payment transaction
+            event.setTransaction(paymentTransaction);
         }
     }
 

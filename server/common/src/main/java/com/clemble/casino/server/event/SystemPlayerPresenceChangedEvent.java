@@ -6,7 +6,7 @@ import com.clemble.casino.player.Presence;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PlayerPresenceChangedEvent implements SystemEvent, PlayerAware {
+public class SystemPlayerPresenceChangedEvent implements SystemEvent, PlayerAware {
 
     /**
      * Generated 13/12/13
@@ -16,12 +16,12 @@ public class PlayerPresenceChangedEvent implements SystemEvent, PlayerAware {
     final private String player;
     final private Presence presence;
 
-    public PlayerPresenceChangedEvent(PlayerPresence playerPresence) {
+    public SystemPlayerPresenceChangedEvent(PlayerPresence playerPresence) {
         this(playerPresence.getPlayer(), playerPresence.getPresence());
     }
 
     @JsonCreator
-    public PlayerPresenceChangedEvent(@JsonProperty("player") String player, @JsonProperty("presence") Presence presence) {
+    public SystemPlayerPresenceChangedEvent(@JsonProperty("player") String player, @JsonProperty("presence") Presence presence) {
         this.player = player;
         this.presence = presence;
     }
@@ -51,7 +51,7 @@ public class PlayerPresenceChangedEvent implements SystemEvent, PlayerAware {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerPresenceChangedEvent other = (PlayerPresenceChangedEvent) obj;
+        SystemPlayerPresenceChangedEvent other = (SystemPlayerPresenceChangedEvent) obj;
         if (player == null) {
             if (other.player != null)
                 return false;

@@ -29,8 +29,7 @@ public class DrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?
         case owned:
             return new DrawByOwnedRuleAspect(transactionService, initiation.getSpecification());
         case spent:
-            // No action need to be taken
-            return null;
+            return DrawBySpentRuleAspect.INSTANCE;
         default:
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         }
