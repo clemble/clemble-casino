@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.OrderComparator;
@@ -16,12 +17,13 @@ import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
+import com.clemble.casino.game.action.management.GameManagementAction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
-public class GameProcessorFactory<State extends GameState> implements ApplicationContextAware {
+public class GameProcessorFactory<State extends GameState> implements BeanPostProcessor, ApplicationContextAware {
 
     final private List<GameAspectFactory> aspectFactories = new ArrayList<>();
 
@@ -62,6 +64,20 @@ public class GameProcessorFactory<State extends GameState> implements Applicatio
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         aspectFactories.addAll(applicationContext.getBeansOfType(GameAspectFactory.class).values());
         Collections.sort(aspectFactories, OrderComparator.INSTANCE);
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if (bean instanceof GameAspectFactory) {
+            aspectFactories.add((GameAspectFactory) bean);
+            Collections.sort(aspectFactories, OrderComparator.INSTANCE);
+        }
+        return bean;
     }
 
 }

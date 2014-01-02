@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.clemble.casino.client.error.ClembleCasinoResponseErrorHandler;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.error.ClembleCasinoFailureDescription;
 import com.clemble.casino.server.error.ClembleCasinoServerException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,13 +42,17 @@ public class ClembleCasinoHandlerExceptionResolver implements HandlerExceptionRe
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         LOGGER.error("Error while processing {} with {}", request, handler);
         LOGGER.error("Log trace ", ex);
+        Collection<ClembleCasinoError> errors = new ArrayList<>();
         ClembleCasinoFailureDescription clembleFailure = null;
         if (ex instanceof ClembleCasinoException) {
             clembleFailure = ((ClembleCasinoException) ex).getFailureDescription();
+            for(ClembleCasinoFailure failure: clembleFailure.getProblems())
+                errors.add(failure.getError());
         } else if(ex instanceof ClembleCasinoServerException) {
             clembleFailure = ((ClembleCasinoServerException) ex).getCasinoException().getFailureDescription();
+            for(ClembleCasinoFailure failure: clembleFailure.getProblems())
+                errors.add(failure.getError());
         } else if (ex instanceof ServletRequestBindingException) {
-            Collection<ClembleCasinoError> errors = new ArrayList<ClembleCasinoError>();
             ServletRequestBindingException bindingException = (ServletRequestBindingException) ex;
             if (!bindingException.getMessage().contains("playerId")) {
                 errors.add(ClembleCasinoError.BadRequestPlayerIdHeaderMissing);
@@ -63,6 +69,9 @@ public class ClembleCasinoHandlerExceptionResolver implements HandlerExceptionRe
 
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setHeader("Content-Type", "application/json");
+        for(ClembleCasinoError error: errors) {
+            response.setHeader(ClembleCasinoResponseErrorHandler.ERROR_CODES_HEADER, error.getCode());
+        }
         clembleFailure = clembleFailure == null ? ClembleCasinoFailureDescription.SERVER_ERROR : clembleFailure;
 
         try {

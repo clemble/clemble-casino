@@ -85,9 +85,9 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         return new GameEndPresenceAspectFactory(presenceService);
     }
 
-    @Bean
-    @Autowired
-    public GameAspectFactory<GameEndedEvent<?>> gameManagementAspectFactory(GameIdGenerator idGenerator, GameInitiatorService initiatorService, GameConstructionRepository constructionRepository) {
+//    @Bean
+//    @Autowired
+    public GameAspectFactory<GameEndedEvent<?>> nextGameConstructionAspect(GameIdGenerator idGenerator, GameInitiatorService initiatorService, GameConstructionRepository constructionRepository) {
         return new NextGameConstructionAspectFactory(idGenerator, initiatorService, constructionRepository);
     }
     
