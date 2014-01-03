@@ -11,6 +11,7 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.bonus.PaymentBonusKey;
 import com.clemble.casino.payment.bonus.PaymentBonusMarker;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
+import com.clemble.casino.payment.event.BonusPaymentEvent;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
@@ -69,6 +70,7 @@ public class DailyBonusService implements BonusService<PlayerEnteredEvent> {
                 // Step 5. Processing new transaction and updating bonus marker
                 transactionServerService.process(transaction);
                 // Step 6. Sending bonus notification
+                notificationService.notify(new BonusPaymentEvent(player, bonusAmount, BONUS_SOURCE));
             }
         }
     }

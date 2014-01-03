@@ -16,6 +16,10 @@
                     <groupId>org.springframework.android</groupId>
                     <artifactId>spring-android-rest-template</artifactId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>logback-android-classic</artifactId>
+                    <groupId>com.github.tony19</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>

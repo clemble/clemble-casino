@@ -22,6 +22,7 @@ public class PresenceListenerWrapper implements MessageListener {
     final private RedisSerializer<String> stringRedisSerializer;
     final private SystemEventListener<SystemEvent> playerStateListener;
 
+    @SuppressWarnings("unchecked")
     public PresenceListenerWrapper(RedisSerializer<String> stringRedisSerializer, SystemEventListener<? extends SystemEvent> playerStateListener, ObjectMapper objectMapper) {
         this.stringRedisSerializer = checkNotNull(stringRedisSerializer);
         this.playerStateListener = (SystemEventListener<SystemEvent>) checkNotNull(playerStateListener);

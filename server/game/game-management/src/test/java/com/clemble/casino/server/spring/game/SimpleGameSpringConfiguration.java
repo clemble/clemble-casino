@@ -22,6 +22,7 @@ import com.clemble.casino.server.repository.game.GameSessionRepository;
 @Ignore
 @Configuration
 @Import(GameManagementSpringConfiguration.class)
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SimpleGameSpringConfiguration {
 
     @Bean
@@ -33,15 +34,16 @@ public class SimpleGameSpringConfiguration {
 
     @Bean
     @Autowired
-    public GameCacheService gameCacheService(GameSessionRepository sessionRepository, GameProcessorFactory processorFactory, GameStateFactory stateFactory) {
+    public GameCacheService<?> gameCacheService(GameSessionRepository<?> sessionRepository, GameProcessorFactory processorFactory, GameStateFactory stateFactory) {
         return new GameCacheService<>(sessionRepository, processorFactory, stateFactory);
     }
 
     @Bean
-    public GameProcessorFactory processorFactory() {
+    public GameProcessorFactory<?> processorFactory() {
         return new GameProcessorFactory<>();
     }
 
+    
     @Bean
     @Autowired
     public GameSessionFactory gameSessionFactory(GameStateFactory stateFactory, GameSessionRepository sessionRepository) {

@@ -153,7 +153,6 @@ public class PlayerProfileOperationsITest {
 
     @Test
     @Ignore
-    // TODO Test security
     public void testProfileWriteByAnother() {
         PlayerProfile playerProfile = randomProfile();
         playerProfile.setPlayer(RandomStringUtils.random(5));
@@ -168,7 +167,8 @@ public class PlayerProfileOperationsITest {
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotProfileOwner));
 
-        // TODO restore Assert.assertEquals(newProfile, playerProfileOperations.put(anotherPlayer, player.getPlayer(), newProfile));
+        newProfile.setCountry("IL");
+        anotherPlayer.profileOperations().updatePlayerProfile(newProfile);
     }
 
     @Test
@@ -183,12 +183,9 @@ public class PlayerProfileOperationsITest {
         playerProfile.setPlayer(player.getPlayer());
         Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
 
-        PlayerProfile newProfile = null;
+        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromPossibleErrors(ClembleCasinoError.PlayerProfileInvalid, ClembleCasinoError.ServerError));
 
-        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromPossibleErrors(ClembleCasinoError.PlayerProfileInvalid,
-                ClembleCasinoError.ServerError));
-
-        // TODO restore Assert.assertEquals(newProfile, playerProfileOperations.put(player, player.getPlayer(), newProfile));
+        player.profileOperations().updatePlayerProfile(null);
     }
 
     @Test

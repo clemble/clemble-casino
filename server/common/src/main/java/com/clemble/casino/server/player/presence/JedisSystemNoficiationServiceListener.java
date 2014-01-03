@@ -85,8 +85,9 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onMessage(String player, String serializedEvent) {
-        Collection<SystemEventListener<? extends SystemEvent>> playerPresenceListeners = subscribers.get(player);
+        Collection<SystemEventListener<? extends SystemEvent>> channelListeners = subscribers.get(player);
         SystemEvent event;
         try {
             event = objectMapper.readValue(serializedEvent, SystemEvent.class);
@@ -94,9 +95,9 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
             LOG.error("Failed to read \"{}\"", serializedEvent);
             throw new RuntimeException(e); // TODO change
         }
-        if (playerPresenceListeners != null) {
-            for(SystemEventListener notificationListener: playerPresenceListeners) {
-                notificationListener.onEvent(player, event);
+        if (channelListeners != null && event != null) {
+            for(SystemEventListener<? extends SystemEvent> channelListener: channelListeners) {
+                ((SystemEventListener<SystemEvent>) channelListener).onEvent(player, event);
             }
         }
     }
@@ -127,10 +128,10 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
         LOG.info("Starting listener");
         Jedis jedis = jedisPool.getResource();
         try {
-            String[] subscriptions = subscribers.keySet().toArray(new String[0]);
-            if(subscriptions.length > 0) {
+            Collection<String> subscriptions = subscribers.keySet();
+            if(subscriptions.size() > 0) {
                 LOG.info("Listening for registered subscribers {}", subscriptions);
-                jedis.subscribe(this, subscriptions);
+                jedis.subscribe(this, subscriptions.toArray(new String[0]));
             } else {
                 LOG.info("Listening for registered subscribers NULL");
                 jedis.subscribe(this, "null");

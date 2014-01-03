@@ -8,20 +8,16 @@ import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.MadeMove;
-import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameProcessor;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.GameStateFactory;
-import com.clemble.casino.server.repository.game.GameConstructionRepository;
 
 abstract public class AbstractGameStateFactory<State extends GameState> implements GameStateFactory<State> {
 
     final private GameProcessorFactory<State> processorFactory;
-    final private GameConstructionRepository constructionRepository;
 
-    protected AbstractGameStateFactory(GameConstructionRepository constructionRepository, GameProcessorFactory<State> processorFactory) {
-        this.constructionRepository = checkNotNull(constructionRepository);
+    protected AbstractGameStateFactory(GameProcessorFactory<State> processorFactory) {
         this.processorFactory = checkNotNull(processorFactory);
     }
 
@@ -31,7 +27,6 @@ abstract public class AbstractGameStateFactory<State extends GameState> implemen
         if (session == null || session.getSpecification() == null) {
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameStateReCreationFailure);
         }
-        GameConstruction construction = constructionRepository.findOne(session.getSession());
         // Step 2. Re creating state
         GameInitiation initiation = session.toInitiation();
         // TODO define politics for restart, all time track is lost here
