@@ -23,9 +23,12 @@ import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.game.service.GameSpecificationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.game.SimpleGameSessionPlayerFactory;
+import com.clemble.casino.integration.game.construction.SimpleSyncGameScenarios;
+import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.game.construction.SimplePlayerScenarios;
+import com.clemble.casino.integration.game.construction.SyncGameScenarios;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
@@ -76,6 +79,11 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
     }
 
     @Bean
+    public SyncGameScenarios syncGameScenarios(GameScenarios gameScenarios) {
+        return new SimpleSyncGameScenarios(gameScenarios);
+    }
+
+    @Bean
     public SimpleGameSessionPlayerFactory<? extends GameState> sessionPlayerFactory() {
         return new SimpleGameSessionPlayerFactory<GameState>();
     }
@@ -93,11 +101,11 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
 
         @Bean
         public EventListenerOperationsFactory playerListenerOperations() {
-            if (new Random().nextBoolean()) {
+//            if (new Random().nextBoolean()) {
                 return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
-            } else {
-                return new EventListenerOperationsFactory.StompEventListenerServiceFactory();
-            }
+//            } else {
+//                return new EventListenerOperationsFactory.StompEventListenerServiceFactory();
+//            }
         }
 
         @Bean

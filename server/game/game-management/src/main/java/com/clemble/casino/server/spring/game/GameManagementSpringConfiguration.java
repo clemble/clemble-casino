@@ -112,9 +112,10 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Configuration
     public static class GameTimeAspectConfiguration {
 
-        @Bean
-        public GameTimeAspectFactory gameTimeAspectFactory() {
-            return new GameTimeAspectFactory(eventTaskExecutor());
+//        @Bean
+//        @Autowired
+        public GameTimeAspectFactory gameTimeAspectFactory(GameEventTaskExecutor eventTaskExecutor) {
+            return new GameTimeAspectFactory(eventTaskExecutor);
         }
 
         @Bean

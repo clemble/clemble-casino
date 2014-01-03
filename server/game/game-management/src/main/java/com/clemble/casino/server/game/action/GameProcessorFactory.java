@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
@@ -35,6 +37,8 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
 
     public static class AggregatedGameProcessor<State extends GameState> implements GameProcessor<State> {
 
+        final private static Logger LOG = LoggerFactory.getLogger(AggregatedGameProcessor.class);
+
         final private GameAspect<?>[] listenerArray;
 
         public AggregatedGameProcessor(Collection<GameAspect<?>> listeners) {
@@ -44,11 +48,11 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
         @Override
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public GameManagementEvent process(GameSession<State> session, GameAction move) {
+            LOG.debug("Processing {}", move);
             State state = session.getState();
             // Step 1. Before move notification
-            for (GameAspect listener : listenerArray) {
+            for (GameAspect listener : listenerArray)
                 listener.onEvent(move);
-            }
             // Step 2. Processing in core
             GameManagementEvent event = state.process(session, move);
             // Step 3 After move notification

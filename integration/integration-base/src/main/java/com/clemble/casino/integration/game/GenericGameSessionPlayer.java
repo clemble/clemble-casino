@@ -2,6 +2,7 @@ package com.clemble.casino.integration.game;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -130,6 +131,16 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     @Override
     public List<GameSessionAwareEvent> getEvents() {
         return actualPlayer.getEvents();
+    }
+
+    @Override
+    public void addDependent(GameSessionPlayer<State> dependent) {
+        actualPlayer.addDependent(dependent);
+    }
+
+    @Override
+    public void addDependent(Collection<GameSessionPlayer<State>> dependent) {
+        actualPlayer.addDependent(dependent);
     }
 
 }

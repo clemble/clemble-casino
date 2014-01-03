@@ -4,6 +4,9 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.event.NotificationMapping;
 import com.clemble.casino.game.GameSessionKey;
@@ -14,6 +17,8 @@ import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class PublicNotificationRuleAspect extends BasicGameAspect<GameManagementEvent> {
+
+    final private Logger LOG = LoggerFactory.getLogger(PublicNotificationRuleAspect.class);
 
     final private String tableChannel;
     final private GameSessionKey sessionKey;
@@ -31,9 +36,11 @@ public class PublicNotificationRuleAspect extends BasicGameAspect<GameManagement
     @Override
     public void doEvent(GameManagementEvent event) {
         // Step 1. Making public notification
-        notificationService.notify(tableChannel, event);
+        boolean tableNotified = notificationService.notify(tableChannel, event);
         // Step 2. Sending to exact participants
-        notificationService.notifyAll(participants, event);
+        boolean playersNotified = notificationService.notifyAll(participants, event);
+        // Step 3. Loging results
+        LOG.debug("Published {} table({}) & players ({}) ", event, tableNotified, playersNotified);
     }
 
 }

@@ -3,7 +3,9 @@ package com.clemble.casino.integration.game;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.io.Closeable;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,6 +22,7 @@ import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStateManagementEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameSpecification;
@@ -32,14 +35,16 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
      */
     private static final long serialVersionUID = -8412015352988124245L;
 
+    final private Collection<GameSessionPlayer<State>> dependents = new LinkedBlockingQueue<GameSessionPlayer<State>>();
+
     final private ClembleCasinoOperations player;
     final private GameConstruction construction;
-    final private GameActionOperations<State> actionOperations; 
+    final private GameActionOperations<State> actionOperations;
     final private Object versionLock = new Object();
     final private EventAccumulator<GameSessionAwareEvent> eventAccumulator = new EventAccumulator<GameSessionAwareEvent>();
     final private AtomicBoolean keepAlive = new AtomicBoolean(true);
     final private AtomicReference<State> currentState = new AtomicReference<>();
-    final private AtomicReference<GameOutcome> isAlive = new AtomicReference<>();
+    final private AtomicReference<GameOutcome> outcome = new AtomicReference<>();
 
     public AbstractGameSessionPlayer(final ClembleCasinoOperations player, GameConstruction construction) {
         this.construction = checkNotNull(construction);
@@ -52,7 +57,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    public String getPlayer(){
+    public String getPlayer() {
         return player.getPlayer();
     }
 
@@ -84,7 +89,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     @Override
     public void onEvent(GameSessionAwareEvent event) {
         if (event instanceof GameEndedEvent<?>)
-            isAlive.set(((GameEndedEvent<?>) event).getOutcome());
+            outcome.set(((GameEndedEvent<?>) event).getOutcome());
         if (event instanceof GameStateManagementEvent)
             setState(((GameStateManagementEvent<State>) event).getState());
     }
@@ -92,7 +97,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     final private void setState(State newState) {
         synchronized (versionLock) {
             if (newState != null) {
-                if (this.currentState.get() == null || this.currentState.get().getVersion() < newState.getVersion()) {
+                if (getState() == null || getState().getVersion() < newState.getVersion()) {
                     System.out.println("updating >> " + this.player.getPlayer() + " >> " + this.construction.getSession() + " >> " + newState.getVersion());
                     this.currentState.set(newState);
                     this.versionLock.notifyAll();
@@ -103,30 +108,29 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     final public boolean isAlive() {
-        return keepAlive.get() && isAlive.get() == null && currentState.get() != null;
+        return keepAlive.get() && outcome.get() == null && getState() != null;
     }
 
     @Override
     final public int getVersion() {
-        return this.currentState.get() == null ? -1 : this.currentState.get().getVersion();
+        return getState() == null ? -1 : getState().getVersion();
     }
 
     @Override
     final public void waitVersion(int expectedVersion) {
-        if (this.currentState.get() != null && this.currentState.get().getVersion() >= expectedVersion)
+        if (getState() != null && getState().getVersion() >= expectedVersion)
             return;
 
-        if(this.currentState.get() == null)
+        if (getState() == null)
             setState(actionOperations.getState());
 
         synchronized (versionLock) {
-            while (this.currentState.get() != null && this.currentState.get().getVersion() < expectedVersion) {
+            while (isAlive() && getState().getVersion() < expectedVersion) {
                 try {
                     versionLock.wait(15000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                setState(actionOperations.getState());
             }
         }
     }
@@ -137,7 +141,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    public List<GameSessionAwareEvent> getEvents(){
+    public List<GameSessionAwareEvent> getEvents() {
         return eventAccumulator.toList();
     }
 
@@ -145,9 +149,9 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     final public void waitForEnd() {
         long expirationTime = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(15);
         synchronized (versionLock) {
-            while(isAlive.get() == null && expirationTime > System.currentTimeMillis()) {
+            while (isAlive() && expirationTime > System.currentTimeMillis()) {
                 try {
-                    versionLock.wait(TimeUnit.SECONDS.toMillis(15));
+                    versionLock.wait(TimeUnit.SECONDS.toMillis(1));
                 } catch (InterruptedException e) {
                 }
             }
@@ -162,12 +166,12 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     @Override
     final public void waitForStart(long timeout) {
         long expirationTime = timeout > 0 ? System.currentTimeMillis() + timeout : Long.MAX_VALUE;
-        if (currentState.get() == null)
+        if (getState() == null)
             setState(this.actionOperations.getState());
         synchronized (versionLock) {
-            while ((keepAlive.get() && currentState.get() == null) && expirationTime > System.currentTimeMillis()) {
+            while (keepAlive.get() && getState() == null && expirationTime > System.currentTimeMillis()) {
                 try {
-                    if(timeout > 0) {
+                    if (timeout > 0) {
                         versionLock.wait(timeout);
                     } else {
                         versionLock.wait();
@@ -177,7 +181,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
                 }
             }
         }
-        if (currentState.get() == null)
+        if (getState() == null)
             throw new RuntimeException(player.getPlayer() + " " + construction.getSession() + " was not started after " + timeout);
     }
 
@@ -206,6 +210,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
         giveUp();
         // Step 2. Marking for removal
         keepAlive.set(false);
+        // Step 3. Releasing the lock
         synchronized (versionLock) {
             versionLock.notifyAll();
         }
@@ -224,14 +229,29 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     public void perform(GameAction gameAction) {
-        onEvent(player.gameActionOperations(construction.getSession()).process(gameAction));
+        GameManagementEvent managementEvent = player.gameActionOperations(construction.getSession()).process(gameAction);
+        onEvent(managementEvent);
+        for (GameSessionPlayer<State> player : dependents)
+            player.syncWith(this);
     }
 
     abstract public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameAction clientEvent);
 
     @Override
-    public GameOutcome getOutcome(){
-        return isAlive.get();
+    public GameOutcome getOutcome() {
+        return outcome.get();
+    }
+
+    @Override
+    public void addDependent(GameSessionPlayer<State> player) {
+        if (player != null && player != this)
+            dependents.add(player);
+    }
+
+    @Override
+    public void addDependent(Collection<GameSessionPlayer<State>> players) {
+        for (GameSessionPlayer<State> player : players)
+            addDependent(player);
     }
 
 }

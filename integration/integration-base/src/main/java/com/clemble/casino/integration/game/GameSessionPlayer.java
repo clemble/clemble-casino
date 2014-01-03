@@ -53,4 +53,8 @@ public interface GameSessionPlayer<State extends GameState> extends GameSessionA
 
     public void close();
 
+    public void addDependent(GameSessionPlayer<State> dependent);
+
+    public void addDependent(Collection<GameSessionPlayer<State>> dependent);
+
 }

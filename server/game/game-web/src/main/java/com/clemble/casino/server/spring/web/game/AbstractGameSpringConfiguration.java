@@ -1,6 +1,5 @@
 package com.clemble.casino.server.spring.web.game;
 
-import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -15,9 +14,6 @@ import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.GameSessionFactory;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.game.action.GameStateFactory;
-import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
-import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
-import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
 import com.clemble.casino.server.game.cache.GameCacheService;
 import com.clemble.casino.server.game.configuration.GameSpecificationConfigurationManager;
 import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
@@ -61,22 +57,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     public PlayerNotificationService playerNotificationService;
 
     @Autowired
-    @Qualifier("gamePriceAspectFactory")
-    public GamePriceAspectFactory gamePriceAspectFactory;
-
-    @Autowired
-    @Qualifier("gameBetAspectFactory")
-    public BetRuleAspectFactory betAspectFactory;
-
-    @Autowired
-    @Qualifier("gameSecurityAspectFactory")
-    public GameSecurityAspectFactory securityAspectFactory;
-
-    @Autowired
-    @Qualifier("gameTimeAspectFactory")
-    public GameTimeAspectFactory timeAspectFactory;
-
-    @Autowired
     @Qualifier("playerAccountService")
     public PlayerAccountServerService playerAccountService;
 
@@ -114,7 +94,8 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     @Autowired
-    public GameInitiatorService picPacPoeInitiatorService(GameSessionProcessor sessionProcessor, ServerPlayerPresenceService presenceServerService, SystemNotificationServiceListener presenceListenerService) {
+    public GameInitiatorService picPacPoeInitiatorService(GameSessionProcessor<?> sessionProcessor, ServerPlayerPresenceService presenceServerService,
+            SystemNotificationServiceListener presenceListenerService) {
         return new SimpleGameInitiatorService(sessionProcessor, presenceServerService, presenceListenerService);
     }
 
@@ -136,8 +117,8 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     @Autowired
-    public GameSessionProcessor picPacPoeSessionProcessor(GameSessionFactory<?> gameSessionFactory, GameCacheService<?> gameCacheService) {
-        return new GameSessionProcessor(gameSessionFactory, gameCacheService, playerNotificationService);
+    public GameSessionProcessor<State> picPacPoeSessionProcessor(GameSessionFactory<State> gameSessionFactory, GameCacheService<State> gameCacheService) {
+        return new GameSessionProcessor<State>(gameSessionFactory, gameCacheService, playerNotificationService);
     }
 
     @Bean
@@ -147,7 +128,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     @Autowired
-    public GameActionController<State> picPacPoeEngineController(GameSessionProcessor sessionProcessor) {
+    public GameActionController<State> picPacPoeEngineController(GameSessionProcessor<State> sessionProcessor) {
         return new GameActionController<State>(gameSessionRepository, sessionProcessor);
     }
 }
