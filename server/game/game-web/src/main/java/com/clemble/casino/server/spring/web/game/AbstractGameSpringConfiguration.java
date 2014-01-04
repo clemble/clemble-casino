@@ -1,5 +1,8 @@
 package com.clemble.casino.server.spring.web.game;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +38,7 @@ import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.game.options.GameSpecificationController;
 import com.clemble.casino.server.web.game.session.GameActionController;
 import com.clemble.casino.server.web.game.session.GameConstructionController;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
 @Import({ GameManagementSpringConfiguration.class, WebCommonSpringConfiguration.class })
@@ -99,7 +103,9 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
             ServerPlayerPresenceService presenceServerService,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
             SystemNotificationServiceListener presenceListenerService) {
-        return new BasicServerGameInitiationService(sessionProcessor, presenceServerService, notificationService, presenceListenerService);
+        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("Game initiation - %d");
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
+        return new BasicServerGameInitiationService(sessionProcessor, presenceServerService, notificationService, presenceListenerService, executorService);
     }
 
     @Bean

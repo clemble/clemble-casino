@@ -129,6 +129,12 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     }
 
     @Override
+    public void markOffline(Collection<String> players) {
+        for(String player: players)
+            markOffline(player);
+    }
+
+    @Override
     public void markOffline(String player) {
         Jedis jedis = jedisPool.getResource();
         try {

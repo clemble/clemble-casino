@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameInitiatedEvent;
+import com.clemble.casino.game.event.server.GameInitiationCanceledEvent;
 import com.clemble.casino.game.event.server.GameInitiationConfirmedEvent;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.event.SystemEvent;
@@ -26,6 +29,7 @@ import com.clemble.casino.server.player.presence.SystemNotificationServiceListen
 
 public class BasicServerGameInitiationService implements ServerGameInitiationService {
 
+    final static public long CANCEL_TIMEOUT_SECONDS = 10;
     final private Logger LOG = LoggerFactory.getLogger(BasicServerGameInitiationService.class);
 
     final private Map<GameSessionKey, GameInitiation> sessionToInitiation = new ConcurrentHashMap<>();
@@ -34,15 +38,19 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
     final private PlayerNotificationService notificationService;
     final private GameSessionProcessor<?> processor;
 
+    final private ScheduledExecutorService executorService;
+
     final private SystemNotificationServiceListener systemListener;
 
     public BasicServerGameInitiationService(
             GameSessionProcessor<?> processor,
             ServerPlayerPresenceService presenceService,
             PlayerNotificationService notificationService,
-            SystemNotificationServiceListener systemListener) {
+            SystemNotificationServiceListener systemListener,
+            ScheduledExecutorService executorService) {
         this.processor = checkNotNull(processor);
 
+        this.executorService = checkNotNull(executorService);
         this.systemListener = checkNotNull(systemListener);
         this.presenceService = checkNotNull(presenceService);
         this.notificationService = checkNotNull(notificationService);
@@ -75,13 +83,28 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
     }
 
     @Override
-    public void start(GameInitiation initiation) {
+    public void start(final GameInitiation initiation) {
         // Step 1. Sanity check
         if (initiation == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.ServerError);
         if (sessionToInitiation.containsKey(initiation.getSession()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.ServerError);
         // Step 2. Adding to internal cache
+        final GameSessionKey sessionKey = initiation.getSession();
+        executorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                // Step 1. Removing initiation from the list
+                GameInitiation initiation = sessionToInitiation.remove(sessionKey);
+                // Step 2. Sending notification event
+                if (initiation != null) {
+                    notificationService.notifyAll(initiation.getParticipants(), new GameInitiationCanceledEvent(sessionKey, initiation));
+                    Collection<String> offlinePlayers = PlayerAwareUtils.toPlayerList(initiation.getParticipants());
+                    offlinePlayers.removeAll(initiation.getConfirmations());
+                    presenceService.markOffline(offlinePlayers);
+                }
+            }
+        }, CANCEL_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         sessionToInitiation.put(initiation.getSession(), initiation);
         // Step 3. Sending notification to the players, that they need to confirm
         notificationService.notifyAll(initiation.getParticipants(), new GameInitiatedEvent(initiation));

@@ -1,10 +1,12 @@
 package com.clemble.casino.server.game.construct;
 
+import static com.clemble.casino.error.ClembleCasinoError.GameConstructionInsufficientMoney;
+import static com.clemble.casino.error.ClembleCasinoError.GameConstructionInvalidInvitationResponse;
+import static com.clemble.casino.error.ClembleCasinoError.GameConstructionInvalidRequest;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.clemble.casino.error.ClembleCasinoError.*;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
@@ -21,15 +23,20 @@ import com.clemble.casino.server.repository.game.GameConstructionRepository;
 
 public class BasicServerGameConstructionService implements ServerGameConstructionService {
 
-    final private AutomaticConstructionManager automaticConstructionManager;
-    final private AvailabilityGameConstructionManager availabilityConstructionManager;
-
     final private GameIdGenerator gameIdGenerator;
     final private ServerPlayerAccountService playerAccountService;
 
-    public BasicServerGameConstructionService(final GameIdGenerator gameIdGenerator, final ServerPlayerAccountService playerAccountService,
-            final PlayerNotificationService playerNotificationService, final GameConstructionRepository constructionRepository,
-            final ServerGameInitiationService initiatorService, final PlayerLockService playerLockService, final ServerPlayerPresenceService playerStateManager) {
+    final private AutomaticConstructionManager automaticConstructionManager;
+    final private AvailabilityGameConstructionManager availabilityConstructionManager;
+
+    public BasicServerGameConstructionService(
+            final GameIdGenerator gameIdGenerator,
+            final ServerPlayerAccountService playerAccountService,
+            final PlayerNotificationService playerNotificationService,
+            final GameConstructionRepository constructionRepository,
+            final ServerGameInitiationService initiatorService,
+            final PlayerLockService playerLockService,
+            final ServerPlayerPresenceService playerStateManager) {
         this.gameIdGenerator = checkNotNull(gameIdGenerator);
         this.playerAccountService = checkNotNull(playerAccountService);
 
