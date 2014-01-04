@@ -126,10 +126,16 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
         return (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(sessionKey.getGame()).construct(participant, construction);
     }
 
+    @Override
+    public <State extends GameState> GameSessionPlayer<State> construct(GameSessionKey sessionKey, ClembleCasinoOperations player) {
+        // Step 1. Generating GameSessionPlayer
+        return (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(sessionKey.getGame()).construct(player, player.gameConstructionOperations(sessionKey.getGame()).getConstruct(sessionKey.getSession()));
+    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         for(GameSessionPlayerFactory<?> sessionPlayerFactory: applicationContext.getBeansOfType(GameSessionPlayerFactory.class).values())
             gameToSessionPlayerFactory.put(sessionPlayerFactory.getGame(), sessionPlayerFactory);
     }
+
 }

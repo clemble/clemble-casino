@@ -7,7 +7,10 @@ import java.util.Map;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventListenerOperations;
+import com.clemble.casino.client.event.EventSelector;
+import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameActionTemplateFactory;
 import com.clemble.casino.client.game.GameConstructionOperations;
@@ -22,9 +25,11 @@ import com.clemble.casino.client.player.PlayerProfileOperations;
 import com.clemble.casino.client.player.PlayerProfileTemplate;
 import com.clemble.casino.client.player.PlayerSessionOperations;
 import com.clemble.casino.client.player.PlayerSessionTemplate;
+import com.clemble.casino.event.Event;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.event.server.GameInitiatedEvent;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.game.service.GameSpecificationService;
@@ -56,14 +61,16 @@ public class ServerPlayer implements ClembleCasinoOperations {
     final private GameSpecificationService specificationService;
     final private GameConstructionService constructionService;
     final private GameActionService<?> actionService;
-    final private LoadingCache<Game, GameConstructionOperations<?>> gameConstructors = CacheBuilder.newBuilder().build(new CacheLoader<Game, GameConstructionOperations<?>>(){
+    final private LoadingCache<Game, GameConstructionOperations<?>> gameConstructors = CacheBuilder.newBuilder().build(
+            new CacheLoader<Game, GameConstructionOperations<?>>() {
 
-        @Override
-        public GameConstructionOperations<?> load(Game key) throws Exception {
-            return new GameConstructionTemplate<>(player, key, new GameActionTemplateFactory(player, listenerOperations, actionService), constructionService, specificationService, listenerOperations);
-        }
+                @Override
+                public GameConstructionOperations<?> load(Game key) throws Exception {
+                    return new GameConstructionTemplate<>(player, key, new GameActionTemplateFactory(player, listenerOperations, actionService),
+                            constructionService, specificationService, listenerOperations);
+                }
 
-    });
+            });
 
     final private PlayerPresenceOperations playerPresenceOperations;
     final private PlayerConnectionOperations connectionOperations;
@@ -71,19 +78,11 @@ public class ServerPlayer implements ClembleCasinoOperations {
     final private PaymentOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
 
-    public ServerPlayer(
-            final ObjectMapper objectMapper,
-            final PlayerToken playerIdentity,
-            final PlayerCredential credential,
-            final PlayerProfileService playerProfileService,
-            final PlayerConnectionService playerConnectionService,
-            final PlayerSessionService sessionOperations,
-            final PaymentService accountOperations,
-            final EventListenerOperationsFactory listenerOperationsFactory,
-            final PlayerPresenceService playerPresenceService,
-            final GameConstructionService gameConstructionService,
-            final GameSpecificationService specificationService,
-            final GameActionService<?> actionService) {
+    public ServerPlayer(final ObjectMapper objectMapper, final PlayerToken playerIdentity, final PlayerCredential credential,
+            final PlayerProfileService playerProfileService, final PlayerConnectionService playerConnectionService,
+            final PlayerSessionService sessionOperations, final PaymentService accountOperations,
+            final EventListenerOperationsFactory listenerOperationsFactory, final PlayerPresenceService playerPresenceService,
+            final GameConstructionService gameConstructionService, final GameSpecificationService specificationService, final GameActionService<?> actionService) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
@@ -98,6 +97,14 @@ public class ServerPlayer implements ClembleCasinoOperations {
         this.constructionService = checkNotNull(gameConstructionService);
         this.specificationService = checkNotNull(specificationService);
         this.actionService = checkNotNull(actionService);
+        this.listenerOperations.subscribe(new EventTypeSelector(GameInitiatedEvent.class), new EventListener<GameInitiatedEvent>() {
+            @Override
+            public void onEvent(GameInitiatedEvent event) {
+                // Step 1. Fetching session key
+                GameSessionKey sessionKey = event.getSession();
+                constructionService.ready(sessionKey.getGame(), sessionKey.getSession(), player);
+            }
+        });
     }
 
     @Override
@@ -111,10 +118,10 @@ public class ServerPlayer implements ClembleCasinoOperations {
     }
 
     @Override
-    public PlayerConnectionOperations connectionOperations(){
+    public PlayerConnectionOperations connectionOperations() {
         return connectionOperations;
     }
-    
+
     @Override
     public PaymentOperations paymentOperations() {
         return playerAccountOperations;
@@ -168,4 +175,3 @@ public class ServerPlayer implements ClembleCasinoOperations {
     }
 
 }
-

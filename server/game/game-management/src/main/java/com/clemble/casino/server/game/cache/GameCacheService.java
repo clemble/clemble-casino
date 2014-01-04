@@ -22,15 +22,10 @@ public class GameCacheService<State extends GameState> {
             try {
                 // Step 1. Searching for appropriate session in repository
                 GameSession<State> session = sessionRepository.findOne(sessionId);
-                // Step 2. Creating new StateFactory based on retrieved session
-                // Step 3. Creating new StateFactory based on retrieved session
+                // Step 2. Creating appropriate initiation
                 GameInitiation initiation = session.toInitiation();
-                GameContext context = new GameContext(initiation);
-                GameProcessor<State> processor = processorFactory.create(initiation, context);
-                State newState = stateFactory.constructState(initiation, context);
-                session.setState(newState);
-                // Step 4. Retrieving associated table
-                return new GameCache<State>(session, processor, session.getPlayers());
+                // Step 3. Construction appropriate GameCache
+                return construct(session, initiation);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
                 throw new RuntimeException(throwable);
@@ -56,5 +51,18 @@ public class GameCacheService<State extends GameState> {
 
     public GameCache<State> get(GameSessionKey sessionId) {
         return gameCache.getUnchecked(sessionId);
+    }
+
+    public GameCache<State> construct(GameSession<State> session, GameInitiation initiation) {
+        try {
+            GameContext context = new GameContext(initiation);
+            GameProcessor<State> processor = processorFactory.create(initiation, context);
+            session.setState(stateFactory.constructState(initiation, context));
+            // Step 4. Retrieving associated table
+            return new GameCache<State>(session, processor, session.getPlayers());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            throw new RuntimeException(throwable);
+        }
     }
 }

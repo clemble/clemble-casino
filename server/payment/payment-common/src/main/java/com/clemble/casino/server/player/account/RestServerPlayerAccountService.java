@@ -15,12 +15,12 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
-public class RestPlayerAccountServerService implements PlayerAccountServerService {
+public class RestServerPlayerAccountService implements ServerPlayerAccountService {
 
     final private RestTemplate restTemplate;
     final private ServerRegistry paymentServerRegistry;
 
-    public RestPlayerAccountServerService(ServerRegistry paymentServerRegistry, RestTemplate restTemplate) {
+    public RestServerPlayerAccountService(ServerRegistry paymentServerRegistry, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.paymentServerRegistry = paymentServerRegistry;
     }

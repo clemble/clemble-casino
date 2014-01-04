@@ -20,7 +20,7 @@ import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.SelectNumberAction;
-import com.clemble.casino.integration.game.construction.GameScenarios;
+import com.clemble.casino.integration.game.construction.SyncGameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
@@ -32,7 +32,7 @@ import com.clemble.casino.payment.event.PaymentEvent;
 public class GamePaymentTransactionITest {
 
     @Autowired
-    public GameScenarios gameScenarios;
+    public SyncGameScenarios gameScenarios;
 
     @Test
     public void testAvailabilityConstruction(){
@@ -42,6 +42,8 @@ public class GamePaymentTransactionITest {
         GameSessionPlayer<NumberState> A = sessionPlayers.get(0);
         A.playerOperations().paymentOperations().subscribe(paymentListener);
         GameSessionPlayer<NumberState> B = sessionPlayers.get(1);
+        A.waitForStart();
+        B.waitForStart();
         // Step 2. Make a surrender by player B
         A.perform(new SelectNumberAction(A.getPlayer(), 2));
         B.perform(new SelectNumberAction(B.getPlayer(), 1));

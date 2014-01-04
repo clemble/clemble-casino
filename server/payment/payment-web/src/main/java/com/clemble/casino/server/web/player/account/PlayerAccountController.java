@@ -21,7 +21,7 @@ import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.payment.PaymentWebMapping;
@@ -29,10 +29,10 @@ import com.clemble.casino.web.payment.PaymentWebMapping;
 @Controller
 public class PlayerAccountController implements PlayerAccountService, ExternalController {
 
-    final private PlayerAccountServerService playerAccountService;
+    final private ServerPlayerAccountService playerAccountService;
     final private PlayerAccountRepository playerAccountRepository;
 
-    public PlayerAccountController(PlayerAccountServerService playerAccountService,
+    public PlayerAccountController(ServerPlayerAccountService playerAccountService,
             PlayerAccountRepository playerAccountRepository) {
         this.playerAccountService = checkNotNull(playerAccountService);
         this.playerAccountRepository = checkNotNull(playerAccountRepository);

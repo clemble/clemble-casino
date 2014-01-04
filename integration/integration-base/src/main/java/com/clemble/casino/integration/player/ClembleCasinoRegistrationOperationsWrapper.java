@@ -51,7 +51,7 @@ public class ClembleCasinoRegistrationOperationsWrapper extends AbstractTestExec
 
     @Override
     public void afterTestMethod(TestContext testContext) throws Exception {
-        ClembleCasinoOperations createdContext;
+        ClembleCasinoOperations createdContext = null;
         while((createdContext = initializedOperations.poll()) != null){
             try {
                 createdContext.close();

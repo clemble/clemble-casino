@@ -19,8 +19,8 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.payment.RestServerPaymentTransactionService;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
-import com.clemble.casino.server.player.account.RestPlayerAccountServerService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
+import com.clemble.casino.server.player.account.RestServerPlayerAccountService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
@@ -43,7 +43,7 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
 
         @Autowired(required = false)
         @Qualifier("realPlayerAccountService")
-        public PlayerAccountServerService realPlayerAccountService;
+        public ServerPlayerAccountService realPlayerAccountService;
 
         @Bean
         public ServerPaymentTransactionService paymentTransactionService() {
@@ -54,10 +54,10 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public PlayerAccountServerService playerAccountService() {
+        public ServerPlayerAccountService playerAccountService() {
             ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/",
                     "http://127.0.0.1:8080/payment/");
-            return realPlayerAccountService == null ? new RestPlayerAccountServerService(paymentRegistry, restTemplate) : realPlayerAccountService;
+            return realPlayerAccountService == null ? new RestServerPlayerAccountService(paymentRegistry, restTemplate) : realPlayerAccountService;
         }
     }
 
@@ -66,8 +66,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
     public static class Test {
 
         @Bean
-        public PlayerAccountServerService playerAccountService() {
-            return new PlayerAccountServerService() {
+        public ServerPlayerAccountService playerAccountService() {
+            return new ServerPlayerAccountService() {
 
                 @Override
                 public PlayerAccount register(PlayerProfile playerProfile) {

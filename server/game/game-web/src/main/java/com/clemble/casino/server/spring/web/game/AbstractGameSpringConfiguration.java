@@ -17,11 +17,11 @@ import com.clemble.casino.server.game.action.GameStateFactory;
 import com.clemble.casino.server.game.cache.GameCacheService;
 import com.clemble.casino.server.game.configuration.GameSpecificationConfigurationManager;
 import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
-import com.clemble.casino.server.game.construct.GameConstructionServerService;
-import com.clemble.casino.server.game.construct.GameInitiatorService;
-import com.clemble.casino.server.game.construct.SimpleGameConstructionServerService;
-import com.clemble.casino.server.game.construct.SimpleGameInitiatorService;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
+import com.clemble.casino.server.game.construct.BasicServerGameConstructionService;
+import com.clemble.casino.server.game.construct.BasicServerGameInitiationService;
+import com.clemble.casino.server.game.construct.ServerGameConstructionService;
+import com.clemble.casino.server.game.construct.ServerGameInitiationService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
@@ -58,7 +58,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Autowired
     @Qualifier("playerAccountService")
-    public PlayerAccountServerService playerAccountService;
+    public ServerPlayerAccountService playerAccountService;
 
     @Autowired
     public ServerPlayerPresenceService playerStateManager;
@@ -82,21 +82,24 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameConstructionController<State> constructionController(GameConstructionServerService constructionServerService) {
-        return new GameConstructionController<State>(gameConstructionRepository, constructionServerService, gameSpecificationRegistry);
+    public GameConstructionController<State> constructionController(ServerGameConstructionService constructionServerService, ServerGameInitiationService initiationService) {
+        return new GameConstructionController<State>(gameConstructionRepository, constructionServerService, initiationService, gameSpecificationRegistry);
     }
 
     @Bean
-    public GameConstructionServerService picPacPoeConstructionService(GameInitiatorService initiatorService) {
-        return new SimpleGameConstructionServerService(gameIdGenerator, playerAccountService, playerNotificationService, gameConstructionRepository,
+    public ServerGameConstructionService picPacPoeConstructionService(ServerGameInitiationService initiatorService) {
+        return new BasicServerGameConstructionService(gameIdGenerator, playerAccountService, playerNotificationService, gameConstructionRepository,
                 initiatorService, playerLockService, playerStateManager);
     }
 
     @Bean
     @Autowired
-    public GameInitiatorService picPacPoeInitiatorService(GameSessionProcessor<?> sessionProcessor, ServerPlayerPresenceService presenceServerService,
+    public ServerGameInitiationService serverGameInitiationService(
+            GameSessionProcessor<?> sessionProcessor,
+            ServerPlayerPresenceService presenceServerService,
+            @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
             SystemNotificationServiceListener presenceListenerService) {
-        return new SimpleGameInitiatorService(sessionProcessor, presenceServerService, presenceListenerService);
+        return new BasicServerGameInitiationService(sessionProcessor, presenceServerService, notificationService, presenceListenerService);
     }
 
     @Bean

@@ -13,8 +13,8 @@ import com.clemble.casino.server.payment.BasicServerPaymentTransactionService;
 import com.clemble.casino.server.payment.bonus.DailyBonusService;
 import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.payment.bonus.policy.NoBonusPolicy;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
-import com.clemble.casino.server.player.account.PlayerAccountServerServiceImpl;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
+import com.clemble.casino.server.player.account.BasicServerPlayerAccountService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
@@ -29,9 +29,9 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
 
     @Bean
     @Autowired
-    public PlayerAccountServerService realPlayerAccountService(PlayerAccountRepository playerAccountRepository,
+    public ServerPlayerAccountService realPlayerAccountService(PlayerAccountRepository playerAccountRepository,
             @Qualifier("realPaymentTransactionService") ServerPaymentTransactionService realPaymentTransactionService) {
-        return new PlayerAccountServerServiceImpl(playerAccountRepository, realPaymentTransactionService);
+        return new BasicServerPlayerAccountService(playerAccountRepository, realPaymentTransactionService);
     }
 
     @Bean

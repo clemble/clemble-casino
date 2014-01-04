@@ -14,20 +14,20 @@ import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.game.construct.GameInitiatorService;
+import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 
 public class NextGameConstructionAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
     final private GameIdGenerator idGenerator;
     final private GameConstructionRepository constructionRepository;
-    final private GameInitiatorService initiatorService;
+    final private ServerGameInitiationService initiatorService;
 
     final private GameSpecification specification;
     final private Collection<GamePlayerRole> participants;
 
     public NextGameConstructionAspect(GameIdGenerator idGenerator,
-            GameInitiatorService initiatorService,
+            ServerGameInitiationService initiatorService,
             GameConstructionRepository constructionRepository,
             GameInitiation initiation) {
         super(new EventTypeSelector(GameEndedEvent.class));
@@ -50,7 +50,7 @@ public class NextGameConstructionAspect extends BasicGameAspect<GameEndedEvent<?
         construction = constructionRepository.saveAndFlush(construction);
         // Step 3. Initiating new game
         GameInitiation initiation = new GameInitiation(construction.getSession(), specification, participants);
-        initiatorService.initiate(initiation);
+        initiatorService.start(initiation);
     }
 
 }

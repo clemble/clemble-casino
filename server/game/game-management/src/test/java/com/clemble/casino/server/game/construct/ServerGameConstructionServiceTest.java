@@ -19,12 +19,22 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
+import com.clemble.casino.game.rule.bet.FixedBetRule;
+import com.clemble.casino.game.rule.construct.PlayerNumberRule;
+import com.clemble.casino.game.rule.construct.PrivacyRule;
+import com.clemble.casino.game.rule.giveup.GiveUpRule;
+import com.clemble.casino.game.rule.time.MoveTimeRule;
+import com.clemble.casino.game.rule.time.TotalTimeRule;
 import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.GameSpecificationKey;
+import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
@@ -32,14 +42,14 @@ import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.UNIT_TEST)
 @ContextConfiguration(classes = { SimpleGameSpringConfiguration.class })
-public class GameConstructionServerServiceTest {
+public class ServerGameConstructionServiceTest {
 
     final private static Random RANDOM = new Random();
 
     final private int NUM_PARTICIPANTS = 50;
 
     @Autowired
-    public GameConstructionServerService constructionService;
+    public ServerGameConstructionService constructionService;
 
     @Autowired
     public GameConstructionRepository constructionRepository;
@@ -50,8 +60,9 @@ public class GameConstructionServerServiceTest {
         for (int i = 0; i < NUM_PARTICIPANTS; i++)
             players.add(String.valueOf(RANDOM.nextLong()));
         List<String> participants = new ArrayList<>(players);
+        GameSpecification specification = generate(participants);
 
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), GameSpecification.DEFAULT, participants);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
 
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
@@ -68,8 +79,9 @@ public class GameConstructionServerServiceTest {
         for (int i = 0; i < NUM_PARTICIPANTS; i++)
             players.add(String.valueOf(RANDOM.nextLong()));
         List<String> participants = new ArrayList<>(players);
+        GameSpecification specification = generate(participants);
 
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), GameSpecification.DEFAULT, participants);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
 
         final CountDownLatch downLatch = new CountDownLatch(NUM_PARTICIPANTS - 1);
@@ -88,14 +100,27 @@ public class GameConstructionServerServiceTest {
         Assert.assertEquals(finalConstructionState.getState(), GameConstructionState.constructed);
     }
 
+    private GameSpecification generate(List<String> roles) { 
+        return new GameSpecification()
+            .setName(new GameSpecificationKey(Game.pic, "DEFAULT"))
+            .setBetRule(FixedBetRule.DEFAULT)
+            .setPrice(Money.create(Currency.FakeMoney, 50))
+            .setGiveUpRule(GiveUpRule.lost)
+            .setMoveTimeRule(MoveTimeRule.DEFAULT)
+            .setTotalTimeRule(TotalTimeRule.DEFAULT)
+            .setNumberRule(PlayerNumberRule.two)
+            .setPrivacayRule(PrivacyRule.everybody)
+            .setRoles(roles);
+    }
+
     public static class GameResponce implements Callable<GameConstruction> {
 
         final public String player;
         final public GameSessionKey construction;
         final public CountDownLatch endLatch;
-        final public GameConstructionServerService constructionService;
+        final public ServerGameConstructionService constructionService;
 
-        public GameResponce(GameSessionKey construction, String player, CountDownLatch endLatch, GameConstructionServerService constructionService) {
+        public GameResponce(GameSessionKey construction, String player, CountDownLatch endLatch, ServerGameConstructionService constructionService) {
             this.player = player;
             this.construction = construction;
             this.endLatch = endLatch;

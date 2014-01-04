@@ -2,7 +2,6 @@ package com.clemble.casino.server.web.game.session;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.server.ExternalController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +18,14 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.construct.PlayerGameConstructionRequest;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.service.GameConstructionService;
+import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
-import com.clemble.casino.server.game.construct.GameConstructionServerService;
+import com.clemble.casino.server.game.construct.ServerGameConstructionService;
+import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.web.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
@@ -32,15 +34,18 @@ import com.clemble.casino.web.mapping.WebMapping;
 public class GameConstructionController<State extends GameState> implements GameConstructionService, ExternalController {
 
     final private GameSpecificationRegistry configurationManager;
-    final private GameConstructionServerService constructionService;
+    final private ServerGameConstructionService constructionService;
+    final private ServerGameInitiationService initiationService;
     final private GameConstructionRepository constructionRepository;
 
     public GameConstructionController(
             final GameConstructionRepository constructionRepository,
-            final GameConstructionServerService matchingService,
+            final ServerGameConstructionService matchingService,
+            ServerGameInitiationService initiationService,
             final GameSpecificationRegistry configurationManager) {
         this.constructionService = checkNotNull(matchingService);
         this.configurationManager = checkNotNull(configurationManager);
+        this.initiationService = checkNotNull(initiationService);
         this.constructionRepository = checkNotNull(constructionRepository);
     }
 
@@ -82,6 +87,13 @@ public class GameConstructionController<State extends GameState> implements Game
     public @ResponseBody GameConstruction reply(@PathVariable("game") final Game game, @PathVariable("session") String sessionId, @RequestBody final InvitationResponseEvent gameRequest) {
         // Step 1. Invoking actual matching service
         return constructionService.invitationResponsed(gameRequest);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_INITIATION_READY, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public @ResponseBody GameInitiation ready(@PathVariable("game") final Game game, @PathVariable("session") final String session, @PathVariable("playerId") final String player) {
+        return initiationService.ready(new GameSessionKey(game, session), player);
     }
 
 }

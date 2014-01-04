@@ -38,9 +38,9 @@ import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { PlayerCommonSpringConfiguration.class })
-public class PlayerPresenceServerServiceTest {
+public class ServerPlayerPresenceServiceTest {
 
-    final private Logger LOG = LoggerFactory.getLogger(PlayerPresenceServerServiceTest.class);
+    final private Logger LOG = LoggerFactory.getLogger(ServerPlayerPresenceServiceTest.class);
     final private Random RANDOM = new Random();
 
     @Autowired

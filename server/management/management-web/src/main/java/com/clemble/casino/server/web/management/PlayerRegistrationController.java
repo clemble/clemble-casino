@@ -25,7 +25,7 @@ import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.player.PlayerIdGenerator;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
@@ -41,7 +41,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     final private ServerProfileRegistrationService playerProfileRegistrationService;
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
-    final private PlayerAccountServerService playerAccountServerService;
+    final private ServerPlayerAccountService playerAccountServerService;
 
     public PlayerRegistrationController(final PlayerIdGenerator playerIdentifierGenerator,
             final PlayerTokenFactory playerTokenFactory,
@@ -49,7 +49,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
             final PlayerCredentialRepository playerCredentialRepository,
             final ClembleConsumerDetailsService playerIdentityRepository,
             final ClembleCasinoValidationService validationService,
-            final PlayerAccountServerService playerAccountServerService) {
+            final ServerPlayerAccountService playerAccountServerService) {
         this.playerIdentifierGenerator = checkNotNull(playerIdentifierGenerator);
         this.playerTokenFactory = checkNotNull(playerTokenFactory);
         this.playerAccountServerService = checkNotNull(playerAccountServerService);

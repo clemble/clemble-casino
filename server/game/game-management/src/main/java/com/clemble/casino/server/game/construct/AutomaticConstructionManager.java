@@ -73,13 +73,13 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
     final private Map<String, AutomaticGameConstruction> playerConstructions = new ConcurrentHashMap<>();
 
     final private GameConstructionRepository constructionRepository;
-    final private GameInitiatorService initiatorService;
+    final private ServerGameInitiationService initiatorService;
 
     final private PlayerLockService playerLockService;
     final private ServerPlayerPresenceService playerStateManager;
 
     public AutomaticConstructionManager(
-            final GameInitiatorService initiatorService,
+            final ServerGameInitiationService initiatorService,
             final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService,
             final ServerPlayerPresenceService playerStateManager) {
@@ -132,10 +132,9 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
                 // Step 3.2 Construction was present appending to existing one
                 if (pendingConstuction.append(request)) {
                     GameInitiation initiation = pendingConstuction.toInitiation();
-                    if (initiatorService.initiate(initiation)) {
-                        for (PlayerAware participant : initiation.getParticipants())
-                            playerConstructions.remove(participant.getPlayer());
-                    }
+                    initiatorService.start(initiation);
+                    for (PlayerAware participant : initiation.getParticipants())
+                        playerConstructions.remove(participant.getPlayer());
                 } else {
                     playerConstructions.put(player, pendingConstuction);
                     specificationQueue.add(pendingConstuction);

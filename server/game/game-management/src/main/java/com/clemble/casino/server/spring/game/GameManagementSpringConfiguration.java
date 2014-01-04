@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.id.GameIdGenerator;
@@ -26,11 +26,11 @@ import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
 import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
-import com.clemble.casino.server.game.construct.GameConstructionServerService;
-import com.clemble.casino.server.game.construct.GameInitiatorService;
-import com.clemble.casino.server.game.construct.SimpleGameConstructionServerService;
+import com.clemble.casino.server.game.construct.BasicServerGameConstructionService;
+import com.clemble.casino.server.game.construct.ServerGameConstructionService;
+import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
@@ -81,19 +81,20 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @Autowired
-    public GameEndPresenceAspectFactory gamePresenceAspectFactory(ServerPlayerPresenceService presenceService){
+    public GameEndPresenceAspectFactory gamePresenceAspectFactory(ServerPlayerPresenceService presenceService) {
         return new GameEndPresenceAspectFactory(presenceService);
     }
 
-//    @Bean
-//    @Autowired
-    public GameAspectFactory<GameEndedEvent<?>> nextGameConstructionAspect(GameIdGenerator idGenerator, GameInitiatorService initiatorService, GameConstructionRepository constructionRepository) {
+    // @Bean
+    // @Autowired
+    public GameAspectFactory<GameEndedEvent<?>> nextGameConstructionAspect(GameIdGenerator idGenerator, ServerGameInitiationService initiatorService,
+            GameConstructionRepository constructionRepository) {
         return new NextGameConstructionAspectFactory(idGenerator, initiatorService, constructionRepository);
     }
-    
+
     @Bean
     @Autowired
-    public PlayerNotificationRuleAspectFactory gameNotificationManagementAspectFactory(PlayerNotificationService playerNotificationService){
+    public PlayerNotificationRuleAspectFactory gameNotificationManagementAspectFactory(PlayerNotificationService playerNotificationService) {
         return new PlayerNotificationRuleAspectFactory(playerNotificationService);
     }
 
@@ -112,8 +113,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Configuration
     public static class GameTimeAspectConfiguration {
 
-//        @Bean
-//        @Autowired
+        @Bean
+        @Autowired
         public GameTimeAspectFactory gameTimeAspectFactory(GameEventTaskExecutor eventTaskExecutor) {
             return new GameTimeAspectFactory(eventTaskExecutor);
         }
@@ -132,23 +133,27 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
         @Bean
         @Autowired
-        public GameConstructionServerService gameConstructionService(GameIdGenerator gameIdGenerator, PlayerAccountServerService playerAccountService,
+        public ServerGameConstructionService gameConstructionService(GameIdGenerator gameIdGenerator, ServerPlayerAccountService playerAccountService,
                 PlayerNotificationService playerNotificationService, GameConstructionRepository constructionRepository,
-                GameInitiatorService initiatorService, PlayerLockService playerLockService, ServerPlayerPresenceService playerStateManager) {
-            return new SimpleGameConstructionServerService(gameIdGenerator, playerAccountService, playerNotificationService, constructionRepository,
+                ServerGameInitiationService initiatorService, PlayerLockService playerLockService, ServerPlayerPresenceService playerStateManager) {
+            return new BasicServerGameConstructionService(gameIdGenerator, playerAccountService, playerNotificationService, constructionRepository,
                     initiatorService, playerLockService, playerStateManager);
         }
 
         @Bean
-        public GameInitiatorService initiatorService() {
-            return new GameInitiatorService() {
+        public ServerGameInitiationService initiatorService() {
+            return new ServerGameInitiationService() {
                 @Override
-                public void initiate(GameConstruction construction) {
+                public void register(GameInitiation construction) {
                 }
 
                 @Override
-                public boolean initiate(GameInitiation initiation) {
-                    return true;
+                public void start(GameInitiation initiation) {
+                }
+
+                @Override
+                public GameInitiation ready(GameSessionKey sessionKey, String player) {
+                    return null;
                 }
             };
         }

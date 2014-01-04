@@ -18,21 +18,21 @@ import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 
 public class AvailabilityGameConstructionManager implements GameConstructionManager<AvailabilityGameRequest> {
 
-    final private PlayerAccountServerService playerAccountService;
+    final private ServerPlayerAccountService playerAccountService;
     final private GameConstructionRepository constructionRepository;
     final private PlayerNotificationService playerNotificationService;
-    final private GameInitiatorService initiatorService;
+    final private ServerGameInitiationService initiatorService;
 
-    public AvailabilityGameConstructionManager(PlayerAccountServerService accountServerService,
+    public AvailabilityGameConstructionManager(ServerPlayerAccountService accountServerService,
             GameConstructionRepository constructionRepository,
             PlayerNotificationService notificationService,
-            GameInitiatorService initiatorService) {
+            ServerGameInitiationService initiatorService) {
         this.playerAccountService = checkNotNull(accountServerService);
         this.constructionRepository = checkNotNull(constructionRepository);
         this.playerNotificationService = checkNotNull(notificationService);
@@ -109,7 +109,7 @@ public class AvailabilityGameConstructionManager implements GameConstructionMana
         ActionLatch responseLatch = construction.getResponses();
         playerNotificationService.notify(responseLatch.fetchParticipants(), new GameConstructedEvent(construction.getSession()));
         // Step 3. Moving to the next step
-        initiatorService.initiate(construction);
+        initiatorService.register(construction.toInitiation());
         return construction;
     }
 

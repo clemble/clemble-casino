@@ -13,7 +13,7 @@ import com.clemble.casino.configuration.ResourceLocationService;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.PlayerIdGenerator;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.security.AESPlayerTokenFactory;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
@@ -48,7 +48,7 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,
             ClembleCasinoValidationService gogomayaValidationService,
-            @Qualifier("playerAccountService") PlayerAccountServerService playerAccountService) throws NoSuchAlgorithmException {
+            @Qualifier("playerAccountService") ServerPlayerAccountService playerAccountService) throws NoSuchAlgorithmException {
         return new PlayerRegistrationController(idGenerator, playerTokenFactory(), playerProfileRegistrationService, playerCredentialRepository, clembleConsumerDetailsService,
                 gogomayaValidationService, playerAccountService);
     }

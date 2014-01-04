@@ -16,6 +16,8 @@ public interface GameScenarios extends BaseGameScenarios {
     public <State extends GameState> GameSessionPlayer<State> construct(Game game, ClembleCasinoOperations initiator, String... participants);
 
     public <State extends GameState> GameSessionPlayer<State> construct(GameSpecification specification, ClembleCasinoOperations initiator, String... participants);
+    
+    public <State extends GameState> GameSessionPlayer<State> construct(GameSessionKey sessionKey, ClembleCasinoOperations player);
 
     public <State extends GameState> GameSessionPlayer<State> accept(GameSessionKey gameSessionKey, ClembleCasinoOperations participant);
 

@@ -8,7 +8,6 @@ import com.clemble.casino.game.GameSessionState;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameSpecification;
-import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
 
 public class GameSessionFactory<State extends GameState> {
@@ -29,7 +28,7 @@ public class GameSessionFactory<State extends GameState> {
             .setSession(initiation.getSession())
             .setSpecification(specification)
             .setSessionState(GameSessionState.active)
-            .setPlayers(PlayerAwareUtils.toPlayerList(initiation.getParticipants()))
+            .setPlayers(initiation.getConfirmations())
             .setState(stateFactory.constructState(initiation, new GameContext(initiation)));
 
         return sessionRepository.saveAndFlush(session);

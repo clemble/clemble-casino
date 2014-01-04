@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
-import com.clemble.casino.server.player.account.PlayerAccountServerService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
@@ -24,7 +24,7 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     @Qualifier("realPlayerAccountService")
-    public PlayerAccountServerService playerAccountService;
+    public ServerPlayerAccountService playerAccountService;
 
     @Autowired
     @Qualifier("paymentTransactionRepository")

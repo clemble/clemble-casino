@@ -10,18 +10,18 @@ import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
-import com.clemble.casino.server.game.construct.GameInitiatorService;
+import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 
 public class NextGameConstructionAspectFactory implements GameAspectFactory<GameEndedEvent<?>> {
 
     final private GameIdGenerator idGenerator;
     final private GameConstructionRepository constructionRepository;
-    final private GameInitiatorService initiatorService;
+    final private ServerGameInitiationService initiatorService;
 
     public NextGameConstructionAspectFactory(
             GameIdGenerator idGenerator,
-            GameInitiatorService initiatorService,
+            ServerGameInitiationService initiatorService,
             GameConstructionRepository constructionRepository) {
         this.initiatorService = checkNotNull(initiatorService);
         this.idGenerator = checkNotNull(idGenerator);
