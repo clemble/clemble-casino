@@ -1,7 +1,5 @@
 package com.clemble.casino.server.spring.player;
 
-import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
-import com.clemble.casino.server.player.registration.RestServerProfileRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +11,8 @@ import org.springframework.web.client.RestTemplate;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
+import com.clemble.casino.server.player.registration.RestServerProfileRegistrationService;
+import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PlayerPresenceSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -41,7 +41,6 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        @Autowired
         public ServerProfileRegistrationService playerProfileRegistrationService(RestTemplate restTemplate) {
             return realPlayerProfileRegistrationService == null ? new RestServerProfileRegistrationService(getBaseUrl(), restTemplate) : realPlayerProfileRegistrationService;
         }

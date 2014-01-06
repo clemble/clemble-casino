@@ -3,10 +3,8 @@ package com.clemble.casino.integration.spring;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,11 +21,11 @@ import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.game.service.GameSpecificationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.game.SimpleGameSessionPlayerFactory;
-import com.clemble.casino.integration.game.construction.SimpleSyncGameScenarios;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.game.construction.SimplePlayerScenarios;
+import com.clemble.casino.integration.game.construction.SimpleSyncGameScenarios;
 import com.clemble.casino.integration.game.construction.SyncGameScenarios;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
@@ -73,7 +71,6 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
     }
 
     @Bean
-    @Singleton
     public SimpleGameScenarios gameScenarios() {
         return new SimpleGameScenarios(playerOperations);
     }
@@ -89,7 +86,6 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
     }
 
     @Bean
-    @Autowired
     public PlayerScenarios playerScenarios(ClembleCasinoRegistrationOperations registrationOperations) {
         return new SimplePlayerScenarios(registrationOperations);
     }
@@ -109,19 +105,16 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         }
 
         @Bean
-        @Autowired
         public PaymentService paymentService(@Qualifier("paymentTransactionController") PaymentTransactionService transactionService, PlayerAccountService accountService) {
             return new CombinedPaymentService(transactionService, accountService);
         }
 
         @Bean
-        @Autowired
         public PaymentTransactionOperations paymentTransactionOperations(ServerPaymentTransactionService paymentTransactionController) {
             return new WebPaymentTransactionOperations(paymentTransactionController);
         }
 
         @Bean
-        @Autowired
         public TestContextListenerRegistrator testContextListener(){
             return new TestContextListenerRegistrator();
         }

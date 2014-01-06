@@ -41,7 +41,6 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     }
 
     @Bean
-    @Autowired
     public PlayerRegistrationController playerRegistrationController(
             @Qualifier("playerProfileRegistrationService") ServerProfileRegistrationService playerProfileRegistrationService,
             PlayerIdGenerator idGenerator,
@@ -54,7 +53,6 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
     }
 
     @Bean
-    @Autowired
     public PlayerSessionController playerSessionController(
             ResourceLocationService resourceLocationService,
             PlayerSessionRepository playerSessionRepository,

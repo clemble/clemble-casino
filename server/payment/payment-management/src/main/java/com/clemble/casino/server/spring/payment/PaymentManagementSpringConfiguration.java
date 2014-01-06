@@ -1,6 +1,5 @@
 package com.clemble.casino.server.spring.payment;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,13 +7,13 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.payment.BasicServerPaymentTransactionService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.payment.bonus.DailyBonusService;
 import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.payment.bonus.policy.NoBonusPolicy;
-import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.account.BasicServerPlayerAccountService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
@@ -28,14 +27,12 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 public class PaymentManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    @Autowired
     public ServerPlayerAccountService realPlayerAccountService(PlayerAccountRepository playerAccountRepository,
             @Qualifier("realPaymentTransactionService") ServerPaymentTransactionService realPaymentTransactionService) {
         return new BasicServerPlayerAccountService(playerAccountRepository, realPaymentTransactionService);
     }
 
     @Bean
-    @Autowired
     public ServerPaymentTransactionService realPaymentTransactionService(
             PaymentTransactionRepository paymentTransactionRepository,
             PlayerNotificationService playerNotificationService,
@@ -44,7 +41,6 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
     }
 
     @Bean
-    @Autowired
     public DailyBonusService dailyBonusService(
             PlayerNotificationService playerNotificationService,
             PlayerAccountRepository accountRepository,

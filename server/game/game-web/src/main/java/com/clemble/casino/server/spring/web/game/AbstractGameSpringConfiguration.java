@@ -80,7 +80,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     abstract public Game getGame();
 
     @Bean
-    @Autowired
     public GameSessionFactory<State> gameSessionFactory(GameStateFactory<State> gameStateFactory) {
         return new GameSessionFactory<State>(gameStateFactory, gameSessionRepository);
     }
@@ -97,7 +96,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    @Autowired
     public ServerGameInitiationService serverGameInitiationService(
             GameSessionProcessor<?> sessionProcessor,
             ServerPlayerPresenceService presenceServerService,
@@ -125,7 +123,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    @Autowired
     public GameSessionProcessor<State> picPacPoeSessionProcessor(GameSessionFactory<State> gameSessionFactory, GameCacheService<State> gameCacheService) {
         return new GameSessionProcessor<State>(gameSessionFactory, gameCacheService, playerNotificationService);
     }
@@ -136,7 +133,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    @Autowired
     public GameActionController<State> picPacPoeEngineController(GameSessionProcessor<State> sessionProcessor) {
         return new GameActionController<State>(gameSessionRepository, sessionProcessor);
     }

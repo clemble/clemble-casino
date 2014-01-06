@@ -3,12 +3,14 @@ package com.clemble.casino.server.player.notification;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 
@@ -19,6 +21,7 @@ import com.clemble.casino.player.PlayerAwareUtils;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class RabbitPlayerNotificationService implements PlayerNotificationService {
 
@@ -26,7 +29,8 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
 
         @Override
         public RabbitTemplate load(String server) throws Exception {
-            ConnectionFactory connectionFactory = new CachingConnectionFactory(server);
+            CachingConnectionFactory connectionFactory = new CachingConnectionFactory(server);
+            connectionFactory.setExecutor(executorService);
             RabbitTemplate rabbitTemplagte = new RabbitTemplate(connectionFactory);
             rabbitTemplagte.setMessageConverter(messageConverter);
             rabbitTemplagte.setExchange("amq.topic");
@@ -41,10 +45,17 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     final private MessageConverter messageConverter;
     final private ServerRegistry serverRegistry;
 
+    final private ExecutorService executorService;
+
     public RabbitPlayerNotificationService(final String postfix, final MessageConverter messageConverter, final ServerRegistry serverRegistry) {
         this.postfix = checkNotNull(postfix);
         this.messageConverter = checkNotNull(messageConverter);
         this.serverRegistry = checkNotNull(serverRegistry);
+
+        ThreadFactory notificationThreadFactory = new ThreadFactoryBuilder()
+            .setNameFormat("playerNotification with '" + postfix + "' %d")
+            .build();
+        this.executorService = Executors.newFixedThreadPool(2, notificationThreadFactory);
     }
 
     @Override

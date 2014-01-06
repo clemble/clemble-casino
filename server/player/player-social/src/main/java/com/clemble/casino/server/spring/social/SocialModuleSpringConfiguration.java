@@ -42,13 +42,11 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     public PlayerProfileRepository playerProfileRepository;
 
     @Bean
-    @Autowired
     public SocialConnectionDataAdapter socialConnectionDataAdapter(UsersConnectionRepository usersConnectionRepository, SocialConnectionAdapterRegistry socialConnectionAdapterRegistry, ConnectionFactoryRegistry connectionFactoryLocator) {
         return new SocialConnectionDataAdapter(connectionFactoryLocator, usersConnectionRepository, socialConnectionAdapterRegistry);
     }
 
     @Bean
-    @Autowired
     public ConnectionFactoryRegistry connectionFactoryLocator(
             SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
             FacebookConnectionFactory facebookConnectionFactory,
@@ -89,13 +87,11 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    @Autowired
     public ConnectionSignUp connectionSignUp(PlayerIdGenerator idGenerator, PlayerProfileRepository profileRepository, SocialConnectionAdapterRegistry socialAdapterRegistry, PlayerSocialNetworkRepository socialNetworkRepository) {
         return new SocialProfileConnectionSignUp(idGenerator, profileRepository, socialAdapterRegistry, socialNetworkRepository);
     }
 
     @Bean
-    @Autowired
     public UsersConnectionRepository usersConnectionRepository(ConnectionSignUp connectionSignUp, ConnectionFactoryRegistry connectionFactoryLocator) {
         JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
         repository.setConnectionSignUp(connectionSignUp);

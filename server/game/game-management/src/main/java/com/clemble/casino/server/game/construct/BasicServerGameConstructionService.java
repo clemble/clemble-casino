@@ -26,7 +26,7 @@ public class BasicServerGameConstructionService implements ServerGameConstructio
     final private GameIdGenerator gameIdGenerator;
     final private ServerPlayerAccountService playerAccountService;
 
-    final private AutomaticConstructionManager automaticConstructionManager;
+    final private AutomaticGameConstructionManager automaticConstructionManager;
     final private AvailabilityGameConstructionManager availabilityConstructionManager;
 
     public BasicServerGameConstructionService(
@@ -40,7 +40,7 @@ public class BasicServerGameConstructionService implements ServerGameConstructio
         this.gameIdGenerator = checkNotNull(gameIdGenerator);
         this.playerAccountService = checkNotNull(playerAccountService);
 
-        this.automaticConstructionManager = new AutomaticConstructionManager(initiatorService, constructionRepository, checkNotNull(playerLockService), playerStateManager);
+        this.automaticConstructionManager = new AutomaticGameConstructionManager(initiatorService, constructionRepository, checkNotNull(playerLockService), playerStateManager);
         this.availabilityConstructionManager = new AvailabilityGameConstructionManager(playerAccountService, constructionRepository, playerNotificationService, initiatorService);
     }
 

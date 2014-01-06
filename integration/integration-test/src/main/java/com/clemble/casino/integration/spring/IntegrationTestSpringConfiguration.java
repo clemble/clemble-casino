@@ -40,7 +40,6 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
     public static class LocalTestConfiguration {
 
         @Bean
-        @Autowired
         public PaymentTransactionOperations paymentTransactionOperations(ServerPaymentTransactionController paymentTransactionController) {
             return new WebPaymentTransactionOperations(paymentTransactionController);
         }

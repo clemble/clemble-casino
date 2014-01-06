@@ -68,32 +68,27 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    @Autowired
     public WonRuleAspectFactory wonRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
         return new WonRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean
-    @Autowired
     public DrawRuleAspectFactory drawRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
         return new DrawRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean
-    @Autowired
     public GameEndPresenceAspectFactory gamePresenceAspectFactory(ServerPlayerPresenceService presenceService) {
         return new GameEndPresenceAspectFactory(presenceService);
     }
 
     // @Bean
-    // @Autowired
     public GameAspectFactory<GameEndedEvent<?>> nextGameConstructionAspect(GameIdGenerator idGenerator, ServerGameInitiationService initiatorService,
             GameConstructionRepository constructionRepository) {
         return new NextGameConstructionAspectFactory(idGenerator, initiatorService, constructionRepository);
     }
 
     @Bean
-    @Autowired
     public PlayerNotificationRuleAspectFactory gameNotificationManagementAspectFactory(PlayerNotificationService playerNotificationService) {
         return new PlayerNotificationRuleAspectFactory(playerNotificationService);
     }

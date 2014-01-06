@@ -5,6 +5,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -23,6 +26,7 @@ import com.clemble.casino.server.event.SystemEvent;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> implements PlayerNotificationListenerManger<T> {
 
@@ -30,7 +34,8 @@ public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> impl
 
         @Override
         public RabbitListenerControl load(String server) throws Exception {
-            ConnectionFactory connectionFactory = new CachingConnectionFactory(server);
+            CachingConnectionFactory connectionFactory = new CachingConnectionFactory(server);
+            connectionFactory.setExecutor(executorService);
             return new RabbitListenerControl(connectionFactory);
         }
 
@@ -42,10 +47,17 @@ public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> impl
     final private MessageConverter messageConverter;
     final private ServerRegistry serverRegistry;
 
+    final private ExecutorService executorService;
+
     public RabbitPlayerNotificationListenerManager(final String postfix, final MessageConverter messageConverter, final ServerRegistry serverRegistry) {
         this.postfix = checkNotNull(postfix);
         this.messageConverter = checkNotNull(messageConverter);
         this.serverRegistry = checkNotNull(serverRegistry);
+
+        ThreadFactory notificationThreadFactory = new ThreadFactoryBuilder()
+            .setNameFormat("playerNotificationListener with '" + postfix + "' %d")
+            .build();
+        this.executorService = Executors.newFixedThreadPool(2, notificationThreadFactory);
     }
 
     @Override

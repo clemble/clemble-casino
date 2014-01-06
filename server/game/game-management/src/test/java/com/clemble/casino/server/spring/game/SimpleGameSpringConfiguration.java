@@ -26,14 +26,12 @@ import com.clemble.casino.server.repository.game.GameSessionRepository;
 public class SimpleGameSpringConfiguration {
 
     @Bean
-    @Autowired
     public GameSessionProcessor<?> gameProcessor(GameSessionFactory sessionFactory, GameCacheService cacheService,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new GameSessionProcessor(sessionFactory, cacheService, notificationService);
     }
 
     @Bean
-    @Autowired
     public GameCacheService<?> gameCacheService(GameSessionRepository<?> sessionRepository, GameProcessorFactory processorFactory, GameStateFactory stateFactory) {
         return new GameCacheService<>(sessionRepository, processorFactory, stateFactory);
     }
@@ -45,7 +43,6 @@ public class SimpleGameSpringConfiguration {
 
     
     @Bean
-    @Autowired
     public GameSessionFactory gameSessionFactory(GameStateFactory stateFactory, GameSessionRepository sessionRepository) {
         return new GameSessionFactory(stateFactory, sessionRepository);
     }

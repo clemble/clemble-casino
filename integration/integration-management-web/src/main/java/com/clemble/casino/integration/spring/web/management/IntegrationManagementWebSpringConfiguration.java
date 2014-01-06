@@ -1,6 +1,5 @@
 package com.clemble.casino.integration.spring.web.management;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -32,7 +31,6 @@ public class IntegrationManagementWebSpringConfiguration extends AbstractManagem
 
 
         @Bean
-        @Autowired
         public ResourceLocationService resourceLocationService(ServerRegistryConfiguration serverRegistryConfiguration) {
             SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
             return new SimpleResourceLocationService(configurationService,

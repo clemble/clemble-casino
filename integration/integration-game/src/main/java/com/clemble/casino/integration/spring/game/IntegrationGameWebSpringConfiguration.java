@@ -1,6 +1,5 @@
 package com.clemble.casino.integration.spring.game;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -24,7 +23,6 @@ public class IntegrationGameWebSpringConfiguration extends AbstractGameSpringCon
     }
 
     @Bean
-    @Autowired
     public GameStateFactory<NumberState> ticTacToeStateFactory(GameProcessorFactory<NumberState> processorFactory) {
         return new NumberStateFactory(processorFactory);
     }

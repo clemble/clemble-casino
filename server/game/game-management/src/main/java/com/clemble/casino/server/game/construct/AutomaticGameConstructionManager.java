@@ -28,7 +28,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class AutomaticConstructionManager implements GameConstructionManager<AutomaticGameRequest> {
+public class AutomaticGameConstructionManager implements GameConstructionManager<AutomaticGameRequest> {
 
     final public static class AutomaticGameConstruction {
         final private GameConstruction construction;
@@ -78,7 +78,7 @@ public class AutomaticConstructionManager implements GameConstructionManager<Aut
     final private PlayerLockService playerLockService;
     final private ServerPlayerPresenceService playerStateManager;
 
-    public AutomaticConstructionManager(
+    public AutomaticGameConstructionManager(
             final ServerGameInitiationService initiatorService,
             final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService,

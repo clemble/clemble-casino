@@ -46,13 +46,11 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    @Autowired
     public BasicServerProfileRegistrationService realPlayerProfileRegistrationService(PlayerSocialNetworkRepository socialNetworkRepository) {
         return new BasicServerProfileRegistrationService(gogomayaValidationService, playerProfileRepository, socialConnectionDataAdapter, socialNetworkRepository);
     }
 
     @Bean
-    @Autowired
     public ServerProfileRegistrationController playerProfileRegistrationController(BasicServerProfileRegistrationService realPlayerProfileRegistrationService) {
         return new ServerProfileRegistrationController(realPlayerProfileRegistrationService);
     }
@@ -63,7 +61,6 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    @Autowired
     public PlayerConnectionController playerConnectionController(PlayerSocialNetworkRepository socialNetworkRepository) {
         return new PlayerConnectionController(socialNetworkRepository);
     }
