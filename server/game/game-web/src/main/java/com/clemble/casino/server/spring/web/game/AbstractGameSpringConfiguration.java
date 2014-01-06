@@ -119,7 +119,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Bean
     public PendingGameInitiationListener pendingGameInitiationListener(PendingGameInitiationRepository initiationRepository,
             PendingPlayerRepository playerRepository, SystemNotificationServiceListener notificationServiceListener, ServerPlayerPresenceService presenceService, ServerGameInitiationService initiationService) {
-        PendingGameInitiationListener initiationListener = new PendingGameInitiationListener(playerRepository, presenceService, initiationService);
+        PendingGameInitiationListener initiationListener = new PendingGameInitiationListener(playerRepository, initiationRepository, presenceService, initiationService);
         notificationServiceListener.subscribe(SystemPlayerPresenceChangedEvent.CHANNEL, initiationListener);
         return initiationListener;
     }
