@@ -1,10 +1,14 @@
 package com.clemble.casino.server.spring.social;
 
+import com.clemble.casino.server.event.SystemPlayerConnectedSocialEvent;
 import com.clemble.casino.server.player.PlayerIdGenerator;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
+import com.clemble.casino.server.social.SocialNetworkPopulator;
 import com.clemble.casino.server.social.SocialProfileConnectionSignUp;
 import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
@@ -42,15 +46,15 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     public PlayerProfileRepository playerProfileRepository;
 
     @Bean
-    public SocialConnectionDataAdapter socialConnectionDataAdapter(UsersConnectionRepository usersConnectionRepository, SocialConnectionAdapterRegistry socialConnectionAdapterRegistry, ConnectionFactoryRegistry connectionFactoryLocator) {
-        return new SocialConnectionDataAdapter(connectionFactoryLocator, usersConnectionRepository, socialConnectionAdapterRegistry);
+    public SocialConnectionDataAdapter socialConnectionDataAdapter(UsersConnectionRepository usersConnectionRepository,
+            SocialConnectionAdapterRegistry socialConnectionAdapterRegistry, ConnectionFactoryRegistry connectionFactoryLocator,
+            SystemNotificationService systemNotificationService) {
+        return new SocialConnectionDataAdapter(connectionFactoryLocator, usersConnectionRepository, socialConnectionAdapterRegistry, systemNotificationService);
     }
 
     @Bean
-    public ConnectionFactoryRegistry connectionFactoryLocator(
-            SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
-            FacebookConnectionFactory facebookConnectionFactory,
-            LinkedInConnectionFactory linkedInConnectionFactory,
+    public ConnectionFactoryRegistry connectionFactoryLocator(SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
+            FacebookConnectionFactory facebookConnectionFactory, LinkedInConnectionFactory linkedInConnectionFactory,
             TwitterConnectionFactory twitterConnectionFactory) {
         ConnectionFactoryRegistry connectionFactoryRegistry = new ConnectionFactoryRegistry();
         // Step 1. Registering FB
@@ -63,6 +67,15 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
         connectionFactoryRegistry.addConnectionFactory(linkedInConnectionFactory);
         socialConnectionAdapterRegistry.register(new LinkedInSocialAdapter(linkedInConnectionFactory));
         return connectionFactoryRegistry;
+    }
+
+    @Bean
+    public SocialNetworkPopulator socialNetworkPopulator(SocialConnectionAdapterRegistry socialAdapterRegistry,
+            PlayerSocialNetworkRepository socialNetworkRepository, SystemNotificationService notificationService,
+            UsersConnectionRepository usersConnectionRepository, SystemNotificationServiceListener serviceListener) {
+        SocialNetworkPopulator networkPopulator = new SocialNetworkPopulator(socialAdapterRegistry, usersConnectionRepository, socialNetworkRepository, notificationService);
+        serviceListener.subscribe(SystemPlayerConnectedSocialEvent.CHANNEL, networkPopulator);
+        return networkPopulator;
     }
 
     @Bean
@@ -87,7 +100,8 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ConnectionSignUp connectionSignUp(PlayerIdGenerator idGenerator, PlayerProfileRepository profileRepository, SocialConnectionAdapterRegistry socialAdapterRegistry, PlayerSocialNetworkRepository socialNetworkRepository) {
+    public ConnectionSignUp connectionSignUp(PlayerIdGenerator idGenerator, PlayerProfileRepository profileRepository,
+            SocialConnectionAdapterRegistry socialAdapterRegistry, PlayerSocialNetworkRepository socialNetworkRepository) {
         return new SocialProfileConnectionSignUp(idGenerator, profileRepository, socialAdapterRegistry, socialNetworkRepository);
     }
 

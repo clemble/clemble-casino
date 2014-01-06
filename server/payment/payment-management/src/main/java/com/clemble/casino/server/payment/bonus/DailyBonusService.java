@@ -15,14 +15,14 @@ import com.clemble.casino.payment.event.BonusPaymentEvent;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
-import com.clemble.casino.server.event.PlayerEnteredEvent;
+import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
 
-public class DailyBonusService implements BonusService<PlayerEnteredEvent> {
+public class DailyBonusService implements BonusService<SystemPlayerEnteredEvent> {
 
     final private static PaymentBonusSource BONUS_SOURCE = PaymentBonusSource.dailybonus;
     final private static DateFormat DATE_FORMAT = new SimpleDateFormat("ddmmyy");
@@ -50,7 +50,7 @@ public class DailyBonusService implements BonusService<PlayerEnteredEvent> {
     }
 
     @Override
-    public void onEvent(String channel, PlayerEnteredEvent event) {
+    public void onEvent(String channel, SystemPlayerEnteredEvent event) {
         // Step 1. Sanity check
         if (event == null || channel == null)
             return;

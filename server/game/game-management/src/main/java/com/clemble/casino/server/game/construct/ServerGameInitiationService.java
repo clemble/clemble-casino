@@ -1,5 +1,8 @@
 package com.clemble.casino.server.game.construct;
 
+import java.util.Collection;
+
+import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.ServerService;
@@ -28,5 +31,14 @@ public interface ServerGameInitiationService extends ServerService {
      * @return appropriate initiation
      */
     public GameInitiation ready(GameSessionKey session, String player);
+
+    /**
+     * Returns list of pending initiations for the player
+     * 
+     * @param game - Game to be queried
+     * @param player - player to be queried
+     * @return List of GameInitiations for player
+     */
+    public Collection<GameInitiation> pending(Game game, String player);
 
 }

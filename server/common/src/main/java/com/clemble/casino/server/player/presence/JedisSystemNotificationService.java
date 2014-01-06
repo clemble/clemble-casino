@@ -25,12 +25,12 @@ public class JedisSystemNotificationService implements SystemNotificationService
     }
 
     @Override
-    public void notify(String channel, SystemEvent event) {
+    public void notify(SystemEvent event) {
         // Step 1. Fetching jedis connection
         Jedis jedis = jedisPool.getResource();
         try {
             // Step 2. Notifying players
-            Long numUpdatedClients = jedis.publish(channel, objectMapper.writeValueAsString(event));
+            Long numUpdatedClients = jedis.publish(event.getChannel(), objectMapper.writeValueAsString(event));
             LOG.debug("published {} system events", numUpdatedClients);
         } catch (JsonProcessingException e) {
             LOG.error("Failed to convert to JSON", e);

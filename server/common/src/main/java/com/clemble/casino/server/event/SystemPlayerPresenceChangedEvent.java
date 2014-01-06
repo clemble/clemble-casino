@@ -13,6 +13,8 @@ public class SystemPlayerPresenceChangedEvent implements SystemEvent, PlayerAwar
      */
     private static final long serialVersionUID = 6335808874731056541L;
 
+    final public static String CHANNEL = "presence";
+
     final private String player;
     final private Presence presence;
 
@@ -33,6 +35,11 @@ public class SystemPlayerPresenceChangedEvent implements SystemEvent, PlayerAwar
     @Override
     public String getPlayer() {
         return player;
+    }
+
+    @Override
+    public String getChannel(){
+        return CHANNEL;
     }
 
     @Override

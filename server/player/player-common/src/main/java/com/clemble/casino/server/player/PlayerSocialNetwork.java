@@ -1,5 +1,6 @@
 package com.clemble.casino.server.player;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,13 +24,13 @@ public class PlayerSocialNetwork implements PlayerAware {
     @GraphId
     private Long id;
 
-    @Indexed(unique = true)
+    @Indexed(unique = true, fieldName = "player")
     private String player;
 
-    @RelatedTo(type = "OWN", direction = Direction.BOTH)
+    @RelatedTo(type = "OWN", direction = Direction.OUTGOING)
     private Set<PlayerConnectionKey> owns = new HashSet<PlayerConnectionKey>();
 
-    @RelatedTo(type = "CONNECTED", direction = Direction.BOTH)
+    @RelatedTo(type = "CONNECTED", direction = Direction.OUTGOING)
     private Set<PlayerConnectionKey> connections = new HashSet<PlayerConnectionKey>();
 
     public PlayerSocialNetwork() {
@@ -62,6 +63,12 @@ public class PlayerSocialNetwork implements PlayerAware {
 
     public PlayerSocialNetwork addOwned(ConnectionKey connectionKey) {
         owns.add(new PlayerConnectionKey(connectionKey));
+        return this;
+    }
+    
+    public PlayerSocialNetwork addOwned(Collection<ConnectionKey> connectionKey) {
+        for(ConnectionKey connection: connectionKey)
+            addOwned(connection);
         return this;
     }
 

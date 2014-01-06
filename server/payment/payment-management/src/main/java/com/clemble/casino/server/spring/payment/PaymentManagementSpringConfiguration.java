@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.payment.BasicServerPaymentTransactionService;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.payment.bonus.DailyBonusService;
@@ -50,7 +51,7 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
             SystemNotificationServiceListener notificationServiceListener) {
         Money bonus = new Money(Currency.FakeMoney, 100);
         DailyBonusService dailyBonusService = new DailyBonusService(playerNotificationService, accountRepository, transactionRepository, transactionServerService, bonusPolicy, bonus);
-        notificationServiceListener.subscribe("entered", dailyBonusService);
+        notificationServiceListener.subscribe(SystemPlayerEnteredEvent.CHANNEL, dailyBonusService);
         return dailyBonusService;
     }
 

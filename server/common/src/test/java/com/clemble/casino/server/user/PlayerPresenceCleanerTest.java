@@ -54,18 +54,18 @@ public class PlayerPresenceCleanerTest {
 
     @Test
     public void testExpireWorks() throws InterruptedException {
+        Thread.sleep(1500);
         // Step 1. Mark player as online, and check his presence
         presenceService.markOnline("A");
         assertTrue(presenceService.isAvailable("A"));
         assertEquals(presenceService.getPresence("A").getPresence(), Presence.online);
         final BlockingQueue<SystemPlayerPresenceChangedEvent> events = new ArrayBlockingQueue<>(10);
-        systemListener.subscribe("A", new SystemEventListener<SystemPlayerPresenceChangedEvent>() {
+        systemListener.subscribe(SystemPlayerPresenceChangedEvent.CHANNEL, new SystemEventListener<SystemPlayerPresenceChangedEvent>() {
             @Override
             public void onEvent(String channel, SystemPlayerPresenceChangedEvent event) {
                 events.add(event);
             }
         });
-        Thread.sleep(500);
         assertTrue(events.isEmpty());
         // Step 2. Mark for expire in 1 second
         Jedis jedis = jedisPool.getResource();

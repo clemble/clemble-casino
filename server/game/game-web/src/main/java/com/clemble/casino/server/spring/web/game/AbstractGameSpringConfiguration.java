@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.id.GameIdGenerator;
+import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.GameSessionFactory;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
@@ -22,6 +23,7 @@ import com.clemble.casino.server.game.configuration.GameSpecificationConfigurati
 import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
 import com.clemble.casino.server.game.construct.BasicServerGameConstructionService;
 import com.clemble.casino.server.game.construct.BasicServerGameInitiationService;
+import com.clemble.casino.server.game.construct.PendingGameInitiationListener;
 import com.clemble.casino.server.game.construct.ServerGameConstructionService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.player.account.ServerPlayerAccountService;
@@ -32,12 +34,15 @@ import com.clemble.casino.server.player.presence.SystemNotificationServiceListen
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
 import com.clemble.casino.server.repository.game.GameSpecificationRepository;
+import com.clemble.casino.server.repository.game.PendingGameInitiationRepository;
+import com.clemble.casino.server.repository.game.PendingPlayerRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.game.options.GameSpecificationController;
 import com.clemble.casino.server.web.game.session.GameActionController;
 import com.clemble.casino.server.web.game.session.GameConstructionController;
+import com.clemble.casino.server.web.game.session.GameInitiationController;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
@@ -85,8 +90,14 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameConstructionController<State> constructionController(ServerGameConstructionService constructionServerService, ServerGameInitiationService initiationService) {
-        return new GameConstructionController<State>(gameConstructionRepository, constructionServerService, initiationService, gameSpecificationRegistry);
+    public GameConstructionController<State> constructionController(ServerGameConstructionService constructionServerService,
+            ServerGameInitiationService initiationService) {
+        return new GameConstructionController<State>(gameConstructionRepository, constructionServerService, gameSpecificationRegistry);
+    }
+
+    @Bean
+    public GameInitiationController initiationController(ServerGameInitiationService initiationService) {
+        return new GameInitiationController(initiationService);
     }
 
     @Bean
@@ -96,14 +107,21 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public ServerGameInitiationService serverGameInitiationService(
-            GameSessionProcessor<?> sessionProcessor,
-            ServerPlayerPresenceService presenceServerService,
-            @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
-            SystemNotificationServiceListener presenceListenerService) {
+    public ServerGameInitiationService serverGameInitiationService(GameSessionProcessor<?> sessionProcessor, ServerPlayerPresenceService presenceServerService,
+            @Qualifier("playerNotificationService") PlayerNotificationService notificationService, PendingPlayerRepository pendingPlayerRepository,
+            PendingGameInitiationRepository initiationRepository) {
         ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("Game initiation - %d");
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
-        return new BasicServerGameInitiationService(sessionProcessor, presenceServerService, notificationService, presenceListenerService, executorService);
+        return new BasicServerGameInitiationService(sessionProcessor, presenceServerService, notificationService, pendingPlayerRepository,
+                initiationRepository, executorService);
+    }
+
+    @Bean
+    public PendingGameInitiationListener pendingGameInitiationListener(PendingGameInitiationRepository initiationRepository,
+            PendingPlayerRepository playerRepository, SystemNotificationServiceListener notificationServiceListener, ServerPlayerPresenceService presenceService, ServerGameInitiationService initiationService) {
+        PendingGameInitiationListener initiationListener = new PendingGameInitiationListener(playerRepository, presenceService, initiationService);
+        notificationServiceListener.subscribe(SystemPlayerPresenceChangedEvent.CHANNEL, initiationListener);
+        return initiationListener;
     }
 
     @Bean

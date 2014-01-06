@@ -47,12 +47,8 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
     }
 
     @Override
-    public PlayerSocialNetwork fetchPlayerNetwork(PlayerProfile playerProfile, LinkedIn api) {
-        // Step 1. Creating owned social network
-        PlayerSocialNetwork socialNetwork = new PlayerSocialNetwork()
-            .addOwned(playerProfile.getSocialConnection(getProviderId()))
-            .setPlayer(playerProfile.getPlayer());;
-        // Step 2. Fetching all friend connections
+    public PlayerSocialNetwork enrichPlayerNetwork(PlayerSocialNetwork socialNetwork, LinkedIn api) {
+        // Step 1. Fetching all friend connections
         int position = 0;
         List<LinkedInProfile> colleagues = api.connectionOperations().getConnections(position, 500);
         do {
@@ -61,7 +57,7 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
                 socialNetwork.addConnection(toConnectionKey(linkedInProfile.getId()));
             position += 500;
         } while(colleagues.size() == 500);
-        // Step 3. Returning created PlayerProfile
+        // Step 2. Returning created PlayerProfile
         return socialNetwork;
     }
 

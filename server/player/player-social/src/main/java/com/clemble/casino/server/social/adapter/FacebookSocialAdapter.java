@@ -60,12 +60,8 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
     }
 
     @Override
-    public PlayerSocialNetwork fetchPlayerNetwork(PlayerProfile playerProfile, Facebook api) {
-        // Step 1. Creating owned social network
-        PlayerSocialNetwork socialNetwork = new PlayerSocialNetwork()
-            .addOwned(playerProfile.getSocialConnection(getProviderId()))
-            .setPlayer(playerProfile.getPlayer());;
-        // Step 2. Fetching all friend connections
+    public PlayerSocialNetwork enrichPlayerNetwork(PlayerSocialNetwork socialNetwork, Facebook api) {
+        // Step 1. Fetching all friend connections
         PagingParameters pagingParameters = null;
         PagedList<String> friends = api.friendOperations().getFriendIds();
         do {
@@ -73,7 +69,7 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
                 socialNetwork.addConnection(toConnectionKey(facebookId));
             pagingParameters = friends.getNextPage();
         } while(pagingParameters != null && (pagingParameters.getLimit() > pagingParameters.getOffset()));
-        // Step 3. Returning created PlayerProfile
+        // Step 2. Returning created PlayerProfile
         return socialNetwork;
     }
 

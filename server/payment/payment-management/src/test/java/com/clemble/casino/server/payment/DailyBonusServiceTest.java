@@ -22,7 +22,7 @@ import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
-import com.clemble.casino.server.event.PlayerEnteredEvent;
+import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.payment.bonus.DailyBonusService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
@@ -59,7 +59,7 @@ public class DailyBonusServiceTest {
         transactionRepository.saveAndFlush(paymentTransaction);
         assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, PaymentBonusSource.dailybonus + "%").size(), 1);
         // Step 3. Checking value in payment transaction
-        dailyBonusService.onEvent("entered", new PlayerEnteredEvent(player));
+        dailyBonusService.onEvent(SystemPlayerEnteredEvent.CHANNEL, new SystemPlayerEnteredEvent(player));
         // Step 4. Checking new transaction performed
         assertEquals(transactionRepository.findByPaymentOperationsPlayer(player).size(), 2);
         assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, PaymentBonusSource.dailybonus + "%").size(), 2);

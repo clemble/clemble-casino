@@ -2,9 +2,11 @@ package com.clemble.casino.server.game.construct;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -13,19 +15,21 @@ import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameInitiatedEvent;
 import com.clemble.casino.game.event.server.GameInitiationCanceledEvent;
 import com.clemble.casino.game.event.server.GameInitiationConfirmedEvent;
 import com.clemble.casino.player.PlayerAwareUtils;
-import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
+import com.clemble.casino.server.game.PendingGameInitiation;
+import com.clemble.casino.server.game.PendingPlayer;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.repository.game.PendingGameInitiationRepository;
+import com.clemble.casino.server.repository.game.PendingPlayerRepository;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class BasicServerGameInitiationService implements ServerGameInitiationService {
 
@@ -37,46 +41,40 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
     final private ServerPlayerPresenceService presenceService;
     final private PlayerNotificationService notificationService;
     final private GameSessionProcessor<?> processor;
+    final private PendingPlayerRepository playerRepository;
+    final private PendingGameInitiationRepository initiationRepository;
 
     final private ScheduledExecutorService executorService;
-
-    final private SystemNotificationServiceListener systemListener;
 
     public BasicServerGameInitiationService(
             GameSessionProcessor<?> processor,
             ServerPlayerPresenceService presenceService,
             PlayerNotificationService notificationService,
-            SystemNotificationServiceListener systemListener,
+            PendingPlayerRepository playerRepository,
+            PendingGameInitiationRepository initiationRepository,
             ScheduledExecutorService executorService) {
         this.processor = checkNotNull(processor);
 
-        this.executorService = checkNotNull(executorService);
-        this.systemListener = checkNotNull(systemListener);
         this.presenceService = checkNotNull(presenceService);
+        this.initiationRepository = checkNotNull(initiationRepository);
+        this.playerRepository = checkNotNull(playerRepository);
         this.notificationService = checkNotNull(notificationService);
+
+        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("Game initiation - %d");
+        this.executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
     }
 
     @Override
     public void register(final GameInitiation initiation) {
         final Collection<String> players = PlayerAwareUtils.toPlayerList(initiation.getParticipants());
         if (!presenceService.areAvailable(players)) {
-            systemListener.subscribe(players, new SystemEventListener<SystemEvent>() {
-
-                @Override
-                public void onEvent(String player, SystemEvent event) {
-                    if (event instanceof SystemPlayerPresenceChangedEvent) {
-                        if (presenceService.areAvailable(players)) {
-                            systemListener.unsubscribe(players, this);
-                            start(initiation);
-                        }
-                    }
-                }
-
-                @Override
-                public String toString() {
-                    return "systemListener:" + initiation.getSession();
-                }
-            });
+            // TODO make automatic creation part of initialization flow
+            Collection<PendingPlayer> pendingPlayers = new ArrayList<>();
+            for(String player: players)
+                pendingPlayers.add(new PendingPlayer(player));
+            playerRepository.save(pendingPlayers);
+            // Step 1. Saving new PendingGameInitiation
+            initiationRepository.save(new PendingGameInitiation(initiation));
         } else {
             start(initiation);
         }
@@ -132,6 +130,17 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
             notificationService.notifyAll(initiation.getParticipants(), new GameInitiationConfirmedEvent(sessionKey, initiation, player));
         }
         return initiation;
+    }
+
+    @Override
+    public Collection<GameInitiation> pending(Game game, String player) {
+        // TODO add filtering by game
+        // Step 1. Fetching data from pending player
+        Collection<GameInitiation> initiations = new ArrayList<>();
+        for(PendingGameInitiation initiation: playerRepository.findPending(player))
+            initiations.add(initiation.toInitiation());
+        // Step 2. Returning pending initiations
+        return initiations;
     }
 
 }

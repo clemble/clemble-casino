@@ -39,17 +39,13 @@ public class TwitterSocialAdapter extends SocialConnectionAdapter<Twitter>{
     }
 
     @Override
-    public PlayerSocialNetwork fetchPlayerNetwork(PlayerProfile playerProfile, Twitter api) {
-        // Step 1. Creating owned social network
-        PlayerSocialNetwork socialNetwork = new PlayerSocialNetwork()
-            .addOwned(playerProfile.getSocialConnection(getProviderId()))
-            .setPlayer(playerProfile.getPlayer());;
-        // Step 2. Fetching all twitter connections (5000)
+    public PlayerSocialNetwork enrichPlayerNetwork(PlayerSocialNetwork socialNetwork, Twitter api) {
+        // Step 1. Fetching all twitter connections (5000)
         // TODO check if this ever fails
         CursoredList<Long> friends = api.friendOperations().getFriendIds();
         for(Long twitterId: friends)
             socialNetwork.addConnection(toConnectionKey(String.valueOf(twitterId)));
-        // Step 3. Returning created PlayerProfile
+        // Step 2. Returning created PlayerProfile
         return socialNetwork;
     }
 

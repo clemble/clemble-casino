@@ -6,17 +6,19 @@ import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PlayerLeftEvent implements SystemEvent, PlayerAware {
+public class SystemPlayerLeftEvent implements SystemEvent, PlayerAware {
 
     /**
      * Generated 13/11/13
      */
     private static final long serialVersionUID = -7854654395683761302L;
 
+    final public static String CHANNEL = "left";
+
     final private String player;
 
     @JsonCreator
-    public PlayerLeftEvent(@JsonProperty("player") String player) {
+    public SystemPlayerLeftEvent(@JsonProperty("player") String player) {
         this.player = checkNotNull(player);
     }
 
@@ -41,12 +43,17 @@ public class PlayerLeftEvent implements SystemEvent, PlayerAware {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerLeftEvent other = (PlayerLeftEvent) obj;
+        SystemPlayerLeftEvent other = (SystemPlayerLeftEvent) obj;
         if (player == null) {
             if (other.player != null)
                 return false;
         } else if (!player.equals(other.player))
             return false;
         return true;
+    }
+
+    @Override
+    public String getChannel() {
+        return CHANNEL;
     }
 }

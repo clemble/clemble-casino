@@ -45,8 +45,10 @@ public class SocialProfileConnectionSignUp implements ConnectionSignUp {
         playerProfile.setPlayer(idGenerator.newId());
         playerProfile = profileRepository.save(playerProfile);
         // Step 4. Fetching player social network
-        // TODO make this an asynchronous task
-        PlayerSocialNetwork socialNetwork = socialAdapter.fetchPlayerNetwork(playerProfile, connection.getApi());
+        // Step 1. Creating owned social network
+        PlayerSocialNetwork socialNetwork = new PlayerSocialNetwork()
+            .addOwned(playerProfile.getSocialConnections())
+            .setPlayer(playerProfile.getPlayer());
         socialNetworkRepository.save(socialNetwork);
         // Step 5. Returning playerIdentity as a result
         return String.valueOf(playerProfile.getPlayer());

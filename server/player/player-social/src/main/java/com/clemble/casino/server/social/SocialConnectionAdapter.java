@@ -28,10 +28,10 @@ public abstract class SocialConnectionAdapter<A> {
 
     abstract public PlayerProfile fetchPlayerProfile(A api);
 
-    abstract public PlayerSocialNetwork fetchPlayerNetwork(PlayerProfile playerProfile, A api);
-
     abstract public ConnectionData toConnectionData(SocialAccessGrant accessGrant);
 
     abstract public ConnectionData toConnectionData(SocialConnectionData connectionData);
+
+    abstract public PlayerSocialNetwork enrichPlayerNetwork(PlayerSocialNetwork socialNetwork, A api);
 
 }

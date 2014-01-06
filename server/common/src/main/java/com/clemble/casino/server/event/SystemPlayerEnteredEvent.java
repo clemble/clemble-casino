@@ -4,17 +4,19 @@ import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PlayerEnteredEvent implements SystemEvent, PlayerAware {
+public class SystemPlayerEnteredEvent implements SystemEvent, PlayerAware {
 
     /**
      * Generated 13/12/13
      */
     private static final long serialVersionUID = -2179848922729269755L;
 
+    final public static String CHANNEL = "entered";
+
     final private String player;
 
     @JsonCreator
-    public PlayerEnteredEvent(@JsonProperty("player") String player) {
+    public SystemPlayerEnteredEvent(@JsonProperty("player") String player) {
         this.player = player;
     }
 
@@ -25,6 +27,11 @@ public class PlayerEnteredEvent implements SystemEvent, PlayerAware {
     @Override
     public String toString(){
         return "entered:" + player;
+    }
+
+    @Override
+    public String getChannel() {
+        return CHANNEL;
     }
 
     @Override
@@ -43,7 +50,7 @@ public class PlayerEnteredEvent implements SystemEvent, PlayerAware {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerEnteredEvent other = (PlayerEnteredEvent) obj;
+        SystemPlayerEnteredEvent other = (SystemPlayerEnteredEvent) obj;
         if (player == null) {
             if (other.player != null)
                 return false;

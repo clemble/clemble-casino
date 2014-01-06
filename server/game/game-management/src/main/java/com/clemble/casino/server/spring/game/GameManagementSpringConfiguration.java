@@ -1,5 +1,6 @@
 package com.clemble.casino.server.spring.game;
 
+import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
+import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
@@ -36,13 +38,14 @@ import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
+import com.clemble.casino.server.spring.common.BasicNeo4JSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, GameJPASpringConfiguration.class, PaymentCommonSpringConfiguration.class,
+@Import(value = {CommonSpringConfiguration.class, GameNeo4jSpringConfiguration.class, GameJPASpringConfiguration.class, PaymentCommonSpringConfiguration.class,
         PlayerCommonSpringConfiguration.class, GameManagementSpringConfiguration.GameTimeAspectConfiguration.class,
         GameManagementSpringConfiguration.Test.class })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
@@ -148,6 +151,11 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
                 @Override
                 public GameInitiation ready(GameSessionKey sessionKey, String player) {
+                    return null;
+                }
+
+                @Override
+                public Collection<GameInitiation> pending(Game game, String player) {
                     return null;
                 }
             };

@@ -22,8 +22,8 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.event.PlayerEnteredEvent;
-import com.clemble.casino.server.event.PlayerLeftEvent;
+import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
+import com.clemble.casino.server.event.SystemPlayerLeftEvent;
 import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
@@ -146,13 +146,13 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
         // Step 2. Notifying listeners of state change
         notifyStateChange(PlayerPresence.offline(player));
         // Step 3. Notifying player left event
-        systemNotificationService.notify("left", new PlayerLeftEvent(player));
+        systemNotificationService.notify(new SystemPlayerLeftEvent(player));
     }
 
     @Override
     public Date markAvailable(String player) {
         // Step 1. Notifying player entered event
-        systemNotificationService.notify("entered", new PlayerEnteredEvent(player));
+        systemNotificationService.notify(new SystemPlayerEnteredEvent(player));
         // Step 2. Generating expiration date
         return markOnline(player);
     }
@@ -175,7 +175,7 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
 
     private void notifyStateChange(final PlayerPresence newPresence) {
         // Step 1. Notifying through native Redis mechanisms
-        systemNotificationService.notify(newPresence.getPlayer(), new SystemPlayerPresenceChangedEvent(newPresence));
+        systemNotificationService.notify(new SystemPlayerPresenceChangedEvent(newPresence));
         // Step 2. Notifying through native Rabbit mechanisms
         presenceNotification.notify(newPresence.getPlayer(), new PlayerPresenceChangedEvent(newPresence));
     }
