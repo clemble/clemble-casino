@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,6 +30,8 @@ import com.clemble.casino.server.error.ClembleConstraintExceptionResolver;
 @Import(value = { BasicJPASpringConfiguration.DefaultAndTest.class })
 public class BasicJPASpringConfiguration implements SpringConfiguration {
 
+    final private static Logger LOG = LoggerFactory.getLogger(BasicJPASpringConfiguration.class);
+    
     @Autowired
     @Qualifier("dataSource")
     public DataSource dataSource;
@@ -57,32 +61,26 @@ public class BasicJPASpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public EmbeddedDatabaseFactory dataSourceFactory() throws IOException {
+        public DataSource dataSource() throws IOException {
+            // Step 0. Creating embedded database
             EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
             factory.setDatabaseName("clemble_casino");
             factory.setDatabaseType(EmbeddedDatabaseType.H2);
-            factory.setDatabasePopulator(databasePopulator());
-            return factory;
-        }
-
-        @Bean
-        public DataSource dataSource() throws IOException {
-            return dataSourceFactory().getDatabase();
-        }
-
-        @Bean
-        public ResourceDatabasePopulator databasePopulator() throws IOException {
+            // Step 1. Initializing database populator
             ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
-            // Step 1. Searching for schema script files
+            // Step 2. Searching for schema script files
             for (Resource schema : applicationContext.getResources("classpath*:/sql/schema/h2/*.sql")) {
+                LOG.debug("Adding schema {}", schema);
                 databasePopulator.addScript(schema);
             }
-            // Step 2. Searching for data script files, adding order to support test override of default values
+            // Step 3. Searching for data script files, adding order to support test override of default values
             for (Resource data : applicationContext.getResources("classpath*:/sql/data/*.sql")) {
+                LOG.debug("Adding script {}", data);
                 databasePopulator.addScript(data);
             }
-            // Step 3. Returning aggregated script
-            return databasePopulator;
+            // Step 4. Specifying aggregated script as part of Factory
+            factory.setDatabasePopulator(databasePopulator);
+            return factory.getDatabase();
         }
 
         @Override

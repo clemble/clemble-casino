@@ -13,7 +13,7 @@ import com.clemble.casino.server.player.lock.JavaPlayerLockService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 
 @Configuration
-@Import({ PropertiesSpringConfiguration.class, RabbitSpringConfiguration.class })
+@Import({ PropertiesSpringConfiguration.class, RabbitSpringConfiguration.class, SystemNotificationSpringConfiguration.class })
 public class CommonSpringConfiguration implements SpringConfiguration {
 
     @Bean

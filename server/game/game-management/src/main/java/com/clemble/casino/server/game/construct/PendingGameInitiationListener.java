@@ -32,7 +32,7 @@ public class PendingGameInitiationListener implements SystemEventListener<System
     }
 
     @Override
-    public void onEvent(String channel, SystemPlayerPresenceChangedEvent event) {
+    public void onEvent(SystemPlayerPresenceChangedEvent event) {
         // Step 1. Checking only if presence is online
         if (event.getPresence() == Presence.online) {
             // Step 2. Fetching pending initiations
@@ -46,6 +46,16 @@ public class PendingGameInitiationListener implements SystemEventListener<System
                 }
             }
         }
+    }
+
+    @Override
+    public String getChannel(){
+        return SystemPlayerPresenceChangedEvent.CHANNEL;
+    }
+
+    @Override
+    public String getQueueName() {
+        return "game.pending";
     }
 
 }

@@ -59,7 +59,7 @@ public class DailyBonusServiceTest {
         transactionRepository.saveAndFlush(paymentTransaction);
         assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, PaymentBonusSource.dailybonus + "%").size(), 1);
         // Step 3. Checking value in payment transaction
-        dailyBonusService.onEvent(SystemPlayerEnteredEvent.CHANNEL, new SystemPlayerEnteredEvent(player));
+        dailyBonusService.onEvent(new SystemPlayerEnteredEvent(player));
         // Step 4. Checking new transaction performed
         assertEquals(transactionRepository.findByPaymentOperationsPlayer(player).size(), 2);
         assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, PaymentBonusSource.dailybonus + "%").size(), 2);

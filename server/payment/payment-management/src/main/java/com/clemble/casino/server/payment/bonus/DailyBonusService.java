@@ -50,9 +50,9 @@ public class DailyBonusService implements BonusService<SystemPlayerEnteredEvent>
     }
 
     @Override
-    public void onEvent(String channel, SystemPlayerEnteredEvent event) {
+    public void onEvent(SystemPlayerEnteredEvent event) {
         // Step 1. Sanity check
-        if (event == null || channel == null)
+        if (event == null)
             return;
         // Step 2. Checking last bonus marker
         String player = event.getPlayer();
@@ -73,6 +73,16 @@ public class DailyBonusService implements BonusService<SystemPlayerEnteredEvent>
                 notificationService.notify(new BonusPaymentEvent(player, bonusAmount, BONUS_SOURCE));
             }
         }
+    }
+
+    @Override
+    public String getChannel(){
+        return SystemPlayerEnteredEvent.CHANNEL;
+    }
+
+    @Override
+    public String getQueueName() {
+        return "payment.bonus.daily";
     }
 
 }

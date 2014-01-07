@@ -55,7 +55,7 @@ public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> impl
         this.serverRegistry = checkNotNull(serverRegistry);
 
         ThreadFactory notificationThreadFactory = new ThreadFactoryBuilder()
-            .setNameFormat("playerNotificationListener with '" + postfix + "' %d")
+            .setNameFormat("CL playerNotificationListener with '" + postfix + "' %d")
             .build();
         this.executorService = Executors.newFixedThreadPool(2, notificationThreadFactory);
     }
@@ -124,7 +124,7 @@ public class RabbitPlayerNotificationListenerManager<T extends SystemEvent> impl
                     String routingKey = message.getMessageProperties().getReceivedRoutingKey();
                     String player = routingKey.substring(0, routingKey.length() - postfix.length());
                     for(SystemEventListener<T> playerStateListener: listeners.get(player)) {
-                        playerStateListener.onEvent(player, event);
+                        playerStateListener.onEvent(event);
                     }
                 }
             });

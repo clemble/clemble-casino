@@ -27,7 +27,7 @@ public class JedisPubSubSubcriber<T extends JedisPubSub & RedisSubscribersAware>
     public JedisPubSubSubcriber(JedisPool jedisPool, T jedisPubSub) {
         this.jedisPool = checkNotNull(jedisPool);
         this.jedisPubSub = checkNotNull(jedisPubSub);
-        this.scheduledExecutorService = Executors.newScheduledThreadPool(1, new ThreadFactoryBuilder().setNameFormat(jedisPubSub.toString()).build());
+        this.scheduledExecutorService = Executors.newScheduledThreadPool(1, new ThreadFactoryBuilder().setNameFormat("CL " + jedisPubSub.toString()).build());
 
         this.scheduledExecutorService.execute(this);
         this.LOG = LoggerFactory.getLogger(jedisPubSub.getClass());

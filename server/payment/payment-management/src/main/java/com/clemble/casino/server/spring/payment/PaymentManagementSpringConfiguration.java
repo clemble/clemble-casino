@@ -51,7 +51,7 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
             SystemNotificationServiceListener notificationServiceListener) {
         Money bonus = new Money(Currency.FakeMoney, 100);
         DailyBonusService dailyBonusService = new DailyBonusService(playerNotificationService, accountRepository, transactionRepository, transactionServerService, bonusPolicy, bonus);
-        notificationServiceListener.subscribe(SystemPlayerEnteredEvent.CHANNEL, dailyBonusService);
+        notificationServiceListener.subscribe(dailyBonusService);
         return dailyBonusService;
     }
 

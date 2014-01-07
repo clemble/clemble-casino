@@ -38,7 +38,7 @@ public class PresenceListenerWrapper implements MessageListener {
         // Step 2. Notifying associated PlayerStateListener
         LOG.debug("channel: {}, message: {}", deserializedChannel, deserializedMessage);
         try {
-            playerStateListener.onEvent(deserializedChannel, objectMapper.readValue(deserializedMessage, SystemEvent.class));
+            playerStateListener.onEvent(objectMapper.readValue(deserializedMessage, SystemEvent.class));
         } catch (IOException ioException) {
             LOG.error("Failed to deserialize {}", deserializedMessage);
         }

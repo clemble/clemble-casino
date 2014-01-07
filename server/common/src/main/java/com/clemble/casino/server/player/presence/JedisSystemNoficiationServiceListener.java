@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
 
-import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,52 +43,39 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
     }
 
     @Override
-    public void subscribe(String playerId, SystemEventListener<? extends SystemEvent> messageListener) {
+    public void subscribe(SystemEventListener<? extends SystemEvent> messageListener) {
         // Step 1. Initializing subscription
-        if (!subscribers.containsKey(playerId)) {
-            if (subscribers.putIfAbsent(playerId, new LinkedBlockingQueue<SystemEventListener<? extends SystemEvent>>()) == null) {
+        if (!subscribers.containsKey(messageListener.getChannel())) {
+            if (subscribers.putIfAbsent(messageListener.getChannel(), new LinkedBlockingQueue<SystemEventListener<? extends SystemEvent>>()) == null) {
                 lock.lock();
                 try {
                     if (isSubscribed())
-                        subscribe(playerId);
+                        subscribe(messageListener.getChannel());
                 } finally {
                     lock.unlock();
                 }
             }
         }
         // Step 2. Adding new message listener to the Queue
-        subscribers.get(playerId).add(messageListener);
+        subscribers.get(messageListener.getChannel()).add(messageListener);
     }
 
     @Override
-    public void subscribe(Collection<String> players, SystemEventListener<? extends SystemEvent> messageListener) {
-        for (String player : players) {
-            subscribe(player, messageListener);
-        }
-    }
-
-    @Override
-    public void unsubscribe(String player, SystemEventListener<? extends SystemEvent> messageListener) {
+    public void unsubscribe(SystemEventListener<? extends SystemEvent> messageListener) {
         // Step 1. Removing specific listener
-        subscribers.get(player).remove(messageListener);
+        subscribers.get(messageListener.getChannel()).remove(messageListener);
         // Step 2. If there is nothing to subscribe to for the player remove entry and unsubscribe
-        if (subscribers.get(player).isEmpty()) {
-            subscribers.remove(player);
+        if (subscribers.get(messageListener.getChannel()).isEmpty()) {
+            subscribers.remove(messageListener.getChannel());
             // Step 2.1 Calling inherited unsubscribe method
-            this.unsubscribe(player);
+            this.unsubscribe(messageListener.getChannel());
         }
-    }
-
-    @Override
-    public void unsubscribe(Collection<String> players, SystemEventListener<? extends SystemEvent> playerStateListener) {
-        for (String player : players)
-            unsubscribe(player, playerStateListener);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onMessage(String player, String serializedEvent) {
-        Collection<SystemEventListener<? extends SystemEvent>> channelListeners = subscribers.get(player);
+    public void onMessage(String channel, String serializedEvent) {
+        Collection<SystemEventListener<? extends SystemEvent>> channelListeners = subscribers.get(channel);
         SystemEvent event;
         try {
             event = objectMapper.readValue(serializedEvent, SystemEvent.class);
@@ -99,7 +85,7 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
         }
         if (channelListeners != null && event != null) {
             for (SystemEventListener<? extends SystemEvent> channelListener : channelListeners) {
-                ((SystemEventListener<SystemEvent>) channelListener).onEvent(player, event);
+                ((SystemEventListener<SystemEvent>) channelListener).onEvent(event);
             }
         }
     }
@@ -123,16 +109,6 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
 
     @Override
     public void onPSubscribe(String s, int i) {
-    }
-
-    @Override
-    public void subscribe(EventSelector eventSelector, SystemEventListener<? extends SystemEvent> messageListener) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void unsubscribe(EventSelector eventSelector, SystemEventListener<? extends SystemEvent> playerStateListener) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

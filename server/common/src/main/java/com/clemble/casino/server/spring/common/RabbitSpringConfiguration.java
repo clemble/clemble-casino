@@ -1,10 +1,5 @@
 package com.clemble.casino.server.spring.common;
 
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,7 +22,9 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     @Qualifier("objectMapper")
     public ObjectMapper objectMapper;
 
-    public ServerRegistry playerNotificationRegistry(){
+    @Bean
+    public ServerRegistry playerNotificationRegistry() {
+        // TODO configurations
         return new DNSBasedServerRegistry(0, "127.0.0.1", "127.0.0.1", "127.0.0.1");
     }
 
@@ -39,30 +36,14 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ConnectionFactory connectionFactory() {
-        return new CachingConnectionFactory();
+    public PlayerNotificationService playerNotificationService(ServerRegistry playerNotificationRegistry, Jackson2JsonMessageConverter jsonMessageConverter) {
+        return new RabbitPlayerNotificationService(NotificationMapping.PLAYER_CHANNEL_POSTFIX, jsonMessageConverter, playerNotificationRegistry);
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate() {
-        ConnectionFactory connectionFactory = connectionFactory();
-        // Step 1. Creating Queue
-        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-        rabbitAdmin.declareQueue(new Queue("SCDU", false, false, true));
-        // Step 2. Creating RabbitTemplate for the Queue
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setQueue("SCDU");
-        return rabbitTemplate;
-    }
-
-    @Bean
-    public PlayerNotificationService playerNotificationService() {
-        return new RabbitPlayerNotificationService(NotificationMapping.PLAYER_CHANNEL_POSTFIX, jsonMessageConverter(), playerNotificationRegistry());
-    }
-
-    @Bean
-    public PlayerNotificationService playerPresenceNotificationService() {
-        return new RabbitPlayerNotificationService(NotificationMapping.PRESENCE_CHANNEL_POSTFIX, jsonMessageConverter(), playerNotificationRegistry());
+    public PlayerNotificationService playerPresenceNotificationService(ServerRegistry playerNotificationRegistry,
+            Jackson2JsonMessageConverter jsonMessageConverter) {
+        return new RabbitPlayerNotificationService(NotificationMapping.PRESENCE_CHANNEL_POSTFIX, jsonMessageConverter, playerNotificationRegistry);
     }
 
 }

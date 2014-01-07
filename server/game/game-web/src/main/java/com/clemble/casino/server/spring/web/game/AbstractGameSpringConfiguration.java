@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.id.GameIdGenerator;
-import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.GameSessionFactory;
 import com.clemble.casino.server.game.action.GameSessionProcessor;
@@ -120,7 +119,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     public PendingGameInitiationListener pendingGameInitiationListener(PendingGameInitiationRepository initiationRepository,
             PendingPlayerRepository playerRepository, SystemNotificationServiceListener notificationServiceListener, ServerPlayerPresenceService presenceService, ServerGameInitiationService initiationService) {
         PendingGameInitiationListener initiationListener = new PendingGameInitiationListener(playerRepository, initiationRepository, presenceService, initiationService);
-        notificationServiceListener.subscribe(SystemPlayerPresenceChangedEvent.CHANNEL, initiationListener);
+        notificationServiceListener.subscribe(initiationListener);
         return initiationListener;
     }
 

@@ -53,7 +53,7 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
         this.serverRegistry = checkNotNull(serverRegistry);
 
         ThreadFactory notificationThreadFactory = new ThreadFactoryBuilder()
-            .setNameFormat("playerNotification with '" + postfix + "' %d")
+            .setNameFormat("CL playerNotification with '" + postfix + "' %d")
             .build();
         this.executorService = Executors.newFixedThreadPool(2, notificationThreadFactory);
     }

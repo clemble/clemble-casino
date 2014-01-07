@@ -9,8 +9,8 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 
-import com.clemble.casino.server.event.SystemPlayerConnectionDiscoveredEvent;
 import com.clemble.casino.server.event.SystemPlayerConnectedSocialEvent;
+import com.clemble.casino.server.event.SystemPlayerConnectionDiscoveredEvent;
 import com.clemble.casino.server.player.PlayerSocialNetwork;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
@@ -34,7 +34,7 @@ public class SocialNetworkPopulator implements SystemEventListener<SystemPlayerC
 
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void onEvent(String channel, SystemPlayerConnectedSocialEvent event) {
+    public void onEvent(SystemPlayerConnectedSocialEvent event) {
         // Step 1. Finding appropriate SocialConnectionAdapter
         SocialConnectionAdapter socialAdapter = socialAdapterRegistry.getSocialAdapter(event.getConnection().getProviderId());
         // Step 2. Fetching connection
@@ -42,7 +42,9 @@ public class SocialNetworkPopulator implements SystemEventListener<SystemPlayerC
         Connection<?> connection = connectionRepository.getConnection(event.getConnection());
         // Step 3. Fetching PlayerSocialNetwork and existing connections
         Collection<PlayerSocialNetwork> connectionsBefore = ImmutableList.copyOf(socialNetworkRepository.findRelations(event.getPlayer()));
-        PlayerSocialNetwork socialNetwork = socialNetworkRepository.findByPropertyValue("player", event.getPlayer());
+        //TODO Switch to Neo4jTemplate, otherwise this kills saved relationships
+        PlayerSocialNetwork socialNetwork = new PlayerSocialNetwork(event.getPlayer());
+        socialNetwork.addOwned(event.getConnection());
         // Step 4. Updating socialNetwork with new connections
         socialNetwork = socialAdapter.enrichPlayerNetwork(socialNetwork, connection.getApi());
         // Step 5. Saving social network repository
@@ -53,6 +55,16 @@ public class SocialNetworkPopulator implements SystemEventListener<SystemPlayerC
         connectionsAfter.removeAll(connectionsBefore);
         for (PlayerSocialNetwork newConnection : connectionsAfter)
             notificationService.notify(new SystemPlayerConnectionDiscoveredEvent(event.getPlayer(), newConnection.getPlayer()));
+    }
+
+    @Override
+    public String getChannel() {
+        return SystemPlayerConnectedSocialEvent.CHANNEL;
+    }
+
+    @Override
+    public String getQueueName() {
+        return "player.social.populator";
     }
 
 }

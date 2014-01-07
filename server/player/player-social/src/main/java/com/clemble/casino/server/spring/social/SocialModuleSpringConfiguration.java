@@ -1,21 +1,6 @@
 package com.clemble.casino.server.spring.social;
 
-import com.clemble.casino.server.event.SystemPlayerConnectedSocialEvent;
-import com.clemble.casino.server.player.PlayerIdGenerator;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
-import com.clemble.casino.server.repository.player.PlayerProfileRepository;
-import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
-import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
-import com.clemble.casino.server.social.SocialConnectionDataAdapter;
-import com.clemble.casino.server.social.SocialNetworkPopulator;
-import com.clemble.casino.server.social.SocialProfileConnectionSignUp;
-import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
-import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
-import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
-import com.clemble.casino.server.spring.common.BasicJPASpringConfiguration;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.player.PlayerManagementSpringConfiguration;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,7 +16,21 @@ import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
-import javax.sql.DataSource;
+import com.clemble.casino.server.player.PlayerIdGenerator;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.repository.player.PlayerProfileRepository;
+import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
+import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
+import com.clemble.casino.server.social.SocialConnectionDataAdapter;
+import com.clemble.casino.server.social.SocialNetworkPopulator;
+import com.clemble.casino.server.social.SocialProfileConnectionSignUp;
+import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
+import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
+import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
+import com.clemble.casino.server.spring.common.BasicJPASpringConfiguration;
+import com.clemble.casino.server.spring.common.SpringConfiguration;
+import com.clemble.casino.server.spring.player.PlayerManagementSpringConfiguration;
 
 @Configuration
 @Import(value = { PlayerManagementSpringConfiguration.class, BasicJPASpringConfiguration.class })
@@ -74,7 +73,7 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
             PlayerSocialNetworkRepository socialNetworkRepository, SystemNotificationService notificationService,
             UsersConnectionRepository usersConnectionRepository, SystemNotificationServiceListener serviceListener) {
         SocialNetworkPopulator networkPopulator = new SocialNetworkPopulator(socialAdapterRegistry, usersConnectionRepository, socialNetworkRepository, notificationService);
-        serviceListener.subscribe(SystemPlayerConnectedSocialEvent.CHANNEL, networkPopulator);
+        serviceListener.subscribe(networkPopulator);
         return networkPopulator;
     }
 

@@ -27,13 +27,14 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.PlayerPresenceSpringConfiguration;
+import com.clemble.casino.server.spring.common.SystemNotificationSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = PlayerPresenceCleanerTest.JUnitTestConfiguration.class)
 public class PlayerPresenceCleanerTest {
 
     @Configurable
-    @Import(PlayerPresenceSpringConfiguration.class)
+    @Import({PlayerPresenceSpringConfiguration.class, SystemNotificationSpringConfiguration.class})
     public static class JUnitTestConfiguration {
 
         @Bean(destroyMethod = "close")
@@ -54,16 +55,25 @@ public class PlayerPresenceCleanerTest {
 
     @Test
     public void testExpireWorks() throws InterruptedException {
-        Thread.sleep(1500);
         // Step 1. Mark player as online, and check his presence
         presenceService.markOnline("A");
         assertTrue(presenceService.isAvailable("A"));
         assertEquals(presenceService.getPresence("A").getPresence(), Presence.online);
         final BlockingQueue<SystemPlayerPresenceChangedEvent> events = new ArrayBlockingQueue<>(10);
-        systemListener.subscribe(SystemPlayerPresenceChangedEvent.CHANNEL, new SystemEventListener<SystemPlayerPresenceChangedEvent>() {
+        systemListener.subscribe(new SystemEventListener<SystemPlayerPresenceChangedEvent>() {
             @Override
-            public void onEvent(String channel, SystemPlayerPresenceChangedEvent event) {
+            public void onEvent(SystemPlayerPresenceChangedEvent event) {
                 events.add(event);
+            }
+
+            @Override
+            public String getChannel(){
+                return SystemPlayerPresenceChangedEvent.CHANNEL;
+            }
+
+            @Override
+            public String getQueueName() {
+                return "test";
             }
         });
         assertTrue(events.isEmpty());
@@ -75,7 +85,11 @@ public class PlayerPresenceCleanerTest {
             jedisPool.returnResource(jedis);
         }
         // Step 4. Check player is offline
-        SystemPlayerPresenceChangedEvent presenceChangedEvent = events.poll(5, TimeUnit.SECONDS);
+        long expiration = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(60);
+        SystemPlayerPresenceChangedEvent presenceChangedEvent = events.poll(expiration - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+        while((presenceChangedEvent.getPresence() != Presence.offline) && (System.currentTimeMillis() < expiration))
+            presenceChangedEvent = events.poll(expiration - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+        
         assertNotNull(presenceChangedEvent);
         assertEquals(presenceChangedEvent.getPresence(), Presence.offline);
         assertFalse(presenceService.isAvailable("A"));
