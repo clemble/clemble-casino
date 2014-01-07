@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
-import com.clemble.casino.web.management.ManagementWebMapping;
+import static com.clemble.casino.web.management.ManagementWebMapping.*;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
@@ -60,7 +61,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     PlayerToken login(@RequestBody PlayerLoginRequest loginRequest) {
@@ -79,7 +80,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_REGISTRATION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerToken createPlayer(@RequestBody final PlayerRegistrationRequest registrationRequest) {
@@ -101,7 +102,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerToken createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
@@ -118,7 +119,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerToken createSocialGrantPlayer(@RequestBody PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
         // Step 1. Checking if this user already exists

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -26,8 +25,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
+import com.clemble.casino.player.PlayerConnectionDiscoveredEvent;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
@@ -154,26 +156,19 @@ public class FacebookRegistrationITest {
     @Test
     public void testAutoDiscovery() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
         // Step 1. Generating Facebook test user
-        FacebookTestUserStore facebookStore = new HttpClientFacebookTestUserStore("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
         FacebookTestUserAccount fbAccoA = facebookStore.createTestUser(true, "email");
+        SocialAccessGrant grantA = new SocialAccessGrant("facebook", fbAccoA.accessToken());
+        ClembleCasinoOperations A = playerScenarios.createPlayer(grantA);
+        // Step 2. Adding discovery event listener
+        EventAccumulator<PlayerConnectionDiscoveredEvent> discoveryListener = new EventAccumulator<>();
+        A.listenerOperations().subscribe(new EventTypeSelector(PlayerConnectionDiscoveredEvent.class), discoveryListener);
+        // Step 3. Generating new user B, who is a friend of user A
         FacebookTestUserAccount fbAccoB = facebookStore.createTestUser(true, "email");
         fbAccoA.makeFriends(fbAccoB);
-        // Step 1.1 Generating SocialGrants test user
-        SocialAccessGrant grantA = new SocialAccessGrant("facebook", fbAccoA.accessToken());
         SocialAccessGrant grantB = new SocialAccessGrant("facebook", fbAccoB.accessToken());
-        // Step 2. Connecting A & B in facebook
-        ClembleCasinoOperations A = playerScenarios.createPlayer(grantA);
         ClembleCasinoOperations B = playerScenarios.createPlayer(grantB);
         // Step 3. Checking connection were mapped internally
-        // TODO make asynchronous
-        List<String> conA = A.connectionOperations().getConnectionIds();
-        assertEquals(conA.size(), 1);
-        assertEquals(conA.get(0), B.getPlayer());
-        
-        List<String> conB = B.connectionOperations().getConnectionIds();
-        assertEquals(conB.size(), 1);
-        assertEquals(conB.get(0), A.getPlayer());
-
+        assertNotNull(discoveryListener.poll(60, TimeUnit.SECONDS));
     }
 
     private SocialAccessGrant randomSocialGrant() throws JsonParseException, JsonMappingException, IOException{

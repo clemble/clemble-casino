@@ -34,7 +34,7 @@ public class BasicServerPlayerAccountService implements ServerPlayerAccountServi
         PlayerAccount initialWallet = new PlayerAccount().setPlayer(player.getPlayer());
         initialWallet = playerAccountRepository.save(initialWallet);
         // Step 2. Creating initial empty
-        Money initialBalance = Money.create(Currency.FakeMoney, 500);
+        Money initialBalance = Money.create(Currency.FakeMoney, 200);
         PaymentTransaction initialTransaction = new PaymentTransaction()
                 .setTransactionKey(new PaymentTransactionKey(MoneySource.registration, player.getPlayer()))
                 .setTransactionDate(new Date())

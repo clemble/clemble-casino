@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.payment.BasicServerPaymentTransactionService;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.payment.bonus.DailyBonusService;
+import com.clemble.casino.server.payment.bonus.PlayerConnectionDiscoveryBonusService;
 import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.payment.bonus.policy.NoBonusPolicy;
 import com.clemble.casino.server.player.account.BasicServerPlayerAccountService;
@@ -49,11 +49,26 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
             @Qualifier("realPaymentTransactionService") ServerPaymentTransactionService transactionServerService,
             BonusPolicy bonusPolicy,
             SystemNotificationServiceListener notificationServiceListener) {
-        Money bonus = new Money(Currency.FakeMoney, 100);
+        Money bonus = new Money(Currency.FakeMoney, 50);
         DailyBonusService dailyBonusService = new DailyBonusService(playerNotificationService, accountRepository, transactionRepository, transactionServerService, bonusPolicy, bonus);
         notificationServiceListener.subscribe(dailyBonusService);
         return dailyBonusService;
     }
+
+    @Bean
+    public PlayerConnectionDiscoveryBonusService playerConnectionDiscoveryBonusService(
+            PlayerNotificationService playerNotificationService,
+            PlayerAccountRepository accountRepository,
+            PaymentTransactionRepository transactionRepository,
+            @Qualifier("realPaymentTransactionService") ServerPaymentTransactionService transactionServerService,
+            BonusPolicy bonusPolicy,
+            SystemNotificationServiceListener notificationServiceListener) {
+        Money bonus = new Money(Currency.FakeMoney, 100);
+        PlayerConnectionDiscoveryBonusService dailyBonusService = new PlayerConnectionDiscoveryBonusService(playerNotificationService, accountRepository, transactionRepository, transactionServerService, bonusPolicy, bonus);
+        notificationServiceListener.subscribe(dailyBonusService);
+        return dailyBonusService;
+    }
+
 
     @Bean
     public BonusPolicy bonusPolicy() {

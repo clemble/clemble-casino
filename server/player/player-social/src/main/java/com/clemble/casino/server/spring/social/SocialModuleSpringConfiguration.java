@@ -17,6 +17,7 @@ import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.clemble.casino.server.player.PlayerIdGenerator;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
@@ -24,6 +25,7 @@ import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository
 import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.social.SocialNetworkPopulator;
+import com.clemble.casino.server.social.SocialPlayerConnectionDiscoveredNotifier;
 import com.clemble.casino.server.social.SocialProfileConnectionSignUp;
 import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
@@ -96,6 +98,13 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     @Bean
     public SocialConnectionAdapterRegistry socialAdapterRegistry() {
         return new SocialConnectionAdapterRegistry();
+    }
+
+    @Bean
+    public SocialPlayerConnectionDiscoveredNotifier discoveryNotifier(@Qualifier("playerNotificationService") PlayerNotificationService notificationService, SystemNotificationServiceListener systemListener){
+        SocialPlayerConnectionDiscoveredNotifier discoveryNotifier = new SocialPlayerConnectionDiscoveredNotifier(notificationService);
+        systemListener.subscribe(discoveryNotifier);
+        return discoveryNotifier;
     }
 
     @Bean
