@@ -14,11 +14,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
-import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,7 +27,7 @@ public class PaymentTransactionServiceTest {
     final private Random RANDOM = new Random();
 
     @Autowired
-    public PlayerAccountRepository playerAccountRepository;
+    public PlayerAccountTemplate accountTemplate;
 
     @Autowired
     public ServerPaymentTransactionService paymentTransactionService;
@@ -38,12 +37,8 @@ public class PaymentTransactionServiceTest {
 
     @Before
     public void initialize() {
-        PlayerAccount accountFrom = new PlayerAccount().add(Money.create(Currency.FakeMoney, 100)).setPlayer(playerFrom);
-
-        PlayerAccount accountTo = new PlayerAccount().add(Money.create(Currency.FakeMoney, 50)).setPlayer(playerTo);
-
-        playerAccountRepository.saveAndFlush(accountFrom);
-        playerAccountRepository.saveAndFlush(accountTo);
+        accountTemplate.debit(playerFrom, Money.create(Currency.FakeMoney, 100));
+        accountTemplate.debit(playerTo, Money.create(Currency.FakeMoney, 50));
     }
 
     @Test
@@ -60,8 +55,8 @@ public class PaymentTransactionServiceTest {
 
         paymentTransactionService.process(paymentTransaction);
 
-        Assert.assertEquals(playerAccountRepository.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + amount.getAmount());
-        Assert.assertEquals(playerAccountRepository.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - amount.getAmount());
+        Assert.assertEquals(accountTemplate.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + amount.getAmount());
+        Assert.assertEquals(accountTemplate.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - amount.getAmount());
     }
 
 }

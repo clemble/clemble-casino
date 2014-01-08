@@ -31,6 +31,8 @@ import com.rabbitmq.client.ShutdownSignalException;
 
 public class RabbitSystemNotificationServiceListener implements SystemNotificationServiceListener {
 
+    final private Logger LOG = LoggerFactory.getLogger(getClass());
+
     final private NotificationConfiguration notificationConfiguration;
     final private ObjectMapper objectMapper;
 
@@ -114,8 +116,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
                     channel.queueBind(eventListener.getQueueName(), SystemEventListener.EXCHANGE, eventListener.getChannel());
                 }
             } catch (Throwable e) {
-                e.printStackTrace();
-
+                LOG.error("Failed to start Rabbit listener", e);
                 executor.schedule(RabbitStartupTask.this, 30, TimeUnit.SECONDS);
             }
         }
@@ -165,6 +166,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         @Override
         @SuppressWarnings("unchecked")
         public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) throws IOException {
+            LOG.debug("Processing {}", consumerTag);
             // Step 1. Safely reading event
             T event = null;
             try {
@@ -174,8 +176,11 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
                 LOG.error("FIX_ASAP Ignoring message", ioe);
             }
             // Step 2. If we were able to read event notify, otherwise ignore, some error happened
-            if(event != null)
+            if(event != null) {
+                LOG.debug("Extracted event {}", event);
                 eventListener.onEvent(event);
+            }
+            LOG.debug("Processing finished {}", consumerTag);
         }
 
         @Override

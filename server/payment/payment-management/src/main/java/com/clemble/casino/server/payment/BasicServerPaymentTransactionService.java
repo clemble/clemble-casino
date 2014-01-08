@@ -14,26 +14,25 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
-import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 
 public class BasicServerPaymentTransactionService implements ServerPaymentTransactionService {
 
-    final private PlayerAccountRepository playerAccountRepository;
+    final private PlayerAccountTemplate accountTemplate;
     final private PlayerNotificationService notificationService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
     public BasicServerPaymentTransactionService(
             PaymentTransactionRepository paymentTransactionRepository,
-            PlayerAccountRepository playerWalletRepository,
+            PlayerAccountTemplate accountTemplate,
             PlayerNotificationService notificationService) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
-        this.playerAccountRepository = checkNotNull(playerWalletRepository);
+        this.accountTemplate = checkNotNull(accountTemplate);
         this.notificationService = checkNotNull(notificationService);
     }
 
@@ -48,26 +47,23 @@ public class BasicServerPaymentTransactionService implements ServerPaymentTransa
     }
 
     private PaymentTransaction processTransaction(PaymentTransaction paymentTransaction) {
+        // Step 0. Sanity check
+        if(paymentTransactionRepository.exists(paymentTransaction.getTransactionKey())) {
+            // TODO maybe you need to throw exception here
+            return paymentTransactionRepository.findOne(paymentTransaction.getTransactionKey());
+        }
         Collection<PaymentEvent> paymentEvents = new ArrayList<>();
         // Step 1. Processing payment transactions
-        Collection<PlayerAccount> updatedAccounts = new ArrayList<>(paymentTransaction.getPaymentOperations().size());
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
-            PlayerAccount associatedWallet = playerAccountRepository.findOne(paymentOperation.getPlayer());
-            if (associatedWallet == null) {
-                throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionUnknownPlayers);
-            } else if (paymentOperation.getOperation() == Operation.Credit) {
-                associatedWallet.subtract(paymentOperation.getAmount());
+            if (paymentOperation.getOperation() == Operation.Credit) {
+                accountTemplate.credit(paymentOperation.getPlayer(), paymentOperation.getAmount());
             } else if (paymentOperation.getOperation() == Operation.Debit) {
-                associatedWallet.add(paymentOperation.getAmount());
+                accountTemplate.debit(paymentOperation.getPlayer(), paymentOperation.getAmount());
             } else {
                 throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionInvalid);
             }
-            updatedAccounts.add(associatedWallet);
             paymentEvents.add(new FinishedPaymentEvent(paymentTransaction.getTransactionKey(), paymentOperation));
         }
-        // Step 2. Performing all account operations at a batch
-        playerAccountRepository.save(updatedAccounts);
-        playerAccountRepository.flush();
         // Step 3. Saving account transaction
         PaymentTransaction transaction = paymentTransactionRepository.save(paymentTransaction);
         // Step 4. Sending PaymentEvent notification

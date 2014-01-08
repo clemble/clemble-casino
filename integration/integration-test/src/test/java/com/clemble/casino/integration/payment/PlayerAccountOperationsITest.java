@@ -1,7 +1,6 @@
 package com.clemble.casino.integration.payment;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
@@ -21,6 +20,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
+import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
@@ -32,7 +32,7 @@ import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
-import com.clemble.casino.payment.event.PaymentEvent;
+import com.clemble.casino.payment.event.BonusPaymentEvent;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 
@@ -54,14 +54,19 @@ public class PlayerAccountOperationsITest {
     public void testInitialAmount() throws InterruptedException {
         // Step 1. Creating random player A
         ClembleCasinoOperations A = playerOperations.createPlayer();
-        // Step 1.1 Registering bonus event listener
-        final BlockingQueue<PaymentEvent> bonusEvents = new ArrayBlockingQueue<>(2);
-        A.paymentOperations().subscribe(new EventListener<PaymentEvent>() {
+        // Step 1.1 Registering bonus event listener, and waiting
+        final BlockingQueue<BonusPaymentEvent> bonusLatch = new ArrayBlockingQueue<>(2);
+        A.listenerOperations().subscribe(new EventTypeSelector(BonusPaymentEvent.class), new EventListener<BonusPaymentEvent>() {
             @Override
-            public void onEvent(PaymentEvent event) {
-                bonusEvents.add(event);
+            public void onEvent(BonusPaymentEvent event) {
+                bonusLatch.add(event);
             }
         });
+        long maxTimeout = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(90);
+        while(A.paymentOperations().getPaymentTransactions().size() != 2 && maxTimeout > System.currentTimeMillis()) {
+            bonusLatch.poll(30, TimeUnit.SECONDS);
+        }
+        assertEquals(A.paymentOperations().getPaymentTransactions().size(), 2);
         // Step 2. Fetching account and precondition
         PlayerAccount accountA = A.paymentOperations().getAccount();
         assertTrue(accountA.getMoney().size() > 0);
@@ -72,13 +77,10 @@ public class PlayerAccountOperationsITest {
         Set<PaymentOperation> paymentOperations = transaction.getPaymentOperations();
         Money transactionAmmount = paymentOperations.iterator().next().getAmount();
         // Step 4. Checking bonus transaction (Which might be delayed, because of the system event delays)
-        // TODO remove when messaging is more reliable
-        if(!A.paymentOperations().getPaymentTransactions("dailybonus").isEmpty()) {
-            PaymentTransaction bonusTransaction = A.paymentOperations().getPaymentTransactions("dailybonus").get(0);
-            paymentOperations = bonusTransaction.getPaymentOperations();
-            Money bonusAmmount = paymentOperations.iterator().next().getAmount();
-            assertEquals(transactionAmmount.add(bonusAmmount.getAmount()), accountA.getMoney(Currency.FakeMoney));
-        }
+        PaymentTransaction bonusTransaction = A.paymentOperations().getPaymentTransactions("dailybonus").get(0);
+        paymentOperations = bonusTransaction.getPaymentOperations();
+        Money bonusAmmount = paymentOperations.iterator().next().getAmount();
+        assertEquals(transactionAmmount.add(bonusAmmount.getAmount()), A.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
     }
 
     @Test

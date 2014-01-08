@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -31,7 +32,7 @@ import com.clemble.casino.server.error.ClembleConstraintExceptionResolver;
 public class BasicJPASpringConfiguration implements SpringConfiguration {
 
     final private static Logger LOG = LoggerFactory.getLogger(BasicJPASpringConfiguration.class);
-    
+
     @Autowired
     @Qualifier("dataSource")
     public DataSource dataSource;
@@ -45,8 +46,13 @@ public class BasicJPASpringConfiguration implements SpringConfiguration {
         return new ClembleConstraintExceptionResolver();
     }
 
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+
     @Configuration
-    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST, CLOUD})
+    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST, CLOUD })
     public static class DefaultAndTest implements ApplicationContextAware {
 
         private ApplicationContext applicationContext;

@@ -16,7 +16,6 @@ import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
@@ -25,7 +24,7 @@ import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.payment.bonus.DailyBonusService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
-import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
@@ -39,7 +38,7 @@ public class DailyBonusServiceTest {
     public DailyBonusService dailyBonusService;
 
     @Autowired
-    public PlayerAccountRepository accountRepository;
+    public PlayerAccountTemplate accountRepository;
 
     @Autowired
     public PaymentTransactionRepository transactionRepository;
@@ -48,11 +47,10 @@ public class DailyBonusServiceTest {
     public void checkDailyBonusApplied() {
         // Step 1. Generating player identity
         String player = ObjectGenerator.generate(String.class);
-        accountRepository.saveAndFlush(new PlayerAccount(player));
         // Step 2. Creating money
         Money amount = Money.create(Currency.FakeMoney, 100);
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-            .setTransactionKey(new PaymentTransactionKey(MoneySource.dailybonus, player))
+            .setTransactionKey(new PaymentTransactionKey(PaymentBonusSource.dailybonus, player))
             .setTransactionDate(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
             .addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
             .addPaymentOperation(new PaymentOperation(player, amount, Operation.Debit));

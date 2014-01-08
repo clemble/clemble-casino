@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
-import com.clemble.casino.server.repository.payment.PlayerAccountRepository;
+import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
+import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.payment.ServerPaymentTransactionController;
 import com.clemble.casino.server.web.player.account.PlayerAccountController;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 
 @Configuration
 @Import({
@@ -35,8 +35,7 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
     public ServerPaymentTransactionService paymentTransactionService;
 
     @Autowired
-    @Qualifier("playerAccountRepository")
-    public PlayerAccountRepository playerAccountRepository;
+    public PlayerAccountTemplate accountTemplate;
 
     @Bean
     public ServerPaymentTransactionController paymentTransactionController() {
@@ -45,7 +44,7 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerAccountController playerAccountController() {
-        return new PlayerAccountController(playerAccountService, playerAccountRepository);
+        return new PlayerAccountController(playerAccountService, accountTemplate);
     }
 
 }

@@ -49,6 +49,7 @@ import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.clemble.test.random.ValueGenerator;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 public class ObjectTest {
 
@@ -92,7 +93,7 @@ public class ObjectTest {
         ObjectGenerator.register(PlayerAccount.class, new AbstractValueGenerator<PlayerAccount>() {
             @Override
             public PlayerAccount generate() {
-                return new PlayerAccount().setPlayer(RandomStringUtils.random(5)).add(Money.create(Currency.FakeMoney, 500));
+                return new PlayerAccount(RandomStringUtils.random(5), ImmutableSet.of(Money.create(Currency.FakeMoney, 500)));
             }
         });
         ObjectGenerator.register(PaymentTransaction.class, new AbstractValueGenerator<PaymentTransaction>() {

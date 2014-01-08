@@ -10,9 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.ServerRegistry;
-import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
 public class RestServerPlayerAccountService implements ServerPlayerAccountService {
@@ -23,13 +21,6 @@ public class RestServerPlayerAccountService implements ServerPlayerAccountServic
     public RestServerPlayerAccountService(ServerRegistry paymentServerRegistry, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.paymentServerRegistry = paymentServerRegistry;
-    }
-
-    @Override
-    public PlayerAccount register(PlayerProfile playerProfile) {
-        HttpEntity<PlayerProfile> request = sign(playerProfile); 
-        return restTemplate.postForEntity(paymentServerRegistry.findBase() + PaymentWebMapping.PAYMENT_ACCOUNTS,
-                request, PlayerAccount.class).getBody();
     }
 
     @Override

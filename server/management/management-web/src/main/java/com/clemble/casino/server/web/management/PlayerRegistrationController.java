@@ -1,9 +1,10 @@
 package com.clemble.casino.server.web.management;
 
+import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN;
+import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION;
+import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL;
+import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT;
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -25,12 +26,14 @@ import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
+import com.clemble.casino.server.ExternalController;
+import com.clemble.casino.server.event.SystemPlayerRegisteredEvent;
 import com.clemble.casino.server.player.PlayerIdGenerator;
-import com.clemble.casino.server.player.account.ServerPlayerAccountService;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
-import static com.clemble.casino.web.management.ManagementWebMapping.*;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
@@ -40,9 +43,9 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     final private PlayerTokenFactory playerTokenFactory;
     final private PlayerCredentialRepository playerCredentialRepository;
     final private ServerProfileRegistrationService playerProfileRegistrationService;
+    final private SystemNotificationService notificationService;
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
-    final private ServerPlayerAccountService playerAccountServerService;
 
     public PlayerRegistrationController(final PlayerIdGenerator playerIdentifierGenerator,
             final PlayerTokenFactory playerTokenFactory,
@@ -50,21 +53,20 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
             final PlayerCredentialRepository playerCredentialRepository,
             final ClembleConsumerDetailsService playerIdentityRepository,
             final ClembleCasinoValidationService validationService,
-            final ServerPlayerAccountService playerAccountServerService) {
+            final SystemNotificationService notificationService) {
         this.playerIdentifierGenerator = checkNotNull(playerIdentifierGenerator);
         this.playerTokenFactory = checkNotNull(playerTokenFactory);
-        this.playerAccountServerService = checkNotNull(playerAccountServerService);
         this.playerProfileRegistrationService = checkNotNull(playerProfileRegistrationService);
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
         this.consumerDetailsService = checkNotNull(playerIdentityRepository);
         this.validationService = checkNotNull(validationService);
+        this.notificationService = checkNotNull(notificationService);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    PlayerToken login(@RequestBody PlayerLoginRequest loginRequest) {
+    public @ResponseBody PlayerToken login(@RequestBody PlayerLoginRequest loginRequest) {
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
         // Step 1. Fetch saved player credentials
         PlayerCredential fetchedCredentials = playerCredentialRepository.findByEmail(playerCredentials.getEmail());
@@ -88,7 +90,9 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         PlayerToken playerIdentity = restoreUser(registrationRequest);
         if (playerIdentity != null)
             return playerIdentity;
+        validationService.validate(registrationRequest.getPlayerCredential());
         validationService.validate(registrationRequest.getPlayerProfile());
+        validationService.validate(registrationRequest.getConsumerDetails());
         // Step 2. Creating appropriate PlayerProfile
         PlayerProfile savedProfile = registrationRequest.getPlayerProfile();
         savedProfile.setPlayer(playerIdentifierGenerator.newId());
@@ -104,8 +108,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PlayerToken createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
+    public @ResponseBody PlayerToken createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
         // Step 1. Checking if this user already exists
         PlayerToken playerIdentity = restoreUser(socialRegistrationRequest);
         if (playerIdentity != null)
@@ -135,8 +138,6 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     private PlayerToken restoreUser(PlayerLoginRequest loginRequest) {
         // Step 1. Checking request is valid
         validationService.validate(loginRequest);
-        validationService.validate(loginRequest.getPlayerCredential());
-        validationService.validate(loginRequest.getConsumerDetails());
         // Step 2. Checking this is a new user or an old one
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
         // Step 3. Fetch associated player credentials
@@ -155,16 +156,20 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     }
 
     public PlayerToken register(final PlayerLoginRequest loginRequest, final PlayerProfile playerProfile) {
-        // Step 0. Registering first wallet
-        playerAccountServerService.register(playerProfile);
+        validationService.validate(loginRequest);
+        validationService.validate(loginRequest.getPlayerCredential());
+        validationService.validate(loginRequest.getConsumerDetails());
         // Step 1. Create new credentials
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(playerProfile.getPlayer());
         playerCredentials = playerCredentialRepository.saveAndFlush(playerCredentials);
         // Step 2. Specifying player type
         playerProfile.setType(PlayerType.free);
-
         // Step 3. Create new token
-        return playerTokenFactory.create(playerProfile.getPlayer(), loginRequest.getConsumerDetails());
+        PlayerToken playerToken = playerTokenFactory.create(playerProfile.getPlayer(), loginRequest.getConsumerDetails());
+        // Step 4. Sending system notification for registration
+        notificationService.notify(new SystemPlayerRegisteredEvent(playerProfile.getPlayer()));
+        // Step 5. Returning generated player token
+        return playerToken;
     }
 
 }

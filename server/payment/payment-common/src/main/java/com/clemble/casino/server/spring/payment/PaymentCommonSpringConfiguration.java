@@ -14,13 +14,11 @@ import org.springframework.web.client.RestTemplate;
 import com.clemble.casino.DNSBasedServerRegistry;
 import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.payment.RestServerPaymentTransactionService;
-import com.clemble.casino.server.player.account.ServerPlayerAccountService;
+import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.player.account.RestServerPlayerAccountService;
+import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
@@ -68,11 +66,6 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
         @Bean
         public ServerPlayerAccountService playerAccountService() {
             return new ServerPlayerAccountService() {
-
-                @Override
-                public PlayerAccount register(PlayerProfile playerProfile) {
-                    return new PlayerAccount();
-                }
 
                 @Override
                 public boolean canAfford(String playerId, Money amount) {
