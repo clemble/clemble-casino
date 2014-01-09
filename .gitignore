@@ -4,6 +4,8 @@
 *.jar
 *.war
 *.ear
+*.zip
+*.log
 *.tar.gz
 *.tar
 *.gz
@@ -25,6 +27,7 @@ build
 **/target
 **/build
 **/bin
+**/logs
 # Non related objects #
 .gradle
 .DS_Store

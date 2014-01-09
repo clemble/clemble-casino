@@ -47,8 +47,9 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     @Override
     public void run() {
         while (continueEmulation.get()) {
+            ClembleCasinoOperations player = null;
             try {
-                ClembleCasinoOperations player = playerOperations.createPlayer();
+                player = playerOperations.createPlayer();
                 // Step 1. Start player emulator
                 GameConstruction playerConstruction = player.gameConstructionOperations(actor.getGame()).constructAutomatch(specification);
                 GameSessionPlayer<State> playerState = sessionPlayerFactory.construct(player, playerConstruction);
@@ -60,11 +61,16 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
                     // Step 2. Waiting for player turn
                     playerState.waitForTurn();
                     // Step 3. Performing action
-                    if (playerState.isToMove())
+                    if (playerState.isToMove()) {
+                        int versionBefore = playerState.getVersion();
                         actor.move(playerState);
+                        playerState.waitVersion(versionBefore + 1);
+                    }
                 }
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
+            } finally {
+                player.close();
             }
         }
     }

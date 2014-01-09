@@ -38,7 +38,6 @@ import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.common.BasicNeo4JSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
@@ -111,8 +110,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Configuration
     public static class GameTimeAspectConfiguration {
 
-        @Bean
-        @Autowired
+//        @Bean
+//        @Autowired
         public GameTimeAspectFactory gameTimeAspectFactory(GameEventTaskExecutor eventTaskExecutor) {
             return new GameTimeAspectFactory(eventTaskExecutor);
         }
