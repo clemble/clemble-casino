@@ -13,6 +13,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.springframework.util.StringUtils;
 
+@SuppressWarnings("rawtypes")
 public class ListHibernateType extends ImmutableHibernateType {
 
     final private static int[] TYPES = new int[] { Types.VARCHAR };

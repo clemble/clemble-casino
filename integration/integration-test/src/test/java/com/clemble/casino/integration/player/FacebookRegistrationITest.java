@@ -166,7 +166,7 @@ public class FacebookRegistrationITest {
         FacebookTestUserAccount fbAccoB = facebookStore.createTestUser(true, "email");
         fbAccoA.makeFriends(fbAccoB);
         SocialAccessGrant grantB = new SocialAccessGrant("facebook", fbAccoB.accessToken());
-        ClembleCasinoOperations B = playerScenarios.createPlayer(grantB);
+        playerScenarios.createPlayer(grantB);
         // Step 3. Checking connection were mapped internally
         assertNotNull(discoveryListener.poll(60, TimeUnit.SECONDS));
     }

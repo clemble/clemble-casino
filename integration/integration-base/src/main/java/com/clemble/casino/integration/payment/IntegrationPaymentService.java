@@ -12,6 +12,7 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
+import com.clemble.casino.utils.CollectionUtils;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
 public class IntegrationPaymentService implements PaymentService, ServerPaymentTransactionService {
@@ -60,7 +61,7 @@ public class IntegrationPaymentService implements PaymentService, ServerPaymentT
 
     @Override
     public List<PaymentTransaction> getPlayerTransactionsWithSource(String playerId, String source) {
-        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTION_SOURCE, HttpMethod.GET, null, List.class, playerId, source).getBody();
+        return CollectionUtils.immutableList(restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTION_SOURCE, HttpMethod.GET, null, PaymentTransaction[].class, playerId, source).getBody());
     }
 
 }
