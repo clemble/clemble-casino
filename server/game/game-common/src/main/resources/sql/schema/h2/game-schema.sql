@@ -64,6 +64,7 @@
         MOVE_TIME_LIMIT bigint,
         MOVE_TIME_PUNISHMENT varchar(255),
         PLAYER_NUMBER varchar(255),
+        POT_RULE varchar(255),
         CURRENCY integer,
         PRICE bigint,
         PRIVACY_RULE varchar(255),

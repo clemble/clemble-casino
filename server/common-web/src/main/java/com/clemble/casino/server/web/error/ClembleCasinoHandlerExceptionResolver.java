@@ -42,40 +42,36 @@ public class ClembleCasinoHandlerExceptionResolver implements HandlerExceptionRe
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         LOGGER.error("Error while processing {} with {}", request, handler);
         LOGGER.error("Log trace ", ex);
-        Collection<ClembleCasinoError> errors = new ArrayList<>();
-        ClembleCasinoFailureDescription clembleFailure = null;
+        Collection<ClembleCasinoFailure> errors = new ArrayList<>();
         if (ex instanceof ClembleCasinoException) {
-            clembleFailure = ((ClembleCasinoException) ex).getFailureDescription();
+            ClembleCasinoFailureDescription clembleFailure = ((ClembleCasinoException) ex).getFailureDescription();
             for(ClembleCasinoFailure failure: clembleFailure.getProblems())
-                errors.add(failure.getError());
+                errors.add(failure);
         } else if(ex instanceof ClembleCasinoServerException) {
-            clembleFailure = ((ClembleCasinoServerException) ex).getCasinoException().getFailureDescription();
+            ClembleCasinoFailureDescription clembleFailure = ((ClembleCasinoServerException) ex).getCasinoException().getFailureDescription();
             for(ClembleCasinoFailure failure: clembleFailure.getProblems())
-                errors.add(failure.getError());
+                errors.add(failure);
         } else if (ex instanceof ServletRequestBindingException) {
             ServletRequestBindingException bindingException = (ServletRequestBindingException) ex;
             if (!bindingException.getMessage().contains("playerId")) {
-                errors.add(ClembleCasinoError.BadRequestPlayerIdHeaderMissing);
+                errors.add(new ClembleCasinoFailure(ClembleCasinoError.BadRequestPlayerIdHeaderMissing));
             }
             if (!bindingException.getMessage().contains("sessionId")) {
-                errors.add(ClembleCasinoError.BadRequestSessionIdHeaderMissing);
+                errors.add(new ClembleCasinoFailure(ClembleCasinoError.BadRequestSessionIdHeaderMissing));
             }
             if (!bindingException.getMessage().contains("tableId")) {
-                errors.add(ClembleCasinoError.BadRequestTableIdHeaderMissing);
+                errors.add(new ClembleCasinoFailure(ClembleCasinoError.BadRequestTableIdHeaderMissing));
             }
-            if(errors.size() > 0)
-                clembleFailure = new ClembleCasinoFailureDescription().setErrors(errors);
         }
 
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setHeader("Content-Type", "application/json");
-        for(ClembleCasinoError error: errors) {
-            response.setHeader(ClembleCasinoResponseErrorHandler.ERROR_CODES_HEADER, error.getCode());
+        for(ClembleCasinoFailure failure: errors) {
+            response.setHeader(ClembleCasinoResponseErrorHandler.ERROR_CODES_HEADER, failure.getError().getCode());
         }
-        clembleFailure = clembleFailure == null ? ClembleCasinoFailureDescription.SERVER_ERROR : clembleFailure;
 
         try {
-            objectMapper.writeValue(response.getOutputStream(), clembleFailure);
+            objectMapper.writeValue(response.getOutputStream(), errors);
         } catch (IOException ignore) {
             ignore.printStackTrace();
         }
