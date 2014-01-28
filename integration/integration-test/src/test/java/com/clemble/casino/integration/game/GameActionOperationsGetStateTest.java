@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
@@ -18,11 +19,9 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.configuration.GameSpecificationOptions;
-import com.clemble.casino.game.configuration.SelectSpecificationOptions;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GameInitiationCanceledEvent;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
@@ -47,8 +46,8 @@ public class GameActionOperationsGetStateTest {
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 2. Constructing automatch game
         GameConstructionOperations<NumberState> constructionOperations = A.gameConstructionOperations(Game.num);
-        GameSpecificationOptions specificationOptions = constructionOperations.get();
-        GameSpecification specification = ((SelectSpecificationOptions) specificationOptions).getSpecifications().get(0);
+        List<MatchGameConfiguration> configurations = constructionOperations.getMatchConfigurations();
+        MatchGameConfiguration specification = configurations.get(0);
         GameConstruction construction = constructionOperations.constructAutomatch(specification);
         // Step 3. Checkin getState works fine
         GameActionOperations<NumberState> aoA = A.gameActionOperations(construction.getSession());
@@ -70,8 +69,8 @@ public class GameActionOperationsGetStateTest {
         B.listenerOperations().subscribe(new EventTypeSelector(GameInitiationCanceledEvent.class), listener);
         // Step 2. Constructing automatch game
         GameConstructionOperations<NumberState> constructionOperations = A.gameConstructionOperations(Game.num);
-        GameSpecificationOptions specificationOptions = constructionOperations.get();
-        GameSpecification specification = ((SelectSpecificationOptions) specificationOptions).getSpecifications().get(0);
+        List<MatchGameConfiguration> specificationOptions = constructionOperations.getMatchConfigurations();
+        MatchGameConfiguration specification = specificationOptions.get(0);
         constructionOperations.constructAutomatch(specification);
         // Step 3. Checking getState works fine
         A.close();

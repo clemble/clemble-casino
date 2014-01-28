@@ -2,14 +2,9 @@ package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.server.game.action.GameProcessorFactory;
-import com.clemble.casino.server.game.action.impl.AbstractGameStateFactory;
+import com.clemble.casino.server.game.action.GameStateFactory;
 
-public class NumberStateFactory extends AbstractGameStateFactory<NumberState> {
-
-    public NumberStateFactory(GameProcessorFactory<NumberState> processorFactory) {
-        super(processorFactory);
-    }
+public class NumberStateFactory implements GameStateFactory<NumberState> {
 
     @Override
     public NumberState constructState(GameInitiation initiation, GameContext context) {

@@ -13,11 +13,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.OrderComparator;
 
-import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
@@ -27,10 +26,10 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
     @SuppressWarnings("rawtypes")
     final private List<GameAspectFactory> aspectFactories = new ArrayList<>();
 
-    public GameProcessor<State> create(GameInitiation initiation, GameContext context) {
+    public GameProcessor<State> create(ServerGameInitiation initiation) {
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
         for (GameAspectFactory<?> aspectFactory : aspectFactories) {
-            gameAspects.add(aspectFactory.construct(initiation, context));
+            gameAspects.add(aspectFactory.construct(initiation));
         }
         return new AggregatedGameProcessor<State>(gameAspects);
     }

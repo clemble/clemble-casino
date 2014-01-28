@@ -13,7 +13,7 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.outcome.GameOutcome;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.GameConfigurationKey;
 
 public class GenericGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State> {
 
@@ -49,8 +49,8 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
-    final public GameSpecification getSpecification() {
-        return actualPlayer.getSpecification();
+    final public GameConfigurationKey getConfigurationKey() {
+        return actualPlayer.getConfigurationKey();
     }
 
     @Override

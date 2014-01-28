@@ -13,13 +13,11 @@ import org.springframework.context.annotation.Profile;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.id.UUIDGameIdGenerator;
+import com.clemble.casino.server.game.PendingGameInitiation;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
-import com.clemble.casino.server.game.aspect.GameAspectFactory;
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
-import com.clemble.casino.server.game.aspect.management.NextGameConstructionAspectFactory;
 import com.clemble.casino.server.game.aspect.management.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.DrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.WonRuleAspectFactory;
@@ -27,7 +25,7 @@ import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFacto
 import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
-import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
+import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.BasicServerGameConstructionService;
 import com.clemble.casino.server.game.construct.ServerGameConstructionService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
@@ -37,6 +35,7 @@ import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
+import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
@@ -84,22 +83,16 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         return new GameEndPresenceAspectFactory(presenceService);
     }
 
-    // @Bean
-    public GameAspectFactory<GameEndedEvent<?>> nextGameConstructionAspect(GameIdGenerator idGenerator, ServerGameInitiationService initiatorService,
-            GameConstructionRepository constructionRepository) {
-        return new NextGameConstructionAspectFactory(idGenerator, initiatorService, constructionRepository);
-    }
-
     @Bean
     public PlayerNotificationRuleAspectFactory gameNotificationManagementAspectFactory(PlayerNotificationService playerNotificationService) {
         return new PlayerNotificationRuleAspectFactory(playerNotificationService);
     }
 
     @Bean
-    public GameSpecificationRegistry gameSpecificationRegistry() {
-        return new GameSpecificationRegistry();
+    public ServerGameConfigurationService serverGameConfigurationService(ServerGameConfigurationRepository configurationRepository) {
+        return new ServerGameConfigurationService(configurationRepository);
     }
-
+ 
     /**
      * Needed to separate this way, since BeanPostProcessor is loaded prior to any other configuration, Spring tries to load whole configuration, but some
      * dependencies are naturally missing - like Repositories
@@ -156,6 +149,10 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
                 @Override
                 public Collection<GameInitiation> pending(Game game, String player) {
                     return null;
+                }
+
+                @Override
+                public void start(PendingGameInitiation pendingInitiation) {
                 }
             };
         }

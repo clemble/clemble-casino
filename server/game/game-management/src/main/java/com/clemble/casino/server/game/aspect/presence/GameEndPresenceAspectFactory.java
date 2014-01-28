@@ -2,8 +2,7 @@ package com.clemble.casino.server.game.aspect.presence;
 
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
@@ -18,7 +17,7 @@ public class GameEndPresenceAspectFactory implements GameAspectFactory<GameEnded
     }
 
     @Override
-    public GameAspect<GameEndedEvent<?>> construct(GameInitiation initiation, GameContext construction) {
+    public GameAspect<GameEndedEvent<?>> construct(ServerGameInitiation initiation) {
         return endPresenceAspect;
     }
 

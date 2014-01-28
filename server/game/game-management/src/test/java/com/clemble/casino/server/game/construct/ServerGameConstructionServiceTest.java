@@ -19,22 +19,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
-import com.clemble.casino.game.rule.bet.FixedBetRule;
-import com.clemble.casino.game.rule.construct.PlayerNumberRule;
-import com.clemble.casino.game.rule.construct.PrivacyRule;
-import com.clemble.casino.game.rule.giveup.GiveUpRule;
-import com.clemble.casino.game.rule.time.MoveTimeRule;
-import com.clemble.casino.game.rule.time.TotalTimeRule;
-import com.clemble.casino.game.specification.GameSpecification;
-import com.clemble.casino.game.specification.GameSpecificationKey;
-import com.clemble.casino.payment.money.Currency;
-import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
@@ -60,7 +50,7 @@ public class ServerGameConstructionServiceTest {
         for (int i = 0; i < NUM_PARTICIPANTS; i++)
             players.add(String.valueOf(RANDOM.nextLong()));
         List<String> participants = new ArrayList<>(players);
-        GameSpecification specification = generate(participants);
+        MatchGameConfiguration specification = generate(participants);
 
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
@@ -79,7 +69,7 @@ public class ServerGameConstructionServiceTest {
         for (int i = 0; i < NUM_PARTICIPANTS; i++)
             players.add(String.valueOf(RANDOM.nextLong()));
         List<String> participants = new ArrayList<>(players);
-        GameSpecification specification = generate(participants);
+        MatchGameConfiguration specification = generate(participants);
 
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
@@ -100,17 +90,8 @@ public class ServerGameConstructionServiceTest {
         Assert.assertEquals(finalConstructionState.getState(), GameConstructionState.constructed);
     }
 
-    private GameSpecification generate(List<String> roles) { 
-        return new GameSpecification()
-            .setName(new GameSpecificationKey(Game.pic, "DEFAULT"))
-            .setBetRule(FixedBetRule.DEFAULT)
-            .setPrice(Money.create(Currency.FakeMoney, 50))
-            .setGiveUpRule(GiveUpRule.lost)
-            .setMoveTimeRule(MoveTimeRule.DEFAULT)
-            .setTotalTimeRule(TotalTimeRule.DEFAULT)
-            .setNumberRule(PlayerNumberRule.two)
-            .setPrivacayRule(PrivacyRule.everybody)
-            .setRoles(roles);
+    private MatchGameConfiguration generate(List<String> roles) { 
+        return MatchGameConfiguration.DEFAULT;
     }
 
     public static class GameResponce implements Callable<GameConstruction> {

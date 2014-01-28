@@ -42,17 +42,17 @@ public class AvailabilityGameConstructionManager implements GameConstructionMana
     @Transactional
     public GameConstruction register(AvailabilityGameRequest request, String id) {
         // Step 1. Sanity check
-        if (request == null || request.getSpecification() == null)
+        if (request == null || request.getConfiguration() == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidRequest);
         // Step 2. Checking players can afford operations
         // Step 2.1. Checking initiator
-        Money price = request.getSpecification().getPrice();
+        Money price = request.getConfiguration().getPrice();
         // Step 2.2. Checking opponents
         if (!playerAccountService.canAfford(request.getParticipants(), price))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInsufficientMoney);
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(request);
-        construction.setSession(new GameSessionKey(request.getSpecification().getName().getGame(), id));
+        construction.setSession(new GameSessionKey(request.getConfiguration().getConfigurationKey().getGame(), id));
         construction.setState(GameConstructionState.pending);
         construction.getResponses().expectNext(request.getPlayer(), request.getParticipants(), "response");
         construction.getResponses().put(new InvitationAcceptedEvent(request.getPlayer(), construction.getSession()));

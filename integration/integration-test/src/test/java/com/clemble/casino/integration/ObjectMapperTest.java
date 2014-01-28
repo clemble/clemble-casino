@@ -28,13 +28,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.action.BetAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
-import com.clemble.casino.game.configuration.SelectRuleOptions;
 import com.clemble.casino.game.construct.ScheduledGameRequest;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
-import com.clemble.casino.game.rule.GameRule;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.rule.MatchRule;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
@@ -58,10 +57,9 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void specialCase() {
-        checkSerialization(SelectRuleOptions.class);
-        ObjectGenerator.generate(GameRule.class);
+        ObjectGenerator.generate(MatchRule.class);
 
-        ObjectGenerator.generate(GameSpecification.class);
+        ObjectGenerator.generate(MatchGameConfiguration.class);
         ObjectGenerator.generate(PlayerInvitedEvent.class);
     }
 

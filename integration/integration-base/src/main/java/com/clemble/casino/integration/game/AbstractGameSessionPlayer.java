@@ -25,7 +25,7 @@ import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStateManagementEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.integration.event.EventAccumulator;
 
 abstract public class AbstractGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State>, EventListener<GameSessionAwareEvent>, Closeable {
@@ -72,8 +72,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    final public GameSpecification getSpecification() {
-        return construction.getRequest().getSpecification();
+    final public GameConfigurationKey getConfigurationKey() {
+        return construction.getRequest().getConfiguration().getConfigurationKey();
     }
 
     @Override

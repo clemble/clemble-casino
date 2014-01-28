@@ -40,7 +40,7 @@ public class PendingGameInitiationListener implements SystemEventListener<System
                 // Step 3. Checking we can start game
                 List<String> players = PlayerAwareUtils.toPlayerList(initiation.getParticipants());
                 if (presenceService.areAvailable(players)) {
-                    initiationService.start(initiation.toInitiation());
+                    initiationService.start(initiation);
                     initiationRepository.delete(initiation.getId());
                     break;
                 }

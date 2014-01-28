@@ -22,7 +22,7 @@ import com.clemble.casino.game.construct.PlayerGameConstructionRequest;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.game.configuration.GameSpecificationRegistry;
+import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameConstructionService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.web.game.GameWebMapping;
@@ -31,25 +31,25 @@ import com.clemble.casino.web.mapping.WebMapping;
 @Controller
 public class GameConstructionController<State extends GameState> implements GameConstructionService, ExternalController {
 
-    final private GameSpecificationRegistry configurationManager;
-    final private ServerGameConstructionService constructionService;
     final private GameConstructionRepository constructionRepository;
+    final private ServerGameConstructionService constructionService;
+    final private ServerGameConfigurationService configurationService;
 
     public GameConstructionController(
             final GameConstructionRepository constructionRepository,
             final ServerGameConstructionService matchingService,
-            final GameSpecificationRegistry configurationManager) {
+            final ServerGameConfigurationService configurationService) {
         this.constructionService = checkNotNull(matchingService);
-        this.configurationManager = checkNotNull(configurationManager);
+        this.configurationService = checkNotNull(configurationService);
         this.constructionRepository = checkNotNull(constructionRepository);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_SESSIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameConstruction construct(@RequestBody final PlayerGameConstructionRequest gameRequest) {
+    public @ResponseBody GameConstruction automatch(@RequestBody final PlayerGameConstructionRequest gameRequest) {
         // Step 1. Checking that provided specification was valid
-        if (!configurationManager.getSpecificationOptions(gameRequest.getSpecification().getName().getGame()).valid(gameRequest.getSpecification()))
+        if (!configurationService.isValid(gameRequest.getConfiguration()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         // Step 2. Invoking actual matching service
         return constructionService.construct(gameRequest);
@@ -58,8 +58,7 @@ public class GameConstructionController<State extends GameState> implements Game
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONSTRUCTION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    GameConstruction getConstruct(@PathVariable("game") final Game game, @PathVariable("session") final String session) {
+    public @ResponseBody GameConstruction getConstruction(@PathVariable("game") final Game game, @PathVariable("session") final String session) {
         // Step 1. Searching for construction
         GameConstruction construction = constructionRepository.findOne(new GameSessionKey(game, session));
         // Step 2. Sending error in case resource not found

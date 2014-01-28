@@ -47,11 +47,11 @@ public class BasicServerGameConstructionService implements ServerGameConstructio
     @Transactional
     final public GameConstruction construct(PlayerGameConstructionRequest request) {
         // Step 1. Sanity check
-        if (request == null || request.getSpecification() == null)
+        if (request == null || request.getConfiguration() == null)
             throw ClembleCasinoException.fromError(GameConstructionInvalidRequest);
         // Step 2. Checking players can afford operations
         // Step 2.1. Checking initiator
-        Money price = request.getSpecification().getPrice();
+        Money price = request.getConfiguration().getPrice();
         if (!playerAccountService.canAfford(request.getPlayer(), price))
             throw ClembleCasinoException.fromError(GameConstructionInsufficientMoney);
         // Step 3. Check ready

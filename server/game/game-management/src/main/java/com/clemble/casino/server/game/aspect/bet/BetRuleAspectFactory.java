@@ -2,16 +2,15 @@ package com.clemble.casino.server.game.aspect.bet;
 
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.action.BetAction;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
 public class BetRuleAspectFactory implements GameAspectFactory<BetAction> {
 
     @Override
-    public GameAspect<BetAction> construct(GameInitiation initiation, GameContext context) {
+    public GameAspect<BetAction> construct(ServerGameInitiation initiation) {
         return new BetRuleAspect(initiation.getSpecification().getBetRule());
     }
 

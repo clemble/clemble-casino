@@ -16,9 +16,8 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.specification.GameSpecification;
-import com.clemble.casino.game.specification.GameSpecificationKey;
-import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.player.lock.PlayerLockService;
@@ -32,12 +31,12 @@ public class AutomaticGameConstructionManager implements GameConstructionManager
 
     final public static class AutomaticGameConstruction {
         final private GameConstruction construction;
-        final private GameSpecification specification;
+        final private GameConfiguration configuration;
         final private List<String> participants = new ArrayList<>();
 
         public AutomaticGameConstruction(GameConstruction construction) {
             this.construction = construction;
-            this.specification = construction.getRequest().getSpecification();
+            this.configuration = construction.getRequest().getConfiguration();
             this.participants.add(((AutomaticGameRequest) construction.getRequest()).getPlayer());
         }
 
@@ -49,23 +48,23 @@ public class AutomaticGameConstructionManager implements GameConstructionManager
             if (request != null) {
                 participants.add(request.getPlayer());
             }
-            return participants.size() >= specification.getNumberRule().getMinPlayers();
+            return participants.size() >= configuration.getNumberRule().getMinPlayers();
         }
 
         public boolean ready() {
-            return specification.getNumberRule().getMinPlayers() <= participants.size();
+            return configuration.getNumberRule().getMinPlayers() <= participants.size();
         }
 
         public GameInitiation toInitiation() {
             // Step 1. Creating instant game request
-            return new GameInitiation(construction.getSession(), participants, specification);
+            return new GameInitiation(construction.getSession(), participants, configuration);
         }
     }
 
-    final private LoadingCache<GameSpecificationKey, Queue<AutomaticGameConstruction>> PENDING_CONSTRUCTIONS = CacheBuilder.newBuilder().build(
-            new CacheLoader<GameSpecificationKey, Queue<AutomaticGameConstruction>>() {
+    final private LoadingCache<GameConfigurationKey, Queue<AutomaticGameConstruction>> PENDING_CONSTRUCTIONS = CacheBuilder.newBuilder().build(
+            new CacheLoader<GameConfigurationKey, Queue<AutomaticGameConstruction>>() {
                 @Override
-                public Queue<AutomaticGameConstruction> load(GameSpecificationKey key) throws Exception {
+                public Queue<AutomaticGameConstruction> load(GameConfigurationKey key) throws Exception {
                     return new ArrayBlockingQueue<AutomaticGameConstruction>(100);
                 }
             });
@@ -112,7 +111,7 @@ public class AutomaticGameConstructionManager implements GameConstructionManager
             // Step 2.2. Acquire and process Queue
             Queue<AutomaticGameConstruction> specificationQueue = null;
             try {
-                GameSpecificationKey constructionKey = request.getSpecification().getName();
+                GameConfigurationKey constructionKey = request.getConfiguration().getConfigurationKey();
                 specificationQueue = PENDING_CONSTRUCTIONS.get(constructionKey);
             } catch (ExecutionException e) {
                 throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCacheError);
@@ -122,7 +121,7 @@ public class AutomaticGameConstructionManager implements GameConstructionManager
             if (pendingConstuction == null) {
                 // Step 3.1 Construction was not present, creating new one
                 GameConstruction construction = new GameConstruction(request);
-                construction.setSession(new GameSessionKey(request.getSpecification().getName().getGame(), id));
+                construction.setSession(new GameSessionKey(request.getConfiguration().getConfigurationKey().getGame(), id));
                 construction = constructionRepository.saveAndFlush(construction);
 
                 pendingConstuction = new AutomaticGameConstruction(construction);
@@ -133,8 +132,8 @@ public class AutomaticGameConstructionManager implements GameConstructionManager
                 if (pendingConstuction.append(request)) {
                     GameInitiation initiation = pendingConstuction.toInitiation();
                     initiatorService.start(initiation);
-                    for (PlayerAware participant : initiation.getParticipants())
-                        playerConstructions.remove(participant.getPlayer());
+                    for (String participant : initiation.getParticipants())
+                        playerConstructions.remove(participant);
                 } else {
                     playerConstructions.put(player, pendingConstuction);
                     specificationQueue.add(pendingConstuction);

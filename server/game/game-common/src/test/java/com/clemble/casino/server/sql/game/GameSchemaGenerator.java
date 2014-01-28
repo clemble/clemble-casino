@@ -9,9 +9,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.clemble.casino.game.GameSession;
+import com.clemble.casino.game.configuration.ServerGameConfiguration;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.ScheduledGame;
-import com.clemble.casino.game.specification.GameSpecification;
 
 public class GameSchemaGenerator {
 
@@ -48,7 +48,7 @@ public class GameSchemaGenerator {
 
     private Configuration addAnnotatedClasses(Configuration configuration){
         return configuration
-                .addAnnotatedClass(GameSpecification.class)
+                .addAnnotatedClass(ServerGameConfiguration.class)
                 .addAnnotatedClass(GameSession.class)
                 .addAnnotatedClass(GameConstruction.class)
                 .addAnnotatedClass(ScheduledGame.class);

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.NumberStateFactory;
-import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.GameStateFactory;
 import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
@@ -23,8 +22,8 @@ public class IntegrationGameWebSpringConfiguration extends AbstractGameSpringCon
     }
 
     @Bean
-    public GameStateFactory<NumberState> ticTacToeStateFactory(GameProcessorFactory<NumberState> processorFactory) {
-        return new NumberStateFactory(processorFactory);
+    public GameStateFactory<NumberState> gameStateFactory() {
+        return new NumberStateFactory();
     }
 
 }

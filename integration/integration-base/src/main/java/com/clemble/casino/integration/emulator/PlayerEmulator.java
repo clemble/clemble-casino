@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
@@ -22,7 +22,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
 
     final private Logger logger = LoggerFactory.getLogger(PlayerEmulator.class);
 
-    final private GameSpecification specification;
+    final private MatchGameConfiguration specification;
     final private PlayerScenarios playerOperations;
     final private GameSessionPlayerFactory<State> sessionPlayerFactory;
     final private GameActor<State> actor;
@@ -33,14 +33,14 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
     public PlayerEmulator(final GameActor<State> actor,
             final PlayerScenarios playerOperations,
             final GameSessionPlayerFactory<State> sessionPlayerFactory,
-            final GameSpecification specification) {
+            final MatchGameConfiguration specification) {
         this.specification = checkNotNull(specification);
         this.actor = checkNotNull(actor);
         this.sessionPlayerFactory = checkNotNull(sessionPlayerFactory);
         this.playerOperations = checkNotNull(playerOperations);
     }
 
-    public GameSpecification getSpecification() {
+    public MatchGameConfiguration getSpecification() {
         return specification;
     }
 

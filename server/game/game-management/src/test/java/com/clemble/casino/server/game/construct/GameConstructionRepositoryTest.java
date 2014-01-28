@@ -20,7 +20,7 @@ import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.construct.GameDeclineBehavior;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
@@ -56,7 +56,7 @@ public class GameConstructionRepositoryTest {
 
     @Test
     public void testSaving() {
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", GameSpecification.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", MatchGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
@@ -69,7 +69,7 @@ public class GameConstructionRepositoryTest {
 
     @Test
     public void testSaving2() {
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", GameSpecification.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", MatchGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setState(GameConstructionState.pending);

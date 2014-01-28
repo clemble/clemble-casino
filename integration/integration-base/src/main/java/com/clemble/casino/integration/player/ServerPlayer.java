@@ -31,7 +31,7 @@ import com.clemble.casino.game.event.server.GameInitiatedEvent;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.game.service.GameInitiationService;
-import com.clemble.casino.game.service.GameSpecificationService;
+import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.security.PlayerCredential;
@@ -57,7 +57,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
     final private PlayerSession session;
     final private EventListenerOperations listenerOperations;
 
-    final private GameSpecificationService specificationService;
+    final private GameConfigurationService specificationService;
     final private GameConstructionService constructionService;
     final private GameInitiationService initiationService;
     final private GameActionService<?> actionService;
@@ -83,7 +83,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
             final PlayerSessionService sessionOperations, final PaymentService accountOperations,
             final EventListenerOperationsFactory listenerOperationsFactory, final PlayerPresenceService playerPresenceService,
             final GameConstructionService gameConstructionService, 
-            final GameInitiationService initiationService, final GameSpecificationService specificationService, final GameActionService<?> actionService) {
+            final GameInitiationService initiationService, final GameConfigurationService specificationService, final GameActionService<?> actionService) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());

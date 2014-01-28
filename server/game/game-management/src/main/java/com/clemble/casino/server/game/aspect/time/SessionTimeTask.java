@@ -11,8 +11,7 @@ import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.action.GameAction;
-import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.GameEventTask;
 
@@ -26,10 +25,10 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
     final private GameSessionKey session;
     final private Collection<PlayerTimeTracker> playerTimeTrackers;
 
-    public SessionTimeTask(GameInitiation initiation, GameContext context) {
-        this.session = initiation.getSession();
+    public SessionTimeTask(GameSessionKey sessionKey, MatchGameConfiguration initiation, GameContext context) {
+        this.session = sessionKey;
 
-        final GameSpecification specification = initiation.getSpecification();
+        final MatchGameConfiguration specification = initiation;
 
         this.playerTimeTrackers = new ArrayList<PlayerTimeTracker>();
         for (GamePlayerContext playerContext : context.getPlayerContexts()) {

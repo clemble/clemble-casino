@@ -7,7 +7,7 @@ import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.game.service.GameConstructionService;
 import com.clemble.casino.game.service.GameInitiationService;
-import com.clemble.casino.game.service.GameSpecificationService;
+import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.PlayerProfile;
@@ -40,7 +40,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private EventListenerOperationsFactory listenerOperations;
     final private GameConstructionService gameConstructionService;
     final private GameInitiationService initiationService;
-    final private GameSpecificationService specificationService;
+    final private GameConfigurationService specificationService;
     final private GameActionService<?> actionService;
 
     public ServerClembleCasinoRegistrationOperations(ObjectMapper objectMapper,
@@ -53,7 +53,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
             PlayerPresenceService presenceService,
             GameConstructionService gameConstructionService,
             GameInitiationService initiationService,
-            GameSpecificationService specificationService,
+            GameConfigurationService specificationService,
             GameActionService<?> actionService) {
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);

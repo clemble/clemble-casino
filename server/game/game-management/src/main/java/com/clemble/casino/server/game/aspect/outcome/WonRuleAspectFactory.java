@@ -6,8 +6,7 @@ import org.springframework.core.Ordered;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
@@ -25,12 +24,12 @@ public class WonRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>
     }
 
     @Override
-    public GameAspect<GameEndedEvent<?>> construct(GameInitiation initiation, GameContext construction) {
+    public GameAspect<GameEndedEvent<?>> construct(ServerGameInitiation initiation) {
         switch (initiation.getSpecification().getWonRule()) {
         case price:
-            return new WonByPriceRuleAspect(initiation.getSpecification(), transactionService);
+            return new WonByPriceRuleAspect(initiation.getSpecification().getPrice(), transactionService);
         case spent:
-            return new WonBySpentRuleAspect(initiation.getSpecification(), transactionService);
+            return new WonBySpentRuleAspect(initiation.getSpecification().getPrice().getCurrency(), transactionService);
         default:
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         }

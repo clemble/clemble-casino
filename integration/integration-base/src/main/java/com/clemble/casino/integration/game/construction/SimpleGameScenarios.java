@@ -19,7 +19,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 
@@ -37,16 +37,16 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
             throw new IllegalArgumentException("Name must not be null");
         ClembleCasinoOperations randomPlayer = playerOperations.createPlayer();
         // Step 0. Sanity check
-        GameSpecification specification = GameScenariosUtils.random(randomPlayer.gameConstructionOperations(game).get());
+        MatchGameConfiguration specification = GameScenariosUtils.random(randomPlayer.gameConstructionOperations(game).getMatchConfigurations());
         // Step 1. Selecting specification for the game
         return construct(specification);
     }
 
     @SuppressWarnings("unchecked")
-    public <State extends GameState> List<GameSessionPlayer<State>> construct(GameSpecification specification) {
-        if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
+    public <State extends GameState> List<GameSessionPlayer<State>> construct(MatchGameConfiguration specification) {
+        if (specification == null || specification.getConfigurationKey() == null || specification.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
-        Game game = specification.getName().getGame();
+        Game game = specification.getConfigurationKey().getGame();
         List<GameSessionPlayer<State>> constructedGames = new ArrayList<>();
         // Step 0. Generating players
         int numPlayers = specification.getNumberRule().getMaxPlayers();
@@ -88,10 +88,10 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     }
 
     @Override
-    public <State extends GameState> GameSessionPlayer<State> construct(GameSpecification specification, ClembleCasinoOperations initiator) {
-        if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
+    public <State extends GameState> GameSessionPlayer<State> construct(MatchGameConfiguration specification, ClembleCasinoOperations initiator) {
+        if (specification == null || specification.getConfigurationKey() == null || specification.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
-        Game game = specification.getName().getGame();
+        Game game = specification.getConfigurationKey().getGame();
         // Step 2. Creating availability game request
         GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAutomatch(specification);
         GameSessionPlayer<State> sessionPlayer = (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(game).construct(initiator, construction);
@@ -106,10 +106,10 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
 
     @Override
     @SuppressWarnings("unchecked")
-    public <State extends GameState> GameSessionPlayer<State> construct(GameSpecification specification, ClembleCasinoOperations initiator, String... participants) {
-        if (specification == null || specification.getName() == null || specification.getName().getGame() == null)
+    public <State extends GameState> GameSessionPlayer<State> construct(MatchGameConfiguration specification, ClembleCasinoOperations initiator, String... participants) {
+        if (specification == null || specification.getConfigurationKey() == null || specification.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
-        Game game = specification.getName().getGame();
+        Game game = specification.getConfigurationKey().getGame();
         // Step 2. Creating availability game request
         GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAvailability(specification, Arrays.asList(participants));
         GameSessionPlayer<State> sessionPlayer = (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(game).construct(initiator, construction);

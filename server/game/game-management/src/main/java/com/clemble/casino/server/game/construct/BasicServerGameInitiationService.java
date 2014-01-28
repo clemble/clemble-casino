@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -21,6 +22,7 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameInitiatedEvent;
 import com.clemble.casino.game.event.server.GameInitiationCanceledEvent;
 import com.clemble.casino.game.event.server.GameInitiationConfirmedEvent;
+import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.PendingGameInitiation;
 import com.clemble.casino.server.game.PendingPlayer;
@@ -29,6 +31,7 @@ import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.game.PendingGameInitiationRepository;
 import com.clemble.casino.server.repository.game.PendingPlayerRepository;
+import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class BasicServerGameInitiationService implements ServerGameInitiationService {
@@ -38,17 +41,21 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
 
     final private Map<GameSessionKey, GameInitiation> sessionToInitiation = new ConcurrentHashMap<>();
 
-    final private ServerPlayerPresenceService presenceService;
-    final private PlayerNotificationService notificationService;
-    final private GameSessionProcessor<?> processor;
     final private PendingPlayerRepository playerRepository;
     final private PendingGameInitiationRepository initiationRepository;
+
+    final private ServerGameConfigurationRepository configurationRepository;
+    final private GameSessionProcessor<?> processor;
+
+    final private PlayerNotificationService notificationService;
+    final private ServerPlayerPresenceService presenceService;
 
     final private ScheduledExecutorService executorService;
 
     public BasicServerGameInitiationService(
             GameSessionProcessor<?> processor,
             ServerPlayerPresenceService presenceService,
+            ServerGameConfigurationRepository configurationRepository,
             PlayerNotificationService notificationService,
             PendingPlayerRepository playerRepository,
             PendingGameInitiationRepository initiationRepository,
@@ -59,6 +66,7 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
         this.initiationRepository = checkNotNull(initiationRepository);
         this.playerRepository = checkNotNull(playerRepository);
         this.notificationService = checkNotNull(notificationService);
+        this.configurationRepository = checkNotNull(configurationRepository);
 
         ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("Game initiation - %d");
         this.executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
@@ -66,7 +74,7 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
 
     @Override
     public void register(final GameInitiation initiation) {
-        final Collection<String> players = PlayerAwareUtils.toPlayerList(initiation.getParticipants());
+        final Collection<String> players = initiation.getParticipants();
         if (!presenceService.areAvailable(players)) {
             // TODO make automatic creation part of initialization flow
             Collection<PendingPlayer> pendingPlayers = new ArrayList<>();
@@ -78,6 +86,10 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
         } else {
             start(initiation);
         }
+    }
+
+    public void start(final PendingGameInitiation pendingInitiation) {
+        start(toInitiation(pendingInitiation));
     }
 
     @Override
@@ -96,8 +108,8 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
                 GameInitiation initiation = sessionToInitiation.remove(sessionKey);
                 // Step 2. Sending notification event
                 if (initiation != null) {
-                    notificationService.notifyAll(initiation.getParticipants(), new GameInitiationCanceledEvent(sessionKey, initiation));
-                    Collection<String> offlinePlayers = PlayerAwareUtils.toPlayerList(initiation.getParticipants());
+                    notificationService.notify(initiation.getParticipants(), new GameInitiationCanceledEvent(sessionKey, initiation));
+                    Collection<String> offlinePlayers = initiation.getParticipants();
                     offlinePlayers.removeAll(initiation.getConfirmations());
                     presenceService.markOffline(offlinePlayers);
                 }
@@ -105,7 +117,7 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
         }, CANCEL_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         sessionToInitiation.put(initiation.getSession(), initiation);
         // Step 3. Sending notification to the players, that they need to confirm
-        notificationService.notifyAll(initiation.getParticipants(), new GameInitiatedEvent(initiation));
+        notificationService.notify(initiation.getParticipants(), new GameInitiatedEvent(initiation));
     }
 
     @Override
@@ -120,14 +132,14 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
             GameInitiation readyInitiation = sessionToInitiation.remove(sessionKey);
             if (readyInitiation == null)
                 return initiation;
-            if (presenceService.markPlaying(PlayerAwareUtils.toPlayerList(initiation.getParticipants()), initiation.getSession())) {
+            if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSession())) {
                 LOG.trace("Successfully updated presences, starting a new game");
                 processor.start(initiation);
             } else {
                 LOG.trace("Failed to update presences");
             }
         } else {
-            notificationService.notifyAll(initiation.getParticipants(), new GameInitiationConfirmedEvent(sessionKey, initiation, player));
+            notificationService.notify(initiation.getParticipants(), new GameInitiationConfirmedEvent(sessionKey, initiation, player));
         }
         return initiation;
     }
@@ -138,9 +150,15 @@ public class BasicServerGameInitiationService implements ServerGameInitiationSer
         // Step 1. Fetching data from pending player
         Collection<GameInitiation> initiations = new ArrayList<>();
         for(PendingGameInitiation initiation: playerRepository.findPending(player))
-            initiations.add(initiation.toInitiation());
+            initiations.add(toInitiation(initiation));
         // Step 2. Returning pending initiations
         return initiations;
+    }
+
+    public GameInitiation toInitiation(PendingGameInitiation initiation) {
+        GameConfiguration configuration = configurationRepository.findOne(initiation.getConfigurationKey()).getConfiguration();
+        List<String> players = PlayerAwareUtils.toPlayerList(initiation.getParticipants());
+        return new GameInitiation(initiation.getSession(), players, configuration);
     }
 
 }

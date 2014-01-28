@@ -1,6 +1,5 @@
 package com.clemble.casino.integration;
 
-import java.util.Collections;
 import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -15,23 +14,15 @@ import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.cell.Cell;
 import com.clemble.casino.game.cell.CellState;
-import com.clemble.casino.game.configuration.GameRuleOptions;
-import com.clemble.casino.game.configuration.SelectRuleOptions;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.rule.GameRule;
-import com.clemble.casino.game.rule.bet.BetRule;
+import com.clemble.casino.game.rule.MatchRule;
 import com.clemble.casino.game.rule.bet.FixedBetRule;
 import com.clemble.casino.game.rule.bet.LimitedBetRule;
 import com.clemble.casino.game.rule.bet.UnlimitedBetRule;
-import com.clemble.casino.game.rule.construct.PlayerNumberRule;
-import com.clemble.casino.game.rule.construct.PrivacyRule;
-import com.clemble.casino.game.rule.giveup.GiveUpRule;
-import com.clemble.casino.game.rule.time.MoveTimeRule;
-import com.clemble.casino.game.rule.time.TotalTimeRule;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.payment.PaymentOperation;
@@ -126,9 +117,9 @@ public class ObjectTest {
                         .setPlayer(RandomStringUtils.random(5));
             }
         });
-        ObjectGenerator.register(GameRule.class, new AbstractValueGenerator<GameRule>() {
+        ObjectGenerator.register(MatchRule.class, new AbstractValueGenerator<MatchRule>() {
             @Override
-            public GameRule generate() {
+            public MatchRule generate() {
                 return UnlimitedBetRule.INSTANCE;
             }
         });
@@ -136,17 +127,9 @@ public class ObjectTest {
             @Override
             public GameConstruction generate() {
                 return new GameConstruction().setSession(new GameSessionKey(Game.pic, "0"))
-                        .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), GameSpecification.DEFAULT))
+                        .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), MatchGameConfiguration.DEFAULT))
                         .setResponses(new ActionLatch().expectNext(ImmutableList.<String>of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
                         .setState(GameConstructionState.pending);
-            }
-        });
-        ObjectGenerator.register(SelectRuleOptions.class, new AbstractValueGenerator<SelectRuleOptions>() {
-            @Override
-            public SelectRuleOptions generate() {
-                return new SelectRuleOptions(Game.pic, Collections.singleton(Money.create(Currency.FakeMoney, 50)), new GameRuleOptions<BetRule>(
-                        FixedBetRule.DEFAULT), GiveUpRule.DEFAULT_OPTIONS, PlayerNumberRule.DEFAULT_OPTIONS, PrivacyRule.DEFAULT_OPTIONS,
-                        MoveTimeRule.DEFAULT_OPTIONS, TotalTimeRule.DEFAULT_OPTIONS);
             }
         });
         ObjectGenerator.register(LimitedBetRule.class, new AbstractValueGenerator<LimitedBetRule>() {
@@ -155,17 +138,17 @@ public class ObjectTest {
                 return LimitedBetRule.create(10, 200);
             }
         });
-        ObjectGenerator.register(GameSpecification.class, new AbstractValueGenerator<GameSpecification>() {
+        ObjectGenerator.register(MatchGameConfiguration.class, new AbstractValueGenerator<MatchGameConfiguration>() {
             @Override
-            public GameSpecification generate() {
-                return GameSpecification.DEFAULT;
+            public MatchGameConfiguration generate() {
+                return MatchGameConfiguration.DEFAULT;
             }
         });
         ObjectGenerator.register(NumberState.class, new AbstractValueGenerator<NumberState>() {
             @Override
             public NumberState generate() {
-                GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), GameSpecification.DEFAULT);
-                GameContext context = new GameContext(initiation);
+                GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), MatchGameConfiguration.DEFAULT);
+                GameContext context = new GameContext(initiation, MatchGameConfiguration.DEFAULT);
                 return new NumberState(context, null, 0);
             }
         });

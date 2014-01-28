@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayer;
 
 public class SimpleSyncGameScenarios implements SyncGameScenarios {
@@ -24,7 +24,7 @@ public class SimpleSyncGameScenarios implements SyncGameScenarios {
     }
 
     @Override
-    public <State extends GameState> List<GameSessionPlayer<State>> construct(GameSpecification specification) {
+    public <State extends GameState> List<GameSessionPlayer<State>> construct(MatchGameConfiguration specification) {
         // Step 1. Constructing players
         return unite(gameScenarios.<State>construct(specification));
     }

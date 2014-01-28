@@ -10,7 +10,6 @@ import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
-import com.clemble.casino.game.specification.GameSpecification;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.money.Currency;
@@ -24,12 +23,12 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
  */
 public class WonBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
-    final private GameSpecification specification;
+    final private Currency currency;
     final private ServerPaymentTransactionService transactionService;
 
-    public WonBySpentRuleAspect(GameSpecification specification, ServerPaymentTransactionService transactionService) {
+    public WonBySpentRuleAspect(Currency currency, ServerPaymentTransactionService transactionService) {
         super(new EventTypeSelector(GameEndedEvent.class));
-        this.specification = checkNotNull(specification);
+        this.currency = currency;
         this.transactionService = checkNotNull(transactionService);
     }
 
@@ -39,7 +38,6 @@ public class WonBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
         if (outcome instanceof PlayerWonOutcome) {
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
-            Currency currency = specification.getPrice().getCurrency();
             PaymentTransaction transaction = new PaymentTransaction()
                     .setTransactionKey(event.getSession().toPaymentTransactionKey())
                     .setTransactionDate(new Date());

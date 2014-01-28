@@ -10,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.event.NotificationMapping;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
@@ -21,15 +19,13 @@ public class PublicNotificationRuleAspect extends BasicGameAspect<GameManagement
     final private Logger LOG = LoggerFactory.getLogger(PublicNotificationRuleAspect.class);
 
     final private String tableChannel;
-    final private GameSessionKey sessionKey;
-    final private Collection<? extends PlayerAware> participants;
+    final private Collection<String> participants;
     final private PlayerNotificationService notificationService;
 
-    public PublicNotificationRuleAspect(GameInitiation initiation, PlayerNotificationService notificationService) {
+    public PublicNotificationRuleAspect(GameSessionKey sessionKey, Collection<String> participants, PlayerNotificationService notificationService) {
         super(new EventTypeSelector(GameManagementEvent.class));
-        this.sessionKey = checkNotNull(initiation.getSession());
         this.tableChannel = NotificationMapping.toTable(sessionKey);
-        this.participants = initiation.getParticipants();
+        this.participants = checkNotNull(participants);
         this.notificationService = checkNotNull(notificationService);
     }
 
@@ -38,8 +34,8 @@ public class PublicNotificationRuleAspect extends BasicGameAspect<GameManagement
         // Step 1. Making public notification
         boolean tableNotified = notificationService.notify(tableChannel, event);
         // Step 2. Sending to exact participants
-        boolean playersNotified = notificationService.notifyAll(participants, event);
-        // Step 3. Loging results
+        boolean playersNotified = notificationService.notify(participants, event);
+        // Step 3. Logging results
         LOG.debug("Published {} table({}) & players ({}) ", event, tableNotified, playersNotified);
     }
 

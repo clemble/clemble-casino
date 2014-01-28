@@ -2,8 +2,7 @@ package com.clemble.casino.server.game.aspect.time;
 
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.aspect.GameAspect;
@@ -18,8 +17,8 @@ public class GameTimeAspectFactory implements GameAspectFactory<GameManagementEv
     }
 
     @Override
-    public GameAspect<GameManagementEvent> construct(GameInitiation initiation, GameContext context) {
-        return new GameTimeAspect(initiation, context, eventTaskExecutor);
+    public GameAspect<GameManagementEvent> construct(ServerGameInitiation initiation) {
+        return new GameTimeAspect(initiation.getSession(), initiation.getSpecification(), initiation.getContext(), eventTaskExecutor);
     }
 
     @Override

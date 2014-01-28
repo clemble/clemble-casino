@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
@@ -17,6 +16,7 @@ import com.clemble.casino.server.game.action.GameStateFactory;
 import com.clemble.casino.server.game.cache.GameCacheService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
+import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 
 @Ignore
 @Configuration
@@ -31,8 +31,8 @@ public class SimpleGameSpringConfiguration {
     }
 
     @Bean
-    public GameCacheService<?> gameCacheService(GameSessionRepository<?> sessionRepository, GameProcessorFactory processorFactory, GameStateFactory stateFactory) {
-        return new GameCacheService<>(sessionRepository, processorFactory, stateFactory);
+    public GameCacheService<?> gameCacheService(GameSessionRepository<?> sessionRepository, GameProcessorFactory processorFactory, GameStateFactory stateFactory, ServerGameConfigurationRepository configurationRepository) {
+        return new GameCacheService<>(sessionRepository, processorFactory, stateFactory, configurationRepository);
     }
 
     @Bean
@@ -55,10 +55,6 @@ public class SimpleGameSpringConfiguration {
                 throw new UnsupportedOperationException();
             }
 
-            @Override
-            public GameState constructState(GameSession gameSession) {
-                throw new UnsupportedOperationException();
-            }
         };
     }
 

@@ -13,9 +13,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.PreDestroy;
 
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.configuration.GameSpecificationOptions;
-import com.clemble.casino.game.configuration.SelectSpecificationOptions;
-import com.clemble.casino.game.specification.GameSpecification;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 
@@ -24,7 +22,7 @@ public class GameplayEmulator<State extends GameState> {
     final private PlayerScenarios playerOperations;
     final private GameSessionPlayerFactory<State> sessionPlayerFactory;
     final private GameActor<State> actor;
-    final private Map<GameSpecification, Collection<PlayerEmulator<State>>> playerEmulators = new HashMap<GameSpecification, Collection<PlayerEmulator<State>>>();
+    final private Map<MatchGameConfiguration, Collection<PlayerEmulator<State>>> playerEmulators = new HashMap<MatchGameConfiguration, Collection<PlayerEmulator<State>>>();
 
     private ScheduledExecutorService executorService;
 
@@ -37,7 +35,7 @@ public class GameplayEmulator<State extends GameState> {
     @PreDestroy
     public void clean() {
         System.out.println("Cleaning Emulators");
-        for (GameSpecification specification : playerEmulators.keySet()) {
+        for (MatchGameConfiguration specification : playerEmulators.keySet()) {
             for (PlayerEmulator<State> emulator : playerEmulators.get(specification)) {
                 try {
                     emulator.stop();
@@ -48,22 +46,14 @@ public class GameplayEmulator<State extends GameState> {
     }
 
     public void emulate() {
-        List<GameSpecification> specifications = new ArrayList<GameSpecification>();
         // Step 1. Fetching specification options for the game
-        GameSpecificationOptions specificatinOptions = playerOperations.createPlayer().gameConstructionOperations(actor.getGame()).get();
-        if (specificatinOptions instanceof SelectSpecificationOptions) {
-            SelectSpecificationOptions selectSpecificationOptions = (SelectSpecificationOptions) specificatinOptions;
-            // Step 1.1 Adding all possible specifications to the list of GameSpecifications
-            specifications.addAll(selectSpecificationOptions.getSpecifications());
-        } else {
-            throw new UnsupportedOperationException("This kind of specification not supported");
-        }
+        List<MatchGameConfiguration> specifications = playerOperations.createPlayer().gameConstructionOperations(actor.getGame()).getMatchConfigurations();
         // Step 2. Creating Players to emulate gaming
         if (specifications.size() == 0)
             throw new RuntimeException("Specification list is empty check your configurations");
         // Step 3. For each specification creating player emulator
         executorService = Executors.newScheduledThreadPool(specifications.size() + 1);
-        for (GameSpecification specification : specifications) {
+        for (MatchGameConfiguration specification : specifications) {
             playerEmulators.put(specification, new ArrayList<PlayerEmulator<State>>());
             createEmulator(specification);
         }
@@ -71,7 +61,7 @@ public class GameplayEmulator<State extends GameState> {
         // executorService.scheduleAtFixedRate(new PlayerEmulatorManager(), 30, 30, TimeUnit.SECONDS);
     }
 
-    private void createEmulator(GameSpecification specification) {
+    private void createEmulator(MatchGameConfiguration specification) {
         PlayerEmulator<State> playerEmulator = new PlayerEmulator<State>(actor, playerOperations, sessionPlayerFactory, specification);
         playerEmulators.get(specification).add(playerEmulator);
         executorService.submit(playerEmulator);
@@ -81,7 +71,7 @@ public class GameplayEmulator<State extends GameState> {
 
         @Override
         public void run() {
-            for (GameSpecification specification : playerEmulators.keySet()) {
+            for (MatchGameConfiguration specification : playerEmulators.keySet()) {
                 List<PlayerEmulator<State>> emulatorsToRelease = new ArrayList<PlayerEmulator<State>>();
                 // Step 1. Checking all emulators from existing player emulators
                 // Step 1.1. Check if there is no pending users

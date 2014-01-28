@@ -8,11 +8,12 @@ import java.util.Date;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStateChangedEvent;
 import com.clemble.casino.game.event.server.PlayerMovedEvent;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
@@ -25,11 +26,15 @@ public class GameTimeAspect extends BasicGameAspect<GameManagementEvent> {
     final private SessionTimeTask sessionTimeTracker;
     final private GameEventTaskExecutor gameEventTaskExecutor;
 
-    public GameTimeAspect(GameInitiation initiation, GameContext context, GameEventTaskExecutor gameEventTaskExecutor) {
+    public GameTimeAspect(
+            GameSessionKey sessionKey,
+            MatchGameConfiguration specification, 
+            GameContext context,
+            GameEventTaskExecutor gameEventTaskExecutor) {
         super(new EventTypeSelector(GameManagementEvent.class));
         this.context  = context;
-        this.participants = PlayerAwareUtils.toPlayerList(initiation.getParticipants());
-        this.sessionTimeTracker = new SessionTimeTask(initiation, context);
+        this.participants = PlayerAwareUtils.toPlayerList(context.getPlayerContexts());
+        this.sessionTimeTracker = new SessionTimeTask(sessionKey, specification, context);
         this.gameEventTaskExecutor = checkNotNull(gameEventTaskExecutor);
 
     }

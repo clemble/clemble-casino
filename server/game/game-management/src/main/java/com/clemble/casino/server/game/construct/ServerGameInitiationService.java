@@ -6,6 +6,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.ServerService;
+import com.clemble.casino.server.game.PendingGameInitiation;
 
 public interface ServerGameInitiationService extends ServerService {
 
@@ -15,6 +16,8 @@ public interface ServerGameInitiationService extends ServerService {
      * @param initiation
      */
     public void register(GameInitiation initiation);
+
+    public void start(PendingGameInitiation pendingInitiation);
 
     /**
      * Starts game right away, if it fails, it fails.

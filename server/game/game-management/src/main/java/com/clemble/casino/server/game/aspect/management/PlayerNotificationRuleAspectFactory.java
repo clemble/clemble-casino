@@ -6,8 +6,7 @@ import org.springframework.core.Ordered;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
@@ -22,12 +21,12 @@ public class PlayerNotificationRuleAspectFactory implements GameAspectFactory<Ga
     }
 
     @Override
-    public GameAspect<GameManagementEvent> construct(GameInitiation initiation, GameContext construction) {
+    public GameAspect<GameManagementEvent> construct(ServerGameInitiation initiation) {
         switch (initiation.getSpecification().getPrivacyRule()) {
             case everybody:
-                return new PublicNotificationRuleAspect(initiation, notificationService);
+                return new PublicNotificationRuleAspect(initiation.getSession(), initiation.getParticipants(), notificationService);
             case players:
-                return new PrivateNotificationRuleAspect(initiation, notificationService);
+                return new PrivateNotificationRuleAspect(initiation.getParticipants(), notificationService);
             default:
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         }

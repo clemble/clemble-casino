@@ -1,4 +1,6 @@
 
+    drop table GAME_CONFIGURATION if exists;
+
     drop table GAME_SCHEDULE if exists;
 
     drop table GAME_SESSION if exists;
@@ -9,7 +11,12 @@
 
     drop table GAME_SESSION_PLAYERS if exists;
 
-    drop table GAME_SPECIFICATION if exists;
+    create table GAME_CONFIGURATION (
+        GAME_NAME varchar(255) not null,
+        SPECIFICATION_NAME varchar(255) not null,
+        CONFIGURATION varchar(4096),
+        primary key (GAME_NAME, SPECIFICATION_NAME)
+    );
 
     create table GAME_SCHEDULE (
         GAME integer not null,
@@ -21,11 +28,11 @@
     create table GAME_SESSION (
         GAME integer not null,
         SESSION_ID varchar(255) not null,
+        GAME_NAME varchar(255),
+        SPECIFICATION_NAME varchar(255),
         SESSION_STATE integer,
         GAME_STATE varchar(4096),
         VERSION integer,
-        GAME_NAME varchar(255),
-        SPECIFICATION_NAME varchar(255),
         primary key (GAME, SESSION_ID)
     );
 
@@ -54,32 +61,6 @@
         PLAYERS_ORDER integer not null,
         primary key (SESSION_ID, GAME, PLAYERS_ORDER)
     );
-
-    create table GAME_SPECIFICATION (
-        GAME_NAME varchar(255) not null,
-        SPECIFICATION_NAME varchar(255) not null,
-        BET_RULE varchar(255),
-        DRAW varchar(255),
-        GIVE_UP varchar(255),
-        MOVE_TIME_LIMIT bigint,
-        MOVE_TIME_PUNISHMENT varchar(255),
-        PLAYER_NUMBER varchar(255),
-        POT_RULE varchar(255),
-        CURRENCY integer,
-        PRICE bigint,
-        PRIVACY_RULE varchar(255),
-        ROLES varchar(255),
-        TOTAL_TIME_LIMIT bigint,
-        TOTAL_TIME_PUNISHMENT varchar(255),
-        VISIBILITY varchar(255),
-        WON varchar(255),
-        primary key (GAME_NAME, SPECIFICATION_NAME)
-    );
-
-    alter table GAME_SESSION 
-        add constraint FK_euxcm3ovet7vx5omn4ovd7am5 
-        foreign key (GAME_NAME, SPECIFICATION_NAME) 
-        references GAME_SPECIFICATION;
 
     alter table GAME_SESSION_MOVES 
         add constraint FK_aedf85y3v0mkk356uwh8l0raq 

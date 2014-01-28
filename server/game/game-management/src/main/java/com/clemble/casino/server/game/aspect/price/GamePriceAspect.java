@@ -10,16 +10,16 @@ import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
 public class GamePriceAspect extends BasicGameAspect<BetAction> {
 
-    final private GameContext account;
+    final private GameContext context;
 
     public GamePriceAspect(GameContext account) {
         super(new EventTypeSelector(BetAction.class));
-        this.account = account;
+        this.context = account;
     }
 
     @Override
     public void doEvent(BetAction move) {
-        GamePlayerAccount gamePlayerState = account.getPlayerContext(move.getPlayer()).getAccount();
+        GamePlayerAccount gamePlayerState = context.getPlayerContext(move.getPlayer()).getAccount();
         if (move.getBet() > gamePlayerState.getLeft())
             throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayBetOverflow);
     }

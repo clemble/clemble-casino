@@ -4,8 +4,7 @@ import org.springframework.core.Ordered;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
@@ -24,10 +23,10 @@ public class DrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?
     }
 
     @Override
-    public GameAspect<GameEndedEvent<?>> construct(GameInitiation initiation, GameContext construction) {
+    public GameAspect<GameEndedEvent<?>> construct(ServerGameInitiation initiation) {
         switch (initiation.getSpecification().getDrawRule()) {
         case owned:
-            return new DrawByOwnedRuleAspect(transactionService, initiation.getSpecification());
+            return new DrawByOwnedRuleAspect(initiation.getSpecification().getPrice().getCurrency(), transactionService);
         case spent:
             return DrawBySpentRuleAspect.INSTANCE;
         default:

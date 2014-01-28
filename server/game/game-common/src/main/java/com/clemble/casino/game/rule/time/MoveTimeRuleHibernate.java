@@ -27,7 +27,7 @@ public class MoveTimeRuleHibernate extends ImmutableHibernateType<TimeRule> {
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         TimeBreachPunishment breachBehavior = TimeBreachPunishment.valueOf(rs.getString(names[1]));
-        return new MoveTimeRule().setPunishment(breachBehavior).setLimit(rs.getInt(names[2]));
+        return new MoveTimeRule(rs.getInt(names[2]), breachBehavior);
     }
 
     @Override

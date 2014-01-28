@@ -13,6 +13,7 @@ import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GameStartedEvent;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.game.cache.GameCache;
 import com.clemble.casino.server.game.cache.GameCacheService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -34,9 +35,10 @@ public class GameSessionProcessor<State extends GameState> {
 
     public GameSession<State> start(GameInitiation initiation) {
         // Step 1. Allocating table for game initiation
-        final GameSession<State> session = sessionFactory.construct(initiation);
+        // TODO Change this it would cause problems
+        final GameSession<State> session = sessionFactory.construct(initiation, (MatchGameConfiguration) initiation.getConfiguration());
         // Step 2. Sending notification for game started
-        notificationService.notifyAll(initiation.getParticipants(), new GameStartedEvent<State>(session));
+        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<State>(session));
         // Step 3. Returning active table
         return session;
     }

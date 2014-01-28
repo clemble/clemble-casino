@@ -12,10 +12,10 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.outcome.GameOutcome;
-import com.clemble.casino.game.specification.GameSpecificationAware;
+import com.clemble.casino.game.specification.GameConfigurationKeyAware;
 import com.clemble.casino.player.PlayerAware;
 
-public interface GameSessionPlayer<State extends GameState> extends GameSessionAware, PlayerAware, Closeable, GameSpecificationAware {
+public interface GameSessionPlayer<State extends GameState> extends GameSessionAware, PlayerAware, Closeable, GameConfigurationKeyAware {
 
     public ClembleCasinoOperations playerOperations();
 
