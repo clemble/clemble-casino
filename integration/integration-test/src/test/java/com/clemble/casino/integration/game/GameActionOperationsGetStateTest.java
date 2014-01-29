@@ -1,6 +1,5 @@
 package com.clemble.casino.integration.game;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -27,6 +26,8 @@ import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.server.game.construct.BasicServerGameInitiationService;
+import com.clemble.test.concurrent.AsyncCompletionUtils;
+import com.clemble.test.concurrent.Check;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -65,7 +66,7 @@ public class GameActionOperationsGetStateTest {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 1.1. Accumulating Game initiation events
-        EventAccumulator<GameInitiationCanceledEvent> listener = new EventAccumulator<>();
+        final EventAccumulator<GameInitiationCanceledEvent> listener = new EventAccumulator<>();
         B.listenerOperations().subscribe(new EventTypeSelector(GameInitiationCanceledEvent.class), listener);
         // Step 2. Constructing automatch game
         GameConstructionOperations<NumberState> constructionOperations = A.gameConstructionOperations(Game.num);
@@ -82,7 +83,12 @@ public class GameActionOperationsGetStateTest {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        assertEquals(listener.toList().size(), 1);
+        AsyncCompletionUtils.check(new Check() {
+            @Override
+            public boolean check() {
+                return listener.toList().size() == 1;
+            }
+        }, 10_000);
     }
 
 }

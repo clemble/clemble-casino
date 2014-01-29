@@ -32,8 +32,8 @@ import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
-import com.clemble.test.concurrent.Check;
-import com.clemble.test.concurrent.CheckDelayUtils;
+import com.clemble.test.concurrent.AsyncCompletionUtils;
+import com.clemble.test.concurrent.Get;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -162,7 +162,7 @@ public class PaymentTransactionOperationsTest {
         // Step 1. Creating player
         final ClembleCasinoOperations player = playerOperations.createPlayer();
         // Step 2. Checking account exists
-        PaymentTransaction paymentTransaction = CheckDelayUtils.check(new Check<PaymentTransaction>() {
+        PaymentTransaction paymentTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>() {
             @Override
             public PaymentTransaction get() {
                 return player.paymentOperations().getPaymentTransaction("registration", player.getPlayer());

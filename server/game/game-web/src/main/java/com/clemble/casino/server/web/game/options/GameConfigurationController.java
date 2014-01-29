@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.clemble.casino.game.service.GameConfigurationService;
@@ -31,21 +32,21 @@ public class GameConfigurationController implements GameConfigurationService, Ex
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SPECIFICATION_OPTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<MatchGameConfiguration> getMatchConfigurations() {
+    public @ResponseBody List<MatchGameConfiguration> getMatchConfigurations() {
         return configurationService.getMatchConfigurations();
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_POT_SPECIFICATION_OPTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<PotGameConfiguration> getPotConfigurations() {
+    public @ResponseBody List<PotGameConfiguration> getPotConfigurations() {
         return configurationService.getPotConfigurations();
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_TOURNAMENT_SPECIFICATION_OPTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<TournamentGameConfiguration> getTournamentConfigurations() {
+    public @ResponseBody List<TournamentGameConfiguration> getTournamentConfigurations() {
         return configurationService.getTournamentConfigurations();
     }
 

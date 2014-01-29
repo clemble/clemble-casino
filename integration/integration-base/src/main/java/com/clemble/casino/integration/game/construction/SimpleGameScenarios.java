@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -26,7 +25,7 @@ import com.clemble.casino.integration.game.GameSessionPlayerFactory;
 public class SimpleGameScenarios implements GameScenarios, ApplicationContextAware {
 
     final private PlayerScenarios playerOperations;
-    final private Map<Game, GameSessionPlayerFactory<?>> gameToSessionPlayerFactory = new HashMap<>();
+    final private ConcurrentHashMap<Game, GameSessionPlayerFactory<?>> gameToSessionPlayerFactory = new ConcurrentHashMap<>();
 
     public SimpleGameScenarios(PlayerScenarios playerOperations) {
         this.playerOperations = checkNotNull(playerOperations);
@@ -112,6 +111,7 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
         Game game = specification.getConfigurationKey().getGame();
         // Step 2. Creating availability game request
         GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAvailability(specification, Arrays.asList(participants));
+        
         GameSessionPlayer<State> sessionPlayer = (GameSessionPlayer<State>) gameToSessionPlayerFactory.get(game).construct(initiator, construction);
         // Step 3. Returning constructed player
         return sessionPlayer;

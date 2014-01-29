@@ -61,7 +61,12 @@ public class PlayerPresenceCleanerTest {
         // Player notification is not immediate, it's done by background process, 
         // calling get triggers key expire event
         if(presenceChangedEvent == null) {
-            A.presenceOperations().getPresence();
+            jedis = jedisPool.getResource();
+            try {
+                jedis.get(A.getPlayer());
+            }finally {
+                jedisPool.returnResource(jedis);
+            }
             presenceChangedEvent = events.poll(30, TimeUnit.SECONDS);
         }
         assertNotNull(presenceChangedEvent);
