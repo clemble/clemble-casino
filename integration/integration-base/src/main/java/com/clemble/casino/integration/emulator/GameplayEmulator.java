@@ -47,7 +47,7 @@ public class GameplayEmulator<State extends GameState> {
 
     public void emulate() {
         // Step 1. Fetching specification options for the game
-        List<MatchGameConfiguration> specifications = playerOperations.createPlayer().gameConstructionOperations(actor.getGame()).getMatchConfigurations();
+        List<MatchGameConfiguration> specifications = playerOperations.createPlayer().gameConstructionOperations(actor.getGame()).getConfigurations().matchConfigurations();
         // Step 2. Creating Players to emulate gaming
         if (specifications.size() == 0)
             throw new RuntimeException("Specification list is empty check your configurations");

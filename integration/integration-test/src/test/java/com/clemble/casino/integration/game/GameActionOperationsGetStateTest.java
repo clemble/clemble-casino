@@ -47,7 +47,7 @@ public class GameActionOperationsGetStateTest {
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 2. Constructing automatch game
         GameConstructionOperations<NumberState> constructionOperations = A.gameConstructionOperations(Game.num);
-        List<MatchGameConfiguration> configurations = constructionOperations.getMatchConfigurations();
+        List<MatchGameConfiguration> configurations = constructionOperations.getConfigurations().matchConfigurations();
         MatchGameConfiguration specification = configurations.get(0);
         GameConstruction construction = constructionOperations.constructAutomatch(specification);
         // Step 3. Checkin getState works fine
@@ -70,7 +70,7 @@ public class GameActionOperationsGetStateTest {
         B.listenerOperations().subscribe(new EventTypeSelector(GameInitiationCanceledEvent.class), listener);
         // Step 2. Constructing automatch game
         GameConstructionOperations<NumberState> constructionOperations = A.gameConstructionOperations(Game.num);
-        List<MatchGameConfiguration> specificationOptions = constructionOperations.getMatchConfigurations();
+        List<MatchGameConfiguration> specificationOptions = constructionOperations.getConfigurations().matchConfigurations();
         MatchGameConfiguration specification = specificationOptions.get(0);
         constructionOperations.constructAutomatch(specification);
         // Step 3. Checking getState works fine

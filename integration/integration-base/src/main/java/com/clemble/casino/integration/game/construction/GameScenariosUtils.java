@@ -10,7 +10,7 @@ import com.clemble.casino.integration.util.RandomUtils;
 public class GameScenariosUtils {
 
     public static MatchGameConfiguration random(ClembleCasinoOperations player, Game game) {
-        return random(player.gameConstructionOperations(game).getMatchConfigurations());
+        return random(player.gameConstructionOperations(game).getConfigurations().matchConfigurations());
     }
 
     public static MatchGameConfiguration random(List<MatchGameConfiguration> specificationOptions) {

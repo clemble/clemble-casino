@@ -36,7 +36,7 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
             throw new IllegalArgumentException("Name must not be null");
         ClembleCasinoOperations randomPlayer = playerOperations.createPlayer();
         // Step 0. Sanity check
-        MatchGameConfiguration specification = GameScenariosUtils.random(randomPlayer.gameConstructionOperations(game).getMatchConfigurations());
+        MatchGameConfiguration specification = GameScenariosUtils.random(randomPlayer.gameConstructionOperations(game).getConfigurations().matchConfigurations());
         // Step 1. Selecting specification for the game
         return construct(specification);
     }
