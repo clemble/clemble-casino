@@ -16,8 +16,9 @@ import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.game.service.GameActionService;
-import com.clemble.casino.game.service.GameConstructionService;
+import com.clemble.casino.game.service.AutoGameConstructionService;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
@@ -129,11 +130,12 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
                 PlayerSessionService sessionOperations,
                 PaymentService accountOperations,
                 PlayerPresenceService presenceService,
-                GameConstructionService constructionService,
-                GameInitiationService initiationService,
+                @Qualifier("autoGameConstructionController") AutoGameConstructionService constructionService,
+                @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,
+                @Qualifier("gameInitiationController") GameInitiationService initiationService,
                 @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
                 GameActionService<?> actionService) {
-            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, connectionService, sessionOperations, accountOperations, presenceService, constructionService, initiationService, specificationService, actionService);
+            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
         

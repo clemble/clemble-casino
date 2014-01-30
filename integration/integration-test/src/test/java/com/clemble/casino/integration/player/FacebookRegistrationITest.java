@@ -29,7 +29,7 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.player.PlayerConnectionDiscoveredEvent;
+import com.clemble.casino.player.PlayerDiscoveredConnectionEvent;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
@@ -160,8 +160,8 @@ public class FacebookRegistrationITest {
         SocialAccessGrant grantA = new SocialAccessGrant("facebook", fbAccoA.accessToken());
         ClembleCasinoOperations A = playerScenarios.createPlayer(grantA);
         // Step 2. Adding discovery event listener
-        EventAccumulator<PlayerConnectionDiscoveredEvent> discoveryListener = new EventAccumulator<>();
-        A.listenerOperations().subscribe(new EventTypeSelector(PlayerConnectionDiscoveredEvent.class), discoveryListener);
+        EventAccumulator<PlayerDiscoveredConnectionEvent> discoveryListener = new EventAccumulator<>();
+        A.listenerOperations().subscribe(new EventTypeSelector(PlayerDiscoveredConnectionEvent.class), discoveryListener);
         // Step 3. Generating new user B, who is a friend of user A
         FacebookTestUserAccount fbAccoB = facebookStore.createTestUser(true, "email");
         fbAccoA.makeFriends(fbAccoB);

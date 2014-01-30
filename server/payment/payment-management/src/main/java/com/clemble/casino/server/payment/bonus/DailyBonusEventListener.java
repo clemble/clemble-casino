@@ -12,7 +12,7 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.payment.BonusPaymentTransaction;
 
-public class DailyBonusService implements BonusEventListener<SystemPlayerEnteredEvent> {
+public class DailyBonusEventListener implements BonusEventListener<SystemPlayerEnteredEvent> {
 
     final private static PaymentBonusSource SOURCE = PaymentBonusSource.dailybonus;
     final private static DateFormat DATE_FORMAT = new SimpleDateFormat("ddmmyy");
@@ -20,7 +20,7 @@ public class DailyBonusService implements BonusEventListener<SystemPlayerEntered
     final private Money amount;
     final private BonusService bonusService;
 
-    public DailyBonusService(Money bonusAmount, BonusService bonusService) {
+    public DailyBonusEventListener(Money bonusAmount, BonusService bonusService) {
         this.amount = checkNotNull(bonusAmount);
         this.bonusService = checkNotNull(bonusService);
     }

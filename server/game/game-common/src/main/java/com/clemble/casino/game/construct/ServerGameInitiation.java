@@ -16,9 +16,9 @@ public class ServerGameInitiation implements GameSessionAware {
     private static final long serialVersionUID = -3413033971589908905L;
 
     final private GameContext context;
-    final private List<String> participants;
-    final private MatchGameConfiguration specification;
     final private GameSessionKey sessionKey;
+    final private MatchGameConfiguration specification;
+    final private List<String> participants;
 
     public ServerGameInitiation(GameSessionKey sessionKey, GameContext context, MatchGameConfiguration specification) {
         this.context = context;

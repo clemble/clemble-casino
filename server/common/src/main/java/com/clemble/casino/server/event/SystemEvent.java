@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(name = SystemPlayerLeftEvent.CHANNEL, value = SystemPlayerLeftEvent.class),
         @JsonSubTypes.Type(name = SystemPlayerPresenceChangedEvent.CHANNEL, value = SystemPlayerPresenceChangedEvent.class),
         @JsonSubTypes.Type(name = SystemPlayerConnectedSocialEvent.CHANNEL, value = SystemPlayerConnectedSocialEvent.class),
-        @JsonSubTypes.Type(name = SystemPlayerConnectionDiscoveredEvent.CHANNEL, value = SystemPlayerConnectionDiscoveredEvent.class),
+        @JsonSubTypes.Type(name = SystemPlayerDiscoveredConnectionEvent.CHANNEL, value = SystemPlayerDiscoveredConnectionEvent.class),
         @JsonSubTypes.Type(name = SystemPlayerRegisteredEvent.CHANNEL, value = SystemPlayerRegisteredEvent.class)
 })
 public interface SystemEvent extends Event {

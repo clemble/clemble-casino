@@ -126,7 +126,7 @@ public class ServerPlayerPresenceServiceTest {
         final CountDownLatch endLatch = new CountDownLatch(MARK_ACTIVE_IN_PARRALLEL_THREADS);
         final AtomicInteger numLocksReceived = new AtomicInteger(0);
 
-        final PlayerListener playerListener = new PlayerListener(1);
+        final TestPlayerEventListener playerListener = new TestPlayerEventListener(1);
         presenceListenerService.subscribe(playerListener);
 
         for (int i = 0; i < MARK_ACTIVE_IN_PARRALLEL_THREADS; i++) {
@@ -179,7 +179,7 @@ public class ServerPlayerPresenceServiceTest {
     public void testArbitraryListening() throws InterruptedException {
         String player = ObjectGenerator.generate(String.class);
 
-        PlayerListener playerListener = new PlayerListener(1);
+        TestPlayerEventListener playerListener = new TestPlayerEventListener(1);
         presenceListenerService.subscribe(playerListener);
         try {
             playerPresenceService.markOnline(player);
@@ -200,7 +200,7 @@ public class ServerPlayerPresenceServiceTest {
     public void testStateChangeListening() throws InterruptedException {
         String player = ObjectGenerator.generate(String.class);
 
-        PlayerListener playerListener = new PlayerListener(3);
+        TestPlayerEventListener playerListener = new TestPlayerEventListener(3);
         presenceListenerService.subscribe(playerListener);
 
         playerPresenceService.markOnline(player);
@@ -217,11 +217,11 @@ public class ServerPlayerPresenceServiceTest {
         }
     }
 
-    private class PlayerListener implements SystemEventListener<SystemPlayerPresenceChangedEvent> {
+    private class TestPlayerEventListener implements SystemEventListener<SystemPlayerPresenceChangedEvent> {
         final public CountDownLatch countDownLatch;
         final public ArrayBlockingQueue<Entry<String, Presence>> calls;
 
-        public PlayerListener(int numCalls) {
+        public TestPlayerEventListener(int numCalls) {
             countDownLatch = new CountDownLatch(numCalls);
             calls = new ArrayBlockingQueue<>(numCalls);
         }

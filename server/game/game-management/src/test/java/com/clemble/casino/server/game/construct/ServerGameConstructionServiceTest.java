@@ -24,6 +24,7 @@ import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
+import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -39,7 +40,7 @@ public class ServerGameConstructionServiceTest {
     final private int NUM_PARTICIPANTS = 50;
 
     @Autowired
-    public ServerGameConstructionService constructionService;
+    public AvailabilityGameConstructionService constructionService;
 
     @Autowired
     public GameConstructionRepository constructionRepository;
@@ -56,7 +57,7 @@ public class ServerGameConstructionServiceTest {
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
 
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
-            constructionService.invitationResponsed(new InvitationAcceptedEvent(participants.get(i), construction.getSession()));
+            constructionService.reply(new InvitationAcceptedEvent(participants.get(i), construction.getSession()));
         }
 
         GameConstruction finalConstructionState = constructionRepository.findOne(construction.getSession());
@@ -99,9 +100,9 @@ public class ServerGameConstructionServiceTest {
         final public String player;
         final public GameSessionKey construction;
         final public CountDownLatch endLatch;
-        final public ServerGameConstructionService constructionService;
+        final public AvailabilityGameConstructionService constructionService;
 
-        public GameResponce(GameSessionKey construction, String player, CountDownLatch endLatch, ServerGameConstructionService constructionService) {
+        public GameResponce(GameSessionKey construction, String player, CountDownLatch endLatch, AvailabilityGameConstructionService constructionService) {
             this.player = player;
             this.construction = construction;
             this.endLatch = endLatch;
@@ -112,7 +113,7 @@ public class ServerGameConstructionServiceTest {
         public GameConstruction call() {
             try {
                 Thread.sleep(RANDOM.nextInt(1000));
-                GameConstruction construct = constructionService.invitationResponsed(new InvitationAcceptedEvent(player, construction));
+                GameConstruction construct = constructionService.reply(new InvitationAcceptedEvent(player, construction));
                 System.out.println(construct.getVersion());
                 return construct;
             } catch (Throwable throwable) {

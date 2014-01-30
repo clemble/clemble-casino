@@ -21,14 +21,16 @@ public class GameSessionFactory<State extends GameState> {
         this.sessionRepository = checkNotNull(sessionRepository);
     }
 
-    public GameSession<State> construct(GameInitiation initiation, MatchGameConfiguration specification) {
+    public GameSession<State> construct(GameInitiation initiation, MatchGameConfiguration configuration) {
+
+        State state = stateFactory.constructState(initiation, new GameContext(initiation, configuration));
 
         GameSession<State> session = new GameSession<State>()
             .setSession(initiation.getSession())
-            .setConfiguration(specification.getConfigurationKey())
+            .setConfiguration(configuration.getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants())
-            .setState(stateFactory.constructState(initiation, new GameContext(initiation, specification)));
+            .setState(state);
 
         return sessionRepository.saveAndFlush(session);
     }

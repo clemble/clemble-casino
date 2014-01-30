@@ -11,9 +11,9 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.payment.BasicServerPaymentTransactionService;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.payment.bonus.BonusService;
-import com.clemble.casino.server.payment.bonus.DailyBonusService;
-import com.clemble.casino.server.payment.bonus.PlayerConnectionDiscoveryBonusService;
-import com.clemble.casino.server.payment.bonus.PlayerRegisterationBonusService;
+import com.clemble.casino.server.payment.bonus.DailyBonusEventListener;
+import com.clemble.casino.server.payment.bonus.PlayerConnectionDiscoveryBonusEventListener;
+import com.clemble.casino.server.payment.bonus.PlayerRegisterationBonusEventListener;
 import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.payment.bonus.policy.NoBonusPolicy;
 import com.clemble.casino.server.player.account.BasicServerPlayerAccountService;
@@ -54,25 +54,25 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
     }
 
     @Bean
-    public DailyBonusService dailyBonusService(BonusService bonusService, SystemNotificationServiceListener notificationServiceListener) {
+    public DailyBonusEventListener dailyBonusService(BonusService bonusService, SystemNotificationServiceListener notificationServiceListener) {
         Money bonus = new Money(Currency.FakeMoney, 50);
-        DailyBonusService dailyBonusService = new DailyBonusService(bonus, bonusService);
+        DailyBonusEventListener dailyBonusService = new DailyBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(dailyBonusService);
         return dailyBonusService;
     }
 
     @Bean
-    public PlayerConnectionDiscoveryBonusService dicoveryBonusService(BonusService bonusService, SystemNotificationServiceListener notificationServiceListener) {
+    public PlayerConnectionDiscoveryBonusEventListener dicoveryBonusService(BonusService bonusService, SystemNotificationServiceListener notificationServiceListener) {
         Money bonus = new Money(Currency.FakeMoney, 100);
-        PlayerConnectionDiscoveryBonusService discoveryBonusService = new PlayerConnectionDiscoveryBonusService(bonus, bonusService);
+        PlayerConnectionDiscoveryBonusEventListener discoveryBonusService = new PlayerConnectionDiscoveryBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(discoveryBonusService);
         return discoveryBonusService;
     }
 
     @Bean
-    public PlayerRegisterationBonusService registerationBonusService(BonusService bonusService, SystemNotificationServiceListener notificationServiceListener) {
+    public PlayerRegisterationBonusEventListener registerationBonusService(BonusService bonusService, SystemNotificationServiceListener notificationServiceListener) {
         Money bonus = new Money(Currency.FakeMoney, 200);
-        PlayerRegisterationBonusService registrationBonusService = new PlayerRegisterationBonusService(bonus, bonusService);
+        PlayerRegisterationBonusEventListener registrationBonusService = new PlayerRegisterationBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(registrationBonusService);
         return registrationBonusService;
     }

@@ -5,23 +5,23 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.event.SystemPlayerConnectionDiscoveredEvent;
+import com.clemble.casino.server.event.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.payment.BonusPaymentTransaction;
 
-public class PlayerConnectionDiscoveryBonusService implements BonusEventListener<SystemPlayerConnectionDiscoveredEvent>{
+public class PlayerConnectionDiscoveryBonusEventListener implements BonusEventListener<SystemPlayerDiscoveredConnectionEvent>{
 
     final private static PaymentBonusSource SOURCE = PaymentBonusSource.discovery;
 
     final private Money amount;
     final private BonusService bonusService;
 
-    public PlayerConnectionDiscoveryBonusService(Money bonusAmount, BonusService bonusService) {
+    public PlayerConnectionDiscoveryBonusEventListener(Money bonusAmount, BonusService bonusService) {
         this.amount = checkNotNull(bonusAmount);
         this.bonusService = checkNotNull(bonusService);
     }
 
     @Override
-    public void onEvent(SystemPlayerConnectionDiscoveredEvent event) {
+    public void onEvent(SystemPlayerDiscoveredConnectionEvent event) {
         // Step 1. Sanity check
         if (event == null)
             return;
@@ -35,7 +35,7 @@ public class PlayerConnectionDiscoveryBonusService implements BonusEventListener
 
     @Override
     public String getChannel() {
-        return SystemPlayerConnectionDiscoveredEvent.CHANNEL;
+        return SystemPlayerDiscoveredConnectionEvent.CHANNEL;
     }
 
     @Override

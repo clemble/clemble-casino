@@ -24,8 +24,8 @@ import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
-import com.clemble.casino.server.social.SocialNetworkPopulator;
-import com.clemble.casino.server.social.SocialPlayerConnectionDiscoveredNotifier;
+import com.clemble.casino.server.social.SocialNetworkPopulatorEventListener;
+import com.clemble.casino.server.social.SocialPlayerDiscoveredConnectionEventListener;
 import com.clemble.casino.server.social.SocialProfileConnectionSignUp;
 import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
@@ -71,10 +71,10 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public SocialNetworkPopulator socialNetworkPopulator(SocialConnectionAdapterRegistry socialAdapterRegistry,
+    public SocialNetworkPopulatorEventListener socialNetworkPopulator(SocialConnectionAdapterRegistry socialAdapterRegistry,
             PlayerSocialNetworkRepository socialNetworkRepository, SystemNotificationService notificationService,
             UsersConnectionRepository usersConnectionRepository, SystemNotificationServiceListener serviceListener) {
-        SocialNetworkPopulator networkPopulator = new SocialNetworkPopulator(socialAdapterRegistry, usersConnectionRepository, socialNetworkRepository, notificationService);
+        SocialNetworkPopulatorEventListener networkPopulator = new SocialNetworkPopulatorEventListener(socialAdapterRegistry, usersConnectionRepository, socialNetworkRepository, notificationService);
         serviceListener.subscribe(networkPopulator);
         return networkPopulator;
     }
@@ -101,8 +101,8 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public SocialPlayerConnectionDiscoveredNotifier discoveryNotifier(@Qualifier("playerNotificationService") PlayerNotificationService notificationService, SystemNotificationServiceListener systemListener){
-        SocialPlayerConnectionDiscoveredNotifier discoveryNotifier = new SocialPlayerConnectionDiscoveredNotifier(notificationService);
+    public SocialPlayerDiscoveredConnectionEventListener discoveryNotifier(@Qualifier("playerNotificationService") PlayerNotificationService notificationService, SystemNotificationServiceListener systemListener){
+        SocialPlayerDiscoveredConnectionEventListener discoveryNotifier = new SocialPlayerDiscoveredConnectionEventListener(notificationService);
         systemListener.subscribe(discoveryNotifier);
         return discoveryNotifier;
     }

@@ -20,7 +20,7 @@ import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 
 public class BonusService {
 
-    final private static Logger LOG = LoggerFactory.getLogger(DailyBonusService.class);
+    final private static Logger LOG = LoggerFactory.getLogger(DailyBonusEventListener.class);
 
     final private BonusPolicy bonusPolicy;
     final private PlayerAccountTemplate accountTemplate;

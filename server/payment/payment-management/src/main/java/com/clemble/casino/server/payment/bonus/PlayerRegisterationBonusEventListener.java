@@ -7,14 +7,15 @@ import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.event.SystemPlayerRegisteredEvent;
 import com.clemble.casino.server.payment.BonusPaymentTransaction;
-public class PlayerRegisterationBonusService implements BonusEventListener<SystemPlayerRegisteredEvent> {
+
+public class PlayerRegisterationBonusEventListener implements BonusEventListener<SystemPlayerRegisteredEvent> {
 
     final private static PaymentBonusSource SOURCE = PaymentBonusSource.registration;
 
     final private Money bonusAmount;
     final private BonusService bonusService;
 
-    public PlayerRegisterationBonusService(Money bonusAmount, BonusService bonusService) {
+    public PlayerRegisterationBonusEventListener(Money bonusAmount, BonusService bonusService) {
         this.bonusAmount = checkNotNull(bonusAmount);
         this.bonusService = checkNotNull(bonusService);
     }

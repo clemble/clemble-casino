@@ -2,8 +2,6 @@ package com.clemble.casino.server.web.game.session;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.util.Collection;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.server.ExternalController;
@@ -31,17 +28,10 @@ public class GameInitiationController implements GameInitiationService, External
     }
 
     @Override
-    public @ResponseBody
-    Collection<GameInitiation> pending(@PathVariable("game") Game game, @PathVariable("playerId") String player) {
-        return initiationService.pending(game, player);
-    }
-
-    @Override
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_INITIATION_READY, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    GameInitiation ready(@PathVariable("game") final Game game, @PathVariable("session") final String session, @PathVariable("playerId") final String player) {
-        return initiationService.ready(new GameSessionKey(game, session), player);
+    public @ResponseBody GameInitiation confirm(@PathVariable("game") final Game game, @PathVariable("session") final String session, @PathVariable("playerId") final String player) {
+        return initiationService.confirm(game, session, player);
     }
 
 }

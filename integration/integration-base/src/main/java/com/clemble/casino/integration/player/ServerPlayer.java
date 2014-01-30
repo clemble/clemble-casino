@@ -28,8 +28,9 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.event.server.GameInitiatedEvent;
+import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.game.service.GameActionService;
-import com.clemble.casino.game.service.GameConstructionService;
+import com.clemble.casino.game.service.AutoGameConstructionService;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
@@ -58,7 +59,8 @@ public class ServerPlayer implements ClembleCasinoOperations {
     final private EventListenerOperations listenerOperations;
 
     final private GameConfigurationService specificationService;
-    final private GameConstructionService constructionService;
+    final private AutoGameConstructionService constructionService;
+    final private AvailabilityGameConstructionService availabilityConstructionService;
     final private GameInitiationService initiationService;
     final private GameActionService<?> actionService;
     final private LoadingCache<Game, GameConstructionOperations<?>> gameConstructors = CacheBuilder.newBuilder().build(
@@ -66,8 +68,9 @@ public class ServerPlayer implements ClembleCasinoOperations {
 
             @Override
             public GameConstructionOperations<?> load(Game key) throws Exception {
-                return new GameConstructionTemplate<>(player, key, new GameActionTemplateFactory(player, listenerOperations, actionService),
-                        constructionService, initiationService, specificationService, listenerOperations);
+                return new GameConstructionTemplate<>(player, key, 
+                        new GameActionTemplateFactory(player, listenerOperations, actionService),
+                        constructionService, availabilityConstructionService, initiationService, specificationService, listenerOperations);
             }
 
         });
@@ -78,12 +81,19 @@ public class ServerPlayer implements ClembleCasinoOperations {
     final private PaymentOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
 
-    public ServerPlayer(final ObjectMapper objectMapper, final PlayerToken playerIdentity, final PlayerCredential credential,
-            final PlayerProfileService playerProfileService, final PlayerConnectionService playerConnectionService,
-            final PlayerSessionService sessionOperations, final PaymentService accountOperations,
-            final EventListenerOperationsFactory listenerOperationsFactory, final PlayerPresenceService playerPresenceService,
-            final GameConstructionService gameConstructionService, 
-            final GameInitiationService initiationService, final GameConfigurationService specificationService, final GameActionService<?> actionService) {
+    public ServerPlayer(final ObjectMapper objectMapper,
+            final PlayerToken playerIdentity,
+            final PlayerCredential credential,
+            final PlayerProfileService playerProfileService,
+            final PlayerConnectionService playerConnectionService,
+            final PlayerSessionService sessionOperations,
+            final PaymentService accountOperations,
+            final EventListenerOperationsFactory listenerOperationsFactory,
+            final PlayerPresenceService playerPresenceService,
+            final AutoGameConstructionService gameConstructionService,
+            final AvailabilityGameConstructionService availabilityConstructionService,
+            final GameInitiationService initiationService,
+            final GameConfigurationService specificationService, final GameActionService<?> actionService) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
@@ -96,6 +106,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
         this.playerAccountOperations = new PaymentTemplate(player, accountOperations, listenerOperations);
 
         this.constructionService = checkNotNull(gameConstructionService);
+        this.availabilityConstructionService = checkNotNull(availabilityConstructionService);
         this.initiationService = checkNotNull(initiationService);
         this.specificationService = checkNotNull(specificationService);
         this.actionService = checkNotNull(actionService);
@@ -104,7 +115,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
             public void onEvent(GameInitiatedEvent event) {
                 // Step 1. Fetching session key
                 GameSessionKey sessionKey = event.getSession();
-                initiationService.ready(sessionKey.getGame(), sessionKey.getSession(), player);
+                initiationService.confirm(sessionKey.getGame(), sessionKey.getSession(), player);
             }
         });
     }

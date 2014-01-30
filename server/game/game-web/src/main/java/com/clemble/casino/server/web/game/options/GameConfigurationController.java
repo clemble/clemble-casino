@@ -30,21 +30,21 @@ public class GameConfigurationController implements GameConfigurationService, Ex
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SPECIFICATION_OPTIONS, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONFIGURATIONS_MATCH, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<MatchGameConfiguration> getMatchConfigurations() {
         return configurationService.getMatchConfigurations();
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_POT_SPECIFICATION_OPTIONS, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONFIGURATIONS_POT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<PotGameConfiguration> getPotConfigurations() {
         return configurationService.getPotConfigurations();
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_TOURNAMENT_SPECIFICATION_OPTIONS, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONFIGURATIONS_TOURNAMENT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<TournamentGameConfiguration> getTournamentConfigurations() {
         return configurationService.getTournamentConfigurations();

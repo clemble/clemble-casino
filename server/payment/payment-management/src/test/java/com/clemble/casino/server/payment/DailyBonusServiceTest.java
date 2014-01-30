@@ -21,7 +21,7 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
-import com.clemble.casino.server.payment.bonus.DailyBonusService;
+import com.clemble.casino.server.payment.bonus.DailyBonusEventListener;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -34,7 +34,7 @@ import com.clemble.test.random.ObjectGenerator;
 public class DailyBonusServiceTest {
 
     @Autowired
-    public DailyBonusService dailyBonusService;
+    public DailyBonusEventListener dailyBonusService;
 
     @Autowired
     public PlayerAccountTemplate accountRepository;

@@ -25,7 +25,7 @@ import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.server.game.construct.BasicServerGameInitiationService;
+import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 
@@ -79,7 +79,7 @@ public class GameActionOperationsGetStateTest {
         B.gameConstructionOperations(Game.num).constructAutomatch(specification);
         // Step 5. Checking value is not null anymore
         try {
-            Thread.sleep(TimeUnit.SECONDS.toMillis(BasicServerGameInitiationService.CANCEL_TIMEOUT_SECONDS));
+            Thread.sleep(TimeUnit.SECONDS.toMillis(ServerGameInitiationService.CANCEL_TIMEOUT_SECONDS));
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }

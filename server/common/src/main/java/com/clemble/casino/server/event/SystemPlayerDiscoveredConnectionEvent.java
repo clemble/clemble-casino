@@ -4,7 +4,7 @@ import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerConnectionDiscoveredEvent implements PlayerAware, SystemEvent {
+public class SystemPlayerDiscoveredConnectionEvent implements PlayerAware, SystemEvent {
 
     final public static String CHANNEL = "discovered";
 
@@ -17,7 +17,7 @@ public class SystemPlayerConnectionDiscoveredEvent implements PlayerAware, Syste
     final private String discovered;
 
     @JsonCreator
-    public SystemPlayerConnectionDiscoveredEvent(@JsonProperty("player") String player, @JsonProperty("discovered") String discovered) {
+    public SystemPlayerDiscoveredConnectionEvent(@JsonProperty("player") String player, @JsonProperty("discovered") String discovered) {
         this.player = player;
         this.discovered = discovered;
     }
@@ -53,7 +53,7 @@ public class SystemPlayerConnectionDiscoveredEvent implements PlayerAware, Syste
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SystemPlayerConnectionDiscoveredEvent other = (SystemPlayerConnectionDiscoveredEvent) obj;
+        SystemPlayerDiscoveredConnectionEvent other = (SystemPlayerDiscoveredConnectionEvent) obj;
         if (discovered == null) {
             if (other.discovered != null)
                 return false;

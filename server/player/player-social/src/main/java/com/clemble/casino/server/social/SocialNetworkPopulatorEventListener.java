@@ -10,21 +10,21 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 
 import com.clemble.casino.server.event.SystemPlayerConnectedSocialEvent;
-import com.clemble.casino.server.event.SystemPlayerConnectionDiscoveredEvent;
+import com.clemble.casino.server.event.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.player.PlayerSocialNetwork;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.google.common.collect.ImmutableList;
 
-public class SocialNetworkPopulator implements SystemEventListener<SystemPlayerConnectedSocialEvent> {
+public class SocialNetworkPopulatorEventListener implements SystemEventListener<SystemPlayerConnectedSocialEvent> {
 
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
     final private UsersConnectionRepository usersConnectionRepository;
     final private PlayerSocialNetworkRepository socialNetworkRepository;
     final private SystemNotificationService notificationService;
 
-    public SocialNetworkPopulator(SocialConnectionAdapterRegistry socialAdapterRegistry, UsersConnectionRepository usersConnectionRepository,
+    public SocialNetworkPopulatorEventListener(SocialConnectionAdapterRegistry socialAdapterRegistry, UsersConnectionRepository usersConnectionRepository,
             PlayerSocialNetworkRepository socialNetworkRepository, SystemNotificationService notificationService) {
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
         this.socialNetworkRepository = checkNotNull(socialNetworkRepository);
@@ -54,7 +54,7 @@ public class SocialNetworkPopulator implements SystemEventListener<SystemPlayerC
         // Step 7. Finding difference
         connectionsAfter.removeAll(connectionsBefore);
         for (PlayerSocialNetwork newConnection : connectionsAfter)
-            notificationService.notify(new SystemPlayerConnectionDiscoveredEvent(event.getPlayer(), newConnection.getPlayer()));
+            notificationService.notify(new SystemPlayerDiscoveredConnectionEvent(event.getPlayer(), newConnection.getPlayer()));
     }
 
     @Override

@@ -1,22 +1,17 @@
 package com.clemble.casino.server.spring.game;
 
-import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 
-import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.id.UUIDGameIdGenerator;
-import com.clemble.casino.server.game.PendingGameInitiation;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
+import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.management.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.DrawRuleAspectFactory;
@@ -26,15 +21,20 @@ import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
-import com.clemble.casino.server.game.construct.BasicServerGameConstructionService;
-import com.clemble.casino.server.game.construct.ServerGameConstructionService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
+import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructionService;
+import com.clemble.casino.server.game.construction.availability.PendingGameInitiationEventListener;
+import com.clemble.casino.server.game.construction.availability.PendingPlayerCreationEventListener;
+import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
+import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
+import com.clemble.casino.server.repository.game.PendingGameInitiationRepository;
+import com.clemble.casino.server.repository.game.PendingPlayerRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -43,9 +43,8 @@ import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
-@Import(value = {CommonSpringConfiguration.class, GameNeo4jSpringConfiguration.class, GameJPASpringConfiguration.class, PaymentCommonSpringConfiguration.class,
-        PlayerCommonSpringConfiguration.class, GameManagementSpringConfiguration.GameTimeAspectConfiguration.class,
-        GameManagementSpringConfiguration.Test.class })
+@Import(value = { CommonSpringConfiguration.class, GameNeo4jSpringConfiguration.class, GameJPASpringConfiguration.class,
+        PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, GameManagementSpringConfiguration.GameTimeAspectConfiguration.class})
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -92,7 +91,50 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     public ServerGameConfigurationService serverGameConfigurationService(ServerGameConfigurationRepository configurationRepository) {
         return new ServerGameConfigurationService(configurationRepository);
     }
- 
+
+    @Bean
+    public ServerAutoGameConstructionService serverAutoGameConstructionService(final GameIdGenerator idGenerator,
+            final ServerGameInitiationService initiatorService, final GameConstructionRepository constructionRepository,
+            final PlayerLockService playerLockService, final ServerPlayerPresenceService playerStateManager) {
+        return new ServerAutoGameConstructionService(idGenerator, initiatorService, constructionRepository, playerLockService, playerStateManager);
+    }
+
+    @Bean
+    public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(GameIdGenerator idGenerator,
+            @Qualifier("playerAccountService") ServerPlayerAccountService accountServerService,
+            ServerGameConfigurationRepository configurationRepository,
+            GameConstructionRepository constructionRepository,
+            @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+            PendingGameInitiationEventListener pendingInitiationService) {
+        return new ServerAvailabilityGameConstructionService(idGenerator, accountServerService, configurationRepository, constructionRepository,
+                notificationService, pendingInitiationService);
+    }
+
+    @Bean
+    public PendingPlayerCreationEventListener pendingPlayerCreationEventListener(SystemNotificationServiceListener notificationServiceListener,
+            PendingPlayerRepository playerRepository) {
+        PendingPlayerCreationEventListener playerEventListener = new PendingPlayerCreationEventListener(playerRepository);
+        notificationServiceListener.subscribe(playerEventListener);
+        return playerEventListener;
+    }
+
+    @Bean
+    public PendingGameInitiationEventListener pendingGameInitiationEventListener(PendingPlayerRepository playerRepository,
+            PendingGameInitiationRepository initiationRepository, ServerPlayerPresenceService presenceService, ServerGameInitiationService initiationService,
+            ServerGameConfigurationRepository configurationRepository, SystemNotificationServiceListener notificationServiceListener) {
+        PendingGameInitiationEventListener eventListener = new PendingGameInitiationEventListener(playerRepository, initiationRepository, presenceService,
+                initiationService, configurationRepository);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+    
+    @Bean
+    public ServerGameInitiationService serverGameInitiationActivator(GameSessionProcessor<?> processor,
+            ServerPlayerPresenceService presenceService,
+            @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        return new ServerGameInitiationService(processor, presenceService, notificationService);
+    }
+
     /**
      * Needed to separate this way, since BeanPostProcessor is loaded prior to any other configuration, Spring tries to load whole configuration, but some
      * dependencies are naturally missing - like Repositories
@@ -103,8 +145,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Configuration
     public static class GameTimeAspectConfiguration {
 
-//        @Bean
-//        @Autowired
+        // @Bean
+        // @Autowired
         public GameTimeAspectFactory gameTimeAspectFactory(GameEventTaskExecutor eventTaskExecutor) {
             return new GameTimeAspectFactory(eventTaskExecutor);
         }
@@ -115,48 +157,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
             return new GameEventTaskExecutor(executorService);
         }
-    }
-
-    @Configuration
-    @Profile(value = { UNIT_TEST })
-    public static class Test {
-
-        @Bean
-        @Autowired
-        public ServerGameConstructionService gameConstructionService(GameIdGenerator gameIdGenerator, ServerPlayerAccountService playerAccountService,
-                PlayerNotificationService playerNotificationService, GameConstructionRepository constructionRepository,
-                ServerGameInitiationService initiatorService, PlayerLockService playerLockService, ServerPlayerPresenceService playerStateManager) {
-            return new BasicServerGameConstructionService(gameIdGenerator, playerAccountService, playerNotificationService, constructionRepository,
-                    initiatorService, playerLockService, playerStateManager);
-        }
-
-        @Bean
-        public ServerGameInitiationService initiatorService() {
-            return new ServerGameInitiationService() {
-                @Override
-                public void register(GameInitiation construction) {
-                }
-
-                @Override
-                public void start(GameInitiation initiation) {
-                }
-
-                @Override
-                public GameInitiation ready(GameSessionKey sessionKey, String player) {
-                    return null;
-                }
-
-                @Override
-                public Collection<GameInitiation> pending(Game game, String player) {
-                    return null;
-                }
-
-                @Override
-                public void start(PendingGameInitiation pendingInitiation) {
-                }
-            };
-        }
-
     }
 
 }
