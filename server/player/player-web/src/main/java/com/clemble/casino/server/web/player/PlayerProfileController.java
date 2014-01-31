@@ -33,8 +33,7 @@ public class PlayerProfileController implements PlayerProfileService, ExternalCo
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
-    public @ResponseBody
-    PlayerProfile getPlayerProfile(@PathVariable("playerId") String playerId) {
+    public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("playerId") String playerId) {
         // Step 1. Fetching playerProfile
         PlayerProfile playerProfile = profileRepository.findOne(playerId);
         // Step 2. Checking profile

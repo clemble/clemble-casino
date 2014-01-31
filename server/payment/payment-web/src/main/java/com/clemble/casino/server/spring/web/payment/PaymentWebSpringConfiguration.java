@@ -13,7 +13,7 @@ import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
-import com.clemble.casino.server.web.payment.ServerPaymentTransactionController;
+import com.clemble.casino.server.web.payment.PaymentTransactionController;
 import com.clemble.casino.server.web.player.account.PlayerAccountController;
 
 @Configuration
@@ -38,8 +38,8 @@ public class PaymentWebSpringConfiguration implements SpringConfiguration {
     public PlayerAccountTemplate accountTemplate;
 
     @Bean
-    public ServerPaymentTransactionController paymentTransactionController() {
-        return new ServerPaymentTransactionController(paymentTransactionRepository, paymentTransactionService);
+    public PaymentTransactionController paymentTransactionController() {
+        return new PaymentTransactionController(paymentTransactionRepository, paymentTransactionService);
     }
 
     @Bean

@@ -24,12 +24,12 @@ import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
 @Controller
-public class ServerPaymentTransactionController implements ServerPaymentTransactionService, ExternalController {
+public class PaymentTransactionController implements ServerPaymentTransactionService, ExternalController {
 
     final private ServerPaymentTransactionService paymentTransactionService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public ServerPaymentTransactionController(final PaymentTransactionRepository paymentTransactionRepository,
+    public PaymentTransactionController(final PaymentTransactionRepository paymentTransactionRepository,
             final ServerPaymentTransactionService paymentTransactionService) {
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
