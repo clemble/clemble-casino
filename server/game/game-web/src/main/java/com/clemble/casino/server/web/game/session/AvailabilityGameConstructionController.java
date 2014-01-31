@@ -43,9 +43,9 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONSTRUCTION_AVAILABILITY, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_CONSTRUCTION_AVAILABILITY, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public GameConstruction construct(AvailabilityGameRequest gameRequest) {
+    public @ResponseBody GameConstruction construct(@RequestBody AvailabilityGameRequest gameRequest) {
         return availabilityConstructionService.construct(gameRequest);
     }
 
@@ -78,9 +78,9 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_CONSTRUCTION_AVAILABILITY_PENDING, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONSTRUCTION_AVAILABILITY_PENDING, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public Collection<GameInitiation> getPending(String player) {
+    public @ResponseBody Collection<GameInitiation> getPending(@PathVariable("playerId") String player) {
         return availabilityConstructionService.getPending(player);
     }
 

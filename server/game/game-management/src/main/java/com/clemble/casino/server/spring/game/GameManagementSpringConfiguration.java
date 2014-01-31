@@ -100,7 +100,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(GameIdGenerator idGenerator,
+    public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
+            GameIdGenerator idGenerator,
             @Qualifier("playerAccountService") ServerPlayerAccountService accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,

@@ -34,7 +34,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     final private GameIdGenerator idGenerator;
     final private GameConstructionRepository constructionRepository;
     final private PlayerNotificationService playerNotificationService;
-    final private ServerPlayerAccountService playerAccountService;
+    final private ServerPlayerAccountService accountService;
     final private PendingGameInitiationEventListener pendingInitiationService;
 
     public ServerAvailabilityGameConstructionService(
@@ -45,7 +45,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             PlayerNotificationService notificationService,
             PendingGameInitiationEventListener pendingInitiationService) {
         this.idGenerator = checkNotNull(idGenerator);
-        this.playerAccountService = checkNotNull(accountServerService);
+        this.accountService = checkNotNull(accountServerService);
         this.constructionRepository = checkNotNull(constructionRepository);
         this.playerNotificationService = checkNotNull(notificationService);
         this.pendingInitiationService = checkNotNull(pendingInitiationService);
@@ -61,7 +61,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         // Step 2.1. Checking initiator
         Money price = request.getConfiguration().getPrice();
         // Step 2.2. Checking opponents
-        if (!playerAccountService.canAfford(request.getParticipants(), price))
+        if (!accountService.canAfford(request.getParticipants(), price))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInsufficientMoney);
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(id, request);
