@@ -7,15 +7,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.server.game.action.GameManagerService;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
 import com.clemble.casino.server.game.action.GameStateFactory;
-import com.clemble.casino.server.game.action.MatchGameManager;
-import com.clemble.casino.server.game.cache.GameCacheService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
+import com.clemble.casino.server.repository.game.PotGameRecordRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 
 @Ignore
@@ -25,15 +25,13 @@ import com.clemble.casino.server.repository.game.ServerGameConfigurationReposito
 public class SimpleGameSpringConfiguration {
 
     @Bean
-    public MatchGameManager<?> gameProcessor(GameStateFactory<?> stateFactory, GameSessionRepository<?> sessionRepository, GameCacheService<?> cacheService,
+    public GameManagerService gameProcessor(PotGameRecordRepository potRepository,
+            GameStateFactory<GameState> stateFactory,
+            GameProcessorFactory<GameState> processorFactory,
+            GameSessionRepository<GameState> sessionRepository,
+            ServerGameConfigurationRepository configurationRepository,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new MatchGameManager(stateFactory, sessionRepository, cacheService, notificationService);
-    }
-
-    @Bean
-    public GameCacheService<?> gameCacheService(GameSessionRepository<?> sessionRepository, GameProcessorFactory processorFactory,
-            GameStateFactory stateFactory, ServerGameConfigurationRepository configurationRepository) {
-        return new GameCacheService<>(sessionRepository, processorFactory, stateFactory, configurationRepository);
+        return new GameManagerService(potRepository, stateFactory, processorFactory, sessionRepository, configurationRepository, notificationService);
     }
 
     @Bean
@@ -52,7 +50,8 @@ public class SimpleGameSpringConfiguration {
 
             @Override
             public GameState constructState(GameInitiation initiation, MatchGameContext context) {
-                throw new UnsupportedOperationException();
+                // TODO Auto-generated method stub
+                return null;
             }
 
         };

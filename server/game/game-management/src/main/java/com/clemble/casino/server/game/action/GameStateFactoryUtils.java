@@ -33,7 +33,7 @@ public class GameStateFactoryUtils<State extends GameState> {
         // Step 2. Re creating state
         GameInitiation initiation = new GameInitiation(session.getSession(), session.getPlayers(), (MatchGameConfiguration) configurationRepository.findOne(session.getConfigurationKey()).getConfiguration());
         // TODO define politics for restart, all time track is lost here
-        MatchGameContext context = new MatchGameContext(initiation, (MatchGameConfiguration) initiation.getConfiguration());
+        MatchGameContext context = new MatchGameContext(initiation);
         State restoredState = stateFactory.constructState(initiation, context);
         ServerGameInitiation gameInitiation = new ServerGameInitiation(session.getSession(), context, (MatchGameConfiguration) initiation.getConfiguration());
         GameProcessor<State> processor = processorFactory.create(gameInitiation);

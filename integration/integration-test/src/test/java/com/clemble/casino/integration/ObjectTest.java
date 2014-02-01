@@ -2,6 +2,7 @@ package com.clemble.casino.integration;
 
 import static com.clemble.test.random.ObjectGenerator.register;
 
+import java.util.Collections;
 import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -11,6 +12,8 @@ import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.PotGameContext;
+import com.clemble.casino.game.TournamentGameContext;
 import com.clemble.casino.game.action.BetAction;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
@@ -20,6 +23,7 @@ import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.rule.MatchRule;
 import com.clemble.casino.game.rule.bet.FixedBetRule;
 import com.clemble.casino.game.rule.bet.LimitedBetRule;
@@ -28,6 +32,7 @@ import com.clemble.casino.game.rule.construct.PlayerNumberRule;
 import com.clemble.casino.game.rule.construct.PrivacyRule;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.integration.game.NumberState;
@@ -150,11 +155,36 @@ public class ObjectTest {
                 return MatchGameConfiguration.DEFAULT;
             }
         });
+        register(MatchGameContext.class, new AbstractValueGenerator<MatchGameContext>() {
+            @Override
+            public MatchGameContext generate() {
+                GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), MatchGameConfiguration.DEFAULT);
+                return new MatchGameContext(initiation);
+            }
+        });
+        register(PotGameContext.class, new AbstractValueGenerator<PotGameContext>() {
+            @Override
+            public PotGameContext generate() {
+                return new PotGameContext(3, Collections.<GameOutcome>emptyList(), null);
+            }
+        });
+        register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
+            @Override
+            public TournamentGameConfiguration generate() {
+                return new TournamentGameConfiguration(null, null, null, null, null);
+            }
+        });
+        register(TournamentGameContext.class, new AbstractValueGenerator<TournamentGameContext>() {
+            @Override
+            public TournamentGameContext generate() {
+                return new TournamentGameContext(null);
+            }
+        });
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {
             @Override
             public NumberState generate() {
                 GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), MatchGameConfiguration.DEFAULT);
-                MatchGameContext context = new MatchGameContext(initiation, MatchGameConfiguration.DEFAULT);
+                MatchGameContext context = new MatchGameContext(initiation);
                 return new NumberState(context, null, 0);
             }
         });
