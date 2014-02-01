@@ -24,9 +24,9 @@ public class DrawRuleAspectFactory implements GameAspectFactory<GameMatchEndedEv
 
     @Override
     public GameAspect<GameMatchEndedEvent<?>> construct(ServerGameInitiation initiation) {
-        switch (initiation.getSpecification().getDrawRule()) {
+        switch (initiation.getConfiguration().getDrawRule()) {
         case owned:
-            return new DrawByOwnedRuleAspect(initiation.getSpecification().getPrice().getCurrency(), transactionService);
+            return new DrawByOwnedRuleAspect(initiation.getConfiguration().getPrice().getCurrency(), transactionService);
         case spent:
             return DrawBySpentRuleAspect.INSTANCE;
         default:

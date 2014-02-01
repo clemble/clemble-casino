@@ -18,7 +18,7 @@ public class GameTimeAspectFactory implements GameAspectFactory<GameManagementEv
 
     @Override
     public GameAspect<GameManagementEvent> construct(ServerGameInitiation initiation) {
-        return new GameTimeAspect(initiation.getSession(), initiation.getSpecification(), initiation.getContext(), eventTaskExecutor);
+        return new GameTimeAspect(initiation.getSession(), initiation.getConfiguration(), initiation.getContext(), eventTaskExecutor);
     }
 
     @Override

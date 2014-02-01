@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.id.UUIDGameIdGenerator;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
+import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.action.MatchGameManager;
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.management.PlayerNotificationRuleAspectFactory;
@@ -44,7 +45,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class, GameNeo4jSpringConfiguration.class, GameJPASpringConfiguration.class,
-        PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, GameManagementSpringConfiguration.GameTimeAspectConfiguration.class})
+        PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, GameManagementSpringConfiguration.GameTimeAspectConfiguration.class })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -78,6 +79,11 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public GameStateFactoryFacade gameStateFactoryFacade() {
+        return new GameStateFactoryFacade();
+    }
+
+    @Bean
     public GameEndPresenceAspectFactory gamePresenceAspectFactory(ServerPlayerPresenceService presenceService) {
         return new GameEndPresenceAspectFactory(presenceService);
     }
@@ -100,12 +106,9 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
-            GameIdGenerator idGenerator,
-            @Qualifier("playerAccountService") ServerPlayerAccountService accountServerService,
-            ServerGameConfigurationRepository configurationRepository,
-            GameConstructionRepository constructionRepository,
-            @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+    public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(GameIdGenerator idGenerator,
+            @Qualifier("playerAccountService") ServerPlayerAccountService accountServerService, ServerGameConfigurationRepository configurationRepository,
+            GameConstructionRepository constructionRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
             PendingGameInitiationEventListener pendingInitiationService) {
         return new ServerAvailabilityGameConstructionService(idGenerator, accountServerService, configurationRepository, constructionRepository,
                 notificationService, pendingInitiationService);
@@ -128,10 +131,9 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }
-    
+
     @Bean
-    public ServerGameInitiationService serverGameInitiationActivator(MatchGameManager<?> processor,
-            ServerPlayerPresenceService presenceService,
+    public ServerGameInitiationService serverGameInitiationActivator(MatchGameManager<?> processor, ServerPlayerPresenceService presenceService,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new ServerGameInitiationService(processor, presenceService, notificationService);
     }

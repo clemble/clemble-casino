@@ -5,10 +5,11 @@ import java.util.List;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.specification.GameConfigurationAware;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
 
-public class ServerGameInitiation implements GameSessionAware {
+public class ServerGameInitiation implements GameSessionAware, GameConfigurationAware {
 
     /**
      * Generated 23/01/14
@@ -17,13 +18,13 @@ public class ServerGameInitiation implements GameSessionAware {
 
     final private GameContext context;
     final private GameSessionKey sessionKey;
-    final private MatchGameConfiguration specification;
+    final private MatchGameConfiguration configuration;
     final private List<String> participants;
 
     public ServerGameInitiation(GameSessionKey sessionKey, GameContext context, MatchGameConfiguration specification) {
         this.context = context;
         this.sessionKey = sessionKey;
-        this.specification = specification;
+        this.configuration = specification;
         this.participants = PlayerAwareUtils.toPlayerList(context.getPlayerContexts());
     }
 
@@ -32,12 +33,13 @@ public class ServerGameInitiation implements GameSessionAware {
         return sessionKey;
     }
 
-    public List<String> getParticipants() {
-        return participants;
+    @Override
+    public MatchGameConfiguration getConfiguration() {
+        return configuration;
     }
 
-    public MatchGameConfiguration getSpecification() {
-        return specification;
+    public List<String> getParticipants() {
+        return participants;
     }
 
     public GameContext getContext() {

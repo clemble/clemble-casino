@@ -11,7 +11,7 @@ public class BetRuleAspectFactory implements GameAspectFactory<BetAction> {
 
     @Override
     public GameAspect<BetAction> construct(ServerGameInitiation initiation) {
-        return new BetRuleAspect(initiation.getSpecification().getBetRule());
+        return new BetRuleAspect(initiation.getConfiguration().getBetRule());
     }
 
     @Override

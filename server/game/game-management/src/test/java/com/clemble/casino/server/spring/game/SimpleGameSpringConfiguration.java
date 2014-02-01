@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -20,19 +21,18 @@ import com.clemble.casino.server.repository.game.ServerGameConfigurationReposito
 @Ignore
 @Configuration
 @Import(GameManagementSpringConfiguration.class)
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class SimpleGameSpringConfiguration {
 
     @Bean
-    public MatchGameManager<?> gameProcessor(GameStateFactory<?> stateFactory,
-            GameSessionRepository<?> sessionRepository,
-            GameCacheService<?> cacheService,
+    public MatchGameManager<?> gameProcessor(GameStateFactory<?> stateFactory, GameSessionRepository<?> sessionRepository, GameCacheService<?> cacheService,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new MatchGameManager(stateFactory, sessionRepository, cacheService, notificationService);
     }
 
     @Bean
-    public GameCacheService<?> gameCacheService(GameSessionRepository<?> sessionRepository, GameProcessorFactory processorFactory, GameStateFactory stateFactory, ServerGameConfigurationRepository configurationRepository) {
+    public GameCacheService<?> gameCacheService(GameSessionRepository<?> sessionRepository, GameProcessorFactory processorFactory,
+            GameStateFactory stateFactory, ServerGameConfigurationRepository configurationRepository) {
         return new GameCacheService<>(sessionRepository, processorFactory, stateFactory, configurationRepository);
     }
 
@@ -42,8 +42,13 @@ public class SimpleGameSpringConfiguration {
     }
 
     @Bean
-    public GameStateFactory ticTacToeStateFactory() {
+    public GameStateFactory fakeStateFactory() {
         return new GameStateFactory() {
+
+            @Override
+            public Game getGame() {
+                return Game.num;
+            }
 
             @Override
             public GameState constructState(GameInitiation initiation, GameContext context) {

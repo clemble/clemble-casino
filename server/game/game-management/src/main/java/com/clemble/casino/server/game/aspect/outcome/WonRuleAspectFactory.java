@@ -25,11 +25,11 @@ public class WonRuleAspectFactory implements GameAspectFactory<GameMatchEndedEve
 
     @Override
     public GameAspect<GameMatchEndedEvent<?>> construct(ServerGameInitiation initiation) {
-        switch (initiation.getSpecification().getWonRule()) {
+        switch (initiation.getConfiguration().getWonRule()) {
         case price:
-            return new WonByPriceRuleAspect(initiation.getSpecification().getPrice(), transactionService);
+            return new WonByPriceRuleAspect(initiation.getConfiguration().getPrice(), transactionService);
         case spent:
-            return new WonBySpentRuleAspect(initiation.getSpecification().getPrice().getCurrency(), transactionService);
+            return new WonBySpentRuleAspect(initiation.getConfiguration().getPrice().getCurrency(), transactionService);
         default:
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         }

@@ -22,7 +22,7 @@ public class PlayerNotificationRuleAspectFactory implements GameAspectFactory<Ga
 
     @Override
     public GameAspect<GameManagementEvent> construct(ServerGameInitiation initiation) {
-        switch (initiation.getSpecification().getPrivacyRule()) {
+        switch (initiation.getConfiguration().getPrivacyRule()) {
             case everybody:
                 return new PublicNotificationRuleAspect(initiation.getSession(), initiation.getParticipants(), notificationService);
             case players:
