@@ -7,7 +7,7 @@ import java.util.Date;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
-import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.event.server.GameMatchEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.payment.PaymentOperation;
@@ -21,19 +21,19 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class WonBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
+public class WonBySpentRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?>> {
 
     final private Currency currency;
     final private ServerPaymentTransactionService transactionService;
 
     public WonBySpentRuleAspect(Currency currency, ServerPaymentTransactionService transactionService) {
-        super(new EventTypeSelector(GameEndedEvent.class));
+        super(new EventTypeSelector(GameMatchEndedEvent.class));
         this.currency = currency;
         this.transactionService = checkNotNull(transactionService);
     }
 
     @Override
-    public void doEvent(GameEndedEvent<?> event) {
+    public void doEvent(GameMatchEndedEvent<?> event) {
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof PlayerWonOutcome) {
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();

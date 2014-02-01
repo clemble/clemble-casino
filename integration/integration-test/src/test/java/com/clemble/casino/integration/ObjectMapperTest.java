@@ -31,7 +31,7 @@ import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.ScheduledGameRequest;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
-import com.clemble.casino.game.event.server.GameStartedEvent;
+import com.clemble.casino.game.event.server.GameMatchStartedEvent;
 import com.clemble.casino.game.rule.MatchRule;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.game.NumberState;
@@ -67,7 +67,7 @@ public class ObjectMapperTest extends ObjectTest {
     public void testSpecialSerialization() {
         Assert.assertNull(checkSerialization(InvitationDeclinedEvent.class));
         Assert.assertNull(checkSerialization(ScheduledGameRequest.class));
-        Assert.assertNull(checkSerialization(GameStartedEvent.class));
+        Assert.assertNull(checkSerialization(GameMatchStartedEvent.class));
         Assert.assertNull(checkSerialization(BetAction.class));
         Assert.assertNull(checkSerialization(NumberState.class));
     }

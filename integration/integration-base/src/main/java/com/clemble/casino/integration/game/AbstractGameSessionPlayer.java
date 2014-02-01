@@ -21,9 +21,9 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.event.server.GameMatchEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.GameStateManagementEvent;
+import com.clemble.casino.game.event.server.GameMatchEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.integration.event.EventAccumulator;
@@ -88,10 +88,10 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     public void onEvent(GameSessionAwareEvent event) {
-        if (event instanceof GameEndedEvent<?>)
-            outcome.set(((GameEndedEvent<?>) event).getOutcome());
-        if (event instanceof GameStateManagementEvent)
-            setState(((GameStateManagementEvent<State>) event).getState());
+        if (event instanceof GameMatchEndedEvent<?>)
+            outcome.set(((GameMatchEndedEvent<?>) event).getOutcome());
+        if (event instanceof GameMatchEvent)
+            setState(((GameMatchEvent<State>) event).getState());
     }
 
     final private void setState(State newState) {

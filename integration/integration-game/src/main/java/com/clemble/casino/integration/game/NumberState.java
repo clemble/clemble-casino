@@ -9,7 +9,7 @@ import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.SurrenderAction;
-import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.event.server.GameMatchEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.PlayerMovedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
@@ -59,9 +59,9 @@ public class NumberState implements GameState {
                 for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
-                        resultEvent = new GameEndedEvent<>(session, new PlayerWonOutcome(selectNumberEvent.getPlayer()));
+                        resultEvent = new GameMatchEndedEvent<>(session, new PlayerWonOutcome(selectNumberEvent.getPlayer()));
                     } else if (selectNumberEvent.getNumber() == maxBet) {
-                        resultEvent = new GameEndedEvent<>(session, new DrawOutcome());
+                        resultEvent = new GameMatchEndedEvent<>(session, new DrawOutcome());
                     }
                 }
             } else {
@@ -73,11 +73,11 @@ public class NumberState implements GameState {
             Collection<String> opponents = context.getPlayerIterator().whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
-                resultEvent = new GameEndedEvent<>(session, new NoOutcome());
+                resultEvent = new GameMatchEndedEvent<>(session, new NoOutcome());
             } else {
                 String winner = opponents.iterator().next();
                 // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
-                resultEvent = new GameEndedEvent<>(session, new PlayerWonOutcome(winner));
+                resultEvent = new GameMatchEndedEvent<>(session, new PlayerWonOutcome(winner));
             }
         }
         // Step 3. Sanity check

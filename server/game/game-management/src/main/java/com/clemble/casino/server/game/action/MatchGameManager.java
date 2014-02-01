@@ -14,7 +14,7 @@ import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.GameStartedEvent;
+import com.clemble.casino.game.event.server.GameMatchStartedEvent;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.game.cache.GameCache;
 import com.clemble.casino.server.game.cache.GameCacheService;
@@ -51,7 +51,7 @@ public class MatchGameManager<S extends GameState> implements GameManager<MatchG
             .setState(state);
         matchRecord = sessionRepository.saveAndFlush(matchRecord);
         // Step 2. Sending notification for game started
-        notificationService.notify(initiation.getParticipants(), new GameStartedEvent<S>(matchRecord));
+        notificationService.notify(initiation.getParticipants(), new GameMatchStartedEvent<S>(matchRecord));
         // Step 3. Returning active table
         return matchRecord;
     }

@@ -11,18 +11,24 @@ import com.clemble.casino.game.PotGameRecord;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.event.server.GamePotStartedEvent;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.PotGameConfiguration;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.game.PotGameRecordRepository;
 
 public class PotGameManager implements GameManager<PotGameRecord>{
 
     final private MatchGameManager<?> matchGameManager;
     final private PotGameRecordRepository potRepository;
+    final private PlayerNotificationService notificationService;
 
-    public PotGameManager(MatchGameManager<?> matchGameManager, PotGameRecordRepository potRepository) {
+    public PotGameManager(MatchGameManager<?> matchGameManager,
+            PotGameRecordRepository potRepository,
+            PlayerNotificationService notificationService) {
         this.matchGameManager = checkNotNull(matchGameManager);
         this.potRepository = checkNotNull(potRepository);
+        this.notificationService = checkNotNull(notificationService);
     }
 
     @Override
@@ -38,7 +44,11 @@ public class PotGameManager implements GameManager<PotGameRecord>{
         // Step 5. Generating new pot game record
         PotGameRecord potGameRecord = new PotGameRecord(initiation.getSession(), initiation.getConfiguration().getConfigurationKey(), GameSessionState.active, Collections.<MatchGameRecord<?>>singletonList(matchGameRecord));
         // Step 6. Saving pot record
-        return potRepository.saveAndFlush(potGameRecord);
+        potGameRecord = potRepository.saveAndFlush(potGameRecord);
+        // Step 7. Sending notification to related players
+        notificationService.notify(initiation.getParticipants(), new GamePotStartedEvent(potGameRecord.getSession()));
+        // Step 8. Returning pot game record
+        return potGameRecord;
     }
 
     @Override
