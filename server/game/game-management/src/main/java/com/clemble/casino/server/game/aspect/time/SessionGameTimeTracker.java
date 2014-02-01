@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
@@ -16,7 +16,7 @@ public class SessionGameTimeTracker {
 
     final private Map<String, Collection<PlayerGameTimeTracker>> playerToTrackers;
 
-    public SessionGameTimeTracker(final MatchGameConfiguration specification, GameContext context, ScheduledGameAction action, ScheduledGameActionExecutor actionExecutor) {
+    public SessionGameTimeTracker(final MatchGameConfiguration specification, MatchGameContext context, ScheduledGameAction action, ScheduledGameActionExecutor actionExecutor) {
         this.playerToTrackers = new HashMap<String, Collection<PlayerGameTimeTracker>>();
         for (GamePlayerContext playerContext : context.getPlayerContexts()) {
             Collection<PlayerGameTimeTracker> trackers = new ArrayList<>();

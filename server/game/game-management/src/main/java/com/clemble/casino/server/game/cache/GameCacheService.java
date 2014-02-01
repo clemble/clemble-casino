@@ -2,7 +2,7 @@ package com.clemble.casino.server.game.cache;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
@@ -65,7 +65,7 @@ public class GameCacheService<State extends GameState> {
     public GameCache<State> construct(MatchGameRecord<State> session, GameInitiation initiation) {
         try {
             GameConfiguration configuration = initiation.getConfiguration();
-            GameContext context = new GameContext(initiation, (MatchGameConfiguration) configuration);
+            MatchGameContext context = new MatchGameContext(initiation, (MatchGameConfiguration) configuration);
             ServerGameInitiation gameInitiation = new ServerGameInitiation(session.getSession(), context, (MatchGameConfiguration) initiation.getConfiguration());
             GameProcessor<State> processor = processorFactory.create(gameInitiation);
             session.setState(stateFactory.constructState(initiation, context));

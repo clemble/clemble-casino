@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameSessionState;
 import com.clemble.casino.game.GameState;
@@ -42,7 +42,7 @@ public class MatchGameManager<S extends GameState> implements GameManager<MatchG
     @Override
     public MatchGameRecord<S> start(GameInitiation initiation) {
         // Step 1. Allocating table for game initiation
-        S state = stateFactory.constructState(initiation, new GameContext(initiation, (MatchGameConfiguration) initiation.getConfiguration()));
+        S state = stateFactory.constructState(initiation, new MatchGameContext(initiation, (MatchGameConfiguration) initiation.getConfiguration()));
         MatchGameRecord<S> matchRecord = new MatchGameRecord<S>()
             .setSession(initiation.getSession())
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import com.clemble.casino.VersionAware;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.action.BetAction;
 import com.clemble.casino.game.action.GameAction;
@@ -154,7 +154,7 @@ public class ObjectTest {
             @Override
             public NumberState generate() {
                 GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), MatchGameConfiguration.DEFAULT);
-                GameContext context = new GameContext(initiation, MatchGameConfiguration.DEFAULT);
+                MatchGameContext context = new MatchGameContext(initiation, MatchGameConfiguration.DEFAULT);
                 return new NumberState(context, null, 0);
             }
         });

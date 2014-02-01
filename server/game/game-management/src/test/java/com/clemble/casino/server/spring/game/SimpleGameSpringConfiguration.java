@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
@@ -51,7 +51,7 @@ public class SimpleGameSpringConfiguration {
             }
 
             @Override
-            public GameState constructState(GameInitiation initiation, GameContext context) {
+            public GameState constructState(GameInitiation initiation, MatchGameContext context) {
                 throw new UnsupportedOperationException();
             }
 

@@ -2,7 +2,7 @@ package com.clemble.casino.game.construct;
 
 import java.util.List;
 
-import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.specification.GameConfigurationAware;
@@ -16,12 +16,12 @@ public class ServerGameInitiation implements GameSessionAware, GameConfiguration
      */
     private static final long serialVersionUID = -3413033971589908905L;
 
-    final private GameContext context;
+    final private MatchGameContext context;
     final private GameSessionKey sessionKey;
     final private MatchGameConfiguration configuration;
     final private List<String> participants;
 
-    public ServerGameInitiation(GameSessionKey sessionKey, GameContext context, MatchGameConfiguration specification) {
+    public ServerGameInitiation(GameSessionKey sessionKey, MatchGameContext context, MatchGameConfiguration specification) {
         this.context = context;
         this.sessionKey = sessionKey;
         this.configuration = specification;
@@ -42,7 +42,7 @@ public class ServerGameInitiation implements GameSessionAware, GameConfiguration
         return participants;
     }
 
-    public GameContext getContext() {
+    public MatchGameContext getContext() {
         return context;
     }
 

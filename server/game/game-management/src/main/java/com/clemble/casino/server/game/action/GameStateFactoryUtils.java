@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.MadeMove;
@@ -33,7 +33,7 @@ public class GameStateFactoryUtils<State extends GameState> {
         // Step 2. Re creating state
         GameInitiation initiation = new GameInitiation(session.getSession(), session.getPlayers(), (MatchGameConfiguration) configurationRepository.findOne(session.getConfigurationKey()).getConfiguration());
         // TODO define politics for restart, all time track is lost here
-        GameContext context = new GameContext(initiation, (MatchGameConfiguration) initiation.getConfiguration());
+        MatchGameContext context = new MatchGameContext(initiation, (MatchGameConfiguration) initiation.getConfiguration());
         State restoredState = stateFactory.constructState(initiation, context);
         ServerGameInitiation gameInitiation = new ServerGameInitiation(session.getSession(), context, (MatchGameConfiguration) initiation.getConfiguration());
         GameProcessor<State> processor = processorFactory.create(gameInitiation);

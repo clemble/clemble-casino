@@ -7,7 +7,7 @@ import java.util.Date;
 
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.event.server.GameMatchEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
@@ -21,7 +21,7 @@ import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
 public class GameTimeAspect extends BasicGameAspect<GameManagementEvent> {
 
-    final private GameContext context;
+    final private MatchGameContext context;
     final private Collection<String> participants;
     final private SessionTimeTask sessionTimeTracker;
     final private GameEventTaskExecutor gameEventTaskExecutor;
@@ -29,7 +29,7 @@ public class GameTimeAspect extends BasicGameAspect<GameManagementEvent> {
     public GameTimeAspect(
             GameSessionKey sessionKey,
             MatchGameConfiguration specification, 
-            GameContext context,
+            MatchGameContext context,
             GameEventTaskExecutor gameEventTaskExecutor) {
         super(new EventTypeSelector(GameManagementEvent.class));
         this.context  = context;

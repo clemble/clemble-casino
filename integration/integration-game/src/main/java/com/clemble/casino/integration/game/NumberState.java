@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
@@ -28,12 +28,12 @@ public class NumberState implements GameState {
      */
     private static final long serialVersionUID = 6467228372170341563L;
 
-    final private GameContext context;
+    final private MatchGameContext context;
 
     private int version;
 
     @JsonCreator
-    public NumberState(@JsonProperty("context") GameContext context,
+    public NumberState(@JsonProperty("context") MatchGameContext context,
             @JsonProperty("root") GameUnit parent,
             @JsonProperty("version") int version) {
         this.context = context;
@@ -89,7 +89,7 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public GameContext getContext() {
+    public MatchGameContext getContext() {
         return context;
     }
 
