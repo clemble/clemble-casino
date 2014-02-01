@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSession;
+import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
@@ -33,7 +33,7 @@ public class GameSessionController<State extends GameState> implements ExternalC
 
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameSession<State> get(@RequestHeader("playerId") String playerId, @PathVariable("session") String session) {
+    public @ResponseBody MatchGameRecord<State> get(@RequestHeader("playerId") String playerId, @PathVariable("session") String session) {
         return sessionRepository.findOne(new GameSessionKey(game, session));
     }
 }

@@ -9,7 +9,7 @@ public class ScheduledGameActionExecutor implements Runnable, BeanPostProcessor 
 
     final private PriorityBlockingQueue<ScheduledGameAction> scheduledActions = new PriorityBlockingQueue<>();
 
-    private GameSessionProcessor<?> sessionProcessor;
+    private MatchGameManager<?> sessionProcessor;
 
     public void schedule(ScheduledGameAction action) {
         this.scheduledActions.add(action);
@@ -41,8 +41,8 @@ public class ScheduledGameActionExecutor implements Runnable, BeanPostProcessor 
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (bean instanceof GameSessionProcessor)
-            sessionProcessor = (GameSessionProcessor<?>) bean;
+        if (bean instanceof MatchGameManager)
+            sessionProcessor = (MatchGameManager<?>) bean;
         return bean;
     }
 

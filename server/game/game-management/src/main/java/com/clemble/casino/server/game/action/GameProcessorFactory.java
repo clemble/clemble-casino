@@ -13,28 +13,28 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.OrderComparator;
 
-import com.clemble.casino.game.GameSession;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
-public class GameProcessorFactory<State extends GameState> implements BeanPostProcessor, ApplicationContextAware {
+public class GameProcessorFactory<S extends GameState> implements BeanPostProcessor, ApplicationContextAware {
 
     @SuppressWarnings("rawtypes")
     final private List<GameAspectFactory> aspectFactories = new ArrayList<>();
 
-    public GameProcessor<State> create(ServerGameInitiation initiation) {
+    public GameProcessor<S> create(ServerGameInitiation initiation) {
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
         for (GameAspectFactory<?> aspectFactory : aspectFactories) {
             gameAspects.add(aspectFactory.construct(initiation));
         }
-        return new AggregatedGameProcessor<State>(gameAspects);
+        return new AggregatedGameProcessor<>(gameAspects);
     }
 
-    public static class AggregatedGameProcessor<State extends GameState> implements GameProcessor<State> {
+    public static class AggregatedGameProcessor<S extends GameState> implements GameProcessor<S> {
 
         final private static Logger LOG = LoggerFactory.getLogger(AggregatedGameProcessor.class);
 
@@ -46,9 +46,9 @@ public class GameProcessorFactory<State extends GameState> implements BeanPostPr
 
         @Override
         @SuppressWarnings({ "rawtypes", "unchecked" })
-        public GameManagementEvent process(GameSession<State> session, GameAction move) {
+        public GameManagementEvent process(MatchGameRecord<S> session, GameAction move) {
             LOG.debug("Processing {}", move);
-            State state = session.getState();
+            GameState state = session.getState();
             // Step 1. Before move notification
             for (GameAspect listener : listenerArray)
                 listener.onEvent(move);

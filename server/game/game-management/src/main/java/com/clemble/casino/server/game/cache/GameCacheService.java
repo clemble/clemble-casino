@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.cache;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameSession;
+import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
@@ -27,7 +27,7 @@ public class GameCacheService<State extends GameState> {
         public GameCache<State> load(GameSessionKey sessionId) throws Exception {
             try {
                 // Step 1. Searching for appropriate session in repository
-                GameSession<State> session = sessionRepository.findOne(sessionId);
+                MatchGameRecord<State> session = sessionRepository.findOne(sessionId);
                 // Step 2. Creating appropriate initiation
                 GameInitiation initiation = new GameInitiation(session.getSession(), session.getPlayers(), (MatchGameConfiguration) configurationRepository.findOne(session.getConfigurationKey()).getConfiguration());
                 // Step 3. Construction appropriate GameCache
@@ -62,7 +62,7 @@ public class GameCacheService<State extends GameState> {
         return gameCache.getUnchecked(sessionId);
     }
 
-    public GameCache<State> construct(GameSession<State> session, GameInitiation initiation) {
+    public GameCache<State> construct(MatchGameRecord<State> session, GameInitiation initiation) {
         try {
             GameConfiguration configuration = initiation.getConfiguration();
             GameContext context = new GameContext(initiation, (MatchGameConfiguration) configuration);

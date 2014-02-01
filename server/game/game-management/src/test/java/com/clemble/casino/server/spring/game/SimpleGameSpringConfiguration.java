@@ -10,9 +10,8 @@ import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
-import com.clemble.casino.server.game.action.GameSessionFactory;
-import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.game.action.GameStateFactory;
+import com.clemble.casino.server.game.action.MatchGameManager;
 import com.clemble.casino.server.game.cache.GameCacheService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.game.GameSessionRepository;
@@ -25,9 +24,11 @@ import com.clemble.casino.server.repository.game.ServerGameConfigurationReposito
 public class SimpleGameSpringConfiguration {
 
     @Bean
-    public GameSessionProcessor<?> gameProcessor(GameSessionFactory sessionFactory, GameCacheService cacheService,
+    public MatchGameManager<?> gameProcessor(GameStateFactory<?> stateFactory,
+            GameSessionRepository<?> sessionRepository,
+            GameCacheService<?> cacheService,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameSessionProcessor(sessionFactory, cacheService, notificationService);
+        return new MatchGameManager(stateFactory, sessionRepository, cacheService, notificationService);
     }
 
     @Bean
@@ -38,12 +39,6 @@ public class SimpleGameSpringConfiguration {
     @Bean
     public GameProcessorFactory<?> processorFactory() {
         return new GameProcessorFactory<>();
-    }
-
-    
-    @Bean
-    public GameSessionFactory gameSessionFactory(GameStateFactory stateFactory, GameSessionRepository sessionRepository) {
-        return new GameSessionFactory(stateFactory, sessionRepository);
     }
 
     @Bean

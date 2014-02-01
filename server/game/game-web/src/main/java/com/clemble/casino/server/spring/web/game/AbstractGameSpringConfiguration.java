@@ -1,5 +1,6 @@
 package com.clemble.casino.server.spring.web.game;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -7,9 +8,8 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.server.game.action.GameProcessorFactory;
-import com.clemble.casino.server.game.action.GameSessionFactory;
-import com.clemble.casino.server.game.action.GameSessionProcessor;
 import com.clemble.casino.server.game.action.GameStateFactory;
+import com.clemble.casino.server.game.action.MatchGameManager;
 import com.clemble.casino.server.game.cache.GameCacheService;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
@@ -38,11 +38,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     abstract public Game getGame();
 
     @Bean
-    public GameSessionFactory<State> gameSessionFactory(GameStateFactory<State> gameStateFactory, GameSessionRepository<State> sessionRepository) {
-        return new GameSessionFactory<State>(gameStateFactory, sessionRepository);
-    }
-
-    @Bean
     public GameInitiationController gameInitiationController(ServerGameInitiationService initiationService) {
         return new GameInitiationController(initiationService);
     }
@@ -67,9 +62,11 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameSessionProcessor<State> picPacPoeSessionProcessor(GameSessionFactory<State> gameSessionFactory, GameCacheService<State> gameCacheService,
-            PlayerNotificationService playerNotificationService) {
-        return new GameSessionProcessor<State>(gameSessionFactory, gameCacheService, playerNotificationService);
+    public MatchGameManager<State> matchGameManager(GameStateFactory<State> stateFactory,
+            GameSessionRepository<State> sessionRepository,
+            GameCacheService<State> cacheService,
+            @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        return new MatchGameManager<State>(stateFactory, sessionRepository, cacheService, notificationService);
     }
 
     @Bean
@@ -78,9 +75,11 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameActionController<State> picPacPoeEngineController(GameSessionProcessor<State> sessionProcessor,
-            GameSessionRepository<State> gameSessionRepository) {
-        return new GameActionController<State>(gameSessionRepository, sessionProcessor);
+    public GameActionController<State> picPacPoeEngineController(
+            MatchGameManager<State> sessionProcessor,
+            GameSessionRepository<State> gameSessionRepository,
+            GameCacheService<State> cacheService) {
+        return new GameActionController<State>(gameSessionRepository, cacheService, sessionProcessor);
     }
 
     @Bean

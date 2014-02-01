@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.id.UUIDGameIdGenerator;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
-import com.clemble.casino.server.game.action.GameSessionProcessor;
+import com.clemble.casino.server.game.action.MatchGameManager;
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.management.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.DrawRuleAspectFactory;
@@ -130,7 +130,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
     
     @Bean
-    public ServerGameInitiationService serverGameInitiationActivator(GameSessionProcessor<?> processor,
+    public ServerGameInitiationService serverGameInitiationActivator(MatchGameManager<?> processor,
             ServerPlayerPresenceService presenceService,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new ServerGameInitiationService(processor, presenceService, notificationService);

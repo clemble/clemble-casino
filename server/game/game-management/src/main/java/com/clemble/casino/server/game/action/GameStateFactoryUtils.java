@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameSession;
+import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.MadeMove;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -25,7 +25,7 @@ public class GameStateFactoryUtils<State extends GameState> {
         this.configurationRepository = checkNotNull(configurationRepository);
     }
 
-    public State constructState(final GameSession<State> session) {
+    public State constructState(final MatchGameRecord<State> session) {
         // Step 1. Sanity check
         if (session == null || session.getConfigurationKey() == null) {
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameStateReCreationFailure);
@@ -38,7 +38,7 @@ public class GameStateFactoryUtils<State extends GameState> {
         ServerGameInitiation gameInitiation = new ServerGameInitiation(session.getSession(), context, (MatchGameConfiguration) initiation.getConfiguration());
         GameProcessor<State> processor = processorFactory.create(gameInitiation);
         // Step 2.1 To prevent population of original session with duplicated events
-        GameSession<State> tmpSession = new GameSession<State>();
+        MatchGameRecord<State> tmpSession = new MatchGameRecord<State>();
         tmpSession.setState(restoredState);
         for (MadeMove madeMove : MadeMove.sort(session.getMadeMoves())) {
             processor.process(tmpSession, madeMove.getMove());
