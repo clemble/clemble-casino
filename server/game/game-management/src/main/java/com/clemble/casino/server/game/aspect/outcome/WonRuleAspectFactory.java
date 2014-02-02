@@ -30,6 +30,8 @@ public class WonRuleAspectFactory implements GameAspectFactory<GameMatchEndedEve
             return new WonByPriceRuleAspect(initiation.getConfiguration().getPrice(), transactionService);
         case spent:
             return new WonBySpentRuleAspect(initiation.getConfiguration().getPrice().getCurrency(), transactionService);
+        case owned:
+            return new WonByOwnedRuleAspect(initiation.getConfiguration().getPrice().getCurrency(), transactionService);
         default:
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         }

@@ -15,23 +15,23 @@ import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.PotGameContext;
 import com.clemble.casino.game.PotGameRecord;
+import com.clemble.casino.game.PotPlayerGameContext;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameMatchStartedEvent;
 import com.clemble.casino.game.event.server.GamePotStartedEvent;
-import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.repository.game.GameSessionRepository;
+import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
 import com.clemble.casino.server.repository.game.PotGameRecordRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class GameManagerService {
+public class GameManagerFactory {
 
     final private LoadingCache<GameSessionKey, GameManager<?>> sessionToManager = CacheBuilder.newBuilder().build(
             new CacheLoader<GameSessionKey, GameManager<?>>() {
@@ -50,15 +50,15 @@ public class GameManagerService {
 
     final private PotGameRecordRepository potRepository;
     final private GameStateFactory<GameState> stateFactory;
-    final private GameProcessorFactory<GameState> processorFactory;
-    final private GameSessionRepository<GameState> sessionRepository;
+    final private MatchGameProcessorFactory<GameState> processorFactory;
+    final private MatchGameRecordRepository<GameState> sessionRepository;
     final private PlayerNotificationService notificationService;
     final private ServerGameConfigurationRepository configurationRepository;
 
-    public GameManagerService(PotGameRecordRepository potRepository,
+    public GameManagerFactory(PotGameRecordRepository potRepository,
             GameStateFactory<GameState> stateFactory,
-            GameProcessorFactory<GameState> processorFactory,
-            GameSessionRepository<GameState> sessionRepository,
+            MatchGameProcessorFactory<GameState> processorFactory,
+            MatchGameRecordRepository<GameState> sessionRepository,
             ServerGameConfigurationRepository configurationRepository,
             PlayerNotificationService notificationService) {
         this.stateFactory = checkNotNull(stateFactory);
@@ -93,7 +93,7 @@ public class GameManagerService {
         matchRecord = sessionRepository.saveAndFlush(matchRecord);
         // Step 2. Sending notification for game started
         ServerGameInitiation serverInitiation = new ServerGameInitiation(initiation.getSession(), new MatchGameContext(initiation), matchGameConfiguration);
-        GameProcessor<GameState> processor = processorFactory.create(serverInitiation);
+        MatchGameProcessor<GameState> processor = processorFactory.create(serverInitiation);
         // Step 3. Returning active table
         MatchGameManager<?> manager = new MatchGameManager<>(processor, matchRecord);
         sessionToManager.put(initiation.getSession(), manager);
@@ -109,7 +109,7 @@ public class GameManagerService {
         // Step 3. Constructing match initiation
         GameInitiation matchInitiation = new GameInitiation(initiation.getSession().append("0"), matchConfiguration, initiation.getParticipants());
         // Step 4. Generating new match game record
-        PotGameContext potGameContext = new PotGameContext(3, Collections.<GameOutcome> emptyList(), null);
+        PotGameContext potGameContext = new PotGameContext(Collections.<PotPlayerGameContext>emptyList(), null, 0);
         MatchGameManager<?> matchRecord = match(matchInitiation, potGameContext);
         // Step 5. Generating new pot game record
         List<MatchGameRecord<?>> matchRecords = new ArrayList<>();
@@ -117,7 +117,7 @@ public class GameManagerService {
         PotGameRecord potGameRecord = new PotGameRecord(initiation.getSession(), initiation.getConfiguration().getConfigurationKey(), GameSessionState.active, matchRecords);
         // Step 6. Saving pot record
         potGameRecord = potRepository.saveAndFlush(potGameRecord);
-        PotGameManager potGameManager = new PotGameManager();
+        PotGameManager potGameManager = new PotGameManager(potGameRecord);
         sessionToManager.put(initiation.getSession(), potGameManager);
         // Step 7. Sending notification to related players
         notificationService.notify(initiation.getParticipants(), new GamePotStartedEvent(potGameRecord.getSession()));

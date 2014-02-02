@@ -16,7 +16,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.server.repository.game.GameSessionRepository;
+import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
 import com.clemble.casino.web.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
@@ -24,9 +24,9 @@ import com.clemble.casino.web.mapping.WebMapping;
 public class GameSessionController<State extends GameState> implements ExternalController {
 
     final private Game game;
-    final private GameSessionRepository<State> sessionRepository;
+    final private MatchGameRecordRepository<State> sessionRepository;
 
-    public GameSessionController(Game game, GameSessionRepository<State> sessionRepository) {
+    public GameSessionController(Game game, MatchGameRecordRepository<State> sessionRepository) {
         this.game = checkNotNull(game);
         this.sessionRepository = checkNotNull(sessionRepository);
     }

@@ -20,20 +20,20 @@ import com.clemble.casino.game.action.MadeMove;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.game.action.GameManagerService;
-import com.clemble.casino.server.repository.game.GameSessionRepository;
+import com.clemble.casino.server.game.action.GameManagerFactory;
+import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
 import com.clemble.casino.web.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
 public class GameActionController<State extends GameState> implements GameActionService<State>, ExternalController {
 
-    final private GameManagerService managerService;
-    final private GameSessionRepository<State> sessionRepository;
+    final private GameManagerFactory managerService;
+    final private MatchGameRecordRepository<State> sessionRepository;
 
     public GameActionController(
-            final GameSessionRepository<State> sessionRepository,
-            final GameManagerService sessionProcessor) {
+            final MatchGameRecordRepository<State> sessionRepository,
+            final GameManagerFactory sessionProcessor) {
         this.managerService = checkNotNull(sessionProcessor);
         this.sessionRepository = checkNotNull(sessionRepository);
     }

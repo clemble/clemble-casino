@@ -21,12 +21,12 @@ import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
-public class GameProcessorFactory<S extends GameState> implements BeanPostProcessor, ApplicationContextAware {
+public class MatchGameProcessorFactory<S extends GameState> implements BeanPostProcessor, ApplicationContextAware {
 
     @SuppressWarnings("rawtypes")
     final private List<GameAspectFactory> aspectFactories = new ArrayList<>();
 
-    public GameProcessor<S> create(ServerGameInitiation initiation) {
+    public MatchGameProcessor<S> create(ServerGameInitiation initiation) {
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
         for (GameAspectFactory<?> aspectFactory : aspectFactories) {
             gameAspects.add(aspectFactory.construct(initiation));
@@ -34,7 +34,7 @@ public class GameProcessorFactory<S extends GameState> implements BeanPostProces
         return new AggregatedGameProcessor<>(gameAspects);
     }
 
-    public static class AggregatedGameProcessor<S extends GameState> implements GameProcessor<S> {
+    public static class AggregatedGameProcessor<S extends GameState> implements MatchGameProcessor<S> {
 
         final private static Logger LOG = LoggerFactory.getLogger(AggregatedGameProcessor.class);
 

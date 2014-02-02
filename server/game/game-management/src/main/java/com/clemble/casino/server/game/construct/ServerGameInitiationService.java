@@ -25,7 +25,7 @@ import com.clemble.casino.game.event.server.GameInitiationCanceledEvent;
 import com.clemble.casino.game.event.server.GameInitiationConfirmedEvent;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.server.ServerService;
-import com.clemble.casino.server.game.action.GameManagerService;
+import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.action.MatchGameManager;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
@@ -38,13 +38,13 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
 
     final private ConcurrentHashMap<GameSessionKey, Entry<GameInitiation, Set<String>>> sessionToInitiation = new ConcurrentHashMap<>();
 
-    final private GameManagerService processor;
+    final private GameManagerFactory processor;
     final private PlayerNotificationService notificationService;
     final private ServerPlayerPresenceService presenceService;
 
     final private ScheduledExecutorService executorService;
 
-    public ServerGameInitiationService(GameManagerService processor,
+    public ServerGameInitiationService(GameManagerFactory processor,
             ServerPlayerPresenceService presenceService,
             PlayerNotificationService notificationService) {
         this.presenceService = checkNotNull(presenceService);

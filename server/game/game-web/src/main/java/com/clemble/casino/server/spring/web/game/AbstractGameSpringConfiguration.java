@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.server.game.action.GameManagerService;
-import com.clemble.casino.server.game.action.GameProcessorFactory;
+import com.clemble.casino.server.game.action.GameManagerFactory;
+import com.clemble.casino.server.game.action.MatchGameProcessorFactory;
 import com.clemble.casino.server.game.action.GameStateFactory;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
@@ -18,7 +18,7 @@ import com.clemble.casino.server.game.construction.availability.ServerAvailabili
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
-import com.clemble.casino.server.repository.game.GameSessionRepository;
+import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
 import com.clemble.casino.server.repository.game.PendingPlayerRepository;
 import com.clemble.casino.server.repository.game.PotGameRecordRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
@@ -38,10 +38,10 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     abstract public Game getGame();
 
     @Bean
-    public GameManagerService gameProcessor(PotGameRecordRepository potRepository, GameStateFactory<GameState> stateFactory,
-            GameProcessorFactory<GameState> processorFactory, GameSessionRepository<GameState> sessionRepository,
+    public GameManagerFactory gameProcessor(PotGameRecordRepository potRepository, GameStateFactory<GameState> stateFactory,
+            MatchGameProcessorFactory<GameState> processorFactory, MatchGameRecordRepository<GameState> sessionRepository,
             ServerGameConfigurationRepository configurationRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerService(potRepository, stateFactory, processorFactory, sessionRepository, configurationRepository, notificationService);
+        return new GameManagerFactory(potRepository, stateFactory, processorFactory, sessionRepository, configurationRepository, notificationService);
     }
 
     @Bean
@@ -58,8 +58,8 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameProcessorFactory<State> picPacPoeProcessorFactory() {
-        return new GameProcessorFactory<State>();
+    public MatchGameProcessorFactory<State> picPacPoeProcessorFactory() {
+        return new MatchGameProcessorFactory<State>();
     }
 
     @Bean
@@ -68,7 +68,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameActionController<State> picPacPoeEngineController(GameManagerService sessionProcessor, GameSessionRepository<State> gameSessionRepository) {
+    public GameActionController<State> picPacPoeEngineController(GameManagerFactory sessionProcessor, MatchGameRecordRepository<State> gameSessionRepository) {
         return new GameActionController<State>(gameSessionRepository, sessionProcessor);
     }
 

@@ -2,7 +2,6 @@ package com.clemble.casino.integration;
 
 import static com.clemble.test.random.ObjectGenerator.register;
 
-import java.util.Collections;
 import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -10,8 +9,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import com.clemble.casino.VersionAware;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.PotGameContext;
 import com.clemble.casino.game.TournamentGameContext;
 import com.clemble.casino.game.action.BetAction;
@@ -23,7 +22,6 @@ import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.rule.MatchRule;
 import com.clemble.casino.game.rule.bet.FixedBetRule;
 import com.clemble.casino.game.rule.bet.LimitedBetRule;
@@ -32,7 +30,6 @@ import com.clemble.casino.game.rule.construct.PlayerNumberRule;
 import com.clemble.casino.game.rule.construct.PrivacyRule;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
-import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.integration.game.NumberState;
@@ -165,7 +162,7 @@ public class ObjectTest {
         register(PotGameContext.class, new AbstractValueGenerator<PotGameContext>() {
             @Override
             public PotGameContext generate() {
-                return new PotGameContext(3, Collections.<GameOutcome>emptyList(), null);
+                return new PotGameContext(null, null, 0);
             }
         });
         register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {

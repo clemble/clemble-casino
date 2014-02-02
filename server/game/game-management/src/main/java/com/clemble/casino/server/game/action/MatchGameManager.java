@@ -16,10 +16,10 @@ public class MatchGameManager<S extends GameState> implements GameManager<MatchG
 
     final private ReentrantLock sessionLock = new ReentrantLock();
 
-    final private GameProcessor<S> processor;
+    final private MatchGameProcessor<S> processor;
     final private MatchGameRecord<S> session;
 
-    public MatchGameManager(GameProcessor<S> processor, MatchGameRecord<S> session) {
+    public MatchGameManager(MatchGameProcessor<S> processor, MatchGameRecord<S> session) {
         this.processor = checkNotNull(processor);
         this.session = checkNotNull(session);
     }

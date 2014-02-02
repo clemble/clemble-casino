@@ -15,11 +15,11 @@ import com.clemble.casino.server.repository.game.ServerGameConfigurationReposito
 
 public class GameStateFactoryUtils<State extends GameState> {
 
-    final private GameProcessorFactory<State> processorFactory;
+    final private MatchGameProcessorFactory<State> processorFactory;
     final private GameStateFactory<State> stateFactory;
     final private ServerGameConfigurationRepository configurationRepository;
 
-    public GameStateFactoryUtils(GameProcessorFactory<State> processorFactory, GameStateFactory<State> stateFactory, ServerGameConfigurationRepository configurationRepository) {
+    public GameStateFactoryUtils(MatchGameProcessorFactory<State> processorFactory, GameStateFactory<State> stateFactory, ServerGameConfigurationRepository configurationRepository) {
         this.stateFactory = checkNotNull(stateFactory);
         this.processorFactory = checkNotNull(processorFactory);
         this.configurationRepository = checkNotNull(configurationRepository);
@@ -36,7 +36,7 @@ public class GameStateFactoryUtils<State extends GameState> {
         MatchGameContext context = new MatchGameContext(initiation);
         State restoredState = stateFactory.constructState(initiation, context);
         ServerGameInitiation gameInitiation = new ServerGameInitiation(session.getSession(), context, (MatchGameConfiguration) initiation.getConfiguration());
-        GameProcessor<State> processor = processorFactory.create(gameInitiation);
+        MatchGameProcessor<State> processor = processorFactory.create(gameInitiation);
         // Step 2.1 To prevent population of original session with duplicated events
         MatchGameRecord<State> tmpSession = new MatchGameRecord<State>();
         tmpSession.setState(restoredState);
