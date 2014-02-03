@@ -7,7 +7,7 @@ import java.util.Date;
 import org.springframework.scheduling.TriggerContext;
 
 import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.GamePlayerContext;
+import com.clemble.casino.game.MatchGamePlayerContext;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.action.GameAction;
@@ -31,7 +31,7 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
         final MatchGameConfiguration specification = initiation;
 
         this.playerTimeTrackers = new ArrayList<PlayerTimeTracker>();
-        for (GamePlayerContext playerContext : context.getPlayerContexts()) {
+        for (MatchGamePlayerContext playerContext : context.getPlayerContexts()) {
             playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getTotalTimeRule()));
             playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getMoveTimeRule()));
         }

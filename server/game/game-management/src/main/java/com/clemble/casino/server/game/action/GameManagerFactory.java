@@ -15,7 +15,7 @@ import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.PotGameContext;
 import com.clemble.casino.game.PotGameRecord;
-import com.clemble.casino.game.PotPlayerGameContext;
+import com.clemble.casino.game.PotGamePlayerContext;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameMatchStartedEvent;
@@ -109,7 +109,7 @@ public class GameManagerFactory {
         // Step 3. Constructing match initiation
         GameInitiation matchInitiation = new GameInitiation(initiation.getSession().append("0"), matchConfiguration, initiation.getParticipants());
         // Step 4. Generating new match game record
-        PotGameContext potGameContext = new PotGameContext(Collections.<PotPlayerGameContext>emptyList(), null, 0);
+        PotGameContext potGameContext = new PotGameContext(Collections.<PotGamePlayerContext>emptyList(), null, 0);
         MatchGameManager<?> matchRecord = match(matchInitiation, potGameContext);
         // Step 5. Generating new pot game record
         List<MatchGameRecord<?>> matchRecords = new ArrayList<>();

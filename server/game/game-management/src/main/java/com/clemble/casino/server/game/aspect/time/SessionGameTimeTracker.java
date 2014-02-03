@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.GamePlayerContext;
+import com.clemble.casino.game.MatchGamePlayerContext;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.ScheduledGameAction;
@@ -18,7 +18,7 @@ public class SessionGameTimeTracker {
 
     public SessionGameTimeTracker(final MatchGameConfiguration specification, MatchGameContext context, ScheduledGameAction action, ScheduledGameActionExecutor actionExecutor) {
         this.playerToTrackers = new HashMap<String, Collection<PlayerGameTimeTracker>>();
-        for (GamePlayerContext playerContext : context.getPlayerContexts()) {
+        for (MatchGamePlayerContext playerContext : context.getPlayerContexts()) {
             Collection<PlayerGameTimeTracker> trackers = new ArrayList<>();
             trackers.add(new PlayerGameTimeTracker(playerContext.getClock(), action, specification.getMoveTimeRule(), actionExecutor));
             trackers.add(new PlayerGameTimeTracker(playerContext.getClock(), action, specification.getTotalTimeRule(), actionExecutor));

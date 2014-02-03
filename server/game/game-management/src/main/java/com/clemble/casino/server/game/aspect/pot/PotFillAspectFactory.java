@@ -18,6 +18,8 @@ public class PotFillAspectFactory implements PotGameAspectFactory<GameMatchEnded
             return new PotFillMaxCommonAspect(context);
         case reminder:
             return new PotFillReminderAspect(context);
+        case none:
+            return new PotFillNoneAspect(context);
         default:
             throw new IllegalArgumentException();
         }

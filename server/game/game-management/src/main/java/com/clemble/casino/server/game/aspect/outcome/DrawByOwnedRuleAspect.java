@@ -6,7 +6,7 @@ import java.util.Date;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
-import com.clemble.casino.game.GamePlayerContext;
+import com.clemble.casino.game.MatchGamePlayerContext;
 import com.clemble.casino.game.event.server.GameMatchEndedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
@@ -41,7 +41,7 @@ public class DrawByOwnedRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?
             PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(event.getSession().toPaymentTransactionKey())
                 .setTransactionDate(new Date());
-            for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
+            for (MatchGamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();
                 paymentTransaction
                     .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))
