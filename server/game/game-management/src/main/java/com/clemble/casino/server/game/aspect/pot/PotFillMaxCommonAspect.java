@@ -25,7 +25,7 @@ public class PotFillMaxCommonAspect extends BasicGameAspect<GameMatchEndedEvent<
         // Step 2. Adding max common to each player's pot value
         for (MatchGamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
             GamePlayerAccount playerMatchAccount = playerContext.getAccount();
-            GamePlayerAccount playerPotAccount = potGameContext.get(playerContext.getPlayer()).getAccount();
+            GamePlayerAccount playerPotAccount = potGameContext.getPlayerContext(playerContext.getPlayer()).getAccount();
             playerPotAccount.subLeft(playerMatchAccount.getSpent() + maxCommon);
             playerPotAccount.addOwned(playerMatchAccount.getOwned());
             potGameContext.add(maxCommon);

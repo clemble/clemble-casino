@@ -21,7 +21,7 @@ public class PotFillReminderAspect extends BasicGameAspect<GameMatchEndedEvent<?
         // Step 1. Filling pot with the reminder
         for (MatchGamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
             GamePlayerAccount playerMatchAccount = playerContext.getAccount();
-            GamePlayerAccount playerPotAccount = potGameContext.get(playerContext.getPlayer()).getAccount();
+            GamePlayerAccount playerPotAccount = potGameContext.getPlayerContext(playerContext.getPlayer()).getAccount();
             playerPotAccount.subLeft(playerMatchAccount.getSpent() + playerPotAccount.getLeft());
             playerPotAccount.addOwned(playerMatchAccount.getOwned());
             potGameContext.add(playerPotAccount.getLeft());

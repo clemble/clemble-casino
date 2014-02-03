@@ -4,12 +4,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
-import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.MadeMove;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 
@@ -35,8 +34,7 @@ public class GameStateFactoryUtils<State extends GameState> {
         // TODO define politics for restart, all time track is lost here
         MatchGameContext context = new MatchGameContext(initiation);
         State restoredState = stateFactory.constructState(initiation, context);
-        ServerGameInitiation gameInitiation = new ServerGameInitiation(session.getSession(), context, (MatchGameConfiguration) initiation.getConfiguration());
-        MatchGameProcessor<State> processor = processorFactory.create(gameInitiation);
+        MatchGameProcessor<State> processor = processorFactory.create((MatchGameConfiguration) initiation.getConfiguration(), context);
         // Step 2.1 To prevent population of original session with duplicated events
         MatchGameRecord<State> tmpSession = new MatchGameRecord<State>();
         tmpSession.setState(restoredState);

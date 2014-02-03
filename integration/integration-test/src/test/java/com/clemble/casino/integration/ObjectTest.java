@@ -162,7 +162,7 @@ public class ObjectTest {
         register(PotGameContext.class, new AbstractValueGenerator<PotGameContext>() {
             @Override
             public PotGameContext generate() {
-                return new PotGameContext(null, null, 0);
+                return new PotGameContext(GameSessionKey.DEFAULT_SESSION, null, null, 0);
             }
         });
         register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
@@ -174,7 +174,7 @@ public class ObjectTest {
         register(TournamentGameContext.class, new AbstractValueGenerator<TournamentGameContext>() {
             @Override
             public TournamentGameContext generate() {
-                return new TournamentGameContext(null);
+                return new TournamentGameContext(GameSessionKey.DEFAULT_SESSION, null);
             }
         });
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {

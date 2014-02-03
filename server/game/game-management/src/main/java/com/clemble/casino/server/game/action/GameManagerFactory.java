@@ -14,10 +14,9 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.PotGameContext;
-import com.clemble.casino.game.PotGameRecord;
 import com.clemble.casino.game.PotGamePlayerContext;
+import com.clemble.casino.game.PotGameRecord;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.construct.ServerGameInitiation;
 import com.clemble.casino.game.event.server.GameMatchStartedEvent;
 import com.clemble.casino.game.event.server.GamePotStartedEvent;
 import com.clemble.casino.game.specification.GameConfiguration;
@@ -83,7 +82,7 @@ public class GameManagerFactory {
         }
     }
 
-    public MatchGameManager<?> match(GameInitiation initiation, GameContext parent) {
+    public MatchGameManager<?> match(GameInitiation initiation, GameContext<?> parent) {
         MatchGameConfiguration matchGameConfiguration = (MatchGameConfiguration) initiation.getConfiguration();
         // Step 1. Allocating table for game initiation
         GameState state = stateFactory.constructState(initiation, new MatchGameContext(initiation));
@@ -92,8 +91,7 @@ public class GameManagerFactory {
                 .setPlayers(initiation.getParticipants()).setState(state);
         matchRecord = sessionRepository.saveAndFlush(matchRecord);
         // Step 2. Sending notification for game started
-        ServerGameInitiation serverInitiation = new ServerGameInitiation(initiation.getSession(), new MatchGameContext(initiation), matchGameConfiguration);
-        MatchGameProcessor<GameState> processor = processorFactory.create(serverInitiation);
+        MatchGameProcessor<GameState> processor = processorFactory.create(matchGameConfiguration, new MatchGameContext(initiation, parent));
         // Step 3. Returning active table
         MatchGameManager<?> manager = new MatchGameManager<>(processor, matchRecord);
         sessionToManager.put(initiation.getSession(), manager);
@@ -101,7 +99,7 @@ public class GameManagerFactory {
         return manager;
     }
 
-    public PotGameManager pot(GameInitiation initiation, GameContext parent) {
+    public PotGameManager pot(GameInitiation initiation, GameContext<?> parent) {
         // Step 1. Fetching first pot configuration
         PotGameConfiguration potConfiguration = (PotGameConfiguration) initiation.getConfiguration();
         // Step 2. Taking first match from the pot
@@ -109,7 +107,7 @@ public class GameManagerFactory {
         // Step 3. Constructing match initiation
         GameInitiation matchInitiation = new GameInitiation(initiation.getSession().append("0"), matchConfiguration, initiation.getParticipants());
         // Step 4. Generating new match game record
-        PotGameContext potGameContext = new PotGameContext(Collections.<PotGamePlayerContext>emptyList(), null, 0);
+        PotGameContext potGameContext = new PotGameContext(initiation.getSession(), Collections.<PotGamePlayerContext>emptyList(), null, 0);
         MatchGameManager<?> matchRecord = match(matchInitiation, potGameContext);
         // Step 5. Generating new pot game record
         List<MatchGameRecord<?>> matchRecords = new ArrayList<>();

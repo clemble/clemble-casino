@@ -14,7 +14,7 @@ public class PotGameManager implements GameManager<PotGameRecord> {
 
     public PotGameManager(PotGameRecord record) {
         this.record = record;
-        this.potContext = new PotGameContext(null, null, 0);
+        this.potContext = new PotGameContext(record.getSession(), null, null, 0);
         this.manager = null;
     }
 

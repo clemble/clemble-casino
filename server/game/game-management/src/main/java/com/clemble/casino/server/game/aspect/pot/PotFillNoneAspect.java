@@ -21,7 +21,7 @@ public class PotFillNoneAspect extends BasicGameAspect<GameMatchEndedEvent<?>>{
         // Step 1. Making adjustment to the player accounts in pot
         for (MatchGamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
             GamePlayerAccount playerMatchAccount = playerContext.getAccount();
-            GamePlayerAccount playerPotAccount = potGameContext.get(playerContext.getPlayer()).getAccount();
+            GamePlayerAccount playerPotAccount = potGameContext.getPlayerContext(playerContext.getPlayer()).getAccount();
             playerPotAccount.subLeft(playerMatchAccount.getSpent());
             playerPotAccount.addOwned(playerMatchAccount.getOwned());
         }

@@ -6,13 +6,15 @@ import org.springframework.core.Ordered;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.construct.ServerGameInitiation;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.GameAspectFactory;
+import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
-public class PlayerNotificationRuleAspectFactory implements GameAspectFactory<GameManagementEvent> {
+public class PlayerNotificationRuleAspectFactory implements MatchGameAspectFactory<GameManagementEvent> {
 
     final private PlayerNotificationService notificationService;
 
@@ -21,12 +23,12 @@ public class PlayerNotificationRuleAspectFactory implements GameAspectFactory<Ga
     }
 
     @Override
-    public GameAspect<GameManagementEvent> construct(ServerGameInitiation initiation) {
-        switch (initiation.getConfiguration().getPrivacyRule()) {
+    public GameAspect<GameManagementEvent> construct(MatchGameConfiguration configuration, MatchGameContext context) {
+        switch (configuration.getPrivacyRule()) {
             case everybody:
-                return new PublicNotificationRuleAspect(initiation.getSession(), initiation.getParticipants(), notificationService);
+                return new PublicNotificationRuleAspect(context.getSession(), PlayerAwareUtils.toPlayerList(context.getPlayerContexts()), notificationService);
             case players:
-                return new PrivateNotificationRuleAspect(initiation.getParticipants(), notificationService);
+                return new PrivateNotificationRuleAspect(PlayerAwareUtils.toPlayerList(context.getPlayerContexts()), notificationService);
             default:
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         }
