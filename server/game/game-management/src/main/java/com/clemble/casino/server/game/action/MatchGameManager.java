@@ -7,24 +7,23 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 
-public class MatchGameManager<S extends GameState> implements GameManager<MatchGameRecord<S>> {
+public class MatchGameManager implements GameManager<MatchGameRecord> {
 
     final private ReentrantLock sessionLock = new ReentrantLock();
 
-    final private MatchGameProcessor<S> processor;
-    final private MatchGameRecord<S> session;
+    final private MatchGameProcessor processor;
+    final private MatchGameRecord session;
 
-    public MatchGameManager(MatchGameProcessor<S> processor, MatchGameRecord<S> session) {
+    public MatchGameManager(MatchGameProcessor processor, MatchGameRecord session) {
         this.processor = checkNotNull(processor);
         this.session = checkNotNull(session);
     }
     
-    public MatchGameRecord<S> getRecord() {
+    public MatchGameRecord getRecord() {
         return session;
     }
 

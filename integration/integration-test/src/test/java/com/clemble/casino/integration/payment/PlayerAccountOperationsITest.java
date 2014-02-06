@@ -35,6 +35,8 @@ import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.event.BonusPaymentEvent;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
+import com.clemble.test.concurrent.AsyncCompletionUtils;
+import com.clemble.test.concurrent.Check;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -53,7 +55,7 @@ public class PlayerAccountOperationsITest {
     @Test
     public void testInitialAmount() throws InterruptedException {
         // Step 1. Creating random player A
-        ClembleCasinoOperations A = playerOperations.createPlayer();
+        final ClembleCasinoOperations A = playerOperations.createPlayer();
         // Step 1.1 Registering bonus event listener, and waiting
         final BlockingQueue<BonusPaymentEvent> bonusLatch = new ArrayBlockingQueue<>(2);
         A.listenerOperations().subscribe(new EventTypeSelector(BonusPaymentEvent.class), new EventListener<BonusPaymentEvent>() {
@@ -62,11 +64,12 @@ public class PlayerAccountOperationsITest {
                 bonusLatch.add(event);
             }
         });
-        long maxTimeout = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(90);
-        while(A.paymentOperations().getPaymentTransactions().size() != 2 && maxTimeout > System.currentTimeMillis()) {
-            bonusLatch.poll(30, TimeUnit.SECONDS);
-        }
-        assertEquals(A.paymentOperations().getPaymentTransactions().size(), 2);
+        AsyncCompletionUtils.check(new Check() {
+            @Override
+            public boolean check() {
+                return A.paymentOperations().getPaymentTransactions().size() == 2;
+            }
+        }, 10_000);
         // Step 2. Fetching account and precondition
         PlayerAccount accountA = A.paymentOperations().getAccount();
         assertTrue(accountA.getMoney().size() > 0);

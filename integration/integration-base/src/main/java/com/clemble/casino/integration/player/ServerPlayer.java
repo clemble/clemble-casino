@@ -62,7 +62,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
     final private AutoGameConstructionService constructionService;
     final private AvailabilityGameConstructionService availabilityConstructionService;
     final private GameInitiationService initiationService;
-    final private GameActionService<?> actionService;
+    final private GameActionService actionService;
     final private LoadingCache<Game, GameConstructionOperations<?>> gameConstructors = CacheBuilder.newBuilder().build(
         new CacheLoader<Game, GameConstructionOperations<?>>() {
 
@@ -93,7 +93,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
             final AutoGameConstructionService gameConstructionService,
             final AvailabilityGameConstructionService availabilityConstructionService,
             final GameInitiationService initiationService,
-            final GameConfigurationService specificationService, final GameActionService<?> actionService) {
+            final GameConfigurationService specificationService, final GameActionService actionService) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());

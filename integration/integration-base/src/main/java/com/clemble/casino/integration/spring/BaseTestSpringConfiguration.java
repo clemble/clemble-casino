@@ -134,7 +134,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
                 @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,
                 @Qualifier("gameInitiationController") GameInitiationService initiationService,
                 @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
-                GameActionService<?> actionService) {
+                GameActionService actionService) {
             ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }

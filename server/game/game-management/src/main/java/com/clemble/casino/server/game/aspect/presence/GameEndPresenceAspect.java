@@ -7,7 +7,7 @@ import com.clemble.casino.game.event.server.GameMatchEndedEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
-public class GameEndPresenceAspect extends BasicGameAspect<GameMatchEndedEvent<?>> {
+public class GameEndPresenceAspect extends BasicGameAspect<GameMatchEndedEvent> {
 
     final private ServerPlayerPresenceService presenceService;
 
@@ -17,7 +17,7 @@ public class GameEndPresenceAspect extends BasicGameAspect<GameMatchEndedEvent<?
     }
 
     @Override
-    public void doEvent(GameMatchEndedEvent<?> event) {
+    public void doEvent(GameMatchEndedEvent event) {
         for (String player : event.getState().getContext().getPlayerIterator().getPlayers())
             presenceService.markOnline(player);
     }

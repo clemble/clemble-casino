@@ -21,8 +21,8 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.event.server.GameMatchEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.event.server.GameMatchEndedEvent;
 import com.clemble.casino.game.event.server.GameMatchEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameConfigurationKey;
@@ -43,7 +43,7 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     final private Object versionLock = new Object();
     final private EventAccumulator<GameSessionAwareEvent> eventAccumulator = new EventAccumulator<GameSessionAwareEvent>();
     final private AtomicBoolean keepAlive = new AtomicBoolean(true);
-    final private AtomicReference<State> currentState = new AtomicReference<>();
+    final private AtomicReference<GameState> currentState = new AtomicReference<>();
     final private AtomicReference<GameOutcome> outcome = new AtomicReference<>();
 
     public AbstractGameSessionPlayer(final ClembleCasinoOperations player, GameConstruction construction) {
@@ -83,18 +83,19 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
 
     @Override
     final public State getState() {
-        return currentState.get();
+        // TODO generalize
+        return (State) currentState.get();
     }
 
     @Override
     public void onEvent(GameSessionAwareEvent event) {
-        if (event instanceof GameMatchEndedEvent<?>)
-            outcome.set(((GameMatchEndedEvent<?>) event).getOutcome());
+        if (event instanceof GameMatchEndedEvent)
+            outcome.set(((GameMatchEndedEvent) event).getOutcome());
         if (event instanceof GameMatchEvent)
-            setState(((GameMatchEvent<State>) event).getState());
+            setState(((GameMatchEvent) event).getState());
     }
 
-    final private void setState(State newState) {
+    final private void setState(GameState newState) {
         synchronized (versionLock) {
             if (newState != null) {
                 if (getState() == null || getState().getVersion() < newState.getVersion()) {

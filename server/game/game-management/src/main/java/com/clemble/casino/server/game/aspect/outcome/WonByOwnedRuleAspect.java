@@ -18,7 +18,7 @@ import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
-public class WonByOwnedRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?>> {
+public class WonByOwnedRuleAspect extends BasicGameAspect<GameMatchEndedEvent> {
 
     final private Currency currency;
     final private ServerPaymentTransactionService transactionService;
@@ -30,7 +30,7 @@ public class WonByOwnedRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?>
     }
 
     @Override
-    public void doEvent(GameMatchEndedEvent<?> event) {
+    public void doEvent(GameMatchEndedEvent event) {
         // TODO Auto-generated method stub
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof PlayerWonOutcome) {

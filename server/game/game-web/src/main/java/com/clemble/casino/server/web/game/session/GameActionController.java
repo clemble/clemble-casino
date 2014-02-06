@@ -26,13 +26,13 @@ import com.clemble.casino.web.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
-public class GameActionController<State extends GameState> implements GameActionService<State>, ExternalController {
+public class GameActionController<State extends GameState> implements GameActionService, ExternalController {
 
     final private GameManagerFactory managerService;
-    final private MatchGameRecordRepository<State> sessionRepository;
+    final private MatchGameRecordRepository sessionRepository;
 
     public GameActionController(
-            final MatchGameRecordRepository<State> sessionRepository,
+            final MatchGameRecordRepository sessionRepository,
             final GameManagerFactory sessionProcessor) {
         this.managerService = checkNotNull(sessionProcessor);
         this.sessionRepository = checkNotNull(sessionRepository);
@@ -51,12 +51,11 @@ public class GameActionController<State extends GameState> implements GameAction
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_STATE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    State getState(@PathVariable("game") Game game, @PathVariable("session") String session) {
+    public @ResponseBody GameState getState(@PathVariable("game") Game game, @PathVariable("session") String session) {
         GameSessionKey sessionKey = new GameSessionKey(game, session);
         if (!sessionRepository.exists(sessionKey))
             return null;
-        return ((MatchGameRecord<State>) managerService.get(sessionKey).getRecord()).getState();
+        return ((MatchGameRecord) managerService.get(sessionKey).getRecord()).getState();
     }
 
     @Override

@@ -26,7 +26,6 @@ import com.clemble.casino.game.event.server.GameInitiationConfirmedEvent;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.server.ServerService;
 import com.clemble.casino.server.game.action.GameManagerFactory;
-import com.clemble.casino.server.game.action.MatchGameManager;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -38,7 +37,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
 
     final private ConcurrentHashMap<GameSessionKey, Entry<GameInitiation, Set<String>>> sessionToInitiation = new ConcurrentHashMap<>();
 
-    final private GameManagerFactory processor;
+    final private GameManagerFactory managerFactory;
     final private PlayerNotificationService notificationService;
     final private ServerPlayerPresenceService presenceService;
 
@@ -48,7 +47,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
             ServerPlayerPresenceService presenceService,
             PlayerNotificationService notificationService) {
         this.presenceService = checkNotNull(presenceService);
-        this.processor = checkNotNull(processor);
+        this.managerFactory = checkNotNull(processor);
         this.notificationService = checkNotNull(notificationService);
 
         ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL game.initiation %d");
@@ -104,7 +103,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
             sessionToInitiation.remove(sessionKey);
             if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSession())) {
                 LOG.trace("Successfully updated presences, starting a new game");
-                processor.start(initiation, null);
+                managerFactory.start(initiation, null);
             } else {
                 // TODO remove session from the lists
                 LOG.trace("Failed to update presences");

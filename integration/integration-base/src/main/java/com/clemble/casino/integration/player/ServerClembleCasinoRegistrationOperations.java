@@ -43,7 +43,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private AvailabilityGameConstructionService availabilityConstructionService;
     final private GameInitiationService initiationService;
     final private GameConfigurationService specificationService;
-    final private GameActionService<?> actionService;
+    final private GameActionService actionService;
 
     public ServerClembleCasinoRegistrationOperations(ObjectMapper objectMapper,
             EventListenerOperationsFactory listenerOperations,
@@ -57,7 +57,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
             AvailabilityGameConstructionService availabilityConstructionService,
             GameInitiationService initiationService,
             GameConfigurationService specificationService,
-            GameActionService<?> actionService) {
+            GameActionService actionService) {
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
         this.listenerOperations = checkNotNull(listenerOperations);

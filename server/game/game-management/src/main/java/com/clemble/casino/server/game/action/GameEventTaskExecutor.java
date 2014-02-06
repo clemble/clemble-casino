@@ -15,7 +15,7 @@ import com.clemble.casino.game.action.GameAction;
 
 public class GameEventTaskExecutor implements BeanPostProcessor {
 
-    private MatchGameManager<?> sessionProcessor;
+    private MatchGameManager sessionProcessor;
     final private ConcurrentHashMap<GameEventTask, ScheduledFuture<?>> concurrentHashMap = new ConcurrentHashMap<>();
 
     final private ScheduledExecutorService scheduledExecutorService;
@@ -69,8 +69,9 @@ public class GameEventTaskExecutor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        // TODO fix it, this won't worl
         if (bean instanceof MatchGameManager) {
-            sessionProcessor = (MatchGameManager<?>) bean;
+            sessionProcessor = (MatchGameManager) bean;
         }
         return bean;
     }

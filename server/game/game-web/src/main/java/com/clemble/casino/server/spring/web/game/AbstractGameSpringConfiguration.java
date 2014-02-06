@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.server.game.action.GameManagerFactory;
-import com.clemble.casino.server.game.action.MatchGameProcessorFactory;
 import com.clemble.casino.server.game.action.GameStateFactory;
+import com.clemble.casino.server.game.action.MatchGameProcessorFactory;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructionService;
@@ -39,7 +39,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public GameManagerFactory gameProcessor(PotGameRecordRepository potRepository, GameStateFactory<GameState> stateFactory,
-            MatchGameProcessorFactory<GameState> processorFactory, MatchGameRecordRepository<GameState> sessionRepository,
+            MatchGameProcessorFactory<GameState> processorFactory, MatchGameRecordRepository sessionRepository,
             ServerGameConfigurationRepository configurationRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new GameManagerFactory(potRepository, stateFactory, processorFactory, sessionRepository, configurationRepository, notificationService);
     }
@@ -68,7 +68,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameActionController<State> picPacPoeEngineController(GameManagerFactory sessionProcessor, MatchGameRecordRepository<State> gameSessionRepository) {
+    public GameActionController<State> picPacPoeEngineController(GameManagerFactory sessionProcessor, MatchGameRecordRepository gameSessionRepository) {
         return new GameActionController<State>(gameSessionRepository, sessionProcessor);
     }
 

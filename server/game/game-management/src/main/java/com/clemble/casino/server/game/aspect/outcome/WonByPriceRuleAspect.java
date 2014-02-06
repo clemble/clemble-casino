@@ -19,7 +19,7 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class WonByPriceRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?>>{
+public class WonByPriceRuleAspect extends BasicGameAspect<GameMatchEndedEvent>{
 
     final private Money price;
     final private ServerPaymentTransactionService transactionService;
@@ -31,7 +31,7 @@ public class WonByPriceRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?>
     }
 
     @Override
-    public void doEvent(GameMatchEndedEvent<?> event) {
+    public void doEvent(GameMatchEndedEvent event) {
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof PlayerWonOutcome) {
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();

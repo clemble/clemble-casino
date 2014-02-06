@@ -21,7 +21,7 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class DrawByOwnedRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?>> {
+public class DrawByOwnedRuleAspect extends BasicGameAspect<GameMatchEndedEvent> {
 
     final private Currency currency;
     final private ServerPaymentTransactionService transactionService;
@@ -33,7 +33,7 @@ public class DrawByOwnedRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?
     }
 
     @Override
-    public void doEvent(GameMatchEndedEvent<?> event) {
+    public void doEvent(GameMatchEndedEvent event) {
         // TODO Auto-generated method stub
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof DrawOutcome) {

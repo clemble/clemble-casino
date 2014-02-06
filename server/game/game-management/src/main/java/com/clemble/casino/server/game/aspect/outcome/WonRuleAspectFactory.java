@@ -16,7 +16,7 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class WonRuleAspectFactory implements MatchGameAspectFactory<GameMatchEndedEvent<?>> {
+public class WonRuleAspectFactory implements MatchGameAspectFactory<GameMatchEndedEvent> {
 
     final private ServerPaymentTransactionService transactionService;
 
@@ -25,7 +25,7 @@ public class WonRuleAspectFactory implements MatchGameAspectFactory<GameMatchEnd
     }
 
     @Override
-    public GameAspect<GameMatchEndedEvent<?>> construct(MatchGameConfiguration configuration, MatchGameContext context) {
+    public GameAspect<GameMatchEndedEvent> construct(MatchGameConfiguration configuration, MatchGameContext context) {
         switch (configuration.getWonRule()) {
         case price:
             return new WonByPriceRuleAspect(configuration.getPrice(), transactionService);

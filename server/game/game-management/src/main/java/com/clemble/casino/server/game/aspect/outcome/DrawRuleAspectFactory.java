@@ -14,7 +14,7 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class DrawRuleAspectFactory implements MatchGameAspectFactory<GameMatchEndedEvent<?>> {
+public class DrawRuleAspectFactory implements MatchGameAspectFactory<GameMatchEndedEvent> {
 
     // TODO enable caching for DrawRule
     final private ServerPaymentTransactionService transactionService;
@@ -24,7 +24,7 @@ public class DrawRuleAspectFactory implements MatchGameAspectFactory<GameMatchEn
     }
 
     @Override
-    public GameAspect<GameMatchEndedEvent<?>> construct(MatchGameConfiguration configuration, MatchGameContext context) {
+    public GameAspect<GameMatchEndedEvent> construct(MatchGameConfiguration configuration, MatchGameContext context) {
         switch (configuration.getDrawRule()) {
         case owned:
             return new DrawByOwnedRuleAspect(configuration.getPrice().getCurrency(), transactionService);

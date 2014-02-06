@@ -1,11 +1,14 @@
 package com.clemble.casino.server.game.aspect;
 
 import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.PotGameContext;
 import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.specification.GameConfiguration;
+import org.springframework.core.PriorityOrdered;
 
-public interface GameAspectFactory<T extends Event, GC extends PotGameContext> {
+public interface GameAspectFactory<T extends Event, GC extends GameContext, GI extends GameConfiguration> extends PriorityOrdered {
 
-    public GameAspect<T> construct(GameInitiation initiation, GC potContext);
+    public GameAspect<T> construct(GI configuration, GC potContext);
 
 }

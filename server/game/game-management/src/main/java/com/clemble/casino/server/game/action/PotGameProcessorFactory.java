@@ -14,22 +14,25 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.OrderComparator;
 
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
+import com.clemble.casino.game.PotGameContext;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
+import com.clemble.casino.server.game.aspect.PotGameAspectFactory;
 
-public class MatchGameProcessorFactory<S extends GameState> implements BeanPostProcessor, ApplicationContextAware {
+/**
+ * Created by mavarazy on 04/02/14.
+ */
+public class PotGameProcessorFactory<S extends GameState> implements BeanPostProcessor, ApplicationContextAware {
 
     @SuppressWarnings("rawtypes")
-    final private List<MatchGameAspectFactory> aspectFactories = new ArrayList<>();
+    final private List<PotGameAspectFactory> aspectFactories = new ArrayList<>();
 
-    public MatchGameProcessor create(MatchGameConfiguration configuration, MatchGameContext context) {
+    public MatchGameProcessor create(PotGameConfiguration configuration, PotGameContext context) {
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
-        for (MatchGameAspectFactory<?> aspectFactory : aspectFactories) {
+        for (PotGameAspectFactory<?> aspectFactory : aspectFactories) {
             gameAspects.add(aspectFactory.construct(configuration, context));
         }
         return new AggregatedGameProcessor(gameAspects);
@@ -65,7 +68,7 @@ public class MatchGameProcessorFactory<S extends GameState> implements BeanPostP
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        aspectFactories.addAll(applicationContext.getBeansOfType(MatchGameAspectFactory.class).values());
+        aspectFactories.addAll(applicationContext.getBeansOfType(PotGameAspectFactory.class).values());
         Collections.sort(aspectFactories, OrderComparator.INSTANCE);
     }
 
@@ -77,11 +80,10 @@ public class MatchGameProcessorFactory<S extends GameState> implements BeanPostP
     @Override
     @SuppressWarnings("rawtypes")
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (bean instanceof MatchGameAspectFactory) {
-            aspectFactories.add((MatchGameAspectFactory) bean);
+        if (bean instanceof PotGameAspectFactory) {
+            aspectFactories.add((PotGameAspectFactory) bean);
             Collections.sort(aspectFactories, OrderComparator.INSTANCE);
         }
         return bean;
     }
-
 }

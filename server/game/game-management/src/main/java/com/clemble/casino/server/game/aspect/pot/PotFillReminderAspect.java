@@ -2,29 +2,29 @@ package com.clemble.casino.server.game.aspect.pot;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
-import com.clemble.casino.game.MatchGamePlayerContext;
+import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.PotGameContext;
 import com.clemble.casino.game.event.server.GameMatchEndedEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
-public class PotFillReminderAspect extends BasicGameAspect<GameMatchEndedEvent<?>>{
+public class PotFillReminderAspect extends BasicGameAspect<GameMatchEndedEvent>{
 
-    final private PotGameContext potGameContext;
+    final private PotGameContext context;
 
     public PotFillReminderAspect(PotGameContext context) {
         super(new EventTypeSelector(GameMatchEndedEvent.class));
-        this.potGameContext = context;
+        this.context = context;
     }
 
     @Override
-    public void doEvent(GameMatchEndedEvent<?> event) {
+    public void doEvent(GameMatchEndedEvent event) {
         // Step 1. Filling pot with the reminder
-        for (MatchGamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
+        for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
             GamePlayerAccount playerMatchAccount = playerContext.getAccount();
-            GamePlayerAccount playerPotAccount = potGameContext.getPlayerContext(playerContext.getPlayer()).getAccount();
+            GamePlayerAccount playerPotAccount = context.getPlayerContext(playerContext.getPlayer()).getAccount();
             playerPotAccount.subLeft(playerMatchAccount.getSpent() + playerPotAccount.getLeft());
             playerPotAccount.addOwned(playerMatchAccount.getOwned());
-            potGameContext.add(playerPotAccount.getLeft());
+            context.add(playerPotAccount.getLeft());
         }
     }
 

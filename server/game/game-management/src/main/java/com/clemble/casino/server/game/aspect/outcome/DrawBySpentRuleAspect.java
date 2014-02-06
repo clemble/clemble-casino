@@ -9,7 +9,7 @@ import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
-public class DrawBySpentRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?>> {
+public class DrawBySpentRuleAspect extends BasicGameAspect<GameMatchEndedEvent> {
 
     final public static DrawBySpentRuleAspect INSTANCE = new DrawBySpentRuleAspect();
 
@@ -18,7 +18,7 @@ public class DrawBySpentRuleAspect extends BasicGameAspect<GameMatchEndedEvent<?
     }
 
     @Override
-    public void doEvent(GameMatchEndedEvent<?> event) {
+    public void doEvent(GameMatchEndedEvent event) {
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof DrawOutcome) {
             // Step 1. Generating payment transaction

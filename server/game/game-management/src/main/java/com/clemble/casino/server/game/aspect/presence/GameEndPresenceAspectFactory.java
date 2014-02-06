@@ -9,7 +9,7 @@ import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
-public class GameEndPresenceAspectFactory implements MatchGameAspectFactory<GameMatchEndedEvent<?>> {
+public class GameEndPresenceAspectFactory implements MatchGameAspectFactory<GameMatchEndedEvent> {
 
     final private GameEndPresenceAspect endPresenceAspect;
 
@@ -18,7 +18,7 @@ public class GameEndPresenceAspectFactory implements MatchGameAspectFactory<Game
     }
 
     @Override
-    public GameAspect<GameMatchEndedEvent<?>> construct(MatchGameConfiguration configuration, MatchGameContext context) {
+    public GameAspect<GameMatchEndedEvent> construct(MatchGameConfiguration configuration, MatchGameContext context) {
         return endPresenceAspect;
     }
 
