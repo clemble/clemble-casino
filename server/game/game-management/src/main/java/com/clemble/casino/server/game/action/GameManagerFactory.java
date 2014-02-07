@@ -47,7 +47,8 @@ public class GameManagerFactory {
             });
 
     final private GameStateFactory<GameState> stateFactory;
-    final private ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> processorFactory;
+    final private ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory;
+    final private ServerGameProcessorFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory;
     final private PotGameRecordRepository potRepository;
     final private MatchGameRecordRepository sessionRepository;
     final private PlayerNotificationService notificationService;
@@ -55,13 +56,15 @@ public class GameManagerFactory {
 
     public GameManagerFactory(PotGameRecordRepository potRepository,
             GameStateFactory<GameState> stateFactory,
-            ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> processorFactory,
+            ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory,
+            ServerGameProcessorFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory,
             MatchGameRecordRepository sessionRepository,
             ServerGameConfigurationRepository configurationRepository,
             PlayerNotificationService notificationService) {
         this.stateFactory = checkNotNull(stateFactory);
         this.potRepository = checkNotNull(potRepository);
-        this.processorFactory = checkNotNull(processorFactory);
+        this.matchProcessorFactory = checkNotNull(matchProcessorFactory);
+        this.potProcessorFactory = checkNotNull(potProcessorFactory);
         this.sessionRepository = checkNotNull(sessionRepository);
         this.notificationService = checkNotNull(notificationService);
         this.configurationRepository = checkNotNull(configurationRepository);
@@ -71,7 +74,7 @@ public class GameManagerFactory {
         return (GameManager<R>) sessionToManager.getUnchecked(sessionKey);
     }
 
-    public GameManager<?> start(GameInitiation initiation, GameContext parent) {
+    public GameManager<?> start(GameInitiation initiation, GameContext<?> parent) {
         if (initiation.getConfiguration() instanceof MatchGameConfiguration) {
             return match(initiation, parent);
         } else if (initiation.getConfiguration() instanceof PotGameConfiguration) {
@@ -90,7 +93,7 @@ public class GameManagerFactory {
                 .setPlayers(initiation.getParticipants()).setState(state);
         matchRecord = sessionRepository.saveAndFlush(matchRecord);
         // Step 2. Sending notification for game started
-        GameProcessor<MatchGameRecord, Event> processor = processorFactory.create(state, matchGameConfiguration, new MatchGameContext(initiation, parent));
+        GameProcessor<MatchGameRecord, Event> processor = matchProcessorFactory.create(state, matchGameConfiguration, new MatchGameContext(initiation, parent));
         // Step 3. Returning active table
         MatchGameManager manager = new MatchGameManager(processor, matchRecord);
         sessionToManager.put(initiation.getSession(), manager);
@@ -115,7 +118,11 @@ public class GameManagerFactory {
         potGameRecord.getMatchRecords().add(subManager.getRecord());
         // Step 7. Saving pot record
         potGameRecord = potRepository.saveAndFlush(potGameRecord);
-        PotGameManager potGameManager = new PotGameManager(potGameRecord);
+        PotGameContext context = new PotGameContext(initiation);
+        PotGameConfiguration configuration = (PotGameConfiguration) initiation.getConfiguration();
+        PotGameProcessor gameProcessor = new PotGameProcessor(context, configuration, this);
+        GameProcessor<PotGameRecord, Event> potProcessor = potProcessorFactory.create(gameProcessor, configuration, context);
+        PotGameManager potGameManager = new PotGameManager(potGameRecord, potProcessor);
         sessionToManager.put(initiation.getSession(), potGameManager);
         // Step 8. Returning pot game record
         return potGameManager;

@@ -30,7 +30,7 @@ public class ScheduledGameActionExecutor implements Runnable, BeanPostProcessor 
                 scheduledActions.add(action);
                 return;
             }
-            sessionProcessor.process(action.getSession(), action.getAction());
+            sessionProcessor.process(action.getAction());
         }
     }
 

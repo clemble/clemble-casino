@@ -8,7 +8,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameProcessor;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 
@@ -29,7 +28,7 @@ public class MatchGameManager implements GameManager<MatchGameRecord> {
     }
 
     @Override
-    public GameManagementEvent process(GameSessionKey sessionKey, Event action) {
+    public GameManagementEvent process(Event action) {
         // Step 1. Sanity check
         if (action == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayMoveUndefined);

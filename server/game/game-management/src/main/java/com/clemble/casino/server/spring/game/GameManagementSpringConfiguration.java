@@ -15,8 +15,10 @@ import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.management.PlayerNotificationRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.DrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.WonRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.pot.PotFillAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
@@ -133,11 +135,19 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ServerGameInitiationService serverGameInitiationActivator(
-            GameManagerFactory processor,
-            ServerPlayerPresenceService presenceService,
+    public ServerGameInitiationService serverGameInitiationActivator(GameManagerFactory processor, ServerPlayerPresenceService presenceService,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new ServerGameInitiationService(processor, presenceService, notificationService);
+    }
+
+    @Bean
+    public PotFillAspectFactory potFillAspectFactory() {
+        return new PotFillAspectFactory();
+    }
+
+    @Bean
+    public NextGameAspectFactory nextGameAspectFactory(GameManagerFactory managerFactory) {
+        return new NextGameAspectFactory(managerFactory);
     }
 
     /**

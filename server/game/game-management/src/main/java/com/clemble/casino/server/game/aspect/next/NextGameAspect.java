@@ -19,11 +19,11 @@ public class NextGameAspect extends BasicGameAspect<GameEndedEvent> {
     }
 
     @Override
-    public void doEvent(GameEndedEvent bet) {
+    public void doEvent(GameEndedEvent endedEvent) {
         // Step 1. Fetching Parent session key
         GameSessionKey sessionKey = context.getParent().getSession();
         // Step 2. Notifying parent of child game ended
-        managerFactory.get(sessionKey).process(context.getSession(), bet);
+        managerFactory.get(sessionKey).process(endedEvent);
     }
 
 }

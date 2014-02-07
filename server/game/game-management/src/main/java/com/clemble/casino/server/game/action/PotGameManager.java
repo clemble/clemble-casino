@@ -1,21 +1,18 @@
 package com.clemble.casino.server.game.action;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.PotGameContext;
+import com.clemble.casino.game.GameProcessor;
 import com.clemble.casino.game.PotGameRecord;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 
 public class PotGameManager implements GameManager<PotGameRecord> {
 
     final private PotGameRecord record;
-    final private PotGameContext potContext;
-    final private GameManager<PotGameRecord> manager;
+    final private GameProcessor<PotGameRecord, Event> potProcessor;
 
-    public PotGameManager(PotGameRecord record) {
-        this.potContext = new PotGameContext(record.getSession(), null, null, 0);
+    public PotGameManager(PotGameRecord record, GameProcessor<PotGameRecord, Event> potProcessor) {
         this.record = record;
-        this.manager = null;
+        this.potProcessor = potProcessor;
     }
 
     @Override
@@ -24,10 +21,9 @@ public class PotGameManager implements GameManager<PotGameRecord> {
     }
 
     @Override
-    public GameManagementEvent process(GameSessionKey sessionKey, Event action) {
+    public GameManagementEvent process(Event action) {
         // Step 1. Processing event with the manager
-        manager.process(sessionKey, action);
-        return null;
+        return potProcessor.process(record, action);
     }
 
 }

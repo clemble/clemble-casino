@@ -45,7 +45,7 @@ public class GameActionController<State extends GameState> implements GameAction
     GameManagementEvent process(@PathVariable("game") Game game, @PathVariable("session") String session, @RequestBody GameAction action) {
         GameSessionKey sessionKey = new GameSessionKey(game, session);
         // Step 1. Retrieving associated table
-        return managerService.get(sessionKey).process(sessionKey, action);
+        return managerService.get(sessionKey).process(action);
     }
 
     @Override

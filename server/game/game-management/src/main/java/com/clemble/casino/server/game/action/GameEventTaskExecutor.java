@@ -56,7 +56,7 @@ public class GameEventTaskExecutor implements BeanPostProcessor {
         public void run() {
             Collection<GameAction> events = eventTask.execute();
             for (GameAction event : events) {
-                GameEventTaskExecutor.this.sessionProcessor.process(eventTask.getSession(), event);
+                GameEventTaskExecutor.this.sessionProcessor.process(event);
             }
             reschedule(eventTask);
         }

@@ -2,6 +2,7 @@ package com.clemble.casino.integration;
 
 import static com.clemble.test.random.ObjectGenerator.register;
 
+import java.util.Collections;
 import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -22,6 +23,7 @@ import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.rule.MatchRule;
 import com.clemble.casino.game.rule.bet.FixedBetRule;
 import com.clemble.casino.game.rule.bet.LimitedBetRule;
@@ -162,7 +164,7 @@ public class ObjectTest {
         register(PotGameContext.class, new AbstractValueGenerator<PotGameContext>() {
             @Override
             public PotGameContext generate() {
-                return new PotGameContext(GameSessionKey.DEFAULT_SESSION, null, null, 0);
+                return new PotGameContext(GameSessionKey.DEFAULT_SESSION, null, null, 0, Collections.<GameOutcome>emptyList());
             }
         });
         register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
