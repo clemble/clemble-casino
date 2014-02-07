@@ -4,7 +4,9 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Collections;
 
+import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.GameProcessor;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameSessionState;
@@ -44,16 +46,16 @@ public class GameManagerFactory {
                 }
             });
 
-    final private PotGameRecordRepository potRepository;
     final private GameStateFactory<GameState> stateFactory;
-    final private MatchGameProcessorFactory<GameState> processorFactory;
+    final private ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> processorFactory;
+    final private PotGameRecordRepository potRepository;
     final private MatchGameRecordRepository sessionRepository;
     final private PlayerNotificationService notificationService;
     final private ServerGameConfigurationRepository configurationRepository;
 
     public GameManagerFactory(PotGameRecordRepository potRepository,
             GameStateFactory<GameState> stateFactory,
-            MatchGameProcessorFactory<GameState> processorFactory,
+            ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> processorFactory,
             MatchGameRecordRepository sessionRepository,
             ServerGameConfigurationRepository configurationRepository,
             PlayerNotificationService notificationService) {
@@ -88,7 +90,7 @@ public class GameManagerFactory {
                 .setPlayers(initiation.getParticipants()).setState(state);
         matchRecord = sessionRepository.saveAndFlush(matchRecord);
         // Step 2. Sending notification for game started
-        MatchGameProcessor processor = processorFactory.create(matchGameConfiguration, new MatchGameContext(initiation, parent));
+        GameProcessor<MatchGameRecord, Event> processor = processorFactory.create(state, matchGameConfiguration, new MatchGameContext(initiation, parent));
         // Step 3. Returning active table
         MatchGameManager manager = new MatchGameManager(processor, matchRecord);
         sessionToManager.put(initiation.getSession(), manager);
@@ -107,7 +109,7 @@ public class GameManagerFactory {
         // Step 4. Sending notification to related players
         notificationService.notify(initiation.getParticipants(), new GamePotStartedEvent(initiation.getSession()));
         // Step 5. Generating new match game record
-        GameManager subManager = start(subInitiation, potGameContext);
+        GameManager<?> subManager = start(subInitiation, potGameContext);
         // Step 6. Generating new pot game record
         PotGameRecord potGameRecord = new PotGameRecord(initiation.getSession(), initiation.getConfiguration().getConfigurationKey(), GameSessionState.active, Collections.<GameRecord>emptyList());
         potGameRecord.getMatchRecords().add(subManager.getRecord());

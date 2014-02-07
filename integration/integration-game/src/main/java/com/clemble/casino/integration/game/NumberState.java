@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
@@ -48,7 +49,8 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public GameManagementEvent process(MatchGameRecord session, GameAction action) {
+    public GameManagementEvent process(MatchGameRecord session, Event event) {
+        GameAction action = (GameAction) event;
         // Step 1. Processing Select cell move
         GameManagementEvent resultEvent = null;
 

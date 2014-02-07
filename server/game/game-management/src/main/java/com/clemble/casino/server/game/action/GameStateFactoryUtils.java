@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameProcessor;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.MatchGameRecord;
@@ -14,11 +16,11 @@ import com.clemble.casino.server.repository.game.ServerGameConfigurationReposito
 
 public class GameStateFactoryUtils {
 
-    final private MatchGameProcessorFactory processorFactory;
     final private GameStateFactory stateFactory;
+    final private ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> processorFactory;
     final private ServerGameConfigurationRepository configurationRepository;
 
-    public GameStateFactoryUtils(MatchGameProcessorFactory processorFactory, GameStateFactory stateFactory, ServerGameConfigurationRepository configurationRepository) {
+    public GameStateFactoryUtils(ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> processorFactory, GameStateFactory stateFactory, ServerGameConfigurationRepository configurationRepository) {
         this.stateFactory = checkNotNull(stateFactory);
         this.processorFactory = checkNotNull(processorFactory);
         this.configurationRepository = checkNotNull(configurationRepository);
@@ -34,7 +36,7 @@ public class GameStateFactoryUtils {
         // TODO define politics for restart, all time track is lost here
         MatchGameContext context = new MatchGameContext(initiation);
         GameState restoredState = stateFactory.constructState(initiation, context);
-        MatchGameProcessor processor = processorFactory.create((MatchGameConfiguration) initiation.getConfiguration(), context);
+        GameProcessor<MatchGameRecord, Event> processor = processorFactory.create(restoredState, (MatchGameConfiguration) initiation.getConfiguration(), context);
         // Step 2.1 To prevent population of original session with duplicated events
         MatchGameRecord tmpSession = new MatchGameRecord();
         tmpSession.setState(restoredState);

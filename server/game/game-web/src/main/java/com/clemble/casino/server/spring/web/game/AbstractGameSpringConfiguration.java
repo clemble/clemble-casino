@@ -7,9 +7,13 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.MatchGameContext;
+import com.clemble.casino.game.MatchGameRecord;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.action.GameStateFactory;
-import com.clemble.casino.server.game.action.MatchGameProcessorFactory;
+import com.clemble.casino.server.game.action.ServerGameProcessorFactory;
+import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructionService;
@@ -39,7 +43,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public GameManagerFactory gameProcessor(PotGameRecordRepository potRepository, GameStateFactory<GameState> stateFactory,
-            MatchGameProcessorFactory<GameState> processorFactory, MatchGameRecordRepository sessionRepository,
+            ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> processorFactory, MatchGameRecordRepository sessionRepository,
             ServerGameConfigurationRepository configurationRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new GameManagerFactory(potRepository, stateFactory, processorFactory, sessionRepository, configurationRepository, notificationService);
     }
@@ -58,8 +62,8 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public MatchGameProcessorFactory<State> picPacPoeProcessorFactory() {
-        return new MatchGameProcessorFactory<State>();
+    public ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> picPacPoeProcessorFactory() {
+        return new ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord>(MatchGameAspectFactory.class);
     }
 
     @Bean
