@@ -2,14 +2,14 @@ package com.clemble.casino.server.game.action;
 
 import java.util.concurrent.PriorityBlockingQueue;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-
-public class ScheduledGameActionExecutor implements Runnable, BeanPostProcessor {
+public class ScheduledGameActionExecutor implements Runnable {
 
     final private PriorityBlockingQueue<ScheduledGameAction> scheduledActions = new PriorityBlockingQueue<>();
+    final private GameManagerFactory sessionProcessor;
 
-    private MatchGameManager sessionProcessor;
+    public ScheduledGameActionExecutor(GameManagerFactory gameManagerFactory) {
+        this.sessionProcessor = gameManagerFactory;
+    }
 
     public void schedule(ScheduledGameAction action) {
         this.scheduledActions.add(action);
@@ -30,21 +30,8 @@ public class ScheduledGameActionExecutor implements Runnable, BeanPostProcessor 
                 scheduledActions.add(action);
                 return;
             }
-            sessionProcessor.process(action.getAction());
+            sessionProcessor.get(action.getSession()).process(action.getAction());
         }
-    }
-
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        // TODO Fix it this won't work
-        if (bean instanceof MatchGameManager)
-            sessionProcessor = (MatchGameManager) bean;
-        return bean;
     }
 
 }

@@ -1,26 +1,14 @@
 package com.clemble.casino.server.spring.web.game;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.MatchGameRecord;
-import com.clemble.casino.game.PotGameContext;
-import com.clemble.casino.game.PotGameRecord;
-import com.clemble.casino.game.TournamentGameContext;
-import com.clemble.casino.game.TournamentGameRecord;
+import com.clemble.casino.game.*;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.server.game.action.GameManagerFactory;
-import com.clemble.casino.server.game.action.GameStateFactory;
-import com.clemble.casino.server.game.action.ServerGameProcessorFactory;
+import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 import com.clemble.casino.server.game.aspect.PotGameAspectFactory;
+import com.clemble.casino.server.game.aspect.ServerGameAspectFactory;
 import com.clemble.casino.server.game.aspect.TournamentGameAspectFactory;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
@@ -29,11 +17,7 @@ import com.clemble.casino.server.game.construction.availability.PendingPlayerCre
 import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
-import com.clemble.casino.server.repository.game.GameConstructionRepository;
-import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
-import com.clemble.casino.server.repository.game.PendingPlayerRepository;
-import com.clemble.casino.server.repository.game.PotGameRecordRepository;
-import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
+import com.clemble.casino.server.repository.game.*;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
@@ -42,20 +26,24 @@ import com.clemble.casino.server.web.game.session.AutoGameConstructionController
 import com.clemble.casino.server.web.game.session.AvailabilityGameConstructionController;
 import com.clemble.casino.server.web.game.session.GameActionController;
 import com.clemble.casino.server.web.game.session.GameInitiationController;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({ GameManagementSpringConfiguration.class, WebCommonSpringConfiguration.class })
+@Import({GameManagementSpringConfiguration.class, WebCommonSpringConfiguration.class})
 abstract public class AbstractGameSpringConfiguration<State extends GameState> implements SpringConfiguration {
 
     abstract public Game getGame();
 
     @Bean
     public GameManagerFactory gameProcessor(PotGameRecordRepository potRepository,
-            GameStateFactory<GameState> stateFactory,
-            @Qualifier("matchProcessorFactory") ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory,
-            @Qualifier("potProcessorFactory") ServerGameProcessorFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory,
-            MatchGameRecordRepository sessionRepository,
-            ServerGameConfigurationRepository configurationRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+                                            GameStateFactoryFacade stateFactory,
+                                            @Qualifier("matchProcessorFactory") ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory,
+                                            @Qualifier("potProcessorFactory") ServerGameAspectFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory,
+                                            MatchGameRecordRepository sessionRepository,
+                                            ServerGameConfigurationRepository configurationRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new GameManagerFactory(potRepository, stateFactory, matchProcessorFactory, potProcessorFactory, sessionRepository, configurationRepository, notificationService);
     }
 
@@ -66,25 +54,25 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public PendingPlayerCreationEventListener pendingPlayerCreationListener(PendingPlayerRepository playerRepository,
-            SystemNotificationServiceListener notificationServiceListener) {
+                                                                            SystemNotificationServiceListener notificationServiceListener) {
         PendingPlayerCreationEventListener initiationListener = new PendingPlayerCreationEventListener(playerRepository);
         notificationServiceListener.subscribe(initiationListener);
         return initiationListener;
     }
 
     @Bean
-    public ServerGameProcessorFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory() {
-        return new ServerGameProcessorFactory<>(MatchGameAspectFactory.class);
+    public ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory() {
+        return new ServerGameAspectFactory<>(MatchGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameProcessorFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory() {
-        return new ServerGameProcessorFactory<>(PotGameAspectFactory.class);
+    public ServerGameAspectFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory() {
+        return new ServerGameAspectFactory<>(PotGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameProcessorFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory() {
-        return new ServerGameProcessorFactory<>(TournamentGameAspectFactory.class);
+    public ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory() {
+        return new ServerGameAspectFactory<>(TournamentGameAspectFactory.class);
     }
 
     @Bean
@@ -104,7 +92,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public AvailabilityGameConstructionController availabilityGameConstructionController(ServerAvailabilityGameConstructionService constructionService,
-            GameConstructionRepository constructionRepository) {
+                                                                                         GameConstructionRepository constructionRepository) {
         return new AvailabilityGameConstructionController(constructionService, constructionRepository);
     }
 }

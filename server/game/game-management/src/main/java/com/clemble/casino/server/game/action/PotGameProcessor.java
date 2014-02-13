@@ -1,15 +1,7 @@
 package com.clemble.casino.server.game.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.ComparatorUtils;
-import com.clemble.casino.game.GameProcessor;
-import com.clemble.casino.game.PotGameContext;
-import com.clemble.casino.game.PotGamePlayerContext;
-import com.clemble.casino.game.PotGameRecord;
+import com.clemble.casino.game.*;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
@@ -19,6 +11,10 @@ import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
 
@@ -47,11 +43,11 @@ public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
             // Step 2. Checking values
             if (leaderScore > nextAfterLeaderScore && 
                (nextAfterLeaderScore + gamesLeft < leaderScore)) {
-                return new GamePotEndedeEvent(context.getSession(), new PlayerWonOutcome(leader.getPlayer()));
+                return new GamePotEndedeEvent(context.getSession(), new PlayerWonOutcome(leader.getPlayer()), context);
             }
             // Step 3. If no games left mark as a draw
             if (gamesLeft == 0)
-                return new GamePotEndedeEvent(context.getSession(), new DrawOutcome());
+                return new GamePotEndedeEvent(context.getSession(), new DrawOutcome(), context);
             // Step 4. Constructing next match initiation
             int gameNum = context.getOutcomes().size();
             GameInitiation subInitiation = new GameInitiation(

@@ -1,11 +1,11 @@
-package com.clemble.casino.server.game.action;
+package com.clemble.casino.server.game.aspect;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
+import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.GameProcessor;
+import com.clemble.casino.game.GameRecord;
+import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.specification.GameConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -14,21 +14,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.OrderComparator;
 
-import com.clemble.casino.event.Event;
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameProcessor;
-import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.GameAspectFactory;
+import java.util.*;
 
-public class ServerGameProcessorFactory<GC extends GameConfiguration, C extends GameContext<?>, R extends GameRecord> implements BeanPostProcessor, ApplicationContextAware {
+public class ServerGameAspectFactory<GC extends GameConfiguration, C extends GameContext<?>, R extends GameRecord> implements BeanPostProcessor, ApplicationContextAware {
 
     final private List<GameAspectFactory<?, C, GC>> aspectFactories = new ArrayList<>();
     final private Class<?> aspectFactoryClass;
 
-    public ServerGameProcessorFactory(Class<?> aspectFactoryClass) {
+    public ServerGameAspectFactory(Class<?> aspectFactoryClass) {
         this.aspectFactoryClass = aspectFactoryClass;
     }
 
@@ -53,7 +46,7 @@ public class ServerGameProcessorFactory<GC extends GameConfiguration, C extends 
         }
 
         @Override
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({"rawtypes", "unchecked"})
         public GameManagementEvent process(R record, Event action) {
             LOG.debug("Processing {}", action);
             // Step 1. Before move notification

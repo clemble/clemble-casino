@@ -1,13 +1,5 @@
 package com.clemble.casino.server.spring.game;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.id.UUIDGameIdGenerator;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
@@ -44,6 +36,13 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class, GameNeo4jSpringConfiguration.class, GameJPASpringConfiguration.class,
@@ -167,10 +166,10 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public GameEventTaskExecutor eventTaskExecutor() {
+        public GameEventTaskExecutor eventTaskExecutor(GameManagerFactory managerFactory) {
             ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("[GETE] task-executor - %d");
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
-            return new GameEventTaskExecutor(executorService);
+            return new GameEventTaskExecutor(managerFactory, executorService);
         }
     }
 

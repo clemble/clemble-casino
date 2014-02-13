@@ -1,6 +1,6 @@
 package com.clemble.casino.server.game.action;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.clemble.casino.game.action.GameAction;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,20 +8,18 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.game.action.GameAction;
+public class GameEventTaskExecutor {
 
-public class GameEventTaskExecutor implements BeanPostProcessor {
-
-    private MatchGameManager sessionProcessor;
+    final private GameManagerFactory sessionProcessor;
     final private ConcurrentHashMap<GameEventTask, ScheduledFuture<?>> concurrentHashMap = new ConcurrentHashMap<>();
 
     final private ScheduledExecutorService scheduledExecutorService;
 
-    public GameEventTaskExecutor(ScheduledExecutorService scheduledExecutorService) {
+    public GameEventTaskExecutor(GameManagerFactory gameManagerFactory, ScheduledExecutorService scheduledExecutorService) {
         this.scheduledExecutorService = checkNotNull(scheduledExecutorService);
+        this.sessionProcessor = gameManagerFactory;
     }
 
     public void schedule(GameEventTask eventTask) {
@@ -55,25 +53,12 @@ public class GameEventTaskExecutor implements BeanPostProcessor {
         @Override
         public void run() {
             Collection<GameAction> events = eventTask.execute();
+            GameManager<?> manager = GameEventTaskExecutor.this.sessionProcessor.get(eventTask.getSession());
             for (GameAction event : events) {
-                GameEventTaskExecutor.this.sessionProcessor.process(event);
+                manager.process(event);
             }
             reschedule(eventTask);
         }
-    }
-
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        // TODO fix it, this won't worl
-        if (bean instanceof MatchGameManager) {
-            sessionProcessor = (MatchGameManager) bean;
-        }
-        return bean;
     }
 
 }
