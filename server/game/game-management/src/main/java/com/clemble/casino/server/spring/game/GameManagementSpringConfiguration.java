@@ -107,12 +107,14 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(GameIdGenerator idGenerator,
-            @Qualifier("playerAccountService") ServerPlayerAccountService accountServerService, ServerGameConfigurationRepository configurationRepository,
-            GameConstructionRepository constructionRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+    public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
+            GameIdGenerator idGenerator,
+            @Qualifier("playerAccountService") ServerPlayerAccountService accountServerService,
+            ServerGameConfigurationRepository configurationRepository,
+            GameConstructionRepository constructionRepository,
+            @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
             PendingGameInitiationEventListener pendingInitiationService) {
-        return new ServerAvailabilityGameConstructionService(idGenerator, accountServerService, configurationRepository, constructionRepository,
-                notificationService, pendingInitiationService);
+        return new ServerAvailabilityGameConstructionService(idGenerator, accountServerService, configurationRepository, constructionRepository, notificationService, pendingInitiationService);
     }
 
     @Bean

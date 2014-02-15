@@ -42,9 +42,10 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
                                             GameStateFactoryFacade stateFactory,
                                             @Qualifier("matchProcessorFactory") ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory,
                                             @Qualifier("potProcessorFactory") ServerGameAspectFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory,
+                                            @Qualifier("tournamentProcessorFactory") ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
                                             MatchGameRecordRepository sessionRepository,
                                             ServerGameConfigurationRepository configurationRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerFactory(potRepository, stateFactory, matchProcessorFactory, potProcessorFactory, sessionRepository, configurationRepository, notificationService);
+        return new GameManagerFactory(potRepository, stateFactory, matchProcessorFactory, potProcessorFactory, tournamentProcessorFactory, sessionRepository, configurationRepository, notificationService);
     }
 
     @Bean
@@ -82,7 +83,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public GameActionController<State> picPacPoeEngineController(GameManagerFactory sessionProcessor, MatchGameRecordRepository gameSessionRepository) {
-        return new GameActionController<State>(gameSessionRepository, sessionProcessor);
+        return new GameActionController<>(gameSessionRepository, sessionProcessor);
     }
 
     @Bean

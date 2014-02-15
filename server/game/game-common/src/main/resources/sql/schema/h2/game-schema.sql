@@ -3,6 +3,8 @@
 
     drop table GAME_POT_RECORD if exists;
 
+    drop table GAME_POT_TO_SUB_RECORDS if exists;
+
     drop table GAME_SCHEDULE if exists;
 
     drop table GAME_SESSION if exists;
@@ -25,9 +27,15 @@
         SESSION_ID varchar(255) not null,
         GAME_NAME varchar(255),
         SPECIFICATION_NAME varchar(255),
-        GAME_STATE varchar(40960),
         RECORD_STATE varchar(255),
         primary key (GAME, SESSION_ID)
+    );
+
+    create table GAME_POT_TO_SUB_RECORDS (
+        POT_GAME varchar(255) not null,
+        POT_SESSION_ID varchar(255) not null,
+        GAME varchar(255),
+        SESSION_ID varchar(255)
     );
 
     create table GAME_SCHEDULE (
@@ -73,6 +81,11 @@
         PLAYERS_ORDER integer not null,
         primary key (SESSION_ID, GAME, PLAYERS_ORDER)
     );
+
+    alter table GAME_POT_TO_SUB_RECORDS 
+        add constraint FK_6x7dwtak3wk8qakx5aev6oxcq 
+        foreign key (POT_GAME, POT_SESSION_ID) 
+        references GAME_POT_RECORD;
 
     alter table GAME_SESSION_MOVES 
         add constraint FK_aedf85y3v0mkk356uwh8l0raq 

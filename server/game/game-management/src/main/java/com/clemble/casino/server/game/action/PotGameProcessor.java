@@ -8,13 +8,18 @@ import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GamePotChangedEvent;
 import com.clemble.casino.game.event.server.GamePotEndedeEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
+import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import java.util.Map.Entry;
 
 public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
 
@@ -33,17 +38,21 @@ public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
         if(event instanceof GameEndedEvent) {
             context.addOutcome(((GameEndedEvent) event).getOutcome());
             int gamesLeft = configuration.getConfigurations().size() - context.getOutcomes().size();
+            MultiValueMap<String, PlayerWonOutcome> wonOutcomes = new LinkedMultiValueMap<>();
+            for(GameOutcome outcome: context.getOutcomes())
+                if(outcome instanceof  PlayerWonOutcome)
+                    wonOutcomes.add(((PlayerWonOutcome) outcome).getWinner(), (PlayerWonOutcome) outcome);
             // Step 1. Searching for a leader in the pot
-            List<PotGamePlayerContext> sortedContexts = new ArrayList<>(context.getPlayerContexts());
-            Collections.sort(sortedContexts, ComparatorUtils.WON_SIZE_COMPARATOR);
-            PotGamePlayerContext leader = sortedContexts.get(0);
-            PotGamePlayerContext nextAfterLeader = sortedContexts.get(1);
-            int leaderScore = leader.getWonOutcomes().size();
-            int nextAfterLeaderScore = nextAfterLeader.getWonOutcomes().size();
+            List<Entry<String, List<PlayerWonOutcome>>> sortedContexts = new ArrayList<>(wonOutcomes.entrySet());
+            Collections.sort(sortedContexts, ComparatorUtils.WON_OUT_COMPARATOR);
+            Entry<String, List<PlayerWonOutcome>> leader = sortedContexts.get(0);
+            Entry<String, List<PlayerWonOutcome>> nextAfterLeader = sortedContexts.get(1);
+            int leaderScore = leader.getValue().size();
+            int nextAfterLeaderScore = nextAfterLeader.getValue().size();
             // Step 2. Checking values
             if (leaderScore > nextAfterLeaderScore && 
                (nextAfterLeaderScore + gamesLeft < leaderScore)) {
-                return new GamePotEndedeEvent(context.getSession(), new PlayerWonOutcome(leader.getPlayer()), context);
+                return new GamePotEndedeEvent(context.getSession(), new PlayerWonOutcome(leader.getKey()), context);
             }
             // Step 3. If no games left mark as a draw
             if (gamesLeft == 0)
@@ -55,7 +64,7 @@ public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
                     configuration.getConfigurations().get(gameNum),
                     PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
             GameManager<?> manager = managerFactory.start(subInitiation, context);
-            record.getMatchRecords().add(manager.getRecord());
+            record.getSubRecords().add(manager.getRecord().getSession());
             // Step 5. Sending Game Changed event
             return new GamePotChangedEvent(context.getSession(), context);
         } else {
