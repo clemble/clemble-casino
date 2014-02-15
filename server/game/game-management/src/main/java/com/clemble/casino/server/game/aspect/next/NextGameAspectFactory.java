@@ -9,7 +9,7 @@ import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
-public class NextGameAspectFactory implements GameAspectFactory<GameEndedEvent, GameContext<?>, GameConfiguration> {
+public class NextGameAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameContext<?>, GameConfiguration> {
 
     final private GameManagerFactory managerFactory;
 
@@ -18,8 +18,10 @@ public class NextGameAspectFactory implements GameAspectFactory<GameEndedEvent, 
     }
 
     @Override
-    public GameAspect<GameEndedEvent> construct(GameConfiguration configuration, GameContext<?> context) {
-        return new NextGameAspect(context, managerFactory);
+    public GameAspect<GameEndedEvent<?>> construct(GameConfiguration configuration, GameContext<?> context) {
+        if (context.getParent() != null)
+            return new NextGameAspect(context, managerFactory);
+        return null;
     }
 
     @Override

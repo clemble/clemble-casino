@@ -3,10 +3,10 @@ package com.clemble.casino.server.game.construct;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -78,7 +78,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
                 }
             }
         }, CANCEL_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        sessionToInitiation.put(initiation.getSession(), new ImmutablePair<GameInitiation, Set<String>>(initiation, new HashSet<String>()));
+        sessionToInitiation.put(initiation.getSession(), new ImmutablePair<GameInitiation, Set<String>>(initiation, new ConcurrentSkipListSet<String>()));
         // Step 3. Sending notification to the players, that they need to confirm
         notificationService.notify(initiation.getParticipants(), new GameInitiatedEvent(initiation));
     }
@@ -95,21 +95,22 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         Set<String> confirmations = initiationToConfirmed.getValue();
         if (!initiation.isParticipates(player)) {
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameInitiationInvalidPlayer);
-        } else {
-            confirmations.add(player);
         }
-        // Step 3. Checking everybody confirmed
-        if (confirmations.size() == initiation.getParticipants().size()) {
-            sessionToInitiation.remove(sessionKey);
-            if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSession())) {
-                LOG.trace("Successfully updated presences, starting a new game");
-                managerFactory.start(initiation, null);
+        synchronized (confirmations) {
+            confirmations.add(player);
+            // Step 3. Checking everybody confirmed
+            if (confirmations.size() == initiation.getParticipants().size()) {
+                sessionToInitiation.remove(sessionKey);
+                if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSession())) {
+                    LOG.trace("Successfully updated presences, starting a new game");
+                    managerFactory.start(initiation, null);
+                } else {
+                    // TODO remove session from the lists
+                    LOG.trace("Failed to update presences");
+                }
             } else {
-                // TODO remove session from the lists
-                LOG.trace("Failed to update presences");
+                notificationService.notify(initiation.getParticipants(), new GameInitiationConfirmedEvent(sessionKey, initiation, player));
             }
-        } else {
-            notificationService.notify(initiation.getParticipants(), new GameInitiationConfirmedEvent(sessionKey, initiation, player));
         }
         return initiation;
     }

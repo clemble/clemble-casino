@@ -30,14 +30,17 @@ public class EventAccumulator<T extends Event> implements EventListener<T> {
         }
     }
 
+    public boolean isEmpty() {
+        return events.isEmpty();
+    }
+
     public boolean waitFor(Event event) {
         return waitFor(event, 15_000);
     }
 
-    
     public boolean waitFor(Event expected, long timeout) {
         // Step 1. Sanity check
-        if(expected == null)
+        if (expected == null)
             return true;
         // Step 2. Poll until receive event or first timeout
         Event actual = null;
@@ -47,12 +50,12 @@ public class EventAccumulator<T extends Event> implements EventListener<T> {
             } catch (InterruptedException e) {
                 actual = null;
             }
-        } while(!expected.equals(actual) && actual != null);
+        } while (!expected.equals(actual) && actual != null);
         // Step 3. Returning true only if actual matches polled
         return expected.equals(actual);
     }
 
-    public List<T> toList(){
+    public List<T> toList() {
         return new ArrayList<>(events);
     }
 

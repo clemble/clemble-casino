@@ -173,7 +173,7 @@ public class ObjectTest {
         register(TournamentGameContext.class, new AbstractValueGenerator<TournamentGameContext>() {
             @Override
             public TournamentGameContext generate() {
-                return new TournamentGameContext(GameSessionKey.DEFAULT_SESSION, null, null);
+                return new TournamentGameContext(GameSessionKey.DEFAULT_SESSION, null, null, null);
             }
         });
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {

@@ -1,5 +1,5 @@
-package com.clemble.casino.server.player.presence;
 
+package com.clemble.casino.server.player.presence;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.concurrent.Executors;
@@ -17,7 +17,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class JedisPubSubSubcriber<T extends JedisPubSub & RedisSubscribersAware> implements Runnable {
 
-    final private Logger LOG;
+    final private Logger LOG = LoggerFactory.getLogger(JedisPubSubSubcriber.class);
 
     final private ScheduledExecutorService scheduledExecutorService;
 
@@ -30,7 +30,6 @@ public class JedisPubSubSubcriber<T extends JedisPubSub & RedisSubscribersAware>
         this.scheduledExecutorService = Executors.newScheduledThreadPool(1, new ThreadFactoryBuilder().setNameFormat("CL " + jedisPubSub.toString()).build());
 
         this.scheduledExecutorService.execute(this);
-        this.LOG = LoggerFactory.getLogger(jedisPubSub.getClass());
     }
 
     @Override

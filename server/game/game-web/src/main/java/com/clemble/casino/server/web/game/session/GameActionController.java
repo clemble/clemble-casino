@@ -20,6 +20,7 @@ import com.clemble.casino.game.action.MadeMove;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.server.ExternalController;
+import com.clemble.casino.server.game.action.GameManager;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
 import com.clemble.casino.web.game.GameWebMapping;
@@ -28,13 +29,13 @@ import com.clemble.casino.web.mapping.WebMapping;
 @Controller
 public class GameActionController<State extends GameState> implements GameActionService, ExternalController {
 
-    final private GameManagerFactory managerService;
+    final private GameManagerFactory managerFactory;
     final private MatchGameRecordRepository sessionRepository;
 
     public GameActionController(
             final MatchGameRecordRepository sessionRepository,
             final GameManagerFactory sessionProcessor) {
-        this.managerService = checkNotNull(sessionProcessor);
+        this.managerFactory = checkNotNull(sessionProcessor);
         this.sessionRepository = checkNotNull(sessionRepository);
     }
 
@@ -45,17 +46,21 @@ public class GameActionController<State extends GameState> implements GameAction
     GameManagementEvent process(@PathVariable("game") Game game, @PathVariable("session") String session, @RequestBody GameAction action) {
         GameSessionKey sessionKey = new GameSessionKey(game, session);
         // Step 1. Retrieving associated table
-        return managerService.get(sessionKey).process(action);
+        return managerFactory.get(sessionKey).process(action);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_STATE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody GameState getState(@PathVariable("game") Game game, @PathVariable("session") String session) {
+        // Step 1. Constructing session key
         GameSessionKey sessionKey = new GameSessionKey(game, session);
-        if (!sessionRepository.exists(sessionKey))
+        // Step 2. Fetching game manager
+        GameManager<?> gameManager = managerFactory.get(sessionKey);
+        if (gameManager == null || gameManager.getRecord() == null || ((MatchGameRecord) managerFactory.get(sessionKey).getRecord()).getState() == null)
             return null;
-        return ((MatchGameRecord) managerService.get(sessionKey).getRecord()).getState();
+        // Step 3. Fetching State
+        return ((MatchGameRecord) gameManager.getRecord()).getState();
     }
 
     @Override

@@ -4,6 +4,9 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.MatchGamePlayerContext;
 import com.clemble.casino.game.event.server.GameMatchEndedEvent;
@@ -20,6 +23,8 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
  * Created by mavarazy on 23/12/13.
  */
 public class WonByPriceRuleAspect extends BasicGameAspect<GameMatchEndedEvent>{
+    
+    final private Logger LOG = LoggerFactory.getLogger(WonByPriceRuleAspect.class);
 
     final private Money price;
     final private ServerPaymentTransactionService transactionService;
@@ -32,8 +37,10 @@ public class WonByPriceRuleAspect extends BasicGameAspect<GameMatchEndedEvent>{
 
     @Override
     public void doEvent(GameMatchEndedEvent event) {
+        LOG.debug("Processing ended event {}", event);
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof PlayerWonOutcome) {
+            LOG.debug("Processing won outcome {}", event);
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()

@@ -28,7 +28,9 @@ public class ServerGameAspectFactory<GC extends GameConfiguration, C extends Gam
     public GameProcessor<R, Event> create(GameProcessor<R, Event> processor, GC configuration, C context) {
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
         for (GameAspectFactory<?, C, GC> aspectFactory : aspectFactories) {
-            gameAspects.add(aspectFactory.construct(configuration, context));
+            GameAspect<?> gameAspect = aspectFactory.construct(configuration, context);
+            if(gameAspect != null)
+                gameAspects.add(aspectFactory.construct(configuration, context));
         }
         return new ServerGameProcessor<>(processor, gameAspects);
     }

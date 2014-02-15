@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
@@ -19,8 +17,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.player.PlayerPresenceChangedEvent;
@@ -41,14 +39,9 @@ public class PlayerPresenceCleanerTest {
     public void testExpireWorks() throws InterruptedException {
         // Step 1. Mark player as online, and check his presence
         ClembleCasinoOperations A = playerScenarios.createPlayer();
-        final BlockingQueue<PlayerPresenceChangedEvent> events = new ArrayBlockingQueue<>(10);
-        A.presenceOperations().subscribe(A.getPlayer(), new EventListener<PlayerPresenceChangedEvent>() {
-            @Override
-            public void onEvent(PlayerPresenceChangedEvent event) {
-                events.add(event);
-            }
-        });
-        assertTrue(events.isEmpty());
+        EventAccumulator<PlayerPresenceChangedEvent> accumulator = new EventAccumulator<>();
+        A.presenceOperations().subscribe(A.getPlayer(), accumulator);
+        assertTrue(accumulator.isEmpty());
         // Step 2. Mark for expire in 1 second
         Jedis jedis = jedisPool.getResource();
         try {
@@ -57,7 +50,7 @@ public class PlayerPresenceCleanerTest {
             jedisPool.returnResource(jedis);
         }
         // Step 4. Check player is offline
-        PlayerPresenceChangedEvent presenceChangedEvent = events.poll(2, TimeUnit.SECONDS);
+        PlayerPresenceChangedEvent presenceChangedEvent = accumulator.poll(2, TimeUnit.SECONDS);
         // Player notification is not immediate, it's done by background process, 
         // calling get triggers key expire event
         if(presenceChangedEvent == null) {
@@ -67,7 +60,7 @@ public class PlayerPresenceCleanerTest {
             }finally {
                 jedisPool.returnResource(jedis);
             }
-            presenceChangedEvent = events.poll(30, TimeUnit.SECONDS);
+            presenceChangedEvent = accumulator.poll(5, TimeUnit.SECONDS);
         }
         assertNotNull(presenceChangedEvent);
         assertEquals(presenceChangedEvent.getPresence(), Presence.offline);

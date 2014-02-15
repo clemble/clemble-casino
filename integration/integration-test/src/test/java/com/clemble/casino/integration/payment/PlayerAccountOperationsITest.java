@@ -6,9 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -87,7 +85,6 @@ public class PlayerAccountOperationsITest {
     }
 
     @Test
-    @Ignore
     public void runingOutOfMoney() {
         ClembleCasinoOperations A = playerOperations.createPlayer();
         ClembleCasinoOperations B = playerOperations.createPlayer();
@@ -95,6 +92,12 @@ public class PlayerAccountOperationsITest {
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GameConstructionInsufficientMoney));
 
         do {
+            Money cashAbefore = A.paymentOperations().getAccount().getMoney(Currency.FakeMoney);
+            Money cashBbefore = B.paymentOperations().getAccount().getMoney(Currency.FakeMoney);
+
+            assertTrue(cashAbefore.getAmount() >= 0);
+            assertTrue(cashBbefore.getAmount() >= 0);
+
             GameSessionPlayer<GameState> AvsB = gameOperations.<GameState> construct(Game.num, A, B.getPlayer());
             GameSessionPlayer<GameState> BvsA = gameOperations.<GameState> accept(AvsB.getSession(), B);
 
@@ -102,6 +105,9 @@ public class PlayerAccountOperationsITest {
             BvsA.waitForStart();
 
             AvsB.giveUp();
+
+            assertEquals(cashAbefore.add(-50), A.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
+            assertEquals(cashBbefore.add(+50), B.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
         } while (true);
     }
 
