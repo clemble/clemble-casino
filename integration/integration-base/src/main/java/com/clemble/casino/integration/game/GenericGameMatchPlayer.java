@@ -15,16 +15,16 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 
-public class GenericGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State> {
+public class GenericGameMatchPlayer<State extends GameState> implements MatchGamePlayer<State> {
 
     /**
      * Generated 05/07/13
      */
     private static final long serialVersionUID = -4604087499745502553L;
 
-    final protected GameSessionPlayer<State> actualPlayer;
+    final protected MatchGamePlayer<State> actualPlayer;
 
-    public GenericGameSessionPlayer(GameSessionPlayer<State> delegate) {
+    public GenericGameMatchPlayer(MatchGamePlayer<State> delegate) {
         this.actualPlayer = checkNotNull(delegate);
     }
 
@@ -61,11 +61,6 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     @Override
     final public boolean isAlive() {
         return actualPlayer.isAlive();
-    }
-
-    @Override
-    final public void syncWith(GameSessionPlayer<State> anotherState) {
-        actualPlayer.syncWith(anotherState);
     }
 
     @Override
@@ -134,13 +129,18 @@ public class GenericGameSessionPlayer<State extends GameState> implements GameSe
     }
 
     @Override
-    public void addDependent(GameSessionPlayer<State> dependent) {
+    public void addDependent(GamePlayer dependent) {
         actualPlayer.addDependent(dependent);
     }
 
     @Override
-    public void addDependent(Collection<GameSessionPlayer<State>> dependent) {
+    public void addDependent(Collection<? extends GamePlayer> dependent) {
         actualPlayer.addDependent(dependent);
+    }
+
+    @Override
+    public void syncWith(GamePlayer anotherState) {
+        actualPlayer.syncWith(anotherState);
     }
 
 }

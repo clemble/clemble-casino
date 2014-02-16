@@ -2,11 +2,10 @@ package com.clemble.casino.integration.game.construction;
 
 import java.util.List;
 
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.integration.game.GameSessionPlayer;
+import com.clemble.casino.integration.game.GamePlayer;
 
 public interface SyncGameScenarios extends BaseGameScenarios {
 
-    public <State extends GameState> List<GameSessionPlayer<State>> unite(List<GameSessionPlayer<State>> players);
+    public <P extends GamePlayer> List<P> unite(List<P> players);
 
 }

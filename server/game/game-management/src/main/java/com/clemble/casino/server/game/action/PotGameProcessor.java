@@ -6,7 +6,7 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.GamePotChangedEvent;
-import com.clemble.casino.game.event.server.GamePotEndedeEvent;
+import com.clemble.casino.game.event.server.GamePotEndedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
@@ -52,11 +52,11 @@ public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
             // Step 2. Checking values
             if (leaderScore > nextAfterLeaderScore && 
                (nextAfterLeaderScore + gamesLeft < leaderScore)) {
-                return new GamePotEndedeEvent(context.getSession(), new PlayerWonOutcome(leader.getKey()), context);
+                return new GamePotEndedEvent(context.getSession(), new PlayerWonOutcome(leader.getKey()), context);
             }
             // Step 3. If no games left mark as a draw
             if (gamesLeft == 0)
-                return new GamePotEndedeEvent(context.getSession(), new DrawOutcome(), context);
+                return new GamePotEndedEvent(context.getSession(), new DrawOutcome(), context);
             // Step 4. Constructing next match initiation
             int gameNum = context.getOutcomes().size();
             GameInitiation subInitiation = new GameInitiation(

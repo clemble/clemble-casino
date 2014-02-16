@@ -10,7 +10,7 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.construct.GameConstruction;
 
-public class SimpleGameSessionPlayer<State extends GameState> extends AbstractGameSessionPlayer<State> {
+public class SimpleMatchGamePlayer<State extends GameState> extends AbstractMatchGamePlayer<State> {
 
     /**
      * Generated 05/07/13
@@ -19,7 +19,7 @@ public class SimpleGameSessionPlayer<State extends GameState> extends AbstractGa
 
     final private GameActionOperations<State> gameEngineController;
 
-    public SimpleGameSessionPlayer(final ClembleCasinoOperations player, final GameConstruction construction, final GameActionOperations<State> gameEngineController) {
+    public SimpleMatchGamePlayer(final ClembleCasinoOperations player, final GameConstruction construction, final GameActionOperations<State> gameEngineController) {
         super(player, construction);
         this.gameEngineController = checkNotNull(gameEngineController);
     }

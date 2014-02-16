@@ -18,7 +18,7 @@
     create table GAME_CONFIGURATION (
         GAME_NAME varchar(255) not null,
         SPECIFICATION_NAME varchar(255) not null,
-        CONFIGURATION varchar(4096),
+        CONFIGURATION varchar(40960),
         primary key (GAME_NAME, SPECIFICATION_NAME)
     );
 

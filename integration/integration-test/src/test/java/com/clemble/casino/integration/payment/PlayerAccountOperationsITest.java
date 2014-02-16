@@ -22,7 +22,7 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.integration.game.GameSessionPlayer;
+import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -98,8 +98,8 @@ public class PlayerAccountOperationsITest {
             assertTrue(cashAbefore.getAmount() >= 0);
             assertTrue(cashBbefore.getAmount() >= 0);
 
-            GameSessionPlayer<GameState> AvsB = gameOperations.<GameState> construct(Game.num, A, B.getPlayer());
-            GameSessionPlayer<GameState> BvsA = gameOperations.<GameState> accept(AvsB.getSession(), B);
+            MatchGamePlayer<GameState> AvsB = gameOperations.<GameState> match(Game.num, A, B.getPlayer());
+            MatchGamePlayer<GameState> BvsA = gameOperations.<GameState> accept(AvsB.getSession(), B);
 
             AvsB.waitForStart();
             BvsA.waitForStart();

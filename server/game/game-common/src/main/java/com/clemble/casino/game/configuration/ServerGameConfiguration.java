@@ -25,7 +25,7 @@ public class ServerGameConfiguration implements GameConfigurationKeyAware, GameC
     private GameConfigurationKey configurationKey;
 
     @Type(type = "com.clemble.casino.game.configuration.ServerGameConfigurationHibernate")
-    @Column(name = "CONFIGURATION", length = 4096)
+    @Column(name = "CONFIGURATION", length = 40960)
     private GameConfiguration configuration;
 
     @Override

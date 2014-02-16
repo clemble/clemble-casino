@@ -17,7 +17,7 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.integration.game.GameSessionPlayer;
+import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -89,8 +89,8 @@ public class PlayerPresenceITest {
                 }
             });
             // Step 5. Initiating a game between B and C
-            GameSessionPlayer<GameState> BtoC = gameScenarios.construct(Game.num, B, C.getPlayer());
-            GameSessionPlayer<GameState> CtoB = gameScenarios.accept(BtoC.getSession(), C);
+            MatchGamePlayer<GameState> BtoC = gameScenarios.match(Game.num, B, C.getPlayer());
+            MatchGamePlayer<GameState> CtoB = gameScenarios.accept(BtoC.getSession(), C);
             // Step 6. Checking presences
             PlayerPresence Bpresence = BtoApresence.poll(15, TimeUnit.SECONDS);
             PlayerPresence Cpresence = CtoApresence.poll(15, TimeUnit.SECONDS);

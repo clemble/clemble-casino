@@ -2,7 +2,6 @@ package com.clemble.casino.integration.game;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.io.Closeable;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -10,50 +9,49 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
-import com.clemble.casino.client.game.GameActionOperations;
-import com.clemble.casino.event.Event;
+import com.clemble.casino.client.event.EventSelector;
+import com.clemble.casino.client.event.EventSelectors;
+import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.client.event.GameSessionEventSelector;
 import com.clemble.casino.game.GameSessionAwareEvent;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.action.GameAction;
-import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.GameMatchEndedEvent;
-import com.clemble.casino.game.event.server.GameMatchEvent;
+import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.integration.event.EventAccumulator;
 
-abstract public class AbstractGameSessionPlayer<State extends GameState> implements GameSessionPlayer<State>, EventListener<GameSessionAwareEvent>, Closeable {
+abstract public class AbstractGamePlayer implements GamePlayer {
 
     /**
      * Generated 04/07/13
      */
     private static final long serialVersionUID = -8412015352988124245L;
 
-    final private Collection<GameSessionPlayer<State>> dependents = new LinkedBlockingQueue<GameSessionPlayer<State>>();
+    final private Collection<GamePlayer> dependents = new LinkedBlockingQueue<GamePlayer>();
 
     final private ClembleCasinoOperations player;
     final private GameConstruction construction;
-    final private GameActionOperations<State> actionOperations;
     final private Object versionLock = new Object();
     final private EventAccumulator<GameSessionAwareEvent> eventAccumulator = new EventAccumulator<GameSessionAwareEvent>();
+
     final private AtomicBoolean keepAlive = new AtomicBoolean(true);
-    final private AtomicReference<GameState> currentState = new AtomicReference<>();
     final private AtomicReference<GameOutcome> outcome = new AtomicReference<>();
 
-    public AbstractGameSessionPlayer(final ClembleCasinoOperations player, GameConstruction construction) {
+    public AbstractGamePlayer(final ClembleCasinoOperations player, GameConstruction construction) {
         this.construction = checkNotNull(construction);
         this.player = player;
-        this.actionOperations = this.player.gameActionOperations(construction.getSession());
-
-        this.actionOperations.subscribe(this);
-        this.actionOperations.subscribe(eventAccumulator);
-        setState(this.actionOperations.getState());
+        // Step 1. Listening for outcomes
+        EventSelector endEventSelector = EventSelectors.where(new GameSessionEventSelector(construction.getSession()))
+            .and(new EventTypeSelector(GameEndedEvent.class));
+        this.player.listenerOperations().subscribe(endEventSelector, new EventListener<GameEndedEvent<?>>() {
+            @Override
+            public void onEvent(GameEndedEvent<?> event) {
+                outcome.set(event.getOutcome());
+            }
+        });
     }
 
     @Override
@@ -82,51 +80,17 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    final public State getState() {
-        // TODO generalize
-        return (State) currentState.get();
-    }
-
-    @Override
-    public void onEvent(GameSessionAwareEvent event) {
-        if (event instanceof GameMatchEndedEvent)
-            outcome.set(((GameMatchEndedEvent) event).getOutcome());
-        if (event instanceof GameMatchEvent)
-            setState(((GameMatchEvent) event).getState());
-    }
-
-    final private void setState(GameState newState) {
-        synchronized (versionLock) {
-            if (newState != null) {
-                if (getState() == null || getState().getVersion() < newState.getVersion()) {
-                    System.out.println("updating >> " + this.player.getPlayer() + " >> " + this.construction.getSession() + " >> " + newState.getVersion());
-                    this.currentState.set(newState);
-                    this.versionLock.notifyAll();
-                }
-            }
-        }
-    }
-
-    @Override
     final public boolean isAlive() {
-        return keepAlive.get() && outcome.get() == null && getState() != null;
-    }
-
-    @Override
-    final public int getVersion() {
-        return getState() == null ? -1 : getState().getVersion();
+        return keepAlive.get() && outcome.get() == null && getVersion() > 0;
     }
 
     @Override
     final public void waitVersion(int expectedVersion) {
-        if (getState() != null && getState().getVersion() >= expectedVersion)
+        if (getVersion() >= expectedVersion)
             return;
 
-        if (getState() == null)
-            setState(actionOperations.getState());
-
         synchronized (versionLock) {
-            while (isAlive() && getState().getVersion() < expectedVersion) {
+            while (isAlive() && getVersion() < expectedVersion) {
                 try {
                     versionLock.wait(15000);
                 } catch (InterruptedException e) {
@@ -134,11 +98,6 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
                 }
             }
         }
-    }
-
-    @Override
-    final public Event getNextMove() {
-        return getState().getContext().getActionLatch().fetchAction(player.getPlayer());
     }
 
     @Override
@@ -167,10 +126,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     @Override
     final public void waitForStart(long timeout) {
         long expirationTime = timeout > 0 ? System.currentTimeMillis() + timeout : Long.MAX_VALUE;
-        if (getState() == null)
-            setState(this.actionOperations.getState());
         synchronized (versionLock) {
-            while (keepAlive.get() && getState() == null && expirationTime > System.currentTimeMillis()) {
+            while (keepAlive.get() && getVersion() == 0 && expirationTime > System.currentTimeMillis()) {
                 try {
                     if (timeout > 0) {
                         versionLock.wait(timeout);
@@ -182,27 +139,8 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
                 }
             }
         }
-        if (getState() == null)
+        if (getVersion() == 0)
             throw new RuntimeException(player.getPlayer() + " " + construction.getSession() + " was not started after " + timeout);
-    }
-
-    @Override
-    final public void waitForTurn() {
-        while (keepAlive.get() && !isToMove() && isAlive())
-            waitVersion(getState().getVersion() + 1);
-    }
-
-    @Override
-    final public boolean isToMove() {
-        return !getState().getContext().getActionLatch().acted(player.getPlayer());
-    }
-
-    @Override
-    public void giveUp() {
-        // Step 1. Giving up if needed
-        if (isAlive()) {
-            perform(new GiveUpAction(player.getPlayer()));
-        }
     }
 
     @Override
@@ -218,7 +156,9 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    public void syncWith(GameSessionPlayer<State> anotherSessionPlayer) {
+    public void syncWith(GamePlayer anotherSessionPlayer) {
+        if(!(anotherSessionPlayer instanceof MatchGamePlayer))
+            throw new IllegalArgumentException();
         // Step 1. While versions do not match iterate
         while (keepAlive.get() && getVersion() != anotherSessionPlayer.getVersion()) {
             int maxVersion = Math.max(getVersion(), anotherSessionPlayer.getVersion());
@@ -229,29 +169,19 @@ abstract public class AbstractGameSessionPlayer<State extends GameState> impleme
     }
 
     @Override
-    public void perform(GameAction gameAction) {
-        GameManagementEvent managementEvent = player.gameActionOperations(construction.getSession()).process(gameAction);
-        onEvent(managementEvent);
-        for (GameSessionPlayer<State> player : dependents)
-            player.syncWith(this);
-    }
-
-    abstract public State perform(ClembleCasinoOperations player, ServerRegistry resourse, GameSessionKey session, GameAction clientEvent);
-
-    @Override
     public GameOutcome getOutcome() {
         return outcome.get();
     }
 
-    @Override
-    public void addDependent(GameSessionPlayer<State> player) {
-        if (player != null && player != this)
-            dependents.add(player);
+    public void addDependent(GamePlayer player) {
+        if (player != null && player != this) {
+            dependents.add((GamePlayer) player);
+        }
     }
 
     @Override
-    public void addDependent(Collection<GameSessionPlayer<State>> players) {
-        for (GameSessionPlayer<State> player : players)
+    public void addDependent(Collection<? extends GamePlayer> players) {
+        for (GamePlayer player : players)
             addDependent(player);
     }
 

@@ -17,7 +17,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.integration.event.EventAccumulator;
-import com.clemble.casino.integration.game.GameSessionPlayer;
+import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.integration.game.construction.SyncGameScenarios;
@@ -36,12 +36,12 @@ public class GamePaymentTransactionITest {
 
     @Test
     public void testAvailabilityConstruction(){
-        List<GameSessionPlayer<NumberState>> sessionPlayers = gameScenarios.construct(Game.num);
+        List<MatchGamePlayer<NumberState>> sessionPlayers = gameScenarios.match(Game.num);
         // Step 1. Preparing game session listener
         EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
-        GameSessionPlayer<NumberState> A = sessionPlayers.get(0);
+        MatchGamePlayer<NumberState> A = sessionPlayers.get(0);
         A.playerOperations().paymentOperations().subscribe(paymentListener);
-        GameSessionPlayer<NumberState> B = sessionPlayers.get(1);
+        MatchGamePlayer<NumberState> B = sessionPlayers.get(1);
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make a surrender by player B

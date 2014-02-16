@@ -14,8 +14,8 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
-import com.clemble.casino.integration.game.GameSessionPlayer;
-import com.clemble.casino.integration.game.GameSessionPlayerFactory;
+import com.clemble.casino.integration.game.MatchGamePlayer;
+import com.clemble.casino.integration.game.MatchGamePlayerFactory;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 
 public class PlayerEmulator<State extends GameState> implements Runnable {
@@ -24,15 +24,15 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
 
     final private MatchGameConfiguration specification;
     final private PlayerScenarios playerOperations;
-    final private GameSessionPlayerFactory<State> sessionPlayerFactory;
+    final private MatchGamePlayerFactory<State> sessionPlayerFactory;
     final private GameActor<State> actor;
     final private AtomicBoolean continueEmulation = new AtomicBoolean(true);
     final private AtomicLong lastMoved = new AtomicLong();
-    final private AtomicReference<GameSessionPlayer<State>> currentPlayer = new AtomicReference<GameSessionPlayer<State>>();
+    final private AtomicReference<MatchGamePlayer<State>> currentPlayer = new AtomicReference<MatchGamePlayer<State>>();
 
     public PlayerEmulator(final GameActor<State> actor,
             final PlayerScenarios playerOperations,
-            final GameSessionPlayerFactory<State> sessionPlayerFactory,
+            final MatchGamePlayerFactory<State> sessionPlayerFactory,
             final MatchGameConfiguration specification) {
         this.specification = checkNotNull(specification);
         this.actor = checkNotNull(actor);
@@ -52,7 +52,7 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
                 player = playerOperations.createPlayer();
                 // Step 1. Start player emulator
                 GameConstruction playerConstruction = player.gameConstructionOperations(actor.getGame()).constructAutomatch(specification);
-                GameSessionPlayer<State> playerState = sessionPlayerFactory.construct(player, playerConstruction);
+                MatchGamePlayer<State> playerState = sessionPlayerFactory.construct(player, playerConstruction);
                 logger.info("Registered {} with construction {} ", playerState.playerOperations(), playerState.getSession());
                 currentPlayer.set(playerState);
                 lastMoved.set(System.currentTimeMillis());

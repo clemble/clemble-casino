@@ -6,8 +6,9 @@ import java.util.List;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
-import com.clemble.casino.integration.game.GameSessionPlayer;
+import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.integration.game.GamePlayer;
+import com.clemble.casino.integration.game.MatchGamePlayer;
 
 public class SimpleSyncGameScenarios implements SyncGameScenarios {
 
@@ -18,20 +19,21 @@ public class SimpleSyncGameScenarios implements SyncGameScenarios {
     }
     
     @Override
-    public <State extends GameState> List<GameSessionPlayer<State>> construct(Game game) {
+    public <State extends GameState> List<MatchGamePlayer<State>> match(Game game) {
+        List<MatchGamePlayer<State>> players = gameScenarios.<State>match(game);
         // Step 1. Constructing players
-        return unite(gameScenarios.<State>construct(game));
+        return unite(players);
     }
 
     @Override
-    public <State extends GameState> List<GameSessionPlayer<State>> construct(MatchGameConfiguration specification) {
+    public <State extends GameState> List<MatchGamePlayer<State>> match(GameConfiguration configuration) {
         // Step 1. Constructing players
-        return unite(gameScenarios.<State>construct(specification));
+        return unite(gameScenarios.<State>match(configuration));
     }
 
     @Override
-    public <State extends GameState> List<GameSessionPlayer<State>> unite(List<GameSessionPlayer<State>> players) {
-        for(GameSessionPlayer<State> player: players)
+    public <P extends GamePlayer> List<P> unite(List<P> players) {
+        for(GamePlayer player: players)
             player.addDependent(players);
         return players;
     }

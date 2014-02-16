@@ -56,7 +56,7 @@ public class GameActionOperationsGetStateTest {
         // Step 4. Creating construction from B side
         B.gameConstructionOperations(Game.num).constructAutomatch(specification);
         // Step 5. Checking value is not null anymore
-        gameScenarios.construct(construction.getSession(), A).waitForStart();
+        gameScenarios.match(construction.getSession(), A).waitForStart();
         assertNotNull(aoA.getState());
     }
 
