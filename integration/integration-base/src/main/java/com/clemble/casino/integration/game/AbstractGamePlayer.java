@@ -53,7 +53,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
         // Step 2. Listening for all possible events
         GameSessionKey sessionKey = construction.getSession();
         eventAccumulator = new EventAccumulator<GameSessionAwareEvent>();
-        EventSelector eventSelector = new GameSessionLikeEventSelector(sessionKey.getGame(), sessionKey.getSession() + "*");
+        EventSelector eventSelector = new GameSessionEventSelector(sessionKey);
         this.player.listenerOperations().subscribe(eventSelector, eventAccumulator);
     }
 

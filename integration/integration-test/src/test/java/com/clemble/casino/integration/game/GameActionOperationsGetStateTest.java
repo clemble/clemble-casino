@@ -1,6 +1,5 @@
 package com.clemble.casino.integration.game;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.List;
@@ -48,15 +47,15 @@ public class GameActionOperationsGetStateTest {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 2. Constructing automatch game
-        GameConstructionOperations<NumberState> constructionOperations = A.gameConstructionOperations(Game.num);
-        List<MatchGameConfiguration> configurations = constructionOperations.getConfigurations().matchConfigurations();
+        GameConstructionOperations constructionOperations = A.gameConstructionOperations();
+        List<MatchGameConfiguration> configurations = constructionOperations.getConfigurations().matchConfigurations(Game.num);
         MatchGameConfiguration configuration = configurations.get(0);
         GameConstruction construction = constructionOperations.constructAutomatch(configuration);
         // Step 3. Checking getState works fine
         final GameActionOperations<NumberState> aoA = A.gameActionOperations(construction.getSession());
         assertNull(aoA.getState());
         // Step 4. Creating construction from B side
-        B.gameConstructionOperations(Game.num).constructAutomatch(configuration);
+        B.gameConstructionOperations().constructAutomatch(configuration);
         // Step 5. Checking value is not null anymore
         gameScenarios.match(construction.getSession(), A).waitForStart();
         AsyncCompletionUtils.<GameState>get(new Get<GameState>() {
@@ -76,14 +75,14 @@ public class GameActionOperationsGetStateTest {
         final EventAccumulator<GameInitiationCanceledEvent> listener = new EventAccumulator<>();
         B.listenerOperations().subscribe(new EventTypeSelector(GameInitiationCanceledEvent.class), listener);
         // Step 2. Constructing automatch game
-        GameConstructionOperations<NumberState> constructionOperations = A.gameConstructionOperations(Game.num);
-        List<MatchGameConfiguration> specificationOptions = constructionOperations.getConfigurations().matchConfigurations();
+        GameConstructionOperations constructionOperations = A.gameConstructionOperations();
+        List<MatchGameConfiguration> specificationOptions = constructionOperations.getConfigurations().matchConfigurations(Game.num);
         MatchGameConfiguration specification = specificationOptions.get(0);
         constructionOperations.constructAutomatch(specification);
         // Step 3. Checking getState works fine
         A.close();
         // Step 4. Creating construction from B side
-        B.gameConstructionOperations(Game.num).constructAutomatch(specification);
+        B.gameConstructionOperations().constructAutomatch(specification);
         // Step 5. Checking value is not null anymore
         try {
             Thread.sleep(TimeUnit.SECONDS.toMillis(ServerGameInitiationService.CANCEL_TIMEOUT_SECONDS));

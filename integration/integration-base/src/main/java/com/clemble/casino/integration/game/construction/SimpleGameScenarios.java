@@ -20,14 +20,18 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.MatchGamePlayerFactory;
+import com.clemble.casino.integration.game.PotGamePlayer;
+import com.clemble.casino.integration.game.PotGamePlayerFactory;
 import com.clemble.casino.integration.game.SimpleMatchGamePlayerFactory;
 
 public class SimpleGameScenarios implements GameScenarios, ApplicationContextAware {
 
     final private PlayerScenarios playerOperations;
     final private MatchGamePlayerFactory<?> DEFAULT_FACTORY = new SimpleMatchGamePlayerFactory<>();
+    final private PotGamePlayerFactory potPlayerFactory = new PotGamePlayerFactory();
     final private ConcurrentHashMap<Game, MatchGamePlayerFactory<?>> gameToSessionPlayerFactory = new ConcurrentHashMap<>();
 
     public SimpleGameScenarios(PlayerScenarios playerOperations) {
@@ -39,7 +43,7 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
             throw new IllegalArgumentException("Name must not be null");
         ClembleCasinoOperations A = playerOperations.createPlayer();
         // Step 0. Sanity check
-        MatchGameConfiguration configuration = GameScenariosUtils.random(A.gameConstructionOperations(game).getConfigurations().matchConfigurations());
+        MatchGameConfiguration configuration = GameScenariosUtils.random(A.gameConstructionOperations().getConfigurations().matchConfigurations(game));
         // Step 1. Selecting configuration for the game
         return match(configuration);
     }
@@ -61,12 +65,12 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
             participants.add(participant.getPlayer());
         }
         // Step 2. Creating availability game request
-        GameConstruction construction = players.get(0).<State> gameConstructionOperations(game).constructAvailability(configuration, participants);
+        GameConstruction construction = players.get(0).gameConstructionOperations().constructAvailability(configuration, participants);
         MatchGamePlayer<State> sessionPlayer = (MatchGamePlayer<State>) gameToSessionPlayerFactory.get(game).construct(players.get(0), construction);
         constructedGames.add(sessionPlayer);
         GameSessionKey sessionKey = sessionPlayer.getSession();
         for (int i = 1; i < numPlayers; i++) {
-            GameConstruction iPlayerConstruction = players.get(i).<State> gameConstructionOperations(game).accept(sessionKey.getSession());
+            GameConstruction iPlayerConstruction = players.get(i).gameConstructionOperations().accept(sessionKey);
             MatchGamePlayer<State> iSessionPlayer = (MatchGamePlayer<State>) gameToSessionPlayerFactory.get(game).construct(players.get(i), iPlayerConstruction);
             constructedGames.add(iSessionPlayer);
         }
@@ -93,9 +97,8 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     public <State extends GameState> MatchGamePlayer<State> match(GameConfiguration configuration, ClembleCasinoOperations initiator) {
         if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
-        Game game = configuration.getConfigurationKey().getGame();
         // Step 2. Creating availability game request
-        GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAutomatch(configuration);
+        GameConstruction construction = initiator.gameConstructionOperations().constructAutomatch(configuration);
         // Step 3. Returning constructed player
         return toSessionPlayer(initiator, construction);
     }
@@ -109,16 +112,15 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     public <State extends GameState> MatchGamePlayer<State> match(GameConfiguration configuration, ClembleCasinoOperations initiator, String... participants) {
         if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
-        Game game = configuration.getConfigurationKey().getGame();
         // Step 2. Creating availability game request
-        GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAvailability(configuration, Arrays.asList(participants));
+        GameConstruction construction = initiator.gameConstructionOperations().constructAvailability(configuration, Arrays.asList(participants));
         return toSessionPlayer(initiator, construction);
     }
 
     @Override
     public <State extends GameState> MatchGamePlayer<State> accept(GameSessionKey sessionKey, ClembleCasinoOperations participant) {
         // Step 1. Fetching construction
-        GameConstruction construction = participant.gameConstructionOperations(sessionKey.getGame()).accept(sessionKey.getSession());
+        GameConstruction construction = participant.gameConstructionOperations().accept(sessionKey);
         // Step 2. Generating GameSessionPlayer
         return toSessionPlayer(participant, construction);
     }
@@ -126,7 +128,7 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     @Override
     public <State extends GameState> MatchGamePlayer<State> match(GameSessionKey sessionKey, ClembleCasinoOperations player) {
         // Step 1. Generating GameSessionPlayer
-        return toSessionPlayer(player, player.gameConstructionOperations(sessionKey.getGame()).getConstruct(sessionKey.getSession()));
+        return toSessionPlayer(player, player.gameConstructionOperations().getConstruct(sessionKey));
     }
 
     @Override
@@ -142,6 +144,39 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
             return (MatchGamePlayer<S>) gameToSessionPlayerFactory.get(game).construct(player, construction);
         // Step 3. Returning constructed player
         return (MatchGamePlayer<S>) DEFAULT_FACTORY.construct(player, construction);
+    }
+
+    @Override
+    public List<PotGamePlayer> pot() {
+        ClembleCasinoOperations player = playerOperations.createPlayer();
+        return pot(player.gameConstructionOperations().getConfigurations().potConfigurations().get(0));
+    }
+
+    @Override
+    public List<PotGamePlayer> pot(PotGameConfiguration configuration) {
+        List<PotGamePlayer> constructedGames = new ArrayList<>();
+        // Step 1. Creating players with participants
+        int numPlayers = configuration.getNumberRule().getMinPlayers();
+        List<ClembleCasinoOperations> players = new ArrayList<>();
+        List<String> participants = new ArrayList<>();
+        for (int i = 0; i < numPlayers; i++) {
+            ClembleCasinoOperations participant = playerOperations.createPlayer();
+            players.add(participant);
+            participants.add(participant.getPlayer());
+        }
+        // Step 2. Constructing Game
+        GameConstruction potConstruction = players.get(0).gameConstructionOperations().constructAvailability(configuration, participants);
+        GameSessionKey potSession = potConstruction.getSession();
+        for (int i = 1; i < numPlayers; i++) {
+            GameConstruction iPlayerConstruction = players.get(i).gameConstructionOperations().accept(potSession);
+            PotGamePlayer iPotPlayer = potPlayerFactory.construct(players.get(i), iPlayerConstruction);
+            constructedGames.add(iPotPlayer);
+        }
+        // Step 3. Waiting until all will be in sync
+        for (PotGamePlayer player : constructedGames)
+            player.waitForStart();
+        // Step 5. Returning constructed games
+        return constructedGames;
     }
 
 }

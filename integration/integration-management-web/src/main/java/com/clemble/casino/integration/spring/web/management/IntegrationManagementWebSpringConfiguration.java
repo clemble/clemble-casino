@@ -7,14 +7,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.clemble.casino.configuration.ResourceLocationService;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
-import com.clemble.casino.game.Game;
 import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
 import com.clemble.casino.server.configuration.SimpleResourceLocationService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.management.AbstractManagementWebSpringConfiguration;
-import com.google.common.collect.ImmutableList;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PaymentCommonSpringConfiguration.class, IntegrationManagementWebSpringConfiguration.DefaultAndTest.class })
@@ -34,8 +32,7 @@ public class IntegrationManagementWebSpringConfiguration extends AbstractManagem
         public ResourceLocationService resourceLocationService(ServerRegistryConfiguration serverRegistryConfiguration) {
             SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
             return new SimpleResourceLocationService(configurationService,
-                    serverRegistryConfiguration,
-                    ImmutableList.<Game> of(Game.num));
+                    serverRegistryConfiguration);
         }
 
     }

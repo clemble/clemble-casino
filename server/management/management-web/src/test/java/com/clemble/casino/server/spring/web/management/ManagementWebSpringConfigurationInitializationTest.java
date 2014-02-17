@@ -11,11 +11,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.configuration.ResourceLocationService;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
-import com.clemble.casino.game.Game;
 import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
 import com.clemble.casino.server.configuration.SimpleResourceLocationService;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
-import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -34,7 +32,7 @@ public class ManagementWebSpringConfigurationInitializationTest {
         @Bean
         public ResourceLocationService resourceLocationService(ServerRegistryConfiguration serverRegistryConfiguration) {
             SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
-            return new SimpleResourceLocationService(configurationService, serverRegistryConfiguration, ImmutableList.<Game> of(Game.num));
+            return new SimpleResourceLocationService(configurationService, serverRegistryConfiguration);
         }
     }
 

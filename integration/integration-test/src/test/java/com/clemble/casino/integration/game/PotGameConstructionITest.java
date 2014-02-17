@@ -48,7 +48,7 @@ public class PotGameConstructionITest {
 
     @Test
     public void testConstruction() throws JsonProcessingException{
-        GameConfigurations allConfiguration = playerScenarios.createPlayer().gameConstructionOperations(Game.num).getConfigurations();
+        GameConfigurations allConfiguration = playerScenarios.createPlayer().gameConstructionOperations().getConfigurations();
         List<GameConfiguration> configurations = new ArrayList<>();
         MatchGameConfiguration configuration = allConfiguration.matchConfigurations().get(0);
         configurations.add(configuration);
@@ -66,7 +66,7 @@ public class PotGameConstructionITest {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 1. Constructing game session player
-        PotGameConfiguration potConfiguration = A.gameConstructionOperations(Game.pot).getConfigurations().potConfigurations().get(0);
+        PotGameConfiguration potConfiguration = A.gameConstructionOperations().getConfigurations().potConfigurations().get(0);
         MatchGamePlayer<NumberState> AvsB = gameScenarios.match(potConfiguration, A, B.getPlayer());
         MatchGamePlayer<NumberState> BvsA = gameScenarios.accept(AvsB.getSession(), B);
         // Step 3. First game A wins

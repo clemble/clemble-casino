@@ -129,7 +129,6 @@ public class GameManagerFactory {
         // Step 3. Constructing match initiation
         GameInitiation subInitiation = new GameInitiation(initiation.getSession().append("0"), subConfiguration, initiation.getParticipants());
         // Step 4. Sending notification to related players
-        notificationService.notify(initiation.getParticipants(), new GamePotStartedEvent(initiation.getSession()));
         // Step 5. Generating new match game record
         GameManager<?> subManager = start(subInitiation, potGameContext);
         // Step 6. Generating new pot game record
@@ -143,6 +142,7 @@ public class GameManagerFactory {
         GameProcessor<PotGameRecord, Event> potProcessor = potAspectFactory.create(gameProcessor, configuration, context);
         GameManager<PotGameRecord> potGameManager = new GameManager<>(potProcessor, potGameRecord);
         sessionToManager.put(initiation.getSession(), potGameManager);
+        notificationService.notify(initiation.getParticipants(), new GamePotStartedEvent(initiation.getSession(), potGameContext));
         // Step 8. Returning pot game record
         return potGameManager;
     }

@@ -30,7 +30,7 @@ public class SimpleMatchGamePlayerFactory<State extends GameState> implements Ma
     @Override
     public MatchGamePlayer<State> construct(ClembleCasinoOperations player, GameSessionKey sessionKey) {
         // Step 1. Fetching game construction
-        GameConstruction gameConstruction = player.gameConstructionOperations(sessionKey.getGame()).getConstruct(sessionKey.getSession());
+        GameConstruction gameConstruction = player.gameConstructionOperations().getConstruct(sessionKey);
         // Step 2. Processing to the generic constructor
         return construct(player, gameConstruction);
     }
