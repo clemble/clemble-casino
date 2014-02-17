@@ -1,5 +1,7 @@
 package com.clemble.casino.integration.game;
 
-public class PotGamePlayer {
+public interface PotGamePlayer extends GamePlayer {
+
+    public GamePlayer getСurrent();
 
 }

@@ -57,19 +57,18 @@ public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
             // Step 3. If no games left mark as a draw
             if (gamesLeft == 0)
                 return new GamePotEndedEvent(context.getSession(), new DrawOutcome(), context);
-            // Step 4. Constructing next match initiation
-            int gameNum = context.getOutcomes().size();
-            GameInitiation subInitiation = new GameInitiation(
-                    context.getSession().append(String.valueOf(gameNum)), 
-                    configuration.getConfigurations().get(gameNum),
-                    PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
-            GameManager<?> manager = managerFactory.start(subInitiation, context);
-            record.getSubRecords().add(manager.getRecord().getSession());
-            // Step 5. Sending Game Changed event
-            return new GamePotChangedEvent(context.getSession(), context);
-        } else {
-            throw new IllegalArgumentException();
         }
+        // Step 4. Constructing next match initiation
+        int gameNum = context.getOutcomes().size();
+        GameSessionKey nextSessionKey = context.getSession().append(String.valueOf(gameNum));
+        GameInitiation subInitiation = new GameInitiation(
+                nextSessionKey,
+                configuration.getConfigurations().get(gameNum),
+                PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
+        GameManager<?> manager = managerFactory.start(subInitiation, context);
+        record.getSubRecords().add(manager.getRecord().getSession());
+        // Step 5. Sending Game Changed event
+        return new GamePotChangedEvent(context.getSession(), context, nextSessionKey);
     }
 
 }

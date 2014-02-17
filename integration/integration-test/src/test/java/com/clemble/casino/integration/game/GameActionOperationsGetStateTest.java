@@ -18,6 +18,7 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.game.Game;
+import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GameInitiationCanceledEvent;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
@@ -28,6 +29,7 @@ import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
+import com.clemble.test.concurrent.Get;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -48,16 +50,21 @@ public class GameActionOperationsGetStateTest {
         // Step 2. Constructing automatch game
         GameConstructionOperations<NumberState> constructionOperations = A.gameConstructionOperations(Game.num);
         List<MatchGameConfiguration> configurations = constructionOperations.getConfigurations().matchConfigurations();
-        MatchGameConfiguration specification = configurations.get(0);
-        GameConstruction construction = constructionOperations.constructAutomatch(specification);
-        // Step 3. Checkin getState works fine
-        GameActionOperations<NumberState> aoA = A.gameActionOperations(construction.getSession());
+        MatchGameConfiguration configuration = configurations.get(0);
+        GameConstruction construction = constructionOperations.constructAutomatch(configuration);
+        // Step 3. Checking getState works fine
+        final GameActionOperations<NumberState> aoA = A.gameActionOperations(construction.getSession());
         assertNull(aoA.getState());
         // Step 4. Creating construction from B side
-        B.gameConstructionOperations(Game.num).constructAutomatch(specification);
+        B.gameConstructionOperations(Game.num).constructAutomatch(configuration);
         // Step 5. Checking value is not null anymore
         gameScenarios.match(construction.getSession(), A).waitForStart();
-        assertNotNull(aoA.getState());
+        AsyncCompletionUtils.<GameState>get(new Get<GameState>() {
+            @Override
+            public GameState get() {
+                return aoA.getState();
+            }
+        }, 30_000);
     }
 
     @Test

@@ -10,11 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.client.event.EventListener;
-import com.clemble.casino.client.event.EventSelector;
-import com.clemble.casino.client.event.EventSelectors;
-import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.client.event.GameSessionEventSelector;
+import com.clemble.casino.client.event.*;
 import com.clemble.casino.game.GameSessionAwareEvent;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameConstruction;
@@ -30,19 +26,21 @@ abstract public class AbstractGamePlayer implements GamePlayer {
      */
     private static final long serialVersionUID = -8412015352988124245L;
 
-    final private Collection<GamePlayer> dependents = new LinkedBlockingQueue<GamePlayer>();
+    //TODO make an external concern
+    final protected Collection<GamePlayer> dependents = new LinkedBlockingQueue<GamePlayer>();
 
-    final private ClembleCasinoOperations player;
+    final protected Object versionLock = new Object();
+
     final private GameConstruction construction;
-    final private Object versionLock = new Object();
-    final private EventAccumulator<GameSessionAwareEvent> eventAccumulator = new EventAccumulator<GameSessionAwareEvent>();
+    final private ClembleCasinoOperations player;
+    final private EventAccumulator<GameSessionAwareEvent> eventAccumulator;
 
-    final private AtomicBoolean keepAlive = new AtomicBoolean(true);
+    final protected AtomicBoolean keepAlive = new AtomicBoolean(true);
     final private AtomicReference<GameOutcome> outcome = new AtomicReference<>();
 
-    public AbstractGamePlayer(final ClembleCasinoOperations player, GameConstruction construction) {
+    public AbstractGamePlayer(final ClembleCasinoOperations player, final GameConstruction construction) {
+        this.player = checkNotNull(player);
         this.construction = checkNotNull(construction);
-        this.player = player;
         // Step 1. Listening for outcomes
         EventSelector endEventSelector = EventSelectors.where(new GameSessionEventSelector(construction.getSession()))
             .and(new EventTypeSelector(GameEndedEvent.class));
@@ -52,10 +50,15 @@ abstract public class AbstractGamePlayer implements GamePlayer {
                 outcome.set(event.getOutcome());
             }
         });
+        // Step 2. Listening for all possible events
+        GameSessionKey sessionKey = construction.getSession();
+        eventAccumulator = new EventAccumulator<GameSessionAwareEvent>();
+        EventSelector eventSelector = new GameSessionLikeEventSelector(sessionKey.getGame(), sessionKey.getSession() + "*");
+        this.player.listenerOperations().subscribe(eventSelector, eventAccumulator);
     }
 
     @Override
-    public String getPlayer() {
+    final public String getPlayer() {
         return player.getPlayer();
     }
 
@@ -81,7 +84,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
 
     @Override
     final public boolean isAlive() {
-        return keepAlive.get() && outcome.get() == null && getVersion() > 0;
+        return keepAlive.get() && outcome.get() == null && getVersion() > -1;
     }
 
     @Override
@@ -101,7 +104,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    public List<GameSessionAwareEvent> getEvents() {
+    final public List<GameSessionAwareEvent> getEvents() {
         return eventAccumulator.toList();
     }
 
@@ -127,7 +130,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     final public void waitForStart(long timeout) {
         long expirationTime = timeout > 0 ? System.currentTimeMillis() + timeout : Long.MAX_VALUE;
         synchronized (versionLock) {
-            while (keepAlive.get() && getVersion() == 0 && expirationTime > System.currentTimeMillis()) {
+            while (keepAlive.get() && getVersion() < 0 && expirationTime > System.currentTimeMillis()) {
                 try {
                     if (timeout > 0) {
                         versionLock.wait(timeout);
@@ -139,12 +142,12 @@ abstract public class AbstractGamePlayer implements GamePlayer {
                 }
             }
         }
-        if (getVersion() == 0)
+        if (getVersion() < 0)
             throw new RuntimeException(player.getPlayer() + " " + construction.getSession() + " was not started after " + timeout);
     }
 
     @Override
-    public void close() {
+    final public void close() {
         // Step 1. Giving up
         giveUp();
         // Step 2. Marking for removal
@@ -156,7 +159,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    public void syncWith(GamePlayer anotherSessionPlayer) {
+    final public void syncWith(GamePlayer anotherSessionPlayer) {
         if(!(anotherSessionPlayer instanceof MatchGamePlayer))
             throw new IllegalArgumentException();
         // Step 1. While versions do not match iterate
@@ -169,18 +172,18 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    public GameOutcome getOutcome() {
+    final public GameOutcome getOutcome() {
         return outcome.get();
     }
 
-    public void addDependent(GamePlayer player) {
+    final public void addDependent(GamePlayer player) {
         if (player != null && player != this) {
-            dependents.add((GamePlayer) player);
+            dependents.add(player);
         }
     }
 
     @Override
-    public void addDependent(Collection<? extends GamePlayer> players) {
+    final public void addDependent(Collection<? extends GamePlayer> players) {
         for (GamePlayer player : players)
             addDependent(player);
     }

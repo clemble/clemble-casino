@@ -37,11 +37,11 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     public <State extends GameState> List<MatchGamePlayer<State>> match(Game game) {
         if (game == null)
             throw new IllegalArgumentException("Name must not be null");
-        ClembleCasinoOperations randomPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations A = playerOperations.createPlayer();
         // Step 0. Sanity check
-        MatchGameConfiguration specification = GameScenariosUtils.random(randomPlayer.gameConstructionOperations(game).getConfigurations().matchConfigurations());
-        // Step 1. Selecting specification for the game
-        return match(specification);
+        MatchGameConfiguration configuration = GameScenariosUtils.random(A.gameConstructionOperations(game).getConfigurations().matchConfigurations());
+        // Step 1. Selecting configuration for the game
+        return match(configuration);
     }
 
     @SuppressWarnings("unchecked")
@@ -90,12 +90,12 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     }
 
     @Override
-    public <State extends GameState> MatchGamePlayer<State> match(GameConfiguration specification, ClembleCasinoOperations initiator) {
-        if (specification == null || specification.getConfigurationKey() == null || specification.getConfigurationKey().getGame() == null)
+    public <State extends GameState> MatchGamePlayer<State> match(GameConfiguration configuration, ClembleCasinoOperations initiator) {
+        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
-        Game game = specification.getConfigurationKey().getGame();
+        Game game = configuration.getConfigurationKey().getGame();
         // Step 2. Creating availability game request
-        GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAutomatch(specification);
+        GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAutomatch(configuration);
         // Step 3. Returning constructed player
         return toSessionPlayer(initiator, construction);
     }
@@ -106,12 +106,12 @@ public class SimpleGameScenarios implements GameScenarios, ApplicationContextAwa
     }
 
     @Override
-    public <State extends GameState> MatchGamePlayer<State> match(GameConfiguration specification, ClembleCasinoOperations initiator, String... participants) {
-        if (specification == null || specification.getConfigurationKey() == null || specification.getConfigurationKey().getGame() == null)
+    public <State extends GameState> MatchGamePlayer<State> match(GameConfiguration configuration, ClembleCasinoOperations initiator, String... participants) {
+        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
-        Game game = specification.getConfigurationKey().getGame();
+        Game game = configuration.getConfigurationKey().getGame();
         // Step 2. Creating availability game request
-        GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAvailability(specification, Arrays.asList(participants));
+        GameConstruction construction = initiator.<State> gameConstructionOperations(game).constructAvailability(configuration, Arrays.asList(participants));
         return toSessionPlayer(initiator, construction);
     }
 

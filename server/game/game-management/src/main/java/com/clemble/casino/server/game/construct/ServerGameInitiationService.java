@@ -98,6 +98,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         }
         synchronized (confirmations) {
             confirmations.add(player);
+            notificationService.notify(initiation.getParticipants(), new GameInitiationConfirmedEvent(sessionKey, initiation, player));
             // Step 3. Checking everybody confirmed
             if (confirmations.size() == initiation.getParticipants().size()) {
                 sessionToInitiation.remove(sessionKey);
@@ -108,8 +109,6 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
                     // TODO remove session from the lists
                     LOG.trace("Failed to update presences");
                 }
-            } else {
-                notificationService.notify(initiation.getParticipants(), new GameInitiationConfirmedEvent(sessionKey, initiation, player));
             }
         }
         return initiation;
