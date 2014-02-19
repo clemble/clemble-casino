@@ -13,7 +13,9 @@ import com.clemble.casino.server.game.aspect.outcome.WonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.pot.PotFillAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
-import com.clemble.casino.server.game.aspect.security.GameSecurityAspectFactory;
+import com.clemble.casino.server.game.aspect.security.GameMatchSecurityAspectFactory;
+import com.clemble.casino.server.game.aspect.security.GamePotSecurityAspect;
+import com.clemble.casino.server.game.aspect.security.GamePotSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
@@ -36,6 +38,7 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -65,8 +68,13 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GameSecurityAspectFactory gameSecurityAspectFactory() {
-        return new GameSecurityAspectFactory();
+    public GameMatchSecurityAspectFactory gameMatchSecurityAspectFactory() {
+        return new GameMatchSecurityAspectFactory();
+    }
+
+    @Bean
+    public GamePotSecurityAspectFactory gamePotSecurityAspectFactory() {
+        return new GamePotSecurityAspectFactory();
     }
 
     @Bean

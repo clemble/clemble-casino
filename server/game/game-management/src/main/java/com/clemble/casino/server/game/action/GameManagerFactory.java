@@ -121,6 +121,7 @@ public class GameManagerFactory {
         return manager;
     }
 
+    // TODO make this internal to the system, with no available processing from outside
     public GameManager<PotGameRecord> pot(GameInitiation initiation, GameContext<?> parent) {
         PotGameContext context = new PotGameContext(initiation, parent);
         // Step 1. Fetching first pot configuration

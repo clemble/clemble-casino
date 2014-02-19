@@ -12,11 +12,11 @@ import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
-public class GameSecurityAspect extends BasicGameAspect<PlayerAwareEvent> {
+public class GameMatchSecurityAspect extends BasicGameAspect<PlayerAwareEvent> {
 
     final private Collection<String> participants;
 
-    public GameSecurityAspect(Collection<String> participants) {
+    public GameMatchSecurityAspect(Collection<String> participants) {
         // This is on purpose to filter messages to detect messages that might be PlayerAware, but not PlayerAwareEvent
         super(new EventTypeSelector(PlayerAware.class));
         this.participants = new ArrayList<>(checkNotNull(participants));

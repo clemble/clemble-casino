@@ -12,13 +12,13 @@ import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
+
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import java.util.Map.Entry;
 
 public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
@@ -66,6 +66,7 @@ public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
         // Step 4. Constructing next match initiation
         int gameNum = context.getOutcomes().size();
         GameSessionKey nextSessionKey = context.getSession().append(String.valueOf(gameNum));
+        context.setCurrentSession(nextSessionKey);
         GameInitiation subInitiation = new GameInitiation(
                 nextSessionKey,
                 configuration.getConfigurations().get(gameNum),

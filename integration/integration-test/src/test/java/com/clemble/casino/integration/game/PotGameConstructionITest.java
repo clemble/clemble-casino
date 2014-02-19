@@ -97,10 +97,6 @@ public class PotGameConstructionITest {
 
         AvsB.waitVersion(2);
 
-        currentAvsB = AvsB.getСurrent();
-        currentAvsB.waitForStart();
-        assertTrue(currentAvsB.isAlive());
-        currentAvsB.giveUp();
         // Step 3. Checking there is a payment transaction
         PaymentTransaction transaction = BvsA.playerOperations().paymentOperations().getPaymentTransaction(AvsB.getSession());
         assertNotNull(transaction);

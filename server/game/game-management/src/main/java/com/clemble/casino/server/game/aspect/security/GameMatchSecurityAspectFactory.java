@@ -9,11 +9,11 @@ import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 
-public class GameSecurityAspectFactory implements MatchGameAspectFactory<PlayerAwareEvent> {
+public class GameMatchSecurityAspectFactory implements MatchGameAspectFactory<PlayerAwareEvent> {
 
     @Override
     public GameAspect<PlayerAwareEvent> construct(MatchGameConfiguration configuration, MatchGameContext context) {
-        return new GameSecurityAspect(PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
+        return new GameMatchSecurityAspect(PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
     }
 
     @Override
