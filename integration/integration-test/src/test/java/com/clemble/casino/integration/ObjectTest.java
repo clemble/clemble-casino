@@ -161,13 +161,13 @@ public class ObjectTest {
         register(PotGameContext.class, new AbstractValueGenerator<PotGameContext>() {
             @Override
             public PotGameContext generate() {
-                return new PotGameContext(GameSessionKey.DEFAULT_SESSION, null, null, 0, Collections.<GameOutcome>emptyList());
+                return new PotGameContext(GameSessionKey.DEFAULT_SESSION, GameSessionKey.DEFAULT_SESSION, null, null, 0, Collections.<GameOutcome>emptyList());
             }
         });
         register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
             @Override
             public TournamentGameConfiguration generate() {
-                return new TournamentGameConfiguration(null, null, null, null, null, null, null);
+                return new TournamentGameConfiguration(null, null, null, null, null, null, null, null, null);
             }
         });
         register(TournamentGameContext.class, new AbstractValueGenerator<TournamentGameContext>() {
@@ -187,7 +187,7 @@ public class ObjectTest {
         register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
             @Override
             public TournamentGameConfiguration generate() {
-                return new TournamentGameConfiguration(new GameConfigurationKey(Game.pic, "AAA"), new Money(Currency.FakeMoney, 50), PrivacyRule.players, PlayerNumberRule.two, MatchGameConfiguration.DEFAULT, null, null);
+                return new TournamentGameConfiguration(new GameConfigurationKey(Game.pic, "AAA"), new Money(Currency.FakeMoney, 50), PrivacyRule.players, PlayerNumberRule.two, MatchGameConfiguration.DEFAULT, null, null, null, null);
             }
         });
         register(VersionAware.class, "version", new ValueGenerator<Integer>() {

@@ -3,6 +3,7 @@ package com.clemble.casino.server.game.action;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameProcessor;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.event.server.GameManagementEvent;
@@ -18,14 +19,20 @@ public class GameManager<R extends GameRecord> {
 
     final private GameProcessor<R, Event> processor;
     final private R record;
+    final private GameContext<?> context;
 
-    public GameManager(GameProcessor<R, Event> processor, R session) {
-        this.processor = checkNotNull(processor);
+    public GameManager(GameProcessor<R, Event> processor, R session, GameContext<?> context) {
         this.record = checkNotNull(session);
+        this.context = checkNotNull(context);
+        this.processor = checkNotNull(processor);
     }
 
     public R getRecord() {
         return record;
+    }
+
+    public GameContext<?> getContext(){
+        return context;
     }
 
     public GameManagementEvent process(Event action) {

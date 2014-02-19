@@ -4,17 +4,17 @@ import org.springframework.core.Ordered;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.event.server.GameMatchEndedEvent;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
+import com.clemble.casino.server.game.aspect.GameAspectFactory;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class DrawRuleAspectFactory implements MatchGameAspectFactory<GameMatchEndedEvent> {
+public class DrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameContext<?>, GameConfiguration> {
 
     // TODO enable caching for DrawRule
     final private ServerPaymentTransactionService transactionService;
@@ -24,7 +24,7 @@ public class DrawRuleAspectFactory implements MatchGameAspectFactory<GameMatchEn
     }
 
     @Override
-    public GameAspect<GameMatchEndedEvent> construct(MatchGameConfiguration configuration, MatchGameContext context) {
+    public GameAspect<GameEndedEvent<?>> construct(GameConfiguration configuration, GameContext<?> context) {
         switch (configuration.getDrawRule()) {
         case owned:
             return new DrawByOwnedRuleAspect(configuration.getPrice().getCurrency(), transactionService);

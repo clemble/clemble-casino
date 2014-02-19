@@ -5,9 +5,10 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.Date;
 
 import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GamePlayerAccount;
-import com.clemble.casino.game.MatchGamePlayerContext;
-import com.clemble.casino.game.event.server.GameMatchEndedEvent;
+import com.clemble.casino.game.GamePlayerContext;
+import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.payment.PaymentOperation;
@@ -21,27 +22,28 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class DrawByOwnedRuleAspect extends BasicGameAspect<GameMatchEndedEvent> {
+public class DrawByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
     final private Currency currency;
     final private ServerPaymentTransactionService transactionService;
 
     public DrawByOwnedRuleAspect(Currency currency, ServerPaymentTransactionService transactionService) {
-        super(new EventTypeSelector(GameMatchEndedEvent.class));
+        super(new EventTypeSelector(GameEndedEvent.class));
         this.currency = checkNotNull(currency);
         this.transactionService = checkNotNull(transactionService);
     }
 
     @Override
-    public void doEvent(GameMatchEndedEvent event) {
+    public void doEvent(GameEndedEvent<?> event) {
         // TODO Auto-generated method stub
         GameOutcome outcome = event.getOutcome();
+        GameContext<?> context = event.getContext();
         if (outcome instanceof DrawOutcome) {
             // Step 2. Generating payment transaction
             PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(event.getSession().toPaymentTransactionKey())
+                .setTransactionKey(context.getSession().toPaymentTransactionKey())
                 .setTransactionDate(new Date());
-            for (MatchGamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
+            for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();
                 paymentTransaction
                     .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))

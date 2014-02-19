@@ -8,8 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.MatchGamePlayerContext;
-import com.clemble.casino.game.event.server.GameMatchEndedEvent;
+import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.GamePlayerContext;
+import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.payment.PaymentOperation;
@@ -22,7 +23,7 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class WonByPriceRuleAspect extends BasicGameAspect<GameMatchEndedEvent>{
+public class WonByPriceRuleAspect extends BasicGameAspect<GameEndedEvent<?>>{
     
     final private Logger LOG = LoggerFactory.getLogger(WonByPriceRuleAspect.class);
 
@@ -30,13 +31,14 @@ public class WonByPriceRuleAspect extends BasicGameAspect<GameMatchEndedEvent>{
     final private ServerPaymentTransactionService transactionService;
 
     public WonByPriceRuleAspect(Money price, ServerPaymentTransactionService transactionService) {
-        super(new EventTypeSelector(GameMatchEndedEvent.class));
+        super(new EventTypeSelector(GameEndedEvent.class));
         this.transactionService = checkNotNull(transactionService);
         this.price = checkNotNull(price);
     }
 
     @Override
-    public void doEvent(GameMatchEndedEvent event) {
+    public void doEvent(GameEndedEvent<?> event) {
+        GameContext<?> context = event.getContext();
         LOG.debug("Processing ended event {}", event);
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof PlayerWonOutcome) {
@@ -44,9 +46,9 @@ public class WonByPriceRuleAspect extends BasicGameAspect<GameMatchEndedEvent>{
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()
-                    .setTransactionKey(event.getSession().toPaymentTransactionKey())
+                    .setTransactionKey(context.getSession().toPaymentTransactionKey())
                     .setTransactionDate(new Date());
-            for (MatchGamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
+            for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 if (!playerContext.getPlayer().equals(winnerId)) {
                     transaction
                         .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), price, Operation.Credit))

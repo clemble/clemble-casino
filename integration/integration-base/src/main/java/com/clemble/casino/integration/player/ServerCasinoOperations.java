@@ -13,6 +13,8 @@ import com.clemble.casino.client.game.GameActionOperationsFactory;
 import com.clemble.casino.client.game.GameActionTemplateFactory;
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.game.GameConstructionTemplate;
+import com.clemble.casino.client.game.GameRecordOperations;
+import com.clemble.casino.client.game.GameRecordTemplate;
 import com.clemble.casino.client.payment.PaymentOperations;
 import com.clemble.casino.client.payment.PaymentTemplate;
 import com.clemble.casino.client.player.PlayerConnectionOperations;
@@ -31,6 +33,7 @@ import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.game.service.GameInitiationService;
+import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.security.PlayerCredential;
@@ -42,7 +45,7 @@ import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ServerPlayer implements ClembleCasinoOperations {
+public class ServerCasinoOperations implements ClembleCasinoOperations {
 
     /**
      * Generated
@@ -61,20 +64,15 @@ public class ServerPlayer implements ClembleCasinoOperations {
     final private PaymentOperations playerAccountOperations;
     final private PlayerProfileOperations profileOperations;
     final private GameActionOperationsFactory actionOperationsFactory;
+    final private GameRecordOperations recordOperations;
 
-    public ServerPlayer(final ObjectMapper objectMapper,
-            final PlayerToken playerIdentity,
-            final PlayerCredential credential,
-            final PlayerProfileService playerProfileService,
-            final PlayerConnectionService playerConnectionService,
-            final PlayerSessionService sessionOperations,
-            final PaymentService accountOperations,
-            final EventListenerOperationsFactory listenerOperationsFactory,
-            final PlayerPresenceService playerPresenceService,
-            final AutoGameConstructionService gameConstructionService,
-            final AvailabilityGameConstructionService availabilityConstructionService,
-            final GameInitiationService initiationService,
-            final GameConfigurationService specificationService, final GameActionService actionService) {
+    public ServerCasinoOperations(final ObjectMapper objectMapper, final PlayerToken playerIdentity, final PlayerCredential credential,
+            final PlayerProfileService playerProfileService, final PlayerConnectionService playerConnectionService,
+            final PlayerSessionService sessionOperations, final PaymentService accountOperations,
+            final EventListenerOperationsFactory listenerOperationsFactory, final PlayerPresenceService playerPresenceService,
+            final AutoGameConstructionService gameConstructionService, final AvailabilityGameConstructionService availabilityConstructionService,
+            final GameInitiationService initiationService, final GameConfigurationService specificationService, final GameActionService actionService,
+            final GameRecordService recordService) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
@@ -90,7 +88,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
 
         this.gameConstructors = new GameConstructionTemplate(player, constructionService, availabilityConstructionService, initiationService, specificationService, listenerOperations);
         this.actionOperationsFactory = new GameActionTemplateFactory(player, listenerOperations, actionService);
-        
+
         this.listenerOperations.subscribe(new EventTypeSelector(GameInitiatedEvent.class), new EventListener<GameInitiatedEvent>() {
             @Override
             public void onEvent(GameInitiatedEvent event) {
@@ -99,6 +97,8 @@ public class ServerPlayer implements ClembleCasinoOperations {
                 initiationService.confirm(sessionKey.getGame(), sessionKey.getSession(), player);
             }
         });
+
+        this.recordOperations = new GameRecordTemplate(recordService);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class ServerPlayer implements ClembleCasinoOperations {
 
     @Override
     public <State extends GameState> GameActionOperations<State> gameActionOperations(GameSessionKey session) {
-        return (GameActionOperations<State>) actionOperationsFactory.<State>construct(session);
+        return (GameActionOperations<State>) actionOperationsFactory.<State> construct(session);
     }
 
     @Override
@@ -159,6 +159,11 @@ public class ServerPlayer implements ClembleCasinoOperations {
     @Override
     public EventListenerOperations listenerOperations() {
         return listenerOperations;
+    }
+
+    @Override
+    public GameRecordOperations gameRecordOperations() {
+        return recordOperations;
     }
 
 }

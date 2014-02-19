@@ -9,6 +9,7 @@ import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.game.service.AutoGameConstructionService;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.service.GameConfigurationService;
+import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.PlayerProfile;
@@ -44,6 +45,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private GameInitiationService initiationService;
     final private GameConfigurationService specificationService;
     final private GameActionService actionService;
+    final private GameRecordService recordService;
 
     public ServerClembleCasinoRegistrationOperations(ObjectMapper objectMapper,
             EventListenerOperationsFactory listenerOperations,
@@ -57,7 +59,8 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
             AvailabilityGameConstructionService availabilityConstructionService,
             GameInitiationService initiationService,
             GameConfigurationService specificationService,
-            GameActionService actionService) {
+            GameActionService actionService,
+            GameRecordService recordService) {
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
         this.listenerOperations = checkNotNull(listenerOperations);
@@ -71,6 +74,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         this.gameConstructionService = checkNotNull(gameConstructionService);
         this.specificationService = checkNotNull(specificationService);
         this.actionService = checkNotNull(actionService);
+        this.recordService = checkNotNull(recordService);
     }
 
     @Override
@@ -106,7 +110,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     }
 
     private ClembleCasinoOperations create(PlayerToken playerIdentity, PlayerCredential credential) {
-        return new ServerPlayer(objectMapper, playerIdentity, credential, profileOperations, connectionService, sessionOperations, paymentService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService);
+        return new ServerCasinoOperations(objectMapper, playerIdentity, credential, profileOperations, connectionService, sessionOperations, paymentService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService);
     }
 
 }

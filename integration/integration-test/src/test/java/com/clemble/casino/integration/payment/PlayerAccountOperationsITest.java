@@ -99,8 +99,8 @@ public class PlayerAccountOperationsITest {
             assertTrue(cashAbefore.getAmount() >= 0);
             assertTrue(cashBbefore.getAmount() >= 0);
 
-            MatchGamePlayer<GameState> AvsB = gameOperations.<GameState> match(Game.num, A, B.getPlayer());
-            MatchGamePlayer<GameState> BvsA = gameOperations.<GameState> accept(AvsB.getSession(), B);
+            MatchGamePlayer<GameState> AvsB = gameOperations.match(Game.num, A, B.getPlayer());
+            MatchGamePlayer<GameState> BvsA = gameOperations.accept(AvsB.getSession(), B);
 
             AvsB.waitForStart();
             BvsA.waitForStart();

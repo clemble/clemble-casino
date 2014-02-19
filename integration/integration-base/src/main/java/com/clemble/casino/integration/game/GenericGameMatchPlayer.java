@@ -11,7 +11,6 @@ import com.clemble.casino.game.GameSessionAwareEvent;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
-import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 
@@ -41,11 +40,6 @@ public class GenericGameMatchPlayer<State extends GameState> implements MatchGam
     @Override
     final public GameSessionKey getSession() {
         return actualPlayer.getSession();
-    }
-
-    @Override
-    public GameConstruction getConstructionInfo() {
-        return actualPlayer.getConstructionInfo();
     }
 
     @Override

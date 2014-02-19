@@ -36,27 +36,32 @@ public class PotGameProcessor implements GameProcessor<PotGameRecord, Event> {
     @Override
     public GameManagementEvent process(PotGameRecord record, Event event) {
         if(event instanceof GameEndedEvent) {
-            context.addOutcome(((GameEndedEvent) event).getOutcome());
+            context.addOutcome(((GameEndedEvent<?>) event).getOutcome());
             int gamesLeft = configuration.getConfigurations().size() - context.getOutcomes().size();
-            MultiValueMap<String, PlayerWonOutcome> wonOutcomes = new LinkedMultiValueMap<>();
-            for(GameOutcome outcome: context.getOutcomes())
-                if(outcome instanceof  PlayerWonOutcome)
-                    wonOutcomes.add(((PlayerWonOutcome) outcome).getWinner(), (PlayerWonOutcome) outcome);
-            // Step 1. Searching for a leader in the pot
-            List<Entry<String, List<PlayerWonOutcome>>> sortedContexts = new ArrayList<>(wonOutcomes.entrySet());
-            Collections.sort(sortedContexts, ComparatorUtils.WON_OUT_COMPARATOR);
-            Entry<String, List<PlayerWonOutcome>> leader = sortedContexts.get(0);
-            Entry<String, List<PlayerWonOutcome>> nextAfterLeader = sortedContexts.get(1);
-            int leaderScore = leader.getValue().size();
-            int nextAfterLeaderScore = nextAfterLeader.getValue().size();
-            // Step 2. Checking values
-            if (leaderScore > nextAfterLeaderScore && 
-               (nextAfterLeaderScore + gamesLeft < leaderScore)) {
-                return new GamePotEndedEvent(context.getSession(), new PlayerWonOutcome(leader.getKey()), context);
+            if (context.getOutcomes().size() > gamesLeft) {
+                MultiValueMap<String, PlayerWonOutcome> wonOutcomes = new LinkedMultiValueMap<>();
+                for(GameOutcome outcome: context.getOutcomes())
+                    if(outcome instanceof  PlayerWonOutcome)
+                        wonOutcomes.add(((PlayerWonOutcome) outcome).getWinner(), (PlayerWonOutcome) outcome);
+                // Step 1. Searching for a leader in the pot
+                List<Entry<String, List<PlayerWonOutcome>>> sortedContexts = new ArrayList<>(wonOutcomes.entrySet());
+                Collections.sort(sortedContexts, ComparatorUtils.WON_OUT_COMPARATOR);
+                Entry<String, List<PlayerWonOutcome>> leader = sortedContexts.get(0);
+                int leaderScore = leader.getValue().size();
+                int nextAfterLeaderScore = 0;
+                if (sortedContexts.size() > 1) {
+                    Entry<String, List<PlayerWonOutcome>> nextAfterLeader = sortedContexts.get(1);
+                    nextAfterLeaderScore = nextAfterLeader.getValue().size();
+                }
+                // Step 2. Checking leader can be reached
+                if (leaderScore > nextAfterLeaderScore && 
+                   (nextAfterLeaderScore + gamesLeft < leaderScore)) {
+                    return new GamePotEndedEvent(context.getSession(), new PlayerWonOutcome(leader.getKey()), context, null);
+                }
+                // Step 3. If no games left mark as a draw
+                if (gamesLeft == 0)
+                    return new GamePotEndedEvent(context.getSession(), new DrawOutcome(), context, null);
             }
-            // Step 3. If no games left mark as a draw
-            if (gamesLeft == 0)
-                return new GamePotEndedEvent(context.getSession(), new DrawOutcome(), context);
         }
         // Step 4. Constructing next match initiation
         int gameNum = context.getOutcomes().size();

@@ -6,17 +6,17 @@ import org.springframework.core.Ordered;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.event.server.GameMatchEndedEvent;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
+import com.clemble.casino.server.game.aspect.GameAspectFactory;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class WonRuleAspectFactory implements MatchGameAspectFactory<GameMatchEndedEvent> {
+public class WonRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameContext<?>, GameConfiguration> {
 
     final private ServerPaymentTransactionService transactionService;
 
@@ -25,7 +25,7 @@ public class WonRuleAspectFactory implements MatchGameAspectFactory<GameMatchEnd
     }
 
     @Override
-    public GameAspect<GameMatchEndedEvent> construct(MatchGameConfiguration configuration, MatchGameContext context) {
+    public GameAspect<GameEndedEvent<?>> construct(GameConfiguration configuration, GameContext<?> context) {
         switch (configuration.getWonRule()) {
         case price:
             return new WonByPriceRuleAspect(configuration.getPrice(), transactionService);

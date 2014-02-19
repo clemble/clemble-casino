@@ -21,7 +21,9 @@ import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.game.service.AutoGameConstructionService;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.service.GameConfigurationService;
+import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
+import com.clemble.casino.integration.game.GamePlayerFactory;
 import com.clemble.casino.integration.game.SimpleMatchGamePlayerFactory;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
@@ -73,8 +75,13 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
     }
 
     @Bean
-    public SimpleGameScenarios gameScenarios() {
-        return new SimpleGameScenarios(playerOperations);
+    public SimpleGameScenarios gameScenarios(GamePlayerFactory gamePlayerFactory) {
+        return new SimpleGameScenarios(playerOperations, gamePlayerFactory);
+    }
+
+    @Bean
+    public GamePlayerFactory gamePlayerFactory(){
+        return new GamePlayerFactory();
     }
 
     @Bean
@@ -134,8 +141,9 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
                 @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,
                 @Qualifier("gameInitiationController") GameInitiationService initiationService,
                 @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
-                GameActionService actionService) {
-            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService);
+                GameActionService actionService,
+                GameRecordService recordService) {
+            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
         

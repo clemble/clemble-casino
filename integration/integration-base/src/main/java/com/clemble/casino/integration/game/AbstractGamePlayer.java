@@ -10,7 +10,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.client.event.*;
+import com.clemble.casino.client.event.EventListener;
+import com.clemble.casino.client.event.EventSelector;
+import com.clemble.casino.client.event.EventSelectors;
+import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.client.event.GameSessionEventSelector;
 import com.clemble.casino.game.GameSessionAwareEvent;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameConstruction;
@@ -31,18 +35,25 @@ abstract public class AbstractGamePlayer implements GamePlayer {
 
     final protected Object versionLock = new Object();
 
-    final private GameConstruction construction;
+    final private GameSessionKey sessionKey;
+    final private GameConfigurationKey configurationKey;
     final private ClembleCasinoOperations player;
     final private EventAccumulator<GameSessionAwareEvent> eventAccumulator;
 
     final protected AtomicBoolean keepAlive = new AtomicBoolean(true);
     final private AtomicReference<GameOutcome> outcome = new AtomicReference<>();
+    
 
     public AbstractGamePlayer(final ClembleCasinoOperations player, final GameConstruction construction) {
+        this(player, construction.getSession(), construction.getRequest().getConfiguration().getConfigurationKey());
+    }
+
+    public AbstractGamePlayer(final ClembleCasinoOperations player, final GameSessionKey sessionKey, final GameConfigurationKey configurationKey) {
         this.player = checkNotNull(player);
-        this.construction = checkNotNull(construction);
+        this.sessionKey = checkNotNull(sessionKey);
+        this.configurationKey = checkNotNull(configurationKey);
         // Step 1. Listening for outcomes
-        EventSelector endEventSelector = EventSelectors.where(new GameSessionEventSelector(construction.getSession()))
+        EventSelector endEventSelector = EventSelectors.where(new GameSessionEventSelector(sessionKey))
             .and(new EventTypeSelector(GameEndedEvent.class));
         this.player.listenerOperations().subscribe(endEventSelector, new EventListener<GameEndedEvent<?>>() {
             @Override
@@ -51,7 +62,6 @@ abstract public class AbstractGamePlayer implements GamePlayer {
             }
         });
         // Step 2. Listening for all possible events
-        GameSessionKey sessionKey = construction.getSession();
         eventAccumulator = new EventAccumulator<GameSessionAwareEvent>();
         EventSelector eventSelector = new GameSessionEventSelector(sessionKey);
         this.player.listenerOperations().subscribe(eventSelector, eventAccumulator);
@@ -63,18 +73,13 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    final public GameConstruction getConstructionInfo() {
-        return construction;
-    }
-
-    @Override
     final public GameSessionKey getSession() {
-        return construction != null ? construction.getSession() : null;
+        return sessionKey;
     }
 
     @Override
     final public GameConfigurationKey getConfigurationKey() {
-        return construction.getRequest().getConfiguration().getConfigurationKey();
+        return configurationKey;
     }
 
     @Override
@@ -143,7 +148,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
             }
         }
         if (getVersion() < 0)
-            throw new RuntimeException(player.getPlayer() + " " + construction.getSession() + " was not started after " + timeout);
+            throw new RuntimeException(player.getPlayer() + " " + sessionKey + " was not started after " + timeout);
     }
 
     @Override

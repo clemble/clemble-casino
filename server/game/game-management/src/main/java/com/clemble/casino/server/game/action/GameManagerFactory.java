@@ -106,6 +106,7 @@ public class GameManagerFactory {
         // Step 1. Allocating table for game initiation
         GameState state = stateFactory.constructState(initiation, new MatchGameContext(initiation));
         // Step 2. Sending notification for game started
+        MatchGameContext context = new MatchGameContext(initiation, parent);
         GameProcessor<MatchGameRecord, Event> processor = matchAspectFactory.create(state, matchGameConfiguration, new MatchGameContext(initiation, parent));
         // Step 3. Returning active table
         MatchGameRecord matchRecord = new MatchGameRecord()
@@ -114,14 +115,14 @@ public class GameManagerFactory {
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants()).setState(state);
         matchRecord = sessionRepository.saveAndFlush(matchRecord);
-        GameManager<MatchGameRecord> manager = new GameManager<>(processor, matchRecord);
+        GameManager<MatchGameRecord> manager = new GameManager<>(processor, matchRecord, context);
         sessionToManager.put(initiation.getSession(), manager);
         notificationService.notify(initiation.getParticipants(), new GameMatchStartedEvent<GameState>(matchRecord));
         return manager;
     }
 
     public GameManager<PotGameRecord> pot(GameInitiation initiation, GameContext<?> parent) {
-        PotGameContext potGameContext = new PotGameContext(initiation, parent);
+        PotGameContext context = new PotGameContext(initiation, parent);
         // Step 1. Fetching first pot configuration
         PotGameConfiguration potConfiguration = (PotGameConfiguration) initiation.getConfiguration();
         // Step 2. Taking first match from the pot
@@ -130,19 +131,19 @@ public class GameManagerFactory {
         GameInitiation subInitiation = new GameInitiation(initiation.getSession().append("0"), subConfiguration, initiation.getParticipants());
         // Step 4. Sending notification to related players
         // Step 5. Generating new match game record
-        GameManager<?> subManager = start(subInitiation, potGameContext);
+        GameManager<?> subManager = start(subInitiation, context);
+        context.setCurrentSession(subManager.getContext().getSession());
         // Step 6. Generating new pot game record
         PotGameRecord potGameRecord = new PotGameRecord(initiation.getSession(), initiation.getConfiguration().getConfigurationKey(), GameSessionState.active, Collections.<GameSessionKey>emptyList());
         potGameRecord.getSubRecords().add(subManager.getRecord().getSession());
         // Step 7. Saving pot record
         potGameRecord = potRepository.saveAndFlush(potGameRecord);
-        PotGameContext context = new PotGameContext(initiation);
         PotGameConfiguration configuration = (PotGameConfiguration) initiation.getConfiguration();
         PotGameProcessor gameProcessor = new PotGameProcessor(context, configuration, this);
         GameProcessor<PotGameRecord, Event> potProcessor = potAspectFactory.create(gameProcessor, configuration, context);
-        GameManager<PotGameRecord> potGameManager = new GameManager<>(potProcessor, potGameRecord);
+        GameManager<PotGameRecord> potGameManager = new GameManager<>(potProcessor, potGameRecord, context);
         sessionToManager.put(initiation.getSession(), potGameManager);
-        notificationService.notify(initiation.getParticipants(), new GamePotStartedEvent(initiation.getSession(), potGameContext));
+        notificationService.notify(initiation.getParticipants(), new GamePotStartedEvent(initiation.getSession(), context));
         // Step 8. Returning pot game record
         return potGameManager;
     }

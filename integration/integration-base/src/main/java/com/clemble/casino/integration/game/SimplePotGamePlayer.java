@@ -5,12 +5,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.PotGameContext;
-import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GamePotEvent;
-import com.clemble.casino.integration.game.AbstractGamePlayer;
-import com.clemble.casino.integration.game.GamePlayer;
-import com.clemble.casino.integration.game.PotGamePlayer;
+import com.clemble.casino.game.service.GameRecordService;
+import com.clemble.casino.game.specification.GameConfigurationKey;
 
 /**
  * Created by mavarazy on 16/02/14.
@@ -22,28 +21,46 @@ public class SimplePotGamePlayer extends AbstractGamePlayer implements PotGamePl
      */
     private static final long serialVersionUID = -1280382674448825895L;
 
+    final private Object lock = new Object();
+
+    final private GamePlayerFactory playerFactory;
+
+    final private AtomicReference<GamePlayer> currentPlayer = new AtomicReference<>();
     final private AtomicReference<PotGameContext> potContext = new AtomicReference<>();
 
-    public SimplePotGamePlayer(ClembleCasinoOperations player, GameConstruction construction) {
-        super(player, construction);
+    public SimplePotGamePlayer(ClembleCasinoOperations player, GameSessionKey sessionKey, GameConfigurationKey configurationKey, GamePlayerFactory playerFactory) {
+        super(player, sessionKey, configurationKey);
+        this.playerFactory = playerFactory;
         player.listenerOperations().subscribe(new EventTypeSelector(GamePotEvent.class), new EventListener<GamePotEvent>() {
             @Override
             public void onEvent(GamePotEvent event) {
-                potContext.set(event.getContext());
+                setContext(event.getContext());
             }
         });
     }
 
+    private void setContext(PotGameContext context) {
+        synchronized (lock) {
+            if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
+                potContext.set(context);
+                GameSessionKey sessionKey = context.getCurrentSession();
+                GameConfigurationKey configurationKey = playerOperations().gameRecordOperations().get(sessionKey).getConfigurationKey();
+                currentPlayer.set(playerFactory.construct(playerOperations(), sessionKey, configurationKey));
+            }
+        }
+    }
+
     public int getVersion(){
-        return potContext.get() != null ? -1 : potContext.get().getOutcomes().size();
+        return potContext.get() == null ? -1 : potContext.get().getOutcomes().size();
     }
 
     @Override
     public void giveUp() {
+        playerOperations().gameActionOperations(getSession()).giveUp();
     }
 
     @Override
     public GamePlayer getСurrent() {
-        return null;
+        return currentPlayer.get();
     }
 }

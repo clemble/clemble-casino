@@ -26,6 +26,8 @@ import com.clemble.casino.server.web.game.session.AutoGameConstructionController
 import com.clemble.casino.server.web.game.session.AvailabilityGameConstructionController;
 import com.clemble.casino.server.web.game.session.GameActionController;
 import com.clemble.casino.server.web.game.session.GameInitiationController;
+import com.clemble.casino.server.web.game.session.GameRecordController;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -96,4 +98,10 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
                                                                                          GameConstructionRepository constructionRepository) {
         return new AvailabilityGameConstructionController(constructionService, constructionRepository);
     }
+
+    @Bean
+    public GameRecordController gameRecordController(MatchGameRecordRepository matchGameRecordRepository, PotGameRecordRepository potGameRecordRepository) {
+        return new GameRecordController(matchGameRecordRepository, potGameRecordRepository);
+    }
+
 }
