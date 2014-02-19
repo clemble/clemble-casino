@@ -1,5 +1,6 @@
 package com.clemble.casino.integration.game;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -100,5 +101,10 @@ public class PotGameConstructionITest {
         // Step 3. Checking there is a payment transaction
         PaymentTransaction transaction = BvsA.playerOperations().paymentOperations().getPaymentTransaction(AvsB.getSession());
         assertNotNull(transaction);
+
+        Money mA = AvsB.playerOperations().paymentOperations().getAccount().getMoney(Currency.FakeMoney);
+        Money mB = BvsA.playerOperations().paymentOperations().getAccount().getMoney(Currency.FakeMoney);
+
+        assertEquals(mB.getAmount(), mA.add(300).getAmount());
     }
 }

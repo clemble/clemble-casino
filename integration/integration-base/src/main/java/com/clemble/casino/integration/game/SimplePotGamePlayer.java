@@ -46,6 +46,9 @@ public class SimplePotGamePlayer extends AbstractGamePlayer implements PotGamePl
                 GameSessionKey sessionKey = context.getCurrentSession();
                 GameConfigurationKey configurationKey = playerOperations().gameRecordOperations().get(sessionKey).getConfigurationKey();
                 currentPlayer.set(playerFactory.construct(playerOperations(), sessionKey, configurationKey));
+                synchronized (versionLock) {
+                    versionLock.notifyAll();
+                }
             }
         }
     }

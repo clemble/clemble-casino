@@ -51,8 +51,8 @@ public class TournamentGameProcessor implements GameProcessor<TournamentGameReco
         if (event instanceof GameEndedEvent) {
             // Step 0. Reading session key and outcome
             GameSessionKey sessionKey = session.getSession();
-            GameOutcome outcome = ((GameEndedEvent) event).getOutcome();
-            TournamentGameContext leafContext = (TournamentGameContext) ((GameEndedEvent) event).getContext().getParent();
+            GameOutcome outcome = ((GameEndedEvent<?>) event).getOutcome();
+            TournamentGameContext leafContext = (TournamentGameContext) ((GameEndedEvent<?>) event).getContext().getParent();
             if (outcome instanceof PlayerWonOutcome) {
                 String leader = ((PlayerWonOutcome) outcome).getWinner();
                 TournamentLeaf leaf = leafContext.getLeaf();

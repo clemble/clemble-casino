@@ -2,8 +2,6 @@ package com.clemble.casino.server.game.aspect.outcome;
 
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.error.ClembleCasinoError;
-import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.specification.GameConfiguration;
@@ -14,24 +12,27 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class DrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameContext<?>, GameConfiguration> {
+public class MatchDrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameContext<?>, GameConfiguration> {
 
-    // TODO enable caching for DrawRule
     final private ServerPaymentTransactionService transactionService;
 
-    public DrawRuleAspectFactory(ServerPaymentTransactionService transactionService) {
+    public MatchDrawRuleAspectFactory(ServerPaymentTransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
     @Override
     public GameAspect<GameEndedEvent<?>> construct(GameConfiguration configuration, GameContext<?> context) {
+        // Step 1. Checking draw rule
+        if (configuration.getDrawRule() == null)
+            return null;
+        // Step 2. Constructing draw rule
         switch (configuration.getDrawRule()) {
-        case owned:
-            return new DrawByOwnedRuleAspect(configuration.getPrice().getCurrency(), transactionService);
-        case spent:
-            return DrawBySpentRuleAspect.INSTANCE;
-        default:
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
+            case owned:
+                return new MatchDrawByOwnedRuleAspect(configuration.getPrice().getCurrency(), transactionService);
+            case spent:
+                return MatchDrawBySpentRuleAspect.INSTANCE;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 

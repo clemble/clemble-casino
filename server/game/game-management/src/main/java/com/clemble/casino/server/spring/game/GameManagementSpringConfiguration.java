@@ -1,5 +1,13 @@
 package com.clemble.casino.server.spring.game;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.id.UUIDGameIdGenerator;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
@@ -8,13 +16,14 @@ import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.management.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
-import com.clemble.casino.server.game.aspect.outcome.DrawRuleAspectFactory;
-import com.clemble.casino.server.game.aspect.outcome.WonRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.outcome.PotDrawRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.outcome.PotWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.pot.PotFillAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GameMatchSecurityAspectFactory;
-import com.clemble.casino.server.game.aspect.security.GamePotSecurityAspect;
 import com.clemble.casino.server.game.aspect.security.GamePotSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
@@ -38,14 +47,6 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class, GameNeo4jSpringConfiguration.class, GameJPASpringConfiguration.class,
@@ -78,13 +79,23 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public WonRuleAspectFactory wonRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
-        return new WonRuleAspectFactory(paymentTransactionService);
+    public MatchWonRuleAspectFactory wonRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+        return new MatchWonRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean
-    public DrawRuleAspectFactory drawRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
-        return new DrawRuleAspectFactory(paymentTransactionService);
+    public MatchDrawRuleAspectFactory drawRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+        return new MatchDrawRuleAspectFactory(paymentTransactionService);
+    }
+
+    @Bean
+    public PotWonRuleAspectFactory potWonRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+        return new PotWonRuleAspectFactory(paymentTransactionService);
+    }
+
+    @Bean
+    public PotDrawRuleAspectFactory potDrawRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+        return new PotDrawRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.clemble.casino.game.Game;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;

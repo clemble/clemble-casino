@@ -9,6 +9,7 @@ import javax.persistence.OptimisticLockException;
 
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.GameProcessor;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
@@ -126,6 +127,15 @@ public class GameManagerFactory {
         PotGameContext context = new PotGameContext(initiation, parent);
         // Step 1. Fetching first pot configuration
         PotGameConfiguration potConfiguration = (PotGameConfiguration) initiation.getConfiguration();
+        long guaranteedPotSize = potConfiguration.getPrice().getAmount();
+        for(GameConfiguration configuration: potConfiguration.getConfigurations())
+            guaranteedPotSize -= configuration.getPrice().getAmount();
+        if (guaranteedPotSize > 0) {
+            for(GamePlayerContext playerContext: context.getPlayerContexts()) {
+                context.add(guaranteedPotSize);
+                playerContext.getAccount().subLeft(guaranteedPotSize);
+            }
+        }
         // Step 2. Taking first match from the pot
         GameConfiguration subConfiguration = potConfiguration.getConfigurations().get(0);
         // Step 3. Constructing match initiation
