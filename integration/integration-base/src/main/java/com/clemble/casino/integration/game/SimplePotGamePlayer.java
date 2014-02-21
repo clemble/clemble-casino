@@ -58,8 +58,9 @@ public class SimplePotGamePlayer extends AbstractGamePlayer implements PotGamePl
     }
 
     @Override
-    public void giveUp() {
+    public GamePlayer giveUp() {
         playerOperations().gameActionOperations(getSession()).giveUp();
+        return this;
     }
 
     @Override

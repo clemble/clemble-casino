@@ -12,6 +12,7 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.outcome.GameOutcome;
+import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 
 public class GenericGameMatchPlayer<State extends GameState> implements MatchGamePlayer<State> {
@@ -58,18 +59,21 @@ public class GenericGameMatchPlayer<State extends GameState> implements MatchGam
     }
 
     @Override
-    final public void waitForStart() {
+    final public GamePlayer waitForStart() {
         actualPlayer.waitForStart();
+        return this;
     }
 
     @Override
-    final public void waitForStart(long timeout) {
+    final public GamePlayer waitForStart(long timeout) {
         actualPlayer.waitForStart(timeout);
+        return this;
     }
 
     @Override
-    public void waitForEnd() {
+    public GamePlayer waitForEnd() {
         actualPlayer.waitForEnd();
+        return this;
     }
 
     @Override
@@ -93,8 +97,9 @@ public class GenericGameMatchPlayer<State extends GameState> implements MatchGam
     }
 
     @Override
-    final public void giveUp() {
+    final public GamePlayer giveUp() {
         actualPlayer.giveUp();
+        return this;
     }
 
     @Override
@@ -108,8 +113,9 @@ public class GenericGameMatchPlayer<State extends GameState> implements MatchGam
     }
 
     @Override
-    public void waitVersion(int version) {
+    public GamePlayer waitVersion(int version) {
         actualPlayer.waitVersion(version);
+        return this;
     }
 
     @Override
@@ -123,18 +129,26 @@ public class GenericGameMatchPlayer<State extends GameState> implements MatchGam
     }
 
     @Override
-    public void addDependent(GamePlayer dependent) {
+    public GamePlayer addDependent(GamePlayer dependent) {
         actualPlayer.addDependent(dependent);
+        return this;
     }
 
     @Override
-    public void addDependent(Collection<? extends GamePlayer> dependent) {
+    public GamePlayer addDependent(Collection<? extends GamePlayer> dependent) {
         actualPlayer.addDependent(dependent);
+        return this;
     }
 
     @Override
-    public void syncWith(GamePlayer anotherState) {
+    public GamePlayer syncWith(GamePlayer anotherState) {
         actualPlayer.syncWith(anotherState);
+        return this;
+    }
+
+    @Override
+    public GameConfiguration getConfiguration() {
+        return actualPlayer.getConfiguration();
     }
 
 }

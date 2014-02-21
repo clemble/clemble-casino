@@ -7,9 +7,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -40,6 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 public class PotGameConstructionITest {
 
     @Autowired
@@ -82,8 +85,9 @@ public class PotGameConstructionITest {
         // Step 1. Constructing game session player
         PotGamePlayer AvsB = potPlayers.get(0);
         PotGamePlayer BvsA = potPlayers.get(1);
+        AvsB.waitForStart();
         // Step 2. Checking pot get to live
-        // Step 2.1. Giving up 3 games at a row
+        // Step 2.1. Giving up 2 games at a row
         GamePlayer currentAvsB = AvsB.getСurrent();
         currentAvsB.waitForStart();
         assertTrue(currentAvsB.isAlive());

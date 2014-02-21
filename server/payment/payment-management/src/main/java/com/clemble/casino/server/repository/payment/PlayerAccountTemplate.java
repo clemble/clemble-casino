@@ -26,6 +26,7 @@ public class PlayerAccountTemplate {
         return new PlayerAccount(player, jdbc.query(FIND_ONE, MoneyRowMapper.INSTANCE, player));
     }
 
+    // TODO this is really bad solution switch to Actors model
     public void debit(String player, Money amount) {
         int linesUpdated = 0;
         do {

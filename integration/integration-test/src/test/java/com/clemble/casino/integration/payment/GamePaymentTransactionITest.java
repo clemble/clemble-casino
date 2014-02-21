@@ -20,7 +20,7 @@ import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.SelectNumberAction;
-import com.clemble.casino.integration.game.construction.SyncGameScenarios;
+import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
@@ -32,7 +32,7 @@ import com.clemble.casino.payment.event.PaymentEvent;
 public class GamePaymentTransactionITest {
 
     @Autowired
-    public SyncGameScenarios gameScenarios;
+    public GameScenarios gameScenarios;
 
     @Test
     public void testAvailabilityConstruction(){

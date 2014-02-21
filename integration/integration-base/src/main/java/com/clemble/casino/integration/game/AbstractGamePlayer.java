@@ -20,6 +20,7 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
+import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.integration.event.EventAccumulator;
 
@@ -82,6 +83,10 @@ abstract public class AbstractGamePlayer implements GamePlayer {
         return configurationKey;
     }
 
+    final public GameConfiguration getConfiguration() {
+        return player.gameConstructionOperations().getConfigurations().getConfiguration(configurationKey);
+    }
+
     @Override
     final public ClembleCasinoOperations playerOperations() {
         return player;
@@ -93,12 +98,12 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    final public void waitVersion(int expectedVersion) {
+    final public GamePlayer waitVersion(int expectedVersion) {
         if (getVersion() >= expectedVersion)
-            return;
+            return this;
 
         synchronized (versionLock) {
-            while (isAlive() && getVersion() < expectedVersion) {
+            while (keepAlive.get() && getVersion() < expectedVersion) {
                 try {
                     versionLock.wait(15000);
                 } catch (InterruptedException e) {
@@ -106,6 +111,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
                 }
             }
         }
+        return this;
     }
 
     @Override
@@ -114,7 +120,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    final public void waitForEnd() {
+    final public GamePlayer waitForEnd() {
         long expirationTime = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(15);
         synchronized (versionLock) {
             while (isAlive() && expirationTime > System.currentTimeMillis()) {
@@ -124,15 +130,16 @@ abstract public class AbstractGamePlayer implements GamePlayer {
                 }
             }
         }
+        return this;
     }
 
     @Override
-    final public void waitForStart() {
-        waitForStart(15_000);
+    final public GamePlayer waitForStart() {
+        return waitForStart(15_000);
     }
 
     @Override
-    final public void waitForStart(long timeout) {
+    final public GamePlayer waitForStart(long timeout) {
         long expirationTime = timeout > 0 ? System.currentTimeMillis() + timeout : Long.MAX_VALUE;
         synchronized (versionLock) {
             while (keepAlive.get() && getVersion() < 0 && expirationTime > System.currentTimeMillis()) {
@@ -149,6 +156,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
         }
         if (getVersion() < 0)
             throw new RuntimeException(player.getPlayer() + " " + sessionKey + " was not started after " + timeout);
+        return this;
     }
 
     @Override
@@ -164,7 +172,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    final public void syncWith(GamePlayer anotherSessionPlayer) {
+    final public GamePlayer syncWith(GamePlayer anotherSessionPlayer) {
         if(!(anotherSessionPlayer instanceof MatchGamePlayer))
             throw new IllegalArgumentException();
         // Step 1. While versions do not match iterate
@@ -174,6 +182,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
             anotherSessionPlayer.waitVersion(maxVersion);
             waitVersion(maxVersion);
         }
+        return this;
     }
 
     @Override
@@ -181,16 +190,17 @@ abstract public class AbstractGamePlayer implements GamePlayer {
         return outcome.get();
     }
 
-    final public void addDependent(GamePlayer player) {
-        if (player != null && player != this) {
+    final public GamePlayer addDependent(GamePlayer player) {
+        if (player != null && player != this)
             dependents.add(player);
-        }
+        return this;
     }
 
     @Override
-    final public void addDependent(Collection<? extends GamePlayer> players) {
+    final public GamePlayer addDependent(Collection<? extends GamePlayer> players) {
         for (GamePlayer player : players)
             addDependent(player);
+        return this;
     }
 
 }

@@ -44,6 +44,8 @@ public class PlayerAccountController implements PlayerAccountService, ExternalCo
         return accountTemplate.findOne(playerWalletId);
     }
 
+    
+    // TODO Normalize this behavior
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody boolean canAfford(@RequestParam("player") String players, @RequestParam("currency") Currency currency, @RequestParam("amount") Long amount) {

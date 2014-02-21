@@ -89,9 +89,10 @@ public class SimpleMatchGamePlayer<State extends GameState> extends AbstractGame
     }
 
     @Override
-    public void giveUp() {
+    public GamePlayer giveUp() {
         // Step 1. Giving up if needed
         if (isAlive())
             perform(new GiveUpAction(getPlayer()));
+        return this;
     }
 }
