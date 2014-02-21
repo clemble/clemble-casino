@@ -42,7 +42,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 public class PotGameConstructionITest {
 
     @Autowired

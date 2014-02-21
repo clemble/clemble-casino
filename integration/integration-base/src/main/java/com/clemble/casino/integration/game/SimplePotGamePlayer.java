@@ -37,15 +37,20 @@ public class SimplePotGamePlayer extends AbstractGamePlayer implements PotGamePl
                 setContext(event.getContext());
             }
         });
+        this.setContext((PotGameContext) player.gameActionOperations(sessionKey).getContext());
     }
 
     private void setContext(PotGameContext context) {
+        // Step 1. Sanity check
+        if (context == null)
+            return;
+        // Step 2. Going through potcontext
         synchronized (lock) {
             if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
-                potContext.set(context);
                 GameSessionKey sessionKey = context.getCurrentSession();
                 GameConfigurationKey configurationKey = playerOperations().gameRecordOperations().get(sessionKey).getConfigurationKey();
                 currentPlayer.set(playerFactory.construct(playerOperations(), sessionKey, configurationKey));
+                potContext.set(context);
                 synchronized (versionLock) {
                     versionLock.notifyAll();
                 }

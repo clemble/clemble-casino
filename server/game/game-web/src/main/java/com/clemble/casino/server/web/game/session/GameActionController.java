@@ -2,6 +2,7 @@ package com.clemble.casino.server.web.game.session;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.game.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,10 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.MadeMove;
 import com.clemble.casino.game.event.server.GameManagementEvent;
@@ -62,6 +59,18 @@ public class GameActionController<State extends GameState> implements GameAction
         // Step 3. Fetching State
         return ((MatchGameRecord) gameManager.getRecord()).getState();
     }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_CONTEXT, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody GameContext<?> getContext(@PathVariable("game") Game game, @PathVariable("session") String session) {
+        // Step 1. Generating game session key
+        GameSessionKey  sessionKey = new GameSessionKey(game, session);
+        // Step 2. Extracting game context
+        GameManager manager = managerFactory.get(sessionKey);
+        return manager != null ? manager.getContext() : null;
+    }
+
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_ACTIONS_ACTION, produces = WebMapping.PRODUCES)

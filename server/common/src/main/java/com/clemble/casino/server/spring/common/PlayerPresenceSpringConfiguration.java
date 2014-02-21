@@ -14,7 +14,7 @@ import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 
 @Configuration
-@Import({ RabbitSpringConfiguration.class })
+@Import({ RabbitSpringConfiguration.class, RedisSpringConfiguration.class })
 public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -25,11 +25,6 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     @Bean(destroyMethod = "close")
     public PlayerPresenceCleaner playerPresenceCleaner(JedisPool jedisPool, ServerPlayerPresenceService presenceService) {
         return new JedisPlayerPresenceCleaner(jedisPool, presenceService);
-    }
-
-    @Bean
-    public JedisPool jedisPool() {
-        return new JedisPool("127.0.0.1");
     }
 
 }
