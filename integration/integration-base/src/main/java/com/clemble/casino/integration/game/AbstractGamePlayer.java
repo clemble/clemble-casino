@@ -60,6 +60,9 @@ abstract public class AbstractGamePlayer implements GamePlayer {
             @Override
             public void onEvent(GameEndedEvent<?> event) {
                 outcome.set(event.getOutcome());
+                synchronized (versionLock) {
+                    versionLock.notifyAll();
+                }
             }
         });
         // Step 2. Listening for all possible events
@@ -121,7 +124,12 @@ abstract public class AbstractGamePlayer implements GamePlayer {
 
     @Override
     final public GamePlayer waitForEnd() {
-        long expirationTime = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(15);
+        return waitForEnd(TimeUnit.SECONDS.toMillis(15));
+    }
+
+    @Override
+    final public GamePlayer waitForEnd(long timeout) {
+        long expirationTime = System.currentTimeMillis() + timeout;
         synchronized (versionLock) {
             while (isAlive() && expirationTime > System.currentTimeMillis()) {
                 try {
@@ -130,6 +138,8 @@ abstract public class AbstractGamePlayer implements GamePlayer {
                 }
             }
         }
+        if(isAlive())
+            throw new RuntimeException(player.getPlayer() + " " + sessionKey + " did not end after " + timeout);
         return this;
     }
 

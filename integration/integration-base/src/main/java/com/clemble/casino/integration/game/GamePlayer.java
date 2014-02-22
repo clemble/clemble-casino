@@ -26,6 +26,8 @@ public interface GamePlayer extends GameSessionAware, PlayerAware, Closeable, Ga
 
     public GamePlayer waitForEnd();
 
+    public GamePlayer waitForEnd(long timeout);
+
     public GamePlayer waitForStart();
 
     public GamePlayer waitForStart(long timeout);

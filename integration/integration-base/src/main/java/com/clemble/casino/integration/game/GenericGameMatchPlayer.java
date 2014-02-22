@@ -77,6 +77,12 @@ public class GenericGameMatchPlayer<State extends GameState> implements MatchGam
     }
 
     @Override
+    public GamePlayer waitForEnd(long timeout) {
+        actualPlayer.waitForEnd(timeout);
+        return this;
+    }
+
+    @Override
     final public void waitForTurn() {
         actualPlayer.waitForTurn();
     }
