@@ -6,6 +6,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.PotGameConfiguration;
+import com.clemble.casino.integration.game.GamePlayer;
 import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.PotGamePlayer;
 

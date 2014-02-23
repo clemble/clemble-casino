@@ -16,6 +16,7 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.PotGameConfiguration;
+import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.integration.game.GamePlayer;
 import com.clemble.casino.integration.game.GamePlayerFactory;
 import com.clemble.casino.integration.game.MatchGamePlayer;
@@ -31,6 +32,7 @@ public class SimpleGameScenarios implements GameScenarios {
         this.playerFactory = checkNotNull(playerFactory);
     }
 
+    @Override
     public <State extends GameState> List<MatchGamePlayer<State>> match(Game game) {
         if (game == null)
             throw new IllegalArgumentException("Name must not be null");
@@ -41,6 +43,7 @@ public class SimpleGameScenarios implements GameScenarios {
         return match(configuration);
     }
 
+    @Override
     public <State extends GameState> List<MatchGamePlayer<State>> match(GameConfiguration configuration) {
         if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
@@ -55,6 +58,18 @@ public class SimpleGameScenarios implements GameScenarios {
         });
         // Step 3. Returning constructed games
         return constructedGames;
+    }
+
+    @Override
+    public GamePlayer construct(GameConfiguration configuration, ClembleCasinoOperations player) {
+        if (configuration instanceof PotGameConfiguration) {
+            GameConstruction construction = player.gameConstructionOperations().constructAutomatch(configuration);
+            return playerFactory.construct(player, construction);
+        } else if(configuration instanceof MatchGameConfiguration) {
+            return match(configuration, player);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

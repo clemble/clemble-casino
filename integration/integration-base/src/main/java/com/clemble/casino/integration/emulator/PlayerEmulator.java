@@ -7,40 +7,45 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.specification.GameConfigurationAware;
+import com.clemble.casino.integration.game.GamePlayer;
+import com.clemble.casino.integration.game.construction.GameScenarios;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.MatchGamePlayerFactory;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 
-public class PlayerEmulator<State extends GameState> implements Runnable {
+public class PlayerEmulator implements Runnable, GameConfigurationAware {
 
-    final private Logger logger = LoggerFactory.getLogger(PlayerEmulator.class);
+    final private Logger LOG = LoggerFactory.getLogger(PlayerEmulator.class);
 
-    final private MatchGameConfiguration specification;
+    final private GamePlayerActor actor;
+    final private GameConfiguration specification;
     final private PlayerScenarios playerOperations;
-    final private MatchGamePlayerFactory<State> sessionPlayerFactory;
-    final private GameActor<State> actor;
+    final private GameScenarios sessionPlayerFactory;
     final private AtomicBoolean continueEmulation = new AtomicBoolean(true);
     final private AtomicLong lastMoved = new AtomicLong();
-    final private AtomicReference<MatchGamePlayer<State>> currentPlayer = new AtomicReference<MatchGamePlayer<State>>();
+    final private AtomicReference<GamePlayer> currentPlayer = new AtomicReference<GamePlayer>();
 
-    public PlayerEmulator(final GameActor<State> actor,
+    public PlayerEmulator(
+            final GamePlayerActor actor,
             final PlayerScenarios playerOperations,
-            final MatchGamePlayerFactory<State> sessionPlayerFactory,
-            final MatchGameConfiguration specification) {
+            final GameScenarios sessionPlayerFactory,
+            final GameConfiguration specification) {
         this.specification = checkNotNull(specification);
         this.actor = checkNotNull(actor);
         this.sessionPlayerFactory = checkNotNull(sessionPlayerFactory);
         this.playerOperations = checkNotNull(playerOperations);
     }
 
-    public MatchGameConfiguration getSpecification() {
+    @Override
+    public GameConfiguration getConfiguration() {
         return specification;
     }
 
@@ -51,22 +56,11 @@ public class PlayerEmulator<State extends GameState> implements Runnable {
             try {
                 player = playerOperations.createPlayer();
                 // Step 1. Start player emulator
-                GameConstruction playerConstruction = player.gameConstructionOperations().constructAutomatch(specification);
-                MatchGamePlayer<State> playerState = sessionPlayerFactory.construct(player, playerConstruction);
-                logger.info("Registered {} with construction {} ", playerState.playerOperations(), playerState.getSession());
+                GamePlayer playerState = sessionPlayerFactory.construct(specification, player);
+                LOG.info("Registered {} with construction {} ", playerState.playerOperations(), playerState.getSession());
                 currentPlayer.set(playerState);
                 lastMoved.set(System.currentTimeMillis());
-                playerState.waitForStart(0);
-                while (playerState.isAlive()) {
-                    // Step 2. Waiting for player turn
-                    playerState.waitForTurn();
-                    // Step 3. Performing action
-                    if (playerState.isToMove()) {
-                        int versionBefore = playerState.getVersion();
-                        actor.move(playerState);
-                        playerState.waitVersion(versionBefore + 1);
-                    }
-                }
+                actor.play(playerState);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             } finally {
