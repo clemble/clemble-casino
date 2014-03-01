@@ -3,23 +3,23 @@ package com.clemble.casino.server.game.aspect.security;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.PotGameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.GameEndedEvent;
-import com.clemble.casino.game.event.server.GamePotEvent;
+import com.clemble.casino.game.event.server.MatchEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
-public class GamePotSecurityAspect extends BasicGameAspect<Event> {
+public class MatchGameSecurityAspect extends BasicGameAspect<Event> {
 
-    final private PotGameContext context;
+    final private MatchGameContext context;
     
-    public GamePotSecurityAspect(PotGameContext context) {
+    public MatchGameSecurityAspect(MatchGameContext context) {
         super(new EventTypeSelector(Event.class));
         this.context = context;
     }
 
     @Override
     public void doEvent(Event event) {
-        if (event instanceof GamePotEvent)
+        if (event instanceof MatchEvent)
             return;
         // Step 1. Going through the events
         if (!(event instanceof GameEndedEvent)) // TODO replace with Clemble errors

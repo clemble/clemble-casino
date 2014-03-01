@@ -3,15 +3,15 @@ package com.clemble.casino.server.game.aspect.pot;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
-import com.clemble.casino.game.PotGameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.RoundEndedEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
-public class PotFillMaxCommonAspect extends BasicGameAspect<RoundEndedEvent>{
+public class MatchFillMaxCommonAspect extends BasicGameAspect<RoundEndedEvent>{
 
-    final private PotGameContext context;
+    final private MatchGameContext context;
 
-    public PotFillMaxCommonAspect(PotGameContext context) {
+    public MatchFillMaxCommonAspect(MatchGameContext context) {
         super(new EventTypeSelector(RoundEndedEvent.class));
         this.context = context;
     }

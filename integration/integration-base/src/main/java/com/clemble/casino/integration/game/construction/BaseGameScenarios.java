@@ -5,9 +5,9 @@ import java.util.List;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.PotGameConfiguration;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.RoundGamePlayer;
-import com.clemble.casino.integration.game.PotGamePlayer;
 
 public interface BaseGameScenarios {
 
@@ -15,8 +15,8 @@ public interface BaseGameScenarios {
 
     public <State extends GameState> List<RoundGamePlayer<State>> match(GameConfiguration specification);
 
-    public List<PotGamePlayer> pot();
+    public List<MatchGamePlayer> pot();
 
-    public List<PotGamePlayer> pot(PotGameConfiguration configuration);
+    public List<MatchGamePlayer> pot(MatchGameConfiguration configuration);
 
 }

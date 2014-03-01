@@ -1,7 +1,7 @@
 package com.clemble.casino.integration.emulator;
 
 import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.PotGameConfiguration;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -17,8 +17,8 @@ public class GamePlayerActorFactory implements ApplicationContextAware {
 
     public GamePlayerActor getActor(GameConfiguration configuration) {
         // Step 1. Special case
-        if(configuration instanceof PotGameConfiguration)
-            return new PotGamePlayerActor(this);
+        if(configuration instanceof MatchGameConfiguration)
+            return new MatchGamePlayerActor(this);
         // Step 2. Processing GamePlayerActor
         for(GamePlayerActor actor: actors)
             if(actor.canPlay(configuration))

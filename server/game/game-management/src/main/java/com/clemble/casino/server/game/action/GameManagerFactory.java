@@ -11,51 +11,36 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.game.*;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.event.server.MatchStartedEvent;
 import com.clemble.casino.game.event.server.RoundStartedEvent;
-import com.clemble.casino.game.event.server.GamePotStartedEvent;
 import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
-import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
-import com.clemble.casino.server.repository.game.PotGameRecordRepository;
+import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 
 public class GameManagerFactory {
 
     final private ConcurrentHashMap<GameSessionKey, GameManager<?>> sessionToManager = new ConcurrentHashMap<>();
     
-//    final private LoadingCache<GameSessionKey, GameManager<?>> sessionToManager = CacheBuilder.newBuilder().build(
-//            new CacheLoader<GameSessionKey, GameManager<?>>() {
-//                @Override
-//                public GameManager<?> load(GameSessionKey key) throws Exception {
-//                    // Step 1. Searching for appropriate session in repository
-//                    RoundGameRecord session = sessionRepository.findOne(key);
-//                    // Step 2. Creating appropriate initiation
-//                    GameConfiguration configuration = configurationRepository.findOne(session.getConfigurationKey()).getConfiguration();
-//                    // Step 3. Constructing initiation
-//                    GameInitiation initiation = new GameInitiation(session.getSession(), session.getPlayers(), configuration);
-//                    // Step 4. To match
-//                    return start(initiation, null);
-//                }
-//            });
-
     final private GameStateFactoryFacade stateFactory;
     final private ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchAspectFactory;
-    final private ServerGameAspectFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potAspectFactory;
+    final private ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potAspectFactory;
     final private ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentAspectFactory;
-    final private PotGameRecordRepository potRepository;
+    final private MatchGameRecordRepository potRepository;
     final private RoundGameRecordRepository sessionRepository;
     final private PlayerNotificationService notificationService;
     final private ServerGameConfigurationRepository configurationRepository;
 
     public GameManagerFactory(
-            PotGameRecordRepository potRepository,
+            MatchGameRecordRepository potRepository,
             GameStateFactoryFacade stateFactory,
             ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory,
-            ServerGameAspectFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory,
+            ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
             ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentAspectFactory,
             RoundGameRecordRepository sessionRepository,
             ServerGameConfigurationRepository configurationRepository,
@@ -80,7 +65,7 @@ public class GameManagerFactory {
         try {
             if (initiation.getConfiguration() instanceof RoundGameConfiguration) {
                 return match(initiation, parent);
-            } else if (initiation.getConfiguration() instanceof PotGameConfiguration) {
+            } else if (initiation.getConfiguration() instanceof MatchGameConfiguration) {
                 return pot(initiation, parent);
             } else {
                 throw new IllegalArgumentException();
@@ -112,10 +97,10 @@ public class GameManagerFactory {
     }
 
     // TODO make this internal to the system, with no available processing from outside
-    public GameManager<PotGameRecord> pot(GameInitiation initiation, GameContext<?> parent) {
-        PotGameContext context = new PotGameContext(initiation, parent);
+    public GameManager<MatchGameRecord> pot(GameInitiation initiation, GameContext<?> parent) {
+        MatchGameContext context = new MatchGameContext(initiation, parent);
         // Step 1. Fetching first pot configuration
-        PotGameConfiguration potConfiguration = (PotGameConfiguration) initiation.getConfiguration();
+        MatchGameConfiguration potConfiguration = (MatchGameConfiguration) initiation.getConfiguration();
         long guaranteedPotSize = potConfiguration.getPrice().getAmount();
         for(GameConfiguration configuration: potConfiguration.getConfigurations())
             guaranteedPotSize -= configuration.getPrice().getAmount();
@@ -134,44 +119,21 @@ public class GameManagerFactory {
         GameManager<?> subManager = start(subInitiation, context);
         context.setCurrentSession(subManager.getContext().getSession());
         // Step 6. Generating new pot game record
-        PotGameRecord potGameRecord = new PotGameRecord(initiation.getSession(), initiation.getConfiguration().getConfigurationKey(), GameSessionState.active, Collections.<GameSessionKey>emptyList());
-        potGameRecord.getSubRecords().add(subManager.getRecord().getSession());
+        MatchGameRecord matchGameRecord = new MatchGameRecord(initiation.getSession(), initiation.getConfiguration().getConfigurationKey(), GameSessionState.active, Collections.<GameSessionKey>emptyList());
+        matchGameRecord.getSubRecords().add(subManager.getRecord().getSession());
         // Step 7. Saving pot record
-        potGameRecord = potRepository.saveAndFlush(potGameRecord);
-        PotGameConfiguration configuration = (PotGameConfiguration) initiation.getConfiguration();
-        PotGameProcessor gameProcessor = new PotGameProcessor(context, configuration, this);
-        GameProcessor<PotGameRecord, Event> potProcessor = potAspectFactory.create(gameProcessor, configuration, context);
-        GameManager<PotGameRecord> potGameManager = new GameManager<>(potProcessor, potGameRecord, context);
+        matchGameRecord = potRepository.saveAndFlush(matchGameRecord);
+        MatchGameConfiguration configuration = (MatchGameConfiguration) initiation.getConfiguration();
+        MatchGameProcessor gameProcessor = new MatchGameProcessor(context, configuration, this);
+        GameProcessor<MatchGameRecord, Event> potProcessor = potAspectFactory.create(gameProcessor, configuration, context);
+        GameManager<MatchGameRecord> potGameManager = new GameManager<>(potProcessor, matchGameRecord, context);
         sessionToManager.put(initiation.getSession(), potGameManager);
-        notificationService.notify(initiation.getParticipants(), new GamePotStartedEvent(initiation.getSession(), context));
+        notificationService.notify(initiation.getParticipants(), new MatchStartedEvent(initiation.getSession(), context));
         // Step 8. Returning pot game record
         return potGameManager;
     }
 
     public GameManager<TournamentGameRecord> tournament(GameInitiation initiation, GameContext<?> parent) {
-//        TournamentGameContext potGameContext = new TournamentGameContext(initiation, parent);
-//        // Step 1. Fetching first pot configuration
-//        PotGameConfiguration potConfiguration = (PotGameConfiguration) initiation.getConfiguration();
-//        // Step 2. Taking first match from the pot
-//        GameConfiguration subConfiguration = potConfiguration.getConfigurations().get(0);
-//        // Step 3. Constructing match initiation
-//        GameInitiation subInitiation = new GameInitiation(initiation.getSession().append("0"), subConfiguration, initiation.getParticipants());
-//        // Step 4. Sending notification to related players
-//        notificationService.notify(initiation.getParticipants(), new GamePotStartedEvent(initiation.getSession()));
-//        // Step 5. Generating new match game record
-//        GameManager<?> subManager = start(subInitiation, potGameContext);
-//        // Step 6. Generating new pot game record
-//        PotGameRecord potGameRecord = new PotGameRecord(initiation.getSession(), initiation.getConfiguration().getConfigurationKey(), GameSessionState.active, Collections.<GameSessionKey>emptyList());
-//        potGameRecord.getSubRecords().add(subManager.getRecord().getSession());
-//        // Step 7. Saving pot record
-//        potGameRecord = potRepository.saveAndFlush(potGameRecord);
-//        PotGameContext context = new PotGameContext(initiation);
-//        PotGameConfiguration configuration = (PotGameConfiguration) initiation.getConfiguration();
-//        PotGameProcessor gameProcessor = new PotGameProcessor(context, configuration, this);
-//        GameProcessor<PotGameRecord, Event> potProcessor = potAspectFactory.create(gameProcessor, configuration, context);
-//        GameManager<PotGameRecord> potGameManager = new GameManager<>(potProcessor, potGameRecord);
-//        sessionToManager.put(initiation.getSession(), potGameManager);
-//        // Step 8. Returning pot game record
         return null;
     }
 

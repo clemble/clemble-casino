@@ -3,6 +3,7 @@ package com.clemble.casino.integration.game;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +15,6 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.GameConfigurationKey;
-import com.clemble.casino.game.specification.PotGameConfiguration;
 
 public class GamePlayerFactory implements ApplicationContextAware {
 
@@ -34,8 +34,8 @@ public class GamePlayerFactory implements ApplicationContextAware {
             if (gameToPlayerFactory.get(game) != null)
                 return (P) gameToPlayerFactory.get(game).construct(player, sessionKey, configurationKey);
             return (P) defaultMatchPlayerFactory.construct(player, sessionKey, configurationKey);
-        } else if (configuration instanceof PotGameConfiguration) {
-            return (P) new SimplePotGamePlayer(player, sessionKey, configuration.getConfigurationKey(), this);
+        } else if (configuration instanceof MatchGameConfiguration) {
+            return (P) new SimpleMatchGamePlayer(player, sessionKey, configuration.getConfigurationKey(), this);
         } else {
             throw new IllegalArgumentException();
         } 

@@ -16,19 +16,19 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
-import com.clemble.casino.server.repository.game.PotGameRecordRepository;
+import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
 import com.clemble.casino.web.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
 public class GameRecordController implements GameRecordService, ExternalController {
 
-    final private RoundGameRecordRepository matchGameRecordRepository;
-    final private PotGameRecordRepository potGameRecordRepository;
+    final private RoundGameRecordRepository roundGameRecordRepository;
+    final private MatchGameRecordRepository matchGameRecordRepository;
 
-    public GameRecordController(RoundGameRecordRepository matchGameRecordRepository, PotGameRecordRepository potGameRecordRepository) {
+    public GameRecordController(RoundGameRecordRepository roundGameRecordRepository, MatchGameRecordRepository matchGameRecordRepository) {
+        this.roundGameRecordRepository = checkNotNull(roundGameRecordRepository);
         this.matchGameRecordRepository = checkNotNull(matchGameRecordRepository);
-        this.potGameRecordRepository = checkNotNull(potGameRecordRepository);
     }
 
     @Override
@@ -36,10 +36,10 @@ public class GameRecordController implements GameRecordService, ExternalControll
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody GameRecord get(@PathVariable("game") Game game, @PathVariable("session") String session) {
         GameSessionKey sessionKey = new GameSessionKey(game, session);
-        if (matchGameRecordRepository.exists(sessionKey))
+        if (roundGameRecordRepository.exists(sessionKey))
+            return roundGameRecordRepository.findOne(sessionKey);
+        else if (matchGameRecordRepository.exists(sessionKey))
             return matchGameRecordRepository.findOne(sessionKey);
-        else if (potGameRecordRepository.exists(sessionKey))
-            return potGameRecordRepository.findOne(sessionKey);
         return null;
     }
 }

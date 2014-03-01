@@ -1,5 +1,6 @@
 package com.clemble.casino.server.sql.game;
 
+import com.clemble.casino.game.MatchGameRecord;
 import com.clemble.casino.game.RoundGameRecord;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
@@ -9,7 +10,6 @@ import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.clemble.casino.game.PotGameRecord;
 import com.clemble.casino.game.configuration.ServerGameConfiguration;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.ScheduledGame;
@@ -53,7 +53,7 @@ public class GameSchemaGenerator {
                 .addAnnotatedClass(RoundGameRecord.class)
                 .addAnnotatedClass(GameConstruction.class)
                 .addAnnotatedClass(ScheduledGame.class)
-                .addAnnotatedClass(PotGameRecord.class);
+                .addAnnotatedClass(MatchGameRecord.class);
     }
 
 }

@@ -12,7 +12,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.clemble.casino.VersionAware;
 import com.clemble.casino.base.ActionLatch;
-import com.clemble.casino.game.PotGameContext;
+import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.action.BetAction;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
@@ -158,10 +158,10 @@ public class ObjectTest {
                 return new RoundGameContext(initiation);
             }
         });
-        register(PotGameContext.class, new AbstractValueGenerator<PotGameContext>() {
+        register(MatchGameContext.class, new AbstractValueGenerator<MatchGameContext>() {
             @Override
-            public PotGameContext generate() {
-                return new PotGameContext(GameSessionKey.DEFAULT_SESSION, GameSessionKey.DEFAULT_SESSION, null, null, 0, Collections.<GameOutcome>emptyList());
+            public MatchGameContext generate() {
+                return new MatchGameContext(GameSessionKey.DEFAULT_SESSION, GameSessionKey.DEFAULT_SESSION, null, null, 0, Collections.<GameOutcome>emptyList());
             }
         });
         register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {

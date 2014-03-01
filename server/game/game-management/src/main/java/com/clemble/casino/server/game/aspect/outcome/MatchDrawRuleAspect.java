@@ -7,8 +7,8 @@ import java.util.Date;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
-import com.clemble.casino.game.PotGameContext;
-import com.clemble.casino.game.event.server.GamePotEndedEvent;
+import com.clemble.casino.game.MatchGameContext;
+import com.clemble.casino.game.event.server.MatchEndedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.payment.PaymentOperation;
@@ -19,21 +19,21 @@ import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
-public class PotDrawRuleAspect extends BasicGameAspect<GamePotEndedEvent> {
+public class MatchDrawRuleAspect extends BasicGameAspect<MatchEndedEvent> {
 
     final private Currency currency;
     final private ServerPaymentTransactionService transactionService;
 
-    public PotDrawRuleAspect(Currency currency, ServerPaymentTransactionService transactionService) {
-        super(new EventTypeSelector(GamePotEndedEvent.class));
+    public MatchDrawRuleAspect(Currency currency, ServerPaymentTransactionService transactionService) {
+        super(new EventTypeSelector(MatchEndedEvent.class));
         this.currency = currency;
         this.transactionService = checkNotNull(transactionService);
     }
 
     @Override
-    public void doEvent(GamePotEndedEvent event) {
+    public void doEvent(MatchEndedEvent event) {
         GameOutcome outcome = event.getOutcome();
-        PotGameContext context = event.getContext();
+        MatchGameContext context = event.getContext();
         if (outcome instanceof DrawOutcome) {
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()

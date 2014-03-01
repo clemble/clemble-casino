@@ -6,15 +6,14 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.PotGameContext;
-import com.clemble.casino.game.event.server.GamePotEvent;
-import com.clemble.casino.game.service.GameRecordService;
+import com.clemble.casino.game.MatchGameContext;
+import com.clemble.casino.game.event.server.MatchEvent;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 
 /**
  * Created by mavarazy on 16/02/14.
  */
-public class SimplePotGamePlayer extends AbstractGamePlayer implements PotGamePlayer {
+public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGamePlayer {
 
     /**
      * Generated 17/02/14
@@ -26,21 +25,21 @@ public class SimplePotGamePlayer extends AbstractGamePlayer implements PotGamePl
     final private GamePlayerFactory playerFactory;
 
     final private AtomicReference<GamePlayer> currentPlayer = new AtomicReference<>();
-    final private AtomicReference<PotGameContext> potContext = new AtomicReference<>();
+    final private AtomicReference<MatchGameContext> potContext = new AtomicReference<>();
 
-    public SimplePotGamePlayer(ClembleCasinoOperations player, GameSessionKey sessionKey, GameConfigurationKey configurationKey, GamePlayerFactory playerFactory) {
+    public SimpleMatchGamePlayer(ClembleCasinoOperations player, GameSessionKey sessionKey, GameConfigurationKey configurationKey, GamePlayerFactory playerFactory) {
         super(player, sessionKey, configurationKey);
         this.playerFactory = playerFactory;
-        player.listenerOperations().subscribe(new EventTypeSelector(GamePotEvent.class), new EventListener<GamePotEvent>() {
+        player.listenerOperations().subscribe(new EventTypeSelector(MatchEvent.class), new EventListener<MatchEvent>() {
             @Override
-            public void onEvent(GamePotEvent event) {
+            public void onEvent(MatchEvent event) {
                 setContext(event.getContext());
             }
         });
-        this.setContext((PotGameContext) player.gameActionOperations(sessionKey).getContext());
+        this.setContext((MatchGameContext) player.gameActionOperations(sessionKey).getContext());
     }
 
-    private void setContext(PotGameContext context) {
+    private void setContext(MatchGameContext context) {
         // Step 1. Sanity check
         if (context == null)
             return;

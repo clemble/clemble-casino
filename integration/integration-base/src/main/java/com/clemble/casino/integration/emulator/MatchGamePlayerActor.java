@@ -1,27 +1,27 @@
 package com.clemble.casino.integration.emulator;
 
 import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.PotGameConfiguration;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.game.GamePlayer;
-import com.clemble.casino.integration.game.PotGamePlayer;
+import com.clemble.casino.integration.game.MatchGamePlayer;
 
 /**
  * Created by mavarazy on 23/02/14.
  */
-public class PotGamePlayerActor implements GamePlayerActor<PotGamePlayer> {
+public class MatchGamePlayerActor implements GamePlayerActor<MatchGamePlayer> {
 
     final GamePlayerActorFactory actorFactory;
 
-    public PotGamePlayerActor(GamePlayerActorFactory actorFactory) {
+    public MatchGamePlayerActor(GamePlayerActorFactory actorFactory) {
         this.actorFactory = actorFactory;
     }
 
     public boolean canPlay(GameConfiguration configuration) {
-        return configuration instanceof PotGameConfiguration;
+        return configuration instanceof MatchGameConfiguration;
     }
 
     @Override
-    public void play(PotGamePlayer potPlayer) {
+    public void play(MatchGamePlayer potPlayer) {
         potPlayer.waitForStart();
         while(potPlayer.isAlive()) {
             GamePlayer player = potPlayer.getСurrent();

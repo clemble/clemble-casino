@@ -20,7 +20,7 @@ import com.clemble.casino.game.rule.construct.PlayerNumberRule;
 import com.clemble.casino.game.rule.construct.PrivacyRule;
 import com.clemble.casino.game.rule.outcome.DrawRule;
 import com.clemble.casino.game.rule.outcome.WonRule;
-import com.clemble.casino.game.rule.pot.PotFillRule;
+import com.clemble.casino.game.rule.pot.MatchFillRule;
 import com.clemble.casino.game.rule.time.MoveTimeRule;
 import com.clemble.casino.game.rule.time.TimeBreachPunishment;
 import com.clemble.casino.game.rule.time.TotalTimeRule;
@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class PotGameConstructionITest {
+public class MatchGameConstructionITest {
 
     @Autowired
     public PlayerScenarios playerScenarios;
@@ -57,17 +57,17 @@ public class PotGameConstructionITest {
         configurations.add(configuration);
         configurations.add(configuration);
 
-        PotGameConfiguration potConfiguration = new PotGameConfiguration(new GameConfigurationKey(Game.pot, "pot"), Money.create(Currency.FakeMoney, 200), PrivacyRule.everybody, PlayerNumberRule.two, PotFillRule.maxcommon, new MoveTimeRule(50000, TimeBreachPunishment.loose), new TotalTimeRule(500000, TimeBreachPunishment.loose), WonRule.owned, DrawRule.owned, configurations);
+        MatchGameConfiguration potConfiguration = new MatchGameConfiguration(new GameConfigurationKey(Game.pot, "pot"), Money.create(Currency.FakeMoney, 200), PrivacyRule.everybody, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, TimeBreachPunishment.loose), new TotalTimeRule(500000, TimeBreachPunishment.loose), WonRule.owned, DrawRule.owned, configurations);
 
         System.out.println(objectMapper.writeValueAsString(potConfiguration));
     }
 
     @Test
     public void testIsAlive() {
-        List<PotGamePlayer> potPlayers = gameScenarios.pot();
+        List<MatchGamePlayer> potPlayers = gameScenarios.pot();
         // Step 1. Constructing game session player
-        PotGamePlayer AvsB = potPlayers.get(0);
-        PotGamePlayer BvsA = potPlayers.get(1);
+        MatchGamePlayer AvsB = potPlayers.get(0);
+        MatchGamePlayer BvsA = potPlayers.get(1);
         // Step 2. Checking pot get to live
         assertTrue(AvsB.isAlive());
         assertTrue(BvsA.isAlive());
@@ -75,10 +75,10 @@ public class PotGameConstructionITest {
 
     @Test
     public void testActiveSession() {
-        List<PotGamePlayer> potPlayers = gameScenarios.pot();
+        List<MatchGamePlayer> potPlayers = gameScenarios.pot();
         // Step 1. Constructing game session player
-        PotGamePlayer AvsB = potPlayers.get(0);
-        PotGamePlayer BvsA = potPlayers.get(1);
+        MatchGamePlayer AvsB = potPlayers.get(0);
+        MatchGamePlayer BvsA = potPlayers.get(1);
         AvsB.waitForStart();
         // Step 2. Checking pot get to live
         // Step 2.1. Giving up 2 games at a row

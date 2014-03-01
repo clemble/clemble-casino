@@ -14,12 +14,12 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
-import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.integration.game.GamePlayer;
 import com.clemble.casino.integration.game.GamePlayerFactory;
+import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.RoundGamePlayer;
-import com.clemble.casino.integration.game.PotGamePlayer;
 
 public class SimpleGameScenarios implements GameScenarios {
 
@@ -61,7 +61,7 @@ public class SimpleGameScenarios implements GameScenarios {
 
     @Override
     public GamePlayer construct(GameConfiguration configuration, ClembleCasinoOperations player) {
-        if (configuration instanceof PotGameConfiguration) {
+        if (configuration instanceof MatchGameConfiguration) {
             GameConstruction construction = player.gameConstructionOperations().constructAutomatch(configuration);
             return playerFactory.construct(player, construction);
         } else if(configuration instanceof RoundGameConfiguration) {
@@ -115,13 +115,13 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public List<PotGamePlayer> pot() {
+    public List<MatchGamePlayer> pot() {
         ClembleCasinoOperations player = playerOperations.createPlayer();
         return pot(player.gameConstructionOperations().getConfigurations().potConfigurations().get(0));
     }
 
     @Override
-    public List<PotGamePlayer> pot(PotGameConfiguration configuration) {
+    public List<MatchGamePlayer> pot(MatchGameConfiguration configuration) {
         return construct(configuration);
     }
 
