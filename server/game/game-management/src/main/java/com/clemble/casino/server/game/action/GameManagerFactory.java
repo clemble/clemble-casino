@@ -8,29 +8,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.persistence.OptimisticLockException;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GamePlayerContext;
-import com.clemble.casino.game.GameProcessor;
-import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.GameSessionState;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.MatchGameRecord;
-import com.clemble.casino.game.PotGameContext;
-import com.clemble.casino.game.PotGameRecord;
-import com.clemble.casino.game.TournamentGameContext;
-import com.clemble.casino.game.TournamentGameRecord;
+import com.clemble.casino.game.*;
+import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.event.server.GameMatchStartedEvent;
+import com.clemble.casino.game.event.server.RoundStartedEvent;
 import com.clemble.casino.game.event.server.GamePotStartedEvent;
 import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
+import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
 import com.clemble.casino.server.repository.game.PotGameRecordRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 
@@ -43,7 +32,7 @@ public class GameManagerFactory {
 //                @Override
 //                public GameManager<?> load(GameSessionKey key) throws Exception {
 //                    // Step 1. Searching for appropriate session in repository
-//                    MatchGameRecord session = sessionRepository.findOne(key);
+//                    RoundGameRecord session = sessionRepository.findOne(key);
 //                    // Step 2. Creating appropriate initiation
 //                    GameConfiguration configuration = configurationRepository.findOne(session.getConfigurationKey()).getConfiguration();
 //                    // Step 3. Constructing initiation
@@ -54,21 +43,21 @@ public class GameManagerFactory {
 //            });
 
     final private GameStateFactoryFacade stateFactory;
-    final private ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchAspectFactory;
+    final private ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchAspectFactory;
     final private ServerGameAspectFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potAspectFactory;
     final private ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentAspectFactory;
     final private PotGameRecordRepository potRepository;
-    final private MatchGameRecordRepository sessionRepository;
+    final private RoundGameRecordRepository sessionRepository;
     final private PlayerNotificationService notificationService;
     final private ServerGameConfigurationRepository configurationRepository;
 
     public GameManagerFactory(
             PotGameRecordRepository potRepository,
             GameStateFactoryFacade stateFactory,
-            ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory,
+            ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory,
             ServerGameAspectFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory,
             ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentAspectFactory,
-            MatchGameRecordRepository sessionRepository,
+            RoundGameRecordRepository sessionRepository,
             ServerGameConfigurationRepository configurationRepository,
             PlayerNotificationService notificationService) {
         this.stateFactory = checkNotNull(stateFactory);
@@ -89,7 +78,7 @@ public class GameManagerFactory {
 
     public GameManager<?> start(GameInitiation initiation, GameContext<?> parent) {
         try {
-            if (initiation.getConfiguration() instanceof MatchGameConfiguration) {
+            if (initiation.getConfiguration() instanceof RoundGameConfiguration) {
                 return match(initiation, parent);
             } else if (initiation.getConfiguration() instanceof PotGameConfiguration) {
                 return pot(initiation, parent);
@@ -102,23 +91,23 @@ public class GameManagerFactory {
         }
     }
 
-    public GameManager<MatchGameRecord> match(GameInitiation initiation, GameContext<?> parent) {
-        MatchGameConfiguration matchGameConfiguration = (MatchGameConfiguration) initiation.getConfiguration();
+    public GameManager<RoundGameRecord> match(GameInitiation initiation, GameContext<?> parent) {
+        RoundGameConfiguration matchGameConfiguration = (RoundGameConfiguration) initiation.getConfiguration();
         // Step 1. Allocating table for game initiation
-        GameState state = stateFactory.constructState(initiation, new MatchGameContext(initiation));
+        GameState state = stateFactory.constructState(initiation, new RoundGameContext(initiation));
         // Step 2. Sending notification for game started
-        MatchGameContext context = new MatchGameContext(initiation, parent);
-        GameProcessor<MatchGameRecord, Event> processor = matchAspectFactory.create(state, matchGameConfiguration, new MatchGameContext(initiation, parent));
+        RoundGameContext context = new RoundGameContext(initiation, parent);
+        GameProcessor<RoundGameRecord, Event> processor = matchAspectFactory.create(state, matchGameConfiguration, new RoundGameContext(initiation, parent));
         // Step 3. Returning active table
-        MatchGameRecord matchRecord = new MatchGameRecord()
+        RoundGameRecord matchRecord = new RoundGameRecord()
             .setSession(initiation.getSession())
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants()).setState(state);
         matchRecord = sessionRepository.saveAndFlush(matchRecord);
-        GameManager<MatchGameRecord> manager = new GameManager<>(processor, matchRecord, context);
+        GameManager<RoundGameRecord> manager = new GameManager<>(processor, matchRecord, context);
         sessionToManager.put(initiation.getSession(), manager);
-        notificationService.notify(initiation.getParticipants(), new GameMatchStartedEvent<GameState>(matchRecord));
+        notificationService.notify(initiation.getParticipants(), new RoundStartedEvent<GameState>(matchRecord));
         return manager;
     }
 

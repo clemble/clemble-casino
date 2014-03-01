@@ -10,7 +10,7 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.social.SocialModuleSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.UNIT_TEST)
+@ActiveProfiles(SpringConfiguration.TEST)
 @ContextConfiguration(classes = SocialModuleSpringConfiguration.class)
 public class InitializationTest {
 

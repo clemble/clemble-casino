@@ -1,12 +1,12 @@
 package com.clemble.casino.server.spring.web.game;
 
 import com.clemble.casino.game.*;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.game.specification.PotGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.action.GameStateFactoryFacade;
-import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
+import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 import com.clemble.casino.server.game.aspect.PotGameAspectFactory;
 import com.clemble.casino.server.game.aspect.ServerGameAspectFactory;
 import com.clemble.casino.server.game.aspect.TournamentGameAspectFactory;
@@ -42,10 +42,10 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Bean
     public GameManagerFactory gameProcessor(PotGameRecordRepository potRepository,
                                             GameStateFactoryFacade stateFactory,
-                                            @Qualifier("matchProcessorFactory") ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory,
+                                            @Qualifier("matchProcessorFactory") ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory,
                                             @Qualifier("potProcessorFactory") ServerGameAspectFactory<PotGameConfiguration, PotGameContext, PotGameRecord> potProcessorFactory,
                                             @Qualifier("tournamentProcessorFactory") ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
-                                            MatchGameRecordRepository sessionRepository,
+                                            RoundGameRecordRepository sessionRepository,
                                             ServerGameConfigurationRepository configurationRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new GameManagerFactory(potRepository, stateFactory, matchProcessorFactory, potProcessorFactory, tournamentProcessorFactory, sessionRepository, configurationRepository, notificationService);
     }
@@ -64,8 +64,8 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory() {
-        return new ServerGameAspectFactory<>(MatchGameAspectFactory.class);
+    public ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory() {
+        return new ServerGameAspectFactory<>(RoundGameAspectFactory.class);
     }
 
     @Bean
@@ -84,7 +84,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameActionController<State> picPacPoeEngineController(GameManagerFactory sessionProcessor, MatchGameRecordRepository gameSessionRepository) {
+    public GameActionController<State> picPacPoeEngineController(GameManagerFactory sessionProcessor, RoundGameRecordRepository gameSessionRepository) {
         return new GameActionController<>(gameSessionRepository, sessionProcessor);
     }
 
@@ -100,7 +100,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameRecordController gameRecordController(MatchGameRecordRepository matchGameRecordRepository, PotGameRecordRepository potGameRecordRepository) {
+    public GameRecordController gameRecordController(RoundGameRecordRepository matchGameRecordRepository, PotGameRecordRepository potGameRecordRepository) {
         return new GameRecordController(matchGameRecordRepository, potGameRecordRepository);
     }
 

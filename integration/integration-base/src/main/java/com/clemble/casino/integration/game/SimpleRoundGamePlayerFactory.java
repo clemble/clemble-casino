@@ -7,7 +7,7 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 
-public class SimpleMatchGamePlayerFactory<State extends GameState> implements MatchGamePlayerFactory<State> {
+public class SimpleRoundGamePlayerFactory<State extends GameState> implements RoundGamePlayerFactory<State> {
 
     /**
      * Generate 19/11/12
@@ -21,13 +21,13 @@ public class SimpleMatchGamePlayerFactory<State extends GameState> implements Ma
 
     @Override
     @SuppressWarnings("unchecked")
-    public MatchGamePlayer<State> construct(ClembleCasinoOperations player, GameConstruction construction) {
+    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, GameConstruction construction) {
         // Step 1. Processing game session player
         return construct(player, construction.getSession(), construction.getRequest().getConfiguration().getConfigurationKey());
     }
 
     @Override
-    public MatchGamePlayer<State> construct(ClembleCasinoOperations player, GameSessionKey sessionKey) {
+    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, GameSessionKey sessionKey) {
         // Step 1. Fetching game construction
         GameConstruction gameConstruction = player.gameConstructionOperations().getConstruct(sessionKey);
         // Step 2. Processing to the generic constructor
@@ -35,8 +35,8 @@ public class SimpleMatchGamePlayerFactory<State extends GameState> implements Ma
     }
 
     @Override
-    public MatchGamePlayer<State> construct(ClembleCasinoOperations player, GameSessionKey sessionKey, GameConfigurationKey configurationKey) {
-        return new SimpleMatchGamePlayer(player, sessionKey, configurationKey);
+    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, GameSessionKey sessionKey, GameConfigurationKey configurationKey) {
+        return new SimpleRoundGamePlayer(player, sessionKey, configurationKey);
     }
 
 }

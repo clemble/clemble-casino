@@ -1,6 +1,5 @@
 package com.clemble.casino.server.spring.player;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -17,14 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Import(value = { CommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, CouchbaseSpringConfiguration.class, PlayerNeo4JSpringConfiguration.class })
 public class PlayerManagementSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    public ObjectMapper objectMapper;
-
-    @Autowired
-    public CouchbaseClient playerCouchbaseClient;
-
     @Bean
-    public PlayerProfileRepository playerProfileRepository() {
+    public PlayerProfileRepository playerProfileRepository(ObjectMapper objectMapper, CouchbaseClient playerCouchbaseClient) {
         return new CouchbasePlayerProfileRepository(playerCouchbaseClient, objectMapper);
     }
+
 }

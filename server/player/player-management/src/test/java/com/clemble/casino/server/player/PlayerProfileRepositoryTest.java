@@ -24,7 +24,7 @@ import com.clemble.casino.server.spring.player.PlayerManagementSpringConfigurati
 import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.UNIT_TEST)
+@ActiveProfiles(SpringConfiguration.TEST)
 @ContextConfiguration(classes = PlayerManagementSpringConfiguration.class)
 public class PlayerProfileRepositoryTest {
 

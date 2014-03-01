@@ -24,7 +24,7 @@ import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.game.GamePlayerFactory;
-import com.clemble.casino.integration.game.SimpleMatchGamePlayerFactory;
+import com.clemble.casino.integration.game.SimpleRoundGamePlayerFactory;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
@@ -90,8 +90,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
     }
 
     @Bean
-    public SimpleMatchGamePlayerFactory<? extends GameState> sessionPlayerFactory() {
-        return new SimpleMatchGamePlayerFactory<GameState>();
+    public SimpleRoundGamePlayerFactory<? extends GameState> sessionPlayerFactory() {
+        return new SimpleRoundGamePlayerFactory<GameState>();
     }
 
     @Bean
@@ -101,7 +101,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
 
 
     @Configuration
-    @Profile({UNIT_TEST, DEFAULT})
+    @Profile({TEST, DEFAULT})
     public static class Test {
 
         @Bean

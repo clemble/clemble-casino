@@ -19,14 +19,17 @@ import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
-public class MatchWonByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
+/**
+ * Created by mavarazy on 23/12/13.
+ */
+public class RoundWonBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
     final private Currency currency;
     final private ServerPaymentTransactionService transactionService;
 
-    public MatchWonByOwnedRuleAspect(Currency currency, ServerPaymentTransactionService transactionService) {
+    public RoundWonBySpentRuleAspect(Currency currency, ServerPaymentTransactionService transactionService) {
         super(new EventTypeSelector(GameEndedEvent.class));
-        this.currency = checkNotNull(currency);
+        this.currency = currency;
         this.transactionService = checkNotNull(transactionService);
     }
 
@@ -35,22 +38,25 @@ public class MatchWonByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>
         GameOutcome outcome = event.getOutcome();
         GameContext<?> context = event.getContext();
         if (outcome instanceof PlayerWonOutcome) {
+            String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
-            PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(context.getSession().toPaymentTransactionKey())
-                .setTransactionDate(new Date());
+            PaymentTransaction transaction = new PaymentTransaction()
+                    .setTransactionKey(context.getSession().toPaymentTransactionKey())
+                    .setTransactionDate(new Date());
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();
-                paymentTransaction
-                    .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))
-                    .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
+                if (!playerContext.getPlayer().equals(winnerId)) {
+                    Money spent = Money.create(currency, playerAccount.getSpent());
+                    transaction
+                            .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), spent, Operation.Credit))
+                            .addPaymentOperation(new PaymentOperation(winnerId, spent, Operation.Debit));
+                }
             }
             // Step 3. Processing payment transaction
-            transactionService.process(paymentTransaction);
-            // Step 4. Specifying payment transaction
-            event.setTransaction(paymentTransaction);
+            transactionService.process(transaction);
+            // Step 4. Specifying transaction in response
+            event.setTransaction(transaction);
         }
     }
-
 
 }

@@ -12,11 +12,11 @@ import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class MatchDrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameContext<?>, GameConfiguration> {
+public class RoundDrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameContext<?>, GameConfiguration> {
 
     final private ServerPaymentTransactionService transactionService;
 
-    public MatchDrawRuleAspectFactory(ServerPaymentTransactionService transactionService) {
+    public RoundDrawRuleAspectFactory(ServerPaymentTransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
@@ -28,9 +28,9 @@ public class MatchDrawRuleAspectFactory implements GameAspectFactory<GameEndedEv
         // Step 2. Constructing draw rule
         switch (configuration.getDrawRule()) {
             case owned:
-                return new MatchDrawByOwnedRuleAspect(configuration.getPrice().getCurrency(), transactionService);
+                return new RoundDrawByOwnedRuleAspect(configuration.getPrice().getCurrency(), transactionService);
             case spent:
-                return MatchDrawBySpentRuleAspect.INSTANCE;
+                return RoundDrawBySpentRuleAspect.INSTANCE;
             default:
                 throw new IllegalArgumentException();
         }

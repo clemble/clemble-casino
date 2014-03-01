@@ -14,9 +14,7 @@ import javax.annotation.PreDestroy;
 
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.game.GamePlayerFactory;
-import com.clemble.casino.integration.game.MatchGamePlayerFactory;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 
@@ -25,12 +23,12 @@ public class GamePlayerEmulator<State extends GameState> {
     final private PlayerScenarios playerOperations;
     final private GameScenarios gameScenarios;
     final private GamePlayerFactory sessionPlayerFactory;
-    final private MatchGamePlayerActor<State> actor;
+    final private RoundGamePlayerActor<State> actor;
     final private Map<GameConfiguration, Collection<PlayerEmulator>> playerEmulators = new HashMap<GameConfiguration, Collection<PlayerEmulator>>();
 
     private ScheduledExecutorService executorService;
 
-    public GamePlayerEmulator(final PlayerScenarios playerOperations, final GameScenarios gameScenarios, final MatchGamePlayerActor<State> gameActor, final GamePlayerFactory sessionPlayerFactory) {
+    public GamePlayerEmulator(final PlayerScenarios playerOperations, final GameScenarios gameScenarios, final RoundGamePlayerActor<State> gameActor, final GamePlayerFactory sessionPlayerFactory) {
         this.actor = checkNotNull(gameActor);
         this.gameScenarios = checkNotNull(gameScenarios);
         this.playerOperations = checkNotNull(playerOperations);

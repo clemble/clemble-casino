@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import com.clemble.casino.integration.game.RoundGamePlayer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -22,7 +23,6 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -99,8 +99,8 @@ public class PlayerAccountOperationsITest {
             assertTrue(cashAbefore.getAmount() >= 0);
             assertTrue(cashBbefore.getAmount() >= 0);
 
-            MatchGamePlayer<GameState> AvsB = gameOperations.match(Game.num, A, B.getPlayer());
-            MatchGamePlayer<GameState> BvsA = gameOperations.accept(AvsB.getSession(), B);
+            RoundGamePlayer<GameState> AvsB = gameOperations.match(Game.num, A, B.getPlayer());
+            RoundGamePlayer<GameState> BvsA = gameOperations.accept(AvsB.getSession(), B);
 
             AvsB.waitForStart();
             BvsA.waitForStart();

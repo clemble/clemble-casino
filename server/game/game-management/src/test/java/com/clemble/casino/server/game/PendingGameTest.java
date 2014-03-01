@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.repository.game.PendingGameInitiationRepository;
 import com.clemble.casino.server.repository.game.PendingPlayerRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -23,7 +23,7 @@ import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.UNIT_TEST)
+@ActiveProfiles(SpringConfiguration.TEST)
 @ContextConfiguration(classes = { SimpleGameSpringConfiguration.class })
 public class PendingGameTest {
 
@@ -41,7 +41,7 @@ public class PendingGameTest {
         PendingPlayer B = new PendingPlayer("B");
         playerRepository.save(B);
         // Step 2. Creating and saving game initiation
-        GameInitiation initiation = new GameInitiation(new GameSessionKey(Game.pic, "AB"), ImmutableList.<String>of("A", "B"), MatchGameConfiguration.DEFAULT);
+        GameInitiation initiation = new GameInitiation(new GameSessionKey(Game.pic, "AB"), ImmutableList.<String>of("A", "B"), RoundGameConfiguration.DEFAULT);
         PendingGameInitiation pendingGameInitiation = new PendingGameInitiation(initiation);
         pendingGameInitiation = initiationRepository.save(pendingGameInitiation);
         // Step 3. Checking values

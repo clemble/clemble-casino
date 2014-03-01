@@ -2,8 +2,8 @@ package com.clemble.casino.server.spring.social;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -38,24 +38,20 @@ import com.clemble.casino.server.spring.player.PlayerManagementSpringConfigurati
 @Import(value = { PlayerManagementSpringConfiguration.class, BasicJPASpringConfiguration.class })
 public class SocialModuleSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("dataSource")
-    public DataSource dataSource;
-
-    @Autowired
-    @Qualifier("playerProfileRepository")
-    public PlayerProfileRepository playerProfileRepository;
-
     @Bean
-    public SocialConnectionDataAdapter socialConnectionDataAdapter(UsersConnectionRepository usersConnectionRepository,
-            SocialConnectionAdapterRegistry socialConnectionAdapterRegistry, ConnectionFactoryRegistry connectionFactoryLocator,
+    public SocialConnectionDataAdapter socialConnectionDataAdapter(
+            UsersConnectionRepository usersConnectionRepository,
+            SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
+            ConnectionFactoryRegistry connectionFactoryLocator,
             SystemNotificationService systemNotificationService) {
         return new SocialConnectionDataAdapter(connectionFactoryLocator, usersConnectionRepository, socialConnectionAdapterRegistry, systemNotificationService);
     }
 
     @Bean
-    public ConnectionFactoryRegistry connectionFactoryLocator(SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
-            FacebookConnectionFactory facebookConnectionFactory, LinkedInConnectionFactory linkedInConnectionFactory,
+    public ConnectionFactoryRegistry connectionFactoryLocator(
+            SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
+            FacebookConnectionFactory facebookConnectionFactory,
+            LinkedInConnectionFactory linkedInConnectionFactory,
             TwitterConnectionFactory twitterConnectionFactory) {
         ConnectionFactoryRegistry connectionFactoryRegistry = new ConnectionFactoryRegistry();
         // Step 1. Registering FB
@@ -71,28 +67,36 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public SocialNetworkPopulatorEventListener socialNetworkPopulator(SocialConnectionAdapterRegistry socialAdapterRegistry,
-            PlayerSocialNetworkRepository socialNetworkRepository, SystemNotificationService notificationService,
-            UsersConnectionRepository usersConnectionRepository, SystemNotificationServiceListener serviceListener) {
+    public SocialNetworkPopulatorEventListener socialNetworkPopulator(
+            SocialConnectionAdapterRegistry socialAdapterRegistry,
+            PlayerSocialNetworkRepository socialNetworkRepository,
+            SystemNotificationService notificationService,
+            UsersConnectionRepository usersConnectionRepository,
+            SystemNotificationServiceListener serviceListener) {
         SocialNetworkPopulatorEventListener networkPopulator = new SocialNetworkPopulatorEventListener(socialAdapterRegistry, usersConnectionRepository, socialNetworkRepository, notificationService);
         serviceListener.subscribe(networkPopulator);
         return networkPopulator;
     }
 
     @Bean
-    public FacebookConnectionFactory facebookConnectionFactory() {
-        FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
-        return facebookConnectionFactory;
+    public FacebookConnectionFactory facebookConnectionFactory(
+            @Value("clemble.social.facebook.key") String key,
+            @Value("clemble.social.facebook.secret") String secret) {
+        return new FacebookConnectionFactory(key, secret);
     }
 
     @Bean
-    public TwitterConnectionFactory twitterConnectionFactory() {
-        return new TwitterConnectionFactory("6TV1yY2JeICz3cbX1m9Pnw", "Qig0Ix1gC9W0m77rTWH8CnE9FYfenmiP3GGk4hGlEo");
+    public TwitterConnectionFactory twitterConnectionFactory(
+            @Value("clemble.social.twitter.key") String key,
+            @Value("clemble.social.twitter.secret") String secret) {
+        return new TwitterConnectionFactory(key, secret);
     }
 
     @Bean
-    public LinkedInConnectionFactory linkedInConnectionFactory() {
-        return new LinkedInConnectionFactory("777wwpeqpwl4u1", "PpqvRnoACnPxXNY9");
+    public LinkedInConnectionFactory linkedInConnectionFactory(
+        @Value("clemble.social.linkedin.key") String key,
+        @Value("clemble.social.linkedin.secret") String secret) {
+        return new LinkedInConnectionFactory(key, secret);
     }
 
     @Bean
@@ -108,13 +112,19 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ConnectionSignUp connectionSignUp(PlayerIdGenerator idGenerator, PlayerProfileRepository profileRepository,
-            SocialConnectionAdapterRegistry socialAdapterRegistry, PlayerSocialNetworkRepository socialNetworkRepository) {
+    public ConnectionSignUp connectionSignUp(
+            PlayerIdGenerator idGenerator,
+            PlayerProfileRepository profileRepository,
+            SocialConnectionAdapterRegistry socialAdapterRegistry,
+            PlayerSocialNetworkRepository socialNetworkRepository) {
         return new SocialProfileConnectionSignUp(idGenerator, profileRepository, socialAdapterRegistry, socialNetworkRepository);
     }
 
     @Bean
-    public UsersConnectionRepository usersConnectionRepository(ConnectionSignUp connectionSignUp, ConnectionFactoryRegistry connectionFactoryLocator) {
+    public UsersConnectionRepository usersConnectionRepository(
+            @Qualifier("dataSource") DataSource dataSource,
+            ConnectionSignUp connectionSignUp,
+            ConnectionFactoryRegistry connectionFactoryLocator) {
         JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
         repository.setConnectionSignUp(connectionSignUp);
         return repository;

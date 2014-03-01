@@ -48,7 +48,7 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { UNIT_TEST })
+    @Profile(value = {TEST})
     public static class TestPlayerConfiguration {
 
         @Bean

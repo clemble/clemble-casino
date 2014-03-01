@@ -1,15 +1,15 @@
 package com.clemble.casino.server.game.aspect.presence;
 
+import com.clemble.casino.game.RoundGameContext;
+import com.clemble.casino.game.event.server.RoundEndedEvent;
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.event.server.GameMatchEndedEvent;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
+import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
-public class GameEndPresenceAspectFactory implements MatchGameAspectFactory<GameMatchEndedEvent> {
+public class GameEndPresenceAspectFactory implements RoundGameAspectFactory<RoundEndedEvent> {
 
     final private GameEndPresenceAspect endPresenceAspect;
 
@@ -18,7 +18,7 @@ public class GameEndPresenceAspectFactory implements MatchGameAspectFactory<Game
     }
 
     @Override
-    public GameAspect<GameMatchEndedEvent> construct(MatchGameConfiguration configuration, MatchGameContext context) {
+    public GameAspect<RoundEndedEvent> construct(RoundGameConfiguration configuration, RoundGameContext context) {
         return endPresenceAspect;
     }
 

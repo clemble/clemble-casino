@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.clemble.casino.game.rule.RoundRule;
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,9 +33,7 @@ import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.ScheduledGameRequest;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
-import com.clemble.casino.game.event.server.GameMatchStartedEvent;
-import com.clemble.casino.game.rule.MatchRule;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.event.server.RoundStartedEvent;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
@@ -57,9 +57,9 @@ public class ObjectMapperTest extends ObjectTest {
 
     @Test
     public void specialCase() {
-        ObjectGenerator.generate(MatchRule.class);
+        ObjectGenerator.generate(RoundRule.class);
 
-        ObjectGenerator.generate(MatchGameConfiguration.class);
+        ObjectGenerator.generate(RoundGameConfiguration.class);
         ObjectGenerator.generate(PlayerInvitedEvent.class);
     }
 
@@ -67,7 +67,7 @@ public class ObjectMapperTest extends ObjectTest {
     public void testSpecialSerialization() {
         Assert.assertNull(checkSerialization(InvitationDeclinedEvent.class));
         Assert.assertNull(checkSerialization(ScheduledGameRequest.class));
-        Assert.assertNull(checkSerialization(GameMatchStartedEvent.class));
+        Assert.assertNull(checkSerialization(RoundStartedEvent.class));
         Assert.assertNull(checkSerialization(BetAction.class));
         Assert.assertNull(checkSerialization(NumberState.class));
     }

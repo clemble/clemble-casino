@@ -1,7 +1,7 @@
 package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.MatchGameContext;
+import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.action.GameStateFactory;
 
@@ -18,7 +18,7 @@ public class NumberStateFactory implements GameStateFactory<NumberState> {
     }
 
     @Override
-    public NumberState constructState(GameInitiation initiation, MatchGameContext context) {
+    public NumberState constructState(GameInitiation initiation, RoundGameContext context) {
         return new NumberState(context, null, 0);
     }
 

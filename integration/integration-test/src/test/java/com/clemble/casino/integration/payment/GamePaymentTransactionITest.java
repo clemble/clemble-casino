@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.integration.game.RoundGamePlayer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.integration.event.EventAccumulator;
-import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.integration.game.construction.GameScenarios;
@@ -36,12 +36,12 @@ public class GamePaymentTransactionITest {
 
     @Test
     public void testAvailabilityConstruction(){
-        List<MatchGamePlayer<NumberState>> sessionPlayers = gameScenarios.match(Game.num);
+        List<RoundGamePlayer<NumberState>> sessionPlayers = gameScenarios.match(Game.num);
         // Step 1. Preparing game session listener
         EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
-        MatchGamePlayer<NumberState> A = sessionPlayers.get(0);
+        RoundGamePlayer<NumberState> A = sessionPlayers.get(0);
         A.playerOperations().paymentOperations().subscribe(paymentListener);
-        MatchGamePlayer<NumberState> B = sessionPlayers.get(1);
+        RoundGamePlayer<NumberState> B = sessionPlayers.get(1);
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make a surrender by player B

@@ -14,10 +14,10 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.GameMatchEvent;
+import com.clemble.casino.game.event.server.RoundEvent;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 
-public class SimpleMatchGamePlayer<State extends GameState> extends AbstractGamePlayer implements MatchGamePlayer<State> {
+public class SimpleRoundGamePlayer<State extends GameState> extends AbstractGamePlayer implements RoundGamePlayer<State> {
 
     /**
      * Generated 05/07/13
@@ -27,12 +27,12 @@ public class SimpleMatchGamePlayer<State extends GameState> extends AbstractGame
     final private AtomicReference<State> state = new AtomicReference<>();
     final private GameActionOperations<State> actionOperations;
 
-    public SimpleMatchGamePlayer(final ClembleCasinoOperations player, final GameSessionKey sessionKey, final GameConfigurationKey configurationKey) {
+    public SimpleRoundGamePlayer(final ClembleCasinoOperations player, final GameSessionKey sessionKey, final GameConfigurationKey configurationKey) {
         super(player, sessionKey, configurationKey);
         this.actionOperations = checkNotNull(player).gameActionOperations(sessionKey);
-        this.actionOperations.subscribe(new EventTypeSelector(GameMatchEvent.class), new EventListener<GameMatchEvent>() {
+        this.actionOperations.subscribe(new EventTypeSelector(RoundEvent.class), new EventListener<RoundEvent>() {
             @Override
-            public void onEvent(GameMatchEvent event) {
+            public void onEvent(RoundEvent event) {
                 setState((State) event.getState());
             }
         });
@@ -63,8 +63,8 @@ public class SimpleMatchGamePlayer<State extends GameState> extends AbstractGame
     @Override
     public void perform(GameAction gameAction) {
         GameManagementEvent managementEvent = actionOperations.process(gameAction);
-        if (managementEvent instanceof GameMatchEvent)
-            setState((State) ((GameMatchEvent) managementEvent).getState());
+        if (managementEvent instanceof RoundEvent)
+            setState((State) ((RoundEvent) managementEvent).getState());
         for (GamePlayer player : dependents) {
             player.syncWith(this);
         }

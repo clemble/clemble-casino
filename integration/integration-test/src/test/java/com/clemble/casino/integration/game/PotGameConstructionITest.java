@@ -7,11 +7,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.clemble.casino.server.spring.common.SpringConfiguration;
+import com.clemble.casino.game.specification.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -25,11 +24,7 @@ import com.clemble.casino.game.rule.pot.PotFillRule;
 import com.clemble.casino.game.rule.time.MoveTimeRule;
 import com.clemble.casino.game.rule.time.TimeBreachPunishment;
 import com.clemble.casino.game.rule.time.TotalTimeRule;
-import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.GameConfigurationKey;
-import com.clemble.casino.game.specification.GameConfigurations;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
-import com.clemble.casino.game.specification.PotGameConfiguration;
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -57,7 +52,7 @@ public class PotGameConstructionITest {
     public void testConstruction() throws JsonProcessingException{
         GameConfigurations allConfiguration = playerScenarios.createPlayer().gameConstructionOperations().getConfigurations();
         List<GameConfiguration> configurations = new ArrayList<>();
-        MatchGameConfiguration configuration = allConfiguration.matchConfigurations().get(0);
+        RoundGameConfiguration configuration = allConfiguration.matchConfigurations().get(0);
         configurations.add(configuration);
         configurations.add(configuration);
         configurations.add(configuration);

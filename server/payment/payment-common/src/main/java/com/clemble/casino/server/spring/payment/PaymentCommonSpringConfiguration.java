@@ -60,7 +60,7 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(SpringConfiguration.UNIT_TEST)
+    @Profile(SpringConfiguration.TEST)
     public static class Test {
 
         @Bean

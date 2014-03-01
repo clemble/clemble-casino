@@ -9,11 +9,11 @@ import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
-public class MatchDrawBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
+public class RoundDrawBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
-    final public static MatchDrawBySpentRuleAspect INSTANCE = new MatchDrawBySpentRuleAspect();
+    final public static RoundDrawBySpentRuleAspect INSTANCE = new RoundDrawBySpentRuleAspect();
 
-    public MatchDrawBySpentRuleAspect() {
+    public RoundDrawBySpentRuleAspect() {
         super(new EventTypeSelector(GameEndedEvent.class));
     }
 

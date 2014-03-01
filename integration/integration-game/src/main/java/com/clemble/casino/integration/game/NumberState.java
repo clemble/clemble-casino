@@ -6,12 +6,12 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.MatchGameRecord;
+import com.clemble.casino.game.RoundGameContext;
+import com.clemble.casino.game.RoundGameRecord;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.SurrenderAction;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.GameMatchEndedEvent;
+import com.clemble.casino.game.event.server.RoundEndedEvent;
 import com.clemble.casino.game.event.server.PlayerMovedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.NoOutcome;
@@ -29,12 +29,12 @@ public class NumberState implements GameState {
      */
     private static final long serialVersionUID = 6467228372170341563L;
 
-    final private MatchGameContext context;
+    final private RoundGameContext context;
 
     private int version;
 
     @JsonCreator
-    public NumberState(@JsonProperty("context") MatchGameContext context,
+    public NumberState(@JsonProperty("context") RoundGameContext context,
             @JsonProperty("root") GameUnit parent,
             @JsonProperty("version") int version) {
         this.context = context;
@@ -49,7 +49,7 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public GameManagementEvent process(MatchGameRecord session, Event event) {
+    public GameManagementEvent process(RoundGameRecord session, Event event) {
         GameAction action = (GameAction) event;
         // Step 1. Processing Select cell move
         GameManagementEvent resultEvent = null;
@@ -61,9 +61,9 @@ public class NumberState implements GameState {
                 for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
-                        resultEvent = new GameMatchEndedEvent(session, new PlayerWonOutcome(selectNumberEvent.getPlayer()));
+                        resultEvent = new RoundEndedEvent(session, new PlayerWonOutcome(selectNumberEvent.getPlayer()));
                     } else if (selectNumberEvent.getNumber() == maxBet) {
-                        resultEvent = new GameMatchEndedEvent(session, new DrawOutcome());
+                        resultEvent = new RoundEndedEvent(session, new DrawOutcome());
                     }
                 }
             } else {
@@ -75,11 +75,11 @@ public class NumberState implements GameState {
             Collection<String> opponents = context.getPlayerIterator().whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
-                resultEvent = new GameMatchEndedEvent(session, new NoOutcome());
+                resultEvent = new RoundEndedEvent(session, new NoOutcome());
             } else {
                 String winner = opponents.iterator().next();
                 // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
-                resultEvent = new GameMatchEndedEvent(session, new PlayerWonOutcome(winner));
+                resultEvent = new RoundEndedEvent(session, new PlayerWonOutcome(winner));
             }
         }
         // Step 3. Sanity check
@@ -91,7 +91,7 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public MatchGameContext getContext() {
+    public RoundGameContext getContext() {
         return context;
     }
 

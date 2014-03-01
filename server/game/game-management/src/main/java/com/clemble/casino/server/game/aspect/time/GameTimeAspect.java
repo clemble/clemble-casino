@@ -7,13 +7,13 @@ import java.util.Date;
 
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.MatchGameContext;
+import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.event.server.GameMatchEndedEvent;
+import com.clemble.casino.game.event.server.RoundEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.GameMatchStateChangedEvent;
+import com.clemble.casino.game.event.server.RoundStateChangedEvent;
 import com.clemble.casino.game.event.server.PlayerMovedEvent;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
@@ -21,15 +21,15 @@ import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
 public class GameTimeAspect extends BasicGameAspect<GameManagementEvent> {
 
-    final private MatchGameContext context;
+    final private RoundGameContext context;
     final private Collection<String> participants;
     final private SessionTimeTask sessionTimeTracker;
     final private GameEventTaskExecutor gameEventTaskExecutor;
 
     public GameTimeAspect(
             GameSessionKey sessionKey,
-            MatchGameConfiguration specification, 
-            MatchGameContext context,
+            RoundGameConfiguration specification,
+            RoundGameContext context,
             GameEventTaskExecutor gameEventTaskExecutor) {
         super(new EventTypeSelector(GameManagementEvent.class));
         this.context  = context;
@@ -43,11 +43,11 @@ public class GameTimeAspect extends BasicGameAspect<GameManagementEvent> {
     public void doEvent(GameManagementEvent move) {
         // Step 1. To check if we need rescheduling, first calculate time before
         Date breachTimeBeforeMove = sessionTimeTracker.nextExecutionTime(null);
-        if(move instanceof GameMatchEndedEvent) {
+        if(move instanceof RoundEndedEvent) {
             gameEventTaskExecutor.cancel(sessionTimeTracker);
         } else {
             ActionLatch latch = context.getActionLatch();
-            if(move instanceof GameMatchStateChangedEvent){
+            if(move instanceof RoundStateChangedEvent){
                 for(String player: participants)
                     sessionTimeTracker.markMoved(player);
                 for (String player: latch.fetchParticipants()) {

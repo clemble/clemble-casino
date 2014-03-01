@@ -1,15 +1,15 @@
 package com.clemble.casino.server.game.aspect.time;
 
+import com.clemble.casino.game.RoundGameContext;
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
+import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 
-public class GameTimeAspectFactory implements MatchGameAspectFactory<GameManagementEvent> {
+public class GameTimeAspectFactory implements RoundGameAspectFactory<GameManagementEvent> {
 
     final private GameEventTaskExecutor eventTaskExecutor;
 
@@ -18,7 +18,7 @@ public class GameTimeAspectFactory implements MatchGameAspectFactory<GameManagem
     }
 
     @Override
-    public GameAspect<GameManagementEvent> construct(MatchGameConfiguration configuration, MatchGameContext context) {
+    public GameAspect<GameManagementEvent> construct(RoundGameConfiguration configuration, RoundGameContext context) {
         return new GameTimeAspect(context.getSession(), configuration, context, eventTaskExecutor);
     }
 

@@ -4,7 +4,7 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 
-public interface MatchGamePlayer<State extends GameState> extends GamePlayer {
+public interface RoundGamePlayer<State extends GameState> extends GamePlayer {
 
     public State getState();
 

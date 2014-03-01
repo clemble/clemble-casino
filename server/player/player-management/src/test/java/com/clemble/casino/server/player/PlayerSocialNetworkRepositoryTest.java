@@ -22,7 +22,7 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.UNIT_TEST)
+@ActiveProfiles(SpringConfiguration.TEST)
 @ContextConfiguration(classes = PlayerManagementSpringConfiguration.class)
 public class PlayerSocialNetworkRepositoryTest {
 

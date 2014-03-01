@@ -2,7 +2,7 @@ package com.clemble.casino.server.spring.common;
 
 public interface SpringConfiguration {
 
-    final public static String UNIT_TEST = "test"; // unit tests
+    final public static String TEST = "test"; // unit tests
     final public static String DEFAULT = "default"; // localhost:8080
     final public static String CLOUD = "cloud"; // amazon currently
 

@@ -1,5 +1,6 @@
 package com.clemble.casino.server.game.construct;
 
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -14,14 +15,13 @@ import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.service.AutoGameConstructionService;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
 
 @Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(profiles = SpringConfiguration.UNIT_TEST)
+@ActiveProfiles(profiles = SpringConfiguration.TEST)
 @ContextConfiguration(classes = { SimpleGameSpringConfiguration.class })
 public class InstantGameConstructionTest {
 
@@ -34,7 +34,7 @@ public class InstantGameConstructionTest {
     @Test
     public void testInstantConstruction() {
         // Step 1. Generating random game
-        MatchGameConfiguration specification = MatchGameConfiguration.DEFAULT;
+        RoundGameConfiguration specification = RoundGameConfiguration.DEFAULT;
         // Step 2. Generating player A
         String A = RandomStringUtils.random(10);
         GameConstruction constructionA = constructionService.construct(new AutomaticGameRequest(A, specification));

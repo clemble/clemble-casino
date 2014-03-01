@@ -1,14 +1,12 @@
 package com.clemble.casino.integration.emulator;
 
-import com.clemble.casino.game.GameAware;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.integration.game.GamePlayer;
-import com.clemble.casino.integration.game.MatchGamePlayer;
+import com.clemble.casino.integration.game.RoundGamePlayer;
 
-abstract public class MatchGamePlayerActor<State extends GameState> implements GamePlayerActor<MatchGamePlayer<State>> {
+abstract public class RoundGamePlayerActor<State extends GameState> implements GamePlayerActor<RoundGamePlayer<State>> {
 
     @Override
-    public void play(MatchGamePlayer<State> matchPlayer) {
+    public void play(RoundGamePlayer<State> matchPlayer) {
         // Step 1. Sanity check
         matchPlayer.waitForStart(0);
         while (matchPlayer.isAlive()) {
@@ -23,6 +21,6 @@ abstract public class MatchGamePlayerActor<State extends GameState> implements G
         }
     }
 
-    abstract public void doMove(MatchGamePlayer player);
+    abstract public void doMove(RoundGamePlayer player);
 
 }

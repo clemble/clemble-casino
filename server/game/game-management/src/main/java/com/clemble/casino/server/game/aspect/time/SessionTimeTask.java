@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import com.clemble.casino.game.RoundGameContext;
+import com.clemble.casino.game.RoundGamePlayerContext;
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.springframework.scheduling.TriggerContext;
 
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.MatchGamePlayerContext;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.action.GameAction;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.GameEventTask;
 
@@ -25,13 +25,13 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
     final private GameSessionKey session;
     final private Collection<PlayerTimeTracker> playerTimeTrackers;
 
-    public SessionTimeTask(GameSessionKey sessionKey, MatchGameConfiguration initiation, MatchGameContext context) {
+    public SessionTimeTask(GameSessionKey sessionKey, RoundGameConfiguration initiation, RoundGameContext context) {
         this.session = sessionKey;
 
-        final MatchGameConfiguration specification = initiation;
+        final RoundGameConfiguration specification = initiation;
 
         this.playerTimeTrackers = new ArrayList<PlayerTimeTracker>();
-        for (MatchGamePlayerContext playerContext : context.getPlayerContexts()) {
+        for (RoundGamePlayerContext playerContext : context.getPlayerContexts()) {
             playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getTotalTimeRule()));
             playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getMoveTimeRule()));
         }

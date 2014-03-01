@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GameInitiationCanceledEvent;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
@@ -48,8 +48,8 @@ public class GameActionOperationsGetStateTest {
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 2. Constructing automatch game
         GameConstructionOperations constructionOperations = A.gameConstructionOperations();
-        List<MatchGameConfiguration> configurations = constructionOperations.getConfigurations().matchConfigurations(Game.num);
-        MatchGameConfiguration configuration = configurations.get(0);
+        List<RoundGameConfiguration> configurations = constructionOperations.getConfigurations().matchConfigurations(Game.num);
+        RoundGameConfiguration configuration = configurations.get(0);
         GameConstruction construction = constructionOperations.constructAutomatch(configuration);
         // Step 3. Checking getState works fine
         final GameActionOperations<NumberState> aoA = A.gameActionOperations(construction.getSession());
@@ -76,8 +76,8 @@ public class GameActionOperationsGetStateTest {
         B.listenerOperations().subscribe(new EventTypeSelector(GameInitiationCanceledEvent.class), listener);
         // Step 2. Constructing automatch game
         GameConstructionOperations constructionOperations = A.gameConstructionOperations();
-        List<MatchGameConfiguration> specificationOptions = constructionOperations.getConfigurations().matchConfigurations(Game.num);
-        MatchGameConfiguration specification = specificationOptions.get(0);
+        List<RoundGameConfiguration> specificationOptions = constructionOperations.getConfigurations().matchConfigurations(Game.num);
+        RoundGameConfiguration specification = specificationOptions.get(0);
         constructionOperations.constructAutomatch(specification);
         // Step 3. Checking getState works fine
         A.close();

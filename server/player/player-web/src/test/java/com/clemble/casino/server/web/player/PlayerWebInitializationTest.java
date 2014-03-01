@@ -12,7 +12,7 @@ import com.clemble.casino.server.spring.web.player.PlayerWebSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ActiveProfiles(SpringConfiguration.UNIT_TEST)
+@ActiveProfiles(SpringConfiguration.TEST)
 @ContextConfiguration(classes = { PlayerWebSpringConfiguration.class })
 public class PlayerWebInitializationTest {
 

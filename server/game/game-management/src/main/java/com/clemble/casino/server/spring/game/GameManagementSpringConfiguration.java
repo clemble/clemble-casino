@@ -3,6 +3,9 @@ package com.clemble.casino.server.spring.game;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.outcome.RoundWonRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,14 +19,10 @@ import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.management.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
-import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
-import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.PotDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.PotWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.pot.PotFillAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
-import com.clemble.casino.server.game.aspect.price.GamePriceAspectFactory;
-import com.clemble.casino.server.game.aspect.security.GameMatchSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.GamePotSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
@@ -59,18 +58,13 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GamePriceAspectFactory gamePriceAspectFactory() {
-        return new GamePriceAspectFactory();
-    }
-
-    @Bean
     public BetRuleAspectFactory gameBetAspectFactory() {
         return new BetRuleAspectFactory();
     }
 
     @Bean
-    public GameMatchSecurityAspectFactory gameMatchSecurityAspectFactory() {
-        return new GameMatchSecurityAspectFactory();
+    public RoundGameSecurityAspectFactory gameMatchSecurityAspectFactory() {
+        return new RoundGameSecurityAspectFactory();
     }
 
     @Bean
@@ -79,13 +73,13 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public MatchWonRuleAspectFactory wonRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
-        return new MatchWonRuleAspectFactory(paymentTransactionService);
+    public RoundWonRuleAspectFactory wonRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+        return new RoundWonRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean
-    public MatchDrawRuleAspectFactory drawRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
-        return new MatchDrawRuleAspectFactory(paymentTransactionService);
+    public RoundDrawRuleAspectFactory drawRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+        return new RoundDrawRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean

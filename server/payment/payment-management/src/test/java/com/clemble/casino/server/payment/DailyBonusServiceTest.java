@@ -28,7 +28,7 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
 
-@ActiveProfiles(SpringConfiguration.UNIT_TEST)
+@ActiveProfiles(SpringConfiguration.TEST)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = PaymentManagementSpringConfiguration.class)
 public class DailyBonusServiceTest {

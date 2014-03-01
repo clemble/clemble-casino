@@ -15,16 +15,16 @@ import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 
-public class GenericGameMatchPlayer<State extends GameState> implements MatchGamePlayer<State> {
+public class GenericRoundGamePlayer<State extends GameState> implements RoundGamePlayer<State> {
 
     /**
      * Generated 05/07/13
      */
     private static final long serialVersionUID = -4604087499745502553L;
 
-    final protected MatchGamePlayer<State> actualPlayer;
+    final protected RoundGamePlayer<State> actualPlayer;
 
-    public GenericGameMatchPlayer(MatchGamePlayer<State> delegate) {
+    public GenericRoundGamePlayer(RoundGamePlayer<State> delegate) {
         this.actualPlayer = checkNotNull(delegate);
     }
 

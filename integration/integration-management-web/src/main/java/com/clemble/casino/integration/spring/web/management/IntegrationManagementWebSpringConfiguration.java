@@ -19,7 +19,7 @@ import com.clemble.casino.server.spring.web.management.AbstractManagementWebSpri
 public class IntegrationManagementWebSpringConfiguration extends AbstractManagementWebSpringConfiguration {
 
     @Configuration
-    @Profile({ UNIT_TEST, DEFAULT, INTEGRATION_DEFAULT, INTEGRATION_TEST, INTEGRATION_CLOUD })
+    @Profile({TEST, DEFAULT })
     public static class DefaultAndTest {
 
         @Bean

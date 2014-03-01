@@ -1,18 +1,18 @@
 package com.clemble.casino.server.game.aspect.bet;
 
+import com.clemble.casino.game.RoundGameContext;
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.action.BetAction;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
+import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 
-public class BetRuleAspectFactory implements MatchGameAspectFactory<BetAction> {
+public class BetRuleAspectFactory implements RoundGameAspectFactory<BetAction> {
 
     @Override
-    public GameAspect<BetAction> construct(MatchGameConfiguration configuration, MatchGameContext context) {
-        return new BetRuleAspect(configuration.getBetRule());
+    public GameAspect<BetAction> construct(RoundGameConfiguration configuration, RoundGameContext context) {
+        return new BetRuleAspect(context, configuration.getBetRule());
     }
 
     @Override

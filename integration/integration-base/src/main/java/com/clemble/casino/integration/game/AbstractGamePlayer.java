@@ -183,7 +183,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
 
     @Override
     final public GamePlayer syncWith(GamePlayer anotherSessionPlayer) {
-        if(!(anotherSessionPlayer instanceof MatchGamePlayer))
+        if(!(anotherSessionPlayer instanceof RoundGamePlayer))
             throw new IllegalArgumentException();
         // Step 1. While versions do not match iterate
         while (keepAlive.get() && getVersion() != anotherSessionPlayer.getVersion()) {

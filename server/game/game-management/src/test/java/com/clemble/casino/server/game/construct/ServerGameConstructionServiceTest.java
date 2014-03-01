@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +26,12 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 import com.clemble.casino.game.service.AvailabilityGameConstructionService;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.UNIT_TEST)
+@ActiveProfiles(SpringConfiguration.TEST)
 @ContextConfiguration(classes = { SimpleGameSpringConfiguration.class })
 public class ServerGameConstructionServiceTest {
 
@@ -51,7 +51,7 @@ public class ServerGameConstructionServiceTest {
         for (int i = 0; i < NUM_PARTICIPANTS; i++)
             players.add(String.valueOf(RANDOM.nextLong()));
         List<String> participants = new ArrayList<>(players);
-        MatchGameConfiguration specification = generate(participants);
+        RoundGameConfiguration specification = generate(participants);
 
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
@@ -70,7 +70,7 @@ public class ServerGameConstructionServiceTest {
         for (int i = 0; i < NUM_PARTICIPANTS; i++)
             players.add(String.valueOf(RANDOM.nextLong()));
         List<String> participants = new ArrayList<>(players);
-        MatchGameConfiguration specification = generate(participants);
+        RoundGameConfiguration specification = generate(participants);
 
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
@@ -91,8 +91,8 @@ public class ServerGameConstructionServiceTest {
         Assert.assertEquals(finalConstructionState.getState(), GameConstructionState.constructed);
     }
 
-    private MatchGameConfiguration generate(List<String> roles) { 
-        return MatchGameConfiguration.DEFAULT;
+    private RoundGameConfiguration generate(List<String> roles) {
+        return RoundGameConfiguration.DEFAULT;
     }
 
     public static class GameResponce implements Callable<GameConstruction> {

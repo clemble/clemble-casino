@@ -7,8 +7,6 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -33,14 +31,6 @@ public class BasicJPASpringConfiguration implements SpringConfiguration {
 
     final private static Logger LOG = LoggerFactory.getLogger(BasicJPASpringConfiguration.class);
 
-    @Autowired
-    @Qualifier("dataSource")
-    public DataSource dataSource;
-
-    @Autowired
-    @Qualifier("jpaVendorAdapter")
-    public JpaVendorAdapter jpaVendorAdapter;
-
     @Bean
     public PersistenceExceptionTranslator persistenceExceptionTranslator() {
         return new ClembleConstraintExceptionResolver();
@@ -52,7 +42,7 @@ public class BasicJPASpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { DEFAULT, UNIT_TEST, INTEGRATION_TEST, CLOUD })
+    @Profile(value = { DEFAULT, TEST, CLOUD })
     public static class DefaultAndTest implements ApplicationContextAware {
 
         private ApplicationContext applicationContext;

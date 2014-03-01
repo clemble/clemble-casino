@@ -2,9 +2,7 @@ package com.clemble.casino.server.spring.common;
 
 import javax.validation.Validation;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.PlayerIdGenerator;

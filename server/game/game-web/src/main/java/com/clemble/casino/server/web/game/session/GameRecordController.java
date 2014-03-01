@@ -15,7 +15,7 @@ import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
+import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
 import com.clemble.casino.server.repository.game.PotGameRecordRepository;
 import com.clemble.casino.web.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
@@ -23,10 +23,10 @@ import com.clemble.casino.web.mapping.WebMapping;
 @Controller
 public class GameRecordController implements GameRecordService, ExternalController {
 
-    final private MatchGameRecordRepository matchGameRecordRepository;
+    final private RoundGameRecordRepository matchGameRecordRepository;
     final private PotGameRecordRepository potGameRecordRepository;
 
-    public GameRecordController(MatchGameRecordRepository matchGameRecordRepository, PotGameRecordRepository potGameRecordRepository) {
+    public GameRecordController(RoundGameRecordRepository matchGameRecordRepository, PotGameRecordRepository potGameRecordRepository) {
         this.matchGameRecordRepository = checkNotNull(matchGameRecordRepository);
         this.potGameRecordRepository = checkNotNull(potGameRecordRepository);
     }

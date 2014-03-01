@@ -19,7 +19,7 @@ import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.action.GameManager;
 import com.clemble.casino.server.game.action.GameManagerFactory;
-import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
+import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
 import com.clemble.casino.web.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
@@ -27,10 +27,10 @@ import com.clemble.casino.web.mapping.WebMapping;
 public class GameActionController<State extends GameState> implements GameActionService, ExternalController {
 
     final private GameManagerFactory managerFactory;
-    final private MatchGameRecordRepository sessionRepository;
+    final private RoundGameRecordRepository sessionRepository;
 
     public GameActionController(
-            final MatchGameRecordRepository sessionRepository,
+            final RoundGameRecordRepository sessionRepository,
             final GameManagerFactory sessionProcessor) {
         this.managerFactory = checkNotNull(sessionProcessor);
         this.sessionRepository = checkNotNull(sessionRepository);
@@ -54,10 +54,10 @@ public class GameActionController<State extends GameState> implements GameAction
         GameSessionKey sessionKey = new GameSessionKey(game, session);
         // Step 2. Fetching game manager
         GameManager<?> gameManager = managerFactory.get(sessionKey);
-        if (gameManager == null || gameManager.getRecord() == null || ((MatchGameRecord) managerFactory.get(sessionKey).getRecord()).getState() == null)
+        if (gameManager == null || gameManager.getRecord() == null || ((RoundGameRecord) managerFactory.get(sessionKey).getRecord()).getState() == null)
             return null;
         // Step 3. Fetching State
-        return ((MatchGameRecord) gameManager.getRecord()).getState();
+        return ((RoundGameRecord) gameManager.getRecord()).getState();
     }
 
     @Override

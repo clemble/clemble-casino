@@ -15,10 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.integration.game.MatchGamePlayer;
-import com.clemble.casino.integration.game.MatchGamePlayerFactory;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 
 public class PlayerEmulator implements Runnable, GameConfigurationAware {
