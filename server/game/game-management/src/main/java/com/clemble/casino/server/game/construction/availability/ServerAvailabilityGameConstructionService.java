@@ -4,6 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.clemble.casino.error.ClembleCasinoFailure;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,8 +62,9 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         // Step 2.1. Checking initiator
         Money price = request.getConfiguration().getPrice();
         // Step 2.2. Checking opponents
-        if (!accountService.canAfford(request.getParticipants(), price))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInsufficientMoney);
+        Collection<String> players = accountService.canAfford(request.getParticipants(), price);
+        if (!players.isEmpty())
+            throw ClembleCasinoException.fromFailures(ClembleCasinoFailure.construct(ClembleCasinoError.GameConstructionInsufficientMoney, players, GameSessionKey.DEFAULT_SESSION));
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(id, request);
         construction = constructionRepository.saveAndFlush(construction);

@@ -56,4 +56,9 @@ public class SystemPlayerLeftEvent implements SystemEvent, PlayerAware {
     public String getChannel() {
         return CHANNEL;
     }
+
+    @Override
+    public String toString() {
+        return "sys:left:" + player;
+    }
 }

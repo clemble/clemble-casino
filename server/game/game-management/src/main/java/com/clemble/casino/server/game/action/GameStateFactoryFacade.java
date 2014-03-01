@@ -11,8 +11,10 @@ import org.springframework.context.ApplicationContextAware;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameInitiation;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
-public class GameStateFactoryFacade implements ApplicationContextAware {
+public class GameStateFactoryFacade implements ApplicationListener<ContextRefreshedEvent> {
 
     final private Map<Game, GameStateFactory<?>> gameToStateFactory = new HashMap<Game, GameStateFactory<?>>();
 
@@ -22,8 +24,8 @@ public class GameStateFactoryFacade implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        for(GameStateFactory<?> stateFactory : applicationContext.getBeansOfType(GameStateFactory.class).values())
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        for(GameStateFactory<?> stateFactory : event.getApplicationContext().getBeansOfType(GameStateFactory.class).values())
             gameToStateFactory.put(stateFactory.getGame(), stateFactory);
     }
 

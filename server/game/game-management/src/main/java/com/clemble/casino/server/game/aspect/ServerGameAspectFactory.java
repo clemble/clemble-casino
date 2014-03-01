@@ -12,25 +12,33 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.OrderComparator;
 
 import java.util.*;
 
-public class ServerGameAspectFactory<GC extends GameConfiguration, C extends GameContext<?>, R extends GameRecord> implements BeanPostProcessor, ApplicationContextAware {
+public class ServerGameAspectFactory<GC extends GameConfiguration, C extends GameContext<?>, R extends GameRecord> implements ApplicationListener<ContextRefreshedEvent> {
+
+    final private Logger LOG;
 
     final private List<GameAspectFactory<?, C, GC>> aspectFactories = new ArrayList<>();
     final private Class<?> aspectFactoryClass;
 
     public ServerGameAspectFactory(Class<?> aspectFactoryClass) {
         this.aspectFactoryClass = aspectFactoryClass;
+        LOG = LoggerFactory.getLogger("GAF - " + aspectFactoryClass.getSimpleName());
     }
 
     public GameProcessor<R, Event> create(GameProcessor<R, Event> processor, GC configuration, C context) {
+        // Step 1. Constructing GameAspects
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
         for (GameAspectFactory<?, C, GC> aspectFactory : aspectFactories) {
             GameAspect<?> gameAspect = aspectFactory.construct(configuration, context);
-            if(gameAspect != null)
+            LOG.debug("{} processing aspect factory {} with aspect {}", context.getSession(), aspectFactory, gameAspect);
+            if(gameAspect != null) {
                 gameAspects.add(aspectFactory.construct(configuration, context));
+            }
         }
         return new ServerGameProcessor<>(processor, gameAspects);
     }
@@ -65,30 +73,21 @@ public class ServerGameAspectFactory<GC extends GameConfiguration, C extends Gam
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        for (GameAspectFactory<?, ?, ?> aspectFactory : applicationContext.getBeansOfType(GameAspectFactory.class).values())
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        for (GameAspectFactory<?, ?, ?> aspectFactory : ((ApplicationContext) event.getSource()).getBeansOfType(GameAspectFactory.class).values())
             check(aspectFactory);
     }
 
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        return check(bean);
-    }
-
-    @SuppressWarnings("unchecked")
     private Object check(Object bean) {
-        // Step 1. Checking that bean is assignable to the basic class
+        //LOG.debug("Processing {}", bean);
         if (aspectFactoryClass.isAssignableFrom(bean.getClass())) {
+            // Step 1. Checking that bean is assignable to the basic class
             aspectFactories.add((GameAspectFactory<?, C, GC>) bean);
-        }
-        // Step 2. Adding general game aspect factories
-        if (Arrays.asList(bean.getClass().getInterfaces()).contains(GameAspectFactory.class)) {
+            LOG.debug("Adding as direct aspect {}", bean);
+        } else if (Arrays.asList(bean.getClass().getInterfaces()).contains(GameAspectFactory.class)) {
+            // Step 2. Adding general game aspect factories
             aspectFactories.add((GameAspectFactory<?, C, GC>) bean);
+            LOG.debug("Adding as generic aspect {}", bean);
         }
         Collections.sort(aspectFactories, OrderComparator.INSTANCE);
         return bean;

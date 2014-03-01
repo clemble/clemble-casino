@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.clemble.casino.game.specification.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,10 @@ import com.clemble.casino.game.rule.pot.MatchFillRule;
 import com.clemble.casino.game.rule.time.MoveTimeRule;
 import com.clemble.casino.game.rule.time.TimeBreachPunishment;
 import com.clemble.casino.game.rule.time.TotalTimeRule;
+import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.specification.GameConfigurationKey;
+import com.clemble.casino.game.specification.GameConfigurations;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;

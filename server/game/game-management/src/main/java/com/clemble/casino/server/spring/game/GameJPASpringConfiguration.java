@@ -29,15 +29,9 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
     includeFilters = { @Filter(value = JpaRepository.class, type = FilterType.ASSIGNABLE_TYPE) })
 public class GameJPASpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    private DataSource dataSource;
-
-    @Autowired
-    private JpaVendorAdapter jpaVendorAdapter;
-
     @Bean
-    public PlatformTransactionManager gameTransactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager(gameEntityManagerFactory());
+    public PlatformTransactionManager gameTransactionManager(DataSource dataSource, EntityManagerFactory gameEntityManagerFactory) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager(gameEntityManagerFactory);
         transactionManager.setJpaDialect(new HibernateJpaDialect());
         transactionManager.setDataSource(dataSource);
         transactionManager.setPersistenceUnitName("gameEntityManager");
@@ -45,7 +39,7 @@ public class GameJPASpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public EntityManagerFactory gameEntityManagerFactory() {
+    public EntityManagerFactory gameEntityManagerFactory(JpaVendorAdapter jpaVendorAdapter, DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
         entityManagerFactory.setPackagesToScan("com.clemble.casino.game");

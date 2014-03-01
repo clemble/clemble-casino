@@ -4,6 +4,11 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.clemble.casino.payment.PaymentTransaction;
+import com.clemble.casino.payment.PaymentTransactionKey;
+import com.clemble.test.concurrent.AsyncCompletionUtils;
+import com.clemble.test.concurrent.Check;
+import com.clemble.test.concurrent.Get;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -26,10 +31,13 @@ public class SimplePlayerScenarios implements PlayerScenarios {
 
     @Override
     public ClembleCasinoOperations createPlayer() {
-        PlayerCredential credential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
-                RandomStringUtils.randomAlphanumeric(10));
-        PlayerProfile playerProfile = new PlayerProfile().setFirstName(RandomStringUtils.randomAlphabetic(10))
-                .setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10));
+        PlayerCredential credential = new PlayerCredential()
+                .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
+                .setPassword(RandomStringUtils.randomAlphanumeric(10));
+        PlayerProfile playerProfile = new PlayerProfile()
+                .setFirstName(RandomStringUtils.randomAlphabetic(10))
+                .setLastName(RandomStringUtils.randomAlphabetic(10))
+                .setNickName(RandomStringUtils.randomAlphabetic(10));
         return createPlayer(credential, playerProfile);
     }
 
@@ -43,16 +51,18 @@ public class SimplePlayerScenarios implements PlayerScenarios {
 
     @Override
     public ClembleCasinoOperations createPlayer(SocialConnectionData socialConnectionData) {
-        PlayerCredential credential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
-                RandomStringUtils.randomAlphanumeric(10));
+        PlayerCredential credential = new PlayerCredential()
+                .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
+                .setPassword(RandomStringUtils.randomAlphanumeric(10));
         return createSocialPlayer(credential, socialConnectionData);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(SocialAccessGrant socialConnectionData) {
         // Step 1. Generating random PlayerCredentials
-        PlayerCredential credential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword(
-                RandomStringUtils.randomAlphanumeric(10));
+        PlayerCredential credential = new PlayerCredential()
+                .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
+                .setPassword(RandomStringUtils.randomAlphanumeric(10));
         // Step 2. Create SocialPlayer profile
         return createSocialPlayer(credential, socialConnectionData);
     }
@@ -91,12 +101,20 @@ public class SimplePlayerScenarios implements PlayerScenarios {
                 System.out.println("event >> " + messageNum.incrementAndGet() + " >> " + player.getPlayer() + " >> " + event);
             }
         });
-        while (!player.listenerOperations().isAlive()) {
-            try {
-                Thread.sleep(100);
-            } catch (Throwable throwable) {
+        // Step 1. Checking listener was able to connect
+        AsyncCompletionUtils.check(new Check() {
+            @Override
+            public boolean check() {
+                return player.listenerOperations().isAlive();
             }
-        }
+        }, 10_000);
+        // Step 2. Checking registration passed TODO make this more fluent
+        AsyncCompletionUtils.get(new Get<PaymentTransaction>() {
+            @Override
+            public PaymentTransaction get() {
+                return player.paymentOperations().getPaymentTransaction("registration", player.getPlayer());
+            }
+        }, 10_000);
         return player;
     }
 }

@@ -1,7 +1,6 @@
 package com.clemble.casino.server.player.account;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
@@ -22,17 +21,17 @@ public class RestServerPlayerAccountService implements ServerPlayerAccountServic
 
     @Override
     public boolean canAfford(String playerId, Money amount) {
-        return canAfford(Collections.singleton(playerId), amount);
+        return canAfford(Collections.singleton(playerId), amount).isEmpty();
     }
 
     @Override
-    public boolean canAfford(Collection<String> playerId, Money amount) {
+    public List<String> canAfford(Collection<String> playerId, Money amount) {
         String url = paymentServerRegistry.findBase()
                 + PaymentWebMapping.PAYMENT_ACCOUNTS
                 + "?player=" + StringUtils.collectionToCommaDelimitedString(playerId)
                 + "&currency=" + amount.getCurrency()
                 + "&amount=" + amount.getAmount();
-        return restTemplate.getForEntity(url, Boolean.class).getBody();
+        return Arrays.asList(restTemplate.getForObject(url, String[].class));
     }
 
 }

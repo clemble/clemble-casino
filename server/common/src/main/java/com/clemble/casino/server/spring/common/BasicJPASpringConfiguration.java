@@ -42,7 +42,7 @@ public class BasicJPASpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @Profile(value = { DEFAULT, TEST, CLOUD })
+    @Profile(value = { DEFAULT, TEST, CLOUD, INTEGRATION_TEST })
     public static class DefaultAndTest implements ApplicationContextAware {
 
         private ApplicationContext applicationContext;

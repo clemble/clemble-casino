@@ -14,7 +14,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.server.event.SystemPlayerConnectedSocialEvent;
+import com.clemble.casino.server.event.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.google.common.collect.ImmutableSet;
 
@@ -82,7 +82,7 @@ public class SocialConnectionDataAdapter {
             // Check that this logic remains intact
             player = usersConnectionRepository.findUserIdsWithConnection(connection).iterator().next();
             // Step 5. Sending request to update user connections
-            systemNotificationService.notify(new SystemPlayerConnectedSocialEvent(player, connection.getKey()));
+            systemNotificationService.notify(new SystemPlayerSocialAddedEvent(player, connection.getKey()));
         } else {
             throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCriticalError);
         }
@@ -107,7 +107,7 @@ public class SocialConnectionDataAdapter {
         // Step 4. Adding connection to player connection repository
         usersConnectionRepository.createConnectionRepository(player).addConnection(connection);
         // Step 5. Sending request to update user connections
-        systemNotificationService.notify(new SystemPlayerConnectedSocialEvent(player, connection.getKey()));
+        systemNotificationService.notify(new SystemPlayerSocialAddedEvent(player, connection.getKey()));
         // Step 6. Returning original social connection data
         return socialConnectionData;
     }

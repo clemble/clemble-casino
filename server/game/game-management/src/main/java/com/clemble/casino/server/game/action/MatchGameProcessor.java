@@ -13,6 +13,8 @@ import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -22,6 +24,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class MatchGameProcessor implements GameProcessor<MatchGameRecord, Event> {
+
+    final static private Logger LOG = LoggerFactory.getLogger(MatchGameProcessor.class);
 
     final private MatchGameContext context;
     final private MatchGameConfiguration configuration;
@@ -35,6 +39,7 @@ public class MatchGameProcessor implements GameProcessor<MatchGameRecord, Event>
 
     @Override
     public GameManagementEvent process(MatchGameRecord record, Event event) {
+        LOG.debug("{} match {} processing {}", context.getSession(), record.getSession(), event);
         if(event instanceof GameEndedEvent) {
             context.addOutcome(((GameEndedEvent<?>) event).getOutcome());
             int gamesLeft = configuration.getConfigurations().size() - context.getOutcomes().size();
@@ -56,16 +61,20 @@ public class MatchGameProcessor implements GameProcessor<MatchGameRecord, Event>
                 // Step 2. Checking leader can be reached
                 if (leaderScore > nextAfterLeaderScore && 
                    (nextAfterLeaderScore + gamesLeft < leaderScore)) {
+                    LOG.debug("{} match winner determined {}", context.getSession(), leader.getKey());
                     return new MatchEndedEvent(context.getSession(), new PlayerWonOutcome(leader.getKey()), context, null);
                 }
                 // Step 3. If no games left mark as a draw
-                if (gamesLeft == 0)
+                if (gamesLeft == 0) {
+                    LOG.debug("{} no more games left, considering this as a draw");
                     return new MatchEndedEvent(context.getSession(), new DrawOutcome(), context, null);
+                }
             }
         }
         // Step 4. Constructing next match initiation
         int gameNum = context.getOutcomes().size();
         GameSessionKey nextSessionKey = context.getSession().append(String.valueOf(gameNum));
+        LOG.debug("{} launching new game {} with key {}", context.getSession(), gameNum, nextSessionKey);
         context.setCurrentSession(nextSessionKey);
         GameInitiation subInitiation = new GameInitiation(
                 nextSessionKey,

@@ -8,7 +8,7 @@ import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerConnectedSocialEvent implements PlayerAware, SystemEvent {
+public class SystemPlayerSocialAddedEvent implements PlayerAware, SystemEvent {
 
     /**
      * Generated 06/01/14
@@ -21,7 +21,7 @@ public class SystemPlayerConnectedSocialEvent implements PlayerAware, SystemEven
     final private ConnectionKey connection;
 
     @JsonCreator
-    public SystemPlayerConnectedSocialEvent(@JsonProperty("player") String player, @JsonProperty("connection") ConnectionKey connection) {
+    public SystemPlayerSocialAddedEvent(@JsonProperty("player") String player, @JsonProperty("connection") ConnectionKey connection) {
         this.player = checkNotNull(player);
         this.connection = checkNotNull(connection);
     }
@@ -57,7 +57,7 @@ public class SystemPlayerConnectedSocialEvent implements PlayerAware, SystemEven
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SystemPlayerConnectedSocialEvent other = (SystemPlayerConnectedSocialEvent) obj;
+        SystemPlayerSocialAddedEvent other = (SystemPlayerSocialAddedEvent) obj;
         if (connection == null) {
             if (other.connection != null)
                 return false;
@@ -73,7 +73,7 @@ public class SystemPlayerConnectedSocialEvent implements PlayerAware, SystemEven
 
     @Override
     public String toString() {
-        return "socialPlayerRegistered:" + player + ":" + connection;
+        return "sys:social:added:" + player + ":" + connection;
     }
 
 }

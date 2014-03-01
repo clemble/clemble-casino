@@ -9,7 +9,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 
-import com.clemble.casino.server.event.SystemPlayerConnectedSocialEvent;
+import com.clemble.casino.server.event.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.event.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.player.PlayerSocialNetwork;
 import com.clemble.casino.server.player.notification.SystemEventListener;
@@ -17,7 +17,7 @@ import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.google.common.collect.ImmutableList;
 
-public class SocialNetworkPopulatorEventListener implements SystemEventListener<SystemPlayerConnectedSocialEvent> {
+public class SocialNetworkPopulatorEventListener implements SystemEventListener<SystemPlayerSocialAddedEvent> {
 
     final private SocialConnectionAdapterRegistry socialAdapterRegistry;
     final private UsersConnectionRepository usersConnectionRepository;
@@ -34,7 +34,7 @@ public class SocialNetworkPopulatorEventListener implements SystemEventListener<
 
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void onEvent(SystemPlayerConnectedSocialEvent event) {
+    public void onEvent(SystemPlayerSocialAddedEvent event) {
         // Step 1. Finding appropriate SocialConnectionAdapter
         SocialConnectionAdapter socialAdapter = socialAdapterRegistry.getSocialAdapter(event.getConnection().getProviderId());
         // Step 2. Fetching connection
@@ -59,7 +59,7 @@ public class SocialNetworkPopulatorEventListener implements SystemEventListener<
 
     @Override
     public String getChannel() {
-        return SystemPlayerConnectedSocialEvent.CHANNEL;
+        return SystemPlayerSocialAddedEvent.CHANNEL;
     }
 
     @Override

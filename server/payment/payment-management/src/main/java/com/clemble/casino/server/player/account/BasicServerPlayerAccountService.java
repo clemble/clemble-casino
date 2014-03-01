@@ -2,7 +2,9 @@ package com.clemble.casino.server.player.account;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Money;
@@ -20,18 +22,19 @@ public class BasicServerPlayerAccountService implements ServerPlayerAccountServi
     public boolean canAfford(String player, Money amount) {
         // Step 1. Retrieving players account
         PlayerAccount playerAccount = playerAccountRepository.findOne(player);
-        Money existingAmmount = playerAccount.getMoney(amount.getCurrency());
+        Money existingAmount = playerAccount.getMoney(amount.getCurrency());
         // Step 2. If existing amount is not enough player can't afford it
-        return existingAmmount.getAmount() >= amount.getAmount();
+        return existingAmount.getAmount() >= amount.getAmount();
     }
 
     @Override
-    public boolean canAfford(Collection<String> players, Money amount) {
+    public List<String> canAfford(Collection<String> players, Money amount) {
+        List<String> shortOfCache = new ArrayList<>();
         for (String player : players) {
             if (!canAfford(player, amount))
-                return false;
+                shortOfCache.add(player);
         }
-        return true;
+        return shortOfCache;
     }
 
 }

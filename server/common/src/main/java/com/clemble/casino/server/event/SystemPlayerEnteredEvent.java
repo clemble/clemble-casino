@@ -31,7 +31,7 @@ public class SystemPlayerEnteredEvent implements SystemEvent, PlayerAware {
 
     @Override
     public String toString() {
-        return "entered:" + player;
+        return "sys:" + CHANNEL + ":" + player;
     }
 
     @Override

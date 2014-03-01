@@ -57,7 +57,7 @@ public class SystemPlayerRegisteredEvent implements SystemEvent, PlayerAwareEven
 
     @Override
     public String toString() {
-        return "added:" + player;
+        return "sys:registered:" + player;
     }
 
 }

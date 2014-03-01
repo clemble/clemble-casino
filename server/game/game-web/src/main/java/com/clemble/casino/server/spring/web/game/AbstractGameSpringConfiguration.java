@@ -37,17 +37,17 @@ import org.springframework.context.annotation.Import;
 @Import({GameManagementSpringConfiguration.class, WebCommonSpringConfiguration.class})
 abstract public class AbstractGameSpringConfiguration<State extends GameState> implements SpringConfiguration {
 
-    abstract public Game getGame();
-
     @Bean
-    public GameManagerFactory gameProcessor(MatchGameRecordRepository potRepository,
-                                            GameStateFactoryFacade stateFactory,
-                                            @Qualifier("matchProcessorFactory") ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory,
-                                            @Qualifier("potProcessorFactory") ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
-                                            @Qualifier("tournamentProcessorFactory") ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
-                                            RoundGameRecordRepository sessionRepository,
-                                            ServerGameConfigurationRepository configurationRepository, @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerFactory(potRepository, stateFactory, matchProcessorFactory, potProcessorFactory, tournamentProcessorFactory, sessionRepository, configurationRepository, notificationService);
+    public GameManagerFactory gameProcessor(
+        MatchGameRecordRepository potRepository,
+        GameStateFactoryFacade stateFactory,
+        @Qualifier("roundProcessorFactory") ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory,
+        @Qualifier("matchProcessorFactory") ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
+        @Qualifier("tournamentProcessorFactory") ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
+        RoundGameRecordRepository roundRecordRepository,
+        ServerGameConfigurationRepository configurationRepository,
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        return new GameManagerFactory(potRepository, stateFactory, matchProcessorFactory, potProcessorFactory, tournamentProcessorFactory, roundRecordRepository, configurationRepository, notificationService);
     }
 
     @Bean
@@ -64,12 +64,12 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory() {
+    public ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> roundProcessorFactory() {
         return new ServerGameAspectFactory<>(RoundGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory() {
+    public ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory() {
         return new ServerGameAspectFactory<>(MatchGameAspectFactory.class);
     }
 
@@ -84,24 +84,30 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameActionController<State> picPacPoeEngineController(GameManagerFactory sessionProcessor, RoundGameRecordRepository gameSessionRepository) {
-        return new GameActionController<>(gameSessionRepository, sessionProcessor);
+    public GameActionController<State> picPacPoeEngineController(
+        GameManagerFactory sessionProcessor,
+        RoundGameRecordRepository roundGameRecordRepository) {
+        return new GameActionController<>(roundGameRecordRepository, sessionProcessor);
     }
 
     @Bean
-    public AutoGameConstructionController<State> autoGameConstructionController(ServerAutoGameConstructionService constructionService) {
+    public AutoGameConstructionController<State> autoGameConstructionController(
+        ServerAutoGameConstructionService constructionService) {
         return new AutoGameConstructionController<>(constructionService);
     }
 
     @Bean
-    public AvailabilityGameConstructionController availabilityGameConstructionController(ServerAvailabilityGameConstructionService constructionService,
-                                                                                         GameConstructionRepository constructionRepository) {
+    public AvailabilityGameConstructionController availabilityGameConstructionController(
+        ServerAvailabilityGameConstructionService constructionService,
+        GameConstructionRepository constructionRepository) {
         return new AvailabilityGameConstructionController(constructionService, constructionRepository);
     }
 
     @Bean
-    public GameRecordController gameRecordController(RoundGameRecordRepository matchGameRecordRepository, MatchGameRecordRepository potGameRecordRepository) {
-        return new GameRecordController(matchGameRecordRepository, potGameRecordRepository);
+    public GameRecordController gameRecordController(
+            RoundGameRecordRepository roundGameRecordRepository,
+            MatchGameRecordRepository matchGameRecordRepository) {
+        return new GameRecordController(roundGameRecordRepository, matchGameRecordRepository);
     }
 
 }

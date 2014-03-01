@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,7 @@ public class PlayerAccountController implements PlayerAccountService, ExternalCo
     // TODO Normalize this behavior
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody boolean canAfford(@RequestParam("player") String players, @RequestParam("currency") Currency currency, @RequestParam("amount") Long amount) {
+    public @ResponseBody List<String> canAfford(@RequestParam("player") String players, @RequestParam("currency") Currency currency, @RequestParam("amount") Long amount) {
         String[] splitPlayers = players.split(",");
         Collection<String> parsedPlayers = new ArrayList<>(splitPlayers.length);
         for(String splitedPlayer: splitPlayers)

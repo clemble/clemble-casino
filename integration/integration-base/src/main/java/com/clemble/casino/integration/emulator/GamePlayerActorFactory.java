@@ -5,13 +5,15 @@ import com.clemble.casino.game.specification.MatchGameConfiguration;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.util.*;
 
 /**
  * Created by mavarazy on 23/02/14.
  */
-public class GamePlayerActorFactory implements ApplicationContextAware {
+public class GamePlayerActorFactory implements ApplicationListener<ContextRefreshedEvent> {
 
     final private Set<GamePlayerActor> actors = new HashSet<>();
 
@@ -28,8 +30,8 @@ public class GamePlayerActorFactory implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        actors.addAll(applicationContext.getBeansOfType(GamePlayerActor.class).values());
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        actors.addAll(event.getApplicationContext().getBeansOfType(GamePlayerActor.class).values());
     }
 
 }

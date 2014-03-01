@@ -1,6 +1,7 @@
 package com.clemble.casino.server.spring.payment;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +74,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
                 }
 
                 @Override
-                public boolean canAfford(Collection<String> playerId, Money amount) {
-                    return true;
+                public List<String> canAfford(Collection<String> playerId, Money amount) {
+                    return Collections.emptyList();
                 }
             };
         }

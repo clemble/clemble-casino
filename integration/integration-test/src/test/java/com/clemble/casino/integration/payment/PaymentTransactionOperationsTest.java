@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -157,7 +156,6 @@ public class PaymentTransactionOperationsTest {
     }
 
     @Test
-    @Repeat(100)
     public void testRegistrationTransaction() {
         // Step 1. Creating player
         final ClembleCasinoOperations player = playerOperations.createPlayer();
@@ -167,7 +165,7 @@ public class PaymentTransactionOperationsTest {
             public PaymentTransaction get() {
                 return player.paymentOperations().getPaymentTransaction("registration", player.getPlayer());
             }
-        }, 10_000);
+        }, 30_000);
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
             if (paymentOperation.getPlayer().equals(player.getPlayer())) {

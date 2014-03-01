@@ -5,9 +5,6 @@ import java.util.Map;
 
 import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
@@ -15,8 +12,10 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.GameConfigurationKey;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
-public class GamePlayerFactory implements ApplicationContextAware {
+public class GamePlayerFactory implements ApplicationListener<ContextRefreshedEvent> {
 
     final private RoundGamePlayerFactory<?> defaultMatchPlayerFactory = new SimpleRoundGamePlayerFactory<>();
     final private Map<Game, RoundGamePlayerFactory<?>> gameToPlayerFactory = new HashMap<>();
@@ -46,8 +45,8 @@ public class GamePlayerFactory implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        for (RoundGamePlayerFactory<?> gamePlayerFactory : applicationContext.getBeansOfType(RoundGamePlayerFactory.class).values())
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        for (RoundGamePlayerFactory<?> gamePlayerFactory : event.getApplicationContext().getBeansOfType(RoundGamePlayerFactory.class).values())
             gameToPlayerFactory.put(gamePlayerFactory.getGame(), gamePlayerFactory);
     }
 

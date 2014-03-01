@@ -16,11 +16,6 @@ import com.clemble.casino.server.spring.web.game.AbstractGameSpringConfiguration
 @Import({ GameManagementSpringConfiguration.class, WebCommonSpringConfiguration.class })
 public class IntegrationGameWebSpringConfiguration extends AbstractGameSpringConfiguration<NumberState> {
 
-    @Override
-    public Game getGame() {
-        return Game.num;
-    }
-
     @Bean
     public GameStateFactory<NumberState> gameStateFactory() {
         return new NumberStateFactory();
