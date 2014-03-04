@@ -19,15 +19,7 @@ public class RoundDrawBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?
 
     @Override
     public void doEvent(GameEndedEvent<?> event) {
-        GameOutcome outcome = event.getOutcome();
-        if (outcome instanceof DrawOutcome) {
-            // Step 1. Generating payment transaction
-            PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(event.getContext().getSession().toPaymentTransactionKey())
-                .setTransactionDate(new Date());
-            // Step 2. Specifying payment transaction
-            event.setTransaction(paymentTransaction);
-        }
+        // Do nothing, nothing is expected from the client
     }
 
 }

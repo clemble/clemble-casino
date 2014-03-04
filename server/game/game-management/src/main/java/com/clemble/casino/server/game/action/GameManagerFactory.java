@@ -92,7 +92,7 @@ public class GameManagerFactory {
         matchRecord = sessionRepository.saveAndFlush(matchRecord);
         GameManager<RoundGameRecord> manager = new GameManager<>(processor, matchRecord, context);
         sessionToManager.put(initiation.getSession(), manager);
-        notificationService.notify(initiation.getParticipants(), new RoundStartedEvent<GameState>(matchRecord));
+        notificationService.notify(initiation.getParticipants(), new RoundStartedEvent<GameState>(initiation.getSession(), state));
         return manager;
     }
 

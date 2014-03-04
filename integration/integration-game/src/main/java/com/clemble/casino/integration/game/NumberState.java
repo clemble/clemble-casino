@@ -61,9 +61,9 @@ public class NumberState implements GameState {
                 for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
-                        resultEvent = new RoundEndedEvent(session, new PlayerWonOutcome(selectNumberEvent.getPlayer()));
+                        resultEvent = new RoundEndedEvent(session.getSession(), session.getState(), new PlayerWonOutcome(selectNumberEvent.getPlayer()), context);
                     } else if (selectNumberEvent.getNumber() == maxBet) {
-                        resultEvent = new RoundEndedEvent(session, new DrawOutcome());
+                        resultEvent = new RoundEndedEvent(session.getSession(), session.getState(), new DrawOutcome(), context);
                     }
                 }
             } else {
@@ -75,11 +75,11 @@ public class NumberState implements GameState {
             Collection<String> opponents = context.getPlayerIterator().whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
-                resultEvent = new RoundEndedEvent(session, new NoOutcome());
+                resultEvent = new RoundEndedEvent(context, session.getState(), new NoOutcome());
             } else {
                 String winner = opponents.iterator().next();
                 // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
-                resultEvent = new RoundEndedEvent(session, new PlayerWonOutcome(winner));
+                resultEvent = new RoundEndedEvent(context, session.getState(), new PlayerWonOutcome(winner));
             }
         }
         // Step 3. Sanity check

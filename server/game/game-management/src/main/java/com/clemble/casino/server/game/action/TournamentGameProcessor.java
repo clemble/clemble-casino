@@ -6,7 +6,7 @@ import com.clemble.casino.game.*;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.GameTournamentEndedEvent;
+import com.clemble.casino.game.event.server.TournamentEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.game.specification.GameConfiguration;
@@ -65,7 +65,7 @@ public class TournamentGameProcessor implements GameProcessor<TournamentGameReco
                 TournamentLeaf finalLeaf = new TournamentLeaf(((PlayerWonOutcome) outcome).getWinner(), leaf.getSession(), leaf.getLeafs());
                 // Step 2. Processing level & group
                 if (level == 0) {
-                    return new GameTournamentEndedEvent(context.getSession(), outcome, context);
+                    return new TournamentEndedEvent(context.getSession(), outcome, context);
                 } else {
                     // Step 3. Creating final leaf
                     Entry<Integer, Integer> levToGroup = new ImmutablePair<>(level, group);

@@ -62,12 +62,12 @@ public class MatchGameProcessor implements GameProcessor<MatchGameRecord, Event>
                 if (leaderScore > nextAfterLeaderScore && 
                    (nextAfterLeaderScore + gamesLeft < leaderScore)) {
                     LOG.debug("{} match winner determined {}", context.getSession(), leader.getKey());
-                    return new MatchEndedEvent(context.getSession(), new PlayerWonOutcome(leader.getKey()), context, null);
+                    return new MatchEndedEvent(context.getSession(), new PlayerWonOutcome(leader.getKey()), context);
                 }
                 // Step 3. If no games left mark as a draw
                 if (gamesLeft == 0) {
                     LOG.debug("{} no more games left, considering this as a draw");
-                    return new MatchEndedEvent(context.getSession(), new DrawOutcome(), context, null);
+                    return new MatchEndedEvent(context.getSession(), new DrawOutcome(), context);
                 }
             }
         }

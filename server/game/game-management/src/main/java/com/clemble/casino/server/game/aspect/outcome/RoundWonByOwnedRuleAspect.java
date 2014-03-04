@@ -47,8 +47,6 @@ public class RoundWonByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>
             }
             // Step 3. Processing payment transaction
             transactionService.process(paymentTransaction);
-            // Step 4. Specifying payment transaction
-            event.setTransaction(paymentTransaction);
         }
     }
 

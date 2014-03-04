@@ -52,8 +52,6 @@ public class MatchDrawRuleAspect extends BasicGameAspect<MatchEndedEvent> {
             }
             // Step 3. Processing payment transaction
             transactionService.process(transaction);
-            // Step 4. Specifying transaction in response
-            event.setTransaction(transaction);
         }
     }
 
