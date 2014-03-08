@@ -46,10 +46,6 @@
 
         <dependency>
             <groupId>com.clemble.casino.integration</groupId>
-            <artifactId>integration-management-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.integration</groupId>
             <artifactId>integration-game</artifactId>
         </dependency>
 
@@ -174,8 +170,8 @@
                                             <destFileName>payment.war</destFileName>
                                         </artifactItem>
                                         <artifactItem>
-                                            <groupId>com.clemble.casino.integration</groupId>
-                                            <artifactId>integration-management-web</artifactId>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>management-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
                                             <destFileName>management.war</destFileName>

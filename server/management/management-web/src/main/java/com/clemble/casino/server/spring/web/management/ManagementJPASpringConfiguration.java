@@ -24,10 +24,10 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 @Configuration
 @Import(BasicJPASpringConfiguration.class)
 @EnableJpaRepositories(basePackages = "com.clemble.casino.server.repository.player",
-    entityManagerFactoryRef = "playerEntityManagerFactory",
-    transactionManagerRef = "playerTransactionManager",
+    entityManagerFactoryRef = "managementEntityManagerFactory",
+    transactionManagerRef = "managementTransactionManager",
     includeFilters = { @Filter(value = JpaRepository.class, type = FilterType.ASSIGNABLE_TYPE) })
-public class PlayerJPASpringConfiguration implements SpringConfiguration {
+public class ManagementJPASpringConfiguration implements SpringConfiguration {
 
     @Autowired
     private DataSource dataSource;
@@ -36,8 +36,8 @@ public class PlayerJPASpringConfiguration implements SpringConfiguration {
     private JpaVendorAdapter jpaVendorAdapter;
 
     @Bean
-    public PlatformTransactionManager playerTransactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager(playerEntityManagerFactory());
+    public PlatformTransactionManager managementTransactionManager(EntityManagerFactory managementEntityManagerFactory) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager(managementEntityManagerFactory);
         transactionManager.setJpaDialect(new HibernateJpaDialect());
         transactionManager.setDataSource(dataSource);
         transactionManager.setPersistenceUnitName("playerEntityManager");
@@ -45,7 +45,7 @@ public class PlayerJPASpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public EntityManagerFactory playerEntityManagerFactory() {
+    public EntityManagerFactory managementEntityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
         entityManagerFactory.setPackagesToScan("com.clemble.casino.player");

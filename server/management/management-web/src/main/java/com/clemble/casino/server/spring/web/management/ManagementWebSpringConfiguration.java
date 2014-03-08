@@ -2,8 +2,12 @@ package com.clemble.casino.server.spring.web.management;
 
 import java.security.NoSuchAlgorithmException;
 
+import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
+import com.clemble.casino.server.configuration.SimpleResourceLocationService;
+import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,11 +31,18 @@ import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.clemble.casino.server.web.management.PlayerSessionController;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Import(value = { WebCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PlayerJPASpringConfiguration.class,
-        PaymentCommonSpringConfiguration.class, OAuthSpringConfiguration.class })
-abstract public class AbstractManagementWebSpringConfiguration implements SpringConfiguration {
+@Import(value = {
+        WebCommonSpringConfiguration.class,
+        CommonSpringConfiguration.class,
+        PlayerCommonSpringConfiguration.class,
+        ManagementJPASpringConfiguration.class,
+        PaymentCommonSpringConfiguration.class,
+        OAuthSpringConfiguration.class
+})
+public class ManagementWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     public ServerRegistryConfiguration paymentEndpointRegistry;
@@ -43,17 +54,37 @@ abstract public class AbstractManagementWebSpringConfiguration implements Spring
 
     @Bean
     public PlayerRegistrationController playerRegistrationController(
-            @Qualifier("playerProfileRegistrationService") ServerProfileRegistrationService playerProfileRegistrationService, PlayerIdGenerator idGenerator,
-            PlayerCredentialRepository playerCredentialRepository, ClembleConsumerDetailsService clembleConsumerDetailsService,
-            ClembleCasinoValidationService gogomayaValidationService, SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
+            @Qualifier("playerProfileRegistrationService") ServerProfileRegistrationService playerProfileRegistrationService,
+            PlayerIdGenerator idGenerator,
+            PlayerCredentialRepository playerCredentialRepository,
+            ClembleConsumerDetailsService clembleConsumerDetailsService,
+            ClembleCasinoValidationService gogomayaValidationService,
+            SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
         return new PlayerRegistrationController(idGenerator, playerTokenFactory(), playerProfileRegistrationService, playerCredentialRepository,
                 clembleConsumerDetailsService, gogomayaValidationService, systemNotificationService);
     }
 
     @Bean
-    public PlayerSessionController playerSessionController(ResourceLocationService resourceLocationService, PlayerSessionRepository playerSessionRepository,
+    public PlayerSessionController playerSessionController(
+            ResourceLocationService resourceLocationService,
+            PlayerSessionRepository playerSessionRepository,
             ServerPlayerPresenceService playerStateManager) {
         return new PlayerSessionController(resourceLocationService, playerSessionRepository, playerStateManager);
+    }
+
+    @Bean
+    public ServerRegistryConfiguration serverRegistryConfiguration(
+        @Value("${clemble.management.configuration.notification}") String notificationBase,
+        @Value("${clemble.management.configuration.player}") String playerBase,
+        @Value("${clemble.management.configuration.payment}") String paymentBase,
+        @Value("${clemble.management.configuration.game}") String gameBase) {
+        return new ServerRegistryConfiguration(notificationBase, playerBase, paymentBase, gameBase);
+    }
+
+    @Bean
+    public ResourceLocationService resourceLocationService(ServerRegistryConfiguration serverRegistryConfiguration) {
+        SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
+        return new SimpleResourceLocationService(configurationService, serverRegistryConfiguration);
     }
 
 }

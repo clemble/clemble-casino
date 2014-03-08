@@ -80,22 +80,22 @@ public class SocialModuleSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public FacebookConnectionFactory facebookConnectionFactory(
-            @Value("clemble.social.facebook.key") String key,
-            @Value("clemble.social.facebook.secret") String secret) {
+            @Value("${clemble.social.facebook.key}") String key,
+            @Value("${clemble.social.facebook.secret}") String secret) {
         return new FacebookConnectionFactory(key, secret);
     }
 
     @Bean
     public TwitterConnectionFactory twitterConnectionFactory(
-            @Value("clemble.social.twitter.key") String key,
-            @Value("clemble.social.twitter.secret") String secret) {
+            @Value("${clemble.social.twitter.key}") String key,
+            @Value("${clemble.social.twitter.secret}") String secret) {
         return new TwitterConnectionFactory(key, secret);
     }
 
     @Bean
     public LinkedInConnectionFactory linkedInConnectionFactory(
-        @Value("clemble.social.linkedin.key") String key,
-        @Value("clemble.social.linkedin.secret") String secret) {
+        @Value("${clemble.social.linkedin.key}") String key,
+        @Value("${clemble.social.linkedin.secret}") String secret) {
         return new LinkedInConnectionFactory(key, secret);
     }
 

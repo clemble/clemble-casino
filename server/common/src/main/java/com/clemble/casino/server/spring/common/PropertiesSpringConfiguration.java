@@ -13,20 +13,20 @@ public class PropertiesSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
-    @PropertySource(value = "file:/clemble/config/default.properties")
-    @Profile(value = { DEFAULT })
+    @PropertySource(name = "clembleConfig", value = "file:/clemble/config/default.properties")
+    @Profile(value = { DEFAULT, INTEGRATION_TEST, INTEGRATION_DEFAULT })
     public static class Default {
     }
 
     @Configuration
-    @PropertySource(value = "file:/clemble/config/test.properties")
+    @PropertySource(name = "clembleConfig", value = "file:/clemble/config/test.properties")
     @Profile(value = {TEST})
     public static class Test {
     }
 
     @Configuration
-    @Profile(value = { CLOUD })
-    @PropertySource(value = "file:/clemble/config/cloud.properties")
+    @Profile(value = { CLOUD, INTEGRATION_CLOUD })
+    @PropertySource(name = "clembleConfig", value = "file:/clemble/config/cloud.properties")
     public static class Cloud {
     }
 }
