@@ -54,10 +54,8 @@ public class GameActionController<State extends GameState> implements GameAction
         GameSessionKey sessionKey = new GameSessionKey(game, session);
         // Step 2. Fetching game manager
         GameManager<?> gameManager = managerFactory.get(sessionKey);
-        if (gameManager == null || gameManager.getRecord() == null || ((RoundGameRecord) managerFactory.get(sessionKey).getRecord()).getState() == null)
-            return null;
         // Step 3. Fetching State
-        return ((RoundGameRecord) gameManager.getRecord()).getState();
+        return gameManager == null ? null : gameManager.getState();
     }
 
     @Override

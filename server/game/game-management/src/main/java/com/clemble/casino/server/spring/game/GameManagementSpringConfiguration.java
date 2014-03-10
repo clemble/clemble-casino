@@ -21,7 +21,7 @@ import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
-import com.clemble.casino.server.game.aspect.management.PlayerNotificationRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.notification.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;

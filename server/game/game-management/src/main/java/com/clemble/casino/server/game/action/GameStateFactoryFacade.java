@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.clemble.casino.game.RoundGameContext;
+import com.clemble.casino.game.RoundGameState;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -19,7 +20,7 @@ public class GameStateFactoryFacade implements ApplicationListener<ContextRefres
     final private Map<Game, GameStateFactory<?>> gameToStateFactory = new HashMap<Game, GameStateFactory<?>>();
 
     @SuppressWarnings("unchecked")
-    public <S extends GameState> S constructState(final GameInitiation initiation, final RoundGameContext context){
+    public <S extends RoundGameState> S constructState(final GameInitiation initiation, final RoundGameContext context){
         return (S) gameToStateFactory.get(initiation.getConfiguration().getConfigurationKey().getGame()).constructState(initiation, context);
     }
 

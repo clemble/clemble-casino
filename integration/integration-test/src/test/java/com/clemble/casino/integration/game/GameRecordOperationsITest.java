@@ -1,13 +1,14 @@
-package com.clemble.casino.integration.payment;
+package com.clemble.casino.integration.game;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import com.clemble.casino.integration.game.RoundGamePlayer;
+import com.clemble.casino.game.Game;
+import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.RoundGameRecord;
+import com.clemble.casino.integration.event.EventAccumulator;
+import com.clemble.casino.integration.game.construction.GameScenarios;
+import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
+import com.clemble.casino.payment.PaymentTransactionKey;
+import com.clemble.casino.payment.event.FinishedPaymentEvent;
+import com.clemble.casino.payment.event.PaymentEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +16,20 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.integration.event.EventAccumulator;
-import com.clemble.casino.integration.game.NumberState;
-import com.clemble.casino.integration.game.SelectNumberAction;
-import com.clemble.casino.integration.game.construction.GameScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.event.FinishedPaymentEvent;
-import com.clemble.casino.payment.event.PaymentEvent;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+/**
+ * Created by mavarazy on 09/03/14.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class GamePaymentTransactionITest {
+public class GameRecordOperationsITest {
 
     @Autowired
     public GameScenarios gameScenarios;
@@ -58,6 +58,14 @@ public class GamePaymentTransactionITest {
         GameSessionKey sessionKey = A.getSession();
         assertEquals(sessionKey.getSession(), transactionKey.getTransaction());
         assertEquals(sessionKey.getGame().name(), transactionKey.getSource());
+        // Step 6. Checking game record
+        RoundGameRecord AgameRecord = A.playerOperations().gameRecordOperations().get(sessionKey);
+        RoundGameRecord BgameRecord = A.playerOperations().gameRecordOperations().get(sessionKey);
+        // Step 7. Checking game records are same
+        assertEquals(AgameRecord, BgameRecord);
+        assertEquals(AgameRecord.getMadeMoves().size(), 2);
+        assertEquals(AgameRecord.getMadeMoves().get(0).getMove(), new SelectNumberAction(A.getPlayer(), 2));
+        assertEquals(AgameRecord.getMadeMoves().get(1).getMove(), new SelectNumberAction(B.getPlayer(), 1));
     }
 
 }

@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.aspect.management;
+package com.clemble.casino.server.game.aspect.notification;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 

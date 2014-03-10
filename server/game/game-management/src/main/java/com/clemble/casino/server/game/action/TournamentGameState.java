@@ -12,8 +12,10 @@ import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.GameConfigurationAware;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
+import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by mavarazy on 12/02/14.
  */
-public class TournamentGameProcessor implements GameProcessor<TournamentGameRecord, Event> {
+@JsonTypeName("tournament")
+public class TournamentGameState implements GameState<TournamentGameContext, Event> {
 
     final private String TOURNAME_SEPARATOR = "_";
     final private GameManagerFactory managerFactory;
@@ -31,7 +34,7 @@ public class TournamentGameProcessor implements GameProcessor<TournamentGameReco
     final private List<TournamentLevel> levels = new ArrayList<>();
     final private TournamentGameConfiguration configuration;
 
-    public TournamentGameProcessor(TournamentGameConfiguration configuration, TournamentGameContext context, GameManagerFactory managerFactory, List<String> players) {
+    public TournamentGameState(TournamentGameConfiguration configuration, TournamentGameContext context, GameManagerFactory managerFactory, List<String> players) {
         this.context = context;
         this.configuration = configuration;
         this.managerFactory = managerFactory;
@@ -47,10 +50,14 @@ public class TournamentGameProcessor implements GameProcessor<TournamentGameReco
         }
     }
 
-    public GameManagementEvent process(TournamentGameRecord session, Event event) {
+    public TournamentGameContext getContext(){
+        return context;
+    }
+
+    public GameManagementEvent process(Event event) {
         if (event instanceof GameEndedEvent) {
             // Step 0. Reading session key and outcome
-            GameSessionKey sessionKey = session.getSession();
+            GameSessionKey sessionKey = ((GameEndedEvent) event).getContext().getSession();
             GameOutcome outcome = ((GameEndedEvent<?>) event).getOutcome();
             TournamentGameContext leafContext = (TournamentGameContext) ((GameEndedEvent<?>) event).getContext().getParent();
             if (outcome instanceof PlayerWonOutcome) {
@@ -78,6 +85,16 @@ public class TournamentGameProcessor implements GameProcessor<TournamentGameReco
             throw new IllegalArgumentException();
         }
         return null;
+    }
+
+    @Override
+    public GameUnit getState() {
+        throw new IllegalArgumentException();
+    }
+
+    @Override
+    public int getVersion() {
+        throw new IllegalArgumentException();
     }
 
     public class TournamentLevel implements GameConfigurationAware {

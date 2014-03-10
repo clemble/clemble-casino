@@ -2,35 +2,32 @@ package com.clemble.casino.server.game.aspect;
 
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameProcessor;
+import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.server.game.action.GameManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.OrderComparator;
 
 import java.util.*;
 
-public class ServerGameAspectFactory<GC extends GameConfiguration, C extends GameContext<?>, R extends GameRecord> implements ApplicationListener<ContextRefreshedEvent> {
+public class ServerGameManagerFactory<GC extends GameConfiguration, C extends GameContext<?>, R extends GameRecord> implements ApplicationListener<ContextRefreshedEvent> {
 
     final private Logger LOG;
 
     final private List<GameAspectFactory<?, C, GC>> aspectFactories = new ArrayList<>();
     final private Class<?> aspectFactoryClass;
 
-    public ServerGameAspectFactory(Class<?> aspectFactoryClass) {
+    public ServerGameManagerFactory(Class<?> aspectFactoryClass) {
         this.aspectFactoryClass = aspectFactoryClass;
         LOG = LoggerFactory.getLogger("GAF - " + aspectFactoryClass.getSimpleName());
     }
 
-    public GameProcessor<R, Event> create(GameProcessor<R, Event> processor, GC configuration, C context) {
+    public GameManager<C> create(GameState<C, Event> processor, GC configuration, C context) {
         // Step 1. Constructing GameAspects
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
         for (GameAspectFactory<?, C, GC> aspectFactory : aspectFactories) {
@@ -40,36 +37,7 @@ public class ServerGameAspectFactory<GC extends GameConfiguration, C extends Gam
                 gameAspects.add(aspectFactory.construct(configuration, context));
             }
         }
-        return new ServerGameProcessor<>(processor, gameAspects);
-    }
-
-    public static class ServerGameProcessor<R extends GameRecord> implements GameProcessor<R, Event> {
-
-        final private static Logger LOG = LoggerFactory.getLogger(ServerGameProcessor.class);
-
-        final private GameAspect<?>[] listenerArray;
-        final private GameProcessor<R, Event> processor;
-
-        public ServerGameProcessor(GameProcessor<R, Event> processor, Collection<GameAspect<?>> listeners) {
-            this.processor = processor;
-            this.listenerArray = listeners.toArray(new GameAspect[0]);
-        }
-
-        @Override
-        @SuppressWarnings({"rawtypes", "unchecked"})
-        public GameManagementEvent process(R record, Event action) {
-            LOG.debug("Processing {}", action);
-            // Step 1. Before move notification
-            for (GameAspect listener : listenerArray)
-                listener.onEvent(action);
-            // Step 2. Processing in core
-            GameManagementEvent event = processor.process(record, action);
-            // Step 3 After move notification
-            for (GameAspect listener : listenerArray)
-                listener.onEvent(event);
-            return event;
-        }
-
+        return new GameManager<>(context, processor, gameAspects);
     }
 
     @Override

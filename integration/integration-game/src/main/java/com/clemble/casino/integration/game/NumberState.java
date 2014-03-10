@@ -8,6 +8,7 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGameRecord;
+import com.clemble.casino.game.RoundGameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.SurrenderAction;
 import com.clemble.casino.game.event.server.GameManagementEvent;
@@ -22,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("number")
-public class NumberState implements GameState {
+public class NumberState implements RoundGameState {
 
     /**
      * Generated 20/12/13
@@ -35,7 +36,7 @@ public class NumberState implements GameState {
 
     @JsonCreator
     public NumberState(@JsonProperty("context") RoundGameContext context,
-            @JsonProperty("root") GameUnit parent,
+            @JsonProperty("state") GameUnit parent,
             @JsonProperty("version") int version) {
         this.context = context;
         this.context.getActionLatch().expectNext(context.getPlayerIterator().getPlayers(), "selectNumber", SelectNumberAction.class);
@@ -44,12 +45,12 @@ public class NumberState implements GameState {
     }
 
     @Override
-    public GameUnit getRoot() {
+    public GameUnit getState() {
         return null;
     }
 
     @Override
-    public GameManagementEvent process(RoundGameRecord session, Event event) {
+    public GameManagementEvent process(Event event) {
         GameAction action = (GameAction) event;
         // Step 1. Processing Select cell move
         GameManagementEvent resultEvent = null;
@@ -61,13 +62,13 @@ public class NumberState implements GameState {
                 for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
-                        resultEvent = new RoundEndedEvent(session.getSession(), session.getState(), new PlayerWonOutcome(selectNumberEvent.getPlayer()), context);
+                        resultEvent = new RoundEndedEvent(context.getSession(), this, new PlayerWonOutcome(selectNumberEvent.getPlayer()), context);
                     } else if (selectNumberEvent.getNumber() == maxBet) {
-                        resultEvent = new RoundEndedEvent(session.getSession(), session.getState(), new DrawOutcome(), context);
+                        resultEvent = new RoundEndedEvent(context.getSession(), this, new DrawOutcome(), context);
                     }
                 }
             } else {
-                resultEvent = new PlayerMovedEvent(session.getSession(), action.getPlayer());
+                resultEvent = new PlayerMovedEvent(context.getSession(), action.getPlayer());
             }
         } else if (action instanceof SurrenderAction) {
             // Step 1. Fetching player identifier
@@ -75,11 +76,11 @@ public class NumberState implements GameState {
             Collection<String> opponents = context.getPlayerIterator().whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
-                resultEvent = new RoundEndedEvent(context, session.getState(), new NoOutcome());
+                resultEvent = new RoundEndedEvent(context, this, new NoOutcome());
             } else {
                 String winner = opponents.iterator().next();
                 // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
-                resultEvent = new RoundEndedEvent(context, session.getState(), new PlayerWonOutcome(winner));
+                resultEvent = new RoundEndedEvent(context, this, new PlayerWonOutcome(winner));
             }
         }
         // Step 3. Sanity check

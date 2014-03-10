@@ -11,8 +11,10 @@ import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.player.PlayerAwareUtils;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,23 +25,29 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class MatchGameProcessor implements GameProcessor<MatchGameRecord, Event> {
+@JsonTypeName("match")
+public class MatchGameState implements GameState<MatchGameContext, Event> {
 
-    final static private Logger LOG = LoggerFactory.getLogger(MatchGameProcessor.class);
+    final static private Logger LOG = LoggerFactory.getLogger(MatchGameState.class);
 
     final private MatchGameContext context;
     final private MatchGameConfiguration configuration;
     final private GameManagerFactory managerFactory;
 
-    public MatchGameProcessor(MatchGameContext context, MatchGameConfiguration configuration, GameManagerFactory managerFactory) {
+    public MatchGameState(MatchGameContext context, MatchGameConfiguration configuration, GameManagerFactory managerFactory) {
         this.context = context;
         this.configuration = configuration;
         this.managerFactory = managerFactory;
     }
 
     @Override
-    public GameManagementEvent process(MatchGameRecord record, Event event) {
-        LOG.debug("{} match {} processing {}", context.getSession(), record.getSession(), event);
+    public MatchGameContext getContext(){
+        return context;
+    }
+
+    @Override
+    public GameManagementEvent process(Event event) {
+        LOG.debug("{} match processing {}", context.getSession(), event);
         if(event instanceof GameEndedEvent) {
             context.addOutcome(((GameEndedEvent<?>) event).getOutcome());
             int gamesLeft = configuration.getConfigurations().size() - context.getOutcomes().size();
@@ -81,9 +89,17 @@ public class MatchGameProcessor implements GameProcessor<MatchGameRecord, Event>
                 configuration.getConfigurations().get(gameNum),
                 PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
         GameManager<?> manager = managerFactory.start(subInitiation, context);
-        record.getSubRecords().add(manager.getRecord().getSession());
         // Step 5. Sending Game Changed event
         return new MatchChangedEvent(context.getSession(), context, nextSessionKey);
     }
 
+    @Override
+    public GameUnit getState() {
+        return null;
+    }
+
+    @Override
+    public int getVersion() {
+        return context.getOutcomes().size();
+    }
 }

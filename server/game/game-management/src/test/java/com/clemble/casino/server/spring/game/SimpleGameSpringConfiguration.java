@@ -9,7 +9,7 @@ import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.action.GameStateFactory;
 import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
-import com.clemble.casino.server.game.aspect.ServerGameAspectFactory;
+import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
 import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
@@ -29,9 +29,9 @@ public class SimpleGameSpringConfiguration {
     @Bean
     public GameManagerFactory gameProcessor(MatchGameRecordRepository potRepository,
                                             GameStateFactoryFacade stateFactory,
-                                            ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> processorFactory,
-                                            ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
-                                            ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
+                                            ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> processorFactory,
+                                            ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
+                                            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
                                             RoundGameRecordRepository sessionRepository,
                                             ServerGameConfigurationRepository configurationRepository,
                                             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
@@ -39,8 +39,8 @@ public class SimpleGameSpringConfiguration {
     }
 
     @Bean
-    public ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> processorFactory() {
-        return new ServerGameAspectFactory<>(RoundGameAspectFactory.class);
+    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> processorFactory() {
+        return new ServerGameManagerFactory<>(RoundGameAspectFactory.class);
     }
 
     @Bean

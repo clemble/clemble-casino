@@ -11,13 +11,14 @@ import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.RoundGameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.RoundEvent;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 
-public class SimpleRoundGamePlayer<State extends GameState> extends AbstractGamePlayer implements RoundGamePlayer<State> {
+public class SimpleRoundGamePlayer<State extends RoundGameState> extends AbstractGamePlayer implements RoundGamePlayer<State> {
 
     /**
      * Generated 05/07/13

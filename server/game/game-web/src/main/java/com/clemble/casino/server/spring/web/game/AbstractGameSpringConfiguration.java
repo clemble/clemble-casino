@@ -6,9 +6,9 @@ import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.action.GameStateFactoryFacade;
+import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
-import com.clemble.casino.server.game.aspect.ServerGameAspectFactory;
 import com.clemble.casino.server.game.aspect.TournamentGameAspectFactory;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
@@ -41,9 +41,9 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     public GameManagerFactory gameProcessor(
         MatchGameRecordRepository potRepository,
         GameStateFactoryFacade stateFactory,
-        @Qualifier("roundProcessorFactory") ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory,
-        @Qualifier("matchProcessorFactory") ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
-        @Qualifier("tournamentProcessorFactory") ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
+        @Qualifier("roundProcessorFactory") ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory,
+        @Qualifier("matchProcessorFactory") ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
+        @Qualifier("tournamentProcessorFactory") ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
         RoundGameRecordRepository roundRecordRepository,
         ServerGameConfigurationRepository configurationRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
@@ -64,18 +64,18 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public ServerGameAspectFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> roundProcessorFactory() {
-        return new ServerGameAspectFactory<>(RoundGameAspectFactory.class);
+    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> roundProcessorFactory() {
+        return new ServerGameManagerFactory<>(RoundGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameAspectFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory() {
-        return new ServerGameAspectFactory<>(MatchGameAspectFactory.class);
+    public ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory() {
+        return new ServerGameManagerFactory<>(MatchGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameAspectFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory() {
-        return new ServerGameAspectFactory<>(TournamentGameAspectFactory.class);
+    public ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory() {
+        return new ServerGameManagerFactory<>(TournamentGameAspectFactory.class);
     }
 
     @Bean
