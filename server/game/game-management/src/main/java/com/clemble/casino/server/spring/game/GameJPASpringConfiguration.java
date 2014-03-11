@@ -3,6 +3,9 @@ package com.clemble.casino.server.spring.game;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import com.clemble.casino.server.repository.game.MadeMoveRepository;
+import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +15,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -48,6 +52,11 @@ public class GameJPASpringConfiguration implements SpringConfiguration {
         entityManagerFactory.setPersistenceUnitName("gameEntityManager");
         entityManagerFactory.afterPropertiesSet();
         return entityManagerFactory.getObject();
+    }
+
+    @Bean
+    public MadeMoveRepository madeMoveRepository(RoundGameRecordRepository recordRepository){
+        return new MadeMoveRepository(recordRepository);
     }
 
 }

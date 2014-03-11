@@ -3,12 +3,14 @@ package com.clemble.casino.integration.game;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.RoundGameRecord;
+import com.clemble.casino.game.action.MadeMove;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +38,7 @@ public class GameRecordOperationsITest {
     public GameScenarios gameScenarios;
 
     @Test
-    public void testAvailabilityConstruction(){
+    public void testRoundRecordSaving(){
         List<RoundGamePlayer<NumberState>> sessionPlayers = gameScenarios.match(Game.num);
         // Step 1. Preparing game session listener
         EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
@@ -64,8 +67,9 @@ public class GameRecordOperationsITest {
         // Step 7. Checking game records are same
         assertEquals(AgameRecord, BgameRecord);
         assertEquals(AgameRecord.getMadeMoves().size(), 2);
-        assertEquals(AgameRecord.getMadeMoves().get(0).getMove(), new SelectNumberAction(A.getPlayer(), 2));
-        assertEquals(AgameRecord.getMadeMoves().get(1).getMove(), new SelectNumberAction(B.getPlayer(), 1));
+        Iterator<MadeMove> moveIterator = AgameRecord.getMadeMoves().iterator();
+        assertEquals(moveIterator.next().getRequest(), new SelectNumberAction(A.getPlayer(), 2));
+        assertEquals(moveIterator.next().getRequest(), new SelectNumberAction(B.getPlayer(), 1));
     }
 
 }

@@ -69,11 +69,4 @@ public class GameActionController<State extends GameState> implements GameAction
         return manager != null ? manager.getContext() : null;
     }
 
-
-    @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_ACTIONS_ACTION, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody MadeMove getAction(@PathVariable("game") Game game, @PathVariable("sessionId") String session, @PathVariable("actionId") int actionId) {
-        return sessionRepository.findAction(new GameSessionKey(game, session), actionId);
-    }
 }

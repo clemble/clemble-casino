@@ -1,8 +1,17 @@
 package com.clemble.casino.server.game.action;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.clemble.casino.ImmutablePair;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.*;
+import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.TournamentGameContext;
+import com.clemble.casino.game.TournamentLeaf;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
@@ -15,17 +24,10 @@ import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by mavarazy on 12/02/14.
  */
-@JsonTypeName("tournament")
 public class TournamentGameState implements GameState<TournamentGameContext, Event> {
 
     final private String TOURNAME_SEPARATOR = "_";

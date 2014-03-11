@@ -8,8 +8,10 @@ import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.pot.MatchFillAspectFactory;
+import com.clemble.casino.server.game.aspect.record.RoundRecordGameAspectFactory;
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
+import com.clemble.casino.server.repository.game.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,10 +39,6 @@ import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
-import com.clemble.casino.server.repository.game.GameConstructionRepository;
-import com.clemble.casino.server.repository.game.PendingGameInitiationRepository;
-import com.clemble.casino.server.repository.game.PendingPlayerRepository;
-import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
@@ -162,6 +160,11 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public NextGameAspectFactory nextGameAspectFactory(GameManagerFactory managerFactory) {
         return new NextGameAspectFactory(managerFactory);
+    }
+
+    @Bean
+    public RoundRecordGameAspectFactory recordGameAspectFactory(MadeMoveRepository moveRepository) {
+        return new RoundRecordGameAspectFactory(moveRepository);
     }
 
     /**

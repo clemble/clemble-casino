@@ -2,22 +2,30 @@ package com.clemble.casino.integration;
 
 import static com.clemble.test.random.ObjectGenerator.register;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.Date;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 import com.clemble.casino.game.*;
 import com.clemble.casino.game.rule.RoundRule;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.unit.GameUnit;
+
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.VersionAware;
 import com.clemble.casino.base.ActionLatch;
-import com.clemble.casino.game.MatchGameContext;
+import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.action.BetAction;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
-import com.clemble.casino.game.cell.Cell;
-import com.clemble.casino.game.cell.CellState;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
@@ -28,10 +36,12 @@ import com.clemble.casino.game.rule.bet.LimitedBetRule;
 import com.clemble.casino.game.rule.bet.UnlimitedBetRule;
 import com.clemble.casino.game.rule.construct.PlayerNumberRule;
 import com.clemble.casino.game.rule.construct.PrivacyRule;
+import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.GameConfigurationKey;
+import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
-import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.integration.game.NumberState;
+import com.clemble.casino.integration.game.NumberUnit;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
@@ -43,6 +53,8 @@ import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
+import com.clemble.casino.server.game.action.MatchGameState;
+import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.clemble.test.random.ValueGenerator;
@@ -52,22 +64,25 @@ import com.google.common.collect.ImmutableSet;
 public class ObjectTest {
 
     static {
+        register(NumberState.class, new AbstractValueGenerator<NumberState>() {
+            @Override
+            public NumberState generate() {
+                GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
+                return new NumberState(new RoundGameContext(initiation), null, 0);
+            }
+        });
+        register(RoundGameContext.class, new AbstractValueGenerator<RoundGameContext>(){
+            @Override
+            public RoundGameContext generate() {
+                GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
+                return new RoundGameContext(initiation);
+            }
+            
+        });
         register(GameSessionKey.class, new AbstractValueGenerator<GameSessionKey>() {
             @Override
             public GameSessionKey generate() {
                 return new GameSessionKey(ObjectGenerator.generate(Game.class), ObjectGenerator.generate(String.class));
-            }
-        });
-        register(CellState.class, new AbstractValueGenerator<CellState>() {
-            @Override
-            public CellState generate() {
-                return CellState.DEFAULT;
-            }
-        });
-        register(GameUnit.class, new AbstractValueGenerator<GameUnit>() {
-            @Override
-            public GameUnit generate() {
-                return Cell.create(0, 0);
             }
         });
         register(FixedBetRule.class, new AbstractValueGenerator<FixedBetRule>() {
@@ -92,6 +107,21 @@ public class ObjectTest {
             @Override
             public PlayerAccount generate() {
                 return new PlayerAccount(RandomStringUtils.random(5), ImmutableSet.of(Money.create(Currency.FakeMoney, 500)));
+            }
+        });
+        register(GameUnit.class, new AbstractValueGenerator<GameUnit>() {
+            @Override
+            public GameUnit generate() {
+                return new NumberUnit(Collections.<GameUnit>emptyList());
+            }
+        });
+        register(GameState.class, new AbstractValueGenerator<GameState>() {
+            @Override
+            public GameState generate() {
+                return new NumberState(
+                    ObjectGenerator.generate(RoundGameContext.class),
+                    ObjectGenerator.generate(GameUnit.class),
+                    0);
             }
         });
         register(PaymentTransaction.class, new AbstractValueGenerator<PaymentTransaction>() {
@@ -133,9 +163,10 @@ public class ObjectTest {
         register(GameConstruction.class, new AbstractValueGenerator<GameConstruction>() {
             @Override
             public GameConstruction generate() {
-                return new GameConstruction().setSession(new GameSessionKey(Game.pic, "0"))
+                return new GameConstruction()
+                        .setSession(new GameSessionKey(Game.pic, "0"))
                         .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT))
-                        .setResponses(new ActionLatch().expectNext(ImmutableList.<String>of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
+                        .setResponses(new ActionLatch().expectNext(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
                         .setState(GameConstructionState.pending);
             }
         });
@@ -149,45 +180,6 @@ public class ObjectTest {
             @Override
             public RoundGameConfiguration generate() {
                 return RoundGameConfiguration.DEFAULT;
-            }
-        });
-        register(RoundGameContext.class, new AbstractValueGenerator<RoundGameContext>() {
-            @Override
-            public RoundGameContext generate() {
-                GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
-                return new RoundGameContext(initiation);
-            }
-        });
-        register(MatchGameContext.class, new AbstractValueGenerator<MatchGameContext>() {
-            @Override
-            public MatchGameContext generate() {
-                return new MatchGameContext(GameSessionKey.DEFAULT_SESSION, GameSessionKey.DEFAULT_SESSION, null, null, 0, Collections.<GameOutcome>emptyList());
-            }
-        });
-        register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
-            @Override
-            public TournamentGameConfiguration generate() {
-                return new TournamentGameConfiguration(null, null, null, null, null, null, null, null, null);
-            }
-        });
-        register(TournamentGameContext.class, new AbstractValueGenerator<TournamentGameContext>() {
-            @Override
-            public TournamentGameContext generate() {
-                return new TournamentGameContext(GameSessionKey.DEFAULT_SESSION, null, null, null);
-            }
-        });
-        register(NumberState.class, new AbstractValueGenerator<NumberState>() {
-            @Override
-            public NumberState generate() {
-                GameInitiation initiation = new GameInitiation(GameSessionKey.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
-                RoundGameContext context = new RoundGameContext(initiation);
-                return new NumberState(context, null, 0);
-            }
-        });
-        register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
-            @Override
-            public TournamentGameConfiguration generate() {
-                return new TournamentGameConfiguration(new GameConfigurationKey(Game.pic, "AAA"), new Money(Currency.FakeMoney, 50), PrivacyRule.players, PlayerNumberRule.two, RoundGameConfiguration.DEFAULT, null, null, null, null);
             }
         });
         register(VersionAware.class, "version", new ValueGenerator<Integer>() {
@@ -205,6 +197,56 @@ public class ObjectTest {
                 return this;
             }
         });
+        register(GameConfiguration.class, new AbstractValueGenerator<GameConfiguration>() {
+            @Override
+            public GameConfiguration generate() {
+                return RoundGameConfiguration.DEFAULT;
+            }
+        });
+        register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
+            @Override
+            public TournamentGameConfiguration generate() {
+                return new TournamentGameConfiguration(new GameConfigurationKey(Game.pic, "AAA"), new Money(Currency.FakeMoney, 50), PrivacyRule.players, PlayerNumberRule.two, RoundGameConfiguration.DEFAULT, null, null, null, null);
+            }
+        });
+
+        final RSAKeySecret rsaKey = ClembleConsumerDetailUtils.randomKey();
+        register(PrivateKey.class, new AbstractValueGenerator<PrivateKey>() {
+            @Override
+            public PrivateKey generate() {
+                return rsaKey.getPrivateKey();
+            }
+        });
+        register(PublicKey.class, new AbstractValueGenerator<PublicKey>() {
+            @Override
+            public PublicKey generate() {
+                return rsaKey.getPublicKey();
+            }
+        });
+        register(MatchGameContext.class, new AbstractValueGenerator<MatchGameContext>() {
+            @Override
+            public MatchGameContext generate() {
+                return new MatchGameContext(GameSessionKey.DEFAULT_SESSION, null, Collections.<MatchGamePlayerContext>emptyList(), null, 0, Collections.<GameOutcome>emptyList());
+            }
+        });
+        register(TournamentGameContext.class, new AbstractValueGenerator<TournamentGameContext>() {
+            @Override
+            public TournamentGameContext generate() {
+                return new TournamentGameContext(GameSessionKey.DEFAULT_SESSION, null, null, null);
+            }
+        });
+        try {
+            final KeyGenerator AES = KeyGenerator.getInstance("AES");
+            AES.init(256, new SecureRandom());
+            register(SecretKey.class, new AbstractValueGenerator<SecretKey>() {
+                @Override
+                public SecretKey generate() {
+                    return AES.generateKey();
+                }
+            });
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
 }

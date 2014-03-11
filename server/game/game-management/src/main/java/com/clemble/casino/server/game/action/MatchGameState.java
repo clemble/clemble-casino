@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-@JsonTypeName("match")
 public class MatchGameState implements GameState<MatchGameContext, Event> {
 
     final static private Logger LOG = LoggerFactory.getLogger(MatchGameState.class);

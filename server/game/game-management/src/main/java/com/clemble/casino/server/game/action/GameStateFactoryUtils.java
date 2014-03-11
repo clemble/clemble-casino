@@ -12,6 +12,8 @@ import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 
+import java.util.Collections;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class GameStateFactoryUtils {
@@ -38,8 +40,8 @@ public class GameStateFactoryUtils {
         GameState restoredState = stateFactory.constructState(initiation, context);
         // Step 2.1 To prevent population of original session with duplicated events
         RoundGameRecord tmpSession = new RoundGameRecord();
-        for (MadeMove madeMove : MadeMove.sort(session.getMadeMoves())) {
-            restoredState.process(madeMove.getMove());
+        for (MadeMove madeMove : session.getMadeMoves()) {
+            restoredState.process(madeMove.getRequest());
         }
         // Step 3. Returning restored application state
         return restoredState;

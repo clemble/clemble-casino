@@ -221,11 +221,6 @@
                 <artifactId>api-management</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.clemble.casino</groupId>
-                <artifactId>api-game-cell</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
             <!-- Client dependencies -->
 

@@ -12,7 +12,4 @@ import com.clemble.casino.game.action.MadeMove;
 @Repository
 public interface RoundGameRecordRepository extends JpaRepository<RoundGameRecord, GameSessionKey> {
 
-    @Query(value = "select move from RoundGameRecord session left join session.madeMoves move where session.session = :session and move.moveId = :action")
-    public MadeMove findAction(@Param("session") GameSessionKey session, @Param("action") int action);
-
 }

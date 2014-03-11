@@ -104,12 +104,9 @@ public class ObjectMapperTest extends ObjectTest {
     }
 
     private Throwable checkSerialization(Class<?> candidate) {
-        return checkSerialization(candidate, ObjectGenerator.generate(candidate));
-    }
-
-    private Throwable checkSerialization(Class<?> candidate, Object expected) {
         Throwable error = null;
         try {
+            Object expected = ObjectGenerator.generate(candidate);
             String stringPresentation = objectMapper.writeValueAsString(expected);
             Object actual = objectMapper.readValue(stringPresentation, candidate);
 

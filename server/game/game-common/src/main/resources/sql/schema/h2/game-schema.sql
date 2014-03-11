@@ -51,7 +51,6 @@
         GAME_NAME varchar(255),
         SPECIFICATION_NAME varchar(255),
         SESSION_STATE integer,
-        GAME_STATE varchar(4096),
         VERSION integer,
         primary key (GAME, SESSION_ID)
     );
@@ -69,9 +68,9 @@
     create table GAME_SESSION_MOVES (
         SESSION_ID varchar(255) not null,
         GAME varchar(255) not null,
-        GAME_MOVE varchar(512),
-        MOVE_ID integer,
-        MOVE_TIME bigint
+        CREATED timestamp,
+        REQUEST varchar(2048),
+        RESPONSE varchar(2048)
     );
 
     create table GAME_SESSION_PLAYERS (
@@ -81,6 +80,9 @@
         PLAYERS_ORDER integer not null,
         primary key (SESSION_ID, GAME, PLAYERS_ORDER)
     );
+
+    alter table GAME_SESSION_MOVES 
+        add constraint UK_n6bnpc10l4wsbu3fush5f1bb6 unique (SESSION_ID, GAME, CREATED);
 
     alter table GAME_POT_TO_SUB_RECORDS 
         add constraint FK_6x7dwtak3wk8qakx5aev6oxcq 
