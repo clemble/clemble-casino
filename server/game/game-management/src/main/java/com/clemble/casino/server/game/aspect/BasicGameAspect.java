@@ -11,7 +11,7 @@ abstract public class BasicGameAspect<T extends Event> implements GameAspect<T> 
     final private EventSelector selector;
 
     public BasicGameAspect(EventSelector selector) {
-        this.selector = selector;
+        this.selector = selector == null ? EventSelector.TRUE : selector;
     }
 
     @Override

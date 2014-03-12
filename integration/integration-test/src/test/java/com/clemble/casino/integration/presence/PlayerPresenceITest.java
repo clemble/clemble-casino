@@ -89,7 +89,7 @@ public class PlayerPresenceITest {
                 }
             });
             // Step 5. Initiating a game between B and C
-            RoundGamePlayer<GameState> BtoC = gameScenarios.match(Game.num, B, C.getPlayer());
+            RoundGamePlayer<GameState> BtoC = gameScenarios.round(Game.num, B, C.getPlayer());
             RoundGamePlayer<GameState> CtoB = gameScenarios.accept(BtoC.getSession(), C);
             // Step 6. Checking presences
             PlayerPresence Bpresence = BtoApresence.poll(15, TimeUnit.SECONDS);

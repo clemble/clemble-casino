@@ -8,7 +8,8 @@ import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.pot.MatchFillAspectFactory;
-import com.clemble.casino.server.game.aspect.record.RoundRecordGameAspectFactory;
+import com.clemble.casino.server.game.aspect.record.MatchGameRecordAspectFactory;
+import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory;
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.repository.game.*;
@@ -163,8 +164,13 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public RoundRecordGameAspectFactory recordGameAspectFactory(MadeMoveRepository moveRepository) {
-        return new RoundRecordGameAspectFactory(moveRepository);
+    public RoundGameRecordAspectFactory recordGameAspectFactory(MadeMoveRepository moveRepository) {
+        return new RoundGameRecordAspectFactory(moveRepository);
+    }
+
+    @Bean
+    public MatchGameRecordAspectFactory matchGameRecordAspectFactory(MadeMoveRepository moveRepository) {
+        return new MatchGameRecordAspectFactory(moveRepository);
     }
 
     /**

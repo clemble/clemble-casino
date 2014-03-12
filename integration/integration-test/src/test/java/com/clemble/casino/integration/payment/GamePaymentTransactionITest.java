@@ -36,7 +36,7 @@ public class GamePaymentTransactionITest {
 
     @Test
     public void testAvailabilityConstruction(){
-        List<RoundGamePlayer<NumberState>> sessionPlayers = gameScenarios.match(Game.num);
+        List<RoundGamePlayer<NumberState>> sessionPlayers = gameScenarios.round(Game.num);
         // Step 1. Preparing game session listener
         EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
         RoundGamePlayer<NumberState> A = sessionPlayers.get(0);

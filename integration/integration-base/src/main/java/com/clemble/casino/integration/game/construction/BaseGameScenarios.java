@@ -11,12 +11,12 @@ import com.clemble.casino.integration.game.RoundGamePlayer;
 
 public interface BaseGameScenarios {
 
-    public <State extends GameState> List<RoundGamePlayer<State>> match(Game game);
+    public <State extends GameState> List<RoundGamePlayer<State>> round(Game game);
 
-    public <State extends GameState> List<RoundGamePlayer<State>> match(GameConfiguration specification);
+    public <State extends GameState> List<RoundGamePlayer<State>> round(GameConfiguration specification);
 
-    public List<MatchGamePlayer> pot();
+    public List<MatchGamePlayer> match();
 
-    public List<MatchGamePlayer> pot(MatchGameConfiguration configuration);
+    public List<MatchGamePlayer> match(MatchGameConfiguration configuration);
 
 }

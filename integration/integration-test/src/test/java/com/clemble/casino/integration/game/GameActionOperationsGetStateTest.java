@@ -57,7 +57,7 @@ public class GameActionOperationsGetStateTest {
         // Step 4. Creating construction from B side
         B.gameConstructionOperations().constructAutomatch(configuration);
         // Step 5. Checking value is not null anymore
-        gameScenarios.match(construction.getSession(), A).waitForStart();
+        gameScenarios.round(construction.getSession(), A).waitForStart();
         AsyncCompletionUtils.<GameState>get(new Get<GameState>() {
             @Override
             public GameState get() {

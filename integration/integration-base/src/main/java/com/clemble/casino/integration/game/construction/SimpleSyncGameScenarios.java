@@ -21,16 +21,16 @@ public class SimpleSyncGameScenarios implements SyncGameScenarios {
     }
     
     @Override
-    public <State extends GameState> List<RoundGamePlayer<State>> match(Game game) {
-        List<RoundGamePlayer<State>> players = gameScenarios.<State>match(game);
+    public <State extends GameState> List<RoundGamePlayer<State>> round(Game game) {
+        List<RoundGamePlayer<State>> players = gameScenarios.<State>round(game);
         // Step 1. Constructing players
         return unite(players);
     }
 
     @Override
-    public <State extends GameState> List<RoundGamePlayer<State>> match(GameConfiguration configuration) {
+    public <State extends GameState> List<RoundGamePlayer<State>> round(GameConfiguration configuration) {
         // Step 1. Constructing players
-        return unite(gameScenarios.<State>match(configuration));
+        return unite(gameScenarios.<State>round(configuration));
     }
 
     @Override
@@ -41,15 +41,15 @@ public class SimpleSyncGameScenarios implements SyncGameScenarios {
     }
 
     @Override
-    public List<MatchGamePlayer> pot() {
-        List<MatchGamePlayer> players = gameScenarios.pot();
+    public List<MatchGamePlayer> match() {
+        List<MatchGamePlayer> players = gameScenarios.match();
         // Step 1. Constructing players
         return unite(players);
     }
 
     @Override
-    public List<MatchGamePlayer> pot(MatchGameConfiguration configuration) {
-        List<MatchGamePlayer> players = gameScenarios.pot(configuration);
+    public List<MatchGamePlayer> match(MatchGameConfiguration configuration) {
+        List<MatchGamePlayer> players = gameScenarios.match(configuration);
         // Step 1. Constructing players
         return unite(players);
     }

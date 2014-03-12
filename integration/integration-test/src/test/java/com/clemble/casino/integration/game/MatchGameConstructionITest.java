@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clemble.casino.game.GameRecord;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class MatchGameConstructionITest {
 
     @Test
     public void testIsAlive() {
-        List<MatchGamePlayer> potPlayers = gameScenarios.pot();
+        List<MatchGamePlayer> potPlayers = gameScenarios.match();
         // Step 1. Constructing game session player
         MatchGamePlayer AvsB = potPlayers.get(0);
         MatchGamePlayer BvsA = potPlayers.get(1);
@@ -78,7 +79,7 @@ public class MatchGameConstructionITest {
 
     @Test
     public void testActiveSession() {
-        List<MatchGamePlayer> potPlayers = gameScenarios.pot();
+        List<MatchGamePlayer> potPlayers = gameScenarios.match();
         // Step 1. Constructing game session player
         MatchGamePlayer AvsB = potPlayers.get(0);
         MatchGamePlayer BvsA = potPlayers.get(1);
@@ -107,5 +108,8 @@ public class MatchGameConstructionITest {
         Money mB = BvsA.playerOperations().paymentOperations().getAccount().getMoney(Currency.FakeMoney);
 
         assertEquals(mB.getAmount(), mA.add(300).getAmount());
+
+        GameRecord record = AvsB.playerOperations().gameRecordOperations().get(AvsB.getSession());
+        assertEquals(record.getMadeMoves().size(), 3);
     }
 }

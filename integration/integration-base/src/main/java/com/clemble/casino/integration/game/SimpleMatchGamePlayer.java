@@ -9,6 +9,8 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.MatchEvent;
 import com.clemble.casino.game.specification.GameConfigurationKey;
+import com.clemble.test.concurrent.AsyncCompletionUtils;
+import com.clemble.test.concurrent.Get;
 
 /**
  * Created by mavarazy on 16/02/14.
@@ -46,7 +48,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
         // Step 2. Going through potcontext
         synchronized (lock) {
             if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
-                GameSessionKey sessionKey = context.getCurrentSession();
+                final GameSessionKey sessionKey = context.getCurrentSession();
                 GameConfigurationKey configurationKey = playerOperations().gameRecordOperations().get(sessionKey).getConfigurationKey();
                 currentPlayer.set(playerFactory.construct(playerOperations(), sessionKey, configurationKey));
                 potContext.set(context);

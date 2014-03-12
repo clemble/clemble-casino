@@ -15,13 +15,13 @@ import java.util.Date;
 /**
  * Created by mavarazy on 10/03/14.
  */
-public class RoundRecordGameAspect extends BasicGameAspect<GameEvent> {
+public class RoundGameRecordAspect extends BasicGameAspect<GameEvent> {
 
     final private MadeMoveRepository moveRepository;
 
     private GameAction pendingAction;
 
-    public RoundRecordGameAspect(MadeMoveRepository moveRepository) {
+    public RoundGameRecordAspect(MadeMoveRepository moveRepository) {
         super(EventSelectors.where(new EventTypeSelector(GameEvent.class)));
         this.moveRepository = moveRepository;
     }

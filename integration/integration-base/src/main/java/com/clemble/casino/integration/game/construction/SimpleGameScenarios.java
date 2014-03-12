@@ -32,18 +32,18 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <State extends GameState> List<RoundGamePlayer<State>> match(Game game) {
+    public <State extends GameState> List<RoundGamePlayer<State>> round(Game game) {
         if (game == null)
             throw new IllegalArgumentException("Name must not be null");
         ClembleCasinoOperations A = playerOperations.createPlayer();
         // Step 0. Sanity check
         RoundGameConfiguration configuration = GameScenariosUtils.random(A.gameConstructionOperations().getConfigurations().matchConfigurations(game));
         // Step 1. Selecting configuration for the game
-        return match(configuration);
+        return round(configuration);
     }
 
     @Override
-    public <State extends GameState> List<RoundGamePlayer<State>> match(GameConfiguration configuration) {
+    public <State extends GameState> List<RoundGamePlayer<State>> round(GameConfiguration configuration) {
         if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         // Step 1. Constructing players
@@ -65,19 +65,19 @@ public class SimpleGameScenarios implements GameScenarios {
             GameConstruction construction = player.gameConstructionOperations().constructAutomatch(configuration);
             return playerFactory.construct(player, construction);
         } else if(configuration instanceof RoundGameConfiguration) {
-            return match(configuration, player);
+            return round(configuration, player);
         } else {
             throw new IllegalArgumentException();
         }
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T match(Game game, ClembleCasinoOperations initiator) {
-        return match(GameScenariosUtils.random(initiator, game), initiator);
+    public <T extends RoundGamePlayer<?>> T round(Game game, ClembleCasinoOperations initiator) {
+        return round(GameScenariosUtils.random(initiator, game), initiator);
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T match(GameConfiguration configuration, ClembleCasinoOperations initiator) {
+    public <T extends RoundGamePlayer<?>> T round(GameConfiguration configuration, ClembleCasinoOperations initiator) {
         if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         // Step 2. Creating availability game request
@@ -87,12 +87,12 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T match(Game game, ClembleCasinoOperations initiator, String... participants) {
-        return match(GameScenariosUtils.random(initiator, game), initiator, participants);
+    public <T extends RoundGamePlayer<?>> T round(Game game, ClembleCasinoOperations initiator, String... participants) {
+        return round(GameScenariosUtils.random(initiator, game), initiator, participants);
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T match(GameConfiguration configuration, ClembleCasinoOperations initiator, String... participants) {
+    public <T extends RoundGamePlayer<?>> T round(GameConfiguration configuration, ClembleCasinoOperations initiator, String... participants) {
         if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         // Step 2. Creating availability game request
@@ -109,19 +109,19 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T match(GameSessionKey sessionKey, ClembleCasinoOperations player) {
+    public <T extends RoundGamePlayer<?>> T round(GameSessionKey sessionKey, ClembleCasinoOperations player) {
         // Step 1. Generating GameSessionPlayer
         return playerFactory.construct(player, player.gameConstructionOperations().getConstruct(sessionKey));
     }
 
     @Override
-    public List<MatchGamePlayer> pot() {
+    public List<MatchGamePlayer> match() {
         ClembleCasinoOperations player = playerOperations.createPlayer();
-        return pot(player.gameConstructionOperations().getConfigurations().potConfigurations().get(0));
+        return match(player.gameConstructionOperations().getConfigurations().potConfigurations().get(0));
     }
 
     @Override
-    public List<MatchGamePlayer> pot(MatchGameConfiguration configuration) {
+    public List<MatchGamePlayer> match(MatchGameConfiguration configuration) {
         return construct(configuration);
     }
 
