@@ -1,7 +1,6 @@
 package com.clemble.casino.server.sql.game;
 
-import com.clemble.casino.game.MatchGameRecord;
-import com.clemble.casino.game.RoundGameRecord;
+import com.clemble.casino.game.GameRecord;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
@@ -50,10 +49,9 @@ public class GameSchemaGenerator {
     private Configuration addAnnotatedClasses(Configuration configuration){
         return configuration
                 .addAnnotatedClass(ServerGameConfiguration.class)
-                .addAnnotatedClass(RoundGameRecord.class)
+                .addAnnotatedClass(GameRecord.class)
                 .addAnnotatedClass(GameConstruction.class)
-                .addAnnotatedClass(ScheduledGame.class)
-                .addAnnotatedClass(MatchGameRecord.class);
+                .addAnnotatedClass(ScheduledGame.class);
     }
 
 }

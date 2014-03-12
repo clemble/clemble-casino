@@ -2,7 +2,6 @@ package com.clemble.casino.server.game.action;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.OptimisticLockException;
@@ -18,8 +17,7 @@ import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
-import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
+import com.clemble.casino.server.repository.game.GameRecordRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 
 public class GameManagerFactory {
@@ -27,26 +25,23 @@ public class GameManagerFactory {
     final private ConcurrentHashMap<GameSessionKey, GameManager<?>> sessionToManager = new ConcurrentHashMap<>();
     
     final private GameStateFactoryFacade stateFactory;
-    final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> roundManagerFactory;
-    final private ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchManagerFactory;
-    final private ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentAspectFactory;
-    final private MatchGameRecordRepository potRepository;
-    final private RoundGameRecordRepository sessionRepository;
+    final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundManagerFactory;
+    final private ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchManagerFactory;
+    final private ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentAspectFactory;
+    final private GameRecordRepository roundRepository;
     final private PlayerNotificationService notificationService;
     final private ServerGameConfigurationRepository configurationRepository;
 
     public GameManagerFactory(
-            MatchGameRecordRepository potRepository,
             GameStateFactoryFacade stateFactory,
-            ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory,
-            ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
-            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentAspectFactory,
-            RoundGameRecordRepository sessionRepository,
+            ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> matchProcessorFactory,
+            ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> potProcessorFactory,
+            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentAspectFactory,
+            GameRecordRepository roundRepository,
             ServerGameConfigurationRepository configurationRepository,
             PlayerNotificationService notificationService) {
         this.stateFactory = checkNotNull(stateFactory);
-        this.potRepository = checkNotNull(potRepository);
-        this.sessionRepository = checkNotNull(sessionRepository);
+        this.roundRepository = checkNotNull(roundRepository);
         this.notificationService = checkNotNull(notificationService);
         this.configurationRepository = checkNotNull(configurationRepository);
         this.matchManagerFactory = checkNotNull(potProcessorFactory);
@@ -56,16 +51,15 @@ public class GameManagerFactory {
 
     @SuppressWarnings("unchecked")
     public <GC extends GameContext> GameManager<GC> get(GameSessionKey sessionKey) {
-        //return (GameManager<R>) sessionToManager.getUnchecked(sessionKey);
         return (GameManager<GC>) sessionToManager.get(sessionKey);
     }
 
     public GameManager<?> start(GameInitiation initiation, GameContext<?> parent) {
         try {
             if (initiation.getConfiguration() instanceof RoundGameConfiguration) {
-                return match(initiation, parent);
+                return round(initiation, parent);
             } else if (initiation.getConfiguration() instanceof MatchGameConfiguration) {
-                return pot(initiation, parent);
+                return match(initiation, parent);
             } else {
                 throw new IllegalArgumentException();
             }
@@ -75,19 +69,19 @@ public class GameManagerFactory {
         }
     }
 
-    public GameManager<RoundGameContext> match(GameInitiation initiation, GameContext<?> parent) {
+    public GameManager<RoundGameContext> round(GameInitiation initiation, GameContext<?> parent) {
         RoundGameConfiguration matchGameConfiguration = (RoundGameConfiguration) initiation.getConfiguration();
         // Step 1. Allocating table for game initiation
         RoundGameState state = stateFactory.constructState(initiation, new RoundGameContext(initiation));
         // Step 2. Sending notification for game started
         RoundGameContext context = new RoundGameContext(initiation, parent);
         // Step 3. Returning active table
-        RoundGameRecord roundRecord = new RoundGameRecord()
+        GameRecord roundRecord = new GameRecord()
             .setSession(initiation.getSession())
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
-        roundRecord = sessionRepository.saveAndFlush(roundRecord);
+        roundRecord = roundRepository.saveAndFlush(roundRecord);
         GameManager<RoundGameContext> manager = roundManagerFactory.create(state, matchGameConfiguration, new RoundGameContext(initiation, parent));
         sessionToManager.put(initiation.getSession(), manager);
         notificationService.notify(initiation.getParticipants(), new RoundStartedEvent<RoundGameState>(initiation.getSession(), state));
@@ -95,12 +89,12 @@ public class GameManagerFactory {
     }
 
     // TODO make this internal to the system, with no available processing from outside
-    public GameManager<MatchGameContext> pot(GameInitiation initiation, GameContext<?> parent) {
+    public GameManager<MatchGameContext> match(GameInitiation initiation, GameContext<?> parent) {
         MatchGameContext context = new MatchGameContext(initiation, parent);
         // Step 1. Fetching first pot configuration
-        MatchGameConfiguration potConfiguration = (MatchGameConfiguration) initiation.getConfiguration();
-        long guaranteedPotSize = potConfiguration.getPrice().getAmount();
-        for(GameConfiguration configuration: potConfiguration.getConfigurations())
+        MatchGameConfiguration matchConfiguration = (MatchGameConfiguration) initiation.getConfiguration();
+        long guaranteedPotSize = matchConfiguration.getPrice().getAmount();
+        for(GameConfiguration configuration: matchConfiguration.getConfigurations())
             guaranteedPotSize -= configuration.getPrice().getAmount();
         if (guaranteedPotSize > 0) {
             for(GamePlayerContext playerContext: context.getPlayerContexts()) {
@@ -108,25 +102,23 @@ public class GameManagerFactory {
                 playerContext.getAccount().subLeft(guaranteedPotSize);
             }
         }
-        // Step 2. Taking first match from the pot
-        GameConfiguration subConfiguration = potConfiguration.getConfigurations().get(0);
-        // Step 3. Constructing match initiation
-        GameInitiation subInitiation = new GameInitiation(initiation.getSession().append("0"), subConfiguration, initiation.getParticipants());
-        // Step 4. Sending notification to related players
-        // Step 5. Generating new match game record
-        GameManager<?> subManager = start(subInitiation, context);
-        context.setCurrentSession(subManager.getContext().getSession());
-        // Step 6. Generating new pot game record
-        MatchGameRecord matchGameRecord = new MatchGameRecord(initiation.getSession(), initiation.getConfiguration().getConfigurationKey(), GameSessionState.active, Collections.<GameSessionKey>emptyList());
+        // Step 2. Generating new pot game record
+        GameRecord matchGameRecord = new GameRecord()
+            .setSession(initiation.getSession())
+            .setConfiguration(initiation.getConfiguration().getConfigurationKey())
+            .setSessionState(GameSessionState.active)
+            .setPlayers(initiation.getParticipants());
         // TODO make this part of the initiation process matchGameRecord.getSubRecords().add(subManager.getRecord().getSession());
-        // Step 7. Saving pot record
-        matchGameRecord = potRepository.saveAndFlush(matchGameRecord);
+        // Step 3. Saving pot record
+        matchGameRecord = roundRepository.saveAndFlush(matchGameRecord);
         MatchGameConfiguration configuration = (MatchGameConfiguration) initiation.getConfiguration();
         MatchGameState gameProcessor = new MatchGameState(context, configuration, this);
         GameManager<MatchGameContext> potGameManager = matchManagerFactory.create(gameProcessor, configuration, context);
         sessionToManager.put(initiation.getSession(), potGameManager);
-        notificationService.notify(initiation.getParticipants(), new MatchStartedEvent(initiation.getSession(), context));
+        MatchStartedEvent matchStartedEvent = new MatchStartedEvent(initiation.getSession(), context);
+        notificationService.notify(initiation.getParticipants(), matchStartedEvent);
         // Step 8. Returning pot game record
+        potGameManager.process(matchStartedEvent);
         return potGameManager;
     }
 

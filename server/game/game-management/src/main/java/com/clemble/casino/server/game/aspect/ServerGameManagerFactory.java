@@ -15,7 +15,7 @@ import org.springframework.core.OrderComparator;
 
 import java.util.*;
 
-public class ServerGameManagerFactory<GC extends GameConfiguration, C extends GameContext<?>, R extends GameRecord> implements ApplicationListener<ContextRefreshedEvent> {
+public class ServerGameManagerFactory<GC extends GameConfiguration, C extends GameContext<?>> implements ApplicationListener<ContextRefreshedEvent> {
 
     final private Logger LOG;
 

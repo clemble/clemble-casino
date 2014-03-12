@@ -11,8 +11,7 @@ import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
-import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
+import com.clemble.casino.server.repository.game.GameRecordRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,19 +26,18 @@ import org.springframework.context.annotation.Import;
 public class SimpleGameSpringConfiguration {
 
     @Bean
-    public GameManagerFactory gameProcessor(MatchGameRecordRepository potRepository,
-                                            GameStateFactoryFacade stateFactory,
-                                            ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> processorFactory,
-                                            ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
-                                            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
-                                            RoundGameRecordRepository sessionRepository,
+    public GameManagerFactory gameProcessor(GameStateFactoryFacade stateFactory,
+                                            ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> processorFactory,
+                                            ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> potProcessorFactory,
+                                            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentProcessorFactory,
+                                            GameRecordRepository sessionRepository,
                                             ServerGameConfigurationRepository configurationRepository,
                                             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerFactory(potRepository, stateFactory, processorFactory, potProcessorFactory, tournamentProcessorFactory, sessionRepository, configurationRepository, notificationService);
+        return new GameManagerFactory(stateFactory, processorFactory, potProcessorFactory, tournamentProcessorFactory, sessionRepository, configurationRepository, notificationService);
     }
 
     @Bean
-    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> processorFactory() {
+    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> processorFactory() {
         return new ServerGameManagerFactory<>(RoundGameAspectFactory.class);
     }
 

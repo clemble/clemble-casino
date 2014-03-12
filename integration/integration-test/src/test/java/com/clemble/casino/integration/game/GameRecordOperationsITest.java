@@ -1,8 +1,8 @@
 package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.Game;
+import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.RoundGameRecord;
 import com.clemble.casino.game.action.MadeMove;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
@@ -62,8 +62,8 @@ public class GameRecordOperationsITest {
         assertEquals(sessionKey.getSession(), transactionKey.getTransaction());
         assertEquals(sessionKey.getGame().name(), transactionKey.getSource());
         // Step 6. Checking game record
-        RoundGameRecord AgameRecord = A.playerOperations().gameRecordOperations().get(sessionKey);
-        RoundGameRecord BgameRecord = A.playerOperations().gameRecordOperations().get(sessionKey);
+        GameRecord AgameRecord = A.playerOperations().gameRecordOperations().get(sessionKey);
+        GameRecord BgameRecord = A.playerOperations().gameRecordOperations().get(sessionKey);
         // Step 7. Checking game records are same
         assertEquals(AgameRecord, BgameRecord);
         assertEquals(AgameRecord.getMadeMoves().size(), 2);

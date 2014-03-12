@@ -39,15 +39,14 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
 
     @Bean
     public GameManagerFactory gameProcessor(
-        MatchGameRecordRepository potRepository,
         GameStateFactoryFacade stateFactory,
-        @Qualifier("roundProcessorFactory") ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> matchProcessorFactory,
-        @Qualifier("matchProcessorFactory") ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> potProcessorFactory,
-        @Qualifier("tournamentProcessorFactory") ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory,
-        RoundGameRecordRepository roundRecordRepository,
+        @Qualifier("roundProcessorFactory") ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> matchProcessorFactory,
+        @Qualifier("matchProcessorFactory") ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> potProcessorFactory,
+        @Qualifier("tournamentProcessorFactory") ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentProcessorFactory,
+        GameRecordRepository roundRecordRepository,
         ServerGameConfigurationRepository configurationRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerFactory(potRepository, stateFactory, matchProcessorFactory, potProcessorFactory, tournamentProcessorFactory, roundRecordRepository, configurationRepository, notificationService);
+        return new GameManagerFactory(stateFactory, matchProcessorFactory, potProcessorFactory, tournamentProcessorFactory, roundRecordRepository, configurationRepository, notificationService);
     }
 
     @Bean
@@ -64,17 +63,17 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> roundProcessorFactory() {
+    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundProcessorFactory() {
         return new ServerGameManagerFactory<>(RoundGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext, MatchGameRecord> matchProcessorFactory() {
+    public ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchProcessorFactory() {
         return new ServerGameManagerFactory<>(MatchGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext, TournamentGameRecord> tournamentProcessorFactory() {
+    public ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentProcessorFactory() {
         return new ServerGameManagerFactory<>(TournamentGameAspectFactory.class);
     }
 
@@ -86,7 +85,7 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Bean
     public GameActionController<State> picPacPoeEngineController(
         GameManagerFactory sessionProcessor,
-        RoundGameRecordRepository roundGameRecordRepository) {
+        GameRecordRepository roundGameRecordRepository) {
         return new GameActionController<>(roundGameRecordRepository, sessionProcessor);
     }
 
@@ -104,10 +103,8 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public GameRecordController gameRecordController(
-            RoundGameRecordRepository roundGameRecordRepository,
-            MatchGameRecordRepository matchGameRecordRepository) {
-        return new GameRecordController(roundGameRecordRepository, matchGameRecordRepository);
+    public GameRecordController gameRecordController(GameRecordRepository roundGameRecordRepository) {
+        return new GameRecordController(roundGameRecordRepository);
     }
 
 }

@@ -2,33 +2,30 @@ package com.clemble.casino.server.game.action;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.RoundGameRecord;
 import com.clemble.casino.game.action.MadeMove;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
 
-import java.util.Collections;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class GameStateFactoryUtils {
 
     final private GameStateFactoryFacade stateFactory;
-    final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> processorFactory;
+    final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> processorFactory;
     final private ServerGameConfigurationRepository configurationRepository;
 
-    public GameStateFactoryUtils(ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext, RoundGameRecord> processorFactory, GameStateFactoryFacade stateFactoryFacade, ServerGameConfigurationRepository configurationRepository) {
+    public GameStateFactoryUtils(ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> processorFactory, GameStateFactoryFacade stateFactoryFacade, ServerGameConfigurationRepository configurationRepository) {
         this.stateFactory = checkNotNull(stateFactoryFacade);
         this.processorFactory = checkNotNull(processorFactory);
         this.configurationRepository = checkNotNull(configurationRepository);
     }
 
-    public GameState constructState(final RoundGameRecord session) {
+    public GameState constructState(final GameRecord session) {
         // Step 1. Sanity check
         if (session == null || session.getConfigurationKey() == null) {
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameStateReCreationFailure);
@@ -39,7 +36,6 @@ public class GameStateFactoryUtils {
         RoundGameContext context = new RoundGameContext(initiation);
         GameState restoredState = stateFactory.constructState(initiation, context);
         // Step 2.1 To prevent population of original session with duplicated events
-        RoundGameRecord tmpSession = new RoundGameRecord();
         for (MadeMove madeMove : session.getMadeMoves()) {
             restoredState.process(madeMove.getRequest());
         }

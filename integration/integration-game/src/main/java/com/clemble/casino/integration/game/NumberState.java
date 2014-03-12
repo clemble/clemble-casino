@@ -7,7 +7,6 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.RoundGameRecord;
 import com.clemble.casino.game.RoundGameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.SurrenderAction;

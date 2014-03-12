@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.clemble.casino.game.action.GameAction;
-import com.clemble.casino.game.action.MadeMove;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.action.GameManager;
 import com.clemble.casino.server.game.action.GameManagerFactory;
-import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
+import com.clemble.casino.server.repository.game.GameRecordRepository;
 import com.clemble.casino.web.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
@@ -27,10 +26,10 @@ import com.clemble.casino.web.mapping.WebMapping;
 public class GameActionController<State extends GameState> implements GameActionService, ExternalController {
 
     final private GameManagerFactory managerFactory;
-    final private RoundGameRecordRepository sessionRepository;
+    final private GameRecordRepository sessionRepository;
 
     public GameActionController(
-            final RoundGameRecordRepository sessionRepository,
+            final GameRecordRepository sessionRepository,
             final GameManagerFactory sessionProcessor) {
         this.managerFactory = checkNotNull(sessionProcessor);
         this.sessionRepository = checkNotNull(sessionRepository);

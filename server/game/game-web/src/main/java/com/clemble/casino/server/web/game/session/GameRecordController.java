@@ -15,20 +15,17 @@ import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.repository.game.RoundGameRecordRepository;
-import com.clemble.casino.server.repository.game.MatchGameRecordRepository;
+import com.clemble.casino.server.repository.game.GameRecordRepository;
 import com.clemble.casino.web.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
 public class GameRecordController implements GameRecordService, ExternalController {
 
-    final private RoundGameRecordRepository roundGameRecordRepository;
-    final private MatchGameRecordRepository matchGameRecordRepository;
+    final private GameRecordRepository roundGameRecordRepository;
 
-    public GameRecordController(RoundGameRecordRepository roundGameRecordRepository, MatchGameRecordRepository matchGameRecordRepository) {
+    public GameRecordController(GameRecordRepository roundGameRecordRepository) {
         this.roundGameRecordRepository = checkNotNull(roundGameRecordRepository);
-        this.matchGameRecordRepository = checkNotNull(matchGameRecordRepository);
     }
 
     @Override
@@ -36,10 +33,6 @@ public class GameRecordController implements GameRecordService, ExternalControll
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody GameRecord get(@PathVariable("game") Game game, @PathVariable("session") String session) {
         GameSessionKey sessionKey = new GameSessionKey(game, session);
-        if (roundGameRecordRepository.exists(sessionKey))
-            return roundGameRecordRepository.findOne(sessionKey);
-        else if (matchGameRecordRepository.exists(sessionKey))
-            return matchGameRecordRepository.findOne(sessionKey);
-        return null;
+        return roundGameRecordRepository.findOne(sessionKey);
     }
 }
