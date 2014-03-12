@@ -3,7 +3,7 @@ package com.clemble.casino.integration.game;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.action.MadeMove;
+import com.clemble.casino.game.action.GameEventRecord;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -66,10 +66,11 @@ public class GameRecordOperationsITest {
         GameRecord BgameRecord = A.playerOperations().gameRecordOperations().get(sessionKey);
         // Step 7. Checking game records are same
         assertEquals(AgameRecord, BgameRecord);
-        assertEquals(AgameRecord.getMadeMoves().size(), 2);
-        Iterator<MadeMove> moveIterator = AgameRecord.getMadeMoves().iterator();
-        assertEquals(moveIterator.next().getRequest(), new SelectNumberAction(A.getPlayer(), 2));
-        assertEquals(moveIterator.next().getRequest(), new SelectNumberAction(B.getPlayer(), 1));
+        assertEquals(AgameRecord.getEventRecords().size(), 4);
+        Iterator<GameEventRecord> moveIterator = AgameRecord.getEventRecords().iterator();
+        assertEquals(moveIterator.next().getEvent(), new SelectNumberAction(A.getPlayer(), 2));
+        moveIterator.next();
+        assertEquals(moveIterator.next().getEvent(), new SelectNumberAction(B.getPlayer(), 1));
     }
 
 }

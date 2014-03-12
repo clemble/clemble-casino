@@ -110,6 +110,6 @@ public class MatchGameConstructionITest {
         assertEquals(mB.getAmount(), mA.add(300).getAmount());
 
         GameRecord record = AvsB.playerOperations().gameRecordOperations().get(AvsB.getSession());
-        assertEquals(record.getMadeMoves().size(), 3);
+        assertEquals(record.getEventRecords().size(), 6);
     }
 }

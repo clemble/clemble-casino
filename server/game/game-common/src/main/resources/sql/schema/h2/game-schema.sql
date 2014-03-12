@@ -5,7 +5,7 @@
 
     drop table GAME_RECORD if exists;
 
-    drop table GAME_RECORD_MOVE if exists;
+    drop table GAME_RECORD_EVENT if exists;
 
     drop table GAME_RECORD_PLAYER if exists;
 
@@ -38,12 +38,11 @@
         primary key (GAME, SESSION_ID)
     );
 
-    create table GAME_RECORD_MOVE (
+    create table GAME_RECORD_EVENT (
         SESSION_ID varchar(255) not null,
         GAME varchar(255) not null,
         CREATED timestamp,
-        REQUEST varchar(2048),
-        RESPONSE varchar(2048)
+        EVENT varchar(2048)
     );
 
     create table GAME_RECORD_PLAYER (
@@ -61,11 +60,11 @@
         primary key (GAME, SESSION_ID)
     );
 
-    alter table GAME_RECORD_MOVE 
-        add constraint UK_mk649a334d2dk6piogbph289b unique (SESSION_ID, GAME, CREATED);
+    alter table GAME_RECORD_EVENT 
+        add constraint UK_6rn4pkyiylq66osrph91fy59s unique (SESSION_ID, GAME, CREATED);
 
-    alter table GAME_RECORD_MOVE 
-        add constraint FK_9bmcfqwt0jir6j84xaoe0hycb 
+    alter table GAME_RECORD_EVENT 
+        add constraint FK_pseb5i0ickwgrtkh1k2vajy2r 
         foreign key (SESSION_ID, GAME) 
         references GAME_RECORD;
 

@@ -2,7 +2,7 @@ package com.clemble.casino.server.repository.game;
 
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.action.MadeMove;
+import com.clemble.casino.game.action.GameEventRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,9 +16,9 @@ public class MadeMoveRepository {
         this.recordRepository = recordRepository;
     }
 
-    public void save(GameSessionKey sessionKey, MadeMove move) {
+    public void save(GameSessionKey sessionKey, GameEventRecord move) {
         GameRecord record = recordRepository.findOne(sessionKey);
-        record.getMadeMoves().add(move);
+        record.getEventRecords().add(move);
         recordRepository.save(record);
     }
 }

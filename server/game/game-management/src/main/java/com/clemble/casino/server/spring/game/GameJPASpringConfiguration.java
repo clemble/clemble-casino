@@ -51,9 +51,4 @@ public class GameJPASpringConfiguration implements SpringConfiguration {
         return entityManagerFactory.getObject();
     }
 
-    @Bean
-    public MadeMoveRepository madeMoveRepository(GameRecordRepository recordRepository){
-        return new MadeMoveRepository(recordRepository);
-    }
-
 }

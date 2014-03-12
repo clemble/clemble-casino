@@ -49,6 +49,12 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
         synchronized (lock) {
             if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
                 final GameSessionKey sessionKey = context.getCurrentSession();
+                while(null == playerOperations().gameRecordOperations().get(sessionKey)) {
+                    try {
+                        lock.wait(100);
+                    } catch(Throwable throwable) {
+                    }
+                }
                 GameConfigurationKey configurationKey = playerOperations().gameRecordOperations().get(sessionKey).getConfigurationKey();
                 currentPlayer.set(playerFactory.construct(playerOperations(), sessionKey, configurationKey));
                 potContext.set(context);
