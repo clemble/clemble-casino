@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -33,9 +34,6 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
     @Profile(value = { DEFAULT, INTEGRATION_CLOUD, CLOUD, INTEGRATION_TEST })
     public static class Integration {
 
-        @Autowired
-        public RestTemplate restTemplate;
-
         @Autowired(required = false)
         @Qualifier("realPaymentTransactionService")
         public ServerPaymentTransactionService realPaymentTransactionService;
@@ -45,19 +43,20 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
         public ServerPlayerAccountService realPlayerAccountService;
 
         @Bean
-        public ServerPaymentTransactionService paymentTransactionService() {
-            ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/",
-                    "http://127.0.0.1:8080/payment/");
-            return realPaymentTransactionService == null ? new RestServerPaymentTransactionService(paymentRegistry, restTemplate)
-                    : realPaymentTransactionService;
+        public ServerRegistry paymentServerRegistry(@Value("${clemble.service.payment.host}") String host) {
+            return new DNSBasedServerRegistry(host);
         }
 
         @Bean
-        public ServerPlayerAccountService playerAccountService() {
-            ServerRegistry paymentRegistry = new DNSBasedServerRegistry(0, "http://127.0.0.1:8080/payment/", "http://127.0.0.1:8080/payment/",
-                    "http://127.0.0.1:8080/payment/");
-            return realPlayerAccountService == null ? new RestServerPlayerAccountService(paymentRegistry, restTemplate) : realPlayerAccountService;
+        public ServerPaymentTransactionService paymentTransactionService(RestTemplate restTemplate, ServerRegistry paymentServerRegistry) {
+            return realPaymentTransactionService == null ? new RestServerPaymentTransactionService(paymentServerRegistry, restTemplate) : realPaymentTransactionService;
         }
+
+        @Bean
+        public ServerPlayerAccountService playerAccountService(RestTemplate restTemplate, ServerRegistry paymentServerRegistry) {
+            return realPlayerAccountService == null ? new RestServerPlayerAccountService(paymentServerRegistry, restTemplate) : realPlayerAccountService;
+        }
+
     }
 
     @Configuration

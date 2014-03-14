@@ -22,28 +22,17 @@ import com.clemble.casino.server.web.player.account.PlayerAccountController;
     WebCommonSpringConfiguration.class })
 public class PaymentWebSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("realPlayerAccountService")
-    public ServerPlayerAccountService playerAccountService;
-
-    @Autowired
-    @Qualifier("paymentTransactionRepository")
-    public PaymentTransactionRepository paymentTransactionRepository;
-
-    @Autowired
-    @Qualifier("realPaymentTransactionService")
-    public ServerPaymentTransactionService paymentTransactionService;
-
-    @Autowired
-    public PlayerAccountTemplate accountTemplate;
-
     @Bean
-    public PaymentTransactionController paymentTransactionController() {
+    public PaymentTransactionController paymentTransactionController(
+        PaymentTransactionRepository paymentTransactionRepository,
+        ServerPaymentTransactionService paymentTransactionService) {
         return new PaymentTransactionController(paymentTransactionRepository, paymentTransactionService);
     }
 
     @Bean
-    public PlayerAccountController playerAccountController() {
+    public PlayerAccountController playerAccountController(
+        PlayerAccountTemplate accountTemplate,
+        ServerPlayerAccountService playerAccountService) {
         return new PlayerAccountController(playerAccountService, accountTemplate);
     }
 

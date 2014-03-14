@@ -49,8 +49,9 @@ public class PaymentTransactionController implements ServerPaymentTransactionSer
         // Step 1. Checking payment transaction exists
         PaymentTransactionKey paymentTransactionId = new PaymentTransactionKey(source, transactionId);
         PaymentTransaction paymentTransaction = paymentTransactionRepository.findOne(paymentTransactionId);
-        if (paymentTransaction == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionNotExists);
+//        TODO PaymentTransactionNotExists exception might be overrated
+//        if (paymentTransaction == null)
+//            throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionNotExists);
         return paymentTransaction;
     }
     

@@ -3,6 +3,7 @@ package com.clemble.casino.server.spring.payment;
 import com.clemble.casino.server.repository.payment.JedisPlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -50,14 +51,21 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
     }
 
     @Bean
-    public BonusService bonusService(@Qualifier("playerNotificationService") PlayerNotificationService notificationService, PlayerAccountTemplate accountTemplate,
-            PaymentTransactionRepository transactionRepository, @Qualifier("realPaymentTransactionService") ServerPaymentTransactionService transactionService,
+    public BonusService bonusService(
+            @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+            PlayerAccountTemplate accountTemplate,
+            PaymentTransactionRepository transactionRepository,
+            @Qualifier("realPaymentTransactionService") ServerPaymentTransactionService transactionService,
             BonusPolicy bonusPolicy) {
         return new BonusService(bonusPolicy, notificationService, accountTemplate, transactionRepository, transactionService);
     }
 
     @Bean
-    public DailyBonusEventListener dailyBonusService(BonusService bonusService, SystemNotificationServiceListener notificationServiceListener) {
+    public DailyBonusEventListener dailyBonusService(
+            BonusService bonusService,
+            SystemNotificationServiceListener notificationServiceListener,
+            @Value("${clemble.bonus.daily.currency}") Currency daiyCurrency,
+            @Value("${clemble.bonus.daily.amount}") int dailyBonus) {
         Money bonus = new Money(Currency.FakeMoney, 50);
         DailyBonusEventListener dailyBonusService = new DailyBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(dailyBonusService);
@@ -65,16 +73,24 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
     }
 
     @Bean
-    public PlayerConnectionDiscoveryBonusEventListener dicoveryBonusService(BonusService bonusService, SystemNotificationServiceListener notificationServiceListener) {
-        Money bonus = new Money(Currency.FakeMoney, 100);
+    public PlayerConnectionDiscoveryBonusEventListener dicoveryBonusService(
+            BonusService bonusService,
+            SystemNotificationServiceListener notificationServiceListener,
+            @Value("${clemble.bonus.discovery.currency}") Currency discoveryCurrency,
+            @Value("${clemble.bonus.discovery.amount}") int discoveryBonus) {
+        Money bonus = new Money(discoveryCurrency, discoveryBonus);
         PlayerConnectionDiscoveryBonusEventListener discoveryBonusService = new PlayerConnectionDiscoveryBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(discoveryBonusService);
         return discoveryBonusService;
     }
 
     @Bean
-    public PlayerRegistrationBonusEventListener registerationBonusService(BonusService bonusService, SystemNotificationServiceListener notificationServiceListener) {
-        Money bonus = new Money(Currency.FakeMoney, 200);
+    public PlayerRegistrationBonusEventListener registerationBonusService(
+            BonusService bonusService,
+            SystemNotificationServiceListener notificationServiceListener,
+            @Value("${clemble.bonus.registration.currency}") Currency registrationCurrency,
+            @Value("${clemble.bonus.registration.amount}") int registrationBonus) {
+        Money bonus = new Money(registrationCurrency, registrationBonus);
         PlayerRegistrationBonusEventListener registrationBonusService = new PlayerRegistrationBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(registrationBonusService);
         return registrationBonusService;

@@ -3,6 +3,8 @@ package com.clemble.casino.integration.spring;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
+import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import com.clemble.casino.server.spring.web.management.ManagementWebSpringConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,15 +50,14 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
 
     @Configuration
     @Profile({ INTEGRATION_TEST, INTEGRATION_CLOUD, INTEGRATION_DEFAULT })
-    @Import({ ClientRestCommonSpringConfiguration.class })
+    @Import({PropertiesSpringConfiguration.class, ClientRestCommonSpringConfiguration.class })
     public static class IntegrationTestConfiguration {
 
         @Autowired
         @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
-        //@Value("#{systemProperties['clemble.casino.management.url'] ?: 'http://54.201.45.95:8080/management/'}")
-        @Value("#{systemProperties['clemble.casino.management.url'] ?: 'http://localhost:8080/management/'}")
+        @Value("${clemble.service.management.host}")
         public String baseUrl;
 
         @Bean
@@ -75,7 +76,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
 
         @Bean
         public ClembleCasinoRegistrationOperations registrationOperations() {
-            return new AndroidCasinoRegistrationTemplate(baseUrl);
+            return new ClembleCasinoRegistrationOperationsWrapper(new AndroidCasinoRegistrationTemplate(baseUrl));
         }
 
         @Bean

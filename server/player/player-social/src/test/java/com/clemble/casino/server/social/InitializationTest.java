@@ -7,11 +7,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.social.SocialModuleSpringConfiguration;
+import com.clemble.casino.server.spring.social.PlayerSocialSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.TEST)
-@ContextConfiguration(classes = SocialModuleSpringConfiguration.class)
+@ContextConfiguration(classes = PlayerSocialSpringConfiguration.class)
 public class InitializationTest {
 
     @Test

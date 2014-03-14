@@ -2,6 +2,7 @@ package com.clemble.casino.server.spring.player;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -36,13 +37,11 @@ public class PlayerCommonSpringConfiguration implements SpringConfiguration {
         @Qualifier("realPlayerProfileRegistrationService")
         public ServerProfileRegistrationService realPlayerProfileRegistrationService;
 
-        public String getBaseUrl() {
-            return "http://127.0.0.1:8080/player/";
-        }
-
         @Bean
-        public ServerProfileRegistrationService playerProfileRegistrationService(RestTemplate restTemplate) {
-            return realPlayerProfileRegistrationService == null ? new RestServerProfileRegistrationService(getBaseUrl(), restTemplate) : realPlayerProfileRegistrationService;
+        public ServerProfileRegistrationService playerProfileRegistrationService(
+            RestTemplate restTemplate,
+            @Value("${clemble.service.player.host}") String host) {
+            return realPlayerProfileRegistrationService == null ? new RestServerProfileRegistrationService(host, restTemplate) : realPlayerProfileRegistrationService;
         }
 
     }

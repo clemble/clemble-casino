@@ -13,7 +13,7 @@ import com.couchbase.client.CouchbaseClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, CouchbaseSpringConfiguration.class, PlayerNeo4JSpringConfiguration.class })
+@Import(value = { CommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, PlayerNeo4JSpringConfiguration.class })
 public class PlayerManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean

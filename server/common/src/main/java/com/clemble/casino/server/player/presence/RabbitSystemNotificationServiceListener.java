@@ -6,12 +6,14 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.rabbitmq.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,13 +23,6 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Consumer;
-import com.rabbitmq.client.Envelope;
-import com.rabbitmq.client.ShutdownListener;
-import com.rabbitmq.client.ShutdownSignalException;
 
 public class RabbitSystemNotificationServiceListener implements SystemNotificationServiceListener {
 
@@ -67,6 +62,8 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
 
     public class RabbitStartupTask<T extends SystemEvent> implements Runnable, Closeable {
 
+        final private Logger LOG = LoggerFactory.getLogger(RabbitStartupTask.class);
+
         final private NotificationConfiguration configurations;
         final private ObjectMapper objectMapper;
         final private ScheduledExecutorService executor;
@@ -96,24 +93,29 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
                     factory.setPassword(configurations.getPassword());
                     factory.setHost(configurations.getRabbitHost().getHost());
                     factory.setPort(configurations.getRabbitHost().getPort());
+                    LOG.debug("Created connection factory");
                     // Step 2. Creating connection
                     rabbitConnection = factory.newConnection(executor);
                     final AtomicBoolean keepClosed = new AtomicBoolean(false);
                     // Step 3. Creating new Channel
                     Channel channel = rabbitConnection.createChannel();
+                    LOG.debug("Channel for RabbitConnection created");
                     channel.addShutdownListener(new ShutdownListener() {
                         @Override
                         public void shutdownCompleted(ShutdownSignalException cause) {
                             if (!keepClosed.get()) {
-                                cause.printStackTrace();
+                                LOG.error("KeepClosed flag not specified, restarting", cause);
                                 executor.schedule(RabbitStartupTask.this, 30, TimeUnit.SECONDS);
                             }
                         }
                     });
                     // Step 4. Creating new Queue that will be used for listening of player updates
-                    channel.queueDeclare(eventListener.getQueueName(), true, false, false, null);
-                    channel.basicConsume(eventListener.getQueueName(), true ,new SystemEventListenerAdapter<T>(eventListener, objectMapper));
-                    channel.queueBind(eventListener.getQueueName(), SystemEventListener.EXCHANGE, eventListener.getChannel());
+                    AMQP.Queue.DeclareOk declare = channel.queueDeclare(eventListener.getQueueName(), true, false, false, null);
+                    LOG.debug("Queue declared {}", declare);
+                    String basicConsume = channel.basicConsume(eventListener.getQueueName(), true, new SystemEventListenerAdapter<T>(eventListener, objectMapper));
+                    LOG.debug("Basic consume {}", basicConsume);
+                    AMQP.Queue.BindOk bind = channel.queueBind(eventListener.getQueueName(), SystemEventListener.EXCHANGE, eventListener.getChannel());
+                    LOG.debug("Bind {} with channel {}", bind, eventListener.getChannel());
                 }
             } catch (Throwable e) {
                 LOG.error("Failed to start Rabbit listener", e);
@@ -126,9 +128,9 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
                 keepClosed.set(true);
                 rabbitConnection.close();
             } catch (ShutdownSignalException exception) {
-                // TODO add proper handling
+                LOG.error("Failure to close listener ShutdownSignalException", exception);
             } catch (IOException ioException) {
-                ioException.printStackTrace();
+                LOG.error("Failure to close IOException", ioException);
             }
         }
 
@@ -166,7 +168,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         @Override
         @SuppressWarnings("unchecked")
         public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) throws IOException {
-            LOG.debug("Processing {}", consumerTag);
+            LOG.debug("Processing {} from {} with routing key {}", consumerTag, envelope.getExchange(), envelope.getRoutingKey());
             // Step 1. Safely reading event
             T event = null;
             try {

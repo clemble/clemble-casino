@@ -4,6 +4,8 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.clemble.casino.client.payment.PaymentTransactionEventSelector;
+import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
@@ -20,6 +22,7 @@ import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
+import org.junit.Assert;
 
 public class SimplePlayerScenarios implements PlayerScenarios {
 
@@ -93,6 +96,8 @@ public class SimplePlayerScenarios implements PlayerScenarios {
     }
 
     private ClembleCasinoOperations initialize(final ClembleCasinoOperations player) {
+        EventAccumulator<Event> eventAccumulator = new EventAccumulator<>();
+        player.listenerOperations().subscribe(eventAccumulator);
         player.listenerOperations().subscribe(new EventListener<Event>() {
             final private AtomicInteger messageNum = new AtomicInteger();
 
@@ -105,16 +110,16 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
+
                 return player.listenerOperations().isAlive();
             }
-        }, 10_000);
-        // Step 2. Checking registration passed TODO make this more fluent
-        AsyncCompletionUtils.get(new Get<PaymentTransaction>() {
-            @Override
-            public PaymentTransaction get() {
-                return player.paymentOperations().getPaymentTransaction("registration", player.getPlayer());
-            }
-        }, 10_000);
+        }, 30_000);
+        // Step 2. Checking registration passed
+        PaymentTransactionKey registrationTransaction = new PaymentTransactionKey("registration", player.getPlayer());
+        if (player.paymentOperations().getPaymentTransaction(registrationTransaction) == null)
+            Assert.assertNotNull(
+                    eventAccumulator.waitFor(new PaymentTransactionEventSelector(registrationTransaction), 30_000)
+            );
         return player;
     }
 }

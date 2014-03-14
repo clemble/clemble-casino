@@ -630,12 +630,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.clemble.test</groupId>
-            <artifactId>jbehave-stress</artifactId>
-            <version>${com.clemble.test.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.database.version}</version>

@@ -3,6 +3,7 @@ package com.clemble.casino.server.spring.common;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -18,32 +19,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Import({ JsonSpringConfiguration.class })
 public class RabbitSpringConfiguration implements SpringConfiguration {
 
-    @Autowired
-    @Qualifier("objectMapper")
-    public ObjectMapper objectMapper;
-
     @Bean
-    public ServerRegistry playerNotificationRegistry() {
-        // TODO configurations
-        return new DNSBasedServerRegistry(0, "127.0.0.1", "127.0.0.1", "127.0.0.1");
-    }
-
-    @Bean
-    public Jackson2JsonMessageConverter jsonMessageConverter() {
+    public Jackson2JsonMessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         Jackson2JsonMessageConverter jsonMessageConverter = new Jackson2JsonMessageConverter();
         jsonMessageConverter.setJsonObjectMapper(objectMapper);
         return jsonMessageConverter;
     }
 
     @Bean
-    public PlayerNotificationService playerNotificationService(ServerRegistry playerNotificationRegistry, Jackson2JsonMessageConverter jsonMessageConverter) {
-        return new RabbitPlayerNotificationService(NotificationMapping.PLAYER_CHANNEL_POSTFIX, jsonMessageConverter, playerNotificationRegistry);
+    public PlayerNotificationService playerNotificationService(
+            @Value("${clemble.service.notification.host}") String host,
+            Jackson2JsonMessageConverter jsonMessageConverter) {
+        return new RabbitPlayerNotificationService(NotificationMapping.PLAYER_CHANNEL_POSTFIX, jsonMessageConverter, new DNSBasedServerRegistry(host));
     }
 
     @Bean
-    public PlayerNotificationService playerPresenceNotificationService(ServerRegistry playerNotificationRegistry,
+    public PlayerNotificationService playerPresenceNotificationService(
+            @Value("${clemble.service.notification.host}") String host,
             Jackson2JsonMessageConverter jsonMessageConverter) {
-        return new RabbitPlayerNotificationService(NotificationMapping.PRESENCE_CHANNEL_POSTFIX, jsonMessageConverter, playerNotificationRegistry);
+        return new RabbitPlayerNotificationService(NotificationMapping.PRESENCE_CHANNEL_POSTFIX, jsonMessageConverter, new DNSBasedServerRegistry(host));
     }
 
 }

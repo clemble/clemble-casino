@@ -62,14 +62,14 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         ObjectGenerator.register(RSAKeySecret.class, new AbstractValueGenerator<RSAKeySecret>() {
             @Override
             public RSAKeySecret generate() {
-                try {
-                    KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-                    generator.initialize(1024);
-                    KeyPair keyPair = generator.generateKeyPair();
-                    return new RSAKeySecret(keyPair.getPrivate(), keyPair.getPublic());
-                } catch (NoSuchAlgorithmException algorithmException) {
-                    return null;
-                }
+            try {
+                KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+                generator.initialize(1024);
+                KeyPair keyPair = generator.generateKeyPair();
+                return new RSAKeySecret(keyPair.getPrivate(), keyPair.getPublic());
+            } catch (NoSuchAlgorithmException algorithmException) {
+                return null;
+            }
             }
         });
     }
@@ -99,18 +99,13 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         return new SimplePlayerScenarios(registrationOperations);
     }
 
-
     @Configuration
     @Profile({TEST, DEFAULT})
     public static class Test {
 
         @Bean
         public EventListenerOperationsFactory playerListenerOperations() {
-//            if (new Random().nextBoolean()) {
-                return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
-//            } else {
-//                return new EventListenerOperationsFactory.StompEventListenerServiceFactory();
-//            }
+            return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
         }
 
         @Bean
@@ -146,7 +141,5 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
-        
     }
-
 }

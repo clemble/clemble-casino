@@ -4,6 +4,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -15,6 +17,8 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class RabbitSystemNotificationService implements SystemNotificationService {
+
+    final private Logger LOG = LoggerFactory.getLogger(RabbitSystemNotificationService.class);
 
     final private RabbitTemplate rabbitTemplate;
 
@@ -36,6 +40,7 @@ public class RabbitSystemNotificationService implements SystemNotificationServic
 
     @Override
     public void notify(SystemEvent event) {
+        LOG.debug("Notifying {} of {}", event.getChannel(), event);
         rabbitTemplate.convertAndSend(event.getChannel(), event);
     }
 }
