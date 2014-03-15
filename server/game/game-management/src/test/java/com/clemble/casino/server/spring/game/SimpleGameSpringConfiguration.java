@@ -6,7 +6,7 @@ import com.clemble.casino.game.specification.MatchGameConfiguration;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.server.game.action.GameManagerFactory;
-import com.clemble.casino.server.game.action.GameStateFactory;
+import com.clemble.casino.game.GameStateFactory;
 import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;

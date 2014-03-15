@@ -42,7 +42,7 @@
         SESSION_ID varchar(255) not null,
         GAME varchar(255) not null,
         CREATED timestamp,
-        EVENT varchar(2048)
+        EVENT varchar(4096)
     );
 
     create table GAME_RECORD_PLAYER (

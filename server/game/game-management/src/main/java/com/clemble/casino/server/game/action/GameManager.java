@@ -25,10 +25,10 @@ public class GameManager<GC extends GameContext> {
     final private GameState<GC, Event> state;
     final private GameContext<?> context;
 
-    public GameManager(GameContext<?> context, GameState<GC, Event> state, Collection<GameAspect<?>> listenerArray) {
+    public GameManager(GameContext<?> context, GameState<GC, ? extends Event> state, Collection<GameAspect<?>> listenerArray) {
         this.listenerArray = listenerArray;
         this.context = checkNotNull(context);
-        this.state = checkNotNull(state);
+        this.state = checkNotNull((GameState<GC, Event>) state);
     }
 
     public GameContext<?> getContext(){

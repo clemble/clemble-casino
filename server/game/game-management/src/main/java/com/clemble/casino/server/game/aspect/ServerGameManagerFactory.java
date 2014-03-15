@@ -27,7 +27,7 @@ public class ServerGameManagerFactory<GC extends GameConfiguration, C extends Ga
         LOG = LoggerFactory.getLogger("GAF - " + aspectFactoryClass.getSimpleName());
     }
 
-    public GameManager<C> create(GameState<C, Event> processor, GC configuration, C context) {
+    public GameManager<C> create(GameState<C, ? extends Event> processor, GC configuration, C context) {
         // Step 1. Constructing GameAspects
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
         for (GameAspectFactory<?, C, GC> aspectFactory : aspectFactories) {

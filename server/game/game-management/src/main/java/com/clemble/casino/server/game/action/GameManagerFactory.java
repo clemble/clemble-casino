@@ -70,11 +70,11 @@ public class GameManagerFactory {
     }
 
     public GameManager<RoundGameContext> round(GameInitiation initiation, GameContext<?> parent) {
-        RoundGameConfiguration matchGameConfiguration = (RoundGameConfiguration) initiation.getConfiguration();
+        RoundGameConfiguration roundConfiguration = (RoundGameConfiguration) initiation.getConfiguration();
+        RoundGameContext roundGameContext = new RoundGameContext(initiation, parent);
         // Step 1. Allocating table for game initiation
-        RoundGameState state = stateFactory.constructState(initiation, new RoundGameContext(initiation));
+        RoundGameState state = stateFactory.constructState(initiation, roundGameContext);
         // Step 2. Sending notification for game started
-        RoundGameContext context = new RoundGameContext(initiation, parent);
         // Step 3. Returning active table
         GameRecord roundRecord = new GameRecord()
             .setSession(initiation.getSession())
@@ -82,7 +82,7 @@ public class GameManagerFactory {
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
         roundRecord = roundRepository.saveAndFlush(roundRecord);
-        GameManager<RoundGameContext> manager = roundManagerFactory.create(state, matchGameConfiguration, new RoundGameContext(initiation, parent));
+        GameManager<RoundGameContext> manager = roundManagerFactory.create(state, roundConfiguration, roundGameContext);
         sessionToManager.put(initiation.getSession(), manager);
         notificationService.notify(initiation.getParticipants(), new RoundStartedEvent<RoundGameState>(initiation.getSession(), state));
         return manager;

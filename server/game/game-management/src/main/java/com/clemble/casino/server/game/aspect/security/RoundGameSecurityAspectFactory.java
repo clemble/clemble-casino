@@ -13,7 +13,7 @@ public class RoundGameSecurityAspectFactory implements RoundGameAspectFactory<Pl
 
     @Override
     public GameAspect<PlayerAwareEvent> construct(RoundGameConfiguration configuration, RoundGameContext context) {
-        return new RoundGameSecurityAspect(PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
+        return new RoundGameSecurityAspect(context, PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
     }
 
     @Override

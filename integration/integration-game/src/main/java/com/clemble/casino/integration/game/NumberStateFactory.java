@@ -3,7 +3,7 @@ package com.clemble.casino.integration.game;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.server.game.action.GameStateFactory;
+import com.clemble.casino.game.GameStateFactory;
 
 public class NumberStateFactory implements GameStateFactory<NumberState> {
 
