@@ -48,7 +48,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class, GameNeo4jSpringConfiguration.class, GameJPASpringConfiguration.class,
-        PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class, GameManagementSpringConfiguration.GameTimeAspectConfiguration.class })
+        PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -180,21 +180,16 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
      * @author mavarazy
      * 
      */
-    @Configuration
-    public static class GameTimeAspectConfiguration {
+    @Bean
+    public GameTimeAspectFactory gameTimeAspectFactory(GameEventTaskExecutor eventTaskExecutor) {
+        return new GameTimeAspectFactory(eventTaskExecutor);
+    }
 
-        // @Bean
-        // @Autowired
-        public GameTimeAspectFactory gameTimeAspectFactory(GameEventTaskExecutor eventTaskExecutor) {
-            return new GameTimeAspectFactory(eventTaskExecutor);
-        }
-
-        @Bean
-        public GameEventTaskExecutor eventTaskExecutor(GameManagerFactory managerFactory) {
-            ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("[GETE] task-executor - %d");
-            ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
-            return new GameEventTaskExecutor(managerFactory, executorService);
-        }
+    @Bean
+    public GameEventTaskExecutor eventTaskExecutor(GameManagerFactory managerFactory) {
+        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL EventTaskExecutor - %d");
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
+        return new GameEventTaskExecutor(managerFactory, executorService);
     }
 
 }

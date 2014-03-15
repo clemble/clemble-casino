@@ -74,18 +74,20 @@ public class GameManagerFactory {
         RoundGameContext roundGameContext = new RoundGameContext(initiation, parent);
         // Step 1. Allocating table for game initiation
         RoundGameState state = stateFactory.constructState(initiation, roundGameContext);
-        // Step 2. Sending notification for game started
-        // Step 3. Returning active table
+        // Step 2. Saving game record
         GameRecord roundRecord = new GameRecord()
             .setSession(initiation.getSession())
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
         roundRecord = roundRepository.saveAndFlush(roundRecord);
-        GameManager<RoundGameContext> manager = roundManagerFactory.create(state, roundConfiguration, roundGameContext);
-        sessionToManager.put(initiation.getSession(), manager);
-        notificationService.notify(initiation.getParticipants(), new RoundStartedEvent<RoundGameState>(initiation.getSession(), state));
-        return manager;
+        // Step 3. Constructing manager and saving in a session
+        GameManager<RoundGameContext> roundManager = roundManagerFactory.create(state, roundConfiguration, roundGameContext);
+        sessionToManager.put(initiation.getSession(), roundManager);
+        // Step 4. Sending round started event
+        RoundStartedEvent<RoundGameState> startedEvent = new RoundStartedEvent<RoundGameState>(initiation.getSession(), state);
+        notificationService.notify(initiation.getParticipants(), startedEvent);
+        return roundManager;
     }
 
     // TODO make this internal to the system, with no available processing from outside
@@ -108,18 +110,19 @@ public class GameManagerFactory {
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
-        // TODO make this part of the initiation process matchGameRecord.getSubRecords().add(subManager.getRecord().getSession());
-        // Step 3. Saving pot record
+        // Step 3. Saving match record
         matchGameRecord = roundRepository.saveAndFlush(matchGameRecord);
+        // Step 3. Generating game manager
         MatchGameConfiguration configuration = (MatchGameConfiguration) initiation.getConfiguration();
         MatchGameState gameProcessor = new MatchGameState(context, configuration, this);
-        GameManager<MatchGameContext> potGameManager = matchManagerFactory.create(gameProcessor, configuration, context);
-        sessionToManager.put(initiation.getSession(), potGameManager);
+        GameManager<MatchGameContext> matchGameManager = matchManagerFactory.create(gameProcessor, configuration, context);
+        sessionToManager.put(initiation.getSession(), matchGameManager);
+        // Step 4. Generating match started event
         MatchStartedEvent matchStartedEvent = new MatchStartedEvent(initiation.getSession(), context);
         notificationService.notify(initiation.getParticipants(), matchStartedEvent);
-        // Step 8. Returning pot game record
-        potGameManager.process(matchStartedEvent);
-        return potGameManager;
+        // Step 5. Processing match started event
+        matchGameManager.process(matchStartedEvent);
+        return matchGameManager;
     }
 
     public GameManager<TournamentGameContext> tournament(GameInitiation initiation, GameContext<?> parent) {
