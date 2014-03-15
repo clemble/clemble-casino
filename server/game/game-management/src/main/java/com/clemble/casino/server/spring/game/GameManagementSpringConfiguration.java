@@ -11,6 +11,7 @@ import com.clemble.casino.server.game.aspect.pot.MatchFillAspectFactory;
 import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory;
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
+import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
 import com.clemble.casino.server.repository.game.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -150,6 +151,11 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     public ServerGameInitiationService serverGameInitiationActivator(GameManagerFactory processor, ServerPlayerPresenceService presenceService,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new ServerGameInitiationService(processor, presenceService, notificationService);
+    }
+
+    @Bean
+    public GamePlayerUnitAspectFactory gamePlayerUnitAspectFactory() {
+        return new GamePlayerUnitAspectFactory();
     }
 
     @Bean

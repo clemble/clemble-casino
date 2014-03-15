@@ -7,16 +7,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("selectNumber")
-public class SelectNumberAction extends GameAction {
+public class SelectNumberAction implements GameAction {
 
     private static final long serialVersionUID = 6819390579455234704L;
 
+    final private String player;
     final private int number;
 
     @JsonCreator
     public SelectNumberAction(@JsonProperty(PlayerAware.JSON_ID) String player, @JsonProperty("number") int number) {
-        super(player);
+        this.player = player;
         this.number = number;
+    }
+
+    @Override
+    public String getPlayer(){
+        return player;
     }
 
     public int getNumber() {
@@ -35,8 +41,6 @@ public class SelectNumberAction extends GameAction {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!super.equals(obj))
-            return false;
         if (getClass() != obj.getClass())
             return false;
         SelectNumberAction other = (SelectNumberAction) obj;

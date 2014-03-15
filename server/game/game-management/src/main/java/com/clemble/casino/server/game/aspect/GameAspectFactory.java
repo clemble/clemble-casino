@@ -8,6 +8,6 @@ import com.clemble.casino.game.specification.GameConfiguration;
 
 public interface GameAspectFactory<T extends Event, GC extends GameContext<?>, GI extends GameConfiguration> extends PriorityOrdered {
 
-    public GameAspect<T> construct(GI configuration, GC potContext);
+    public GameAspect<T> construct(GI configuration, GC context);
 
 }
