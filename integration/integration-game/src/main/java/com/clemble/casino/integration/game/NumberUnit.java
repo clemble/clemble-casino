@@ -17,7 +17,6 @@ public class NumberUnit implements GameUnit {
         this.children = children;
     }
 
-    @Override
     public List<? extends GameUnit> getChildren() {
         return children;
     }
