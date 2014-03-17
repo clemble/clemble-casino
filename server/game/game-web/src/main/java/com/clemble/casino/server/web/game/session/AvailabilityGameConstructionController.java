@@ -66,7 +66,7 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONSTRUCTION_RESPONSES_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerAwareEvent getReply(@PathVariable("game") final Game game, @PathVariable("session") final String session, @PathVariable("playerId") final String player) {
-        return constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().fetchAction(player);
+        return constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().filterAction(player);
     }
 
     @Override

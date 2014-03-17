@@ -84,7 +84,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
 
     @Override
     public PlayerAwareEvent getReply(Game game, String session, String player) {
-        return constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().fetchAction(player);
+        return constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().filterAction(player);
     }
 
     @Override

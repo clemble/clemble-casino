@@ -10,7 +10,6 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.RoundGameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
@@ -52,7 +51,7 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
 
     @Override
     public Event getNextMove() {
-        return getState().getContext().getActionLatch().fetchAction(getPlayer());
+        return getState().getContext().getActionLatch().filterAction(getPlayer());
     }
 
     @Override
