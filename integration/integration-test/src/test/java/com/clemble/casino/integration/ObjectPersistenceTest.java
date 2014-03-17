@@ -32,7 +32,7 @@ import com.clemble.test.random.ObjectGenerator;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class ObjectPersistenceTest extends ObjectTest implements ApplicationContextAware {
+public class ObjectPersistenceTest extends IntegrationObjectTest implements ApplicationContextAware {
 
     @SuppressWarnings("rawtypes")
     public Map<String, JpaRepository> repositories;

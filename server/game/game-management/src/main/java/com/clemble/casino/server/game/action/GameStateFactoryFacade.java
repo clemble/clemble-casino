@@ -20,7 +20,7 @@ public class GameStateFactoryFacade implements ApplicationListener<ContextRefres
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        for(GameStateFactory<?> stateFactory : event.getApplicationContext().getBeansOfType(GameStateFactory.class).values())
+        for(GameStateFactory<?> stateFactory : event.getApplicationContext().getBeansOfType(com.clemble.casino.game.GameStateFactory.class).values())
             gameToStateFactory.put(stateFactory.getGame(), stateFactory);
     }
 

@@ -11,7 +11,7 @@ public class JsonSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ObjectMapper objectMapper() {
-        return ObjectMapperUtils.createObjectMapper();
+        return ObjectMapperUtils.OBJECT_MAPPER;
     }
 
 }

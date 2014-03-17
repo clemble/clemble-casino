@@ -33,7 +33,7 @@ import com.clemble.test.concurrent.Get;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class GameActionOperationsGetStateTest {
+public class GameActionOperationsGetStateITest {
 
     @Autowired
     public PlayerScenarios playerScenarios;

@@ -12,7 +12,10 @@ import java.util.Date;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import com.clemble.casino.base.ExpectedEvent;
 import com.clemble.casino.game.*;
+import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
+import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.rule.RoundRule;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.game.unit.GameUnit;
@@ -61,9 +64,15 @@ import com.clemble.test.random.ValueGenerator;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-public class ObjectTest {
+public class IntegrationObjectTest {
 
     static {
+        register(ExpectedEvent.class, new AbstractValueGenerator<ExpectedEvent>() {
+            @Override
+            public ExpectedEvent generate() {
+                return new ExpectedEvent("S", InvitationAcceptedEvent.class);
+            }
+        });
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {
             @Override
             public NumberState generate() {
@@ -166,7 +175,7 @@ public class ObjectTest {
                 return new GameConstruction()
                         .setSession(new GameSessionKey(Game.pic, "0"))
                         .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT))
-                        .setResponses(new ActionLatch().expectNext(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), "response"))
+                        .setResponses(new ActionLatch().expectNext(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), InvitationResponseEvent.class))
                         .setState(GameConstructionState.pending);
             }
         });

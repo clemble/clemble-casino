@@ -38,7 +38,7 @@ public class NumberState implements RoundGameState {
             @JsonProperty("state") GameUnit parent,
             @JsonProperty("version") int version) {
         this.context = context;
-        this.context.getActionLatch().expectNext(context.getPlayerIterator().getPlayers(), "selectNumber", SelectNumberAction.class);
+        this.context.getActionLatch().expectNext(context.getPlayerIterator().getPlayers(), SelectNumberAction.class);
 
         this.version = version;
     }

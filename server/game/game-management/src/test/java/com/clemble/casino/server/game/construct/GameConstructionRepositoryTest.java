@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class GameConstructionRepositoryTest {
     public void testActionLatchSerialization() throws JsonParseException, JsonMappingException, IOException {
         String serializedLatch = null;
         try {
-            ActionLatch randomLatch = new ActionLatch().expectNext(ImmutableList.<String>of("1", "2"), "test");
+            ActionLatch randomLatch = new ActionLatch().expectNext(ImmutableList.<String>of("1", "2"), InvitationResponseEvent.class);
             serializedLatch = objectMapper.writeValueAsString(randomLatch);
             ActionLatch readLatch = objectMapper.readValue(serializedLatch, ActionLatch.class);
             Assert.assertEquals("Failed to deserialize: " + serializedLatch, readLatch, randomLatch);
@@ -61,7 +62,7 @@ public class GameConstructionRepositoryTest {
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         construction.setState(GameConstructionState.pending);
-        construction.getResponses().expectNext("1", "answer");
+        construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
         Assert.assertNotNull(construction.getResponses());
@@ -74,7 +75,7 @@ public class GameConstructionRepositoryTest {
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setState(GameConstructionState.pending);
         construction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
-        construction.getResponses().expectNext("1", "answer");
+        construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
         Assert.assertNotNull(construction.getResponses());
@@ -82,7 +83,7 @@ public class GameConstructionRepositoryTest {
         GameConstruction anotherConstruction = new GameConstruction(availabilityGameRequest);
         anotherConstruction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         anotherConstruction.setState(GameConstructionState.pending);
-        anotherConstruction.getResponses().expectNext("1", "answer");
+        anotherConstruction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(anotherConstruction.getResponses());
         anotherConstruction = constructionRepository.saveAndFlush(anotherConstruction);
         Assert.assertNotNull(anotherConstruction.getResponses());

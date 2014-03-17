@@ -23,7 +23,7 @@ public class GameRecordHibernate implements UserType {
     final private static int[] TYPES = new int[] { Types.VARCHAR };
 
     static {
-        OBJECT_MAPPER = ObjectMapperUtils.createObjectMapper();
+        OBJECT_MAPPER = ObjectMapperUtils.OBJECT_MAPPER;
     }
 
     @Override

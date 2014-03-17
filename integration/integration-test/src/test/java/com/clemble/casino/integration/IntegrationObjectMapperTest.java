@@ -47,7 +47,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class ObjectMapperTest extends ObjectTest {
+public class IntegrationObjectMapperTest extends IntegrationObjectTest {
 
     @Autowired
     public ObjectMapper objectMapper;
