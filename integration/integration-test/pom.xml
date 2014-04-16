@@ -68,15 +68,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.germane-software</groupId>
-            <artifactId>gozirra-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.roderick</groupId>
-            <artifactId>weberknecht</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>

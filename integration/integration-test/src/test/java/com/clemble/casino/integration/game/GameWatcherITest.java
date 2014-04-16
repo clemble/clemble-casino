@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +37,7 @@ public class GameWatcherITest {
     public PlayerScenarios playerScenarios;
 
     @Autowired
-    public SyncGameScenarios gameScenarios;
+    public GameScenarios gameScenarios;
 
     @Test
     public void testSimpleScenarioObservation() {

@@ -5,10 +5,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.client.game.GameRecordOperations;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.MatchEvent;
 import com.clemble.casino.game.specification.GameConfigurationKey;
+import com.clemble.test.concurrent.AsyncCompletionUtils;
+import com.clemble.test.concurrent.Get;
 
 /**
  * Created by mavarazy on 16/02/14.
@@ -47,7 +50,13 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
         synchronized (lock) {
             if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
                 final GameSessionKey sessionKey = context.getCurrentSession();
-                GameConfigurationKey configurationKey = playerOperations().gameRecordOperations().get(sessionKey).getConfigurationKey();
+                final GameRecordOperations recordOperations = playerOperations().gameRecordOperations();
+                GameConfigurationKey configurationKey = AsyncCompletionUtils.get(new Get<GameConfigurationKey>() {
+                    @Override
+                    public GameConfigurationKey get() {
+                        return recordOperations.get(sessionKey).getConfigurationKey();
+                    }
+                }, 30_000);
                 currentPlayer.set(playerFactory.construct(playerOperations(), sessionKey, configurationKey));
                 potContext.set(context);
                 synchronized (versionLock) {

@@ -117,9 +117,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         // Step 2. Checking registration passed
         PaymentTransactionKey registrationTransaction = new PaymentTransactionKey("registration", player.getPlayer());
         if (player.paymentOperations().getPaymentTransaction(registrationTransaction) == null)
-            Assert.assertNotNull(
-                    eventAccumulator.waitFor(new PaymentTransactionEventSelector(registrationTransaction), 30_000)
-            );
+            Assert.assertNotNull("Missing transaction : " + registrationTransaction, eventAccumulator.waitFor(new PaymentTransactionEventSelector(registrationTransaction), 30_000));
         return player;
     }
 }

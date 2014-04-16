@@ -2,7 +2,6 @@ package com.clemble.casino.integration.event;
 
 import com.clemble.casino.client.event.EventListenerOperations;
 import com.clemble.casino.client.event.RabbitEventListenerTemplate;
-import com.clemble.casino.client.event.StompEventListenerTemplate;
 import com.clemble.casino.configuration.NotificationConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,15 +14,6 @@ abstract public class EventListenerOperationsFactory {
         @Override
         public EventListenerOperations construct(String player, NotificationConfiguration configuration, ObjectMapper objectMapper) {
             return new RabbitEventListenerTemplate(player, configuration, objectMapper);
-        }
-
-    }
-
-    public static class StompEventListenerServiceFactory extends EventListenerOperationsFactory {
-
-        @Override
-        public EventListenerOperations construct(String player, NotificationConfiguration configuration, ObjectMapper objectMapper) {
-            return new StompEventListenerTemplate(player, configuration, objectMapper);
         }
 
     }

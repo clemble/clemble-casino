@@ -67,6 +67,12 @@ import com.google.common.collect.ImmutableSet;
 public class IntegrationObjectTest {
 
     static {
+        register(InvitationResponseEvent.class, new AbstractValueGenerator<InvitationResponseEvent>() {
+            @Override
+            public InvitationResponseEvent generate() {
+                return new InvitationAcceptedEvent("d", new GameSessionKey(Game.go, "b"));
+            }
+        });
         register(ExpectedEvent.class, new AbstractValueGenerator<ExpectedEvent>() {
             @Override
             public ExpectedEvent generate() {
