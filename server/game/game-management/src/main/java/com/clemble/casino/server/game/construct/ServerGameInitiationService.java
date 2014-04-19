@@ -103,11 +103,11 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
             if (confirmations.size() == initiation.getParticipants().size()) {
                 sessionToInitiation.remove(sessionKey);
                 if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSession())) {
-                    LOG.trace("Successfully updated presences, starting a new game");
+                    LOG.trace("{} successfully updated presences, starting a new game", sessionKey);
                     managerFactory.start(initiation, null);
                 } else {
                     // TODO remove session from the lists
-                    LOG.trace("Failed to update presences");
+                    LOG.trace("{} failed to update presences", sessionKey);
                 }
             }
         }

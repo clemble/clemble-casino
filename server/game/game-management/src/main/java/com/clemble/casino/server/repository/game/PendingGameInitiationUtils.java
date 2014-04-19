@@ -39,7 +39,7 @@ public class PendingGameInitiationUtils {
         return initiationRepository.findPending(player);
     }
 
-    public Collection<GameInitiation> пуеPending(String player) {
+    public Collection<GameInitiation> getPending(String player) {
         // Step 1. Fetching data from pending player
         Collection<GameInitiation> initiations = new ArrayList<>();
         for (PendingGameInitiation initiation : playerRepository.findPending(player))

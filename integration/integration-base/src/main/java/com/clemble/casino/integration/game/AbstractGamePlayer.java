@@ -150,6 +150,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
 
     @Override
     final public GamePlayer waitForStart(long timeout) {
+        System.out.println("gp >> " + getPlayer() + " >> " + getSession() + " >> wait for start");
         long expirationTime = timeout > 0 ? System.currentTimeMillis() + timeout : Long.MAX_VALUE;
         synchronized (versionLock) {
             while (keepAlive.get() && getVersion() < 0 && expirationTime > System.currentTimeMillis()) {
@@ -164,8 +165,10 @@ abstract public class AbstractGamePlayer implements GamePlayer {
                 }
             }
         }
-        if (getVersion() < 0)
+        if (getVersion() < 0) {
+            System.out.println("gp >> " + getPlayer() + " >> " + getSession() + " >> start failed");
             throw new RuntimeException(player.getPlayer() + " " + sessionKey + " was not started after " + timeout);
+        }
         return this;
     }
 

@@ -28,7 +28,7 @@ public class GameManagerFactory {
     final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundManagerFactory;
     final private ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchManagerFactory;
     final private ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentAspectFactory;
-    final private GameRecordRepository roundRepository;
+    final private GameRecordRepository recordRepository;
     final private PlayerNotificationService notificationService;
     final private ServerGameConfigurationRepository configurationRepository;
 
@@ -41,7 +41,7 @@ public class GameManagerFactory {
             ServerGameConfigurationRepository configurationRepository,
             PlayerNotificationService notificationService) {
         this.stateFactory = checkNotNull(stateFactory);
-        this.roundRepository = checkNotNull(roundRepository);
+        this.recordRepository = checkNotNull(roundRepository);
         this.notificationService = checkNotNull(notificationService);
         this.configurationRepository = checkNotNull(configurationRepository);
         this.matchManagerFactory = checkNotNull(potProcessorFactory);
@@ -80,7 +80,7 @@ public class GameManagerFactory {
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
-        roundRecord = roundRepository.saveAndFlush(roundRecord);
+        roundRecord = recordRepository.saveAndFlush(roundRecord);
         // Step 3. Constructing manager and saving in a session
         GameManager<RoundGameContext> roundManager = roundManagerFactory.create(state, roundConfiguration, roundGameContext);
         sessionToManager.put(initiation.getSession(), roundManager);
@@ -111,17 +111,17 @@ public class GameManagerFactory {
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
         // Step 3. Saving match record
-        matchGameRecord = roundRepository.saveAndFlush(matchGameRecord);
+        matchGameRecord = recordRepository.saveAndFlush(matchGameRecord);
         // Step 3. Generating game manager
         MatchGameConfiguration configuration = (MatchGameConfiguration) initiation.getConfiguration();
         MatchGameState gameProcessor = new MatchGameState(context, configuration, this);
         GameManager<MatchGameContext> matchGameManager = matchManagerFactory.create(gameProcessor, configuration, context);
-        sessionToManager.put(initiation.getSession(), matchGameManager);
         // Step 4. Generating match started event
         MatchStartedEvent matchStartedEvent = new MatchStartedEvent(initiation.getSession(), context);
         notificationService.notify(initiation.getParticipants(), matchStartedEvent);
         // Step 5. Processing match started event
         matchGameManager.process(matchStartedEvent);
+        sessionToManager.put(initiation.getSession(), matchGameManager);
         return matchGameManager;
     }
 

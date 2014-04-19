@@ -74,7 +74,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         return construction;
     }
 
-    final public GameConstruction invitationResponsed(InvitationResponseEvent response) {
+    final public GameConstruction invitationResponded(InvitationResponseEvent response) {
         // Step 1. Sanity check
         if (response == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse);

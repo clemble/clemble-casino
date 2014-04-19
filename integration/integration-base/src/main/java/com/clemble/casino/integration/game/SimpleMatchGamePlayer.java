@@ -6,12 +6,15 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameRecordOperations;
+import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.MatchEvent;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
+import com.clemble.test.concurrent.Check;
 import com.clemble.test.concurrent.Get;
+import org.junit.Assert;
 
 /**
  * Created by mavarazy on 16/02/14.
@@ -30,37 +33,39 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
     final private AtomicReference<GamePlayer> currentPlayer = new AtomicReference<>();
     final private AtomicReference<MatchGameContext> potContext = new AtomicReference<>();
 
-    public SimpleMatchGamePlayer(ClembleCasinoOperations player, GameSessionKey sessionKey, GameConfigurationKey configurationKey, GamePlayerFactory playerFactory) {
+    public SimpleMatchGamePlayer(final ClembleCasinoOperations player, final GameSessionKey sessionKey, GameConfigurationKey configurationKey, GamePlayerFactory playerFactory) {
         super(player, sessionKey, configurationKey);
         this.playerFactory = playerFactory;
         player.listenerOperations().subscribe(new EventTypeSelector(MatchEvent.class), new EventListener<MatchEvent>() {
             @Override
             public void onEvent(MatchEvent event) {
+                System.out.println("gp >> " + player.getPlayer() + " >> " + sessionKey + " >> received event " + event);
                 setContext(event.getContext());
             }
         });
         this.setContext((MatchGameContext) player.gameActionOperations(sessionKey).getContext());
     }
 
-    private void setContext(MatchGameContext context) {
+    private void setContext(final MatchGameContext context) {
         // Step 1. Sanity check
         if (context == null)
             return;
         // Step 2. Going through potcontext
-        synchronized (lock) {
-            if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
-                final GameSessionKey sessionKey = context.getCurrentSession();
-                final GameRecordOperations recordOperations = playerOperations().gameRecordOperations();
-                GameConfigurationKey configurationKey = AsyncCompletionUtils.get(new Get<GameConfigurationKey>() {
-                    @Override
-                    public GameConfigurationKey get() {
-                        return recordOperations.get(sessionKey).getConfigurationKey();
+        final GameSessionKey sessionKey = context.getCurrentSession();
+        final GameRecordOperations recordOperations = playerOperations().gameRecordOperations();
+        if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
+            GameRecord record = recordOperations.get(sessionKey);
+            Assert.assertNotNull(context.getSession() + " >> " + sessionKey + " >> not found in DB", record);
+            synchronized (lock) {
+                if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
+                    GameConfigurationKey configurationKey = record.getConfigurationKey();
+                    GamePlayer newPlayer = playerFactory.construct(playerOperations(), sessionKey, configurationKey);
+                    System.out.println("match >> " + getPlayer() + " >> constructed new player for >> " + sessionKey);
+                    currentPlayer.set(newPlayer);
+                    potContext.set(context);
+                    synchronized (versionLock) {
+                        versionLock.notifyAll();
                     }
-                }, 30_000);
-                currentPlayer.set(playerFactory.construct(playerOperations(), sessionKey, configurationKey));
-                potContext.set(context);
-                synchronized (versionLock) {
-                    versionLock.notifyAll();
                 }
             }
         }

@@ -74,7 +74,7 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody GameConstruction reply(@RequestBody final InvitationResponseEvent gameRequest) {
         // Step 1. Invoking actual matching service
-        return availabilityConstructionService.invitationResponsed(gameRequest);
+        return availabilityConstructionService.invitationResponded(gameRequest);
     }
 
     @Override
