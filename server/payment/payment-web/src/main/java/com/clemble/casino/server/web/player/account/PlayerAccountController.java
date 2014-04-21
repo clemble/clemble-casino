@@ -38,7 +38,7 @@ public class PlayerAccountController implements PlayerAccountService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.ACCOUNTS_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerAccount get(@PathVariable("player") String playerWalletId) {
         // Step 1. Returning account from repository

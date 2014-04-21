@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.server</groupId>
         <artifactId>server</artifactId>
-        <version>0.7.0-SNAPSHOT</version>
+        <version>0.8.0-SNAPSHOT</version>
     </parent>
     <artifactId>payment</artifactId>
     <packaging>pom</packaging>
@@ -33,9 +33,5 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>com.clemble.casino</groupId>
-            <artifactId>api-payment</artifactId>
-        </dependency>
     </dependencies>
 </project>

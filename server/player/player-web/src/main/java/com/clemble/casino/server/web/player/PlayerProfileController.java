@@ -32,8 +32,8 @@ public class PlayerProfileController implements PlayerProfileService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
-    public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("playerId") String playerId) {
+    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PROFILES_PLAYER, produces = WebMapping.PRODUCES)
+    public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("player") String playerId) {
         // Step 1. Fetching playerProfile
         PlayerProfile playerProfile = profileRepository.findOne(playerId);
         // Step 2. Checking profile
@@ -44,9 +44,9 @@ public class PlayerProfileController implements PlayerProfileService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PROFILES_PLAYER, produces = WebMapping.PRODUCES)
     public @ResponseBody
-    PlayerProfile updatePlayerProfile(@PathVariable("playerId") String player, @RequestBody PlayerProfile playerProfile) {
+    PlayerProfile updatePlayerProfile(@PathVariable("player") String player, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (playerProfile == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileInvalid);
@@ -62,7 +62,7 @@ public class PlayerProfileController implements PlayerProfileService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PLAYER_PROFILES, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PROFILES, produces = WebMapping.PRODUCES)
     public @ResponseBody List<PlayerProfile> getPlayerProfile(@RequestParam("player") Collection<String> players) {
         return profileRepository.findAll(players);
     }

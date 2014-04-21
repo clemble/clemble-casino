@@ -27,7 +27,7 @@ public class IntegrationPlayerProfileService implements PlayerProfileService {
     @Override
     public PlayerProfile getPlayerProfile(String player) {
         // Step 1. Rest template generation
-        return restTemplate.exchange(playerRegistry.findById(player) + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.GET, null, PlayerProfile.class, player).getBody();
+        return restTemplate.exchange(playerRegistry.findById(player) + PlayerWebMapping.PROFILES_PLAYER, HttpMethod.GET, null, PlayerProfile.class, player).getBody();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class IntegrationPlayerProfileService implements PlayerProfileService {
         // Step 1. Generating request
         HttpEntity<PlayerProfile> requestEntity = new HttpEntity<>(newProfile);
         // Step 2. Rest template generation
-        return restTemplate.exchange(playerRegistry.findById(newProfile.getPlayer()) + PlayerWebMapping.PLAYER_PROFILE, HttpMethod.PUT, requestEntity, PlayerProfile.class, player).getBody();
+        return restTemplate.exchange(playerRegistry.findById(newProfile.getPlayer()) + PlayerWebMapping.PROFILES_PLAYER, HttpMethod.PUT, requestEntity, PlayerProfile.class, player).getBody();
     }
 
     @Override

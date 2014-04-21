@@ -25,7 +25,7 @@ public class PlayerConnectionController implements PlayerConnectionService {
     }
 
     @Override
-    @RequestMapping(value = PlayerWebMapping.PLAYER_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @RequestMapping(value = PlayerWebMapping.CONNECTIONS_PLAYER, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     public @ResponseBody List<String> getConnections(String player) {
         // Step 1. Generating result collection
         List<String> playerCollection = new ArrayList<>();

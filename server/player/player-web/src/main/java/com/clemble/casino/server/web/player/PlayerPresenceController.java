@@ -31,14 +31,14 @@ public class PlayerPresenceController implements PlayerPresenceService, External
     }
 
     @Override
-    @RequestMapping(value = PlayerWebMapping.PLAYER_PRESENCE, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @RequestMapping(value = PlayerWebMapping.PRESENCES_PLAYER, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerPresence getPresence(@PathVariable("playerId") String player) {
+    public @ResponseBody PlayerPresence getPresence(@PathVariable("player") String player) {
         return presenceServerService.getPresence(player);
     }
 
     @Override
-    @RequestMapping(value = PlayerWebMapping.PLAYER_PRESENCES, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @RequestMapping(value = PlayerWebMapping.PRESENCES, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<PlayerPresence> getPresences(@RequestParam(required = true, value = PlayerWebMapping.PLAYER_PRESENCES_PARAM) List<String> players) {
         return presenceServerService.getPresences(players);

@@ -29,21 +29,21 @@ public class ServerProfileRegistrationController implements ServerProfileRegistr
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE_REGISTRATION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.REGISTRATION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerProfile create(@RequestBody final PlayerProfile playerProfile) {
         return registrationService.create(playerProfile);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerProfile create(@RequestBody SocialConnectionData socialConnectionData) {
         return registrationService.create(socialConnectionData);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_GRANT, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.REGISTRATION_GRANT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerProfile create(@RequestBody SocialAccessGrant accessGrant) {
         return registrationService.create(accessGrant);

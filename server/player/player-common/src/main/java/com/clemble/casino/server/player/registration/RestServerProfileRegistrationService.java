@@ -20,17 +20,17 @@ public class RestServerProfileRegistrationService implements ServerProfileRegist
 
     @Override
     public PlayerProfile create(PlayerProfile playerProfile) {
-        return restTemplate.postForEntity(baseUrl + PlayerWebMapping.PLAYER_PROFILE_REGISTRATION, playerProfile, PlayerProfile.class).getBody();
+        return restTemplate.postForEntity(baseUrl + PlayerWebMapping.REGISTRATION, playerProfile, PlayerProfile.class).getBody();
     }
 
     @Override
     public PlayerProfile create(SocialConnectionData socialConnectionData) {
-        return restTemplate.postForEntity(baseUrl + PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_SOCIAL, socialConnectionData, PlayerProfile.class).getBody();
+        return restTemplate.postForEntity(baseUrl + PlayerWebMapping.REGISTRATION_SOCIAL, socialConnectionData, PlayerProfile.class).getBody();
     }
 
     @Override
     public PlayerProfile create(SocialAccessGrant accessGrant) {
-        return restTemplate.postForEntity(baseUrl + PlayerWebMapping.PLAYER_PROFILE_REGISTRATION_GRANT, accessGrant, PlayerProfile.class).getBody();
+        return restTemplate.postForEntity(baseUrl + PlayerWebMapping.REGISTRATION_GRANT, accessGrant, PlayerProfile.class).getBody();
     }
 
 }

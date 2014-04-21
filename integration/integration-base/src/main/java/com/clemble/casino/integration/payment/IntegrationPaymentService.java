@@ -33,7 +33,7 @@ public class IntegrationPaymentService implements PaymentService, ServerPaymentT
     @Override
     public PlayerAccount get(String playerId) {
         // Step 1. Requesting account associated with the playerId
-        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER, HttpMethod.GET, null, PlayerAccount.class, playerId).getBody();
+        return restTemplate.exchange(getPaymentEndpoint(player) + PaymentWebMapping.ACCOUNTS_PLAYER, HttpMethod.GET, null, PlayerAccount.class, playerId).getBody();
     }
 
     @Override
