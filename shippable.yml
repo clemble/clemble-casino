@@ -4,5 +4,5 @@ services:
     - redis
     - rabbitmq
 before_script:
-   mkdir -p ~/clemble/config
-   cp ./config/*.properties ~/clemble/config/
+    - mkdir -p ~/clemble/config
+    - cp ./config/*.properties ~/clemble/config/
