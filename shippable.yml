@@ -3,3 +3,6 @@ services:
     - mongodb
     - redis
     - rabbitmq
+before_script:
+   mkdir -p ~/clemble/config
+   cp ./config/*.properties ~/clemble/config/
