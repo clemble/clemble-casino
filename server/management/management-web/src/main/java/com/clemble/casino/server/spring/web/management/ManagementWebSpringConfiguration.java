@@ -4,7 +4,9 @@ import java.security.NoSuchAlgorithmException;
 
 import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
 import com.clemble.casino.server.configuration.SimpleResourceLocationService;
+import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
+import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,15 +25,13 @@ import com.clemble.casino.server.player.security.AESPlayerTokenFactory;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
-import com.clemble.casino.server.security.ClembleConsumerDetailsService;
+import com.clemble.casino.server.security.ClembleCouchbaseConsumerDetailsService;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
-import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.clemble.casino.server.web.management.PlayerSessionController;
-import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Import(value = {

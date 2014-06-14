@@ -3,6 +3,7 @@ package com.clemble.casino.server.security;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = OAuthSpringConfiguration.class)
 public class ClembleOAuthProviderTokerServiceTest {

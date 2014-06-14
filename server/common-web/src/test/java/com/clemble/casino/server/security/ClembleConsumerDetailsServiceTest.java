@@ -10,6 +10,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = OAuthSpringConfiguration.class)
 public class ClembleConsumerDetailsServiceTest {

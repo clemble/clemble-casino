@@ -6,6 +6,7 @@ import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_
 import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,6 @@ import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
-import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
