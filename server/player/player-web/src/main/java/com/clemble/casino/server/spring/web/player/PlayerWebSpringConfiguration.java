@@ -22,7 +22,10 @@ import com.clemble.casino.server.web.player.PlayerProfileController;
 import com.clemble.casino.server.web.player.registration.ServerProfileRegistrationController;
 
 @Configuration
-@Import(value = { PlayerSocialSpringConfiguration.class, WebCommonSpringConfiguration.class })
+@Import(value = {
+    PlayerSocialSpringConfiguration.class,
+    WebCommonSpringConfiguration.class
+})
 public class PlayerWebSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -31,12 +34,13 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    @Autowired
     public BasicServerProfileRegistrationService realPlayerProfileRegistrationService(
-        ClembleCasinoValidationService gogomayaValidationService,
+        ClembleCasinoValidationService clembleValidationService,
         PlayerProfileRepository playerProfileRepository,
         PlayerSocialNetworkRepository socialNetworkRepository,
         SocialConnectionDataAdapter socialConnectionDataAdapter) {
-        return new BasicServerProfileRegistrationService(gogomayaValidationService, playerProfileRepository, socialConnectionDataAdapter, socialNetworkRepository);
+        return new BasicServerProfileRegistrationService(clembleValidationService, playerProfileRepository, socialConnectionDataAdapter, socialNetworkRepository);
     }
 
     @Bean

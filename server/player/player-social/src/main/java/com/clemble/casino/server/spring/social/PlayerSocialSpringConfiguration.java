@@ -35,7 +35,10 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerManagementSpringConfiguration;
 
 @Configuration
-@Import(value = { PlayerManagementSpringConfiguration.class, BasicJPASpringConfiguration.class })
+@Import(value = {
+    PlayerManagementSpringConfiguration.class,
+    BasicJPASpringConfiguration.class
+})
 public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @Bean

@@ -34,6 +34,7 @@
         <spring.version>3.2.4.RELEASE</spring.version>
         <spring.security.oauth2.version>1.0.5.RELEASE</spring.security.oauth2.version>
         <couchbase-client.version>1.2.2</couchbase-client.version>
+        <spring-data-mongo.version>1.4.2.RELEASE</spring-data-mongo.version>
         <spring.security.version>3.1.4.RELEASE</spring.security.version>
         <spring-data-common.version>1.6.1.RELEASE</spring-data-common.version>
         <spring-data-jpa.version>1.3.4.RELEASE</spring-data-jpa.version>
@@ -302,6 +303,11 @@
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-couchbase</artifactId>
                 <version>${spring-data-couchbase.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>${spring-data-mongo.version}</version>
             </dependency>
 
             <!-- Social Dependencies -->

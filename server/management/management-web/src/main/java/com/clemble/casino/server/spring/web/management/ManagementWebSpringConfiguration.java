@@ -58,10 +58,10 @@ public class ManagementWebSpringConfiguration implements SpringConfiguration {
             PlayerIdGenerator idGenerator,
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,
-            ClembleCasinoValidationService gogomayaValidationService,
+            ClembleCasinoValidationService clembleValidationService,
             SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
         return new PlayerRegistrationController(idGenerator, playerTokenFactory(), playerProfileRegistrationService, playerCredentialRepository,
-                clembleConsumerDetailsService, gogomayaValidationService, systemNotificationService);
+                clembleConsumerDetailsService, clembleValidationService, systemNotificationService);
     }
 
     @Bean

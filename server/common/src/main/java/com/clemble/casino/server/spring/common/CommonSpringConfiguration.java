@@ -25,7 +25,7 @@ public class CommonSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ClembleCasinoValidationService gogomayaValidationService() {
+    public ClembleCasinoValidationService clembleValidationService() {
         return new ClembleCasinoValidationService(Validation.buildDefaultValidatorFactory());
     }
 
