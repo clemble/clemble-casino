@@ -10,6 +10,5 @@
     <packaging>pom</packaging>
     <modules>
         <module>management-web</module>
-        <module>management-common</module>
     </modules>
 </project>

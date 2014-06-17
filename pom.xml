@@ -187,11 +187,6 @@
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
-                <artifactId>management-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>management-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
