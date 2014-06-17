@@ -10,15 +10,15 @@
     <dependencies>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
-            <artifactId>payment-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.server</groupId>
             <artifactId>common</artifactId>
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>player-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
         </dependency>
     </dependencies>
 </project>

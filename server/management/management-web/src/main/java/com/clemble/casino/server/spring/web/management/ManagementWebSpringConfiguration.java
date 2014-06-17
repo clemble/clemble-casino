@@ -27,7 +27,6 @@ import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
 import com.clemble.casino.server.security.ClembleCouchbaseConsumerDetailsService;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
@@ -39,7 +38,6 @@ import com.clemble.casino.server.web.management.PlayerSessionController;
         CommonSpringConfiguration.class,
         PlayerCommonSpringConfiguration.class,
         ManagementJPASpringConfiguration.class,
-        PaymentCommonSpringConfiguration.class,
         OAuthSpringConfiguration.class
 })
 public class ManagementWebSpringConfiguration implements SpringConfiguration {
