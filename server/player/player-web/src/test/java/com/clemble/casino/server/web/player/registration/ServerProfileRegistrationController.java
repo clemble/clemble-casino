@@ -18,6 +18,8 @@ import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.player.PlayerWebMapping;
 
+// TODO Consider deprecated
+
 @Controller
 public class ServerProfileRegistrationController implements ServerProfileRegistrationService, ExternalController {
 

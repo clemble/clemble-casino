@@ -8,6 +8,8 @@ import org.springframework.web.client.RestTemplate;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+// TODO Consider deprecated
+
 public class RestServerProfileRegistrationService implements ServerProfileRegistrationService {
 
     final private String baseUrl;

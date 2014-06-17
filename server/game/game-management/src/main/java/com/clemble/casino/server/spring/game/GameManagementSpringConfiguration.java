@@ -43,12 +43,11 @@ import com.clemble.casino.server.player.presence.SystemNotificationServiceListen
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
-import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class, GameNeo4jSpringConfiguration.class, GameJPASpringConfiguration.class,
-        PaymentCommonSpringConfiguration.class, PlayerCommonSpringConfiguration.class })
+        PaymentCommonSpringConfiguration.class})
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean

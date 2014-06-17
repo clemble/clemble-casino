@@ -24,6 +24,8 @@ import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 
 import javax.annotation.PostConstruct;
 
+// TODO Consider deprecated
+
 @Configuration
 @Import({
     CommonSpringConfiguration.class,

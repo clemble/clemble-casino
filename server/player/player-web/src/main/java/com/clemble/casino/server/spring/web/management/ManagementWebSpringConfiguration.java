@@ -6,6 +6,7 @@ import com.clemble.casino.server.configuration.SimpleNotificationConfigurationSe
 import com.clemble.casino.server.configuration.SimpleResourceLocationService;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
+import com.clemble.casino.server.spring.player.ManagementJPASpringConfiguration;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,9 +26,7 @@ import com.clemble.casino.server.player.security.AESPlayerTokenFactory;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
-import com.clemble.casino.server.security.ClembleCouchbaseConsumerDetailsService;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.clemble.casino.server.web.management.PlayerSessionController;
@@ -35,9 +34,6 @@ import com.clemble.casino.server.web.management.PlayerSessionController;
 @Configuration
 @Import(value = {
         WebCommonSpringConfiguration.class,
-        CommonSpringConfiguration.class,
-        PlayerCommonSpringConfiguration.class,
-        ManagementJPASpringConfiguration.class,
         OAuthSpringConfiguration.class
 })
 public class ManagementWebSpringConfiguration implements SpringConfiguration {
@@ -52,7 +48,7 @@ public class ManagementWebSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerRegistrationController playerRegistrationController(
-            @Qualifier("playerProfileRegistrationService") ServerProfileRegistrationService playerProfileRegistrationService,
+            @Qualifier("realPlayerProfileRegistrationService") ServerProfileRegistrationService playerProfileRegistrationService,
             PlayerIdGenerator idGenerator,
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,

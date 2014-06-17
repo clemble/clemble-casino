@@ -30,10 +30,6 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>game-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.server</groupId>
-            <artifactId>management-web</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.clemble.casino.integration</groupId>
@@ -124,8 +120,7 @@
                             <includes>
                                 <include>**/*ITest.java</include>
                             </includes>
-                            <argLine>-Dspring.profiles.active=int_test
-                                -Dclemble.casino.management.url=http://localhost:8080/management/</argLine>
+                            <argLine>-Dspring.profiles.active=int_test</argLine>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -157,13 +152,6 @@
                                             <destFileName>payment.war</destFileName>
                                         </artifactItem>
                                         <artifactItem>
-                                            <groupId>com.clemble.casino.server</groupId>
-                                            <artifactId>management-web</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>war</type>
-                                            <destFileName>management.war</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
                                             <groupId>com.clemble.casino.integration</groupId>
                                             <artifactId>integration-game</artifactId>
                                             <version>${project.version}</version>
@@ -182,11 +170,6 @@
                             <daemon>true</daemon>
                             <reload>manual</reload>
                             <contextHandlers>
-                                <contextHandler
-                                    implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/management.war</war>
-                                    <contextPath>/management</contextPath>
-                                </contextHandler>
                                 <contextHandler
                                     implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/player.war</war>
@@ -208,10 +191,6 @@
                                 <systemProperty>
                                     <name>jetty.port</name>
                                     <value>8080</value>
-                                </systemProperty>
-                                <systemProperty>
-                                    <name>clemble.casino.management.url</name>
-                                    <value>http://localhost:8080/management/</value>
                                 </systemProperty>
                                 <systemProperty>
                                     <name>spring.profiles.active</name>

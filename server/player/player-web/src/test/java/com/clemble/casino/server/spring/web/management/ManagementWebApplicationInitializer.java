@@ -8,6 +8,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
+// TODO Consider deprecated
+
 public class ManagementWebApplicationInitializer extends AbstractWebApplicationInitializer {
 
     @Override

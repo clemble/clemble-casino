@@ -18,11 +18,6 @@
         <dependencies>
             <dependency>
                 <groupId>com.clemble.casino.integration</groupId>
-                <artifactId>integration-management-web</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.clemble.casino.integration</groupId>
                 <artifactId>integration-game</artifactId>
                 <version>${project.version}</version>
             </dependency>

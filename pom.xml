@@ -152,11 +152,6 @@
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
-                <artifactId>user-management</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>player-social</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -183,11 +178,6 @@
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
                 <artifactId>payment-web</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
-                <artifactId>management-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
