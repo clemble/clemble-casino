@@ -47,7 +47,7 @@
         <!-- Dependencies for Spring Social -->
         <spring.social.core.version>1.1.0.RELEASE</spring.social.core.version>
         <spring.social.version>1.1.0.RELEASE</spring.social.version>
-        <spring.social.linkedin.version>1.0.0.RC1</spring.social.linkedin.version>
+        <spring.social.linkedin.version>1.0.1.RELEASE</spring.social.linkedin.version>
         <spring.social.facebook.version>1.1.1.RELEASE</spring.social.facebook.version>
         <spring.social.twitter.version>1.1.0.RELEASE</spring.social.twitter.version>
         <spring.social.vkontakte.version>1.0.4</spring.social.vkontakte.version>

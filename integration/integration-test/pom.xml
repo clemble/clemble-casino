@@ -74,13 +74,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.clemble.test</groupId>
-            <artifactId>common-spring</artifactId>
-            <version>${com.clemble.test.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>

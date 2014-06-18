@@ -63,7 +63,7 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
 
     @Override
     public ConnectionData toConnectionData(SocialAccessGrant accessGrant) {
-        Connection<LinkedIn> linkedInConnection = linkedInConnectionFactory.createConnection(accessGrant.toOAuthToken());
+        Connection<LinkedIn> linkedInConnection = linkedInConnectionFactory.createConnection(accessGrant.toAccessGrant());
         return linkedInConnection.createData();
     }
 

@@ -40,13 +40,13 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Bean
     public GameManagerFactory gameProcessor(
         GameStateFactoryFacade stateFactory,
-        @Qualifier("roundProcessorFactory") ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> matchProcessorFactory,
-        @Qualifier("matchProcessorFactory") ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> potProcessorFactory,
-        @Qualifier("tournamentProcessorFactory") ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentProcessorFactory,
+        ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory,
+        ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory,
+        ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory,
         GameRecordRepository roundRecordRepository,
         ServerGameConfigurationRepository configurationRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerFactory(stateFactory, matchProcessorFactory, potProcessorFactory, tournamentProcessorFactory, roundRecordRepository, configurationRepository, notificationService);
+        return new GameManagerFactory(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, roundRecordRepository, configurationRepository, notificationService);
     }
 
     @Bean
@@ -63,17 +63,17 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundProcessorFactory() {
+    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory() {
         return new ServerGameManagerFactory<>(RoundGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchProcessorFactory() {
+    public ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory() {
         return new ServerGameManagerFactory<>(MatchGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentProcessorFactory() {
+    public ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory() {
         return new ServerGameManagerFactory<>(TournamentGameAspectFactory.class);
     }
 

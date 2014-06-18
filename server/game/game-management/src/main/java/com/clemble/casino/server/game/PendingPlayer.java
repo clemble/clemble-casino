@@ -5,6 +5,7 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 import com.clemble.casino.player.PlayerAware;
+import org.springframework.data.neo4j.support.index.IndexType;
 
 @NodeEntity
 public class PendingPlayer implements PlayerAware {
@@ -17,7 +18,7 @@ public class PendingPlayer implements PlayerAware {
     @GraphId
     private Long id;
 
-    @Indexed(unique = true, fieldName = "player")
+    @Indexed(unique = true, indexName = "pendingPlayerIdx", indexType = IndexType.FULLTEXT)
     private String player;
 
     public PendingPlayer() {

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import com.clemble.casino.game.specification.RoundGameConfiguration;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class PendingGameTest {
 
     @Autowired
     public PendingGameInitiationRepository initiationRepository;
+
+    @Before
+    public void clean() {
+        playerRepository.deleteAll();
+    }
 
     @Test
     public void testCreation(){

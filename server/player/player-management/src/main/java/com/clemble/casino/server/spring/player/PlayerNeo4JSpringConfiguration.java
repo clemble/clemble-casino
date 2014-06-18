@@ -12,7 +12,7 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 public class PlayerNeo4JSpringConfiguration extends BasicNeo4JSpringConfiguration {
 
     public PlayerNeo4JSpringConfiguration(){
-        setBasePackage("com.clemble.casino.server.player.social");
+        setBasePackage("com.clemble.casino.server");
     }
 
     @Override

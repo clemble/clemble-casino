@@ -26,8 +26,9 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, Seriali
 
     @GraphId
     private Long id;
+    // TODO make GameSessionAware and restore configuration key serialization
     @Indexed(unique = true)
-    private GameSessionKey sessionKey;
+    private String sessionKey;
     private GameConfigurationKey configurationKey;
     @Fetch
     @RelatedTo(type = "PARTICIPATE", direction = Direction.OUTGOING)
@@ -37,7 +38,7 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, Seriali
     }
 
     public PendingGameInitiation(GameInitiation initiation) {
-        this.sessionKey = initiation.getSession();
+        this.sessionKey = initiation.getSession().toString();
         this.configurationKey = initiation.getConfiguration().getConfigurationKey();
         for (String player : initiation.getParticipants())
             participants.add(new PendingPlayer(player));
@@ -59,11 +60,15 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, Seriali
         this.participants = participants;
     }
 
-    public GameSessionKey getSession() {
+    public String getSession() {
         return sessionKey;
     }
 
-    public void setSession(GameSessionKey session) {
+    public GameSessionKey getSessionKey() {
+        return GameSessionKey.fromString(sessionKey);
+    }
+
+    public void setSession(String session) {
         this.sessionKey = session;
     }
 

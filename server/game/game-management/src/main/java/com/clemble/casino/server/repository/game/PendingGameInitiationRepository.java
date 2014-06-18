@@ -11,7 +11,7 @@ import com.clemble.casino.server.game.PendingGameInitiation;
 @Repository
 public interface PendingGameInitiationRepository extends GraphRepository<PendingGameInitiation> {
 
-    @Query(value = "start rel=node:PendingPlayer(player={0}) match rel<-[:PARTICIPATE]-initiation return initiation", elementClass = PendingGameInitiation.class)
+    @Query(value = "start rel=node:pendingPlayerIdx(player={0}) match rel<-[:PARTICIPATE]-initiation return initiation", elementClass = PendingGameInitiation.class)
     public List<PendingGameInitiation> findPending(String player);
 
 }

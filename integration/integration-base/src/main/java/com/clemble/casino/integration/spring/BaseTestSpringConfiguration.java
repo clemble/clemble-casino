@@ -47,7 +47,6 @@ import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
-import com.clemble.test.spring.listener.TestContextListenerRegistrator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
@@ -116,11 +115,6 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         @Bean
         public PaymentTransactionOperations paymentTransactionOperations(ServerPaymentTransactionService paymentTransactionController) {
             return new WebPaymentTransactionOperations(paymentTransactionController);
-        }
-
-        @Bean
-        public TestContextListenerRegistrator testContextListener(){
-            return new TestContextListenerRegistrator();
         }
 
         @Bean

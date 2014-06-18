@@ -34,9 +34,9 @@ public class GameManagerFactory {
 
     public GameManagerFactory(
             GameStateFactoryFacade stateFactory,
-            ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> matchProcessorFactory,
-            ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> potProcessorFactory,
-            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentAspectFactory,
+            ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory,
+            ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory,
+            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory,
             GameRecordRepository roundRepository,
             ServerGameConfigurationRepository configurationRepository,
             PlayerNotificationService notificationService) {
@@ -44,9 +44,9 @@ public class GameManagerFactory {
         this.recordRepository = checkNotNull(roundRepository);
         this.notificationService = checkNotNull(notificationService);
         this.configurationRepository = checkNotNull(configurationRepository);
-        this.matchManagerFactory = checkNotNull(potProcessorFactory);
-        this.roundManagerFactory = checkNotNull(matchProcessorFactory);
-        this.tournamentAspectFactory = checkNotNull(tournamentAspectFactory);
+        this.matchManagerFactory = checkNotNull(matchGameManagerFactory);
+        this.roundManagerFactory = checkNotNull(roundGameManagerFactory);
+        this.tournamentAspectFactory = checkNotNull(tournamentGameManagerFactory);
     }
 
     @SuppressWarnings("unchecked")

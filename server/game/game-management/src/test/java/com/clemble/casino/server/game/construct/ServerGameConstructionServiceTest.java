@@ -117,7 +117,13 @@ public class ServerGameConstructionServiceTest {
                 System.out.println(construct.getVersion());
                 return construct;
             } catch (Throwable throwable) {
+                System.err.println("Failed to process " + construction.getGame() + construction.getSession());
                 throwable.printStackTrace();
+                try {
+                    Thread.sleep(1 + RANDOM.nextInt(1000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 call();
             } finally {
                 endLatch.countDown();
