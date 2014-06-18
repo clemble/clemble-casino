@@ -8,7 +8,7 @@ import org.springframework.social.connect.ConnectionSignUp;
 
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.player.PlayerIdGenerator;
-import com.clemble.casino.server.player.PlayerSocialNetwork;
+import com.clemble.casino.server.player.social.PlayerSocialNetwork;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 

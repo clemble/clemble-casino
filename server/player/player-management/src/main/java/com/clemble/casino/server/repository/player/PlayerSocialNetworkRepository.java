@@ -4,12 +4,12 @@ import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.stereotype.Repository;
 
-import com.clemble.casino.server.player.PlayerSocialNetwork;
+import com.clemble.casino.server.player.social.PlayerSocialNetwork;
 
 @Repository
 public interface PlayerSocialNetworkRepository extends GraphRepository<PlayerSocialNetwork> {
 
-    @Query(value = "start rel=node:PlayerSocialNetwork(player={0}) match rel-[:CONNECTED]->conKey<-[:OWN]-owner return owner", elementClass = PlayerSocialNetwork.class)
+    @Query(value = "start p=node:playerSocialNetwork(player={0}) match p-[c:CONNECTED]->conKey<-[o:OWN]-owner return owner", elementClass = PlayerSocialNetwork.class)
     public Iterable<PlayerSocialNetwork> findRelations(String player);
 
 }

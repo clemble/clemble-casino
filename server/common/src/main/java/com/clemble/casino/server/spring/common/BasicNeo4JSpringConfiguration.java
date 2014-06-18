@@ -1,9 +1,11 @@
 package com.clemble.casino.server.spring.common;
 
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.config.Setting;
 import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
@@ -20,7 +22,7 @@ import com.clemble.casino.server.error.ClembleConstraintExceptionResolver;
 import com.google.common.collect.ImmutableMap;
 
 @Configuration
-@EnableNeo4jRepositories(basePackages = "com.clemble.casino.server.repository", includeFilters = { @Filter(value = GraphRepository.class, type = FilterType.ASSIGNABLE_TYPE) })
+@EnableNeo4jRepositories(basePackages = "com.clemble.casino.server.repository", includeFilters = { @ComponentScan.Filter(value = GraphRepository.class, type = FilterType.ASSIGNABLE_TYPE) })
 abstract public class BasicNeo4JSpringConfiguration extends Neo4jConfiguration implements SpringConfiguration {
 
     abstract public String getFolder();

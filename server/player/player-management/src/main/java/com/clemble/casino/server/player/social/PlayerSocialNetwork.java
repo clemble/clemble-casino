@@ -1,4 +1,4 @@
-package com.clemble.casino.server.player;
+package com.clemble.casino.server.player.social;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.support.index.IndexType;
 import org.springframework.social.connect.ConnectionKey;
 
 import com.clemble.casino.player.PlayerAware;
@@ -24,7 +25,7 @@ public class PlayerSocialNetwork implements PlayerAware {
     @GraphId
     private Long id;
 
-    @Indexed(unique = true, fieldName = "player")
+    @Indexed(unique = true, indexName = "playerSocialNetwork", indexType=IndexType.FULLTEXT)
     private String player;
 
     @RelatedTo(type = "OWN", direction = Direction.OUTGOING)

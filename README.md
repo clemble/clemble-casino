@@ -1,1 +1,1 @@
-[![Build Status](https://api.shippable.com/projects/53788ec4ae3c9530025f52ac/badge/master)](https://www.shippable.com/projects/53788ec4ae3c9530025f52ac)
+[![Build Status](https://api.shippable.com/projects/53788ec4ae3c9530025f52ac/badge/master)](https://www.shippable.com/projects/53788ec4ae3c9530025f52ac) [![Dependency Status](https://www.versioneye.com/user/projects/53a0a5e083add744ea000041/badge.svg?style=flat)](https://www.versioneye.com/user/projects/53a0a5e083add744ea000041)

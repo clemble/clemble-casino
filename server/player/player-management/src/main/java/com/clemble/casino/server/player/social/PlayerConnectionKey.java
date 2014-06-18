@@ -1,4 +1,4 @@
-package com.clemble.casino.server.player;
+package com.clemble.casino.server.player.social;
 
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -12,13 +12,13 @@ public class PlayerConnectionKey {
     private Long id;
 
     @Indexed(unique = true)
-    private ConnectionKey connectionKey;
+    private String connectionKey;
 
     public PlayerConnectionKey() {
     }
 
     public PlayerConnectionKey(ConnectionKey connectionKey) {
-        this.connectionKey = connectionKey;
+       this.connectionKey = connectionKey.getProviderId() + ":" + connectionKey.getProviderUserId();
     }
 
     public Long getId() {
@@ -29,11 +29,11 @@ public class PlayerConnectionKey {
         this.id = id;
     }
 
-    public ConnectionKey getConnectionKey() {
+    public String getConnectionKey() {
         return connectionKey;
     }
 
-    public void setConnectionKey(ConnectionKey connectionKey) {
+    public void setConnectionKey(String connectionKey) {
         this.connectionKey = connectionKey;
     }
 

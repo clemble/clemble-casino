@@ -11,7 +11,7 @@ import org.springframework.social.connect.UsersConnectionRepository;
 
 import com.clemble.casino.server.event.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.event.SystemPlayerDiscoveredConnectionEvent;
-import com.clemble.casino.server.player.PlayerSocialNetwork;
+import com.clemble.casino.server.player.social.PlayerSocialNetwork;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
