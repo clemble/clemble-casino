@@ -17,6 +17,7 @@
 .classpath
 .project
 .settings
+shippable/*
 **/.classpath
 **/.project
 **/.settings
