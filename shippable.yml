@@ -6,7 +6,7 @@ services:
 before_script:
     - mkdir -p ~/clemble/config
     - cp ./config/*.properties ~/clemble/config/
-after_script:
-    config/move_tests.sh
+#after_script:
+#    config/move_tests.sh
 
 
