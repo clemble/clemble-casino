@@ -1,4 +1,6 @@
 language: java
+jdk:
+    - oraclejdk8
 services:
     - mongodb
     - redis
@@ -9,4 +11,4 @@ before_script:
     - mkdir -p ~/clemble/config
     - cp ./config/*.properties ~/clemble/config/
 after_success:
-    config/deploy.sh
+#    config/deploy.sh
