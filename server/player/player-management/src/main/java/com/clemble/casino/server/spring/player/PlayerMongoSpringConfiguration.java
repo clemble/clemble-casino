@@ -5,6 +5,7 @@ import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +26,9 @@ import java.net.UnknownHostException;
 public class PlayerMongoSpringConfiguration {
 
     @Bean
-    public PlayerProfileRepository playerProfileRepository() throws UnknownHostException {
-        MongoOperations mongoOperations = new MongoTemplate(new MongoClient(), "player");
+    public PlayerProfileRepository playerProfileRepository(@Value("${clemble.db.redis.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
+        MongoClient mongoClient = new MongoClient(host, port);
+        MongoOperations mongoOperations = new MongoTemplate(mongoClient, "player");
         MongoRepositoryFactory repositoryFactory = new MongoRepositoryFactory(mongoOperations);
         return repositoryFactory.getRepository(MongoPlayerProfileRepository.class);
     }
