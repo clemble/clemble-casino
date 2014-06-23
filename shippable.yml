@@ -5,6 +5,8 @@ services:
     - mongodb
     - redis
     - rabbitmq
+install:
+  - pip install awscli
 env:
     secure: Eojvzy9PtHqSws+v5ZZPkp1ixKn2/qHzG2O6XI3uZayBrMPnRAcIo5o5uniIB8L9q9fXnk9Vk7zZ+YcRanQclmDno8jaDscLW1cnmSaAaf2YJhB442g3ioJKelpUpQJZxBPROoy99rnQjocDww5Ul9AZoPW2rzADk0k+k8j9oREn6gG8zSrAFyf2atq/dg442vuO5L1vj73mhvjol5Q5uKQPRN6D7syq3sip+/iFhGANwE2ofGfOi0jJoCDMoICaNQvaxrYVULDSCxaMeUAvBsho1OQGTsCUaVmU6/HppHx3aYius65BGfvjEMg8ocKEX357BEHLRWjQQG1pshjKcg==
 before_script:
