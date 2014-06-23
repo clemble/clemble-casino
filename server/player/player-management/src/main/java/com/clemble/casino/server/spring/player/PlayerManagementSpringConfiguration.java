@@ -13,7 +13,7 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
     PlayerNeo4JSpringConfiguration.class,
     CommonSpringConfiguration.class,
     PlayerPresenceSpringConfiguration.class,
-    ManagementJPASpringConfiguration.class
+//    ManagementJPASpringConfiguration.class
 //    PlayerCouchbaseSpringConfiguration.class
 })
 public class PlayerManagementSpringConfiguration implements SpringConfiguration {

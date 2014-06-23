@@ -12,7 +12,7 @@ import com.clemble.casino.server.spring.social.PlayerSocialSpringConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.TEST)
 @ContextConfiguration(classes = PlayerSocialSpringConfiguration.class)
-public class InitializationTest {
+public class PlayerSocialInitializationTest {
 
     @Test
     public void testInitialized() {

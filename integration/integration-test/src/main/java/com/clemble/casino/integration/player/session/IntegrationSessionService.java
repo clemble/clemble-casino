@@ -36,20 +36,20 @@ public class IntegrationSessionService implements PlayerSessionService {
     }
 
     @Override
-    public PlayerSession refreshPlayerSession(String player, long sessionId) {
+    public PlayerSession refreshPlayerSession(String player, String sessionId) {
         String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
         return restTemplate.exchange(refreshUrl, HttpMethod.PUT, null, PlayerSession.class, player, sessionId).getBody();
 
     }
 
     @Override
-    public void endPlayerSession(String player, long sessionId) {
+    public void endPlayerSession(String player, String sessionId) {
         restTemplate.exchange(baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, HttpMethod.DELETE, null,
                 PlayerSession.class, player, sessionId).getBody();
     }
 
     @Override
-    public PlayerSession getPlayerSession(String player, long sessionId) {
+    public PlayerSession getPlayerSession(String player, String sessionId) {
         String refreshUrl = baseUrl + ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION;
         return restTemplate.exchange(refreshUrl, HttpMethod.GET, null, PlayerSession.class, player, sessionId).getBody();
     }

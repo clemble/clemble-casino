@@ -44,7 +44,7 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
         PlayerSession playerSession = new PlayerSession().setPlayer(playerId);
         // Step 2. Providing result as a Session data
         playerSession.setExpirationTime(playerPresenceService.markAvailable(playerId));
-        playerSession = sessionRepository.saveAndFlush(playerSession);
+        playerSession = sessionRepository.save(playerSession);
         // Step 3. Specifying player resources
         playerSession.setResourceLocations(resourceLocationService.getResources(playerId));
         // Step 4. Returning session identifier
@@ -55,14 +55,14 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
     @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody
-    PlayerSession refreshPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") long sessionId) {
+    PlayerSession refreshPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") String sessionId) {
         // Step 1. Fetching session
         PlayerSession playerSession = getPlayerSession(playerId, sessionId);
         // Step 2. Sanity check
         if (playerSession.expired())
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed);
         playerSession.setExpirationTime(playerPresenceService.markOnline(playerId));
-        playerSession = sessionRepository.saveAndFlush(playerSession);
+        playerSession = sessionRepository.save(playerSession);
         // Step 3. Specifying player resources
         playerSession.setResourceLocations(resourceLocationService.getResources(playerId));
         // Step 4. Returning refreshed session
@@ -72,7 +72,7 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
     @Override
     @RequestMapping(method = RequestMethod.DELETE, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody void endPlayerSession(@PathVariable("playerId") String player, @PathVariable("sessionId") long sessionId) {
+    public @ResponseBody void endPlayerSession(@PathVariable("playerId") String player, @PathVariable("sessionId") String sessionId) {
         // Step 1. Fetching player session
         PlayerSession playerSession = getPlayerSession(player, sessionId);
         if (playerSession.expired())
@@ -82,14 +82,14 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
         // Step 3. Marking player state as ended
         playerSession.markExpired();
         // Step 4. Saving marked session
-        sessionRepository.saveAndFlush(playerSession);
+        sessionRepository.save(playerSession);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    PlayerSession getPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") long sessionId) {
+    PlayerSession getPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") String sessionId) {
         // Step 2. Reading specific session
         PlayerSession playerSession = sessionRepository.findOne(sessionId);
         if (!playerSession.getPlayer().equals(playerId))

@@ -161,7 +161,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         validationService.validate(loginRequest.getConsumerDetails());
         // Step 1. Create new credentials
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(playerProfile.getPlayer());
-        playerCredentials = playerCredentialRepository.saveAndFlush(playerCredentials);
+        playerCredentials = playerCredentialRepository.save(playerCredentials);
         // Step 2. Specifying player type
         playerProfile.setType(PlayerType.free);
         // Step 3. Create new token

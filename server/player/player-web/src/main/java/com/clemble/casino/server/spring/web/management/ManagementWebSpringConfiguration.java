@@ -6,7 +6,6 @@ import com.clemble.casino.server.configuration.SimpleNotificationConfigurationSe
 import com.clemble.casino.server.configuration.SimpleResourceLocationService;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.player.ManagementJPASpringConfiguration;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

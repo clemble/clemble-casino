@@ -3,7 +3,7 @@ package com.clemble.casino.server.spring.player;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.hibernate.ejb.HibernatePersistence;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -49,7 +49,7 @@ public class ManagementJPASpringConfiguration implements SpringConfiguration {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
         entityManagerFactory.setPackagesToScan("com.clemble.casino.player");
-        entityManagerFactory.setPersistenceProvider(new HibernatePersistence());
+        entityManagerFactory.setPersistenceProvider(new HibernatePersistenceProvider());
         entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter);
         entityManagerFactory.setPersistenceUnitName("playerEntityManager");
         entityManagerFactory.afterPropertiesSet();

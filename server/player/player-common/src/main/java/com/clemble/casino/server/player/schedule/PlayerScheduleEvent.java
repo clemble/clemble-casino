@@ -1,19 +1,12 @@
 package com.clemble.casino.server.player.schedule;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Id;
 
-@Entity
-@Table(name = "PLAYER_SCHEDULED_EVENT")
 public class PlayerScheduleEvent implements PlayerAware, GameSessionAware, Comparable<PlayerScheduleEvent> {
 
     /**
@@ -22,13 +15,9 @@ public class PlayerScheduleEvent implements PlayerAware, GameSessionAware, Compa
     private static final long serialVersionUID = -361237726667152884L;
 
     @Id
-    @Column(name = "PLAYER_ID")
     private String player;
-    @Embedded
     private GameSessionKey session;
-    @Column(name = "START_TIME")
     private long startTime;
-    @Column(name = "END_TIME")
     private long endTime;
 
     public PlayerScheduleEvent() {

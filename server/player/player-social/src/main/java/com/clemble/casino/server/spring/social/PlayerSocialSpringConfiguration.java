@@ -11,6 +11,7 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
+import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
@@ -37,7 +38,7 @@ import com.clemble.casino.server.spring.player.PlayerManagementSpringConfigurati
 @Configuration
 @Import(value = {
     PlayerManagementSpringConfiguration.class,
-    BasicJPASpringConfiguration.class
+//    BasicJPASpringConfiguration.class
 })
 public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
@@ -120,16 +121,19 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
             PlayerProfileRepository profileRepository,
             SocialConnectionAdapterRegistry socialAdapterRegistry,
             PlayerSocialNetworkRepository socialNetworkRepository) {
-        return new SocialProfileConnectionSignUp(idGenerator, profileRepository, socialAdapterRegistry, socialNetworkRepository);
+        ConnectionSignUp signUp = new SocialProfileConnectionSignUp(idGenerator, profileRepository, socialAdapterRegistry, socialNetworkRepository);
+        return signUp;
     }
 
     @Bean
     public UsersConnectionRepository usersConnectionRepository(
-            @Qualifier("dataSource") DataSource dataSource,
+//            @Qualifier("dataSource") DataSource dataSource,
             ConnectionSignUp connectionSignUp,
             ConnectionFactoryRegistry connectionFactoryLocator) {
-        JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
+        InMemoryUsersConnectionRepository repository = new InMemoryUsersConnectionRepository(connectionFactoryLocator);
         repository.setConnectionSignUp(connectionSignUp);
+//        JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
+//        repository.setConnectionSignUp(connectionSignUp);
         return repository;
     }
 

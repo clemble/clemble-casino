@@ -1,7 +1,9 @@
 package com.clemble.casino.server.spring.player;
 
 import com.clemble.casino.server.repository.player.MongoPlayerProfileRepository;
+import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
+import com.clemble.casino.server.repository.player.PlayerSessionRepository;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,26 @@ import java.net.UnknownHostException;
 public class PlayerMongoSpringConfiguration {
 
     @Bean
-    public PlayerProfileRepository playerProfileRepository(@Value("${clemble.db.redis.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
+    public MongoRepositoryFactory mongoRepositoryFactory(@Value("${clemble.db.redis.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
         MongoClient mongoClient = new MongoClient(host, port);
         MongoOperations mongoOperations = new MongoTemplate(mongoClient, "player");
-        MongoRepositoryFactory repositoryFactory = new MongoRepositoryFactory(mongoOperations);
+        return new MongoRepositoryFactory(mongoOperations);
+
+    }
+
+    @Bean
+    public PlayerProfileRepository playerProfileRepository(MongoRepositoryFactory repositoryFactory) {
         return repositoryFactory.getRepository(MongoPlayerProfileRepository.class);
+    }
+
+    @Bean
+    public PlayerCredentialRepository playerCredentialRepository(MongoRepositoryFactory repositoryFactory) {
+        return repositoryFactory.getRepository(PlayerCredentialRepository.class);
+    }
+
+    @Bean
+    public PlayerSessionRepository playerSessionRepository(MongoRepositoryFactory repositoryFactory) {
+        return repositoryFactory.getRepository(PlayerSessionRepository.class);
     }
 
 }
