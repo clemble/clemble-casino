@@ -31,7 +31,7 @@ public class PlayerRegistrationValidationITest {
     @Test
     public void testInvalidEmail() {
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.EmailInvalid));
-        playerScenarios.createPlayer(new PlayerCredential().setEmail("test_gmail.com").setPassword("aVsdsvdee!"), ObjectGenerator.generate(PlayerProfile.class));
+        playerScenarios.createPlayer(new PlayerCredential().setEmail(ObjectGenerator.generate(String.class) + "test_gmail.com").setPassword("aVsdsvdee!"), ObjectGenerator.generate(PlayerProfile.class));
     }
 
     @Test

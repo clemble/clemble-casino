@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.server.game.pending.PendingGameInitiation;
+import com.clemble.casino.server.game.pending.PendingPlayer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

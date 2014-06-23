@@ -28,7 +28,7 @@ public class PlayerConnectionController implements PlayerConnectionService {
     @RequestMapping(value = PlayerWebMapping.CONNECTIONS_PLAYER, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     public @ResponseBody List<String> getConnections(String player) {
         // Step 1. Generating result collection
-        List<String> playerCollection = new ArrayList<>();
+        List<String> playerCollection = new ArrayList<String>();
         // Step 2. Going through existing connections
         Iterator<PlayerSocialNetwork> connections = connectionsRepository.findRelations(player).iterator();
         while (connections.hasNext()) {

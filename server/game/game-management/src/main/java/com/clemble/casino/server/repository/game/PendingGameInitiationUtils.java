@@ -9,8 +9,8 @@ import java.util.List;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
-import com.clemble.casino.server.game.PendingGameInitiation;
-import com.clemble.casino.server.game.PendingPlayer;
+import com.clemble.casino.server.game.pending.PendingGameInitiation;
+import com.clemble.casino.server.game.pending.PendingPlayer;
 
 public class PendingGameInitiationUtils {
 

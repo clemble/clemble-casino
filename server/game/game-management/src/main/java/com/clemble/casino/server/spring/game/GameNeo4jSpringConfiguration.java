@@ -8,7 +8,7 @@ import com.clemble.casino.server.spring.common.BasicNeo4JSpringConfiguration;
 public class GameNeo4jSpringConfiguration extends BasicNeo4JSpringConfiguration {
 
     public GameNeo4jSpringConfiguration(){
-        setBasePackage("com.clemble.casino.server");
+        setBasePackage("com.clemble.casino.server.player.social", "com.clemble.casino.server.game.pending");
     }
 
     @Override

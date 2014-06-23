@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game;
+package com.clemble.casino.server.game.pending;
 
 import java.io.Serializable;
 import java.util.HashSet;

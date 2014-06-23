@@ -58,10 +58,14 @@ public class PlayerOperationsITest {
 
     @Test
     public void createPlayerUsingRegistrationRequest() {
-        PlayerProfile profile = new PlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
-                .setNickName("mavarazy");
+        PlayerProfile profile = new PlayerProfile().
+                setCategory(PlayerCategory.Amateur).
+                setFirstName("Anton").
+                setLastName("Oparin").
+                setGender(PlayerGender.M).
+                setNickName("mavarazy");
 
-        PlayerCredential playerCredential = new PlayerCredential().setEmail("mavarazy@gmail.com").setPassword("23443545");
+        PlayerCredential playerCredential = new PlayerCredential().setEmail(ObjectGenerator.generate(String.class) + "@gmail.com").setPassword("23443545");
         ClembleConsumerDetails consumerDetails = ObjectGenerator.generate(ClembleConsumerDetails.class);
 
         PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(profile, playerCredential, consumerDetails);

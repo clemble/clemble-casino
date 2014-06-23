@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game;
+package com.clemble.casino.server.game.pending;
 
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;

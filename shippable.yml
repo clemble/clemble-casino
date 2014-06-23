@@ -5,6 +5,7 @@ services:
     - mongodb
     - redis
     - rabbitmq
+    - neo4j
 install:
   - sudo apt-get install python-pip
   - sudo pip install awscli
