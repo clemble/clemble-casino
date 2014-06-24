@@ -10,7 +10,8 @@ install:
   - sudo apt-get install python-pip
   - sudo pip install awscli
 env:
-    secure: Eojvzy9PtHqSws+v5ZZPkp1ixKn2/qHzG2O6XI3uZayBrMPnRAcIo5o5uniIB8L9q9fXnk9Vk7zZ+YcRanQclmDno8jaDscLW1cnmSaAaf2YJhB442g3ioJKelpUpQJZxBPROoy99rnQjocDww5Ul9AZoPW2rzADk0k+k8j9oREn6gG8zSrAFyf2atq/dg442vuO5L1vj73mhvjol5Q5uKQPRN6D7syq3sip+/iFhGANwE2ofGfOi0jJoCDMoICaNQvaxrYVULDSCxaMeUAvBsho1OQGTsCUaVmU6/HppHx3aYius65BGfvjEMg8ocKEX357BEHLRWjQQG1pshjKcg==
+    secure: TDeG4a2Nzt04Wc4JM5HKVAIZvk7wUwh3MblIavaU+3bj6uS8QskmAKVGmVDLw1XHB+PzXlDLGmYr9rZo+fbTNiQ8OypAiWvwD/tvd+KbkBXBYiit/nXbt+CtziRKbEuctdWjCBcTJ/prW31iylf4At1fdE8FzSA6mpFEWtzl00ARZ4uS8MpdIMKepXw9bz/ytywhhzR7Ua4VQPjAxjrnn829jbXPFi5rgIIPeHtlhFcsWd0Q0WXmhDdl8RUCICZ/bP0yxneZ7iMlVY2pss3M7sDORJUFpUFeL3PDTXUGyX6eEiT9dSfxgkxcYW5UR9/h5voxnMOSIjpPKFy6mlIuKQ==
+    secure: SBmubE4FiLXZI/aaBqnFjlLYNyUPsCfgn383090r+hbuMGN+4tCifRnTr7vKEPgHBpa072CcdvfqIAJN07dsIaP1sj+nqHOyIwqT1d5tkq6qeLe/gZHeQSIqQo2NGSW2Ywy3HPU8Vi4MABtTCJlbBLwi/wvNjqxQzC+golvYi7bNri1LI+KFQe0kRs8m36AJf7dfhjk/+pwEzZSOQyFPqjvPvl1V3+L2fVXUjw2Xv6V/S6lK+5V/ex2jGqG/FIfYrEjo2VKQ9rNjq4BuBYu8avJofToXxELaRm+s+hknHDDVxyFgaPFs0LSja+RzU//TWGNKw0vlUqhSLOOoCctB+A==
 before_script:
     - mkdir -p ~/clemble/config
     - cp ./config/*.properties ~/clemble/config/
