@@ -3,6 +3,7 @@ package com.clemble.casino.integration.player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class PlayerOperationsITest {
                 setGender(PlayerGender.M).
                 setNickName("mavarazy");
 
-        PlayerCredential playerCredential = new PlayerCredential().setEmail(ObjectGenerator.generate(String.class) + "@gmail.com").setPassword("23443545");
+        PlayerCredential playerCredential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword("23443545");
         ClembleConsumerDetails consumerDetails = ObjectGenerator.generate(ClembleConsumerDetails.class);
 
         PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(profile, playerCredential, consumerDetails);
