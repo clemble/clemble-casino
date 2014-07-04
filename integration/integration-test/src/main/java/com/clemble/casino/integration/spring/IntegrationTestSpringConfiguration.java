@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
-import com.clemble.casino.server.spring.web.management.ManagementWebSpringConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +27,6 @@ import com.clemble.casino.player.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.payment.PaymentWebSpringConfiguration;
-import com.clemble.casino.server.spring.web.player.PlayerWebSpringConfiguration;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,7 +41,9 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
 
     @Configuration
     @Profile(DEFAULT)
-    @Import({ PlayerWebSpringConfiguration.class, PaymentWebSpringConfiguration.class, ManagementWebSpringConfiguration.class, IntegrationGameWebSpringConfiguration.class })
+    @Import({
+        PaymentWebSpringConfiguration.class,
+        IntegrationGameWebSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
         @Bean

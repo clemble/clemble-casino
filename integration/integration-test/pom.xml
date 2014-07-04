@@ -28,6 +28,27 @@
         </dependency>
 
         <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>player-connection</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>player-presence</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>player-profile</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>player-registration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>player-social</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.clemble.casino.integration</groupId>
             <artifactId>integration-base</artifactId>
         </dependency>
@@ -128,6 +149,35 @@
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>player-connection</artifactId>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>player-presence</artifactId>
+                                            <type>war</type>
+                                            <destFileName>player-presence.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>player-profile</artifactId>
+                                            <type>war</type>
+                                            <destFileName>player-profile.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>player-registration</artifactId>
+                                            <type>war</type>
+                                            <destFileName>player-registration.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>player-social</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                            <destFileName>player-social.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>payment-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
@@ -152,15 +202,29 @@
                             <daemon>true</daemon>
                             <reload>manual</reload>
                             <contextHandlers>
-                                <contextHandler
-                                    implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/payment.war</war>
                                     <contextPath>/payment</contextPath>
                                 </contextHandler>
-                                <contextHandler
-                                    implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/game.war</war>
                                     <contextPath>/game</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/player-social.war</war>
+                                    <contextPath>/player/social</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/player-connection.war</war>
+                                    <contextPath>/player/connection</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/player-presence.war</war>
+                                    <contextPath>/player/presence</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/player-registration.war</war>
+                                    <contextPath>/registration</contextPath>
                                 </contextHandler>
                             </contextHandlers>
                             <systemProperties>

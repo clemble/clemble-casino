@@ -164,6 +164,31 @@
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
+                <artifactId>player-connection</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
+                <artifactId>player-presence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
+                <artifactId>player-profile</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
+                <artifactId>player-registration</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
+                <artifactId>player-social</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>game-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
