@@ -24,10 +24,6 @@
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
-            <artifactId>player-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.server</groupId>
             <artifactId>game-web</artifactId>
         </dependency>
 
@@ -132,13 +128,6 @@
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
-                                            <artifactId>player-web</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>war</type>
-                                            <destFileName>player.war</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>payment-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
@@ -163,11 +152,6 @@
                             <daemon>true</daemon>
                             <reload>manual</reload>
                             <contextHandlers>
-                                <contextHandler
-                                    implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/player.war</war>
-                                    <contextPath>/player</contextPath>
-                                </contextHandler>
                                 <contextHandler
                                     implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/payment.war</war>

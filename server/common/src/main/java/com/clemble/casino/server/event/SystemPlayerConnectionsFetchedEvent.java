@@ -1,6 +1,7 @@
 package com.clemble.casino.server.event;
 
 import com.clemble.casino.player.ConnectionKeyAware;
+import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.social.connect.ConnectionKey;
@@ -10,7 +11,7 @@ import java.util.Collection;
 /**
  * Created by mavarazy on 7/4/14.
  */
-public class SystemPlayerConnectionsFetchedEvent implements SystemEvent, ConnectionKeyAware {
+public class SystemPlayerConnectionsFetchedEvent implements SystemEvent, PlayerAware, ConnectionKeyAware {
 
     final public static String CHANNEL = "player:social:connections:fetched";
 

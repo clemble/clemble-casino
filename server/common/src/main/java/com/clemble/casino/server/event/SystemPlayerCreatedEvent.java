@@ -1,10 +1,11 @@
 package com.clemble.casino.server.event;
 
 import com.clemble.casino.event.PlayerAwareEvent;
+import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerCreatedEvent implements SystemEvent, PlayerAwareEvent {
+public class SystemPlayerCreatedEvent implements SystemEvent, PlayerAware {
 
     /**
      * Generated 07/01/14

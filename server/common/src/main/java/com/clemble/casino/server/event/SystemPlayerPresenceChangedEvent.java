@@ -1,5 +1,6 @@
 package com.clemble.casino.server.event;
 
+import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
