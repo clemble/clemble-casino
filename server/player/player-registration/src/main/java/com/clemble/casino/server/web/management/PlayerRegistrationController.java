@@ -6,6 +6,9 @@ import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_
 import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.server.event.SystemPlayerProfileRegistered;
+import com.clemble.casino.server.event.SystemPlayerSocialGrantRegistered;
+import com.clemble.casino.server.event.SystemPlayerSocialRegistered;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -31,7 +34,6 @@ import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.event.SystemPlayerRegisteredEvent;
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
-import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.web.mapping.WebMapping;
@@ -42,21 +44,18 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     final private PlayerIdGenerator playerIdentifierGenerator;
     final private PlayerTokenFactory playerTokenFactory;
     final private PlayerCredentialRepository playerCredentialRepository;
-    final private ServerProfileRegistrationService playerProfileRegistrationService;
     final private SystemNotificationService notificationService;
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
 
     public PlayerRegistrationController(final PlayerIdGenerator playerIdentifierGenerator,
             final PlayerTokenFactory playerTokenFactory,
-            final ServerProfileRegistrationService playerProfileRegistrationService,
             final PlayerCredentialRepository playerCredentialRepository,
             final ClembleConsumerDetailsService playerIdentityRepository,
             final ClembleCasinoValidationService validationService,
             final SystemNotificationService notificationService) {
         this.playerIdentifierGenerator = checkNotNull(playerIdentifierGenerator);
         this.playerTokenFactory = checkNotNull(playerTokenFactory);
-        this.playerProfileRegistrationService = checkNotNull(playerProfileRegistrationService);
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
         this.consumerDetailsService = checkNotNull(playerIdentityRepository);
         this.validationService = checkNotNull(validationService);
@@ -94,15 +93,20 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         validationService.validate(registrationRequest.getPlayerProfile());
         validationService.validate(registrationRequest.getConsumerDetails());
         // Step 2. Creating appropriate PlayerProfile
-        PlayerProfile savedProfile = registrationRequest.getPlayerProfile();
-        savedProfile.setPlayer(playerIdentifierGenerator.newId());
-        if(savedProfile.getNickName() == null) {
-            String email = registrationRequest.getPlayerCredential().getEmail();
-            savedProfile.setNickName(email.substring(0, email.indexOf("@")));
-        }
-        savedProfile = playerProfileRegistrationService.create(savedProfile);
+        String player = playerIdentifierGenerator.newId();
+//  TODO move to registration service
+//      PlayerProfile savedProfile = registrationRequest.getPlayerProfile();
+//        savedProfile.setPlayer(playerIdentifierGenerator.newId());
+//        if(savedProfile.getNickName() == null) {
+//            String email = registrationRequest.getPlayerCredential().getEmail();
+//            savedProfile.setNickName(email.substring(0, email.indexOf("@")));
+//        }
         // Step 3. Registration done through separate registration service
-        return register(registrationRequest, savedProfile);
+        PlayerToken token = register(registrationRequest, player);
+        // Step 4. Notifying system of new user
+        notificationService.notify(new SystemPlayerProfileRegistered(player, registrationRequest.getPlayerProfile()));
+        // Step 5. All done returning response
+        return token;
     }
 
     @Override
@@ -116,9 +120,13 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         // Step 2. Creating appropriate PlayerProfile
         validationService.validate(socialRegistrationRequest.getSocialConnectionData());
         // Step 3. Registering player with SocialConnection
-        PlayerProfile playerProfile = playerProfileRegistrationService.create(socialRegistrationRequest.getSocialConnectionData());
+        String player = playerIdentifierGenerator.newId();
         // Step 4. Register new user and identity
-        return register(socialRegistrationRequest, playerProfile);
+        PlayerToken token = register(socialRegistrationRequest, player);
+        // Step 5. Notifying system of new user
+        notificationService.notify(new SystemPlayerSocialRegistered(player, socialRegistrationRequest.getSocialConnectionData()));
+        // Step 6. All done continue
+        return token;
     }
 
     @Override
@@ -130,9 +138,13 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         if (playerIdentity != null)
             return playerIdentity;
         // Step 2. Registering player with SocialConnection
-        PlayerProfile playerProfile = playerProfileRegistrationService.create(grantRegistrationRequest.getAccessGrant());
+        String player = playerIdentifierGenerator.newId();
         // Step 3. Register new user and identity
-        return register(grantRegistrationRequest, playerProfile);
+        PlayerToken token = register(grantRegistrationRequest, player);
+        // Step 4. Notify system of new user creation
+        notificationService.notify(new SystemPlayerSocialGrantRegistered(player, grantRegistrationRequest.getAccessGrant()));
+        // Step 5. All done returning user token
+        return token;
     }
 
     private PlayerToken restoreUser(PlayerLoginRequest loginRequest) {
@@ -155,20 +167,18 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         return null;
     }
 
-    public PlayerToken register(final PlayerLoginRequest loginRequest, final PlayerProfile playerProfile) {
+    public PlayerToken register(final PlayerLoginRequest loginRequest, final String player) {
         validationService.validate(loginRequest);
         validationService.validate(loginRequest.getPlayerCredential());
         validationService.validate(loginRequest.getConsumerDetails());
         // Step 1. Create new credentials
-        PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(playerProfile.getPlayer());
+        PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(player);
         playerCredentials = playerCredentialRepository.save(playerCredentials);
         // Step 2. Specifying player type
-        playerProfile.setType(PlayerType.free);
+        // TODO move to registration listener playerProfile.setType(PlayerType.free);
         // Step 3. Create new token
-        PlayerToken playerToken = playerTokenFactory.create(playerProfile.getPlayer(), loginRequest.getConsumerDetails());
-        // Step 4. Sending system notification for registration
-        notificationService.notify(new SystemPlayerRegisteredEvent(playerProfile.getPlayer()));
-        // Step 5. Returning generated player token
+        PlayerToken playerToken = playerTokenFactory.create(player, loginRequest.getConsumerDetails());
+        // Step 4. Returning generated player token
         return playerToken;
     }
 

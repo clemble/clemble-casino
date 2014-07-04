@@ -4,7 +4,7 @@ import com.clemble.casino.event.PlayerAwareEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerRegisteredEvent implements SystemEvent, PlayerAwareEvent {
+abstract public class SystemPlayerRegisteredEvent implements SystemEvent, PlayerAwareEvent {
 
     /**
      * Generated 07/01/14

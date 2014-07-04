@@ -21,13 +21,9 @@ import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;
-import com.clemble.casino.server.player.security.AESPlayerTokenFactory;
-import com.clemble.casino.server.player.security.PlayerTokenFactory;
-import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
-import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 
 @Configuration
@@ -39,23 +35,6 @@ public class ManagementWebSpringConfiguration implements SpringConfiguration {
 
     @Autowired
     public ServerRegistryConfiguration paymentEndpointRegistry;
-
-    @Bean
-    public PlayerTokenFactory playerTokenFactory() throws NoSuchAlgorithmException {
-        return new AESPlayerTokenFactory();
-    }
-
-    @Bean
-    public PlayerRegistrationController playerRegistrationController(
-            @Qualifier("realPlayerProfileRegistrationService") ServerProfileRegistrationService playerProfileRegistrationService,
-            PlayerIdGenerator idGenerator,
-            PlayerCredentialRepository playerCredentialRepository,
-            ClembleConsumerDetailsService clembleConsumerDetailsService,
-            ClembleCasinoValidationService clembleValidationService,
-            SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
-        return new PlayerRegistrationController(idGenerator, playerTokenFactory(), playerProfileRegistrationService, playerCredentialRepository,
-                clembleConsumerDetailsService, clembleValidationService, systemNotificationService);
-    }
 
     @Bean
     public PlayerSessionController playerSessionController(

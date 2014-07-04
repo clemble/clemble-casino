@@ -20,10 +20,11 @@ public class BasicServerProfileRegistrationService implements ServerProfileRegis
     final private PlayerSocialNetworkRepository socialNetworkRepository;
     final private ClembleCasinoValidationService validationService;
 
-    public BasicServerProfileRegistrationService(final ClembleCasinoValidationService validationService,
-                                            final PlayerProfileRepository playerProfileRepository,
-                                            final SocialConnectionDataAdapter socialConnectionDataAdapter,
-                                            final PlayerSocialNetworkRepository socialNetworkRepository) {
+    public BasicServerProfileRegistrationService(
+        final ClembleCasinoValidationService validationService,
+        final PlayerProfileRepository playerProfileRepository,
+        final SocialConnectionDataAdapter socialConnectionDataAdapter,
+        final PlayerSocialNetworkRepository socialNetworkRepository) {
         this.validationService = checkNotNull(validationService);
         this.playerProfileRepository = checkNotNull(playerProfileRepository);
         this.socialConnectionDataAdapter = checkNotNull(socialConnectionDataAdapter);

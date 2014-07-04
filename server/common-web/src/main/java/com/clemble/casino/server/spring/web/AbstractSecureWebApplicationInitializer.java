@@ -11,7 +11,6 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.clemble.casino.server.security.ClembleCouchbaseConsumerDetailsService;
 import com.clemble.casino.server.security.ClembleOAuthProviderTokenServices;
 import com.clemble.casino.server.security.ClembleSecuritySignatureFilter;
 import com.google.common.collect.ImmutableMap;
@@ -31,7 +30,7 @@ abstract public class AbstractSecureWebApplicationInitializer implements WebAppl
         rootContext.register(configurationClass, OAuthSpringConfiguration.class);
         rootContext.refresh();
 
-        ConsumerDetailsService consumerDetailsService = rootContext.getBean(ClembleCouchbaseConsumerDetailsService.class);
+        ConsumerDetailsService consumerDetailsService = rootContext.getBean(ConsumerDetailsService.class);
         OAuthProviderTokenServices oAuthProviderTokenServices = rootContext.getBean(ClembleOAuthProviderTokenServices.class);
         container.addFilter("clemble", new ClembleSecuritySignatureFilter(oAuthProviderTokenServices, consumerDetailsService));
 

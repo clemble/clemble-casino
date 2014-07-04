@@ -13,6 +13,8 @@
         <module>player-management</module>
         <module>player-social</module>
         <module>player-web</module>
+        <module>player-profile</module>
+        <module>player-registration</module>
     </modules>
     <dependencyManagement>
         <dependencies>

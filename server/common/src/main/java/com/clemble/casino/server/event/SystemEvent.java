@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(name = SystemPlayerPresenceChangedEvent.CHANNEL, value = SystemPlayerPresenceChangedEvent.class),
         @JsonSubTypes.Type(name = SystemPlayerSocialAddedEvent.CHANNEL, value = SystemPlayerSocialAddedEvent.class),
         @JsonSubTypes.Type(name = SystemPlayerDiscoveredConnectionEvent.CHANNEL, value = SystemPlayerDiscoveredConnectionEvent.class),
-        @JsonSubTypes.Type(name = SystemPlayerRegisteredEvent.CHANNEL, value = SystemPlayerRegisteredEvent.class)
+        @JsonSubTypes.Type(name = SystemPlayerRegisteredEvent.CHANNEL, value = SystemPlayerProfileRegistered.class),
+        @JsonSubTypes.Type(name = SystemPlayerRegisteredEvent.CHANNEL + ":social:grant", value = SystemPlayerSocialGrantRegistered.class),
+        @JsonSubTypes.Type(name = SystemPlayerRegisteredEvent.CHANNEL + ":social", value = SystemPlayerSocialRegistered.class)
 })
 public interface SystemEvent extends Event {
 
