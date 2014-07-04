@@ -6,22 +6,19 @@ import com.clemble.casino.server.configuration.SimpleNotificationConfigurationSe
 import com.clemble.casino.server.configuration.SimpleResourceLocationService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.*;
+import com.clemble.casino.server.player.presence.listener.PlayerPresenceGameEndedListener;
+import com.clemble.casino.server.player.presence.listener.PlayerPresenceGameStartedEventListener;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
-import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.mongodb.MongoClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.player.PlayerPresenceController;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -42,10 +39,23 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public PlayerPresenceGameEndedListener playerPresenceGameEndedListener(ServerPlayerPresenceService presenceService, SystemNotificationServiceListener notificationServiceListener) {
+        PlayerPresenceGameEndedListener networkCreationService = new PlayerPresenceGameEndedListener(presenceService);
+        notificationServiceListener.subscribe(networkCreationService);
+        return networkCreationService;
+    }
+
+    @Bean
+    public PlayerPresenceGameStartedEventListener playerPresenceGameStartedListener(ServerPlayerPresenceService presenceService, SystemNotificationServiceListener notificationServiceListener) {
+        PlayerPresenceGameStartedEventListener networkCreationService = new PlayerPresenceGameStartedEventListener(presenceService);
+        notificationServiceListener.subscribe(networkCreationService);
+        return networkCreationService;
+    }
+
+    @Bean
     public PlayerSessionRepository playerSessionRepository(MongoRepositoryFactory repositoryFactory) {
         return repositoryFactory.getRepository(PlayerSessionRepository.class);
     }
-
 
     @Bean
     public PlayerPresenceController playerPresenceController(ServerPlayerPresenceService playerPresenceServerService) {
@@ -58,17 +68,17 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean(destroyMethod = "close")
-    public PlayerPresenceCleaner playerPresenceCleaner(JedisPool jedisPool, ServerPlayerPresenceService presenceService) {
-        return new JedisPlayerPresenceCleaner(jedisPool, presenceService);
+    public PlayerPresenceCleaner playerPresenceCleaner(JedisPool jedisPool, SystemNotificationService notificationService) {
+        return new JedisPlayerPresenceCleaner(jedisPool, notificationService);
     }
-
 
     @Bean
     public PlayerSessionController playerSessionController(
             ResourceLocationService resourceLocationService,
             PlayerSessionRepository playerSessionRepository,
-            ServerPlayerPresenceService playerStateManager) {
-        return new PlayerSessionController(resourceLocationService, playerSessionRepository, playerStateManager);
+            ServerPlayerPresenceService playerStateManager,
+            SystemNotificationService notificationService) {
+        return new PlayerSessionController(resourceLocationService, playerSessionRepository, playerStateManager, notificationService);
     }
 
     @Bean

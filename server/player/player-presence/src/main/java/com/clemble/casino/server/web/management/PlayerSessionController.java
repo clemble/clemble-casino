@@ -3,6 +3,9 @@ package com.clemble.casino.server.web.management;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.ExternalController;
+import com.clemble.casino.server.event.SystemPlayerLeftEvent;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,15 +27,20 @@ import com.clemble.casino.web.mapping.WebMapping;
 @Controller
 public class PlayerSessionController implements PlayerSessionService, ExternalController {
 
-    final private ResourceLocationService resourceLocationService;
     final private PlayerSessionRepository sessionRepository;
+    final private SystemNotificationService notificationService;
+    final private ResourceLocationService resourceLocationService;
     final private ServerPlayerPresenceService playerPresenceService;
 
-    public PlayerSessionController(final ResourceLocationService resourceLocationService, final PlayerSessionRepository sessionRepository,
-            final ServerPlayerPresenceService playerPresenceService) {
+    public PlayerSessionController(
+        final ResourceLocationService resourceLocationService,
+        final PlayerSessionRepository sessionRepository,
+        final ServerPlayerPresenceService playerPresenceService,
+        final SystemNotificationService notificationService) {
         this.resourceLocationService = checkNotNull(resourceLocationService);
         this.sessionRepository = checkNotNull(sessionRepository);
         this.playerPresenceService = checkNotNull(playerPresenceService);
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -78,9 +86,9 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
         if (playerSession.expired())
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed);
         // Step 2. Notifying all listeners of the state change
-        playerPresenceService.markOffline(player);
+        notificationService.notify(new SystemPlayerLeftEvent(player));
         // Step 3. Marking player state as ended
-        playerSession.markExpired();
+        playerSession.markExpired();// TODO generalize session handling
         // Step 4. Saving marked session
         sessionRepository.save(playerSession);
     }

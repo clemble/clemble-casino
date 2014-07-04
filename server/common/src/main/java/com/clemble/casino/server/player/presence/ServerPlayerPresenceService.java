@@ -24,8 +24,6 @@ public interface ServerPlayerPresenceService extends ServerService {
 
     public void markOffline(String player);
 
-    public void markOffline(Collection<String> player);
-
     public boolean markPlaying(String player, GameSessionKey session);
 
     public boolean markPlaying(Collection<String> players, GameSessionKey sessionKey);

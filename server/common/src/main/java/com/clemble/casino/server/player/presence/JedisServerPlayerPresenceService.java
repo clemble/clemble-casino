@@ -129,12 +129,6 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     }
 
     @Override
-    public void markOffline(Collection<String> players) {
-        for(String player: players)
-            markOffline(player);
-    }
-
-    @Override
     public void markOffline(String player) {
         Jedis jedis = jedisPool.getResource();
         try {
@@ -145,8 +139,6 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
         }
         // Step 2. Notifying listeners of state change
         notifyStateChange(PlayerPresence.offline(player));
-        // Step 3. Notifying player left event
-        systemNotificationService.notify(new SystemPlayerLeftEvent(player));
     }
 
     @Override

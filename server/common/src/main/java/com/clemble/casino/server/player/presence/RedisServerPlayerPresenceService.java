@@ -131,12 +131,6 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     }
 
     @Override
-    public void markOffline(Collection<String> players) {
-        for(String player: players)
-            markOffline(player);
-    }
-
-    @Override
     public void markOffline(String player) {
         // Step 1. Removing associated key from the list
         redisTemplate.delete(player);
