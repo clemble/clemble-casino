@@ -2,7 +2,12 @@ package com.clemble.casino.server.spring.social;
 
 import javax.sql.DataSource;
 
+import com.clemble.casino.error.ClembleCasinoValidationService;
+import com.clemble.casino.server.player.registration.ServerProfileSocialRegistrationService;
+import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
+import com.clemble.casino.server.spring.web.PlayerTokenSpringConfiguration;
+import com.clemble.casino.server.web.player.PlayerSocialRegistrationController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,9 +34,10 @@ import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
 import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
+import scala.beans.BeanProperty;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class })
+@Import(value = { CommonSpringConfiguration.class, PlayerTokenSpringConfiguration.class})
 public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -103,6 +109,28 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     public ConnectionSignUp connectionSignUp(SocialConnectionAdapterRegistry socialAdapterRegistry) {
         ConnectionSignUp signUp = new SocialProfileConnectionSignUp(socialAdapterRegistry);
         return signUp;
+    }
+
+    @Bean
+    public ServerProfileSocialRegistrationService serverProfileSocialRegistrationService(
+        final ClembleCasinoValidationService validationService,
+        final SocialConnectionAdapterRegistry socialAdapterRegistry,
+        final SystemNotificationService notificationService,
+        final SocialConnectionDataAdapter socialConnectionDataAdapter) {
+        return new ServerProfileSocialRegistrationService(validationService, socialAdapterRegistry, notificationService, socialConnectionDataAdapter);
+    }
+
+    @Bean
+    public PlayerSocialRegistrationController playerSocialRegistrationController(
+        final PlayerTokenFactory playerTokenFactory,
+        final ServerProfileSocialRegistrationService registrationService,
+        final ClembleCasinoValidationService validationService,
+        final SystemNotificationService notificationService) {
+        return new PlayerSocialRegistrationController(
+            playerTokenFactory,
+            registrationService,
+            validationService,
+            notificationService);
     }
 
     @Bean

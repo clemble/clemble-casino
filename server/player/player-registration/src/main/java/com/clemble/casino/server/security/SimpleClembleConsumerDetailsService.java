@@ -11,7 +11,6 @@ public class SimpleClembleConsumerDetailsService implements ClembleConsumerDetai
 
     final private HashMap<String, ClembleConsumerDetails> consumerKeyToDetails = new HashMap<>();
 
-
     @Override
     public ClembleConsumerDetails loadConsumerByConsumerKey(String consumerKey) {
         return consumerKeyToDetails.get(consumerKey);

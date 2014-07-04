@@ -4,7 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
+import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.player.service.PlayerRegistrationService;
+import com.clemble.casino.player.service.PlayerSocialRegistrationService;
+import com.clemble.casino.player.web.PlayerLoginRequest;
+import com.clemble.casino.player.web.PlayerRegistrationRequest;
+import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
+import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
+import com.clemble.casino.server.spring.player.PlayerConnectionSpringConfiguration;
+import com.clemble.casino.server.spring.player.PlayerProfileSpringConfiguration;
+import com.clemble.casino.server.spring.social.PlayerSocialSpringConfiguration;
+import com.clemble.casino.server.spring.web.management.RegistrationSpringConfiguration;
+import com.clemble.casino.server.spring.web.player.PlayerPresenceSpringConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +54,11 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
     @Configuration
     @Profile(DEFAULT)
     @Import({
+        RegistrationSpringConfiguration.class,
+        PlayerPresenceSpringConfiguration.class,
+        PlayerConnectionSpringConfiguration.class,
+        PlayerProfileSpringConfiguration.class,
+        PlayerSocialSpringConfiguration.class,
         PaymentWebSpringConfiguration.class,
         IntegrationGameWebSpringConfiguration.class })
     public static class LocalTestConfiguration {
@@ -49,6 +66,33 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         @Bean
         public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionController paymentTransactionController) {
             return new WebPaymentTransactionOperations(paymentTransactionController);
+        }
+
+        @Bean
+        public PlayerFacadeRegistrationService playerFacadeRegistrationService(final PlayerRegistrationService registrationService, final PlayerSocialRegistrationService socialRegistrationService) {
+            return new PlayerFacadeRegistrationService() {
+
+                @Override
+                public PlayerToken login(PlayerLoginRequest loginRequest) {
+                    return registrationService.login(loginRequest);
+                }
+
+                @Override
+                public PlayerToken createPlayer(PlayerRegistrationRequest registrationRequest) {
+                    return registrationService.createPlayer(registrationRequest);
+                }
+
+                @Override
+                public PlayerToken createSocialPlayer(PlayerSocialRegistrationRequest socialRegistrationRequest) {
+                    return socialRegistrationService.createSocialPlayer(socialRegistrationRequest);
+                }
+
+                @Override
+                public PlayerToken createSocialGrantPlayer(PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
+                    return socialRegistrationService.createSocialGrantPlayer(grantRegistrationRequest);
+                }
+
+            };
         }
 
     }

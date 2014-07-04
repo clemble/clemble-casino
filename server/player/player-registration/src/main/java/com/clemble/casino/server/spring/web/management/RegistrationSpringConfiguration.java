@@ -1,6 +1,7 @@
 package com.clemble.casino.server.spring.web.management;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
+import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.UUIDPlayerIdGenerator;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
@@ -8,10 +9,12 @@ import com.clemble.casino.server.player.security.AESPlayerTokenFactory;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
+import com.clemble.casino.server.security.SimpleClembleConsumerDetailsService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
+import com.clemble.casino.server.spring.web.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +32,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by mavarazy on 7/4/14.
  */
 @Configuration
-@Import({CommonSpringConfiguration.class, OAuthSpringConfiguration.class})
+@Import({CommonSpringConfiguration.class, OAuthSpringConfiguration.class, PlayerTokenSpringConfiguration.class})
 public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -50,8 +53,8 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerTokenFactory playerTokenFactory() throws NoSuchAlgorithmException {
-        return new AESPlayerTokenFactory();
+    public ClembleConsumerDetailsService clembleConsumerDetailsService() {
+        return new SimpleClembleConsumerDetailsService();
     }
 
     @Bean
@@ -60,8 +63,9 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,
             ClembleCasinoValidationService clembleValidationService,
+            PlayerTokenFactory playerTokenFactory,
             SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
-        return new PlayerRegistrationController(idGenerator, playerTokenFactory(), playerCredentialRepository,
+        return new PlayerRegistrationController(idGenerator, playerTokenFactory, playerCredentialRepository,
                 clembleConsumerDetailsService, clembleValidationService, systemNotificationService);
     }
 }
