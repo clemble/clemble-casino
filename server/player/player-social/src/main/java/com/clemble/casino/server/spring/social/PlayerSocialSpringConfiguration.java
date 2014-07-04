@@ -24,7 +24,6 @@ import com.clemble.casino.server.player.presence.SystemNotificationServiceListen
 import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.social.SocialNetworkPopulatorEventListener;
-import com.clemble.casino.server.social.SocialPlayerDiscoveredConnectionEventListener;
 import com.clemble.casino.server.social.SocialProfileConnectionSignUp;
 import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
@@ -98,13 +97,6 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     @Bean
     public SocialConnectionAdapterRegistry socialAdapterRegistry() {
         return new SocialConnectionAdapterRegistry();
-    }
-
-    @Bean
-    public SocialPlayerDiscoveredConnectionEventListener discoveryNotifier(@Qualifier("playerNotificationService") PlayerNotificationService notificationService, SystemNotificationServiceListener systemListener){
-        SocialPlayerDiscoveredConnectionEventListener discoveryNotifier = new SocialPlayerDiscoveredConnectionEventListener(notificationService);
-        systemListener.subscribe(discoveryNotifier);
-        return discoveryNotifier;
     }
 
     @Bean

@@ -9,6 +9,7 @@ import com.clemble.casino.server.player.connection.listener.PlayerSocialNetworkC
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.web.player.PlayerConnectionController;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
 
 import com.clemble.casino.server.spring.common.BasicNeo4JSpringConfiguration;
@@ -36,7 +37,9 @@ public class PlayerConnectionSpringConfiguration extends BasicNeo4JSpringConfigu
     }
 
     @Bean
-    public PlayerDiscoveryNotifierEventListener playerDiscoveryNotifierEventListener(PlayerNotificationService notificationService, SystemNotificationServiceListener notificationServiceListener) {
+    public PlayerDiscoveryNotifierEventListener playerDiscoveryNotifierEventListener(
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        SystemNotificationServiceListener notificationServiceListener) {
         PlayerDiscoveryNotifierEventListener discoveryNotifierEventListener = new PlayerDiscoveryNotifierEventListener(notificationService);
         notificationServiceListener.subscribe(discoveryNotifierEventListener);
         return discoveryNotifierEventListener;
