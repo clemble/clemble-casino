@@ -74,7 +74,8 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
                     notificationService.notify(initiation.getParticipants(), new GameInitiationCanceledEvent(sessionKey, initiation, confirmations));
                     Collection<String> offlinePlayers = initiation.getParticipants();
                     offlinePlayers.removeAll(confirmations);
-                    presenceService.markOffline(offlinePlayers);
+                    for(String offlinePlayer: offlinePlayers)
+                        presenceService.markOffline(offlinePlayer);
                 }
             }
         }, CANCEL_TIMEOUT_SECONDS, TimeUnit.SECONDS);

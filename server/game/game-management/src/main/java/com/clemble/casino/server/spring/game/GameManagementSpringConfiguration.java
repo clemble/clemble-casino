@@ -13,6 +13,7 @@ import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFac
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
 import com.clemble.casino.server.repository.game.*;
+import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,8 +47,11 @@ import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, GameNeo4jSpringConfiguration.class, GameJPASpringConfiguration.class,
-        PaymentCommonSpringConfiguration.class})
+@Import(value = { CommonSpringConfiguration.class,
+    PresenceServiceSpringConfiguration.class,
+    GameNeo4jSpringConfiguration.class,
+    GameJPASpringConfiguration.class,
+    PaymentCommonSpringConfiguration.class})
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean

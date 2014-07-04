@@ -10,6 +10,7 @@ import com.clemble.casino.server.player.presence.listener.PlayerPresenceGameEnde
 import com.clemble.casino.server.player.presence.listener.PlayerPresenceGameStartedEventListener;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
+import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.mongodb.MongoClient;
@@ -28,7 +29,7 @@ import redis.clients.jedis.JedisPool;
 import java.net.UnknownHostException;
 
 @Configuration
-@Import(value = {CommonSpringConfiguration.class, RedisSpringConfiguration.class})
+@Import(value = {CommonSpringConfiguration.class, PresenceServiceSpringConfiguration.class})
 public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -62,14 +63,9 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
         return new PlayerPresenceController(playerPresenceServerService);
     }
 
-    @Bean
-    public ServerPlayerPresenceService playerPresenceServerService(JedisPool jedisPool, PlayerNotificationService playerPresenceNotificationService, SystemNotificationService systemNotificationService) {
-        return new JedisServerPlayerPresenceService(jedisPool, playerPresenceNotificationService, systemNotificationService);
-    }
-
     @Bean(destroyMethod = "close")
-    public PlayerPresenceCleaner playerPresenceCleaner(JedisPool jedisPool, SystemNotificationService notificationService) {
-        return new JedisPlayerPresenceCleaner(jedisPool, notificationService);
+    public PlayerPresenceCleaner playerPresenceCleaner(JedisPool jedisPool, ServerPlayerPresenceService playerPresenceService) {
+        return new JedisPlayerPresenceCleaner(jedisPool, playerPresenceService);
     }
 
     @Bean

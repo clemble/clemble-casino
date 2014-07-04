@@ -26,12 +26,11 @@ import com.clemble.casino.server.player.presence.SystemNotificationServiceListen
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.common.PlayerPresenceSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import redis.clients.jedis.JedisPool;
 
 @Configuration
-@Import({ CommonSpringConfiguration.class, PaymentJPASpringConfiguration.class, PlayerPresenceSpringConfiguration.class, RedisSpringConfiguration.class})
+@Import({ CommonSpringConfiguration.class, PaymentJPASpringConfiguration.class, RedisSpringConfiguration.class})
 public class PaymentManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
