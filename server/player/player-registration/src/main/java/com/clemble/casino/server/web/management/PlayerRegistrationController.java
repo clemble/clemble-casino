@@ -38,6 +38,7 @@ import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
 public class PlayerRegistrationController implements PlayerRegistrationService, ExternalController {
+    // !!!TODO need a safe restoration process for all Registrations not only for login!!!
 
     final private PlayerIdGenerator playerIdentifierGenerator;
     final private PlayerTokenFactory playerTokenFactory;

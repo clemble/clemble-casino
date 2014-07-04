@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@Import({ PlayerPresenceSpringConfiguration.class, RabbitSpringConfiguration.class })
+@Import({ RabbitSpringConfiguration.class })
 public class SystemNotificationSpringConfiguration implements SpringConfiguration {
 
     @Bean

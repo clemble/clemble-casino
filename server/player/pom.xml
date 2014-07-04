@@ -16,6 +16,7 @@
         <module>player-profile</module>
         <module>player-registration</module>
         <module>player-connection</module>
+        <module>player-presence</module>
     </modules>
     <dependencyManagement>
         <dependencies>

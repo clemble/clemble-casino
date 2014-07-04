@@ -5,6 +5,7 @@ import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.server.ServerService;
 
+@Deprecated
 public interface ServerProfileRegistrationService extends ServerService {
 
     public PlayerProfile create(final PlayerProfile playerProfile);

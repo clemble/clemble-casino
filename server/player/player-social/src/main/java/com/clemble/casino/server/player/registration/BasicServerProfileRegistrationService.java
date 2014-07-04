@@ -13,6 +13,7 @@ import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 
+@Deprecated
 public class BasicServerProfileRegistrationService implements ServerProfileRegistrationService {
 
     final private PlayerProfileRepository playerProfileRepository;

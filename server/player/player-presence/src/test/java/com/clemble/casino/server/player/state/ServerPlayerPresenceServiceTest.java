@@ -15,6 +15,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.clemble.casino.server.spring.web.player.PlayerPresenceSpringConfiguration;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,12 +34,11 @@ import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
-import com.clemble.casino.server.spring.player.PlayerCommonSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { PlayerCommonSpringConfiguration.class })
+@ContextConfiguration(classes = { PlayerPresenceSpringConfiguration.class })
 public class ServerPlayerPresenceServiceTest {
 
     final private Logger LOG = LoggerFactory.getLogger(ServerPlayerPresenceServiceTest.class);
