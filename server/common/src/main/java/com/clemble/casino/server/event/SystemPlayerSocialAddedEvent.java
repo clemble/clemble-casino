@@ -15,7 +15,7 @@ public class SystemPlayerSocialAddedEvent implements PlayerAware, SystemEvent {
      */
     private static final long serialVersionUID = 5081512807506108684L;
     
-    final public static String CHANNEL = "socialRegistered";
+    final public static String CHANNEL = "social:added";
 
     final private String player;
     final private ConnectionKey connection;
@@ -73,7 +73,7 @@ public class SystemPlayerSocialAddedEvent implements PlayerAware, SystemEvent {
 
     @Override
     public String toString() {
-        return "sys:social:added:" + player + ":" + connection;
+        return "sys:" + player + ":" + CHANNEL;
     }
 
 }

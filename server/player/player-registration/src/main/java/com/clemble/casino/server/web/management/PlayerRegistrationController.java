@@ -22,7 +22,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.PlayerType;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerRegistrationService;
@@ -31,7 +30,6 @@ import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.event.SystemPlayerRegisteredEvent;
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
@@ -94,17 +92,17 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         validationService.validate(registrationRequest.getConsumerDetails());
         // Step 2. Creating appropriate PlayerProfile
         String player = playerIdentifierGenerator.newId();
-//  TODO move to registration service
-//      PlayerProfile savedProfile = registrationRequest.getPlayerProfile();
-//        savedProfile.setPlayer(playerIdentifierGenerator.newId());
-//        if(savedProfile.getNickName() == null) {
-//            String email = registrationRequest.getPlayerCredential().getEmail();
-//            savedProfile.setNickName(email.substring(0, email.indexOf("@")));
-//        }
+        // Step 3. Adding initial fields to PlayerProfile
+        PlayerProfile normalizedProfile = registrationRequest.getPlayerProfile();
+        normalizedProfile.setPlayer(player);
+        if(normalizedProfile.getNickName() == null) {
+            String email = registrationRequest.getPlayerCredential().getEmail();
+            normalizedProfile.setNickName(email.substring(0, email.indexOf("@")));
+        }
         // Step 3. Registration done through separate registration service
         PlayerToken token = register(registrationRequest, player);
         // Step 4. Notifying system of new user
-        notificationService.notify(new SystemPlayerProfileRegistered(player, registrationRequest.getPlayerProfile()));
+        notificationService.notify(new SystemPlayerProfileRegistered(player, normalizedProfile));
         // Step 5. All done returning response
         return token;
     }

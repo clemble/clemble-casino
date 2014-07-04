@@ -1,25 +1,26 @@
 package com.clemble.casino.server.event;
 
-import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.event.PlayerAwareEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerEnteredEvent implements SystemEvent {
+public class SystemPlayerCreatedEvent implements SystemEvent, PlayerAwareEvent {
 
     /**
-     * Generated 13/12/13
+     * Generated 07/01/14
      */
-    private static final long serialVersionUID = -2179848922729269755L;
+    private static final long serialVersionUID = 7637036341950271549L;
 
-    final public static String CHANNEL = "entered";
+    final public static String CHANNEL = "created";
 
     final private String player;
 
     @JsonCreator
-    public SystemPlayerEnteredEvent(@JsonProperty("player") String player) {
+    public SystemPlayerCreatedEvent(@JsonProperty("player") String player) {
         this.player = player;
     }
 
+    @Override
     public String getPlayer() {
         return player;
     }
@@ -27,11 +28,6 @@ public class SystemPlayerEnteredEvent implements SystemEvent {
     @Override
     public String getChannel() {
         return CHANNEL;
-    }
-
-    @Override
-    public String toString() {
-        return "sys:" + player + ":" + CHANNEL;
     }
 
     @Override
@@ -50,13 +46,18 @@ public class SystemPlayerEnteredEvent implements SystemEvent {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SystemPlayerEnteredEvent other = (SystemPlayerEnteredEvent) obj;
+        SystemPlayerCreatedEvent other = (SystemPlayerCreatedEvent) obj;
         if (player == null) {
             if (other.player != null)
                 return false;
         } else if (!player.equals(other.player))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "sys:" + player + ":" + CHANNEL;
     }
 
 }

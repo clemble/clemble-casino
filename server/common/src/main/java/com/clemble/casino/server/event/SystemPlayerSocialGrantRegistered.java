@@ -9,20 +9,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Created by mavarazy on 7/4/14.
  */
 public class SystemPlayerSocialGrantRegistered
-    extends SystemPlayerRegisteredEvent
-    implements SocialAccessGrantAware {
+    implements SocialAccessGrantAware,
+        SystemPlayerRegisteredEvent {
 
+    final public static String CHANNEL = "registered:social:grant";
+
+    final private String player;
     final private SocialAccessGrant socialGrant;
 
     @JsonCreator
     public SystemPlayerSocialGrantRegistered(@JsonProperty("player") String player, @JsonProperty("accessGrant") SocialAccessGrant socialGrant) {
-        super(player);
+        this.player = player;
         this.socialGrant = socialGrant;
     }
 
     @Override
     public SocialAccessGrant getAccessGrant() {
         return socialGrant;
+    }
+
+    @Override
+    public String getPlayer() {
+        return player;
+    }
+
+    @Override
+    public String getChannel() {
+        return CHANNEL;
     }
 
     @Override
@@ -47,7 +60,6 @@ public class SystemPlayerSocialGrantRegistered
 
     @Override
     public String toString() {
-        return super.toString() + ":social:grant";
+        return "sys:" + player + ":" + CHANNEL;
     }
-
 }

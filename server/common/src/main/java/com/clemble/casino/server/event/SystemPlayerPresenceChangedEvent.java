@@ -69,7 +69,7 @@ public class SystemPlayerPresenceChangedEvent implements SystemEvent, PlayerAwar
 
     @Override
     public String toString() {
-        return "sys:presence:" + player + ":" + presence;
+        return "sys:" + player + ":" + CHANNEL + ":" + presence;
     }
 
 }

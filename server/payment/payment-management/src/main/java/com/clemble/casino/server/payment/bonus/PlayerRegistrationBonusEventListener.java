@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.event.SystemPlayerRegisteredEvent;
+import com.clemble.casino.server.event.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.payment.BonusPaymentTransaction;
 
-public class PlayerRegistrationBonusEventListener implements BonusEventListener<SystemPlayerRegisteredEvent> {
+public class PlayerRegistrationBonusEventListener implements BonusEventListener<SystemPlayerCreatedEvent> {
     
     final private Logger LOG = LoggerFactory.getLogger(PlayerRegistrationBonusEventListener.class);
 
@@ -26,7 +26,7 @@ public class PlayerRegistrationBonusEventListener implements BonusEventListener<
     }
 
     @Override
-    public void onEvent(SystemPlayerRegisteredEvent event) {
+    public void onEvent(SystemPlayerCreatedEvent event) {
         LOG.debug("processing {} event", event);
         // Step 1. Sanity check
         if (event == null)
@@ -42,7 +42,7 @@ public class PlayerRegistrationBonusEventListener implements BonusEventListener<
 
     @Override
     public String getChannel(){
-        return SystemPlayerRegisteredEvent.CHANNEL;
+        return SystemPlayerCreatedEvent.CHANNEL;
     }
 
     @Override

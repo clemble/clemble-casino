@@ -2,12 +2,12 @@ package com.clemble.casino.server.game.construction.availability;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.server.event.SystemPlayerRegisteredEvent;
+import com.clemble.casino.server.event.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.game.pending.PendingPlayer;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.repository.game.PendingPlayerRepository;
 
-public class PendingPlayerCreationEventListener implements SystemEventListener<SystemPlayerRegisteredEvent> {
+public class PendingPlayerCreationEventListener implements SystemEventListener<SystemPlayerCreatedEvent> {
 
     final private PendingPlayerRepository playerRepository;
 
@@ -16,14 +16,14 @@ public class PendingPlayerCreationEventListener implements SystemEventListener<S
     }
 
     @Override
-    public void onEvent(SystemPlayerRegisteredEvent event) {
+    public void onEvent(SystemPlayerCreatedEvent event) {
         // TODO add fault tolerance processing
         playerRepository.save(new PendingPlayer(event.getPlayer()));
     }
 
     @Override
     public String getChannel() {
-        return SystemPlayerRegisteredEvent.CHANNEL;
+        return SystemPlayerCreatedEvent.CHANNEL;
     }
 
     @Override

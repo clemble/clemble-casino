@@ -69,7 +69,7 @@ public class SystemPlayerDiscoveredConnectionEvent implements PlayerAware, Syste
 
     @Override
     public String toString() {
-        return "sys:discovered:" + player + ":" + discovered;
+        return "sys:" + player + ":" + CHANNEL + ":" + discovered;
     }
 
 }
