@@ -4,7 +4,6 @@ import java.security.NoSuchAlgorithmException;
 
 import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
 import com.clemble.casino.server.configuration.SimpleResourceLocationService;
-import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.configuration.ResourceLocationService;
 import com.clemble.casino.configuration.ServerRegistryConfiguration;
 import com.clemble.casino.error.ClembleCasinoValidationService;
-import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.player.registration.ServerProfileRegistrationService;

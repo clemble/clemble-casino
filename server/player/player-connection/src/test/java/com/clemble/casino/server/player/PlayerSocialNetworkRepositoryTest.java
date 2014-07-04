@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import com.clemble.casino.server.player.social.PlayerConnectionKey;
 import com.clemble.casino.server.player.social.PlayerSocialNetwork;
+import com.clemble.casino.server.spring.player.PlayerConnectionSpringConfiguration;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.player.PlayerManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.TEST)
-@ContextConfiguration(classes = PlayerManagementSpringConfiguration.class)
+@ContextConfiguration(classes = PlayerConnectionSpringConfiguration.class)
 public class PlayerSocialNetworkRepositoryTest {
 
     @Autowired
@@ -42,7 +43,7 @@ public class PlayerSocialNetworkRepositoryTest {
         assertNotNull(A.getId());
         // Step 3. Looking up relations
         PlayerSocialNetwork found = relationsRepository.findByPropertyValue("player", A.getPlayer());
-        assertEquals(found, A);
+        Assert.assertEquals(found, A);
     }
 
     @Test
@@ -57,7 +58,7 @@ public class PlayerSocialNetworkRepositoryTest {
         assertNotNull(relations.getId());
         // Step 3. Looking up relations
         PlayerSocialNetwork found = relationsRepository.findByPropertyValue("player", relations.getPlayer());
-        assertEquals(found, relations);
+        Assert.assertEquals(found, relations);
     }
 
     @Test
@@ -77,7 +78,7 @@ public class PlayerSocialNetworkRepositoryTest {
         assertNull(relations2.getId());
         relations2 = relationsRepository.save(relations2);
         assertNotNull(relations2.getId());
-        assertEquals(relations2.getOwns().iterator().next().getId(), relations.getOwns().iterator().next().getId());
+        Assert.assertEquals(relations2.getOwns().iterator().next().getId(), relations.getOwns().iterator().next().getId());
     }
 
     @Test
@@ -103,10 +104,10 @@ public class PlayerSocialNetworkRepositoryTest {
         // Step 4. Checking autodiscovery worked
         Iterator<PlayerSocialNetwork> iterator = relationsRepository.findRelations("B").iterator();
         assertTrue(iterator.hasNext());
-        assertEquals(iterator.next(), A);
+        Assert.assertEquals(iterator.next(), A);
         iterator = relationsRepository.findRelations("A").iterator();
         assertTrue(iterator.hasNext());
-        assertEquals(iterator.next(), B);
+        Assert.assertEquals(iterator.next(), B);
     }
     
 }

@@ -15,6 +15,7 @@
         <module>player-web</module>
         <module>player-profile</module>
         <module>player-registration</module>
+        <module>player-connection</module>
     </modules>
     <dependencyManagement>
         <dependencies>

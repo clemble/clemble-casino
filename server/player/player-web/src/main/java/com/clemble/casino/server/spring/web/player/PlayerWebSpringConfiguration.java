@@ -11,12 +11,10 @@ import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
-import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.social.PlayerSocialSpringConfiguration;
 import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
-import com.clemble.casino.server.web.player.PlayerConnectionController;
 import com.clemble.casino.server.web.player.PlayerPresenceController;
 
 @Configuration
@@ -30,11 +28,6 @@ public class PlayerWebSpringConfiguration implements SpringConfiguration {
     @Bean
     public PlayerPresenceController playerPresenceController(ServerPlayerPresenceService playerPresenceServerService) {
         return new PlayerPresenceController(playerPresenceServerService);
-    }
-
-    @Bean
-    public PlayerConnectionController playerConnectionController(PlayerSocialNetworkRepository socialNetworkRepository) {
-        return new PlayerConnectionController(socialNetworkRepository);
     }
 
 }
