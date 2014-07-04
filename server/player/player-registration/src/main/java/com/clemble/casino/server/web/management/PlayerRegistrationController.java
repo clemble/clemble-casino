@@ -2,13 +2,10 @@ package com.clemble.casino.server.web.management;
 
 import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN;
 import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION;
-import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL;
-import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.server.event.SystemPlayerProfileRegistered;
-import com.clemble.casino.server.event.SystemPlayerSocialGrantRegistered;
-import com.clemble.casino.server.event.SystemPlayerSocialRegistered;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -24,11 +21,8 @@ import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerToken;
-import com.clemble.casino.player.service.PlayerRegistrationService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
-import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
-import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
@@ -94,55 +88,22 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         // Step 2. Creating appropriate PlayerProfile
         String player = playerIdentifierGenerator.newId();
         // Step 3. Adding initial fields to PlayerProfile
+        if (registrationRequest.getPlayerProfile() == null)
+            throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileInvalid);
+        if (registrationRequest.getPlayerProfile().getSocialConnections() != null && !registrationRequest.getPlayerProfile().getSocialConnections().isEmpty())
+            throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileSocialMustBeEmpty);
         PlayerProfile normalizedProfile = registrationRequest.getPlayerProfile();
         normalizedProfile.setPlayer(player);
         if(normalizedProfile.getNickName() == null) {
             String email = registrationRequest.getPlayerCredential().getEmail();
             normalizedProfile.setNickName(email.substring(0, email.indexOf("@")));
         }
-        // Step 3. Registration done through separate registration service
+        validationService.validate(normalizedProfile);
+        // Step 4. Registration done through separate registration service
         PlayerToken token = register(registrationRequest, player);
-        // Step 4. Notifying system of new user
-        notificationService.notify(new SystemPlayerProfileRegistered(player, normalizedProfile));
-        // Step 5. All done returning response
-        return token;
-    }
-
-    @Override
-    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PlayerToken createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
-        // Step 1. Checking if this user already exists
-        PlayerToken playerIdentity = restoreUser(socialRegistrationRequest);
-        if (playerIdentity != null)
-            return playerIdentity;
-        // Step 2. Creating appropriate PlayerProfile
-        validationService.validate(socialRegistrationRequest.getSocialConnectionData());
-        // Step 3. Registering player with SocialConnection
-        String player = playerIdentifierGenerator.newId();
-        // Step 4. Register new user and identity
-        PlayerToken token = register(socialRegistrationRequest, player);
         // Step 5. Notifying system of new user
-        notificationService.notify(new SystemPlayerSocialRegistered(player, socialRegistrationRequest.getSocialConnectionData()));
-        // Step 6. All done continue
-        return token;
-    }
-
-    @Override
-    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PlayerToken createSocialGrantPlayer(@RequestBody PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
-        // Step 1. Checking if this user already exists
-        PlayerToken playerIdentity = restoreUser(grantRegistrationRequest);
-        if (playerIdentity != null)
-            return playerIdentity;
-        // Step 2. Registering player with SocialConnection
-        String player = playerIdentifierGenerator.newId();
-        // Step 3. Register new user and identity
-        PlayerToken token = register(grantRegistrationRequest, player);
-        // Step 4. Notify system of new user creation
-        notificationService.notify(new SystemPlayerSocialGrantRegistered(player, grantRegistrationRequest.getAccessGrant()));
-        // Step 5. All done returning user token
+        notificationService.notify(new SystemPlayerProfileRegistered(player, normalizedProfile));
+        // Step 6. All done returning response
         return token;
     }
 

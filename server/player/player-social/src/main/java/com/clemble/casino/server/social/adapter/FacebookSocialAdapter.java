@@ -3,11 +3,14 @@ package com.clemble.casino.server.social.adapter;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
 import org.springframework.social.facebook.api.PagedList;
@@ -18,7 +21,6 @@ import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.server.player.social.PlayerSocialNetwork;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
@@ -60,17 +62,18 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
     }
 
     @Override
-    public PlayerSocialNetwork enrichPlayerNetwork(PlayerSocialNetwork socialNetwork, Facebook api) {
+    public Collection<ConnectionKey> fetchConnections(Facebook api) {
+        Collection<ConnectionKey> connections = new ArrayList<>();
         // Step 1. Fetching all friend connections
         PagingParameters pagingParameters = null;
         PagedList<String> friends = api.friendOperations().getFriendIds();
         do {
             for(String facebookId: friends)
-                socialNetwork.addConnection(toConnectionKey(facebookId));
+                connections.add(toConnectionKey(facebookId));
             pagingParameters = friends.getNextPage();
         } while(pagingParameters != null && (pagingParameters.getLimit() > pagingParameters.getOffset()));
         // Step 2. Returning created PlayerProfile
-        return socialNetwork;
+        return connections;
     }
 
     @Override

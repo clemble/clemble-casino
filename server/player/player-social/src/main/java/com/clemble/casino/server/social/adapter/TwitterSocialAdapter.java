@@ -2,6 +2,7 @@ package com.clemble.casino.server.social.adapter;
 
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
@@ -10,8 +11,10 @@ import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.server.player.social.PlayerSocialNetwork;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,14 +42,15 @@ public class TwitterSocialAdapter extends SocialConnectionAdapter<Twitter>{
     }
 
     @Override
-    public PlayerSocialNetwork enrichPlayerNetwork(PlayerSocialNetwork socialNetwork, Twitter api) {
+    public Collection<ConnectionKey> fetchConnections(Twitter api) {
+        Collection<ConnectionKey> connections = new ArrayList<>();
         // Step 1. Fetching all twitter connections (5000)
         // TODO check if this ever fails
         CursoredList<Long> friends = api.friendOperations().getFriendIds();
         for(Long twitterId: friends)
-            socialNetwork.addConnection(toConnectionKey(String.valueOf(twitterId)));
+            connections.add(toConnectionKey(String.valueOf(twitterId)));
         // Step 2. Returning created PlayerProfile
-        return socialNetwork;
+        return connections;
     }
 
     @Override

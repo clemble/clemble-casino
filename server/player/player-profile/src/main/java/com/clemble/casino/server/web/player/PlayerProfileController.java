@@ -25,6 +25,8 @@ import com.clemble.casino.web.player.PlayerWebMapping;
 @Controller
 public class PlayerProfileController implements PlayerProfileService, ExternalController {
 
+    // TODO need a listener, that adds ConnectionKey to PlayerProfile when connection added
+
     final private PlayerProfileRepository profileRepository;
 
     public PlayerProfileController(PlayerProfileRepository playerProfileRepository) {

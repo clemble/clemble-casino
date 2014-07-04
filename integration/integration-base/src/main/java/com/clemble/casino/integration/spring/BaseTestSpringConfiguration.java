@@ -42,7 +42,7 @@ import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
-import com.clemble.casino.player.service.PlayerRegistrationService;
+import com.clemble.casino.player.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.test.random.AbstractValueGenerator;
@@ -120,7 +120,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         @Bean
         public ClembleCasinoRegistrationOperations registrationOperations(ObjectMapper objectMapper,
                 EventListenerOperationsFactory listenerOperations,
-                PlayerRegistrationService registrationService,
+                PlayerFacadeRegistrationService registrationService,
                 PlayerProfileService profileOperations,
                 PlayerConnectionService connectionService,
                 PlayerSessionService sessionOperations,

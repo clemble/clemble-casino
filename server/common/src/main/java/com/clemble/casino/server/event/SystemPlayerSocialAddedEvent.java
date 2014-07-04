@@ -2,13 +2,14 @@ package com.clemble.casino.server.event;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
+import com.clemble.casino.player.ConnectionKeyAware;
 import org.springframework.social.connect.ConnectionKey;
 
 import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerSocialAddedEvent implements PlayerAware, SystemEvent {
+public class SystemPlayerSocialAddedEvent implements SystemEvent, ConnectionKeyAware {
 
     /**
      * Generated 06/01/14
@@ -31,6 +32,7 @@ public class SystemPlayerSocialAddedEvent implements PlayerAware, SystemEvent {
         return player;
     }
 
+    @Override
     public ConnectionKey getConnection() {
         return connection;
     }

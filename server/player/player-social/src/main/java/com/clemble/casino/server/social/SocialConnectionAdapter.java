@@ -8,7 +8,8 @@ import org.springframework.social.connect.ConnectionKey;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.server.player.social.PlayerSocialNetwork;
+
+import java.util.Collection;
 
 public abstract class SocialConnectionAdapter<A> {
 
@@ -22,16 +23,16 @@ public abstract class SocialConnectionAdapter<A> {
         return providerId;
     }
 
-    public ConnectionKey toConnectionKey(String id) {
-        return new ConnectionKey(providerId, id);
-    }
-
     abstract public PlayerProfile fetchPlayerProfile(A api);
+
+    abstract public Collection<ConnectionKey> fetchConnections(A api);
 
     abstract public ConnectionData toConnectionData(SocialAccessGrant accessGrant);
 
     abstract public ConnectionData toConnectionData(SocialConnectionData connectionData);
 
-    abstract public PlayerSocialNetwork enrichPlayerNetwork(PlayerSocialNetwork socialNetwork, A api);
+    public ConnectionKey toConnectionKey(String id) {
+        return new ConnectionKey(providerId, id);
+    }
 
 }

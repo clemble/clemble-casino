@@ -2,6 +2,7 @@ package com.clemble.casino.server.spring.social;
 
 import javax.sql.DataSource;
 
+import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +18,9 @@ import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
-import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
-import com.clemble.casino.server.repository.player.PlayerProfileRepository;
-import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.social.SocialNetworkPopulatorEventListener;
@@ -31,15 +29,10 @@ import com.clemble.casino.server.social.SocialProfileConnectionSignUp;
 import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
 import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
-import com.clemble.casino.server.spring.common.BasicJPASpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.player.PlayerManagementSpringConfiguration;
 
 @Configuration
-@Import(value = {
-    PlayerManagementSpringConfiguration.class,
-//    BasicJPASpringConfiguration.class
-})
+@Import(value = { CommonSpringConfiguration.class })
 public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -73,11 +66,10 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     @Bean
     public SocialNetworkPopulatorEventListener socialNetworkPopulator(
             SocialConnectionAdapterRegistry socialAdapterRegistry,
-            PlayerSocialNetworkRepository socialNetworkRepository,
             SystemNotificationService notificationService,
             UsersConnectionRepository usersConnectionRepository,
             SystemNotificationServiceListener serviceListener) {
-        SocialNetworkPopulatorEventListener networkPopulator = new SocialNetworkPopulatorEventListener(socialAdapterRegistry, usersConnectionRepository, socialNetworkRepository, notificationService);
+        SocialNetworkPopulatorEventListener networkPopulator = new SocialNetworkPopulatorEventListener(socialAdapterRegistry, usersConnectionRepository, notificationService);
         serviceListener.subscribe(networkPopulator);
         return networkPopulator;
     }
@@ -116,12 +108,8 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ConnectionSignUp connectionSignUp(
-            PlayerIdGenerator idGenerator,
-            PlayerProfileRepository profileRepository,
-            SocialConnectionAdapterRegistry socialAdapterRegistry,
-            PlayerSocialNetworkRepository socialNetworkRepository) {
-        ConnectionSignUp signUp = new SocialProfileConnectionSignUp(idGenerator, profileRepository, socialAdapterRegistry, socialNetworkRepository);
+    public ConnectionSignUp connectionSignUp(SocialConnectionAdapterRegistry socialAdapterRegistry) {
+        ConnectionSignUp signUp = new SocialProfileConnectionSignUp(socialAdapterRegistry);
         return signUp;
     }
 

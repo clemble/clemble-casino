@@ -21,7 +21,7 @@ import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
-import com.clemble.casino.player.service.PlayerRegistrationService;
+import com.clemble.casino.player.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoRegistrationOperations {
 
     final private ObjectMapper objectMapper;
-    final private PlayerRegistrationService registrationService;
+    final private PlayerFacadeRegistrationService registrationService;
     final private PlayerProfileService profileOperations;
     final private PlayerConnectionService connectionService;
     final private PlayerPresenceService presenceService;
@@ -49,7 +49,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
 
     public ServerClembleCasinoRegistrationOperations(ObjectMapper objectMapper,
             EventListenerOperationsFactory listenerOperations,
-            PlayerRegistrationService registrationService,
+            PlayerFacadeRegistrationService registrationService,
             PlayerProfileService profileOperations,
             PlayerConnectionService connectionService,
             PlayerSessionService sessionOperations,

@@ -1,9 +1,12 @@
 package com.clemble.casino.server.social.adapter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.linkedin.api.LinkedIn;
 import org.springframework.social.linkedin.api.LinkedInProfile;
 import org.springframework.social.linkedin.api.LinkedInProfileFull;
@@ -13,7 +16,6 @@ import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.server.player.social.PlayerSocialNetwork;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 /**
@@ -47,18 +49,19 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
     }
 
     @Override
-    public PlayerSocialNetwork enrichPlayerNetwork(PlayerSocialNetwork socialNetwork, LinkedIn api) {
+    public Collection<ConnectionKey> fetchConnections(LinkedIn api) {
+        Collection<ConnectionKey> connections = new ArrayList<>();
         // Step 1. Fetching all friend connections
         int position = 0;
         List<LinkedInProfile> colleagues = api.connectionOperations().getConnections(position, 500);
         do {
             colleagues = api.connectionOperations().getConnections(position, 500);
             for(LinkedInProfile linkedInProfile: colleagues)
-                socialNetwork.addConnection(toConnectionKey(linkedInProfile.getId()));
+                connections.add(toConnectionKey(linkedInProfile.getId()));
             position += 500;
         } while(colleagues.size() == 500);
         // Step 2. Returning created PlayerProfile
-        return socialNetwork;
+        return connections;
     }
 
     @Override

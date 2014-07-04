@@ -9,39 +9,12 @@
     <artifactId>player</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>player-common</module>
-        <module>player-management</module>
-        <module>player-social</module>
-        <module>player-web</module>
-        <module>player-profile</module>
         <module>player-registration</module>
+        <module>player-profile</module>
         <module>player-connection</module>
         <module>player-presence</module>
+        <module>player-social</module>
     </modules>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
-                <artifactId>player-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
-                <artifactId>player-management</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
-                <artifactId>player-social</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
-                <artifactId>player-web</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>

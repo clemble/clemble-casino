@@ -86,6 +86,12 @@ public class PlayerSocialNetwork implements PlayerAware {
         return this;
     }
 
+    public PlayerSocialNetwork addConnections(Collection<ConnectionKey> connectionKeys) {
+        for(ConnectionKey connection: connectionKeys)
+            this.connections.add(new PlayerConnectionKey(connection));
+        return this;
+    }
+
     public void setConnections(Set<PlayerConnectionKey> connections) {
         this.connections = connections;
     }
