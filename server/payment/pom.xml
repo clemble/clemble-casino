@@ -12,6 +12,7 @@
         <module>payment-common</module>
         <module>payment-management</module>
         <module>payment-web</module>
+        <module>payment-bonus</module>
     </modules>
     <dependencyManagement>
         <dependencies>

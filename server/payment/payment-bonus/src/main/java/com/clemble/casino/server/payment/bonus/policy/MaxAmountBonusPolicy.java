@@ -15,11 +15,13 @@ public class MaxAmountBonusPolicy implements BonusPolicy {
     }
 
     @Override
-    public boolean eligible(PlayerAccount account, PaymentTransaction transaction) {
-        // Step 1. Fetching current amount
-        Money currentAmount = account.getMoney(maxAmount.getCurrency());
-        // Step 2. Checking currentAmount is lesser, then a limmit
-        return currentAmount.getAmount() >= maxAmount.getAmount();
+    public boolean eligible(PaymentTransaction transaction) {
+        // TODO restore
+        return true;
+//        // Step 1. Fetching current amount
+//        Money currentAmount = account.getMoney(maxAmount.getCurrency());
+//        // Step 2. Checking currentAmount is lesser, then a limmit
+//        return currentAmount.getAmount() >= maxAmount.getAmount();
     }
 
 }

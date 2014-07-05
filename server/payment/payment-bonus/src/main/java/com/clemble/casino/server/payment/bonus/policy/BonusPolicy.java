@@ -5,6 +5,6 @@ import com.clemble.casino.payment.PlayerAccount;
 
 public interface BonusPolicy {
 
-    public boolean eligible(PlayerAccount account, PaymentTransaction transaction);
+    public boolean eligible(PaymentTransaction transaction);
 
 }

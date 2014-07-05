@@ -6,7 +6,7 @@ import com.clemble.casino.payment.PlayerAccount;
 public class NoBonusPolicy implements BonusPolicy {
 
     @Override
-    public boolean eligible(PlayerAccount account, PaymentTransaction transaction) {
+    public boolean eligible(PaymentTransaction transaction) {
         return true;
     }
 

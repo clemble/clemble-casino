@@ -178,6 +178,13 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>payment-bonus</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                            <destFileName>payment-bonus.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>payment-web</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
@@ -225,6 +232,10 @@
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/player-registration.war</war>
                                     <contextPath>/player/registration</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/payment-bonus.war</war>
+                                    <contextPath>/bonus</contextPath>
                                 </contextHandler>
                             </contextHandlers>
                             <systemProperties>
