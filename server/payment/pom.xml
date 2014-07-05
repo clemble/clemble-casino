@@ -12,25 +12,4 @@
         <module>payment-bonus</module>
         <module>payment-transaction</module>
     </modules>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
-                <artifactId>payment-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
-                <artifactId>payment-management</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.clemble.casino.server</groupId>
-                <artifactId>payment-transaction</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-    <dependencies>
-    </dependencies>
 </project>

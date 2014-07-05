@@ -16,18 +16,19 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
+import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
 
 public class MatchWonRuleAspect extends BasicGameAspect<MatchEndedEvent> {
 
     final private Currency currency;
-    final private ServerPaymentTransactionService transactionService;
+    final private SystemNotificationService systemNotificationService;
 
-    public MatchWonRuleAspect(Currency currency, ServerPaymentTransactionService transactionService) {
+    public MatchWonRuleAspect(Currency currency, SystemNotificationService systemNotificationService) {
         super(new EventTypeSelector(MatchEndedEvent.class));
         this.currency = currency;
-        this.transactionService = checkNotNull(transactionService);
+        this.systemNotificationService = checkNotNull(systemNotificationService);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class MatchWonRuleAspect extends BasicGameAspect<MatchEndedEvent> {
                     .addPaymentOperation(new PaymentOperation(player, owned, Operation.Debit));
             }
             // Step 3. Processing payment transaction
-            transactionService.process(transaction);
+            systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(transaction));
         }
     }
 

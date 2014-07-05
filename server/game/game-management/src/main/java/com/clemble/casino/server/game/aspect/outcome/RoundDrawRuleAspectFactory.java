@@ -1,5 +1,6 @@
 package com.clemble.casino.server.game.aspect.outcome;
 
+import com.clemble.casino.server.player.presence.SystemNotificationService;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.game.GameContext;
@@ -7,17 +8,16 @@ import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
 public class RoundDrawRuleAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameContext<?>, GameConfiguration> {
 
-    final private ServerPaymentTransactionService transactionService;
+    final private SystemNotificationService systemNotificationService;
 
-    public RoundDrawRuleAspectFactory(ServerPaymentTransactionService transactionService) {
-        this.transactionService = transactionService;
+    public RoundDrawRuleAspectFactory(SystemNotificationService systemNotificationService) {
+        this.systemNotificationService = systemNotificationService;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class RoundDrawRuleAspectFactory implements GameAspectFactory<GameEndedEv
         // Step 2. Constructing draw rule
         switch (configuration.getDrawRule()) {
             case owned:
-                return new RoundDrawByOwnedRuleAspect(configuration.getPrice().getCurrency(), transactionService);
+                return new RoundDrawByOwnedRuleAspect(configuration.getPrice().getCurrency(), systemNotificationService);
             case spent:
                 return RoundDrawBySpentRuleAspect.INSTANCE;
             default:

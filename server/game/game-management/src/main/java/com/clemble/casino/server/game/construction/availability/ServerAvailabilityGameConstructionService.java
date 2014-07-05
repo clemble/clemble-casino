@@ -5,6 +5,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.clemble.casino.error.ClembleCasinoFailure;
+import com.clemble.casino.payment.service.PlayerAccountService;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,6 @@ import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
 import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
@@ -35,12 +35,12 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     final private GameIdGenerator idGenerator;
     final private GameConstructionRepository constructionRepository;
     final private PlayerNotificationService playerNotificationService;
-    final private ServerPlayerAccountService accountService;
+    final private PlayerAccountService accountService;
     final private PendingGameInitiationEventListener pendingInitiationService;
 
     public ServerAvailabilityGameConstructionService(
             GameIdGenerator idGenerator,
-            ServerPlayerAccountService accountServerService,
+            PlayerAccountService accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,
             PlayerNotificationService notificationService,
@@ -62,7 +62,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         // Step 2.1. Checking initiator
         Money price = request.getConfiguration().getPrice();
         // Step 2.2. Checking opponents
-        Collection<String> players = accountService.canAfford(request.getParticipants(), price);
+        Collection<String> players = accountService.canAfford(request.getParticipants(), price.getCurrency(), price.getAmount());
         if (!players.isEmpty())
             throw ClembleCasinoException.fromFailures(ClembleCasinoFailure.construct(ClembleCasinoError.GameConstructionInsufficientMoney, players, GameSessionKey.DEFAULT_SESSION));
         // Step 3. Processing to opponents creation

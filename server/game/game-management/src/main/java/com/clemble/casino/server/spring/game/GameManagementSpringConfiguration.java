@@ -3,6 +3,7 @@ package com.clemble.casino.server.spring.game;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
@@ -12,6 +13,7 @@ import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.repository.game.*;
 import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,23 +37,19 @@ import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructi
 import com.clemble.casino.server.game.construction.availability.PendingGameInitiationEventListener;
 import com.clemble.casino.server.game.construction.availability.PendingPlayerCreationEventListener;
 import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
-import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class,
     PresenceServiceSpringConfiguration.class,
     GameNeo4jSpringConfiguration.class,
-    GameJPASpringConfiguration.class,
-    PaymentCommonSpringConfiguration.class})
+    GameJPASpringConfiguration.class})
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -75,22 +73,22 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public RoundWonRuleAspectFactory wonRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+    public RoundWonRuleAspectFactory wonRuleAspectFactory(SystemNotificationService paymentTransactionService) {
         return new RoundWonRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean
-    public RoundDrawRuleAspectFactory drawRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+    public RoundDrawRuleAspectFactory drawRuleAspectFactory(SystemNotificationService paymentTransactionService) {
         return new RoundDrawRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean
-    public MatchWonRuleAspectFactory potWonRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+    public MatchWonRuleAspectFactory potWonRuleAspectFactory(SystemNotificationService paymentTransactionService) {
         return new MatchWonRuleAspectFactory(paymentTransactionService);
     }
 
     @Bean
-    public MatchDrawRuleAspectFactory potDrawRuleAspectFactory(ServerPaymentTransactionService paymentTransactionService) {
+    public MatchDrawRuleAspectFactory potDrawRuleAspectFactory(SystemNotificationService paymentTransactionService) {
         return new MatchDrawRuleAspectFactory(paymentTransactionService);
     }
 
@@ -124,7 +122,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
             GameIdGenerator idGenerator,
-            @Qualifier("playerAccountService") ServerPlayerAccountService accountServerService,
+            @Qualifier("playerAccountService") PlayerAccountService accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService,

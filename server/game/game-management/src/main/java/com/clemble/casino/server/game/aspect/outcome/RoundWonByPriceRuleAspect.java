@@ -4,6 +4,8 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Date;
 
+import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +20,6 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 /**
  * Created by mavarazy on 23/12/13.
@@ -28,11 +29,11 @@ public class RoundWonByPriceRuleAspect extends BasicGameAspect<GameEndedEvent<?>
     final private Logger LOG = LoggerFactory.getLogger(RoundWonByPriceRuleAspect.class);
 
     final private Money price;
-    final private ServerPaymentTransactionService transactionService;
+    final private SystemNotificationService systemNotificationService;
 
-    public RoundWonByPriceRuleAspect(Money price, ServerPaymentTransactionService transactionService) {
+    public RoundWonByPriceRuleAspect(Money price, SystemNotificationService systemNotificationService) {
         super(new EventTypeSelector(GameEndedEvent.class));
-        this.transactionService = checkNotNull(transactionService);
+        this.systemNotificationService = checkNotNull(systemNotificationService);
         this.price = checkNotNull(price);
     }
 
@@ -56,7 +57,7 @@ public class RoundWonByPriceRuleAspect extends BasicGameAspect<GameEndedEvent<?>
                 }
             }
             // Step 3. Processing payment transaction
-            transactionService.process(transaction);
+            systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(transaction));
         }
     }
 

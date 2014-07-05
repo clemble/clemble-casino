@@ -4,22 +4,22 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
 public class RoundWonRuleAspectFactory implements RoundGameAspectFactory<GameEndedEvent<?>> {
 
-    final private ServerPaymentTransactionService transactionService;
+    final private SystemNotificationService systemNotificationService;
 
-    public RoundWonRuleAspectFactory(ServerPaymentTransactionService transactionService) {
-        this.transactionService = checkNotNull(transactionService);
+    public RoundWonRuleAspectFactory(SystemNotificationService systemNotificationService) {
+        this.systemNotificationService = checkNotNull(systemNotificationService);
     }
 
     @Override
@@ -30,11 +30,11 @@ public class RoundWonRuleAspectFactory implements RoundGameAspectFactory<GameEnd
         // Step 2. Checking won rule
         switch (configuration.getWonRule()) {
             case price:
-                return new RoundWonByPriceRuleAspect(configuration.getPrice(), transactionService);
+                return new RoundWonByPriceRuleAspect(configuration.getPrice(), systemNotificationService);
             case spent:
-                return new RoundWonBySpentRuleAspect(configuration.getPrice().getCurrency(), transactionService);
+                return new RoundWonBySpentRuleAspect(configuration.getPrice().getCurrency(), systemNotificationService);
             case owned:
-                return new RoundWonByOwnedRuleAspect(configuration.getPrice().getCurrency(), transactionService);
+                return new RoundWonByOwnedRuleAspect(configuration.getPrice().getCurrency(), systemNotificationService);
             default:
                 throw new IllegalArgumentException();
         }

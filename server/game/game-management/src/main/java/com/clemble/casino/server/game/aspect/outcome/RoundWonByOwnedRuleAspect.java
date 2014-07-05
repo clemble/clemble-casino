@@ -16,18 +16,19 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
+import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
 
 public class RoundWonByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
 
     final private Currency currency;
-    final private ServerPaymentTransactionService transactionService;
+    final private SystemNotificationService systemNotificationService;
 
-    public RoundWonByOwnedRuleAspect(Currency currency, ServerPaymentTransactionService transactionService) {
+    public RoundWonByOwnedRuleAspect(Currency currency, SystemNotificationService systemNotificationService) {
         super(new EventTypeSelector(GameEndedEvent.class));
         this.currency = checkNotNull(currency);
-        this.transactionService = checkNotNull(transactionService);
+        this.systemNotificationService = checkNotNull(systemNotificationService);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class RoundWonByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>
                     .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
             }
             // Step 3. Processing payment transaction
-            transactionService.process(paymentTransaction);
+            systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(paymentTransaction));
         }
     }
 

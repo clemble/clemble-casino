@@ -12,6 +12,8 @@ import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
+import com.clemble.casino.server.spring.payment.PaymentBonusSpringConfiguration;
+import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerConnectionSpringConfiguration;
 import com.clemble.casino.server.spring.player.PlayerProfileSpringConfiguration;
 import com.clemble.casino.server.spring.social.PlayerSocialSpringConfiguration;
@@ -59,6 +61,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         PlayerConnectionSpringConfiguration.class,
         PlayerProfileSpringConfiguration.class,
         PlayerSocialSpringConfiguration.class,
+        PaymentBonusSpringConfiguration.class,
         PaymentSpringConfiguration.class,
         IntegrationGameSpringConfiguration.class })
     public static class LocalTestConfiguration {
