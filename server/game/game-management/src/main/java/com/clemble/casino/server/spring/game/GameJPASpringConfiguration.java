@@ -5,7 +5,7 @@ import javax.sql.DataSource;
 
 import com.clemble.casino.server.repository.game.MadeMoveRepository;
 import com.clemble.casino.server.repository.game.GameRecordRepository;
-import org.hibernate.ejb.HibernatePersistence;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +44,7 @@ public class GameJPASpringConfiguration implements SpringConfiguration {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
         entityManagerFactory.setPackagesToScan("com.clemble.casino.game");
-        entityManagerFactory.setPersistenceProvider(new HibernatePersistence());
+        entityManagerFactory.setPersistenceProvider(new HibernatePersistenceProvider());
         entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter);
         entityManagerFactory.setPersistenceUnitName("gameEntityManager");
         entityManagerFactory.afterPropertiesSet();

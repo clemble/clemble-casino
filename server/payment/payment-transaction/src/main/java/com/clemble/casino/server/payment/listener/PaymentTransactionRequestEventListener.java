@@ -1,33 +1,36 @@
-package com.clemble.casino.server.payment;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+package com.clemble.casino.server.payment.listener;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.payment.money.Operation;
+import com.clemble.casino.payment.service.PaymentTransactionService;
+import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-public class BasicServerPaymentTransactionService implements ServerPaymentTransactionService {
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+/**
+ * Created by mavarazy on 7/5/14.
+ */
+public class PaymentTransactionRequestEventListener implements SystemEventListener<SystemPaymentTransactionRequestEvent>{
 
     final private PlayerAccountTemplate accountTemplate;
     final private PlayerNotificationService notificationService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public BasicServerPaymentTransactionService(
+    public PaymentTransactionRequestEventListener(
             PaymentTransactionRepository paymentTransactionRepository,
             PlayerAccountTemplate accountTemplate,
             PlayerNotificationService notificationService) {
@@ -36,14 +39,16 @@ public class BasicServerPaymentTransactionService implements ServerPaymentTransa
         this.notificationService = checkNotNull(notificationService);
     }
 
+
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public PaymentTransaction process(PaymentTransaction paymentTransaction) {
+    public void onEvent(SystemPaymentTransactionRequestEvent event) {
+        PaymentTransaction paymentTransaction = event.getTransaction();
         // Step 1. Sanity check
         if (paymentTransaction == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionEmpty);
         // Step 2. Processing payment transactions
-        return processTransaction(paymentTransaction);
+        processTransaction(paymentTransaction);
     }
 
     private PaymentTransaction processTransaction(PaymentTransaction paymentTransaction) {
@@ -69,21 +74,15 @@ public class BasicServerPaymentTransactionService implements ServerPaymentTransa
         // Step 4. Sending PaymentEvent notification
         notificationService.notify(paymentEvents);
         return transaction;
-
     }
 
     @Override
-    public PaymentTransaction getTransaction(String source, String transactionId) {
-        return paymentTransactionRepository.findOne(new PaymentTransactionKey(source, transactionId));
+    public String getChannel() {
+        return SystemPaymentTransactionRequestEvent.CHANNEL;
     }
 
     @Override
-    public List<PaymentTransaction> getPlayerTransactions(String player) {
-        return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
-    }
-
-    @Override
-    public List<PaymentTransaction> getPlayerTransactionsWithSource(String player, String source) {
-        return paymentTransactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, source + "%");
+    public String getQueueName() {
+        return "payment:transaction:processor";
     }
 }

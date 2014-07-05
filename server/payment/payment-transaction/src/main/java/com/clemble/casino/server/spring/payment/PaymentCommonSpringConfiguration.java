@@ -15,10 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.DNSBasedServerRegistry;
 import com.clemble.casino.ServerRegistry;
-import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.payment.RestServerPaymentTransactionService;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.player.account.RestServerPlayerAccountService;
 import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
@@ -35,21 +32,12 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
     public static class Integration {
 
         @Autowired(required = false)
-        @Qualifier("realPaymentTransactionService")
-        public ServerPaymentTransactionService realPaymentTransactionService;
-
-        @Autowired(required = false)
         @Qualifier("realPlayerAccountService")
         public ServerPlayerAccountService realPlayerAccountService;
 
         @Bean
         public ServerRegistry paymentServerRegistry(@Value("${clemble.service.payment.host}") String host) {
             return new DNSBasedServerRegistry(host);
-        }
-
-        @Bean
-        public ServerPaymentTransactionService paymentTransactionService(RestTemplate restTemplate, ServerRegistry paymentServerRegistry) {
-            return realPaymentTransactionService == null ? new RestServerPaymentTransactionService(paymentServerRegistry, restTemplate) : realPaymentTransactionService;
         }
 
         @Bean
@@ -75,32 +63,6 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
                 @Override
                 public List<String> canAfford(Collection<String> playerId, Money amount) {
                     return Collections.emptyList();
-                }
-            };
-        }
-
-        @Bean
-        public ServerPaymentTransactionService paymentTransactionService() {
-            return new ServerPaymentTransactionService() {
-
-                @Override
-                public PaymentTransaction process(PaymentTransaction paymentTransaction) {
-                    return paymentTransaction;
-                }
-
-                @Override
-                public PaymentTransaction getTransaction(String source, String transactionId) {
-                    return null;
-                }
-
-                @Override
-                public List<PaymentTransaction> getPlayerTransactions(String player) {
-                    return null;
-                }
-
-                @Override
-                public List<PaymentTransaction> getPlayerTransactionsWithSource(String player, String source) {
-                    return null;
                 }
             };
         }

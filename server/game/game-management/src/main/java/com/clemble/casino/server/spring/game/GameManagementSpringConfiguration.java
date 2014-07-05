@@ -15,6 +15,7 @@ import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFac
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.repository.game.*;
+import com.clemble.casino.server.spring.common.PaymentClientSpringConfiguration;
 import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -49,7 +50,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 @Import(value = { CommonSpringConfiguration.class,
     PresenceServiceSpringConfiguration.class,
     GameNeo4jSpringConfiguration.class,
-    GameJPASpringConfiguration.class})
+    GameJPASpringConfiguration.class,
+    PaymentClientSpringConfiguration.class
+})
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -122,7 +125,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
             GameIdGenerator idGenerator,
-            @Qualifier("playerAccountService") PlayerAccountService accountServerService,
+            @Qualifier("playerAccountClient") PlayerAccountService accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
@@ -131,8 +134,9 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PendingPlayerCreationEventListener pendingPlayerCreationEventListener(SystemNotificationServiceListener notificationServiceListener,
-            PendingPlayerRepository playerRepository) {
+    public PendingPlayerCreationEventListener pendingPlayerCreationEventListener(
+        SystemNotificationServiceListener notificationServiceListener,
+        PendingPlayerRepository playerRepository) {
         PendingPlayerCreationEventListener playerEventListener = new PendingPlayerCreationEventListener(playerRepository);
         notificationServiceListener.subscribe(playerEventListener);
         return playerEventListener;

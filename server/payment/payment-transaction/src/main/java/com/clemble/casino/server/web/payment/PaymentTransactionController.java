@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
+import com.clemble.casino.payment.service.PaymentTransactionService;
 import com.clemble.casino.server.ExternalController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -24,22 +25,12 @@ import com.clemble.casino.web.mapping.WebMapping;
 import com.clemble.casino.web.payment.PaymentWebMapping;
 
 @Controller
-public class PaymentTransactionController implements ServerPaymentTransactionService, ExternalController {
+public class PaymentTransactionController implements PaymentTransactionService, ExternalController {
 
-    final private ServerPaymentTransactionService paymentTransactionService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PaymentTransactionController(final PaymentTransactionRepository paymentTransactionRepository,
-            final ServerPaymentTransactionService paymentTransactionService) {
-        this.paymentTransactionService = checkNotNull(paymentTransactionService);
+    public PaymentTransactionController(final PaymentTransactionRepository paymentTransactionRepository) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
-    }
-
-    @Override
-    @RequestMapping(method = RequestMethod.POST, value = PaymentWebMapping.PAYMENT_TRANSACTIONS, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PaymentTransaction process(@RequestBody PaymentTransaction paymentTransaction) {
-        return paymentTransactionService.process(paymentTransaction);
     }
 
     @Override
@@ -68,7 +59,7 @@ public class PaymentTransactionController implements ServerPaymentTransactionSer
     @RequestMapping(method = RequestMethod.GET, value = PaymentWebMapping.PAYMENT_ACCOUNTS_PLAYER_TRANSACTION_SOURCE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<PaymentTransaction> getPlayerTransactionsWithSource(@PathVariable("player") String player, @PathVariable("source") String source) {
-        return paymentTransactionService.getPlayerTransactionsWithSource(player, source);
+        return paymentTransactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, source);
     }
 
 }
