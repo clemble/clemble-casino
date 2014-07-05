@@ -8,7 +8,6 @@ import com.clemble.casino.server.player.connection.listener.PlayerSocialNetworkC
 import com.clemble.casino.server.player.connection.listener.PlayerSocialNetworkCreationListener;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.player.PlayerConnectionController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;

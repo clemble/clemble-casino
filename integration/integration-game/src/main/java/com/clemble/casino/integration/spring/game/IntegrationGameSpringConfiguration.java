@@ -8,7 +8,6 @@ import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.NumberStateFactory;
 import com.clemble.casino.game.GameStateFactory;
 import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;
-import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.game.AbstractGameSpringConfiguration;
 
 @Configuration

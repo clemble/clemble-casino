@@ -12,7 +12,6 @@ import com.clemble.casino.server.repository.payment.PaymentTransactionRepository
 import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
-import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;
 import com.clemble.casino.server.web.player.account.PlayerAccountController;
 

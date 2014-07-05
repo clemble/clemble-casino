@@ -7,7 +7,6 @@ import com.clemble.casino.server.repository.player.MongoPlayerProfileRepository;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.player.PlayerProfileController;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Value;

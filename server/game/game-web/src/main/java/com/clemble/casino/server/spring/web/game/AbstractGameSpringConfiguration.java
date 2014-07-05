@@ -20,7 +20,6 @@ import com.clemble.casino.server.player.presence.SystemNotificationServiceListen
 import com.clemble.casino.server.repository.game.*;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;
-import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.game.options.GameConfigurationController;
 import com.clemble.casino.server.web.game.session.AutoGameConstructionController;
 import com.clemble.casino.server.web.game.session.AvailabilityGameConstructionController;
@@ -34,7 +33,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({GameManagementSpringConfiguration.class, WebCommonSpringConfiguration.class})
+@Import({GameManagementSpringConfiguration.class})
 abstract public class AbstractGameSpringConfiguration<State extends GameState> implements SpringConfiguration {
 
     @Bean

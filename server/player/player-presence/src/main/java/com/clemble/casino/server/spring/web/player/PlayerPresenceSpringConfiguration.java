@@ -11,8 +11,6 @@ import com.clemble.casino.server.player.presence.listener.PlayerPresenceGameStar
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
-import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
-import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Value;
