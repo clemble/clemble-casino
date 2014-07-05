@@ -20,7 +20,11 @@
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
-            <artifactId>payment-web</artifactId>
+            <artifactId>payment-bonus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>payment-transaction</artifactId>
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
@@ -185,7 +189,7 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
-                                            <artifactId>payment-web</artifactId>
+                                            <artifactId>payment-transaction</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
                                             <destFileName>payment.war</destFileName>

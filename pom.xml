@@ -199,7 +199,7 @@
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
-                <artifactId>payment-web</artifactId>
+                <artifactId>payment-transaction</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

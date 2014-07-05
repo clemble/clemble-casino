@@ -9,10 +9,8 @@
     <artifactId>payment</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>payment-common</module>
-        <module>payment-management</module>
-        <module>payment-web</module>
         <module>payment-bonus</module>
+        <module>payment-transaction</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -28,7 +26,7 @@
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
-                <artifactId>payment-web</artifactId>
+                <artifactId>payment-transaction</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

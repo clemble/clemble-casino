@@ -1,7 +1,6 @@
 package com.clemble.casino.server.payment.bonus.policy;
 
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PlayerAccount;
 
 public class BonusPolicies implements BonusPolicy {
 
@@ -18,8 +17,8 @@ public class BonusPolicies implements BonusPolicy {
     public static BonusPolicies not(final BonusPolicy bonusPolicy) {
         return new BonusPolicies(new BonusPolicy() {
             @Override
-            public boolean eligible(PlayerAccount account, PaymentTransaction transaction) {
-                return !bonusPolicy.eligible(account, transaction);
+            public boolean eligible(PaymentTransaction transaction) {
+                return !bonusPolicy.eligible(transaction);
             }
         });
     }
@@ -27,8 +26,8 @@ public class BonusPolicies implements BonusPolicy {
     public BonusPolicies and(final BonusPolicy bonusPolicy) {
         return new BonusPolicies(new BonusPolicy() {
             @Override
-            public boolean eligible(PlayerAccount account, PaymentTransaction transaction) {
-                return delegate.eligible(account, transaction) && bonusPolicy.eligible(account, transaction);
+            public boolean eligible(PaymentTransaction transaction) {
+                return delegate.eligible(transaction) && bonusPolicy.eligible(transaction);
             }
         });
     }
@@ -36,15 +35,15 @@ public class BonusPolicies implements BonusPolicy {
     public BonusPolicies or(final BonusPolicy bonusPolicy) {
         return new BonusPolicies(new BonusPolicy() {
             @Override
-            public boolean eligible(PlayerAccount account, PaymentTransaction transaction) {
-                return delegate.eligible(account, transaction) || bonusPolicy.eligible(account, transaction);
+            public boolean eligible(PaymentTransaction transaction) {
+                return delegate.eligible(transaction) || bonusPolicy.eligible(transaction);
             }
         });
     }
 
     @Override
-    public boolean eligible(PlayerAccount account, PaymentTransaction transaction) {
-        return delegate.eligible(account, transaction);
+    public boolean eligible(PaymentTransaction transaction) {
+        return delegate.eligible(transaction);
     }
 
 }
