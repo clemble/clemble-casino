@@ -7,6 +7,7 @@ import com.clemble.casino.server.payment.RestPlayerAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
@@ -23,6 +24,7 @@ import java.util.List;
 @Import({ PaymentClientSpringConfiguration.Test.class, PaymentClientSpringConfiguration.Default.class })
 public class PaymentClientSpringConfiguration implements SpringConfiguration {
 
+    @Configuration
     @Profile(value = { TEST })
     public static class Test {
 
@@ -30,6 +32,7 @@ public class PaymentClientSpringConfiguration implements SpringConfiguration {
         @Qualifier("playerAccountController")
         public PlayerAccountService playerAccountController;
 
+        @Bean
         public PlayerAccountService playerAccountClient(){
             if (playerAccountController != null)
                 return playerAccountController;
@@ -46,6 +49,7 @@ public class PaymentClientSpringConfiguration implements SpringConfiguration {
         }
     }
 
+    @Configuration
     @Profile(value = { DEFAULT, INTEGRATION_TEST, INTEGRATION_DEFAULT, CLOUD })
     public static class Default {
 
@@ -53,6 +57,7 @@ public class PaymentClientSpringConfiguration implements SpringConfiguration {
         @Qualifier("playerAccountController")
         public PlayerAccountService playerAccountController;
 
+        @Bean
         public PlayerAccountService playerAccountClient(@Value("${clemble.service.payment.host}") String base){
             if (playerAccountController != null)
                 return playerAccountController;
