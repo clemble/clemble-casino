@@ -34,11 +34,11 @@ import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.client.error.ClembleCasinoResponseErrorHandler;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
-import com.clemble.casino.integration.spring.game.IntegrationGameWebSpringConfiguration;
+import com.clemble.casino.integration.spring.game.IntegrationGameSpringConfiguration;
 import com.clemble.casino.player.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
-import com.clemble.casino.server.spring.web.payment.PaymentWebSpringConfiguration;
+import com.clemble.casino.server.spring.web.payment.PaymentSpringConfiguration;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -59,8 +59,8 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         PlayerConnectionSpringConfiguration.class,
         PlayerProfileSpringConfiguration.class,
         PlayerSocialSpringConfiguration.class,
-        PaymentWebSpringConfiguration.class,
-        IntegrationGameWebSpringConfiguration.class })
+        PaymentSpringConfiguration.class,
+        IntegrationGameSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
         @Bean

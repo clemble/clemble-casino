@@ -1,13 +1,11 @@
 package com.clemble.casino.server.web.player;
 
-import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL;
-import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT;
+import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.service.PlayerSocialRegistrationService;
 import com.clemble.casino.server.event.SystemPlayerProfileRegistered;
-import com.clemble.casino.server.event.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.player.registration.ServerProfileSocialRegistrationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -46,7 +44,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_REGISTRATION_SOCIAL, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = SOCIAL_REGISTRATION_DESCRIPTION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerToken createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
         validationService.validate(socialRegistrationRequest.getSocialConnectionData());
@@ -61,7 +59,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_REGISTRATION_SOCIAL_GRANT, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = SOCIAL_REGISTRATION_GRANT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerToken createSocialGrantPlayer(@RequestBody PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
         validationService.validate(grantRegistrationRequest.getAccessGrant());

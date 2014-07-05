@@ -13,7 +13,7 @@ import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.service.PlayerSocialProfileService;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.web.mapping.WebMapping;
-import com.clemble.casino.web.player.PlayerWebMapping;
+import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
 public class PlayerSocialProfileController implements PlayerSocialProfileService, ExternalController {
 
@@ -24,9 +24,8 @@ public class PlayerSocialProfileController implements PlayerSocialProfileService
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.SOCIAL_PLAYER, produces = WebMapping.PRODUCES)
-    public @ResponseBody
-    SocialConnectionData add(@PathVariable("player") String playerId, @RequestBody SocialConnectionData socialConnectionData) {
+    @RequestMapping(method = RequestMethod.POST, value = SOCIAL_PLAYER, produces = WebMapping.PRODUCES)
+    public @ResponseBody SocialConnectionData add(@PathVariable("player") String playerId, @RequestBody SocialConnectionData socialConnectionData) {
         return socialConnectionDataAdapter.add(playerId, socialConnectionData);
     }
 

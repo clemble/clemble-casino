@@ -9,7 +9,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import com.clemble.casino.server.spring.web.AbstractWebApplicationInitializer;
 
-public class PaymentWebApplicationInitializer extends AbstractWebApplicationInitializer {
+public class PaymentApplicationInitializer extends AbstractWebApplicationInitializer {
 
     @Override
     protected void doInit(ServletContext container) throws ServletException {

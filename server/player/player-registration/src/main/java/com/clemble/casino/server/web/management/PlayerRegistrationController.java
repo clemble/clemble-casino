@@ -1,7 +1,6 @@
 package com.clemble.casino.server.web.management;
 
-import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_LOGIN;
-import static com.clemble.casino.web.management.ManagementWebMapping.MANAGEMENT_PLAYER_REGISTRATION;
+import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.service.PlayerRegistrationService;
@@ -56,7 +55,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_LOGIN, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerToken login(@RequestBody PlayerLoginRequest loginRequest) {
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
@@ -74,7 +73,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = MANAGEMENT_PLAYER_REGISTRATION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerToken createPlayer(@RequestBody final PlayerRegistrationRequest registrationRequest) {

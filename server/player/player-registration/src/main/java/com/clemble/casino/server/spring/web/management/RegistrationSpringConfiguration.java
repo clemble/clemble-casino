@@ -15,6 +15,7 @@ import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.casino.server.spring.web.PlayerTokenSpringConfiguration;
+import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Value;

@@ -19,7 +19,7 @@ import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.web.mapping.WebMapping;
-import com.clemble.casino.web.player.PlayerWebMapping;
+import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
 @Controller
 public class PlayerPresenceController implements PlayerPresenceService, ExternalController {
@@ -31,16 +31,16 @@ public class PlayerPresenceController implements PlayerPresenceService, External
     }
 
     @Override
-    @RequestMapping(value = PlayerWebMapping.PRESENCES_PLAYER, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @RequestMapping(value = PRESENCE_PLAYER, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerPresence getPresence(@PathVariable("player") String player) {
         return presenceServerService.getPresence(player);
     }
 
     @Override
-    @RequestMapping(value = PlayerWebMapping.PRESENCES, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @RequestMapping(value = PRESENCE, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PlayerPresence> getPresences(@RequestParam(required = true, value = PlayerWebMapping.PLAYER_PRESENCES_PARAM) List<String> players) {
+    public @ResponseBody List<PlayerPresence> getPresences(@RequestParam(required = true, value = PLAYER_PRESENCES_PARAM) List<String> players) {
         return presenceServerService.getPresences(players);
     }
 

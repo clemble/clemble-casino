@@ -9,13 +9,13 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import com.clemble.casino.server.spring.web.AbstractWebApplicationInitializer;
 
-public class IntegrationGameWebApplicationInitialization extends AbstractWebApplicationInitializer {
+public class IntegrationGameApplicationInitialization extends AbstractWebApplicationInitializer {
 
     @Override
     protected void doInit(ServletContext container) throws ServletException {
         // Step 1. Create the 'root' Spring application context
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(IntegrationGameWebSpringConfiguration.class);
+        rootContext.register(IntegrationGameSpringConfiguration.class);
         // Step 2. Registering appropriate Dispatcher
         ServletRegistration.Dynamic dispatcher = container.addServlet("integration-game", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);

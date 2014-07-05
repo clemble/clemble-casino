@@ -36,8 +36,10 @@ import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.test.random.ObjectGenerator;
 import com.google.common.collect.ImmutableList;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ContextConfiguration(classes = { PlayerPresenceSpringConfiguration.class })
 public class ServerPlayerPresenceServiceTest {
 

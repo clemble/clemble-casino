@@ -13,7 +13,7 @@ import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.player.social.PlayerSocialNetwork;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.web.mapping.WebMapping;
-import com.clemble.casino.web.player.PlayerWebMapping;
+import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
 @Controller
 public class PlayerConnectionController implements PlayerConnectionService {
@@ -25,7 +25,7 @@ public class PlayerConnectionController implements PlayerConnectionService {
     }
 
     @Override
-    @RequestMapping(value = PlayerWebMapping.CONNECTIONS_PLAYER, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @RequestMapping(value = CONNECTION_PLAYER, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     public @ResponseBody List<String> getConnections(String player) {
         // Step 1. Generating result collection
         List<String> playerCollection = new ArrayList<String>();

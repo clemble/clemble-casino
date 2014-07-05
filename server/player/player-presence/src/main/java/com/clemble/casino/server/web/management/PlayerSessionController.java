@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.event.SystemPlayerLeftEvent;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
+import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +21,6 @@ import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
-import com.clemble.casino.web.management.ManagementWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
@@ -44,7 +43,7 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerSession create(@PathVariable("playerId") String playerId) {
@@ -60,7 +59,7 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody
     PlayerSession refreshPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") String sessionId) {
@@ -78,7 +77,7 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.DELETE, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION)
+    @RequestMapping(method = RequestMethod.DELETE, value = PRESENCE_SESSIONS_PLAYER_SESSION)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody void endPlayerSession(@PathVariable("playerId") String player, @PathVariable("sessionId") String sessionId) {
         // Step 1. Fetching player session
@@ -94,7 +93,7 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = ManagementWebMapping.MANAGEMENT_PLAYER_SESSIONS_SESSION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     PlayerSession getPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") String sessionId) {

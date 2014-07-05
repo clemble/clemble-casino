@@ -19,13 +19,14 @@ import org.springframework.social.connect.ConnectionKey;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.TEST)
+@WebAppConfiguration
 @ContextConfiguration(classes = PlayerConnectionSpringConfiguration.class)
 public class PlayerSocialNetworkRepositoryTest {
 

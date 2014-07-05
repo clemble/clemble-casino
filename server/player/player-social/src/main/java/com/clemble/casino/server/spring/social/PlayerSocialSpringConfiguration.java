@@ -7,6 +7,7 @@ import com.clemble.casino.server.player.registration.ServerProfileSocialRegistra
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.web.PlayerTokenSpringConfiguration;
+import com.clemble.casino.server.spring.web.WebCommonSpringConfiguration;
 import com.clemble.casino.server.web.player.PlayerSocialRegistrationController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

@@ -18,7 +18,7 @@ public class PlayerProfileApplicationInitializer extends AbstractWebApplicationI
     protected void doInit(ServletContext container) throws ServletException {
         // Step 2. Create the 'root' Spring application context
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(PlayerProfileSpringConfiguration.class);
+        rootContext.register(PlayerProfileWebSpringConfiguration.class);
         // Step 3. Registering appropriate Dispatcher
         ServletRegistration.Dynamic dispatcher = container.addServlet("player", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);

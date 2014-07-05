@@ -27,7 +27,6 @@ import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.PlayerPresenceChangedEvent;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class PlayerPresenceITest {
 

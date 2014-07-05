@@ -21,9 +21,10 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.TEST)
+@WebAppConfiguration
 @ContextConfiguration(classes = PlayerProfileSpringConfiguration.class)
 public class PlayerProfileRepositoryTest {
 
