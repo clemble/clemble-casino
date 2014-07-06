@@ -42,7 +42,7 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     @Bean
     public MongoRepositoryFactory mongoRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
         MongoClient mongoClient = new MongoClient(host, port);
-        MongoOperations mongoOperations = new MongoTemplate(mongoClient, "player");
+        MongoOperations mongoOperations = new MongoTemplate(mongoClient, "clemble");
         return new MongoRepositoryFactory(mongoOperations);
     }
 

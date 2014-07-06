@@ -110,14 +110,24 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
-
                 return player.listenerOperations().isAlive();
             }
         }, 30_000);
         // Step 2. Checking registration passed
-        PaymentTransactionKey registrationTransaction = new PaymentTransactionKey("registration", player.getPlayer());
-        if (player.paymentOperations().getPaymentTransaction(registrationTransaction) == null)
-            Assert.assertNotNull("Missing transaction : " + registrationTransaction, eventAccumulator.waitFor(new PaymentTransactionEventSelector(registrationTransaction), 30_000));
+        final PaymentTransactionKey registrationTransaction = new PaymentTransactionKey("registration", player.getPlayer());
+        AsyncCompletionUtils.check(new Check() {
+            @Override
+            public boolean check() {
+                return player.paymentOperations().getPaymentTransaction(registrationTransaction) != null;
+            }
+        }, 30_000);
+        // Step 3. Getting PaymentTransaction
+        AsyncCompletionUtils.get(new Get<PlayerProfile>() {
+            @Override
+            public PlayerProfile get() {
+                return player.profileOperations().getPlayerProfile();
+            }
+        }, 30_000);
         return player;
     }
 }
