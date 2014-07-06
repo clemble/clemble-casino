@@ -3,8 +3,8 @@ package com.clemble.casino.server.payment;
 import java.util.Date;
 import java.util.Random;
 
-import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
-import com.clemble.casino.server.payment.listener.PaymentTransactionRequestEventListener;
+import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.spring.web.payment.PaymentSpringConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,7 +21,6 @@ import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
-import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = PaymentSpringConfiguration.class)
@@ -33,7 +32,7 @@ public class PaymentTransactionServiceTest {
     public PlayerAccountTemplate accountTemplate;
 
     @Autowired
-    public PaymentTransactionRequestEventListener eventListener;
+    public SystemPaymentTransactionRequestEventListener eventListener;
 
     private String playerFrom = String.valueOf(RANDOM.nextLong());
     private String playerTo = String.valueOf(RANDOM.nextLong());
@@ -48,7 +47,7 @@ public class PaymentTransactionServiceTest {
     public void testWalletUpdate() {
         Money amount = Money.create(Currency.FakeMoney, RANDOM.nextInt(100));
 
-        PaymentTransactionKey transactionKey = new PaymentTransactionKey().setSource("TicTacToe").setTransaction("1");
+        PaymentTransactionKey transactionKey = new PaymentTransactionKey().setSource("TicTacToe").setTransaction(String.valueOf(RANDOM.nextLong()));
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(transactionKey)

@@ -1,7 +1,6 @@
-package com.clemble.casino.server;
+package com.clemble.casino.server.event;
 
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -43,5 +42,10 @@ public class SystemPaymentTransactionRequestEvent implements SystemEvent {
     @Override
     public int hashCode() {
         return transaction != null ? transaction.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "sys:" + transaction.getTransactionKey().toString() + ":" + CHANNEL;
     }
 }

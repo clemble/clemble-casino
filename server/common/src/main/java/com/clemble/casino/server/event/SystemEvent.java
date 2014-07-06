@@ -1,8 +1,6 @@
 package com.clemble.casino.server.event;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.event.PlayerAwareEvent;
-import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

@@ -13,7 +13,7 @@ import com.clemble.casino.server.payment.BonusPaymentTransaction;
 
 public class PlayerRegistrationBonusEventListener implements BonusEventListener<SystemPlayerCreatedEvent> {
     
-    final private Logger LOG = LoggerFactory.getLogger(PlayerRegistrationBonusEventListener.class);
+    final private static Logger LOG = LoggerFactory.getLogger(PlayerRegistrationBonusEventListener.class);
 
     final private static PaymentBonusSource SOURCE = PaymentBonusSource.registration;
 

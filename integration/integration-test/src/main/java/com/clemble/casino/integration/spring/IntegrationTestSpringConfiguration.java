@@ -11,7 +11,10 @@ import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
+import com.clemble.casino.server.event.SystemEvent;
+import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentBonusSpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
@@ -20,6 +23,7 @@ import com.clemble.casino.server.spring.player.PlayerProfileSpringConfiguration;
 import com.clemble.casino.server.spring.social.PlayerSocialSpringConfiguration;
 import com.clemble.casino.server.spring.web.management.RegistrationSpringConfiguration;
 import com.clemble.casino.server.spring.web.player.PlayerPresenceSpringConfiguration;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +49,8 @@ import com.clemble.casino.server.spring.web.payment.PaymentSpringConfiguration;
 import com.clemble.casino.server.web.payment.PaymentTransactionController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.annotation.PostConstruct;
+
 @Configuration
 @Import(value = {
     BaseTestSpringConfiguration.class,
@@ -66,6 +72,9 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         PaymentSpringConfiguration.class,
         IntegrationGameSpringConfiguration.class })
     public static class LocalTestConfiguration {
+
+        @Autowired
+        public SystemNotificationServiceListener serviceListener;
 
         @Bean
         public PaymentTransactionOperations paymentTransactionOperations(
@@ -99,6 +108,31 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                 }
 
             };
+        }
+
+        @PostConstruct
+        public void integrationSystemEventListener() {
+            JsonSubTypes annotation = SystemEvent.class.getDeclaredAnnotation(JsonSubTypes.class);
+            for(JsonSubTypes.Type type: annotation.value()){
+                final String channel = type.name();
+                serviceListener.subscribe(new SystemEventListener<SystemEvent>() {
+                    @Override
+                    public void onEvent(SystemEvent event) {
+                        System.out.println("integration:system:listener " + event);
+                    }
+
+                    @Override
+                    public String getChannel() {
+                        return channel;
+                    }
+
+                    @Override
+                    public String getQueueName() {
+                        return "integration:" + channel;
+                    }
+                });
+            }
+
         }
 
     }

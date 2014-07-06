@@ -6,7 +6,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import com.clemble.casino.integration.game.RoundGamePlayer;
+import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
+import com.clemble.test.concurrent.Get;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -80,12 +82,17 @@ public class PlayerAccountOperationsITest {
         A.paymentOperations().getPaymentTransactions();
         PaymentTransaction transaction = A.paymentOperations().getPaymentTransaction("registration", A.getPlayer());
         Set<PaymentOperation> paymentOperations = transaction.getPaymentOperations();
-        Money transactionAmmount = paymentOperations.iterator().next().getAmount();
+        Money transactionAmount = paymentOperations.iterator().next().getAmount();
         // Step 4. Checking bonus transaction (Which might be delayed, because of the system event delays)
-        PaymentTransaction bonusTransaction = A.paymentOperations().getPaymentTransactions("dailybonus").get(0);
+        PaymentTransaction bonusTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>(){
+            @Override
+            public PaymentTransaction get() {
+                return A.paymentOperations().getPaymentTransactions(PaymentBonusSource.dailybonus).get(0);
+            }
+        }, 5000);
         paymentOperations = bonusTransaction.getPaymentOperations();
         Money bonusAmmount = paymentOperations.iterator().next().getAmount();
-        assertEquals(transactionAmmount.add(bonusAmmount.getAmount()), A.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
+        assertEquals(transactionAmount.add(bonusAmmount.getAmount()), A.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
     }
 
     @Test

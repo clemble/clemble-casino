@@ -2,13 +2,13 @@ package com.clemble.casino.server.payment.listener;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.payment.money.Operation;
-import com.clemble.casino.payment.service.PaymentTransactionService;
-import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
@@ -24,19 +24,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by mavarazy on 7/5/14.
  */
-public class PaymentTransactionRequestEventListener implements SystemEventListener<SystemPaymentTransactionRequestEvent>{
+public class SystemPaymentTransactionRequestEventListener implements SystemEventListener<SystemPaymentTransactionRequestEvent>{
 
     final private PlayerAccountTemplate accountTemplate;
     final private PlayerNotificationService notificationService;
+    final private ClembleCasinoValidationService validationService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
-    public PaymentTransactionRequestEventListener(
-            PaymentTransactionRepository paymentTransactionRepository,
-            PlayerAccountTemplate accountTemplate,
-            PlayerNotificationService notificationService) {
+    public SystemPaymentTransactionRequestEventListener(
+        PaymentTransactionRepository paymentTransactionRepository,
+        PlayerAccountTemplate accountTemplate,
+        PlayerNotificationService notificationService,
+        ClembleCasinoValidationService validationService) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
         this.accountTemplate = checkNotNull(accountTemplate);
         this.notificationService = checkNotNull(notificationService);
+        this.validationService = validationService;
     }
 
 
@@ -48,6 +51,7 @@ public class PaymentTransactionRequestEventListener implements SystemEventListen
         if (paymentTransaction == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionEmpty);
         // Step 2. Processing payment transactions
+        validationService.validate(paymentTransaction);
         processTransaction(paymentTransaction);
     }
 

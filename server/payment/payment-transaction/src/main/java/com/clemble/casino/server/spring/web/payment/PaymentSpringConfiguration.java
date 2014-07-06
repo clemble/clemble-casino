@@ -1,6 +1,7 @@
 package com.clemble.casino.server.spring.web.payment;
 
-import com.clemble.casino.server.payment.listener.PaymentTransactionRequestEventListener;
+import com.clemble.casino.error.ClembleCasinoValidationService;
+import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,12 +34,13 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PaymentTransactionRequestEventListener paymentTransactionRequestEventListener(
+    public SystemPaymentTransactionRequestEventListener paymentTransactionRequestEventListener(
             PaymentTransactionRepository paymentTransactionRepository,
             PlayerAccountTemplate accountTemplate,
+            ClembleCasinoValidationService validationService,
             SystemNotificationServiceListener notificationServiceListener,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        PaymentTransactionRequestEventListener eventListener = new PaymentTransactionRequestEventListener(paymentTransactionRepository, accountTemplate, notificationService);
+        SystemPaymentTransactionRequestEventListener eventListener = new SystemPaymentTransactionRequestEventListener(paymentTransactionRepository, accountTemplate, notificationService, validationService);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }

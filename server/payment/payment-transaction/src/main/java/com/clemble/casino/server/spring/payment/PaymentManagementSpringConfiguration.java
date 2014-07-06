@@ -22,7 +22,10 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import redis.clients.jedis.JedisPool;
 
 @Configuration
-@Import({ CommonSpringConfiguration.class, PaymentJPASpringConfiguration.class, RedisSpringConfiguration.class})
+@Import({
+    CommonSpringConfiguration.class,
+    PaymentMongoSpringConfiguration.class,
+    RedisSpringConfiguration.class})
 public class PaymentManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean

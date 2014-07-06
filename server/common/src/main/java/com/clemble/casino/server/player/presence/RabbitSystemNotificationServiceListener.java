@@ -181,6 +181,8 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
             if(event != null) {
                 LOG.debug("Extracted event {}", event);
                 eventListener.onEvent(event);
+            } else {
+                LOG.error("Failed to parse message {}", new String(body));
             }
             LOG.debug("Processing finished {}", consumerTag);
         }

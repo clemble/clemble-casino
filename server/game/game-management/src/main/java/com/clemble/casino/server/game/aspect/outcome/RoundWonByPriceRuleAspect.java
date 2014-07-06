@@ -4,7 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Date;
 
-import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
