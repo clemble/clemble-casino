@@ -3,6 +3,9 @@ package com.clemble.casino.server.payment;
 import java.util.Date;
 import java.util.Random;
 
+import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.payment.listener.PaymentTransactionRequestEventListener;
+import com.clemble.casino.server.spring.web.payment.PaymentSpringConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +24,7 @@ import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = PaymentManagementSpringConfiguration.class)
+@ContextConfiguration(classes = PaymentSpringConfiguration.class)
 public class PaymentTransactionServiceTest {
 
     final private Random RANDOM = new Random();
@@ -30,7 +33,7 @@ public class PaymentTransactionServiceTest {
     public PlayerAccountTemplate accountTemplate;
 
     @Autowired
-    public ServerPaymentTransactionService paymentTransactionService;
+    public PaymentTransactionRequestEventListener eventListener;
 
     private String playerFrom = String.valueOf(RANDOM.nextLong());
     private String playerTo = String.valueOf(RANDOM.nextLong());
@@ -53,7 +56,7 @@ public class PaymentTransactionServiceTest {
             .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayer(playerFrom).setAmount(amount))
             .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayer(playerTo).setAmount(amount));
 
-        paymentTransactionService.process(paymentTransaction);
+        eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
         Assert.assertEquals(accountTemplate.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + amount.getAmount());
         Assert.assertEquals(accountTemplate.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - amount.getAmount());

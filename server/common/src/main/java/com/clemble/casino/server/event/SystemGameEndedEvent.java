@@ -2,6 +2,8 @@ package com.clemble.casino.server.event;
 
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 
@@ -15,7 +17,8 @@ public class SystemGameEndedEvent implements SystemEvent, GameSessionAware {
     final private GameSessionKey sessionKey;
     final private Collection<String> participants;
 
-    public SystemGameEndedEvent(GameSessionKey sessionKey, Collection<String> participants) {
+    @JsonCreator
+    public SystemGameEndedEvent(@JsonProperty("session") GameSessionKey sessionKey, @JsonProperty("participants") Collection<String> participants) {
         this.sessionKey = sessionKey;
         this.participants = participants;
     }

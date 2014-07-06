@@ -33,7 +33,7 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PaymentTransactionRequestEventListener bonusService(
+    public PaymentTransactionRequestEventListener paymentTransactionRequestEventListener(
             PaymentTransactionRepository paymentTransactionRepository,
             PlayerAccountTemplate accountTemplate,
             SystemNotificationServiceListener notificationServiceListener,

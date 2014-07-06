@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.annotation.PostConstruct;
 
+import com.clemble.casino.server.player.presence.SystemNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -108,13 +109,13 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         }
 
         @Bean
-        public PaymentService paymentService(@Qualifier("paymentTransactionController") PaymentTransactionService transactionService, PlayerAccountService accountService) {
+        public PaymentService paymentService(@Qualifier("paymentTransactionController") PaymentTransactionService transactionService, @Qualifier("playerAccountController") PlayerAccountService accountService) {
             return new CombinedPaymentService(transactionService, accountService);
         }
 
         @Bean
-        public PaymentTransactionOperations paymentTransactionOperations(ServerPaymentTransactionService paymentTransactionController) {
-            return new WebPaymentTransactionOperations(paymentTransactionController);
+        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionService paymentTransactionController, SystemNotificationService systemNotificationService) {
+            return new WebPaymentTransactionOperations(paymentTransactionController, systemNotificationService);
         }
 
         @Bean

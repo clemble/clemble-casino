@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,8 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
 
-@ActiveProfiles(SpringConfiguration.TEST)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = PaymentManagementSpringConfiguration.class)
+@ContextConfiguration(classes = IntegrationTestSpringConfiguration.class)
 public class DailyBonusServiceTest {
 
     @Autowired

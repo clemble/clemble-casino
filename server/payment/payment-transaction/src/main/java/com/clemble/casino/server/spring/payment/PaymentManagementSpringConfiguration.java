@@ -11,8 +11,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.payment.BasicServerPaymentTransactionService;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.casino.server.player.account.BasicServerPlayerAccountService;
 import com.clemble.casino.server.player.account.ServerPlayerAccountService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -37,9 +35,4 @@ public class PaymentManagementSpringConfiguration implements SpringConfiguration
         return new BasicServerPlayerAccountService(playerAccountRepository);
     }
 
-    @Bean
-    public ServerPaymentTransactionService realPaymentTransactionService(PaymentTransactionRepository paymentTransactionRepository,
-            PlayerNotificationService playerNotificationService, PlayerAccountTemplate accountTemplate) {
-        return new BasicServerPaymentTransactionService(paymentTransactionRepository, accountTemplate, playerNotificationService);
-    }
 }

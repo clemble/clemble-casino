@@ -2,6 +2,8 @@ package com.clemble.casino.server;
 
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.server.event.SystemEvent;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by mavarazy on 7/5/14.
@@ -12,7 +14,8 @@ public class SystemPaymentTransactionRequestEvent implements SystemEvent {
 
     final private PaymentTransaction transaction;
 
-    public SystemPaymentTransactionRequestEvent(PaymentTransaction transaction) {
+    @JsonCreator
+    public SystemPaymentTransactionRequestEvent(@JsonProperty("transaction") PaymentTransaction transaction) {
         this.transaction = transaction;
     }
 

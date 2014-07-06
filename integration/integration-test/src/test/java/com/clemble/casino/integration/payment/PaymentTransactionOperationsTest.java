@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import com.clemble.casino.server.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.payment.listener.PaymentTransactionRequestEventListener;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -44,6 +46,9 @@ public class PaymentTransactionOperationsTest {
     public PaymentTransactionOperations paymentTransactionOperations;
 
     @Autowired
+    public PaymentTransactionRequestEventListener eventListener;
+
+    @Autowired
     public PlayerScenarios playerOperations;
 
     @Rule
@@ -79,7 +84,7 @@ public class PaymentTransactionOperationsTest {
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionDebitAndCreditNotMatched));
 
-        paymentTransactionOperations.perform(paymentTransaction);
+        eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
     }
 
     @Test

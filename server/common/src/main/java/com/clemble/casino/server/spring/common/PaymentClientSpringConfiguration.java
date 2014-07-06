@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class PaymentClientSpringConfiguration implements SpringConfiguration {
                 }
                 @Override
                 public List<String> canAfford(Collection<String> players, Currency currency, Long amount) {
-                    return new ArrayList<>(players);
+                    return Collections.emptyList();
                 }
             };
         }

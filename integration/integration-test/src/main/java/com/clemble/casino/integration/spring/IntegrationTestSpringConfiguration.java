@@ -11,6 +11,7 @@ import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
+import com.clemble.casino.server.player.presence.SystemNotificationService;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentBonusSpringConfiguration;
 import com.clemble.casino.server.spring.payment.PaymentCommonSpringConfiguration;
@@ -67,8 +68,10 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
     public static class LocalTestConfiguration {
 
         @Bean
-        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionController paymentTransactionController) {
-            return new WebPaymentTransactionOperations(paymentTransactionController);
+        public PaymentTransactionOperations paymentTransactionOperations(
+            PaymentTransactionController paymentTransactionController,
+            SystemNotificationService systemNotificationService) {
+            return new WebPaymentTransactionOperations(paymentTransactionController, systemNotificationService);
         }
 
         @Bean

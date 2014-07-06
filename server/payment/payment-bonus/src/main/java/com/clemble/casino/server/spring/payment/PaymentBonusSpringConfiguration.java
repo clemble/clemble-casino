@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -28,25 +29,27 @@ public class PaymentBonusSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public BonusService bonusService(
-            @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
-            SystemNotificationService systemNotificationService,
-            BonusPolicy bonusPolicy) {
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        SystemNotificationService systemNotificationService,
+        BonusPolicy bonusPolicy) {
         return new BonusService(bonusPolicy, notificationService, systemNotificationService);
     }
 
     @Bean
+    @DependsOn("bonusService")
     public DailyBonusEventListener dailyBonusService(
             BonusService bonusService,
             SystemNotificationServiceListener notificationServiceListener,
-            @Value("${clemble.bonus.daily.currency}") Currency daiyCurrency,
+            @Value("${clemble.bonus.daily.currency}") Currency dailyCurrency,
             @Value("${clemble.bonus.daily.amount}") int dailyBonus) {
-        Money bonus = new Money(Currency.FakeMoney, 50);
+        Money bonus = new Money(dailyCurrency, dailyBonus);
         DailyBonusEventListener dailyBonusService = new DailyBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(dailyBonusService);
         return dailyBonusService;
     }
 
     @Bean
+    @DependsOn("bonusService")
     public PlayerConnectionDiscoveryBonusEventListener dicoveryBonusService(
             BonusService bonusService,
             SystemNotificationServiceListener notificationServiceListener,
@@ -59,7 +62,8 @@ public class PaymentBonusSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerRegistrationBonusEventListener registerationBonusService(
+    @DependsOn("bonusService")
+    public PlayerRegistrationBonusEventListener registrationBonusService(
             BonusService bonusService,
             SystemNotificationServiceListener notificationServiceListener,
             @Value("${clemble.bonus.registration.currency}") Currency registrationCurrency,
@@ -74,6 +78,5 @@ public class PaymentBonusSpringConfiguration implements SpringConfiguration {
     public BonusPolicy bonusPolicy() {
         return new NoBonusPolicy();
     }
-
 
 }
