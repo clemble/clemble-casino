@@ -29,7 +29,7 @@ public class GameRecordController implements GameRecordService, ExternalControll
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_SESSIONS_RECORD, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.SESSIONS_RECORD, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody GameRecord get(@PathVariable("game") Game game, @PathVariable("session") String session) {
         GameSessionKey sessionKey = new GameSessionKey(game, session);

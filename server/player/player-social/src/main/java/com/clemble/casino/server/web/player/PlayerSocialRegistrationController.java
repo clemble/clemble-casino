@@ -44,7 +44,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = SOCIAL_REGISTRATION_DESCRIPTION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = SOCIAL_REGISTRATION_DESCRIPTION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody PlayerToken createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
         validationService.validate(socialRegistrationRequest.getSocialConnectionData());

@@ -36,8 +36,7 @@ abstract public class PlayerProfileServiceFactory {
 
         @Override
         public PlayerProfileService construct(ClembleCasinoOperations player) {
-            PlayerSession session = player.sessionOperations().create();
-            return new IntegrationPlayerProfileService(session.getResourceLocations().getServerRegistryConfiguration().getPlayerRegistry(), restTemplate);
+            return new IntegrationPlayerProfileService(player.getHost(), restTemplate);
         }
 
     }

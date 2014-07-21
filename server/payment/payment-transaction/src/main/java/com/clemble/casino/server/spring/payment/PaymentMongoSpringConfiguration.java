@@ -3,6 +3,7 @@ package com.clemble.casino.server.spring.payment;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.mongodb.MongoClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,15 +20,15 @@ import java.net.UnknownHostException;
 public class PaymentMongoSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public MongoRepositoryFactory mongoRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
+    public MongoRepositoryFactory paymentRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
         MongoClient mongoClient = new MongoClient(host, port);
         MongoOperations mongoOperations = new MongoTemplate(mongoClient, "clemble");
         return new MongoRepositoryFactory(mongoOperations);
     }
 
     @Bean
-    public PaymentTransactionRepository paymentTransactionRepository(MongoRepositoryFactory repositoryFactory) {
-        return repositoryFactory.getRepository(PaymentTransactionRepository.class);
+    public PaymentTransactionRepository paymentTransactionRepository(@Qualifier("paymentRepositoryFactory") MongoRepositoryFactory paymentRepositoryFactory) {
+        return paymentRepositoryFactory.getRepository(PaymentTransactionRepository.class);
     }
 
 }

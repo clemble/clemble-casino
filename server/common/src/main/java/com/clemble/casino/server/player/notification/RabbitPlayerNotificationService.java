@@ -14,7 +14,6 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 
-import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
@@ -31,10 +30,10 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
         public RabbitTemplate load(String server) throws Exception {
             CachingConnectionFactory connectionFactory = new CachingConnectionFactory(server);
             connectionFactory.setExecutor(executorService);
-            RabbitTemplate rabbitTemplagte = new RabbitTemplate(connectionFactory);
-            rabbitTemplagte.setMessageConverter(messageConverter);
-            rabbitTemplagte.setExchange("amq.topic");
-            return rabbitTemplagte;
+            RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+            rabbitTemplate.setMessageConverter(messageConverter);
+            rabbitTemplate.setExchange("amq.topic");
+            return rabbitTemplate;
         }
 
     });
@@ -43,14 +42,17 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
 
     final private String postfix;
     final private MessageConverter messageConverter;
-    final private ServerRegistry serverRegistry;
+    final private String host;
 
     final private ExecutorService executorService;
 
-    public RabbitPlayerNotificationService(final String postfix, final MessageConverter messageConverter, final ServerRegistry serverRegistry) {
+    public RabbitPlayerNotificationService(
+        final String postfix,
+        final MessageConverter messageConverter,
+        final String host) {
         this.postfix = checkNotNull(postfix);
         this.messageConverter = checkNotNull(messageConverter);
-        this.serverRegistry = checkNotNull(serverRegistry);
+        this.host = host;
 
         ThreadFactory notificationThreadFactory = new ThreadFactoryBuilder()
             .setNameFormat("CL playerNotification with '" + postfix + "' %d")
@@ -98,7 +100,7 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
 
     private boolean notify(final String player, final Message message) {
         try {
-            RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(serverRegistry.findById(player));
+            RabbitTemplate rabbitTemplate = RABBIT_CACHE.get(host);
             rabbitTemplate.send(String.valueOf(player) + postfix, message);
         } catch (Throwable e) {
             LOG.trace("Failed notification of {} with {}", player, message);

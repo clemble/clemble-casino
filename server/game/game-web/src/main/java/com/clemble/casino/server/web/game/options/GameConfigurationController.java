@@ -13,8 +13,7 @@ import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.game.specification.GameConfigurations;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
-import com.clemble.casino.web.game.GameWebMapping;
-import com.clemble.casino.web.mapping.WebMapping;
+import static com.clemble.casino.web.game.GameWebMapping.*;
 
 @Controller
 public class GameConfigurationController implements GameConfigurationService, ExternalController {
@@ -26,7 +25,7 @@ public class GameConfigurationController implements GameConfigurationService, Ex
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONFIGURATIONS, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = CONFIGURATION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody GameConfigurations getConfigurations() {
         return configurationService.getConfigurations();

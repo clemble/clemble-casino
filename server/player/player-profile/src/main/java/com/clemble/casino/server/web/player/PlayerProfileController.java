@@ -19,8 +19,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
-import com.clemble.casino.web.mapping.WebMapping;
-import com.clemble.casino.web.player.PlayerWebMapping;
+import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
 @Controller
 public class PlayerProfileController implements PlayerProfileService, ExternalController {
@@ -34,7 +33,7 @@ public class PlayerProfileController implements PlayerProfileService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PROFILE_PLAYER, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = PROFILE_PLAYER, produces = PRODUCES)
     public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("player") String playerId) {
         // Step 1. Fetching playerProfile
         PlayerProfile playerProfile = profileRepository.findOne(playerId);
@@ -46,7 +45,7 @@ public class PlayerProfileController implements PlayerProfileService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PlayerWebMapping.PROFILE_PLAYER, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PROFILE_PLAYER, produces = PRODUCES)
     public @ResponseBody
     PlayerProfile updatePlayerProfile(@PathVariable("player") String player, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
@@ -64,7 +63,7 @@ public class PlayerProfileController implements PlayerProfileService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PlayerWebMapping.PROFILE, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = PROFILE, produces = PRODUCES)
     public @ResponseBody List<PlayerProfile> getPlayerProfile(@RequestParam("player") Collection<String> players) {
         return profileRepository.findAll(players);
     }

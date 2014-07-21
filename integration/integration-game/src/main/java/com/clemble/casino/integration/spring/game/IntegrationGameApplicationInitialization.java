@@ -15,7 +15,7 @@ public class IntegrationGameApplicationInitialization extends AbstractWebApplica
     protected void doInit(ServletContext container) throws ServletException {
         // Step 1. Create the 'root' Spring application context
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(IntegrationGameSpringConfiguration.class);
+        rootContext.register(IntegrationGameWebSpringConfiguration.class);
         // Step 2. Registering appropriate Dispatcher
         ServletRegistration.Dynamic dispatcher = container.addServlet("integration-game", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);

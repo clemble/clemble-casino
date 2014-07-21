@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.clemble.casino.configuration.ResourceLocationService;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.security.PlayerSession;
@@ -28,22 +27,19 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
 
     final private PlayerSessionRepository sessionRepository;
     final private SystemNotificationService notificationService;
-    final private ResourceLocationService resourceLocationService;
     final private ServerPlayerPresenceService playerPresenceService;
 
     public PlayerSessionController(
-        final ResourceLocationService resourceLocationService,
         final PlayerSessionRepository sessionRepository,
         final ServerPlayerPresenceService playerPresenceService,
         final SystemNotificationService notificationService) {
-        this.resourceLocationService = checkNotNull(resourceLocationService);
         this.sessionRepository = checkNotNull(sessionRepository);
         this.playerPresenceService = checkNotNull(playerPresenceService);
         this.notificationService = notificationService;
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
     PlayerSession create(@PathVariable("playerId") String playerId) {
@@ -52,14 +48,12 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
         // Step 2. Providing result as a Session data
         playerSession.setExpirationTime(playerPresenceService.markAvailable(playerId));
         playerSession = sessionRepository.save(playerSession);
-        // Step 3. Specifying player resources
-        playerSession.setResourceLocations(resourceLocationService.getResources(playerId));
-        // Step 4. Returning session identifier
+        // Step 3. Returning session identifier
         return playerSession;
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody
     PlayerSession refreshPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") String sessionId) {
@@ -70,9 +64,7 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed);
         playerSession.setExpirationTime(playerPresenceService.markOnline(playerId));
         playerSession = sessionRepository.save(playerSession);
-        // Step 3. Specifying player resources
-        playerSession.setResourceLocations(resourceLocationService.getResources(playerId));
-        // Step 4. Returning refreshed session
+        // Step 3. Returning refreshed session
         return playerSession;
     }
 
@@ -93,7 +85,7 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
     PlayerSession getPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") String sessionId) {

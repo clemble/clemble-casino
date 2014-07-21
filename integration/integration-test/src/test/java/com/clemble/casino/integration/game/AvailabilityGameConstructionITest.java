@@ -30,7 +30,7 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.player.PlayerAware;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
+@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class AvailabilityGameConstructionITest {
 

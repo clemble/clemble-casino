@@ -32,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoRegistrationOperations {
 
+    final private String host;
     final private ObjectMapper objectMapper;
     final private PlayerFacadeRegistrationService registrationService;
     final private PlayerProfileService profileOperations;
@@ -47,20 +48,23 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private GameActionService actionService;
     final private GameRecordService recordService;
 
-    public ServerClembleCasinoRegistrationOperations(ObjectMapper objectMapper,
-            EventListenerOperationsFactory listenerOperations,
-            PlayerFacadeRegistrationService registrationService,
-            PlayerProfileService profileOperations,
-            PlayerConnectionService connectionService,
-            PlayerSessionService sessionOperations,
-            PaymentService accountOperations,
-            PlayerPresenceService presenceService,
-            AutoGameConstructionService gameConstructionService,
-            AvailabilityGameConstructionService availabilityConstructionService,
-            GameInitiationService initiationService,
-            GameConfigurationService specificationService,
-            GameActionService actionService,
-            GameRecordService recordService) {
+    public ServerClembleCasinoRegistrationOperations(
+        String host,
+        ObjectMapper objectMapper,
+        EventListenerOperationsFactory listenerOperations,
+        PlayerFacadeRegistrationService registrationService,
+        PlayerProfileService profileOperations,
+        PlayerConnectionService connectionService,
+        PlayerSessionService sessionOperations,
+        PaymentService accountOperations,
+        PlayerPresenceService presenceService,
+        AutoGameConstructionService gameConstructionService,
+        AvailabilityGameConstructionService availabilityConstructionService,
+        GameInitiationService initiationService,
+        GameConfigurationService specificationService,
+        GameActionService actionService,
+        GameRecordService recordService) {
+        this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
         this.listenerOperations = checkNotNull(listenerOperations);
@@ -110,7 +114,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     }
 
     private ClembleCasinoOperations create(PlayerToken playerIdentity, PlayerCredential credential) {
-        return new ServerCasinoOperations(objectMapper, playerIdentity, credential, profileOperations, connectionService, sessionOperations, paymentService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService);
+        return new ServerCasinoOperations(host, objectMapper, playerIdentity, credential, profileOperations, connectionService, sessionOperations, paymentService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService);
     }
 
 }

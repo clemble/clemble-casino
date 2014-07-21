@@ -1,10 +1,5 @@
 package com.clemble.casino.server.spring.web.player;
 
-import com.clemble.casino.configuration.ResourceLocationService;
-import com.clemble.casino.configuration.ServerRegistryConfiguration;
-import com.clemble.casino.server.configuration.SimpleNotificationConfigurationService;
-import com.clemble.casino.server.configuration.SimpleResourceLocationService;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.*;
 import com.clemble.casino.server.player.presence.listener.PlayerPresenceGameEndedListener;
 import com.clemble.casino.server.player.presence.listener.PlayerPresenceGameStartedEventListener;
@@ -13,6 +8,7 @@ import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerSessionController;
 import com.mongodb.MongoClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +28,7 @@ import java.net.UnknownHostException;
 public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public MongoRepositoryFactory mongoRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
+    public MongoRepositoryFactory playerPresenceRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
         MongoClient mongoClient = new MongoClient(host, port);
         MongoOperations mongoOperations = new MongoTemplate(mongoClient, "clemble");
         return new MongoRepositoryFactory(mongoOperations);
@@ -53,8 +49,8 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerSessionRepository playerSessionRepository(MongoRepositoryFactory repositoryFactory) {
-        return repositoryFactory.getRepository(PlayerSessionRepository.class);
+    public PlayerSessionRepository playerSessionRepository(@Qualifier("playerPresenceRepositoryFactory") MongoRepositoryFactory playerPresenceRepositoryFactory) {
+        return playerPresenceRepositoryFactory.getRepository(PlayerSessionRepository.class);
     }
 
     @Bean
@@ -69,26 +65,10 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerSessionController playerSessionController(
-            ResourceLocationService resourceLocationService,
             PlayerSessionRepository playerSessionRepository,
             ServerPlayerPresenceService playerStateManager,
             SystemNotificationService notificationService) {
-        return new PlayerSessionController(resourceLocationService, playerSessionRepository, playerStateManager, notificationService);
-    }
-
-    @Bean
-    public ServerRegistryConfiguration serverRegistryConfiguration(
-        @Value("${clemble.management.configuration.notification}") String notificationBase,
-        @Value("${clemble.management.configuration.player}") String playerBase,
-        @Value("${clemble.management.configuration.payment}") String paymentBase,
-        @Value("${clemble.management.configuration.game}") String gameBase) {
-        return new ServerRegistryConfiguration(notificationBase, playerBase, paymentBase, gameBase);
-    }
-
-    @Bean
-    public ResourceLocationService resourceLocationService(ServerRegistryConfiguration serverRegistryConfiguration) {
-        SimpleNotificationConfigurationService configurationService = new SimpleNotificationConfigurationService("guest", "guest", serverRegistryConfiguration.getPlayerNotificationRegistry());
-        return new SimpleResourceLocationService(configurationService, serverRegistryConfiguration);
+        return new PlayerSessionController(playerSessionRepository, playerStateManager, notificationService);
     }
 
 }

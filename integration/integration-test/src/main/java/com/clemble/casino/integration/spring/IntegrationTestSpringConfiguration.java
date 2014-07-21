@@ -146,7 +146,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         @Qualifier("objectMapper")
         public ObjectMapper objectMapper;
 
-        @Value("${clemble.service.management.host}")
+        @Value("${clemble.host}")
         public String baseUrl;
 
         @Bean

@@ -29,7 +29,7 @@ public class AutoGameConstructionController<State extends GameState> implements 
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.GAME_CONSTRUCTION_AUTO, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.CONSTRUCTION_AUTO, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody GameConstruction construct(@RequestBody final AutomaticGameRequest request) {
         // Step 1. Checking that provided specification was valid

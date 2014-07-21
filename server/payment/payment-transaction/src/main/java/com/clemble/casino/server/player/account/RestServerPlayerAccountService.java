@@ -5,18 +5,17 @@ import java.util.*;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.web.payment.PaymentWebMapping;
+import static com.clemble.casino.web.payment.PaymentWebMapping.*;
 
 public class RestServerPlayerAccountService implements ServerPlayerAccountService {
 
     final private RestTemplate restTemplate;
-    final private ServerRegistry paymentServerRegistry;
+    final private String host;
 
-    public RestServerPlayerAccountService(ServerRegistry paymentServerRegistry, RestTemplate restTemplate) {
+    public RestServerPlayerAccountService(String paymentServerRegistry, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.paymentServerRegistry = paymentServerRegistry;
+        this.host = paymentServerRegistry;
     }
 
     @Override
@@ -26,8 +25,7 @@ public class RestServerPlayerAccountService implements ServerPlayerAccountServic
 
     @Override
     public List<String> canAfford(Collection<String> playerId, Money amount) {
-        String url = paymentServerRegistry.findBase()
-                + PaymentWebMapping.PAYMENT_ACCOUNTS
+        String url = toPaymentUrl(PAYMENT_ACCOUNTS).replace("{host}", host)
                 + "?player=" + StringUtils.collectionToCommaDelimitedString(playerId)
                 + "&currency=" + amount.getCurrency()
                 + "&amount=" + amount.getAmount();

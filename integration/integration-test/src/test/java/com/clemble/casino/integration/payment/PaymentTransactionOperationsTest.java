@@ -12,7 +12,6 @@ import com.clemble.casino.server.payment.listener.SystemPaymentTransactionReques
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.test.random.ObjectGenerator;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -60,18 +59,6 @@ public class PaymentTransactionOperationsTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    @Ignore // TODO find a solution, if it's not too costly
-    public void testFakePaymentTransaction() {
-        PaymentTransaction paymentTransaction = new PaymentTransaction().setTransactionKey(new PaymentTransactionKey("TicTacToe", 2432))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayer("-1").setAmount(Money.create(Currency.FakeMoney, 50)))
-                .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayer("-2").setAmount(Money.create(Currency.FakeMoney, 50)));
-
-        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionUnknownPlayers));
-
-        paymentTransactionOperations.perform(paymentTransaction);
-    }
-
-    @Test
     public void testInValidPaymentTransaction() {
         ClembleCasinoOperations player = playerOperations.createPlayer();
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
@@ -107,8 +94,9 @@ public class PaymentTransactionOperationsTest {
                         new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)));
 
-        PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
+        eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
+        PaymentTransaction savedPaymentTransaction = transactionRepository.findOne(paymentTransaction.getTransactionKey());
         assertEquals(savedPaymentTransaction, paymentTransaction);
     }
 
@@ -157,7 +145,10 @@ public class PaymentTransactionOperationsTest {
                         new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
                                 .setAmount(Money.create(Currency.FakeMoney, 50)));
 
-        PaymentTransaction savedPaymentTransaction = paymentTransactionOperations.perform(paymentTransaction);
+        eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
+
+        PaymentTransaction savedPaymentTransaction = transactionRepository.findOne(paymentTransaction.getTransactionKey());
+
 
         assertEquals(savedPaymentTransaction, paymentTransaction);
         assertEquals(paymentTransaction, player.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));

@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import com.clemble.casino.server.player.presence.SystemNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -45,7 +46,6 @@ import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.player.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.player.service.PlayerSessionService;
-import com.clemble.casino.server.payment.ServerPaymentTransactionService;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -119,21 +119,23 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         }
 
         @Bean
-        public ClembleCasinoRegistrationOperations registrationOperations(ObjectMapper objectMapper,
-                EventListenerOperationsFactory listenerOperations,
-                PlayerFacadeRegistrationService registrationService,
-                PlayerProfileService profileOperations,
-                PlayerConnectionService connectionService,
-                PlayerSessionService sessionOperations,
-                PaymentService accountOperations,
-                PlayerPresenceService presenceService,
-                @Qualifier("autoGameConstructionController") AutoGameConstructionService constructionService,
-                @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,
-                @Qualifier("gameInitiationController") GameInitiationService initiationService,
-                @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
-                GameActionService actionService,
-                GameRecordService recordService) {
-            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(objectMapper, listenerOperations, registrationService, profileOperations, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService);
+        public ClembleCasinoRegistrationOperations registrationOperations(
+            @Value("${clemble.host}") String host,
+            ObjectMapper objectMapper,
+            EventListenerOperationsFactory listenerOperations,
+            PlayerFacadeRegistrationService registrationService,
+            PlayerProfileService profileOperations,
+            PlayerConnectionService connectionService,
+            PlayerSessionService sessionOperations,
+            PaymentService accountOperations,
+            PlayerPresenceService presenceService,
+            @Qualifier("autoGameConstructionController") AutoGameConstructionService constructionService,
+            @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,
+            @Qualifier("gameInitiationController") GameInitiationService initiationService,
+            @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
+            GameActionService actionService,
+            GameRecordService recordService) {
+            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }

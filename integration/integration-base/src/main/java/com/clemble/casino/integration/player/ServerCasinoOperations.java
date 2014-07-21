@@ -52,6 +52,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
      */
     private static final long serialVersionUID = -4160641502466429770L;
 
+    final private String host;
     final private String player;
     final private PlayerSession session;
     final private EventListenerOperations listenerOperations;
@@ -66,17 +67,29 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     final private GameActionOperationsFactory actionOperationsFactory;
     final private GameRecordOperations recordOperations;
 
-    public ServerCasinoOperations(final ObjectMapper objectMapper, final PlayerToken playerIdentity, final PlayerCredential credential,
-            final PlayerProfileService playerProfileService, final PlayerConnectionService playerConnectionService,
-            final PlayerSessionService sessionOperations, final PaymentService accountOperations,
-            final EventListenerOperationsFactory listenerOperationsFactory, final PlayerPresenceService playerPresenceService,
-            final AutoGameConstructionService gameConstructionService, final AvailabilityGameConstructionService availabilityConstructionService,
-            final GameInitiationService initiationService, final GameConfigurationService specificationService, final GameActionService actionService,
-            final GameRecordService recordService) {
+    public ServerCasinoOperations(
+        final String host,
+        final ObjectMapper objectMapper,
+        final PlayerToken playerIdentity,
+        final PlayerCredential credential,
+        final PlayerProfileService playerProfileService,
+        final PlayerConnectionService playerConnectionService,
+        final PlayerSessionService sessionOperations,
+        final PaymentService accountOperations,
+        final EventListenerOperationsFactory listenerOperationsFactory,
+        final PlayerPresenceService playerPresenceService,
+        final AutoGameConstructionService gameConstructionService,
+        final AvailabilityGameConstructionService availabilityConstructionService,
+        final GameInitiationService initiationService,
+        final GameConfigurationService specificationService,
+        final GameActionService actionService,
+        final GameRecordService recordService
+    ) {
+        this.host = host;
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
-        this.listenerOperations = listenerOperationsFactory.construct(player, session.getResourceLocations().getNotificationConfiguration(), objectMapper);
+        this.listenerOperations = listenerOperationsFactory.construct(player, host, objectMapper);
 
         this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, listenerOperations);
 
@@ -99,6 +112,11 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
         });
 
         this.recordOperations = new GameRecordTemplate(recordService);
+    }
+
+    @Override
+    public String getHost() {
+        return host;
     }
 
     @Override

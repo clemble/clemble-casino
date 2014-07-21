@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.DNSBasedServerRegistry;
-import com.clemble.casino.ServerRegistry;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.player.account.RestServerPlayerAccountService;
 import com.clemble.casino.server.player.account.ServerPlayerAccountService;
@@ -36,13 +34,8 @@ public class PaymentCommonSpringConfiguration implements SpringConfiguration {
         public ServerPlayerAccountService realPlayerAccountService;
 
         @Bean
-        public ServerRegistry paymentServerRegistry(@Value("${clemble.service.payment.host}") String host) {
-            return new DNSBasedServerRegistry(host);
-        }
-
-        @Bean
-        public ServerPlayerAccountService playerAccountService(RestTemplate restTemplate, ServerRegistry paymentServerRegistry) {
-            return realPlayerAccountService == null ? new RestServerPlayerAccountService(paymentServerRegistry, restTemplate) : realPlayerAccountService;
+        public ServerPlayerAccountService playerAccountService(RestTemplate restTemplate, @Value("${clemble.service.payment.host}") String host) {
+            return realPlayerAccountService == null ? new RestServerPlayerAccountService(host, restTemplate) : realPlayerAccountService;
         }
 
     }

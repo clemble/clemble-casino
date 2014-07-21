@@ -6,7 +6,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -17,7 +16,6 @@ import com.rabbitmq.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.clemble.casino.configuration.NotificationConfiguration;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,12 +26,12 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
 
     final private Logger LOG = LoggerFactory.getLogger(getClass());
 
-    final private NotificationConfiguration notificationConfiguration;
+    final private String notificationConfiguration;
     final private ObjectMapper objectMapper;
 
     final private Map<SystemEventListener<?>, RabbitStartupTask<?>> listenerToTask = new HashMap<SystemEventListener<?>, RabbitSystemNotificationServiceListener.RabbitStartupTask<?>>();
 
-    public RabbitSystemNotificationServiceListener(NotificationConfiguration notificationConfiguration, ObjectMapper objectMapper) {
+    public RabbitSystemNotificationServiceListener(String notificationConfiguration, ObjectMapper objectMapper) {
         this.notificationConfiguration = checkNotNull(notificationConfiguration);
         this.objectMapper = checkNotNull(objectMapper);
     }
@@ -64,7 +62,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
 
         final private Logger LOG = LoggerFactory.getLogger(RabbitStartupTask.class);
 
-        final private NotificationConfiguration configurations;
+        final private String configurations;
         final private ObjectMapper objectMapper;
         final private ScheduledExecutorService executor;
         final private SystemEventListener<T> eventListener;
@@ -73,7 +71,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
 
         private Connection rabbitConnection;
 
-        public RabbitStartupTask(NotificationConfiguration configuration, ObjectMapper objectMapper, SystemEventListener<T> eventListener) {
+        public RabbitStartupTask(String configuration, ObjectMapper objectMapper, SystemEventListener<T> eventListener) {
             this.configurations = checkNotNull(configuration);
             this.objectMapper = checkNotNull(objectMapper);
             this.eventListener = checkNotNull(eventListener);
@@ -89,10 +87,10 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
                 synchronized (configurations) {
                     // Step 1. Generalizing connection factory
                     ConnectionFactory factory = new ConnectionFactory();
-                    factory.setUsername(configurations.getUser());
-                    factory.setPassword(configurations.getPassword());
-                    factory.setHost(configurations.getRabbitHost().getHost());
-                    factory.setPort(configurations.getRabbitHost().getPort());
+                    factory.setUsername("guest");
+                    factory.setPassword("guest");
+                    factory.setHost(configurations);
+                    factory.setPort(5672);
                     LOG.debug("Created connection factory");
                     // Step 2. Creating connection
                     rabbitConnection = factory.newConnection(executor);

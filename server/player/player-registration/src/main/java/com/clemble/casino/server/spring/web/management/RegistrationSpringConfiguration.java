@@ -16,6 +16,7 @@ import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.casino.server.spring.web.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.web.management.PlayerRegistrationController;
 import com.mongodb.MongoClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,15 +41,15 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public MongoRepositoryFactory mongoRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
+    public MongoRepositoryFactory playerRegistrationRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
         MongoClient mongoClient = new MongoClient(host, port);
         MongoOperations mongoOperations = new MongoTemplate(mongoClient, "clemble");
         return new MongoRepositoryFactory(mongoOperations);
     }
 
     @Bean
-    public PlayerCredentialRepository playerCredentialRepository(MongoRepositoryFactory repositoryFactory) {
-        return repositoryFactory.getRepository(PlayerCredentialRepository.class);
+    public PlayerCredentialRepository playerCredentialRepository(@Qualifier("playerRegistrationRepositoryFactory") MongoRepositoryFactory playerRegistrationRepositoryFactory) {
+        return playerRegistrationRepositoryFactory.getRepository(PlayerCredentialRepository.class);
     }
 
     @Bean

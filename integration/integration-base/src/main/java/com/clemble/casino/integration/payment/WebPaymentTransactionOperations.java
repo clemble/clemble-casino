@@ -21,12 +21,6 @@ public class WebPaymentTransactionOperations  extends AbstractPaymentTransaction
     }
 
     @Override
-    public PaymentTransaction perform(PaymentTransaction transaction) {
-        systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(transaction));
-        return transaction;
-    }
-
-    @Override
     public PaymentTransaction get(ClembleCasinoOperations player, String source, String transactionId) {
         return paymentTransactionService.getTransaction(source, transactionId);
     }

@@ -59,7 +59,7 @@ public class PaymentClientSpringConfiguration implements SpringConfiguration {
         public PlayerAccountService playerAccountController;
 
         @Bean
-        public PlayerAccountService playerAccountClient(@Value("${clemble.service.payment.host}") String base){
+        public PlayerAccountService playerAccountClient(@Value("${clemble.host}") String base){
             if (playerAccountController != null)
                 return playerAccountController;
             return new RestPlayerAccountService(base, new RestTemplate());
