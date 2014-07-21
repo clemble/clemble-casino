@@ -120,14 +120,14 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             public boolean check() {
                 return player.paymentOperations().getPaymentTransaction(registrationTransaction) != null;
             }
-        }, 30_000);
+        }, 5_000);
         // Step 3. Getting PaymentTransaction
         AsyncCompletionUtils.get(new Get<PlayerProfile>() {
             @Override
             public PlayerProfile get() {
                 return player.profileOperations().getPlayerProfile();
             }
-        }, 30_000);
+        }, 5_000);
         return player;
     }
 }

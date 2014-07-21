@@ -5,9 +5,11 @@ import static org.junit.Assert.assertNull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -32,6 +34,7 @@ import com.clemble.test.concurrent.Get;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
+@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class GameActionOperationsGetStateITest {
 
