@@ -50,7 +50,7 @@ public class SocialNetworkPopulatorEventListener implements SystemEventListener<
 
     @Override
     public String getQueueName() {
-        return "player.social.populator";
+        return SystemPlayerSocialAddedEvent.CHANNEL + " > player:social:populator";
     }
 
 }

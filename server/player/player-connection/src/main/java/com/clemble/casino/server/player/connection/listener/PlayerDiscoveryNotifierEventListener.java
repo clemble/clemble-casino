@@ -30,7 +30,7 @@ public class PlayerDiscoveryNotifierEventListener implements SystemEventListener
 
     @Override
     public String getQueueName() {
-        return "player.social.autodiscovery";
+        return SystemPlayerDiscoveredConnectionEvent.CHANNEL + " > player:social:autodiscovery";
     }
 
 }

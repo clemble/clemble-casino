@@ -19,7 +19,7 @@ public class RegistrationApplicationInitializer extends AbstractWebApplicationIn
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(RegistrationWebSpringConfiguration.class);
         // Step 3. Registering appropriate Dispatcher
-        ServletRegistration.Dynamic dispatcher = container.addServlet("player", new DispatcherServlet(rootContext));
+        ServletRegistration.Dynamic dispatcher = container.addServlet("player-registration", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }

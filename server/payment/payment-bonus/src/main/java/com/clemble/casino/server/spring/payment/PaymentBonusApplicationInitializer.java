@@ -19,7 +19,7 @@ public class PaymentBonusApplicationInitializer extends AbstractWebApplicationIn
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(PaymentBonusWebSpringConfiguration.class);
         // Step 3. Registering appropriate Dispatcher
-        ServletRegistration.Dynamic dispatcher = container.addServlet("player", new DispatcherServlet(rootContext));
+        ServletRegistration.Dynamic dispatcher = container.addServlet("payment-bonus", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }

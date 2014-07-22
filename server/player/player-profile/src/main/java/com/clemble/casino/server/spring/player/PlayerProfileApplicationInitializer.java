@@ -20,7 +20,7 @@ public class PlayerProfileApplicationInitializer extends AbstractWebApplicationI
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(PlayerProfileWebSpringConfiguration.class);
         // Step 3. Registering appropriate Dispatcher
-        ServletRegistration.Dynamic dispatcher = container.addServlet("player", new DispatcherServlet(rootContext));
+        ServletRegistration.Dynamic dispatcher = container.addServlet("player-profile", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }

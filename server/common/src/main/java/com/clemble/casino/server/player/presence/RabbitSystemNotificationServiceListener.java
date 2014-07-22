@@ -11,6 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.rabbitmq.client.*;
 import org.slf4j.Logger;
@@ -68,8 +69,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         final private SystemEventListener<T> eventListener;
 
         final AtomicBoolean keepClosed = new AtomicBoolean(false);
-
-        private Connection rabbitConnection;
+        final private AtomicReference<Connection> rabbitConnection = new AtomicReference<>(null);
 
         public RabbitStartupTask(String configuration, ObjectMapper objectMapper, SystemEventListener<T> eventListener) {
             this.configurations = checkNotNull(configuration);
@@ -93,10 +93,10 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
                     factory.setPort(5672);
                     LOG.debug("Created connection factory");
                     // Step 2. Creating connection
-                    rabbitConnection = factory.newConnection(executor);
+                    rabbitConnection.set(factory.newConnection(executor));
                     final AtomicBoolean keepClosed = new AtomicBoolean(false);
                     // Step 3. Creating new Channel
-                    Channel channel = rabbitConnection.createChannel();
+                    Channel channel = rabbitConnection.get().createChannel();
                     LOG.debug("Channel for RabbitConnection created");
                     channel.addShutdownListener(new ShutdownListener() {
                         @Override
@@ -124,7 +124,11 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         public void close() {
             try {
                 keepClosed.set(true);
-                rabbitConnection.close();
+                if(rabbitConnection.get() != null) {
+                    rabbitConnection.get().close();
+                } else {
+                    LOG.error("Failed to start {} {}", eventListener.getQueueName(), eventListener.getChannel());
+                }
             } catch (ShutdownSignalException exception) {
                 LOG.error("Failure to close listener ShutdownSignalException", exception);
             } catch (IOException ioException) {

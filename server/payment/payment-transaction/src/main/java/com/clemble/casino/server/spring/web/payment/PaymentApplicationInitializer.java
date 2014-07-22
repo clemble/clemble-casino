@@ -17,7 +17,7 @@ public class PaymentApplicationInitializer extends AbstractWebApplicationInitial
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(PaymentWebSpringConfiguration.class);
         // Step 3. Registering appropriate Dispatcher
-        ServletRegistration.Dynamic dispatcher = container.addServlet("payment", new DispatcherServlet(rootContext));
+        ServletRegistration.Dynamic dispatcher = container.addServlet("payment-transaction", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }

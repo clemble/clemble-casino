@@ -168,7 +168,7 @@ public class PaymentTransactionOperationsTest {
             public PaymentTransaction get() {
                 return player.paymentOperations().getPaymentTransaction("registration", player.getPlayer());
             }
-        }, 30_000);
+        }, 5_000);
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
             if (paymentOperation.getPlayer().equals(player.getPlayer())) {

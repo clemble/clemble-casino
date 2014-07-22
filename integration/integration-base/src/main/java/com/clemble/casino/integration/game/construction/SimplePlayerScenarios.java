@@ -8,6 +8,7 @@ import com.clemble.casino.client.payment.PaymentTransactionEventSelector;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
+import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import com.clemble.test.concurrent.Get;
@@ -112,13 +113,19 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             public boolean check() {
                 return player.listenerOperations().isAlive();
             }
-        }, 30_000);
-        // Step 2. Checking registration passed
+        }, 5_000);
+        // Step 2. Checking registration && daily bonus received
         final PaymentTransactionKey registrationTransaction = new PaymentTransactionKey("registration", player.getPlayer());
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
                 return player.paymentOperations().getPaymentTransaction(registrationTransaction) != null;
+            }
+        }, 5_000);
+        AsyncCompletionUtils.check(new Check() {
+            @Override
+            public boolean check() {
+                return player.paymentOperations().getPaymentTransactions(PaymentBonusSource.dailybonus).size() > 0;
             }
         }, 5_000);
         // Step 3. Getting PaymentTransaction

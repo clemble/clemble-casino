@@ -40,7 +40,7 @@ public class PlayerConnectionDiscoveryBonusEventListener implements BonusEventLi
 
     @Override
     public String getQueueName() {
-        return "payment.bonus.autodiscovery";
+        return SystemPlayerDiscoveredConnectionEvent.CHANNEL + " > payment:bonus:autodiscovery";
     }
 
 }

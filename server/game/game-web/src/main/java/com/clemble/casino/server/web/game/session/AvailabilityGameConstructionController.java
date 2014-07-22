@@ -26,7 +26,7 @@ import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
-import com.clemble.casino.web.game.GameWebMapping;
+import static com.clemble.casino.web.game.GameWebMapping.*;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
@@ -43,14 +43,14 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.CONSTRUCTION_AVAILABILITY, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = CONSTRUCTION_AVAILABILITY, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody GameConstruction construct(@RequestBody AvailabilityGameRequest gameRequest) {
         return availabilityConstructionService.construct(gameRequest);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.GAME_CONSTRUCTION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = GAME_CONSTRUCTION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody GameConstruction getConstruction(@PathVariable("game") final Game game, @PathVariable("session") final String session) {
         // Step 1. Searching for construction
@@ -63,14 +63,14 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.CONSTRUCTION_RESPONSES_PLAYER, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = CONSTRUCTION_RESPONSES_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody PlayerAwareEvent getReply(@PathVariable("game") final Game game, @PathVariable("session") final String session, @PathVariable("playerId") final String player) {
         return constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().filterAction(player);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.CONSTRUCTION_RESPONSES, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = CONSTRUCTION_RESPONSES, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody GameConstruction reply(@RequestBody final InvitationResponseEvent gameRequest) {
         // Step 1. Invoking actual matching service
@@ -78,7 +78,7 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.CONSTRUCTION_AVAILABILITY_PENDING, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = CONSTRUCTION_AVAILABILITY_PENDING, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody Collection<GameInitiation> getPending(@PathVariable("playerId") String player) {
         return availabilityConstructionService.getPending(player);

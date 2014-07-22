@@ -28,6 +28,6 @@ public class PlayerSocialNetworkCreationListener implements SystemEventListener<
 
     @Override
     public String getQueueName() {
-        return SystemPlayerCreatedEvent.CHANNEL + "player:connection";
+        return SystemPlayerCreatedEvent.CHANNEL + " > player:connection";
     }
 }

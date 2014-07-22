@@ -17,7 +17,7 @@ public class PlayerSocialApplicationInitializer extends AbstractWebApplicationIn
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(PlayerSocialWebSpringConfiguration.class);
         // Step 3. Registering appropriate Dispatcher
-        ServletRegistration.Dynamic dispatcher = container.addServlet("player", new DispatcherServlet(rootContext));
+        ServletRegistration.Dynamic dispatcher = container.addServlet("player-social", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }

@@ -28,7 +28,7 @@ public class PendingPlayerCreationEventListener implements SystemEventListener<S
 
     @Override
     public String getQueueName() {
-        return "game.pending.player.registration";
+        return SystemPlayerCreatedEvent.CHANNEL + " > game:pending:player:registration";
     }
 
 }

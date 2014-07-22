@@ -65,7 +65,7 @@ public class PendingGameInitiationEventListener implements SystemEventListener<S
 
     @Override
     public String getQueueName() {
-        return "game.pending";
+        return SystemPlayerPresenceChangedEvent.CHANNEL + " > game:pending";
     }
 
     public void add(final GameInitiation initiation) {

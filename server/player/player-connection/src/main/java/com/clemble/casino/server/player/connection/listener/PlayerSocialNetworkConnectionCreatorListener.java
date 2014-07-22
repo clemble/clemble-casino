@@ -55,7 +55,7 @@ public class PlayerSocialNetworkConnectionCreatorListener implements SystemEvent
 
     @Override
     public String getQueueName() {
-        return "player:connection:populator";
+        return SystemPlayerConnectionsFetchedEvent.CHANNEL + " > player:connection:populator";
     }
 
 }

@@ -45,7 +45,7 @@ public class DailyBonusEventListener implements BonusEventListener<SystemPlayerE
 
     @Override
     public String getQueueName() {
-        return "payment:bonus:daily";
+        return SystemPlayerEnteredEvent.CHANNEL + " > payment:bonus:daily";
     }
 
 }

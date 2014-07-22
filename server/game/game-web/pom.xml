@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.server</groupId>
         <artifactId>game</artifactId>
-        <version>0.9.0-SNAPSHOT</version>
+        <version>0.10.0-SNAPSHOT</version>
     </parent>
     <artifactId>game-web</artifactId>
     <dependencies>

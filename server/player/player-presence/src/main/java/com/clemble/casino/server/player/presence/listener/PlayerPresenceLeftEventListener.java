@@ -27,6 +27,6 @@ public class PlayerPresenceLeftEventListener implements SystemEventListener<Syst
 
     @Override
     public String getQueueName() {
-        return "player:presence:left";
+        return SystemPlayerLeftEvent.CHANNEL + " > player:presence:left";
     }
 }

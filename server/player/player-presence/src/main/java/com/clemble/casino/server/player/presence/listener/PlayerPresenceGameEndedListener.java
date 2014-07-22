@@ -29,6 +29,6 @@ public class PlayerPresenceGameEndedListener implements SystemEventListener<Syst
 
     @Override
     public String getQueueName() {
-        return "presence:game:ended";
+        return SystemGameEndedEvent.CHANNEL + " > presence:game:ended";
     }
 }

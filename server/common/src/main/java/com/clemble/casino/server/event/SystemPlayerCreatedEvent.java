@@ -12,7 +12,7 @@ public class SystemPlayerCreatedEvent implements SystemEvent, PlayerAware {
      */
     private static final long serialVersionUID = 7637036341950271549L;
 
-    final public static String CHANNEL = "created";
+    final public static String CHANNEL = "player:created";
 
     final private String player;
 

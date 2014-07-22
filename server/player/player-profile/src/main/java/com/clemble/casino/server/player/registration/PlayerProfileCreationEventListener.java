@@ -34,6 +34,6 @@ public class PlayerProfileCreationEventListener implements SystemEventListener<S
 
     @Override
     public String getQueueName() {
-        return "player:profile:registration";
+        return SystemPlayerProfileRegistered.CHANNEL + " > player:profile:registration";
     }
 }

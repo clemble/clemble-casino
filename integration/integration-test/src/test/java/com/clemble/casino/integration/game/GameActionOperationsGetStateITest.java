@@ -34,7 +34,6 @@ import com.clemble.test.concurrent.Get;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class GameActionOperationsGetStateITest {
 
@@ -66,7 +65,7 @@ public class GameActionOperationsGetStateITest {
             public GameState get() {
                 return aoA.getState();
             }
-        }, 30_000);
+        }, 5_000);
     }
 
     @Test

@@ -28,7 +28,7 @@ public class PlayerPresenceGameStartedEventListener implements SystemEventListen
 
     @Override
     public String getQueueName() {
-        return "presence:game:started";
+        return SystemGameEndedEvent.CHANNEL + " > presence:game:started";
     }
 
 }
