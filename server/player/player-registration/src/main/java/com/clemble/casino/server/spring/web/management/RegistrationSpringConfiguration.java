@@ -2,6 +2,7 @@ package com.clemble.casino.server.spring.web.management;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.PlayerIdGenerator;
+import com.clemble.casino.server.player.RedisPlayerIdGenerator;
 import com.clemble.casino.server.player.UUIDPlayerIdGenerator;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
@@ -9,6 +10,7 @@ import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.security.SimpleClembleConsumerDetailsService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
+import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
 import com.clemble.casino.server.spring.web.PlayerTokenSpringConfiguration;
@@ -22,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
+import redis.clients.jedis.JedisPool;
 
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
@@ -30,12 +33,12 @@ import java.security.NoSuchAlgorithmException;
  * Created by mavarazy on 7/4/14.
  */
 @Configuration
-@Import({CommonSpringConfiguration.class, OAuthSpringConfiguration.class, PlayerTokenSpringConfiguration.class})
+@Import({CommonSpringConfiguration.class, OAuthSpringConfiguration.class, PlayerTokenSpringConfiguration.class, RedisSpringConfiguration.class})
 public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public PlayerIdGenerator playerIdGenerator() {
-        return new UUIDPlayerIdGenerator();
+    public PlayerIdGenerator playerIdGenerator(JedisPool jedisPool) {
+        return new RedisPlayerIdGenerator(jedisPool);
     }
 
     @Bean

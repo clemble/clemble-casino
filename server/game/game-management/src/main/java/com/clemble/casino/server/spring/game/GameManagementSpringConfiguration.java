@@ -3,6 +3,7 @@ package com.clemble.casino.server.spring.game;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import com.clemble.casino.game.id.RedisGameIdGenerator;
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
@@ -15,8 +16,7 @@ import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFac
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.repository.game.*;
-import com.clemble.casino.server.spring.common.PaymentClientSpringConfiguration;
-import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
+import com.clemble.casino.server.spring.common.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,22 +42,22 @@ import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
-import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import redis.clients.jedis.JedisPool;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class,
     PresenceServiceSpringConfiguration.class,
     GameNeo4jSpringConfiguration.class,
     GameJPASpringConfiguration.class,
-    PaymentClientSpringConfiguration.class
+    PaymentClientSpringConfiguration.class,
+    RedisSpringConfiguration.class
 })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public GameIdGenerator gameIdGenerator() {
-        return new UUIDGameIdGenerator();
+    public GameIdGenerator gameIdGenerator(JedisPool jedisPool) {
+        return new RedisGameIdGenerator(jedisPool);
     }
 
     @Bean

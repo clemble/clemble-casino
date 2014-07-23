@@ -98,14 +98,14 @@ public class PlayerAccountOperationsITest {
     @Test
     public void runingOutOfMoney() {
         // TODO can fail, because cash transactions are asynchronous (Need to manage this)
-        ClembleCasinoOperations A = playerOperations.createPlayer();
-        ClembleCasinoOperations B = playerOperations.createPlayer();
+        final ClembleCasinoOperations A = playerOperations.createPlayer();
+        final ClembleCasinoOperations B = playerOperations.createPlayer();
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GameConstructionInsufficientMoney));
 
         do {
-            Money cashAbefore = A.paymentOperations().getAccount().getMoney(Currency.FakeMoney);
-            Money cashBbefore = B.paymentOperations().getAccount().getMoney(Currency.FakeMoney);
+            final Money cashAbefore = A.paymentOperations().getAccount().getMoney(Currency.FakeMoney);
+            final Money cashBbefore = B.paymentOperations().getAccount().getMoney(Currency.FakeMoney);
 
             assertTrue(cashAbefore.getAmount() >= 0);
             assertTrue(cashBbefore.getAmount() >= 0);
@@ -118,8 +118,18 @@ public class PlayerAccountOperationsITest {
 
             AvsB.giveUp();
 
-            assertEquals(cashAbefore.add(-50), A.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
-            assertEquals(cashBbefore.add(+50), B.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
+            AsyncCompletionUtils.check(new Check(){
+                @Override
+                public boolean check() {
+                    return cashAbefore.add(-50).equals(A.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
+                }
+            }, 5_000);
+            AsyncCompletionUtils.check(new Check(){
+                @Override
+                public boolean check() {
+                    return cashBbefore.add(+50).equals(B.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
+                }
+            }, 5_000);
         } while (true);
     }
 
