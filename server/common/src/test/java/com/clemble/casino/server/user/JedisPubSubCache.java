@@ -5,8 +5,8 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.clemble.casino.server.player.presence.JedisPubSubSubcriber;
-import com.clemble.casino.server.player.presence.RedisSubscribersAware;
+import com.clemble.casino.server.player.notification.JedisPubSubSubcriber;
+import com.clemble.casino.server.player.notification.RedisSubscribersAware;
 import com.google.common.collect.ImmutableList;
 
 import redis.clients.jedis.JedisPool;

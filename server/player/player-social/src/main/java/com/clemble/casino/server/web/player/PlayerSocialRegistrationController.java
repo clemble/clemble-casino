@@ -20,7 +20,7 @@ import com.clemble.casino.player.security.PlayerToken;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.web.mapping.WebMapping;
 

@@ -14,12 +14,12 @@ import com.clemble.casino.player.service.PlayerSessionService;
 
 public class IntegrationSessionService implements PlayerSessionService {
 
+    final public String host;
     final public RestTemplate restTemplate;
-    final public String baseUrl;
 
-    public IntegrationSessionService(RestTemplate restTemplate, String baseUrl) {
+    public IntegrationSessionService(RestTemplate restTemplate, String host) {
         this.restTemplate = checkNotNull(restTemplate);
-        this.baseUrl = checkNotNull(baseUrl);
+        this.host = checkNotNull(host);
     }
 
     @Override
@@ -31,25 +31,25 @@ public class IntegrationSessionService implements PlayerSessionService {
         // Step 2. Generating request
         HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, header);
         // Step 3. Rest template generation
-        return restTemplate.exchange(toPresenceUrl(PRESENCE_SESSIONS_PLAYER), HttpMethod.POST, requestEntity, PlayerSession.class, baseUrl, player).getBody();
+        return restTemplate.exchange(toPresenceUrl(host, PRESENCE_SESSIONS_PLAYER), HttpMethod.POST, requestEntity, PlayerSession.class, host, player).getBody();
     }
 
     @Override
     public PlayerSession refreshPlayerSession(String player, String sessionId) {
-        String refreshUrl = toPresenceUrl(PRESENCE_SESSIONS_PLAYER_SESSION);
-        return restTemplate.exchange(refreshUrl, HttpMethod.PUT, null, PlayerSession.class, baseUrl, player, sessionId).getBody();
+        String refreshUrl = toPresenceUrl(host, PRESENCE_SESSIONS_PLAYER_SESSION);
+        return restTemplate.exchange(refreshUrl, HttpMethod.PUT, null, PlayerSession.class, host, player, sessionId).getBody();
 
     }
 
     @Override
     public void endPlayerSession(String player, String sessionId) {
-        restTemplate.exchange(toPresenceUrl(PRESENCE_SESSIONS_PLAYER_SESSION), HttpMethod.DELETE, null, PlayerSession.class, baseUrl, player, sessionId).getBody();
+        restTemplate.exchange(toPresenceUrl(host, PRESENCE_SESSIONS_PLAYER_SESSION), HttpMethod.DELETE, null, PlayerSession.class, host, player, sessionId).getBody();
     }
 
     @Override
     public PlayerSession getPlayerSession(String player, String sessionId) {
-        String refreshUrl = toPresenceUrl(PRESENCE_SESSIONS_PLAYER_SESSION);
-        return restTemplate.exchange(refreshUrl, HttpMethod.GET, null, PlayerSession.class, baseUrl, player, sessionId).getBody();
+        String refreshUrl = toPresenceUrl(host, PRESENCE_SESSIONS_PLAYER_SESSION);
+        return restTemplate.exchange(refreshUrl, HttpMethod.GET, null, PlayerSession.class, host, player, sessionId).getBody();
     }
 
 }

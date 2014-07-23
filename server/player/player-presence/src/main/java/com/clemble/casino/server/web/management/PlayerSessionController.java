@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.event.SystemPlayerLeftEvent;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,6 @@ import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.player.PlayerSessionRepository;
-import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
 public class PlayerSessionController implements PlayerSessionService, ExternalController {

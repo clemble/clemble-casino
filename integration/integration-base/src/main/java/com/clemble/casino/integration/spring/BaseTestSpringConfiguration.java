@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.annotation.PostConstruct;
 
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

@@ -4,6 +4,8 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.clemble.casino.server.player.notification.JedisPubSubSubcriber;
+import com.clemble.casino.server.player.notification.RedisSubscribersAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

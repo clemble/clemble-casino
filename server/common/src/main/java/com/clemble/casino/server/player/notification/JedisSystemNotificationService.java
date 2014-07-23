@@ -1,4 +1,4 @@
-package com.clemble.casino.server.player.presence;
+package com.clemble.casino.server.player.notification;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 

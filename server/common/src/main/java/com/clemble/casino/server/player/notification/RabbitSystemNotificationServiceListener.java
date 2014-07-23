@@ -1,4 +1,4 @@
-package com.clemble.casino.server.player.presence;
+package com.clemble.casino.server.player.notification;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.rabbitmq.client.AMQP.BasicProperties;
@@ -182,7 +181,11 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
             // Step 2. If we were able to read event notify, otherwise ignore, some error happened
             if(event != null) {
                 LOG.debug("Extracted event {}", event);
-                eventListener.onEvent(event);
+                try {
+                    eventListener.onEvent(event);
+                } catch (Throwable throwable) {
+                    LOG.error("Failed to process message", throwable);
+                }
             } else {
                 LOG.error("Failed to parse message {}", new String(body));
             }

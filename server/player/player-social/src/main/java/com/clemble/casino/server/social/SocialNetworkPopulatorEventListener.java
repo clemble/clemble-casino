@@ -12,7 +12,7 @@ import org.springframework.social.connect.UsersConnectionRepository;
 
 import com.clemble.casino.server.event.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 public class SocialNetworkPopulatorEventListener implements SystemEventListener<SystemPlayerSocialAddedEvent> {
 

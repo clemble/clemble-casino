@@ -3,7 +3,7 @@ package com.clemble.casino.server.player.registration;
 import com.clemble.casino.server.event.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.event.SystemPlayerProfileRegistered;
 import com.clemble.casino.server.player.notification.SystemEventListener;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 
 /**

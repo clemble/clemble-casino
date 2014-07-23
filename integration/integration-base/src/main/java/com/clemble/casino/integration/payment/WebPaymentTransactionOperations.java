@@ -5,8 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.service.PaymentTransactionService;
-import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 public class WebPaymentTransactionOperations  extends AbstractPaymentTransactionOperations {
 

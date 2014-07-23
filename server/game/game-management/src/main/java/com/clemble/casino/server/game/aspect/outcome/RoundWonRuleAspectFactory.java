@@ -4,7 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.game.event.server.GameEndedEvent;

@@ -1,6 +1,6 @@
 package com.clemble.casino.server.game.aspect.outcome;
 
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.game.GameContext;

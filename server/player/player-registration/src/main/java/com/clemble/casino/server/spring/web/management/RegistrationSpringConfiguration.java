@@ -1,11 +1,9 @@
 package com.clemble.casino.server.spring.web.management;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
-import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.clemble.casino.server.player.PlayerIdGenerator;
 import com.clemble.casino.server.player.UUIDPlayerIdGenerator;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
-import com.clemble.casino.server.player.security.AESPlayerTokenFactory;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
 import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;

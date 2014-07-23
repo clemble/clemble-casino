@@ -2,8 +2,8 @@ package com.clemble.casino.server.spring.player;
 
 import com.clemble.casino.server.player.connection.listener.PlayerDiscoveryNotifierEventListener;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.connection.listener.PlayerSocialNetworkConnectionCreatorListener;
 import com.clemble.casino.server.player.connection.listener.PlayerSocialNetworkCreationListener;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;

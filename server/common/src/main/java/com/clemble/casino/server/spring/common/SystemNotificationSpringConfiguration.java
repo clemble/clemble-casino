@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.clemble.casino.server.player.presence.RabbitSystemNotificationService;
-import com.clemble.casino.server.player.presence.RabbitSystemNotificationServiceListener;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.RabbitSystemNotificationService;
+import com.clemble.casino.server.player.notification.RabbitSystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration

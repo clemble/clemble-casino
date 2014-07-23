@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,6 @@ import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
-import com.clemble.casino.server.event.SystemPlayerLeftEvent;
 import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 

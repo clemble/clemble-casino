@@ -15,7 +15,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.server.event.SystemPlayerSocialAddedEvent;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.google.common.collect.ImmutableSet;
 
 public class SocialConnectionDataAdapter {

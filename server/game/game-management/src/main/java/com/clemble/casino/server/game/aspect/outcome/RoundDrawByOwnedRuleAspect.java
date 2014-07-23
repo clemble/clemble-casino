@@ -18,7 +18,7 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 /**
  * Created by mavarazy on 23/12/13.

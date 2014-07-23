@@ -1,7 +1,5 @@
 package com.clemble.casino.server.spring.social;
 
-import javax.sql.DataSource;
-
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.player.registration.ServerProfileSocialRegistrationService;
 import com.clemble.casino.server.player.security.PlayerTokenFactory;
@@ -20,8 +18,8 @@ import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
-import com.clemble.casino.server.player.presence.SystemNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.social.SocialNetworkPopulatorEventListener;
@@ -30,7 +28,6 @@ import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
 import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import scala.beans.BeanProperty;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class, PlayerTokenSpringConfiguration.class})

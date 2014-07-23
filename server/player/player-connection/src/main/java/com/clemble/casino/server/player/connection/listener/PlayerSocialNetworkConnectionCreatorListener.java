@@ -3,7 +3,7 @@ package com.clemble.casino.server.player.connection.listener;
 import com.clemble.casino.server.event.SystemPlayerConnectionsFetchedEvent;
 import com.clemble.casino.server.event.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.social.PlayerSocialNetwork;
 import com.clemble.casino.server.repository.player.PlayerSocialNetworkRepository;
 import com.google.common.collect.ImmutableList;

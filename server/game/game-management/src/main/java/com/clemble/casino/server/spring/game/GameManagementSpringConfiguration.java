@@ -13,7 +13,7 @@ import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.repository.game.*;
 import com.clemble.casino.server.spring.common.PaymentClientSpringConfiguration;
 import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
@@ -41,7 +41,7 @@ import com.clemble.casino.server.game.construction.availability.ServerAvailabili
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;

@@ -33,7 +33,7 @@ import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.test.random.ObjectGenerator;
 import com.google.common.collect.ImmutableList;
 import org.springframework.test.context.web.WebAppConfiguration;

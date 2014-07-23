@@ -9,8 +9,8 @@ import com.clemble.casino.server.payment.bonus.PlayerRegistrationBonusEventListe
 import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.payment.bonus.policy.NoBonusPolicy;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;

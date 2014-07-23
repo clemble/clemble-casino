@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.aspect.outcome;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.MatchEndedEvent;
 import com.clemble.casino.game.specification.MatchGameConfiguration;
-import com.clemble.casino.server.player.presence.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.server.game.aspect.GameAspect;

@@ -1,4 +1,4 @@
-package com.clemble.casino.server.player.presence;
+package com.clemble.casino.server.player.notification;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
@@ -15,7 +15,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
 
 import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 

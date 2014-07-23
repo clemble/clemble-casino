@@ -1,7 +1,7 @@
 package com.clemble.casino.server.spring.player;
 
-import com.clemble.casino.server.player.presence.SystemNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.registration.PlayerProfileCreationEventListener;
 import com.clemble.casino.server.repository.player.MongoPlayerProfileRepository;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;

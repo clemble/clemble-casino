@@ -1,4 +1,4 @@
-package com.clemble.casino.server.player.presence;
+package com.clemble.casino.server.player.notification;
 
 import java.util.Collection;
 

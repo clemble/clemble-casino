@@ -16,7 +16,7 @@ import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructi
 import com.clemble.casino.server.game.construction.availability.PendingPlayerCreationEventListener;
 import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.repository.game.*;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;

@@ -46,7 +46,8 @@ public class PendingGameInitiationEventListener implements SystemEventListener<S
         // Step 1. Checking only if presence is online
         if (event.getPresence() == Presence.online) {
             // Step 2. Fetching pending initiations
-            for (PendingGameInitiation initiation : playerRepository.findPending(event.getPlayer())) {
+            List<PendingGameInitiation> pendingGameInitiations = playerRepository.findPending(event.getPlayer());
+            for (PendingGameInitiation initiation : pendingGameInitiations) {
                 // Step 3. Checking we can start game
                 List<String> players = PlayerAwareUtils.toPlayerList(initiation.getParticipants());
                 if (presenceService.areAvailable(players)) {

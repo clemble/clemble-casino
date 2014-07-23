@@ -3,7 +3,7 @@ package com.clemble.casino.server.spring.web.payment;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.presence.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
