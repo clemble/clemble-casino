@@ -35,8 +35,7 @@ public class PlayerRegistrationServiceITest {
             .setPassword(RandomStringUtils.random(10));
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class)
                 .setBirthDate(new Date(0))
-                .setSocialConnections(null)
-                .setImageUrl(null);
+                .setSocialConnections(null);
         // Step 2. Creating CasinoOperations with this credentials and Profile
         ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
         // Step 3. Creating CasinoOperations by just login
@@ -58,8 +57,7 @@ public class PlayerRegistrationServiceITest {
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class)
                 .setNickName(null)
                 .setBirthDate(new Date(0))
-                .setSocialConnections(null)
-                .setImageUrl(null);
+                .setSocialConnections(null);
         // Step 2. Creating CasinoOperations with this credentials and Profile
         ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
         // Step 3. Checking nick matches

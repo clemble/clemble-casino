@@ -44,7 +44,7 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
             .setFirstName(linkedInProfile.getFirstName())
             .setLastName(linkedInProfile.getLastName())
             .setNickName(linkedInProfile.getFirstName())
-            .setImageUrl(linkedInProfile.getProfilePictureUrl())
+            // TODO restore .setImageUrl(linkedInProfile.getProfilePictureUrl())
             .setCategory(PlayerCategory.Novice);
     }
 

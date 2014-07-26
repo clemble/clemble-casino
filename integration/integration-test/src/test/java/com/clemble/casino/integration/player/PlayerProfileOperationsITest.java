@@ -46,7 +46,6 @@ public class PlayerProfileOperationsITest {
 
     private PlayerProfile randomProfile() {
         PlayerProfile randomProfile = ObjectGenerator.generate(PlayerProfile.class)
-            .setImageUrl("http://" + RandomStringUtils.randomAlphabetic(10) + ".com/")
             .setType(PlayerType.free)
             .setBirthDate(new Date(0))
             .setSocialConnections(new HashSet<ConnectionKey>());

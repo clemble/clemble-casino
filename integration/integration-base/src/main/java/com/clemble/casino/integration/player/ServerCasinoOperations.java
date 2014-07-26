@@ -2,6 +2,8 @@ package com.clemble.casino.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.client.player.*;
+import com.clemble.casino.player.service.*;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -17,14 +19,6 @@ import com.clemble.casino.client.game.GameRecordOperations;
 import com.clemble.casino.client.game.GameRecordTemplate;
 import com.clemble.casino.client.payment.PaymentOperations;
 import com.clemble.casino.client.payment.PaymentTemplate;
-import com.clemble.casino.client.player.PlayerConnectionOperations;
-import com.clemble.casino.client.player.PlayerConnectionTemplate;
-import com.clemble.casino.client.player.PlayerPresenceOperations;
-import com.clemble.casino.client.player.PlayerPresenceTemplate;
-import com.clemble.casino.client.player.PlayerProfileOperations;
-import com.clemble.casino.client.player.PlayerProfileTemplate;
-import com.clemble.casino.client.player.PlayerSessionOperations;
-import com.clemble.casino.client.player.PlayerSessionTemplate;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.event.server.GameInitiatedEvent;
@@ -39,10 +33,6 @@ import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.security.PlayerToken;
-import com.clemble.casino.player.service.PlayerConnectionService;
-import com.clemble.casino.player.service.PlayerPresenceService;
-import com.clemble.casino.player.service.PlayerProfileService;
-import com.clemble.casino.player.service.PlayerSessionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ServerCasinoOperations implements ClembleCasinoOperations {
@@ -60,10 +50,11 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     final private AutoGameConstructionService constructionService;
     final private GameConstructionOperations gameConstructors;
     final private PlayerPresenceOperations playerPresenceOperations;
+    final private PlayerProfileOperations profileOperations;
+    final private PlayerImageOperations imageOperations;
     final private PlayerConnectionOperations connectionOperations;
     final private PlayerSessionOperations playerSessionOperations;
     final private PaymentOperations playerAccountOperations;
-    final private PlayerProfileOperations profileOperations;
     final private GameActionOperationsFactory actionOperationsFactory;
     final private GameRecordOperations recordOperations;
 
@@ -73,6 +64,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
         final PlayerToken playerIdentity,
         final PlayerCredential credential,
         final PlayerProfileService playerProfileService,
+        final PlayerImageService imageService,
         final PlayerConnectionService playerConnectionService,
         final PlayerSessionService sessionOperations,
         final PaymentService accountOperations,
@@ -94,6 +86,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
         this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, listenerOperations);
 
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileService);
+        this.imageOperations = new PlayerImageTemplate(player, imageService);
         this.connectionOperations = new PlayerConnectionTemplate(player, playerConnectionService, profileOperations);
         this.playerAccountOperations = new PaymentTemplate(player, accountOperations, listenerOperations);
 
@@ -127,6 +120,11 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     @Override
     public PlayerProfileOperations profileOperations() {
         return profileOperations;
+    }
+
+    @Override
+    public PlayerImageOperations imageOperations() {
+        return imageOperations;
     }
 
     @Override

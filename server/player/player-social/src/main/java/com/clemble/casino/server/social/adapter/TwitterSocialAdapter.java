@@ -37,7 +37,7 @@ public class TwitterSocialAdapter extends SocialConnectionAdapter<Twitter>{
         TwitterProfile twitterProfile = api.userOperations().getUserProfile();
         return new PlayerProfile()
                 .addSocialConnection(toConnectionKey(String.valueOf(twitterProfile.getId())))
-                .setImageUrl(twitterProfile.getProfileImageUrl())
+                // TODO restore .setImageUrl(twitterProfile.getProfileImageUrl())
                 .setNickName(twitterProfile.getName());  //To change body of implemented methods use File | Settings | File Templates.
     }
 

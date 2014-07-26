@@ -57,7 +57,7 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
             .setLastName(facebookProfile.getLastName())
             .setBirthDate(readDate(facebookProfile.getBirthday()))
             .setGender(PlayerGender.parse(facebookProfile.getGender()))
-            .setImageUrl("http://graph.facebook.com/" + facebookProfile.getId() + "/picture")
+            // TODO Restore .setImageUrl("http://graph.facebook.com/" + facebookProfile.getId() + "/picture")
             .setNickName(facebookProfile.getUsername());
     }
 

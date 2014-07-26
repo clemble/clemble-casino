@@ -45,7 +45,6 @@ public class PlayerProfileRepositoryTest {
     @Test
     public void testSave() {
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class);
-        playerProfile.setImageUrl("http://" + RandomStringUtils.random(10) + ".com/");
         playerProfile.setBirthDate(new Date(0));
         playerProfile.setVersion(0);
         playerProfile.setPlayer(RandomStringUtils.random(5));

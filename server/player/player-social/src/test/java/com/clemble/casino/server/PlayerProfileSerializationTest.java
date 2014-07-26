@@ -25,13 +25,12 @@ public class PlayerProfileSerializationTest {
 
     final private String FIRST_NAME = "Michael";
     final private String LAST_NAME = "Limbo";
-    final private String IMAGE_URL = "https://limbozo.com/";
     final private String NICK_NAME = "michael.limbo";
     final private String USER_ID = "1";
     final private PlayerGender GENDER = PlayerGender.M;
 
     final private String JSON_PRESENTATION = "{\"type\":\"free\"," + "\"player\":1," + "\"nickName\":\"michael.limbo\"," + "\"firstName\":\"Michael\","
-            + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\"," + "\"imageUrl\":\"https://limbozo.com/\"" + "}";
+            + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\"" + "}";
 
     @Autowired
     public ObjectMapper objectMapper;
@@ -41,7 +40,6 @@ public class PlayerProfileSerializationTest {
         PlayerProfile expected = new PlayerProfile()
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
-            .setImageUrl(IMAGE_URL)
             .setNickName(NICK_NAME)
             .setGender(GENDER)
             .setPlayer(USER_ID);
@@ -54,7 +52,6 @@ public class PlayerProfileSerializationTest {
         assertEquals(expected.getPlayer(), actual.getPlayer());
         // assertEquals(expected.getPassword(), actual.getPassword());
         assertEquals(expected.getFirstName(), actual.getFirstName());
-        assertEquals(expected.getImageUrl(), actual.getImageUrl());
         assertEquals(expected.getLastName(), actual.getLastName());
         assertEquals(expected.getGender(), actual.getGender());
         assertEquals(expected.getNickName(), actual.getNickName());
@@ -67,7 +64,6 @@ public class PlayerProfileSerializationTest {
         PlayerProfile actual = objectMapper.readValue(JSON_PRESENTATION.getBytes(), PlayerProfile.class);
         // Step 4. Check data value
         assertEquals(FIRST_NAME, actual.getFirstName());
-        assertEquals(IMAGE_URL, actual.getImageUrl());
         assertEquals(LAST_NAME, actual.getLastName());
         assertEquals(NICK_NAME, actual.getNickName());
         assertEquals(USER_ID, actual.getPlayer());
