@@ -29,7 +29,6 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.PlayerType;
 import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -46,7 +45,6 @@ public class PlayerProfileOperationsITest {
 
     private PlayerProfile randomProfile() {
         PlayerProfile randomProfile = ObjectGenerator.generate(PlayerProfile.class)
-            .setType(PlayerType.free)
             .setBirthDate(new Date(0))
             .setSocialConnections(new HashSet<ConnectionKey>());
         return randomProfile;
@@ -166,7 +164,6 @@ public class PlayerProfileOperationsITest {
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotProfileOwner));
 
-        newProfile.setCountry("IL");
         anotherPlayer.profileOperations().updatePlayerProfile(newProfile);
     }
 

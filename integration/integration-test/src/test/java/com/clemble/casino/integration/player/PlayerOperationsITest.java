@@ -16,7 +16,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.client.ClembleConsumerDetails;
@@ -43,14 +42,13 @@ public class PlayerOperationsITest {
 
     @Test
     public void createPlayerUsingProfileTest() {
-        PlayerProfile profile = new PlayerProfile().setCategory(PlayerCategory.Amateur).setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
+        PlayerProfile profile = new PlayerProfile().setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
                 .setNickName("mavarazy");
 
         ClembleCasinoOperations player = playerOperations.createPlayer(profile);
 
         assertNotNull(player);
         PlayerProfile playerProfile = player.profileOperations().getPlayerProfile();
-        assertEquals(playerProfile.getCategory(), PlayerCategory.Amateur);
         assertEquals(playerProfile.getFirstName(), "Anton");
         assertEquals(playerProfile.getLastName(), "Oparin");
         assertEquals(playerProfile.getGender(), PlayerGender.M);
@@ -60,7 +58,6 @@ public class PlayerOperationsITest {
     @Test
     public void createPlayerUsingRegistrationRequest() {
         PlayerProfile profile = new PlayerProfile().
-                setCategory(PlayerCategory.Amateur).
                 setFirstName("Anton").
                 setLastName("Oparin").
                 setGender(PlayerGender.M).
@@ -75,7 +72,6 @@ public class PlayerOperationsITest {
 
         assertNotNull(player);
         PlayerProfile playerProfile = player.profileOperations().getPlayerProfile();
-        assertEquals(playerProfile.getCategory(), PlayerCategory.Amateur);
         assertEquals(playerProfile.getFirstName(), "Anton");
         assertEquals(playerProfile.getLastName(), "Oparin");
         assertEquals(playerProfile.getGender(), PlayerGender.M);

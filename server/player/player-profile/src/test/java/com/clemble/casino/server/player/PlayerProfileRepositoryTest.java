@@ -16,7 +16,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.repository.player.PlayerProfileRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -58,7 +57,7 @@ public class PlayerProfileRepositoryTest {
     @Test
     public void testSaveMultiple() {
         PlayerProfile playerA = new PlayerProfile().setFirstName("User A").setLastName("Userius")
-                .setCategory(PlayerCategory.Novice).setPlayer(RandomStringUtils.random(5));
+                .setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedPlayerA = playerProfileRepository.save(playerA);
         playerA.setPlayer(savedPlayerA.getPlayer());
         Assert.assertNotNull(playerA.getPlayer());
@@ -68,7 +67,7 @@ public class PlayerProfileRepositoryTest {
         Assert.assertEquals(foundPlayerA, savedPlayerA);
 
         PlayerProfile playerB = new PlayerProfile().setFirstName("User B").setLastName("Userius")
-                .setCategory(PlayerCategory.Amateur).setPlayer(RandomStringUtils.random(5));
+                .setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedPlayerB = playerProfileRepository.save(playerB);
         playerB.setPlayer(savedPlayerB.getPlayer());
         Assert.assertNotSame(savedPlayerA.getPlayer(), savedPlayerB.getPlayer());

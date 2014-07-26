@@ -29,7 +29,7 @@ public class PlayerProfileSerializationTest {
     final private String USER_ID = "1";
     final private PlayerGender GENDER = PlayerGender.M;
 
-    final private String JSON_PRESENTATION = "{\"type\":\"free\"," + "\"player\":1," + "\"nickName\":\"michael.limbo\"," + "\"firstName\":\"Michael\","
+    final private String JSON_PRESENTATION = "{" + "\"player\":1," + "\"nickName\":\"michael.limbo\"," + "\"firstName\":\"Michael\","
             + "\"lastName\":\"Limbo\"," + "\"gender\":\"M\"" + "}";
 
     @Autowired

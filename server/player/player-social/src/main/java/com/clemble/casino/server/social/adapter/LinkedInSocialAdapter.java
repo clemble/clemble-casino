@@ -12,7 +12,6 @@ import org.springframework.social.linkedin.api.LinkedInProfile;
 import org.springframework.social.linkedin.api.LinkedInProfileFull;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 
-import com.clemble.casino.player.PlayerCategory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
@@ -45,7 +44,7 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
             .setLastName(linkedInProfile.getLastName())
             .setNickName(linkedInProfile.getFirstName())
             // TODO restore .setImageUrl(linkedInProfile.getProfilePictureUrl())
-            .setCategory(PlayerCategory.Novice);
+            ;
     }
 
     @Override
