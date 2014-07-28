@@ -91,7 +91,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     @Override
     public ClembleCasinoOperations createPlayer(PlayerCredential playerCredential, PlayerProfile playerProfile) {
         ClembleConsumerDetails consumerDetails = ClembleConsumerDetailUtils.generateDetails();
-        PlayerRegistrationRequest loginRequest = new PlayerRegistrationRequest(playerProfile, playerCredential, consumerDetails);
+        PlayerRegistrationRequest loginRequest = new PlayerRegistrationRequest(consumerDetails, playerCredential, playerProfile);
         PlayerToken token = registrationService.createPlayer(loginRequest);
         return create(token, playerCredential);
     }

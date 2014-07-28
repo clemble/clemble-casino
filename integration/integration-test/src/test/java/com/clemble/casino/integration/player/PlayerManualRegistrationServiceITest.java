@@ -22,7 +22,7 @@ import com.clemble.test.random.ObjectGenerator;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class PlayerRegistrationServiceITest {
+public class PlayerManualRegistrationServiceITest {
 
     @Autowired
     public PlayerScenarios playerScenarios;

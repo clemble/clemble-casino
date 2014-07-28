@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.player.security.PlayerToken;
-import com.clemble.casino.player.service.PlayerRegistrationService;
+import com.clemble.casino.player.service.PlayerManualRegistrationService;
 import com.clemble.casino.player.service.PlayerSocialRegistrationService;
 import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
@@ -83,7 +83,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         }
 
         @Bean
-        public PlayerFacadeRegistrationService playerFacadeRegistrationService(final PlayerRegistrationService registrationService, final PlayerSocialRegistrationService socialRegistrationService) {
+        public PlayerFacadeRegistrationService playerFacadeRegistrationService(final PlayerManualRegistrationService registrationService, final PlayerSocialRegistrationService socialRegistrationService) {
             return new PlayerFacadeRegistrationService() {
 
                 @Override

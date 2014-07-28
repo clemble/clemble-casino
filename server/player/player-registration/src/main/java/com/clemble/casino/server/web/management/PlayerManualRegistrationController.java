@@ -3,7 +3,7 @@ package com.clemble.casino.server.web.management;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.player.service.PlayerRegistrationService;
+import com.clemble.casino.player.service.PlayerManualRegistrationService;
 import com.clemble.casino.server.event.SystemPlayerProfileRegistered;
 import com.clemble.casino.server.security.ClembleConsumerDetailsService;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ import com.clemble.casino.server.repository.player.PlayerCredentialRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @Controller
-public class PlayerRegistrationController implements PlayerRegistrationService, ExternalController {
+public class PlayerManualRegistrationController implements PlayerManualRegistrationService, ExternalController {
     // !!!TODO need a safe restoration process for all Registrations not only for login!!!
 
     final private PlayerIdGenerator playerIdentifierGenerator;
@@ -40,12 +40,12 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
 
-    public PlayerRegistrationController(final PlayerIdGenerator playerIdentifierGenerator,
-            final PlayerTokenFactory playerTokenFactory,
-            final PlayerCredentialRepository playerCredentialRepository,
-            final ClembleConsumerDetailsService playerIdentityRepository,
-            final ClembleCasinoValidationService validationService,
-            final SystemNotificationService notificationService) {
+    public PlayerManualRegistrationController(final PlayerIdGenerator playerIdentifierGenerator,
+                                              final PlayerTokenFactory playerTokenFactory,
+                                              final PlayerCredentialRepository playerCredentialRepository,
+                                              final ClembleConsumerDetailsService playerIdentityRepository,
+                                              final ClembleCasinoValidationService validationService,
+                                              final SystemNotificationService notificationService) {
         this.playerIdentifierGenerator = checkNotNull(playerIdentifierGenerator);
         this.playerTokenFactory = checkNotNull(playerTokenFactory);
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
