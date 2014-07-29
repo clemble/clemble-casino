@@ -1,10 +1,14 @@
 package com.clemble.casino.server.repository.payment;
 
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.payment.MoneyRowMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
@@ -26,7 +30,10 @@ public class JdbcPlayerAccountTemplate implements PlayerAccountTemplate {
 
     @Override
     public PlayerAccount findOne(String player){
-        return new PlayerAccount(player, jdbc.query(FIND_ONE, MoneyRowMapper.INSTANCE, player));
+        Map<Currency, Money> cash = new HashMap<>();
+        for(Money amount: jdbc.query(FIND_ONE, MoneyRowMapper.INSTANCE))
+            cash.put(amount.getCurrency(), amount);
+        return new PlayerAccount(player, cash);
     }
 
     // TODO this is really bad solution switch to Actors model

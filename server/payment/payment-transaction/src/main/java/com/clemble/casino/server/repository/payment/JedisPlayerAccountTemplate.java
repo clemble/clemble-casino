@@ -6,7 +6,9 @@ import com.clemble.casino.payment.money.Money;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -22,15 +24,15 @@ public class JedisPlayerAccountTemplate implements PlayerAccountTemplate {
 
     @Override
     public PlayerAccount findOne(String player) {
-        Set<Money> cash = new HashSet<Money>();
+        Map<Currency, Money> cash = new HashMap<Currency, Money>();
         Jedis jedis = jedisPool.getResource();
         try {
             for(Currency currency: Currency.values()) {
                 String amount = jedis.get(player + currency);
                 if (amount != null) {
-                    cash.add(new Money(currency, Long.valueOf(amount)));
+                    cash.put(currency, new Money(currency, Long.valueOf(amount)));
                 } else {
-                    cash.add(new Money(currency, 0));
+                    cash.put(currency, new Money(currency, 0));
                 }
             }
         } finally {
