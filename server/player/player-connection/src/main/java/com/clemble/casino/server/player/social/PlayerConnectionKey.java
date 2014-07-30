@@ -1,5 +1,6 @@
 package com.clemble.casino.server.player.social;
 
+import com.clemble.casino.player.social.ClembleSocialUtils;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -18,7 +19,7 @@ public class PlayerConnectionKey {
     }
 
     public PlayerConnectionKey(ConnectionKey connectionKey) {
-       this.connectionKey = connectionKey.getProviderId() + ":" + connectionKey.getProviderUserId();
+       this.connectionKey = ClembleSocialUtils.toString(connectionKey);
     }
 
     public Long getId() {
