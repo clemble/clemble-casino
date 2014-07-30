@@ -33,7 +33,7 @@ public class PlayerConnectionController implements PlayerConnectionService {
     public @ResponseBody List<ConnectionKey> getConnections(String player) {
         // Step 1. Generating result collection
         List<ConnectionKey> connectionKeys = new ArrayList<>();
-        PlayerSocialNetwork playerConnections = connectionsRepository.findByPlayer(player);
+        PlayerSocialNetwork playerConnections = connectionsRepository.findByPlayer(player);;
         for(PlayerConnectionKey connection: playerConnections.getConnections())
             connectionKeys.add(ClembleSocialUtils.fromString(connection.getConnectionKey()));
         // Step 2. Going through existing connections

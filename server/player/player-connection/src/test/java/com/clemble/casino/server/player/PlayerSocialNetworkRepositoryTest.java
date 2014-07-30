@@ -43,7 +43,7 @@ public class PlayerSocialNetworkRepositoryTest {
         A = relationsRepository.save(A);
         assertNotNull(A.getId());
         // Step 3. Looking up relations
-        PlayerSocialNetwork found = relationsRepository.findByPropertyValue("player", A.getPlayer());
+        PlayerSocialNetwork found = relationsRepository.findByPlayer(A.getPlayer());
         Assert.assertEquals(found, A);
     }
 
@@ -58,7 +58,7 @@ public class PlayerSocialNetworkRepositoryTest {
         relations = relationsRepository.save(relations);
         assertNotNull(relations.getId());
         // Step 3. Looking up relations
-        PlayerSocialNetwork found = relationsRepository.findByPropertyValue("player", relations.getPlayer());
+        PlayerSocialNetwork found = relationsRepository.findByPlayer(relations.getPlayer());
         Assert.assertEquals(found, relations);
     }
 
