@@ -9,6 +9,7 @@ import com.clemble.casino.player.social.ClembleSocialUtils;
 import com.clemble.casino.server.player.social.PlayerConnectionKey;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,7 +31,7 @@ public class PlayerConnectionController implements PlayerConnectionService {
 
     @Override
     @RequestMapping(value = CONNECTION_PLAYER, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    public @ResponseBody List<ConnectionKey> getConnections(String player) {
+    public @ResponseBody List<ConnectionKey> getConnections(@PathVariable("player") String player) {
         // Step 1. Generating result collection
         List<ConnectionKey> connectionKeys = new ArrayList<>();
         PlayerSocialNetwork playerConnections = connectionsRepository.findByPlayer(player);;

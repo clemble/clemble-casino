@@ -2,6 +2,8 @@ package com.clemble.casino.integration.game.construction;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.clemble.casino.client.payment.PaymentTransactionEventSelector;
@@ -24,6 +26,7 @@ import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.security.PlayerCredential;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import org.junit.Assert;
+import org.springframework.social.connect.ConnectionKey;
 
 public class SimplePlayerScenarios implements PlayerScenarios {
 
@@ -133,6 +136,13 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             @Override
             public PlayerProfile get() {
                 return player.profileOperations().getPlayerProfile();
+            }
+        }, 5_000);
+        // Step 4. Getting PlayerConnection
+        AsyncCompletionUtils.get(new Get<List<ConnectionKey>>() {
+            @Override
+            public List<ConnectionKey> get() {
+                return player.connectionOperations().getConnectionIds();
             }
         }, 5_000);
         return player;
