@@ -1,7 +1,7 @@
 package com.clemble.casino.server.goal.spring;
 
 import com.clemble.casino.server.goal.repository.GoalRepository;
-import com.clemble.casino.server.goal.web.GoalController;
+import com.clemble.casino.server.goal.controller.GoalController;
 import com.clemble.casino.server.id.IdGenerator;
 import com.clemble.casino.server.id.RedisIdGenerator;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;

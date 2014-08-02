@@ -23,7 +23,7 @@ import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
-import com.clemble.casino.payment.bonus.DailyBonusEventListener;
+import com.clemble.casino.server.bonus.listener.DailyBonusEventListener;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
 import com.clemble.test.random.ObjectGenerator;

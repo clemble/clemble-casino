@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.clemble.casino.server.spring.web.player.PlayerPresenceSpringConfiguration;
+import com.clemble.casino.server.presence.spring.PlayerPresenceSpringConfiguration;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

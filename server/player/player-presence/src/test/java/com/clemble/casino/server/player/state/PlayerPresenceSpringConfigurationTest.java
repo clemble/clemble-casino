@@ -1,6 +1,6 @@
 package com.clemble.casino.server.player.state;
 
-import com.clemble.casino.server.spring.web.player.PlayerPresenceSpringConfiguration;
+import com.clemble.casino.server.presence.spring.PlayerPresenceSpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;

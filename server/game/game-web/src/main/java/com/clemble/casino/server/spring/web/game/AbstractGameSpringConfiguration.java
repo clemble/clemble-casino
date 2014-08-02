@@ -20,12 +20,12 @@ import com.clemble.casino.server.player.notification.SystemNotificationServiceLi
 import com.clemble.casino.server.repository.game.*;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.GameManagementSpringConfiguration;
-import com.clemble.casino.server.web.game.options.GameConfigurationController;
-import com.clemble.casino.server.web.game.session.AutoGameConstructionController;
-import com.clemble.casino.server.web.game.session.AvailabilityGameConstructionController;
-import com.clemble.casino.server.web.game.session.GameActionController;
-import com.clemble.casino.server.web.game.session.GameInitiationController;
-import com.clemble.casino.server.web.game.session.GameRecordController;
+import com.clemble.casino.server.presence.controller.game.options.GameConfigurationController;
+import com.clemble.casino.server.presence.controller.game.session.AutoGameConstructionController;
+import com.clemble.casino.server.presence.controller.game.session.AvailabilityGameConstructionController;
+import com.clemble.casino.server.presence.controller.game.session.GameActionController;
+import com.clemble.casino.server.presence.controller.game.session.GameInitiationController;
+import com.clemble.casino.server.presence.controller.game.session.GameRecordController;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
