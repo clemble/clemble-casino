@@ -41,12 +41,12 @@ import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.client.error.ClembleCasinoResponseErrorHandler;
 import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
-import com.clemble.casino.integration.spring.game.IntegrationGameSpringConfiguration;
+import com.clemble.casino.integration.game.spring.IntegrationGameSpringConfiguration;
 import com.clemble.casino.player.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
-import com.clemble.casino.server.spring.web.payment.PaymentSpringConfiguration;
-import com.clemble.casino.server.presence.controller.payment.PaymentTransactionController;
+import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
+import com.clemble.casino.server.payment.controller.PaymentTransactionController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.annotation.PostConstruct;

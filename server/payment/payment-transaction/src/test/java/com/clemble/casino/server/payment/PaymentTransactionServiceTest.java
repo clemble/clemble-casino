@@ -5,7 +5,7 @@ import java.util.Random;
 
 import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
-import com.clemble.casino.server.spring.web.payment.PaymentSpringConfiguration;
+import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
-import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
+import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = PaymentSpringConfiguration.class)

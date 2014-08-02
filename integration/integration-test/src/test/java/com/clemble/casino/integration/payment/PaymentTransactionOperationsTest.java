@@ -9,7 +9,7 @@ import java.util.Date;
 
 import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
-import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
+import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
 import com.clemble.test.random.ObjectGenerator;
 import org.junit.Assert;
 import org.junit.Rule;

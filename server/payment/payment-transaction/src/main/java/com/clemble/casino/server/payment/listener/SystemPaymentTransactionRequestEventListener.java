@@ -11,8 +11,8 @@ import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
-import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
-import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
+import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
+import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
