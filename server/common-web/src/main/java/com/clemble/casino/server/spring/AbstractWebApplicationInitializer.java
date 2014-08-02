@@ -3,13 +3,22 @@ package com.clemble.casino.server.spring;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
 import org.springframework.web.WebApplicationInitializer;
 
 import com.google.common.collect.ImmutableMap;
 import com.thetransactioncompany.cors.CORSFilter;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
 
 abstract public class AbstractWebApplicationInitializer implements WebApplicationInitializer {
+
+    final private Class[] configurations;
+
+    public AbstractWebApplicationInitializer(Class ... configurations){
+        this.configurations = configurations;
+    }
 
     @Override
     final public void onStartup(ServletContext container) throws ServletException {
@@ -20,8 +29,14 @@ abstract public class AbstractWebApplicationInitializer implements WebApplicatio
             filter.addMappingForUrlPatterns(null, false, "/*");
         }
         // Step 2. Proceeding to actual initialization
-        doInit(container);
+                // Step 2. Create the 'root' Spring application context
+        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+        for(Class<?> configuration: configurations)
+            rootContext.register(configuration);
+        // Step 3. Registering appropriate Dispatcher
+        ServletRegistration.Dynamic dispatcher = container.addServlet(getClass().getSimpleName(), new DispatcherServlet(rootContext));
+        dispatcher.setLoadOnStartup(1);
+        dispatcher.addMapping("/");;
     }
 
-    abstract protected void doInit(ServletContext container) throws ServletException;
 }
