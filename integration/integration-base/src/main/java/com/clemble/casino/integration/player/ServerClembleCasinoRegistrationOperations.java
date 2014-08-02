@@ -10,6 +10,7 @@ import com.clemble.casino.game.service.AutoGameConstructionService;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.game.service.GameRecordService;
+import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.payment.service.PaymentService;
 import com.clemble.casino.player.PlayerProfile;
@@ -44,6 +45,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private GameConfigurationService specificationService;
     final private GameActionService actionService;
     final private GameRecordService recordService;
+    final private GoalService goalService;
 
     public ServerClembleCasinoRegistrationOperations(
         String host,
@@ -61,7 +63,8 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         GameInitiationService initiationService,
         GameConfigurationService specificationService,
         GameActionService actionService,
-        GameRecordService recordService) {
+        GameRecordService recordService,
+        GoalService goalService) {
         this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
@@ -78,6 +81,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         this.specificationService = checkNotNull(specificationService);
         this.actionService = checkNotNull(actionService);
         this.recordService = checkNotNull(recordService);
+        this.goalService = checkNotNull(goalService);
     }
 
     @Override
@@ -113,7 +117,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     }
 
     private ClembleCasinoOperations create(PlayerToken playerIdentity, PlayerCredential credential) {
-        return new ServerCasinoOperations(host, objectMapper, playerIdentity, credential, profileOperations, imageService, connectionService, sessionOperations, paymentService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService);
+        return new ServerCasinoOperations(host, objectMapper, playerIdentity, credential, profileOperations, imageService, connectionService, sessionOperations, paymentService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService);
     }
 
 }

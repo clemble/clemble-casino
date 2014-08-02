@@ -1,7 +1,7 @@
 package com.clemble.casino.server.goal.spring;
 
-import com.clemble.casino.server.goal.repository.PlayerGoalRepository;
-import com.clemble.casino.server.goal.web.PlayerGoalController;
+import com.clemble.casino.server.goal.repository.GoalRepository;
+import com.clemble.casino.server.goal.web.GoalController;
 import com.clemble.casino.server.id.IdGenerator;
 import com.clemble.casino.server.id.RedisIdGenerator;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
@@ -39,13 +39,13 @@ public class GoalSpringConfiguration {
     }
 
     @Bean
-    public PlayerGoalRepository playerGoalRepository(@Qualifier("playerGoalRepositoryFactory") MongoRepositoryFactory playerGoalRepositoryFactory) {
-        return playerGoalRepositoryFactory.getRepository(PlayerGoalRepository.class);
+    public GoalRepository playerGoalRepository(@Qualifier("playerGoalRepositoryFactory") MongoRepositoryFactory playerGoalRepositoryFactory) {
+        return playerGoalRepositoryFactory.getRepository(GoalRepository.class);
     }
 
     @Bean
-    public PlayerGoalController playerGoalController(@Qualifier("goalIdGenerator") IdGenerator goalIdGenerator,PlayerGoalRepository playerGoalRepository) {
-        return new PlayerGoalController(goalIdGenerator, playerGoalRepository);
+    public GoalController playerGoalController(@Qualifier("goalIdGenerator") IdGenerator goalIdGenerator,GoalRepository goalRepository) {
+        return new GoalController(goalIdGenerator, goalRepository);
     }
 
 }

@@ -30,7 +30,10 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>game-web</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>goal-track</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>player-connection</artifactId>
@@ -184,6 +187,13 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>goal-track</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                            <destFileName>goal-track.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>payment-bonus</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
@@ -247,6 +257,10 @@
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/payment-bonus.war</war>
                                     <contextPath>/bonus</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/goal-track.war</war>
+                                    <contextPath>/goal/track</contextPath>
                                 </contextHandler>
                             </contextHandlers>
                             <systemProperties>

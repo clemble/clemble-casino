@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.annotation.PostConstruct;
 
+import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.player.service.*;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,8 +132,9 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             @Qualifier("gameInitiationController") GameInitiationService initiationService,
             @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
             GameActionService actionService,
-            GameRecordService recordService) {
-            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService);
+            GameRecordService recordService,
+            GoalService goalService) {
+            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }

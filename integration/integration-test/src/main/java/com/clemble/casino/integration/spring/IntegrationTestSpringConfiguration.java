@@ -12,6 +12,7 @@ import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.event.SystemEvent;
+import com.clemble.casino.server.goal.spring.GoalSpringConfiguration;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
@@ -69,6 +70,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         PlayerSocialSpringConfiguration.class,
         PaymentBonusSpringConfiguration.class,
         PaymentSpringConfiguration.class,
+        GoalSpringConfiguration.class,
         IntegrationGameSpringConfiguration.class })
     public static class LocalTestConfiguration {
 
