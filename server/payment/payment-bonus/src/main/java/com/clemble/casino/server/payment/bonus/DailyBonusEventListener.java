@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.payment.BonusPaymentTransaction;

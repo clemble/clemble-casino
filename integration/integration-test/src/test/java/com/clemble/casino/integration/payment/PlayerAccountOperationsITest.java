@@ -6,8 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import com.clemble.casino.integration.game.RoundGamePlayer;
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
+import com.clemble.casino.server.payment.bonus.PaymentBonusSource;
 import com.clemble.test.concurrent.Get;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -16,7 +15,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;

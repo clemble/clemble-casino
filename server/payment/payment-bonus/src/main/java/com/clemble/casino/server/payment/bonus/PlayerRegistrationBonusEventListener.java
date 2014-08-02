@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.event.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.payment.BonusPaymentTransaction;

@@ -15,6 +15,7 @@
 
         <module>payment</module>
         <module>player</module>
+        <module>goal</module>
         <module>game</module>
     </modules>
     <dependencies>

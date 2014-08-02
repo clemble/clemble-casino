@@ -4,6 +4,4 @@ import com.clemble.casino.server.id.IdGenerator;
 
 public interface PlayerIdGenerator extends IdGenerator {
 
-    public String newId();
-
 }

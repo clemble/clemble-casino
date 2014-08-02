@@ -215,6 +215,11 @@
                 <artifactId>api-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.clemble.casino</groupId>
+                <artifactId>api-goal</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Client dependencies -->
 

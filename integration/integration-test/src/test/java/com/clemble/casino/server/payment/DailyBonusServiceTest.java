@@ -11,14 +11,13 @@ import com.clemble.test.concurrent.Check;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
+import com.clemble.casino.server.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.payment.money.Operation;
@@ -27,10 +26,7 @@ import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.payment.bonus.DailyBonusEventListener;
 import com.clemble.casino.server.repository.payment.PaymentTransactionRepository;
 import com.clemble.casino.server.repository.payment.PlayerAccountTemplate;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.payment.PaymentManagementSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
-import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = IntegrationTestSpringConfiguration.class)
