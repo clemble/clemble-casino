@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.payment.service.PlayerAccountService;
+import com.clemble.casino.server.id.IdGenerator;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,6 @@ import com.clemble.casino.game.event.schedule.GameConstructedEvent;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
-import com.clemble.casino.game.id.GameIdGenerator;
 import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.payment.money.Money;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -32,14 +32,14 @@ import com.clemble.casino.server.repository.game.ServerGameConfigurationReposito
 
 public class ServerAvailabilityGameConstructionService implements AvailabilityGameConstructionService {
 
-    final private GameIdGenerator idGenerator;
+    final private IdGenerator idGenerator;
     final private GameConstructionRepository constructionRepository;
     final private PlayerNotificationService playerNotificationService;
     final private PlayerAccountService accountService;
     final private PendingGameInitiationEventListener pendingInitiationService;
 
     public ServerAvailabilityGameConstructionService(
-            GameIdGenerator idGenerator,
+            IdGenerator idGenerator,
             PlayerAccountService accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,

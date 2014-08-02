@@ -3,7 +3,6 @@ package com.clemble.casino.server.spring.game;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.clemble.casino.game.id.RedisGameIdGenerator;
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
@@ -14,6 +13,8 @@ import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
+import com.clemble.casino.server.id.IdGenerator;
+import com.clemble.casino.server.id.RedisIdGenerator;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.repository.game.*;
 import com.clemble.casino.server.spring.common.*;
@@ -22,8 +23,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.clemble.casino.game.id.GameIdGenerator;
-import com.clemble.casino.game.id.UUIDGameIdGenerator;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.action.GameStateFactoryFacade;
@@ -56,8 +55,8 @@ import redis.clients.jedis.JedisPool;
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public GameIdGenerator gameIdGenerator(JedisPool jedisPool) {
-        return new RedisGameIdGenerator(jedisPool);
+    public IdGenerator gameIdGenerator(JedisPool jedisPool) {
+        return new RedisIdGenerator("GAME_COUNTER", "G", jedisPool);
     }
 
     @Bean
@@ -116,7 +115,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ServerAutoGameConstructionService serverAutoGameConstructionService(final GameIdGenerator idGenerator,
+    public ServerAutoGameConstructionService serverAutoGameConstructionService(final @Qualifier("gameIdGenerator") IdGenerator idGenerator,
             final ServerGameInitiationService initiatorService, final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService, final ServerPlayerPresenceService playerStateManager) {
         return new ServerAutoGameConstructionService(idGenerator, initiatorService, constructionRepository, playerLockService, playerStateManager);
@@ -124,7 +123,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
-            GameIdGenerator idGenerator,
+            @Qualifier("gameIdGenerator") IdGenerator idGenerator,
             @Qualifier("playerAccountClient") PlayerAccountService accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,
