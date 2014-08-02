@@ -6,7 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import com.clemble.casino.integration.game.RoundGamePlayer;
-import com.clemble.casino.server.payment.bonus.PaymentBonusSource;
+import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.test.concurrent.Get;
 import org.junit.Assert;
 import org.junit.Ignore;

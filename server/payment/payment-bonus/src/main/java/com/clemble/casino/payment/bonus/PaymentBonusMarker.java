@@ -1,4 +1,4 @@
-package com.clemble.casino.server.payment.bonus;
+package com.clemble.casino.payment.bonus;
 
 import java.io.Serializable;
 

@@ -1,9 +1,8 @@
-package com.clemble.casino.server.payment.bonus.policy;
+package com.clemble.casino.payment.bonus.policy;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Money;
 
 public class MaxAmountBonusPolicy implements BonusPolicy {

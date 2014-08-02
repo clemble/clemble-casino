@@ -1,4 +1,4 @@
-package com.clemble.casino.server.payment.bonus;
+package com.clemble.casino.payment.bonus;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
@@ -14,7 +14,7 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.payment.BonusPaymentTransaction;
-import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
+import com.clemble.casino.payment.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class BonusService {

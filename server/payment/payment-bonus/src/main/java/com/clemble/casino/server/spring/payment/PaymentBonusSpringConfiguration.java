@@ -2,12 +2,12 @@ package com.clemble.casino.server.spring.payment;
 
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.payment.bonus.BonusService;
-import com.clemble.casino.server.payment.bonus.DailyBonusEventListener;
-import com.clemble.casino.server.payment.bonus.PlayerConnectionDiscoveryBonusEventListener;
-import com.clemble.casino.server.payment.bonus.PlayerRegistrationBonusEventListener;
-import com.clemble.casino.server.payment.bonus.policy.BonusPolicy;
-import com.clemble.casino.server.payment.bonus.policy.NoBonusPolicy;
+import com.clemble.casino.payment.bonus.BonusService;
+import com.clemble.casino.payment.bonus.DailyBonusEventListener;
+import com.clemble.casino.payment.bonus.PlayerConnectionDiscoveryBonusEventListener;
+import com.clemble.casino.payment.bonus.PlayerRegistrationBonusEventListener;
+import com.clemble.casino.payment.bonus.policy.BonusPolicy;
+import com.clemble.casino.payment.bonus.policy.NoBonusPolicy;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;

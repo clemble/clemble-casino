@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.server.payment.bonus.PaymentBonusSource;
+import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import com.clemble.test.concurrent.Get;

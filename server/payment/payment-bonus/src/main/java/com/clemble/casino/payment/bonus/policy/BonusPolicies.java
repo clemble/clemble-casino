@@ -1,4 +1,4 @@
-package com.clemble.casino.server.payment.bonus.policy;
+package com.clemble.casino.payment.bonus.policy;
 
 import com.clemble.casino.payment.PaymentTransaction;
 
