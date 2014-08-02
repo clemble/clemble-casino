@@ -1,4 +1,4 @@
-package com.clemble.casino.server.player.security;
+package com.clemble.casino.server.security;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

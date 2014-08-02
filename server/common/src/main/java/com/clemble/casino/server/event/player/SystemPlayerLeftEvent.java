@@ -1,34 +1,31 @@
-package com.clemble.casino.server.event;
+package com.clemble.casino.server.event.player;
 
-import com.clemble.casino.event.PlayerAwareEvent;
+import static com.clemble.casino.utils.Preconditions.checkNotNull;
+
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerCreatedEvent implements SystemEvent, PlayerAware {
+public class SystemPlayerLeftEvent implements SystemEvent, PlayerAware {
 
     /**
-     * Generated 07/01/14
+     * Generated 13/11/13
      */
-    private static final long serialVersionUID = 7637036341950271549L;
+    private static final long serialVersionUID = -7854654395683761302L;
 
-    final public static String CHANNEL = "player:created";
+    final public static String CHANNEL = "left";
 
     final private String player;
 
     @JsonCreator
-    public SystemPlayerCreatedEvent(@JsonProperty("player") String player) {
-        this.player = player;
+    public SystemPlayerLeftEvent(@JsonProperty("player") String player) {
+        this.player = checkNotNull(player);
     }
 
     @Override
     public String getPlayer() {
         return player;
-    }
-
-    @Override
-    public String getChannel() {
-        return CHANNEL;
     }
 
     @Override
@@ -47,7 +44,7 @@ public class SystemPlayerCreatedEvent implements SystemEvent, PlayerAware {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SystemPlayerCreatedEvent other = (SystemPlayerCreatedEvent) obj;
+        SystemPlayerLeftEvent other = (SystemPlayerLeftEvent) obj;
         if (player == null) {
             if (other.player != null)
                 return false;
@@ -57,8 +54,12 @@ public class SystemPlayerCreatedEvent implements SystemEvent, PlayerAware {
     }
 
     @Override
+    public String getChannel() {
+        return CHANNEL;
+    }
+
+    @Override
     public String toString() {
         return "sys:" + player + ":" + CHANNEL;
     }
-
 }

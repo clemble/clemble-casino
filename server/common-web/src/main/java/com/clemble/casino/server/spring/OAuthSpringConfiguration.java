@@ -1,4 +1,4 @@
-package com.clemble.casino.server.spring.web;
+package com.clemble.casino.server.spring;
 
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.springframework.context.annotation.Configuration;

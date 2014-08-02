@@ -8,7 +8,7 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.payment.money.Operation;
-import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;

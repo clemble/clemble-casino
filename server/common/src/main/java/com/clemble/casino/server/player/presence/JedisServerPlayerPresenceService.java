@@ -23,8 +23,8 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.event.SystemPlayerEnteredEvent;
-import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerEnteredEvent;
+import com.clemble.casino.server.event.player.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class JedisServerPlayerPresenceService implements ServerPlayerPresenceService {

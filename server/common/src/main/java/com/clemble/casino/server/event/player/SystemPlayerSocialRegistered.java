@@ -1,4 +1,4 @@
-package com.clemble.casino.server.event;
+package com.clemble.casino.server.event.player;
 
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.player.SocialConnectionDataAware;

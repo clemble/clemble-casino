@@ -1,4 +1,4 @@
-package com.clemble.casino.server.spring.web;
+package com.clemble.casino.server.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.presence.controller.error.ClembleCasinoHandlerExceptionResolver;
+import com.clemble.casino.server.error.ClembleCasinoHandlerExceptionResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 

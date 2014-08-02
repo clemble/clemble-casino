@@ -1,4 +1,4 @@
-package com.clemble.casino.server.event;
+package com.clemble.casino.server.event.player;
 
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.PlayerProfileAware;

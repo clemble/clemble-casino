@@ -1,6 +1,6 @@
 package com.clemble.casino.server.presence.spring;
 
-import com.clemble.casino.server.spring.web.AbstractWebApplicationInitializer;
+import com.clemble.casino.server.spring.AbstractWebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 

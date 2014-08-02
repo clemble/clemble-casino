@@ -5,7 +5,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
 import com.clemble.casino.server.ServerService;
-import com.clemble.casino.server.event.SystemPlayerSocialAddedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.social.SocialConnection;
 import com.clemble.casino.server.social.SocialConnectionAdapter;

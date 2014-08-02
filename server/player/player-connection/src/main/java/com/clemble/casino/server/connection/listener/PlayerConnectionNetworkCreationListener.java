@@ -1,6 +1,6 @@
 package com.clemble.casino.server.connection.listener;
 
-import com.clemble.casino.server.event.SystemPlayerCreatedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.connection.PlayerConnectionNetwork;
 import com.clemble.casino.server.connection.repository.PlayerConnectionNetworkRepository;

@@ -1,4 +1,4 @@
-package com.clemble.casino.server.player.security;
+package com.clemble.casino.server.security;
 
 import com.clemble.casino.player.client.ClembleConsumerDetails;
 import com.clemble.casino.player.security.PlayerToken;

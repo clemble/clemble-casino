@@ -11,7 +11,7 @@ import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.server.spring.web.OAuthSpringConfiguration;
+import com.clemble.casino.server.spring.OAuthSpringConfiguration;
 
 @Ignore
 @RunWith(SpringJUnit4ClassRunner.class)

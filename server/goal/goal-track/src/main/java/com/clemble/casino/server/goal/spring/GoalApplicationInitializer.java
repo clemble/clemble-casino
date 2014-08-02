@@ -1,7 +1,7 @@
 package com.clemble.casino.server.goal.spring;
 
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.web.AbstractWebApplicationInitializer;
+import com.clemble.casino.server.spring.AbstractWebApplicationInitializer;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;

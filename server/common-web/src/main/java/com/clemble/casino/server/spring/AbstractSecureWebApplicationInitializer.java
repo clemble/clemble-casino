@@ -1,4 +1,4 @@
-package com.clemble.casino.server.spring.web;
+package com.clemble.casino.server.spring;
 
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;

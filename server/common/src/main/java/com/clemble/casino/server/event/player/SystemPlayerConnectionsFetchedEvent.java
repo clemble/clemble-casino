@@ -1,7 +1,8 @@
-package com.clemble.casino.server.event;
+package com.clemble.casino.server.event.player;
 
 import com.clemble.casino.player.ConnectionKeyAware;
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.social.connect.ConnectionKey;

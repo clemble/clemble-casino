@@ -10,7 +10,7 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.game.pending.PendingGameInitiation;
 import com.clemble.casino.server.game.pending.PendingPlayer;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;

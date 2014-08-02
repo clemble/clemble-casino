@@ -7,7 +7,7 @@ import javax.servlet.ServletRegistration;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.clemble.casino.server.spring.web.AbstractWebApplicationInitializer;
+import com.clemble.casino.server.spring.AbstractWebApplicationInitializer;
 
 public class PaymentApplicationInitializer extends AbstractWebApplicationInitializer {
 

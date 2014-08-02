@@ -4,7 +4,7 @@ import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.service.PlayerManualRegistrationService;
-import com.clemble.casino.server.event.SystemPlayerProfileRegistered;
+import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
 import com.clemble.casino.server.id.IdGenerator;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import com.clemble.casino.server.player.security.PlayerTokenFactory;
+import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.registration.repository.PlayerCredentialRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 

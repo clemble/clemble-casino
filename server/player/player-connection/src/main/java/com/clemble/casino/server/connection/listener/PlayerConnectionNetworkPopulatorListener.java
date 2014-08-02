@@ -1,7 +1,7 @@
 package com.clemble.casino.server.connection.listener;
 
-import com.clemble.casino.server.event.SystemPlayerConnectionsFetchedEvent;
-import com.clemble.casino.server.event.SystemPlayerDiscoveredConnectionEvent;
+import com.clemble.casino.server.event.player.SystemPlayerConnectionsFetchedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.connection.PlayerConnectionNetwork;

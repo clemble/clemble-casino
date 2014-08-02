@@ -1,4 +1,4 @@
-package com.clemble.casino.server.spring.web;
+package com.clemble.casino.server.spring;
 
 import java.net.URI;
 import java.util.Arrays;

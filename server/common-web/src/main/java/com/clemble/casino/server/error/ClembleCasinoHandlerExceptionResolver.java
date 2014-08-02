@@ -1,4 +1,4 @@
-package com.clemble.casino.server.presence.controller.error;
+package com.clemble.casino.server.error;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -23,7 +23,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.error.ClembleCasinoFailureDescription;
-import com.clemble.casino.server.error.ClembleCasinoServerException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller

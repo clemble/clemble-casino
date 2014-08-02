@@ -3,7 +3,7 @@ package com.clemble.casino.server.payment;
 import java.util.Date;
 import java.util.Random;
 
-import com.clemble.casino.server.event.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
 import org.junit.Assert;

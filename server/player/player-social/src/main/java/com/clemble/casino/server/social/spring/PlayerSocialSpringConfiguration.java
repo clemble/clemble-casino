@@ -2,9 +2,9 @@ package com.clemble.casino.server.social.spring;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.social.ServerProfileSocialRegistrationService;
-import com.clemble.casino.server.player.security.PlayerTokenFactory;
+import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.web.PlayerTokenSpringConfiguration;
+import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.social.controller.PlayerSocialRegistrationController;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

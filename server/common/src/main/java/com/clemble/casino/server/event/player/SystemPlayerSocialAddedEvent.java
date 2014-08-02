@@ -1,8 +1,9 @@
-package com.clemble.casino.server.event;
+package com.clemble.casino.server.event.player;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.ConnectionKeyAware;
+import com.clemble.casino.server.event.SystemEvent;
 import org.springframework.social.connect.ConnectionKey;
 
 import com.clemble.casino.player.PlayerAware;

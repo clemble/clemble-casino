@@ -1,6 +1,6 @@
 package com.clemble.casino.server.presence.listener;
 
-import com.clemble.casino.server.event.SystemPlayerLeftEvent;
+import com.clemble.casino.server.event.player.SystemPlayerLeftEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 

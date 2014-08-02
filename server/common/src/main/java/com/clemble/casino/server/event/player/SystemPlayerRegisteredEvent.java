@@ -1,6 +1,7 @@
-package com.clemble.casino.server.event;
+package com.clemble.casino.server.event.player;
 
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.server.event.SystemEvent;
 
 /**
  * Created by mavarazy on 7/4/14.

@@ -2,7 +2,7 @@ package com.clemble.casino.server.game.construction.availability;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.server.event.SystemPlayerCreatedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.game.pending.PendingPlayer;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.repository.game.PendingPlayerRepository;

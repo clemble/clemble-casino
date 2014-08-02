@@ -30,7 +30,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.event.SystemPlayerPresenceChangedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;

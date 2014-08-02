@@ -1,7 +1,7 @@
 package com.clemble.casino.server.profile.listener;
 
-import com.clemble.casino.server.event.SystemPlayerCreatedEvent;
-import com.clemble.casino.server.event.SystemPlayerProfileRegistered;
+import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.profile.repository.PlayerProfileRepository;

@@ -3,7 +3,7 @@ package com.clemble.casino.server.presence.controller.management;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.event.SystemPlayerLeftEvent;
+import com.clemble.casino.server.event.player.SystemPlayerLeftEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import org.springframework.http.HttpStatus;

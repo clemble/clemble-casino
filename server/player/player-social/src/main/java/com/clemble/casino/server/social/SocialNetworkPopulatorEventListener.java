@@ -4,13 +4,13 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import com.clemble.casino.server.event.SystemPlayerConnectionsFetchedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerConnectionsFetchedEvent;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 
-import com.clemble.casino.server.event.SystemPlayerSocialAddedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 
