@@ -3,6 +3,7 @@ package com.clemble.casino.server.goal.controller;
 import com.clemble.casino.goal.Goal;
 import com.clemble.casino.goal.GoalState;
 import com.clemble.casino.goal.service.GoalService;
+import com.clemble.casino.goal.service.GoalServiceBase;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.id.IdGenerator;
@@ -19,19 +20,19 @@ import static com.clemble.casino.goal.GoalWebMapping.*;
  * Created by mavarazy on 8/2/14.
  */
 @Controller
-public class GoalController implements GoalService, ExternalController {
+public class GoalServiceController implements GoalServiceBase, ExternalController {
 
     final private GoalRepository goalRepository;
     final private IdGenerator goalIdGenerator;
 
-    public GoalController(IdGenerator idGenerator, GoalRepository goalRepository) {
+    public GoalServiceController(IdGenerator idGenerator, GoalRepository goalRepository) {
         this.goalIdGenerator = idGenerator;
         this.goalRepository = goalRepository;
     }
 
-    @Override
-    @RequestMapping(method = RequestMethod.POST, value = PLAYER_GOALS, produces = PRODUCES)
-    public @ResponseBody Goal addGoal(@PathVariable("player") String player, @RequestBody Goal goal) {
+
+    @RequestMapping(method = RequestMethod.POST, value = MY_GOALS, produces = PRODUCES)
+    public @ResponseBody Goal addMyGoal(@CookieValue("player") String player, @RequestBody Goal goal) {
         // Step 1. Generating saved goal
         Goal savedGoal = new Goal(
             player,
@@ -44,6 +45,27 @@ public class GoalController implements GoalService, ExternalController {
         // Step 2. Saving goal for future
         // TODO add player credentials
         return goalRepository.save(goal);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = MY_GOALS, produces = PRODUCES)
+    public @ResponseBody Collection<Goal> myGoals(@CookieValue("player") String player) {
+        return goalRepository.findByPlayer(player);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_PENDING, produces = PRODUCES)
+    public @ResponseBody Collection<Goal> myPendingGoals(@CookieValue("player") String player) {
+        return goalRepository.findByPlayerAndState(player, GoalState.pending);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_REACHED, produces = PRODUCES)
+    public @ResponseBody Collection<Goal> myReachedGoals(@CookieValue("player") String player) {
+        return goalRepository.findByPlayerAndState(player, GoalState.reached);
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_MISSED, produces = PRODUCES)
+    public @ResponseBody Collection<Goal> myMissedGoals(@CookieValue("player") String player) {
+        return goalRepository.findByPlayerAndState(player, GoalState.missed);
     }
 
     @Override

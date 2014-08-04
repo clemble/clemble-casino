@@ -2,11 +2,11 @@ package com.clemble.casino.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.client.goal.GoalOperations;
-import com.clemble.casino.client.goal.GoalTemplate;
+import com.clemble.casino.integration.goal.GoalTemplate;
 import com.clemble.casino.client.player.*;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.player.service.*;
+import com.clemble.casino.server.goal.controller.GoalServiceController;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -60,7 +60,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     final private PaymentOperations playerAccountOperations;
     final private GameActionOperationsFactory actionOperationsFactory;
     final private GameRecordOperations recordOperations;
-    final private GoalOperations goalOperations;
+    final private GoalService goalOperations;
 
     public ServerCasinoOperations(
         final String host,
@@ -80,7 +80,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
         final GameConfigurationService specificationService,
         final GameActionService actionService,
         final GameRecordService recordService,
-        final GoalService goalService
+        final GoalServiceController goalService
     ) {
         this.host = host;
         this.player = playerIdentity.getPlayer();
@@ -144,7 +144,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     }
 
     @Override
-    public GoalOperations goalOperations() {
+    public GoalService goalOperations() {
         return goalOperations;
     }
 

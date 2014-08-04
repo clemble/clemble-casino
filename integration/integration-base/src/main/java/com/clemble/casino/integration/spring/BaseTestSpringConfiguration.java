@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.player.service.*;
+import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -133,7 +134,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
             GameActionService actionService,
             GameRecordService recordService,
-            GoalService goalService) {
+            GoalServiceController goalService) {
             ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }

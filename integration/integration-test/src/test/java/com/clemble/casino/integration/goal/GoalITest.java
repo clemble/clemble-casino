@@ -7,13 +7,10 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -35,10 +32,10 @@ public class GoalITest {
     public void testAddGoal() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         Goal goal = new Goal(A.getPlayer(), null, "Pending A goal", Money.create(Currency.FakeMoney, 100), new Date(System.currentTimeMillis()), 10, GoalState.pending);
-        Goal savedGoal = A.goalOperations().addGoal(goal);
+        Goal savedGoal = A.goalOperations().addMyGoal(goal);
 
-        Assert.assertEquals(A.goalOperations().getGoals().size(), 1);
-        Assert.assertEquals(A.goalOperations().getGoals().iterator().next(), goal);
+        Assert.assertEquals(A.goalOperations().myGoals().size(), 1);
+        Assert.assertEquals(A.goalOperations().myGoals().iterator().next(), goal);
     }
 
 }

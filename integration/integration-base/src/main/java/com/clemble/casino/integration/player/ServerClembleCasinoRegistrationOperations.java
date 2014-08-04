@@ -24,6 +24,7 @@ import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
+import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,7 +46,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private GameConfigurationService specificationService;
     final private GameActionService actionService;
     final private GameRecordService recordService;
-    final private GoalService goalService;
+    final private GoalServiceController goalService;
 
     public ServerClembleCasinoRegistrationOperations(
         String host,
@@ -64,7 +65,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         GameConfigurationService specificationService,
         GameActionService actionService,
         GameRecordService recordService,
-        GoalService goalService) {
+        GoalServiceController goalService) {
         this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);

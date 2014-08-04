@@ -22,6 +22,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>goal-track</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>common</artifactId>
