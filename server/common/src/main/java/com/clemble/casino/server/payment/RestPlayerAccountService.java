@@ -1,6 +1,6 @@
 package com.clemble.casino.server.payment;
 
-import static com.clemble.casino.web.payment.PaymentWebMapping.*;
+import static com.clemble.casino.payment.PaymentWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;

@@ -22,7 +22,7 @@ import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.payment.account.ServerPlayerAccountService;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 import com.clemble.casino.web.mapping.WebMapping;
-import static com.clemble.casino.web.payment.PaymentWebMapping.*;
+import static com.clemble.casino.payment.PaymentWebMapping.*;
 
 @Controller
 public class PlayerAccountController implements PlayerAccountService, ExternalController {

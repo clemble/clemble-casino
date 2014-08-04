@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.payment.PaymentTransaction;
-import static com.clemble.casino.web.payment.PaymentWebMapping.*;
+import static com.clemble.casino.payment.PaymentWebMapping.*;
 
 public class IntegrationPaymentTransactionOperations extends AbstractPaymentTransactionOperations {
 

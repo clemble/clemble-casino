@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.annotation.PostConstruct;
 
-import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.player.service.*;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -40,9 +39,7 @@ import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.integration.player.ServerClembleCasinoRegistrationOperations;
-import com.clemble.casino.integration.player.account.CombinedPaymentService;
-import com.clemble.casino.payment.service.PaymentService;
-import com.clemble.casino.payment.service.PaymentTransactionService;
+import com.clemble.casino.payment.service.PaymentTransactionServiceBase;
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
@@ -107,12 +104,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         }
 
         @Bean
-        public PaymentService paymentService(@Qualifier("paymentTransactionController") PaymentTransactionService transactionService, @Qualifier("playerAccountController") PlayerAccountService accountService) {
-            return new CombinedPaymentService(transactionService, accountService);
-        }
-
-        @Bean
-        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionService paymentTransactionController, SystemNotificationService systemNotificationService) {
+        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionServiceBase paymentTransactionController, SystemNotificationService systemNotificationService) {
             return new WebPaymentTransactionOperations(paymentTransactionController, systemNotificationService);
         }
 
@@ -126,7 +118,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             PlayerImageService imageService,
             PlayerConnectionService connectionService,
             PlayerSessionService sessionOperations,
-            PaymentService accountOperations,
+            @Qualifier("playerAccountController") PlayerAccountService accountOperations,
+            PaymentTransactionServiceBase paymentTransactionService,
             PlayerPresenceService presenceService,
             @Qualifier("autoGameConstructionController") AutoGameConstructionService constructionService,
             @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,
@@ -135,7 +128,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             GameActionService actionService,
             GameRecordService recordService,
             GoalServiceController goalService) {
-            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService);
+            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }

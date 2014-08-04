@@ -19,7 +19,7 @@ import com.clemble.casino.server.payment.account.ServerPlayerAccountService;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.payment.controller.PaymentTransactionController;
+import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountController;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -33,8 +33,8 @@ import java.net.UnknownHostException;
 public class PaymentSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public PaymentTransactionController paymentTransactionController(PaymentTransactionRepository paymentTransactionRepository) {
-        return new PaymentTransactionController(paymentTransactionRepository);
+    public PaymentTransactionServiceController paymentTransactionController(PaymentTransactionRepository paymentTransactionRepository) {
+        return new PaymentTransactionServiceController(paymentTransactionRepository);
     }
 
     @Bean

@@ -2,8 +2,7 @@ package com.clemble.casino.server.goal.controller;
 
 import com.clemble.casino.goal.Goal;
 import com.clemble.casino.goal.GoalState;
-import com.clemble.casino.goal.service.GoalService;
-import com.clemble.casino.goal.service.GoalServiceBase;
+import com.clemble.casino.goal.service.GoalServiceContract;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.id.IdGenerator;
@@ -20,7 +19,7 @@ import static com.clemble.casino.goal.GoalWebMapping.*;
  * Created by mavarazy on 8/2/14.
  */
 @Controller
-public class GoalServiceController implements GoalServiceBase, ExternalController {
+public class GoalServiceController implements GoalServiceContract, ExternalController {
 
     final private GoalRepository goalRepository;
     final private IdGenerator goalIdGenerator;

@@ -46,7 +46,7 @@ import com.clemble.casino.player.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
-import com.clemble.casino.server.payment.controller.PaymentTransactionController;
+import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.annotation.PostConstruct;
@@ -79,9 +79,9 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
 
         @Bean
         public PaymentTransactionOperations paymentTransactionOperations(
-            PaymentTransactionController paymentTransactionController,
+            PaymentTransactionServiceController paymentTransactionServiceController,
             SystemNotificationService systemNotificationService) {
-            return new WebPaymentTransactionOperations(paymentTransactionController, systemNotificationService);
+            return new WebPaymentTransactionOperations(paymentTransactionServiceController, systemNotificationService);
         }
 
         @Bean

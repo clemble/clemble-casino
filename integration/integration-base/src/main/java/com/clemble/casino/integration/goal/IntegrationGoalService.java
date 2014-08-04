@@ -9,12 +9,12 @@ import java.util.Collection;
 /**
  * Created by mavarazy on 8/2/14.
  */
-public class GoalTemplate implements GoalService {
+public class IntegrationGoalService implements GoalService {
 
     final private String player;
     final private GoalServiceController goalService;
 
-    public GoalTemplate(String player, GoalServiceController goalService) {
+    public IntegrationGoalService(String player, GoalServiceController goalService) {
         this.player = player;
         this.goalService = goalService;
     }
