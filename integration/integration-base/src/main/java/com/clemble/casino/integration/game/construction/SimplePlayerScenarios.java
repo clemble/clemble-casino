@@ -131,7 +131,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         AsyncCompletionUtils.get(new Get<PlayerProfile>() {
             @Override
             public PlayerProfile get() {
-                return player.profileOperations().getPlayerProfile();
+                return player.profileOperations().myProfile();
             }
         }, 5_000);
         // Step 4. Getting PlayerConnection

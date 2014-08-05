@@ -27,6 +27,7 @@ import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
+import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,7 +36,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private String host;
     final private ObjectMapper objectMapper;
     final private PlayerFacadeRegistrationService registrationService;
-    final private PlayerProfileService profileOperations;
+    final private PlayerProfileServiceController profileOperations;
     final private PlayerImageServiceController imageService;
     final private PlayerConnectionServiceController connectionService;
     final private PlayerPresenceService presenceService;
@@ -56,7 +57,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         ObjectMapper objectMapper,
         EventListenerOperationsFactory listenerOperations,
         PlayerFacadeRegistrationService registrationService,
-        PlayerProfileService profileOperations,
+        PlayerProfileServiceController profileOperations,
         PlayerImageServiceController imageService,
         PlayerConnectionServiceController connectionService,
         PlayerSessionService sessionOperations,
@@ -123,7 +124,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     }
 
     private ClembleCasinoOperations create(PlayerToken playerIdentity, PlayerCredential credential) {
-        return new ServerCasinoOperations(host, objectMapper, playerIdentity, credential, profileOperations, imageService, connectionService, sessionOperations, paymentService, paymentTransactionService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService);
+        return new IntegrationClembleCasinoOperations(host, objectMapper, playerIdentity, credential, profileOperations, imageService, connectionService, sessionOperations, paymentService, paymentTransactionService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService);
     }
 
 }

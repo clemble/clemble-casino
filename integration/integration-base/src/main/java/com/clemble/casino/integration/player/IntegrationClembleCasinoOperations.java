@@ -14,6 +14,7 @@ import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
+import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -43,7 +44,7 @@ import com.clemble.casino.player.security.PlayerSession;
 import com.clemble.casino.player.security.PlayerToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ServerCasinoOperations implements ClembleCasinoOperations {
+public class IntegrationClembleCasinoOperations implements ClembleCasinoOperations {
 
     /**
      * Generated
@@ -58,7 +59,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     final private AutoGameConstructionService constructionService;
     final private GameConstructionOperations gameConstructors;
     final private PlayerPresenceOperations playerPresenceOperations;
-    final private PlayerProfileOperations profileOperations;
+    final private PlayerProfileService profileOperations;
     final private PlayerImageService imageOperations;
     final private PlayerConnectionService connectionOperations;
     final private PlayerSessionOperations playerSessionOperations;
@@ -68,12 +69,12 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     final private GameRecordOperations recordOperations;
     final private GoalService goalService;
 
-    public ServerCasinoOperations(
+    public IntegrationClembleCasinoOperations(
         final String host,
         final ObjectMapper objectMapper,
         final PlayerToken playerIdentity,
         final PlayerCredential credential,
-        final PlayerProfileService playerProfileService,
+        final PlayerProfileServiceController playerProfileService,
         final PlayerImageServiceController imageService,
         final PlayerConnectionServiceController playerConnectionService,
         final PlayerSessionService sessionOperations,
@@ -97,7 +98,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
 
         this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, listenerOperations);
 
-        this.profileOperations = new PlayerProfileTemplate(player, playerProfileService);
+        this.profileOperations = new IntegrationPlayerProfileService(player, playerProfileService);
         this.imageOperations = new IntegrationPlayerImageService(player, imageService);
         this.connectionOperations = new IntegrationPlayerConnectionService(player, playerConnectionService);
         this.paymentTransactionOperations = new PaymentTransactionOperations(new IntegrationPaymentTransactionService(player, paymentTransactionService));
@@ -132,7 +133,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     }
 
     @Override
-    public PlayerProfileOperations profileOperations() {
+    public PlayerProfileService profileOperations() {
         return profileOperations;
     }
 

@@ -23,7 +23,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.client.player.PlayerProfileOperations;
+import com.clemble.casino.player.service.PlayerProfileService;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -55,15 +55,15 @@ public class PlayerProfileOperationsITest {
         PlayerProfile playerProfile = randomProfile();
         ClembleCasinoOperations player = playerScenarios.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
-        PlayerProfileOperations playerProfileOperations = player.profileOperations();
+        PlayerProfileService playerProfileOperations = player.profileOperations();
         ClembleCasinoOperations anotherPlayer = playerScenarios.createPlayer();
-        PlayerProfileOperations anotherPlayerProfileOperations = anotherPlayer.profileOperations();
+        PlayerProfileService anotherPlayerProfileOperations = anotherPlayer.profileOperations();
 
         playerProfile.setPlayer(player.getPlayer());
-        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
-        Assert.assertEquals(playerProfile, playerProfileOperations.getPlayerProfile(player.getPlayer()));
-        Assert.assertEquals(playerProfile, anotherPlayerProfileOperations.getPlayerProfile(player.getPlayer()));
-        assertTrue(player.profileOperations().getPlayerProfile() instanceof PlayerProfile);
+        Assert.assertEquals(playerProfile, player.profileOperations().myProfile());
+        Assert.assertEquals(playerProfile, playerProfileOperations.getProfile(player.getPlayer()));
+        Assert.assertEquals(playerProfile, anotherPlayerProfileOperations.getProfile(player.getPlayer()));
+        assertTrue(player.profileOperations().myProfile() instanceof PlayerProfile);
     }
 
     @Test
@@ -73,20 +73,20 @@ public class PlayerProfileOperationsITest {
         ClembleCasinoOperations B = playerScenarios.createPlayer(randomProfile());
         ClembleCasinoOperations C = playerScenarios.createPlayer(randomProfile());
         // Step 2. Trying to read 2 profiles B & C from A
-        List<PlayerProfile> BCfromA = A.profileOperations().getPlayerProfile(B.getPlayer(), C.getPlayer());
+        List<PlayerProfile> BCfromA = A.profileOperations().getProfiles(B.getPlayer(), C.getPlayer());
         assertEquals(BCfromA.size(), 2);
-        assertTrue(BCfromA.contains(B.profileOperations().getPlayerProfile()));
-        assertTrue(BCfromA.contains(C.profileOperations().getPlayerProfile()));
+        assertTrue(BCfromA.contains(B.profileOperations().myProfile()));
+        assertTrue(BCfromA.contains(C.profileOperations().myProfile()));
         // Step 2.1 Trying to read 2 profiles A & C from B
-        List<PlayerProfile> ACfromB = B.profileOperations().getPlayerProfile(A.getPlayer(), C.getPlayer());
+        List<PlayerProfile> ACfromB = B.profileOperations().getProfiles(A.getPlayer(), C.getPlayer());
         assertEquals(ACfromB.size(), 2);
-        assertTrue(ACfromB.contains(A.profileOperations().getPlayerProfile()));
-        assertTrue(ACfromB.contains(C.profileOperations().getPlayerProfile()));
+        assertTrue(ACfromB.contains(A.profileOperations().myProfile()));
+        assertTrue(ACfromB.contains(C.profileOperations().myProfile()));
         // Step 2.2 Trying to read 2 profiles A & B from C
-        List<PlayerProfile> ABfromC = C.profileOperations().getPlayerProfile(A.getPlayer(), B.getPlayer());
+        List<PlayerProfile> ABfromC = C.profileOperations().getProfiles(A.getPlayer(), B.getPlayer());
         assertEquals(ABfromC.size(), 2);
-        assertTrue(ABfromC.contains(A.profileOperations().getPlayerProfile()));
-        assertTrue(ABfromC.contains(B.profileOperations().getPlayerProfile()));
+        assertTrue(ABfromC.contains(A.profileOperations().myProfile()));
+        assertTrue(ABfromC.contains(B.profileOperations().myProfile()));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class PlayerProfileOperationsITest {
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerProfileDoesNotExists));
 
-        player.profileOperations().getPlayerProfile("-12345");
+        player.profileOperations().getProfile("-12345");
     }
 
     @Test
@@ -105,47 +105,47 @@ public class PlayerProfileOperationsITest {
         // Step 2. Saving profile to DB
         ClembleCasinoOperations player = playerScenarios.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
-        PlayerProfileOperations playerProfileOperations = player.profileOperations();
+        PlayerProfileService playerProfileOperations = player.profileOperations();
         ClembleCasinoOperations anotherPlayer = playerScenarios.createPlayer();
-        PlayerProfileOperations anotherProfileOperations = anotherPlayer.profileOperations();
-        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
+        PlayerProfileService anotherProfileOperations = anotherPlayer.profileOperations();
+        Assert.assertEquals(playerProfile, player.profileOperations().myProfile());
         // Step 3. Updating created player with new Profile value
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
         newProfile.setVersion(0);
         // Step 4. Checking saved profile, replaced the old one
-        PlayerProfile savedProfile = player.profileOperations().updatePlayerProfile(newProfile);
+        PlayerProfile savedProfile = player.profileOperations().updateProfile(newProfile);
 
         newProfile.setVersion(savedProfile.getVersion());
         Assert.assertEquals(savedProfile, newProfile);
 
-        Assert.assertEquals(newProfile, player.profileOperations().getPlayerProfile());
-        Assert.assertEquals(newProfile, playerProfileOperations.getPlayerProfile(player.getPlayer()));
-        Assert.assertEquals(newProfile, anotherProfileOperations.getPlayerProfile(player.getPlayer()));
+        Assert.assertEquals(newProfile, player.profileOperations().myProfile());
+        Assert.assertEquals(newProfile, playerProfileOperations.getProfile(player.getPlayer()));
+        Assert.assertEquals(newProfile, anotherProfileOperations.getProfile(player.getPlayer()));
         // Step 5. Repeating steps from 3 to 4 with another new Profile
         newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
         newProfile.setVersion(savedProfile.getVersion());
 
-        savedProfile = playerProfileOperations.updatePlayerProfile(newProfile);
+        savedProfile = playerProfileOperations.updateProfile(newProfile);
 
         newProfile.setVersion(savedProfile.getVersion());
         Assert.assertEquals(savedProfile, newProfile);
 
-        Assert.assertEquals(newProfile, player.profileOperations().getPlayerProfile());
-        Assert.assertEquals(newProfile, playerProfileOperations.getPlayerProfile(player.getPlayer()));
-        Assert.assertEquals(newProfile, playerProfileOperations.getPlayerProfile(player.getPlayer()));
+        Assert.assertEquals(newProfile, player.profileOperations().myProfile());
+        Assert.assertEquals(newProfile, playerProfileOperations.getProfile(player.getPlayer()));
+        Assert.assertEquals(newProfile, playerProfileOperations.getProfile(player.getPlayer()));
     }
 
     @Test
     public void testAddIllegalSocial() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
-        PlayerProfile playerProfile = A.profileOperations().getPlayerProfile();
+        PlayerProfile playerProfile = A.profileOperations().myProfile();
         playerProfile.addSocialConnection(new ConnectionKey("facebook", "323232"));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.ProfileSocialCantBeEdited));
 
-        A.profileOperations().updatePlayerProfile(playerProfile);
+        A.profileOperations().updateProfile(playerProfile);
     }
 
     @Test
@@ -157,14 +157,14 @@ public class PlayerProfileOperationsITest {
         ClembleCasinoOperations player = playerScenarios.createPlayer(playerProfile);
         ClembleCasinoOperations anotherPlayer = playerScenarios.createPlayer();
         playerProfile.setPlayer(player.getPlayer());
-        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
+        Assert.assertEquals(playerProfile, player.profileOperations().myProfile());
 
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotProfileOwner));
 
-        anotherPlayer.profileOperations().updatePlayerProfile(newProfile);
+        anotherPlayer.profileOperations().updateProfile(newProfile);
     }
 
     @Test
@@ -177,11 +177,11 @@ public class PlayerProfileOperationsITest {
 
         ClembleCasinoOperations player = playerScenarios.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
-        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
+        Assert.assertEquals(playerProfile, player.profileOperations().myProfile());
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromPossibleErrors(ClembleCasinoError.PlayerProfileInvalid, ClembleCasinoError.ServerError));
 
-        player.profileOperations().updatePlayerProfile(null);
+        player.profileOperations().updateProfile(null);
     }
 
     @Test
@@ -193,13 +193,13 @@ public class PlayerProfileOperationsITest {
 
         ClembleCasinoOperations player = playerScenarios.createPlayer(playerProfile);
         playerProfile.setPlayer(player.getPlayer());
-        Assert.assertEquals(playerProfile, player.profileOperations().getPlayerProfile());
+        Assert.assertEquals(playerProfile, player.profileOperations().myProfile());
 
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(RandomStringUtils.random(5));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotProfileOwner));
 
-        Assert.assertEquals(newProfile, player.profileOperations().updatePlayerProfile(newProfile));
+        Assert.assertEquals(newProfile, player.profileOperations().updateProfile(newProfile));
     }
 }

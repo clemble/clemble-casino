@@ -91,7 +91,7 @@ public class FacebookRegistrationITest {
                 System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
         ClembleCasinoOperations casinoOperations = playerScenarios.createPlayer(connectionData);
         assertNotNull(casinoOperations);
-        PlayerProfile profile = casinoOperations.profileOperations().getPlayerProfile();
+        PlayerProfile profile = casinoOperations.profileOperations().myProfile();
         assertNotNull(profile);
         assertTrue(profile instanceof PlayerProfile);
         PlayerProfile socialProfile = (PlayerProfile) profile;
@@ -111,7 +111,7 @@ public class FacebookRegistrationITest {
                 System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
         ClembleCasinoOperations A = playerScenarios.createPlayer(connectionData);
         assertNotNull(A);
-        PlayerProfile profile = A.profileOperations().getPlayerProfile();
+        PlayerProfile profile = A.profileOperations().myProfile();
         assertNotNull(profile);
         assertTrue(profile instanceof PlayerProfile);
         PlayerProfile socialProfile = (PlayerProfile) profile;
@@ -129,7 +129,7 @@ public class FacebookRegistrationITest {
         // Step 2. Converting to SocialConnectionData
         ClembleCasinoOperations casinoOperations = playerScenarios.createPlayer(accessGrant);
         assertNotNull(casinoOperations);
-        PlayerProfile profile = casinoOperations.profileOperations().getPlayerProfile();
+        PlayerProfile profile = casinoOperations.profileOperations().myProfile();
         assertNotNull(profile);
         assertTrue(profile instanceof PlayerProfile);
         PlayerProfile socialProfile = (PlayerProfile) profile;
@@ -142,7 +142,7 @@ public class FacebookRegistrationITest {
         // Step 1. Converting to SocialConnectionData
         ClembleCasinoOperations A = playerScenarios.createPlayer(accessGrant);
         assertNotNull(A);
-        PlayerProfile profile = A.profileOperations().getPlayerProfile();
+        PlayerProfile profile = A.profileOperations().myProfile();
         assertNotNull(profile);
         assertTrue(profile instanceof PlayerProfile);
         PlayerProfile socialProfile = (PlayerProfile) profile;

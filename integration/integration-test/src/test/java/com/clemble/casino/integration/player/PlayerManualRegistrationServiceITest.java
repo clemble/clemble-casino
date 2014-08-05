@@ -42,7 +42,7 @@ public class PlayerManualRegistrationServiceITest {
         ClembleCasinoOperations origB = playerScenarios.login(credential);
         // Step 4. Checking they are the same
         assertEquals(origA.getPlayer(), origB.getPlayer());
-        assertEquals(origA.profileOperations().getPlayerProfile(), origB.profileOperations().getPlayerProfile());
+        assertEquals(origA.profileOperations().myProfile(), origB.profileOperations().myProfile());
         assertEquals(origA.presenceOperations().getPresence(), origB.presenceOperations().getPresence());
         assertEquals(origA.accountService().myAccount(), origB.accountService().myAccount());
     }
@@ -61,6 +61,6 @@ public class PlayerManualRegistrationServiceITest {
         // Step 2. Creating CasinoOperations with this credentials and Profile
         ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
         // Step 3. Checking nick matches
-        assertEquals(nick, origA.profileOperations().getPlayerProfile().getNickName());
+        assertEquals(nick, origA.profileOperations().myProfile().getNickName());
     }
 }

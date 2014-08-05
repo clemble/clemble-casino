@@ -6,48 +6,34 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.service.PlayerProfileService;
+import com.clemble.casino.player.service.PlayerProfileServiceContract;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.profile.repository.PlayerProfileRepository;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
 @Controller
-public class PlayerProfileController implements PlayerProfileService, ExternalController {
+public class PlayerProfileServiceController implements PlayerProfileServiceContract, ExternalController {
 
     // TODO need a listener, that adds ConnectionKey to PlayerProfile when connection added
 
     final private PlayerProfileRepository profileRepository;
 
-    public PlayerProfileController(PlayerProfileRepository playerProfileRepository) {
+    public PlayerProfileServiceController(PlayerProfileRepository playerProfileRepository) {
         this.profileRepository = checkNotNull(playerProfileRepository);
     }
 
-    @Override
-    @RequestMapping(method = RequestMethod.GET, value = PROFILE_PLAYER, produces = PRODUCES)
-    public @ResponseBody PlayerProfile getPlayerProfile(@PathVariable("player") String playerId) {
-        // Step 1. Fetching playerProfile
-        PlayerProfile playerProfile = profileRepository.findOne(playerId);
-        // Step 2. Checking profile
-        if (playerProfile == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileDoesNotExists);
-        // Step 3. Returning profile
-        return playerProfile;
+    @RequestMapping(method = RequestMethod.GET, value = MY_PROFILE, produces = PRODUCES)
+    public PlayerProfile myProfile(@CookieValue("player") String player) {
+        return getProfile(player);
     }
 
-    @Override
-    @RequestMapping(method = RequestMethod.POST, value = PROFILE_PLAYER, produces = PRODUCES)
-    public @ResponseBody
-    PlayerProfile updatePlayerProfile(@PathVariable("player") String player, @RequestBody PlayerProfile playerProfile) {
+    @RequestMapping(method = RequestMethod.POST, value = MY_PROFILE, produces = PRODUCES)
+    public @ResponseBody PlayerProfile updateProfile(@CookieValue("player") String player, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (playerProfile == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileInvalid);
@@ -63,8 +49,20 @@ public class PlayerProfileController implements PlayerProfileService, ExternalCo
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PROFILE, produces = PRODUCES)
-    public @ResponseBody List<PlayerProfile> getPlayerProfile(@RequestParam("player") Collection<String> players) {
+    @RequestMapping(method = RequestMethod.GET, value = PLAYER_PROFILE, produces = PRODUCES)
+    public @ResponseBody PlayerProfile getProfile(@PathVariable("player") String player) {
+        // Step 1. Fetching playerProfile
+        PlayerProfile playerProfile = profileRepository.findOne(player);
+        // Step 2. Checking profile
+        if (playerProfile == null)
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileDoesNotExists);
+        // Step 3. Returning profile
+        return playerProfile;
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = PLAYER_PROFILES, produces = PRODUCES)
+    public @ResponseBody List<PlayerProfile> getProfiles(@RequestParam("player") Collection<String> players) {
         return profileRepository.findAll(players);
     }
 

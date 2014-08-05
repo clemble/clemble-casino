@@ -48,7 +48,7 @@ public class PlayerOperationsITest {
         ClembleCasinoOperations player = playerOperations.createPlayer(profile);
 
         assertNotNull(player);
-        PlayerProfile playerProfile = player.profileOperations().getPlayerProfile();
+        PlayerProfile playerProfile = player.profileOperations().myProfile();
         assertEquals(playerProfile.getFirstName(), "Anton");
         assertEquals(playerProfile.getLastName(), "Oparin");
         assertEquals(playerProfile.getGender(), PlayerGender.M);
@@ -71,7 +71,7 @@ public class PlayerOperationsITest {
         ClembleCasinoOperations player = playerOperations.createPlayer(registrationRequest);
 
         assertNotNull(player);
-        PlayerProfile playerProfile = player.profileOperations().getPlayerProfile();
+        PlayerProfile playerProfile = player.profileOperations().myProfile();
         assertEquals(playerProfile.getFirstName(), "Anton");
         assertEquals(playerProfile.getLastName(), "Oparin");
         assertEquals(playerProfile.getGender(), PlayerGender.M);
