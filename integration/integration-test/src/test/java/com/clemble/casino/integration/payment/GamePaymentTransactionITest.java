@@ -40,7 +40,7 @@ public class GamePaymentTransactionITest {
         // Step 1. Preparing game session listener
         EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
         RoundGamePlayer<NumberState> A = sessionPlayers.get(0);
-        A.playerOperations().paymentOperations().subscribe(paymentListener);
+        A.playerOperations().listenerOperations().subscribeToPaymentEvents(paymentListener);
         RoundGamePlayer<NumberState> B = sessionPlayers.get(1);
         A.waitForStart();
         B.waitForStart();

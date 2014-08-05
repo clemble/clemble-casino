@@ -106,7 +106,7 @@ public class MatchGameConstructionITest {
         AvsB.waitVersion(2);
 
         // Step 3. Checking there is a payment transaction
-        PaymentTransaction transaction = BvsA.playerOperations().paymentOperations().getPaymentTransaction(AvsB.getSession());
+        PaymentTransaction transaction = BvsA.playerOperations().paymentOperations().getTransaction(AvsB.getSession());
         assertNotNull(transaction);
 
         Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);

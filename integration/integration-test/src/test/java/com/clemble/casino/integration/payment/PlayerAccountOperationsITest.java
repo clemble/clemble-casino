@@ -69,7 +69,7 @@ public class PlayerAccountOperationsITest {
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
-                return A.paymentOperations().getPaymentTransactions().size() == 2;
+                return A.paymentOperations().myTransactions().size() == 2;
             }
         }, 10_000);
         // Step 2. Fetching account and precondition
@@ -77,15 +77,15 @@ public class PlayerAccountOperationsITest {
         assertTrue(accountA.getMoney().size() > 0);
         assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
         // Step 3. Checking registration transaction
-        A.paymentOperations().getPaymentTransactions();
-        PaymentTransaction transaction = A.paymentOperations().getPaymentTransaction("registration", A.getPlayer());
+        A.paymentOperations().myTransactions();
+        PaymentTransaction transaction = A.paymentOperations().getTransaction("registration", A.getPlayer());
         Set<PaymentOperation> paymentOperations = transaction.getPaymentOperations();
         Money transactionAmount = paymentOperations.iterator().next().getAmount();
         // Step 4. Checking bonus transaction (Which might be delayed, because of the system event delays)
         PaymentTransaction bonusTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>(){
             @Override
             public PaymentTransaction get() {
-                return A.paymentOperations().getPaymentTransactions(PaymentBonusSource.dailybonus).get(0);
+                return A.paymentOperations().myTransactions(PaymentBonusSource.dailybonus).get(0);
             }
         }, 5000);
         paymentOperations = bonusTransaction.getPaymentOperations();
@@ -159,21 +159,20 @@ public class PlayerAccountOperationsITest {
     public void testTransactionsListAccess() {
         // Step 1. Checking player has no transactions to access
         ClembleCasinoOperations player = playerOperations.createPlayer();
-        List<PaymentTransaction> transactions = player.paymentOperations().getPaymentTransactions();
+        List<PaymentTransaction> transactions = player.paymentOperations().myTransactions();
         Assert.assertFalse(transactions.isEmpty());
         // Step 2. Checking no other player can't access the transactions
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
-        // TODO Assert.assertFalse(player.getWalletOperations().getPaymentTransaction(MoneySource.Registration, player.getPlayer()));
         // Step 3. Checking no other player can access the transactions
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
-        player.paymentOperations().getPaymentTransaction("registration", anotherPlayer.getPlayer());
+        player.paymentOperations().getTransaction("registration", anotherPlayer.getPlayer());
     }
 
     @Test
     public void testAccessNonExistent() {
         // Step 1. Checking player has no transactions to access
         ClembleCasinoOperations player = playerOperations.createPlayer();
-        assertNull(player.paymentOperations().getPaymentTransaction("TicTacToe", "-1"));
+        assertNull(player.paymentOperations().getTransaction("TicTacToe", "-1"));
     }
 
 }

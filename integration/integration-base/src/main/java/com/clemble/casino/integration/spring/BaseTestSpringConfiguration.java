@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 
 import com.clemble.casino.player.service.*;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
+import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,7 +120,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             PlayerConnectionService connectionService,
             PlayerSessionService sessionOperations,
             @Qualifier("playerAccountController") PlayerAccountServiceController accountOperations,
-            PaymentTransactionServiceContract paymentTransactionService,
+            PaymentTransactionServiceController paymentTransactionService,
             PlayerPresenceService presenceService,
             @Qualifier("autoGameConstructionController") AutoGameConstructionService constructionService,
             @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,

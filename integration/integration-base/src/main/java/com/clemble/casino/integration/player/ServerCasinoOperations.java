@@ -6,11 +6,11 @@ import com.clemble.casino.integration.goal.IntegrationGoalService;
 import com.clemble.casino.client.player.*;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.integration.payment.IntegrationPlayerAccountService;
-import com.clemble.casino.payment.service.PaymentTransactionServiceContract;
+import com.clemble.casino.payment.service.PaymentTransactionOperations;
 import com.clemble.casino.payment.service.PlayerAccountService;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.player.service.*;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
+import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,8 +25,7 @@ import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.game.GameConstructionTemplate;
 import com.clemble.casino.client.game.GameRecordOperations;
 import com.clemble.casino.client.game.GameRecordTemplate;
-import com.clemble.casino.client.payment.PaymentOperations;
-import com.clemble.casino.client.payment.PaymentTemplate;
+import com.clemble.casino.integration.payment.IntegrationPaymentTransactionService;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.event.server.GameInitiatedEvent;
@@ -62,7 +61,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     final private PlayerConnectionOperations connectionOperations;
     final private PlayerSessionOperations playerSessionOperations;
     final private PlayerAccountService accountService;
-    final private PaymentOperations playerAccountOperations;
+    final private PaymentTransactionOperations paymentTransactionOperations;
     final private GameActionOperationsFactory actionOperationsFactory;
     final private GameRecordOperations recordOperations;
     final private GoalService goalService;
@@ -77,7 +76,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
         final PlayerConnectionService playerConnectionService,
         final PlayerSessionService sessionOperations,
         final PlayerAccountServiceController accountServiceController,
-        final PaymentTransactionServiceContract paymentTransactionService,
+        final PaymentTransactionServiceController paymentTransactionService,
         final EventListenerOperationsFactory listenerOperationsFactory,
         final PlayerPresenceService playerPresenceService,
         final AutoGameConstructionService gameConstructionService,
@@ -99,7 +98,7 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
         this.profileOperations = new PlayerProfileTemplate(player, playerProfileService);
         this.imageOperations = new PlayerImageTemplate(player, imageService);
         this.connectionOperations = new PlayerConnectionTemplate(player, playerConnectionService, profileOperations);
-        this.playerAccountOperations = new PaymentTemplate(player, paymentTransactionService, listenerOperations);
+        this.paymentTransactionOperations = new PaymentTransactionOperations(new IntegrationPaymentTransactionService(player, paymentTransactionService));
         this.accountService = new IntegrationPlayerAccountService(player, accountServiceController);
 
         this.constructionService = checkNotNull(gameConstructionService);
@@ -151,8 +150,8 @@ public class ServerCasinoOperations implements ClembleCasinoOperations {
     }
 
     @Override
-    public PaymentOperations paymentOperations() {
-        return playerAccountOperations;
+    public PaymentTransactionOperations paymentOperations() {
+        return paymentTransactionOperations;
     }
 
     @Override

@@ -118,13 +118,13 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
-                return player.paymentOperations().getPaymentTransaction(registrationTransaction) != null;
+                return player.paymentOperations().getTransaction(registrationTransaction) != null;
             }
         }, 5_000);
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
-                return player.paymentOperations().getPaymentTransactions(PaymentBonusSource.dailybonus).size() > 0;
+                return player.paymentOperations().myTransactions(PaymentBonusSource.dailybonus).size() > 0;
             }
         }, 5_000);
         // Step 3. Getting PaymentTransaction

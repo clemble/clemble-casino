@@ -123,8 +123,8 @@ public class PaymentTransactionOperationsTest {
         PaymentTransaction savedPaymentTransaction = transactionRepository.findOne(paymentTransaction.getTransactionKey());
 
         assertEquals(savedPaymentTransaction, paymentTransaction);
-        assertEquals(paymentTransaction, player.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
-        assertEquals(paymentTransaction, player.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, player.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, player.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
     }
 
     // TODO restore @Test
@@ -151,11 +151,11 @@ public class PaymentTransactionOperationsTest {
 
 
         assertEquals(savedPaymentTransaction, paymentTransaction);
-        assertEquals(paymentTransaction, player.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
-        assertEquals(paymentTransaction, anotherPlayer.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, player.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, anotherPlayer.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
-        assertEquals(paymentTransaction, therdPlayer.paymentOperations().getPaymentTransaction(source, String.valueOf(transactionId)));
+        assertEquals(paymentTransaction, therdPlayer.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
     }
 
     @Test
@@ -166,7 +166,7 @@ public class PaymentTransactionOperationsTest {
         PaymentTransaction paymentTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>() {
             @Override
             public PaymentTransaction get() {
-                return player.paymentOperations().getPaymentTransaction("registration", player.getPlayer());
+                return player.paymentOperations().getTransaction("registration", player.getPlayer());
             }
         }, 5_000);
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();
