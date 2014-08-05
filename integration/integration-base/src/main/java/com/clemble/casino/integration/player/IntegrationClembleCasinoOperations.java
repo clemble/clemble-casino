@@ -13,6 +13,7 @@ import com.clemble.casino.server.connection.controller.PlayerConnectionServiceCo
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
+import com.clemble.casino.server.presence.controller.player.PlayerPresenceServiceController;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import org.springframework.web.client.RestTemplate;
@@ -58,7 +59,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
 
     final private AutoGameConstructionService constructionService;
     final private GameConstructionOperations gameConstructors;
-    final private PlayerPresenceOperations playerPresenceOperations;
+    final private PlayerPresenceService playerPresenceOperations;
     final private PlayerProfileService profileOperations;
     final private PlayerImageService imageOperations;
     final private PlayerConnectionService connectionOperations;
@@ -81,7 +82,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final PlayerAccountServiceController accountServiceController,
         final PaymentTransactionServiceController paymentTransactionService,
         final EventListenerOperationsFactory listenerOperationsFactory,
-        final PlayerPresenceService playerPresenceService,
+        final PlayerPresenceServiceController playerPresenceService,
         final AutoGameConstructionService gameConstructionService,
         final AvailabilityGameConstructionService availabilityConstructionService,
         final GameInitiationService initiationService,
@@ -96,7 +97,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         this.session = checkNotNull(playerSessionOperations.create());
         this.listenerOperations = listenerOperationsFactory.construct(player, host, objectMapper);
 
-        this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService, listenerOperations);
+        this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService);
 
         this.profileOperations = new IntegrationPlayerProfileService(player, playerProfileService);
         this.imageOperations = new IntegrationPlayerImageService(player, imageService);
@@ -178,7 +179,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     }
 
     @Override
-    public PlayerPresenceOperations presenceOperations() {
+    public PlayerPresenceService presenceOperations() {
         return playerPresenceOperations;
     }
 

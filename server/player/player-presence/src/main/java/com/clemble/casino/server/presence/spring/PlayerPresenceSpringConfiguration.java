@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.presence.controller.player.PlayerPresenceController;
+import com.clemble.casino.server.presence.controller.player.PlayerPresenceServiceController;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
@@ -58,8 +58,8 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerPresenceController playerPresenceController(ServerPlayerPresenceService playerPresenceServerService) {
-        return new PlayerPresenceController(playerPresenceServerService);
+    public PlayerPresenceServiceController playerPresenceController(ServerPlayerPresenceService playerPresenceServerService) {
+        return new PlayerPresenceServiceController(playerPresenceServerService);
     }
 
     @Bean(destroyMethod = "close")

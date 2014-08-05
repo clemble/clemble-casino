@@ -43,7 +43,7 @@ public class PlayerManualRegistrationServiceITest {
         // Step 4. Checking they are the same
         assertEquals(origA.getPlayer(), origB.getPlayer());
         assertEquals(origA.profileOperations().myProfile(), origB.profileOperations().myProfile());
-        assertEquals(origA.presenceOperations().getPresence(), origB.presenceOperations().getPresence());
+        assertEquals(origA.presenceOperations().myPresence(), origB.presenceOperations().myPresence());
         assertEquals(origA.accountService().myAccount(), origB.accountService().myAccount());
     }
 

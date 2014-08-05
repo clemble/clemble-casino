@@ -6,14 +6,11 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
@@ -43,11 +40,11 @@ public class PlayerPresenceITest {
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         try {
             // Step 2. Checking A presence of A is the same for A & B
-            assertEquals(A.presenceOperations().getPresence(), A.presenceOperations().getPresence(A.getPlayer()));
-            assertEquals(A.presenceOperations().getPresence(), B.presenceOperations().getPresence(A.getPlayer()));
+            assertEquals(A.presenceOperations().myPresence(), A.presenceOperations().getPresence(A.getPlayer()));
+            assertEquals(A.presenceOperations().myPresence(), B.presenceOperations().getPresence(A.getPlayer()));
             // Step 2. Checking B presence of B is the same for A & B
-            assertEquals(B.presenceOperations().getPresence(), B.presenceOperations().getPresence(B.getPlayer()));
-            assertEquals(B.presenceOperations().getPresence(), A.presenceOperations().getPresence(B.getPlayer()));
+            assertEquals(B.presenceOperations().myPresence(), B.presenceOperations().getPresence(B.getPlayer()));
+            assertEquals(B.presenceOperations().myPresence(), A.presenceOperations().getPresence(B.getPlayer()));
             A.presenceOperations().getPresences(A.getPlayer(), B.getPlayer());
         } finally {
             A.close();
@@ -63,27 +60,27 @@ public class PlayerPresenceITest {
         ClembleCasinoOperations C = playerScenarios.createPlayer();
         try {
             // Step 2. Checking A presence of A is the same for A & B
-            assertEquals(A.presenceOperations().getPresence(), A.presenceOperations().getPresence(A.getPlayer()));
-            assertEquals(A.presenceOperations().getPresence(), B.presenceOperations().getPresence(A.getPlayer()));
-            assertEquals(A.presenceOperations().getPresence(), C.presenceOperations().getPresence(A.getPlayer()));
+            assertEquals(A.presenceOperations().myPresence(), A.presenceOperations().getPresence(A.getPlayer()));
+            assertEquals(A.presenceOperations().myPresence(), B.presenceOperations().getPresence(A.getPlayer()));
+            assertEquals(A.presenceOperations().myPresence(), C.presenceOperations().getPresence(A.getPlayer()));
             // Step 2. Checking B presence of B is the same for A & B
-            assertEquals(B.presenceOperations().getPresence(), A.presenceOperations().getPresence(B.getPlayer()));
-            assertEquals(B.presenceOperations().getPresence(), B.presenceOperations().getPresence(B.getPlayer()));
-            assertEquals(B.presenceOperations().getPresence(), C.presenceOperations().getPresence(B.getPlayer()));
+            assertEquals(B.presenceOperations().myPresence(), A.presenceOperations().getPresence(B.getPlayer()));
+            assertEquals(B.presenceOperations().myPresence(), B.presenceOperations().getPresence(B.getPlayer()));
+            assertEquals(B.presenceOperations().myPresence(), C.presenceOperations().getPresence(B.getPlayer()));
             // Step 3. Checking B presence of B is the same for A & B
-            assertEquals(C.presenceOperations().getPresence(), C.presenceOperations().getPresence(C.getPlayer()));
-            assertEquals(C.presenceOperations().getPresence(), C.presenceOperations().getPresence(C.getPlayer()));
-            assertEquals(C.presenceOperations().getPresence(), C.presenceOperations().getPresence(C.getPlayer()));
+            assertEquals(C.presenceOperations().myPresence(), C.presenceOperations().getPresence(C.getPlayer()));
+            assertEquals(C.presenceOperations().myPresence(), C.presenceOperations().getPresence(C.getPlayer()));
+            assertEquals(C.presenceOperations().myPresence(), C.presenceOperations().getPresence(C.getPlayer()));
             // Step 4. Listening for presence updates from B and C
             final BlockingQueue<PlayerPresence> BtoApresence = new ArrayBlockingQueue<>(3);
-            A.presenceOperations().subscribe(B.getPlayer(), new EventListener<PlayerPresenceChangedEvent>() {
+            A.listenerOperations().subscribeToPresenceEvents(B.getPlayer(), new EventListener<PlayerPresenceChangedEvent>() {
                 @Override
                 public void onEvent(PlayerPresenceChangedEvent event) {
                     BtoApresence.add(event);
                 }
             });
             final BlockingQueue<PlayerPresence> CtoApresence = new ArrayBlockingQueue<>(5);
-            A.presenceOperations().subscribe(C.getPlayer(), new EventListener<PlayerPresenceChangedEvent>() {
+            A.listenerOperations().subscribeToPresenceEvents(C.getPlayer(), new EventListener<PlayerPresenceChangedEvent>() {
                 @Override
                 public void onEvent(PlayerPresenceChangedEvent event) {
                     CtoApresence.add((PlayerPresence) event);

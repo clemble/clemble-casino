@@ -42,7 +42,7 @@ public class PlayerPresenceCleanerTest {
         // Step 1. Mark player as online, and check his presence
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         EventAccumulator<PlayerPresenceChangedEvent> accumulator = new EventAccumulator<>();
-        A.presenceOperations().subscribe(A.getPlayer(), accumulator);
+        A.listenerOperations().subscribeToPresenceEvents(A.getPlayer(), accumulator);
         assertTrue(accumulator.isEmpty());
         // Step 2. Mark for expire in 1 second
         Jedis jedis = jedisPool.getResource();
@@ -66,8 +66,8 @@ public class PlayerPresenceCleanerTest {
         }
         assertNotNull(presenceChangedEvent);
         assertEquals(presenceChangedEvent.getPresence(), Presence.offline);
-        assertEquals(A.presenceOperations().getPresence().getSession(), GameSessionKey.DEFAULT_SESSION);
-        assertEquals(A.presenceOperations().getPresence().getPresence(), Presence.offline);
+        assertEquals(A.presenceOperations().myPresence().getSession(), GameSessionKey.DEFAULT_SESSION);
+        assertEquals(A.presenceOperations().myPresence().getPresence(), Presence.offline);
     }
 
 }

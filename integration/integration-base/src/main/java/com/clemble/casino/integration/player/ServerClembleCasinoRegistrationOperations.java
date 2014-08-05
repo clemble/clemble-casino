@@ -26,6 +26,7 @@ import com.clemble.casino.server.connection.controller.PlayerConnectionServiceCo
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
+import com.clemble.casino.server.presence.controller.player.PlayerPresenceServiceController;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
@@ -39,7 +40,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private PlayerProfileServiceController profileOperations;
     final private PlayerImageServiceController imageService;
     final private PlayerConnectionServiceController connectionService;
-    final private PlayerPresenceService presenceService;
+    final private PlayerPresenceServiceController presenceService;
     final private PlayerSessionService sessionOperations;
     final private PlayerAccountServiceController paymentService;
     final private PaymentTransactionServiceController paymentTransactionService;
@@ -63,7 +64,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         PlayerSessionService sessionOperations,
         PlayerAccountServiceController accountOperations,
         PaymentTransactionServiceController paymentTransactionService,
-        PlayerPresenceService presenceService,
+        PlayerPresenceServiceController presenceService,
         AutoGameConstructionService gameConstructionService,
         AvailabilityGameConstructionService availabilityConstructionService,
         GameInitiationService initiationService,
