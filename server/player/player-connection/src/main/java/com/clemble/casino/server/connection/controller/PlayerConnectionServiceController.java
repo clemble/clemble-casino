@@ -4,32 +4,34 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.clemble.casino.player.service.PlayerConnectionServiceContract;
 import com.clemble.casino.player.social.ClembleSocialUtils;
 import com.clemble.casino.server.connection.PlayerConnectionKey;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.connection.PlayerConnectionNetwork;
 import com.clemble.casino.server.connection.repository.PlayerConnectionNetworkRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
 @Controller
-public class PlayerConnectionController implements PlayerConnectionService {
+public class PlayerConnectionServiceController implements PlayerConnectionServiceContract {
 
     final private PlayerConnectionNetworkRepository connectionsRepository;
 
-    public PlayerConnectionController(PlayerConnectionNetworkRepository connectionsRepository) {
+    public PlayerConnectionServiceController(PlayerConnectionNetworkRepository connectionsRepository) {
         this.connectionsRepository = connectionsRepository;
     }
 
+    @RequestMapping(value = MY_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    public @ResponseBody List<ConnectionKey> myConnections(@CookieValue("player") String player) {
+        return getConnections(player);
+    }
+
     @Override
-    @RequestMapping(value = CONNECTION_PLAYER, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @RequestMapping(value = PLAYER_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     public @ResponseBody List<ConnectionKey> getConnections(@PathVariable("player") String player) {
         // Step 1. Generating result collection
         List<ConnectionKey> connectionKeys = new ArrayList<>();

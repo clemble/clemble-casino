@@ -8,7 +8,7 @@ import com.clemble.casino.server.connection.listener.PlayerConnectionNetworkPopu
 import com.clemble.casino.server.connection.listener.PlayerConnectionNetworkCreationListener;
 import com.clemble.casino.server.connection.repository.PlayerConnectionNetworkRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.connection.controller.PlayerConnectionController;
+import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
 
@@ -54,8 +54,8 @@ public class PlayerConnectionSpringConfiguration extends BasicNeo4JSpringConfigu
     }
 
     @Bean
-    public PlayerConnectionController playerConnectionController(PlayerConnectionNetworkRepository socialNetworkRepository) {
-        return new PlayerConnectionController(socialNetworkRepository);
+    public PlayerConnectionServiceController playerConnectionController(PlayerConnectionNetworkRepository socialNetworkRepository) {
+        return new PlayerConnectionServiceController(socialNetworkRepository);
     }
 
 }

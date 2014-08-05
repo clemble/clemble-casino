@@ -11,8 +11,6 @@ import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
-import com.clemble.casino.payment.service.PaymentTransactionServiceContract;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
@@ -24,6 +22,7 @@ import com.clemble.casino.player.web.PlayerLoginRequest;
 import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
+import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
@@ -37,7 +36,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private PlayerFacadeRegistrationService registrationService;
     final private PlayerProfileService profileOperations;
     final private PlayerImageService imageService;
-    final private PlayerConnectionService connectionService;
+    final private PlayerConnectionServiceController connectionService;
     final private PlayerPresenceService presenceService;
     final private PlayerSessionService sessionOperations;
     final private PlayerAccountServiceController paymentService;
@@ -58,7 +57,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         PlayerFacadeRegistrationService registrationService,
         PlayerProfileService profileOperations,
         PlayerImageService imageService,
-        PlayerConnectionService connectionService,
+        PlayerConnectionServiceController connectionService,
         PlayerSessionService sessionOperations,
         PlayerAccountServiceController accountOperations,
         PaymentTransactionServiceController paymentTransactionService,

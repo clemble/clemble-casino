@@ -138,7 +138,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         AsyncCompletionUtils.get(new Get<List<ConnectionKey>>() {
             @Override
             public List<ConnectionKey> get() {
-                return player.connectionOperations().getConnectionIds();
+                return player.connectionOperations().myConnections();
             }
         }, 5_000);
         return player;

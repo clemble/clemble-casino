@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.annotation.PostConstruct;
 
 import com.clemble.casino.player.service.*;
+import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
@@ -117,7 +118,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             PlayerFacadeRegistrationService registrationService,
             PlayerProfileService profileOperations,
             PlayerImageService imageService,
-            PlayerConnectionService connectionService,
+            PlayerConnectionServiceController connectionService,
             PlayerSessionService sessionOperations,
             @Qualifier("playerAccountController") PlayerAccountServiceController accountOperations,
             PaymentTransactionServiceController paymentTransactionService,
