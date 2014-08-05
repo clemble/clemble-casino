@@ -1,4 +1,4 @@
-package com.clemble.casino.server.presence.controller.management;
+package com.clemble.casino.server.presence.controller;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

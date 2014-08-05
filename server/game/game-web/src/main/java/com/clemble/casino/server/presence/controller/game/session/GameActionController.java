@@ -2,7 +2,10 @@ package com.clemble.casino.server.presence.controller.game.session;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.game.*;
+import com.clemble.casino.game.Game;
+import com.clemble.casino.game.GameContext;
+import com.clemble.casino.game.GameSessionKey;
+import com.clemble.casino.game.GameState;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,7 +62,8 @@ public class GameActionController<State extends GameState> implements GameAction
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.SESSIONS_CONTEXT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody GameContext<?> getContext(@PathVariable("game") Game game, @PathVariable("session") String session) {
+    public @ResponseBody
+    GameContext<?> getContext(@PathVariable("game") Game game, @PathVariable("session") String session) {
         // Step 1. Generating game session key
         GameSessionKey  sessionKey = new GameSessionKey(game, session);
         // Step 2. Extracting game context

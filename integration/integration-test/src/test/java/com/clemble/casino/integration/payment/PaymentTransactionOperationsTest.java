@@ -31,9 +31,9 @@ import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.money.Currency;
-import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.payment.money.Operation;
+import com.clemble.casino.money.Currency;
+import com.clemble.casino.money.Money;
+import com.clemble.casino.money.Operation;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Get;
 

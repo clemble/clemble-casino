@@ -8,17 +8,12 @@ import java.util.List;
 
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 
-import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Repeat;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.base.ExpectedEvent;
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -30,8 +25,6 @@ import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.player.PlayerAware;
-
-import javax.swing.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })

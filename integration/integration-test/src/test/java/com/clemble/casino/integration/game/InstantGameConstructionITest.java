@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

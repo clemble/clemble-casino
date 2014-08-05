@@ -24,7 +24,6 @@ import com.clemble.casino.game.GameSessionAwareEvent;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.game.construction.SyncGameScenarios;
 import com.clemble.casino.integration.util.RedisCleaner;
 
 @RunWith(SpringJUnit4ClassRunner.class)

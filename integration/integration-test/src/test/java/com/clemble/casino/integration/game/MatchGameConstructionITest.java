@@ -36,8 +36,8 @@ import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.money.Currency;
-import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.money.Currency;
+import com.clemble.casino.money.Money;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

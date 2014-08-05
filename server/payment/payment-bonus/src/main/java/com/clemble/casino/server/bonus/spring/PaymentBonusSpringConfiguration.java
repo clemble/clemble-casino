@@ -1,7 +1,7 @@
 package com.clemble.casino.server.bonus.spring;
 
-import com.clemble.casino.payment.money.Currency;
-import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.money.Currency;
+import com.clemble.casino.money.Money;
 import com.clemble.casino.server.bonus.BonusService;
 import com.clemble.casino.server.bonus.listener.DailyBonusEventListener;
 import com.clemble.casino.server.bonus.listener.PlayerConnectionDiscoveryBonusEventListener;

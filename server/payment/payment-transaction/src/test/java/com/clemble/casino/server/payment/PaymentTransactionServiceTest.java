@@ -17,9 +17,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.money.Currency;
-import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.payment.money.Operation;
+import com.clemble.casino.money.Currency;
+import com.clemble.casino.money.Money;
+import com.clemble.casino.money.Operation;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 
 @RunWith(SpringJUnit4ClassRunner.class)

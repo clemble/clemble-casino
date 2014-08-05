@@ -4,6 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.clemble.casino.web.game.GameWebMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,7 @@ public class PublicNotificationRuleAspect extends BasicGameAspect<GameManagement
 
     public PublicNotificationRuleAspect(GameSessionKey sessionKey, Collection<String> participants, PlayerNotificationService notificationService) {
         super(new EventTypeSelector(GameManagementEvent.class));
-        this.tableChannel = NotificationMapping.toTable(sessionKey);
+        this.tableChannel = GameWebMapping.toTable(sessionKey);
         this.participants = checkNotNull(participants);
         this.notificationService = checkNotNull(notificationService);
     }

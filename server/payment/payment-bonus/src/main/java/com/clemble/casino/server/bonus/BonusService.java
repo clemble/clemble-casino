@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.money.Operation;
+import com.clemble.casino.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;

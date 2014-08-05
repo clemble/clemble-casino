@@ -6,7 +6,7 @@
     <version>0.10.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-    <module>public</module>
+        <module>public</module>
         <module>server</module>
         <module>integration</module>
     </modules>
@@ -223,6 +223,26 @@
             <dependency>
                 <groupId>com.clemble.casino</groupId>
                 <artifactId>api-goal</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino</groupId>
+                <artifactId>api-game</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino</groupId>
+                <artifactId>api-player</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino</groupId>
+                <artifactId>api-presence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino</groupId>
+                <artifactId>api-game</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

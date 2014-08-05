@@ -1,15 +1,13 @@
 package com.clemble.casino.server.payment.repository;
 
 import com.clemble.casino.payment.PlayerAccount;
-import com.clemble.casino.payment.money.Currency;
-import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.money.Currency;
+import com.clemble.casino.money.Money;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by mavarazy on 21/02/14.

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.clemble.casino.payment.PlayerAccount;
-import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.money.Money;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 
 public class BasicServerPlayerAccountService implements ServerPlayerAccountService {

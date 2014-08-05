@@ -6,7 +6,7 @@ import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.bonus.PaymentBonusSourceAware;
 import com.clemble.casino.payment.event.BonusPaymentEvent;
-import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.money.Money;
 import com.clemble.casino.player.PlayerAware;
 
 public class BonusPaymentTransaction implements PlayerAware, AmountAware, PaymentBonusSourceAware, PaymentTransactionAware {

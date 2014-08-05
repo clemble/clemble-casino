@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.money.Money;
 import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
 

@@ -25,7 +25,7 @@ import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
 import com.clemble.casino.game.service.AvailabilityGameConstructionService;
-import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.money.Money;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
 import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
@@ -64,7 +64,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         // Step 2.2. Checking opponents
         Collection<String> players = accountService.canAfford(request.getParticipants(), price.getCurrency(), price.getAmount());
         if (!players.isEmpty())
-            throw ClembleCasinoException.fromFailures(ClembleCasinoFailure.construct(ClembleCasinoError.GameConstructionInsufficientMoney, players, GameSessionKey.DEFAULT_SESSION));
+            throw ClembleCasinoException.fromFailures(ClembleCasinoFailure.construct(ClembleCasinoError.GameConstructionInsufficientMoney, players));
         // Step 3. Processing to opponents creation
         GameConstruction construction = new GameConstruction(id, request);
         construction = constructionRepository.saveAndFlush(construction);

@@ -1,7 +1,7 @@
 package com.clemble.casino.server.spring.common;
 
 import com.clemble.casino.payment.PlayerAccount;
-import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.money.Currency;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.payment.RestPlayerAccountService;
 import org.springframework.beans.factory.annotation.Autowired;

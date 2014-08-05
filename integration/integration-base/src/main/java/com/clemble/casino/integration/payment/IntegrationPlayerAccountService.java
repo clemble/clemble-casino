@@ -1,9 +1,8 @@
 package com.clemble.casino.integration.payment;
 
 import com.clemble.casino.payment.PlayerAccount;
-import com.clemble.casino.payment.money.Currency;
+import com.clemble.casino.money.Currency;
 import com.clemble.casino.payment.service.PlayerAccountService;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 
 import java.util.Collection;

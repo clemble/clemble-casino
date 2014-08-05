@@ -26,7 +26,7 @@ import com.clemble.casino.server.connection.controller.PlayerConnectionServiceCo
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
-import com.clemble.casino.server.presence.controller.player.PlayerPresenceServiceController;
+import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;

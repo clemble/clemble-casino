@@ -1,8 +1,6 @@
 package com.clemble.casino.server.game.aspect.record;
 
 import com.clemble.casino.client.event.EventSelector;
-import com.clemble.casino.client.event.EventSelectors;
-import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.event.GameEvent;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
@@ -11,9 +9,6 @@ import com.clemble.casino.game.action.GameEventRecord;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.repository.game.GameRecordRepository;
-import com.clemble.casino.server.repository.game.MadeMoveRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 

@@ -17,8 +17,8 @@ import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.payment.money.Operation;
+import com.clemble.casino.money.Money;
+import com.clemble.casino.money.Operation;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
 /**

@@ -5,7 +5,7 @@ import java.util.*;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.payment.money.Money;
+import com.clemble.casino.money.Money;
 import static com.clemble.casino.payment.PaymentWebMapping.*;
 
 public class RestServerPlayerAccountService implements ServerPlayerAccountService {

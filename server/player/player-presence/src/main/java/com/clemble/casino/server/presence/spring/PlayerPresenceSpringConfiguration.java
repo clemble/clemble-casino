@@ -10,7 +10,7 @@ import com.clemble.casino.server.presence.listener.PlayerPresenceGameStartedEven
 import com.clemble.casino.server.presence.repository.PlayerSessionRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
-import com.clemble.casino.server.presence.controller.management.PlayerSessionController;
+import com.clemble.casino.server.presence.controller.PlayerSessionController;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.presence.controller.player.PlayerPresenceServiceController;
+import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
