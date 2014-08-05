@@ -73,7 +73,7 @@ public class PlayerAccountOperationsITest {
             }
         }, 10_000);
         // Step 2. Fetching account and precondition
-        PlayerAccount accountA = A.paymentOperations().getAccount();
+        PlayerAccount accountA = A.accountService().myAccount();
         assertTrue(accountA.getMoney().size() > 0);
         assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
         // Step 3. Checking registration transaction
@@ -90,7 +90,7 @@ public class PlayerAccountOperationsITest {
         }, 5000);
         paymentOperations = bonusTransaction.getPaymentOperations();
         Money bonusAmmount = paymentOperations.iterator().next().getAmount();
-        assertEquals(transactionAmount.add(bonusAmmount.getAmount()), A.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
+        assertEquals(transactionAmount.add(bonusAmmount.getAmount()), A.accountService().myAccount().getMoney(Currency.FakeMoney));
     }
 
     @Test
@@ -102,8 +102,8 @@ public class PlayerAccountOperationsITest {
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GameConstructionInsufficientMoney));
 
         do {
-            final Money cashAbefore = A.paymentOperations().getAccount().getMoney(Currency.FakeMoney);
-            final Money cashBbefore = B.paymentOperations().getAccount().getMoney(Currency.FakeMoney);
+            final Money cashAbefore = A.accountService().myAccount().getMoney(Currency.FakeMoney);
+            final Money cashBbefore = B.accountService().myAccount().getMoney(Currency.FakeMoney);
 
             assertTrue(cashAbefore.getAmount() >= 0);
             assertTrue(cashBbefore.getAmount() >= 0);
@@ -119,13 +119,13 @@ public class PlayerAccountOperationsITest {
             AsyncCompletionUtils.check(new Check(){
                 @Override
                 public boolean check() {
-                    return cashAbefore.add(-50).equals(A.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
+                    return cashAbefore.add(-50).equals(A.accountService().myAccount().getMoney(Currency.FakeMoney));
                 }
             }, 5_000);
             AsyncCompletionUtils.check(new Check(){
                 @Override
                 public boolean check() {
-                    return cashBbefore.add(+50).equals(B.paymentOperations().getAccount().getMoney(Currency.FakeMoney));
+                    return cashBbefore.add(+50).equals(B.accountService().myAccount().getMoney(Currency.FakeMoney));
                 }
             }, 5_000);
         } while (true);
@@ -137,26 +137,21 @@ public class PlayerAccountOperationsITest {
         // Step 1. Creating player
         ClembleCasinoOperations player = playerOperations.createPlayer();
         // Step 2. Checking there is at least one
-        PlayerAccount accountA = player.paymentOperations().getAccount();
+        PlayerAccount accountA = player.accountService().myAccount();
         // Step 3. Checking that there are some fake moneys in the newly created account
         assertNotNull(accountA);
         assertNotNull(accountA.getMoney(Currency.FakeMoney));
         assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
         // Step 4. Checking that there are some fake moneys in the newly created account, accesed through WalletOperations
-        PlayerAccount accountB = player.paymentOperations().getAccount();
+        PlayerAccount accountB = player.accountService().myAccount();
         assertNotNull(accountB);
         assertNotNull(accountB.getMoney(Currency.FakeMoney));
         assertEquals(accountB, accountA);
         // Step 5. Checking that there are some fake moneys in the newly created account, accesed through another WalletOperations
-        PlayerAccount anotherWallet = player.paymentOperations().getAccount();
+        PlayerAccount anotherWallet = player.accountService().myAccount();
         assertNotNull(anotherWallet);
         assertNotNull(anotherWallet.getMoney(Currency.FakeMoney));
         assertEquals(anotherWallet, accountA);
-
-//        Player anotherPlayer = playerOperations.createPlayer();
-//
-//        expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerAccountAccessDenied));
-//        player.getWalletOperations().getAccount();
     }
 
     @Ignore // TODO security was temporary disabled

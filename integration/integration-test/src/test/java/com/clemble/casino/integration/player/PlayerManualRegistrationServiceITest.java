@@ -44,7 +44,7 @@ public class PlayerManualRegistrationServiceITest {
         assertEquals(origA.getPlayer(), origB.getPlayer());
         assertEquals(origA.profileOperations().getPlayerProfile(), origB.profileOperations().getPlayerProfile());
         assertEquals(origA.presenceOperations().getPresence(), origB.presenceOperations().getPresence());
-        assertEquals(origA.paymentOperations().getAccount(), origB.paymentOperations().getAccount());
+        assertEquals(origA.accountService().myAccount(), origB.accountService().myAccount());
     }
 
     @Test

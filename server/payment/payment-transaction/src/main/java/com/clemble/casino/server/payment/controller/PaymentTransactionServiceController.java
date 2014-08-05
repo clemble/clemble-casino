@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import com.clemble.casino.payment.service.PaymentTransactionServiceBase;
+import com.clemble.casino.payment.service.PaymentTransactionServiceContract;
 import com.clemble.casino.server.ExternalController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ import com.clemble.casino.web.mapping.WebMapping;
 import static com.clemble.casino.payment.PaymentWebMapping.*;
 
 @Controller
-public class PaymentTransactionServiceController implements PaymentTransactionServiceBase, ExternalController {
+public class PaymentTransactionServiceController implements PaymentTransactionServiceContract, ExternalController {
 
     final private PaymentTransactionRepository paymentTransactionRepository;
 

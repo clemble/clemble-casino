@@ -3,7 +3,7 @@ package com.clemble.casino.server.spring.game;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.clemble.casino.payment.service.PlayerAccountService;
+import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
@@ -124,7 +124,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
             @Qualifier("gameIdGenerator") IdGenerator idGenerator,
-            @Qualifier("playerAccountClient") PlayerAccountService accountServerService,
+            @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService,

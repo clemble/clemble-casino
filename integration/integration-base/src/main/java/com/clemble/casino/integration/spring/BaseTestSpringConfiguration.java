@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 
 import com.clemble.casino.player.service.*;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
+import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,8 +40,7 @@ import com.clemble.casino.integration.payment.PaymentTransactionOperations;
 import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.integration.player.ServerClembleCasinoRegistrationOperations;
-import com.clemble.casino.payment.service.PaymentTransactionServiceBase;
-import com.clemble.casino.payment.service.PlayerAccountService;
+import com.clemble.casino.payment.service.PaymentTransactionServiceContract;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -104,7 +104,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         }
 
         @Bean
-        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionServiceBase paymentTransactionController, SystemNotificationService systemNotificationService) {
+        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionServiceContract paymentTransactionController, SystemNotificationService systemNotificationService) {
             return new WebPaymentTransactionOperations(paymentTransactionController, systemNotificationService);
         }
 
@@ -118,8 +118,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             PlayerImageService imageService,
             PlayerConnectionService connectionService,
             PlayerSessionService sessionOperations,
-            @Qualifier("playerAccountController") PlayerAccountService accountOperations,
-            PaymentTransactionServiceBase paymentTransactionService,
+            @Qualifier("playerAccountController") PlayerAccountServiceController accountOperations,
+            PaymentTransactionServiceContract paymentTransactionService,
             PlayerPresenceService presenceService,
             @Qualifier("autoGameConstructionController") AutoGameConstructionService constructionService,
             @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,

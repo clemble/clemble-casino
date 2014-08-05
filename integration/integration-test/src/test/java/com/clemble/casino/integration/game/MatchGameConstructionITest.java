@@ -109,8 +109,8 @@ public class MatchGameConstructionITest {
         PaymentTransaction transaction = BvsA.playerOperations().paymentOperations().getPaymentTransaction(AvsB.getSession());
         assertNotNull(transaction);
 
-        Money mA = AvsB.playerOperations().paymentOperations().getAccount().getMoney(Currency.FakeMoney);
-        Money mB = BvsA.playerOperations().paymentOperations().getAccount().getMoney(Currency.FakeMoney);
+        Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
+        Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
 
         assertEquals(mB.getAmount(), mA.add(300).getAmount());
 

@@ -5,7 +5,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.clemble.casino.error.ClembleCasinoFailure;
-import com.clemble.casino.payment.service.PlayerAccountService;
+import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.id.IdGenerator;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,12 +35,12 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     final private IdGenerator idGenerator;
     final private GameConstructionRepository constructionRepository;
     final private PlayerNotificationService playerNotificationService;
-    final private PlayerAccountService accountService;
+    final private PlayerAccountServiceContract accountService;
     final private PendingGameInitiationEventListener pendingInitiationService;
 
     public ServerAvailabilityGameConstructionService(
             IdGenerator idGenerator,
-            PlayerAccountService accountServerService,
+            PlayerAccountServiceContract accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,
             PlayerNotificationService notificationService,

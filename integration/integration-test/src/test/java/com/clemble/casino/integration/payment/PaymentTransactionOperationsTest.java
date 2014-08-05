@@ -178,7 +178,7 @@ public class PaymentTransactionOperationsTest {
         // Step 3. Checking there is at list one operation available
         Assert.assertTrue(associatedOperation.size() > 0);
         for (PaymentOperation operation : associatedOperation)
-            assertTrue(player.paymentOperations().getAccount().getMoney(operation.getAmount().getCurrency()).getAmount() >= operation.getAmount().getAmount());
+            assertTrue(player.accountService().myAccount().getMoney(operation.getAmount().getCurrency()).getAmount() >= operation.getAmount().getAmount());
     }
 
 }

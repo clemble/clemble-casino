@@ -7,17 +7,12 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.money.Currency;
 import com.clemble.casino.payment.money.Money;
-import com.clemble.casino.payment.service.PlayerAccountService;
+import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.payment.account.ServerPlayerAccountService;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
@@ -25,23 +20,30 @@ import com.clemble.casino.web.mapping.WebMapping;
 import static com.clemble.casino.payment.PaymentWebMapping.*;
 
 @Controller
-public class PlayerAccountController implements PlayerAccountService, ExternalController {
+public class PlayerAccountServiceController implements PlayerAccountServiceContract, ExternalController {
 
     final private ServerPlayerAccountService playerAccountService;
     final private PlayerAccountTemplate accountTemplate;
 
-    public PlayerAccountController(ServerPlayerAccountService playerAccountService,
-            PlayerAccountTemplate playerAccountRepository) {
+    public PlayerAccountServiceController(ServerPlayerAccountService playerAccountService,
+                                          PlayerAccountTemplate playerAccountRepository) {
         this.playerAccountService = checkNotNull(playerAccountService);
         this.accountTemplate = checkNotNull(playerAccountRepository);
     }
 
-    @Override
-    @RequestMapping(method = RequestMethod.GET, value = ACCOUNTS_PLAYER, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = PLAYER_ACCOUNT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerAccount get(@PathVariable("player") String playerWalletId) {
+    public @ResponseBody PlayerAccount myAccount(@CookieValue("player") String playerId) {
         // Step 1. Returning account from repository
-        return accountTemplate.findOne(playerWalletId);
+        return accountTemplate.findOne(playerId);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = PLAYER_ACCOUNT, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody PlayerAccount getAccount(@PathVariable("player") String playerId) {
+        // Step 1. Returning account from repository
+        return accountTemplate.findOne(playerId);
     }
 
     @Override

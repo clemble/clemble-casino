@@ -20,7 +20,7 @@ import com.clemble.casino.server.payment.repository.PaymentTransactionRepository
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
-import com.clemble.casino.server.payment.controller.PlayerAccountController;
+import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
@@ -38,10 +38,10 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerAccountController playerAccountController(
+    public PlayerAccountServiceController playerAccountController(
         PlayerAccountTemplate accountTemplate,
         ServerPlayerAccountService playerAccountService) {
-        return new PlayerAccountController(playerAccountService, accountTemplate);
+        return new PlayerAccountServiceController(playerAccountService, accountTemplate);
     }
 
     @Bean

@@ -11,8 +11,8 @@ import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
-import com.clemble.casino.payment.service.PaymentTransactionServiceBase;
-import com.clemble.casino.payment.service.PlayerAccountService;
+import com.clemble.casino.payment.service.PaymentTransactionServiceContract;
+import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.SocialAccessGrant;
 import com.clemble.casino.player.SocialConnectionData;
@@ -25,6 +25,7 @@ import com.clemble.casino.player.web.PlayerRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
+import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,8 +39,8 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private PlayerConnectionService connectionService;
     final private PlayerPresenceService presenceService;
     final private PlayerSessionService sessionOperations;
-    final private PlayerAccountService paymentService;
-    final private PaymentTransactionServiceBase paymentTransactionService;
+    final private PlayerAccountServiceController paymentService;
+    final private PaymentTransactionServiceContract paymentTransactionService;
     final private EventListenerOperationsFactory listenerOperations;
     final private AutoGameConstructionService gameConstructionService;
     final private AvailabilityGameConstructionService availabilityConstructionService;
@@ -58,8 +59,8 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         PlayerImageService imageService,
         PlayerConnectionService connectionService,
         PlayerSessionService sessionOperations,
-        PlayerAccountService accountOperations,
-        PaymentTransactionServiceBase paymentTransactionService,
+        PlayerAccountServiceController accountOperations,
+        PaymentTransactionServiceContract paymentTransactionService,
         PlayerPresenceService presenceService,
         AutoGameConstructionService gameConstructionService,
         AvailabilityGameConstructionService availabilityConstructionService,
