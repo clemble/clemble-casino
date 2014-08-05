@@ -7,7 +7,7 @@ import com.clemble.casino.server.profile.repository.MongoPlayerProfileRepository
 import com.clemble.casino.server.profile.repository.PlayerProfileRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.profile.controller.PlayerImageController;
+import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileController;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,8 +53,8 @@ public class PlayerProfileSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerImageController playerImageController() {
-        return new PlayerImageController();
+    public PlayerImageServiceController playerImageController() {
+        return new PlayerImageServiceController();
     }
 
 }

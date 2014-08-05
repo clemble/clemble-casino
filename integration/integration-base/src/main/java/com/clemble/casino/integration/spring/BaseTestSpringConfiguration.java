@@ -12,6 +12,7 @@ import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -117,7 +118,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             EventListenerOperationsFactory listenerOperations,
             PlayerFacadeRegistrationService registrationService,
             PlayerProfileService profileOperations,
-            PlayerImageService imageService,
+            PlayerImageServiceController imageService,
             PlayerConnectionServiceController connectionService,
             PlayerSessionService sessionOperations,
             @Qualifier("playerAccountController") PlayerAccountServiceController accountOperations,

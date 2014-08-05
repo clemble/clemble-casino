@@ -26,6 +26,7 @@ import com.clemble.casino.server.connection.controller.PlayerConnectionServiceCo
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
+import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,7 +36,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private ObjectMapper objectMapper;
     final private PlayerFacadeRegistrationService registrationService;
     final private PlayerProfileService profileOperations;
-    final private PlayerImageService imageService;
+    final private PlayerImageServiceController imageService;
     final private PlayerConnectionServiceController connectionService;
     final private PlayerPresenceService presenceService;
     final private PlayerSessionService sessionOperations;
@@ -56,7 +57,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         EventListenerOperationsFactory listenerOperations,
         PlayerFacadeRegistrationService registrationService,
         PlayerProfileService profileOperations,
-        PlayerImageService imageService,
+        PlayerImageServiceController imageService,
         PlayerConnectionServiceController connectionService,
         PlayerSessionService sessionOperations,
         PlayerAccountServiceController accountOperations,

@@ -35,6 +35,10 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>player-connection</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>player-profile</artifactId>
+        </dependency>
 
 
         <dependency>
