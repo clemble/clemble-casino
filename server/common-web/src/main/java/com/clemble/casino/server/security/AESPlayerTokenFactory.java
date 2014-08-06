@@ -5,8 +5,8 @@ import java.security.SecureRandom;
 
 import javax.crypto.KeyGenerator;
 
-import com.clemble.casino.player.client.ClembleConsumerDetails;
-import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.security.ClembleConsumerDetails;
+import com.clemble.casino.registration.PlayerToken;
 
 public class AESPlayerTokenFactory implements PlayerTokenFactory {
 

@@ -9,8 +9,8 @@ import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.SocialAccessGrant;
-import com.clemble.casino.player.SocialConnectionData;
+import com.clemble.casino.social.SocialAccessGrant;
+import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 import java.util.ArrayList;

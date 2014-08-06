@@ -1,7 +1,7 @@
 package com.clemble.casino.server.registration.spring;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
-import com.clemble.casino.player.service.PlayerManualRegistrationService;
+import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.server.id.IdGenerator;
 import com.clemble.casino.server.id.RedisIdGenerator;
 import com.clemble.casino.server.player.notification.SystemNotificationService;

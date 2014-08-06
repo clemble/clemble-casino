@@ -13,8 +13,8 @@ import org.springframework.social.linkedin.api.LinkedInProfileFull;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.SocialAccessGrant;
-import com.clemble.casino.player.SocialConnectionData;
+import com.clemble.casino.social.SocialAccessGrant;
+import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
 
 /**

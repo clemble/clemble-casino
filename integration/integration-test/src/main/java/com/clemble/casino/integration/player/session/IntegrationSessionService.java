@@ -9,7 +9,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.clemble.casino.player.security.PlayerSession;
+import com.clemble.casino.player.PlayerSession;
 import com.clemble.casino.player.service.PlayerSessionService;
 
 public class IntegrationSessionService implements PlayerSessionService {

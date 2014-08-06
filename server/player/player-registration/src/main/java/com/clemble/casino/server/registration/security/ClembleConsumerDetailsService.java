@@ -1,7 +1,6 @@
 package com.clemble.casino.server.registration.security;
 
-import com.clemble.casino.player.client.ClembleConsumerDetails;
-import org.springframework.security.oauth.common.OAuthException;
+import com.clemble.casino.security.ClembleConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 
 /**

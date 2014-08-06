@@ -3,9 +3,9 @@ package com.clemble.casino.integration.game.construction;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.SocialAccessGrant;
-import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.player.web.PlayerRegistrationRequest;
+import com.clemble.casino.social.SocialAccessGrant;
+import com.clemble.casino.social.SocialConnectionData;
+import com.clemble.casino.registration.PlayerRegistrationRequest;
 
 public interface PlayerScenarios extends ClembleCasinoRegistrationOperations {
 

@@ -16,7 +16,7 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.security.PlayerCredential;
+import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)

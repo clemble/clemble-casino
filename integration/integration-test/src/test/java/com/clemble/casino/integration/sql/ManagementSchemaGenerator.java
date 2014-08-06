@@ -6,9 +6,9 @@ import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
 import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Test;
 
-import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.player.security.PlayerToken;
-import com.clemble.casino.player.security.PlayerSession;
+import com.clemble.casino.registration.PlayerCredential;
+import com.clemble.casino.registration.PlayerToken;
+import com.clemble.casino.player.PlayerSession;
 
 public class ManagementSchemaGenerator {
 

@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.clemble.casino.player.service.PlayerConnectionServiceContract;
-import com.clemble.casino.player.social.ClembleSocialUtils;
+import com.clemble.casino.social.ClembleSocialUtils;
 import com.clemble.casino.server.connection.PlayerConnectionKey;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.stereotype.Controller;

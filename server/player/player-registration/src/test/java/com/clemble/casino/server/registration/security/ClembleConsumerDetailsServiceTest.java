@@ -9,7 +9,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,7 +18,7 @@ import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.player.client.ClembleConsumerDetails;
+import com.clemble.casino.security.ClembleConsumerDetails;
 import com.clemble.casino.server.registration.spring.OAuthSpringConfiguration;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;

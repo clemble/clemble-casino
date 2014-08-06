@@ -1,13 +1,13 @@
 package com.clemble.casino.server.registration.controller;
 
-import com.clemble.casino.player.client.ClembleConsumerDetails;
-import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.player.security.PlayerToken;
-import com.clemble.casino.player.service.PlayerBaseRegistrationService;
-import com.clemble.casino.player.service.PlayerManualRegistrationService;
-import com.clemble.casino.player.web.PlayerBaseRegistrationRequest;
-import com.clemble.casino.player.web.PlayerLoginRequest;
-import com.clemble.casino.player.web.PlayerRegistrationRequest;
+import com.clemble.casino.security.ClembleConsumerDetails;
+import com.clemble.casino.registration.PlayerCredential;
+import com.clemble.casino.registration.PlayerToken;
+import com.clemble.casino.registration.service.PlayerBaseRegistrationService;
+import com.clemble.casino.registration.service.PlayerManualRegistrationService;
+import com.clemble.casino.registration.PlayerBaseRegistrationRequest;
+import com.clemble.casino.registration.PlayerLoginRequest;
+import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.web.mapping.WebMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

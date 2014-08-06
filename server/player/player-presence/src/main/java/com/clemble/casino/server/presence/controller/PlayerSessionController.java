@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.player.security.PlayerSession;
+import com.clemble.casino.player.PlayerSession;
 import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.presence.repository.PlayerSessionRepository;

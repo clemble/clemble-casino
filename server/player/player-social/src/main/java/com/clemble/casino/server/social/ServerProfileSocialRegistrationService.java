@@ -2,15 +2,11 @@ package com.clemble.casino.server.social;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.SocialAccessGrant;
-import com.clemble.casino.player.SocialConnectionData;
+import com.clemble.casino.social.SocialAccessGrant;
+import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.server.ServerService;
 import com.clemble.casino.server.event.player.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import com.clemble.casino.server.social.SocialConnection;
-import com.clemble.casino.server.social.SocialConnectionAdapter;
-import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
-import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

@@ -1,7 +1,7 @@
 package com.clemble.casino.server.event.player;
 
-import com.clemble.casino.player.SocialAccessGrant;
-import com.clemble.casino.player.SocialAccessGrantAware;
+import com.clemble.casino.social.SocialAccessGrant;
+import com.clemble.casino.social.SocialAccessGrantAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

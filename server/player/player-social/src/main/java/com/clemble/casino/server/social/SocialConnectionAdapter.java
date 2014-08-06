@@ -6,8 +6,8 @@ import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionKey;
 
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.SocialAccessGrant;
-import com.clemble.casino.player.SocialConnectionData;
+import com.clemble.casino.social.SocialAccessGrant;
+import com.clemble.casino.social.SocialConnectionData;
 
 import java.util.Collection;
 

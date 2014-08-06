@@ -53,7 +53,7 @@ import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.security.PlayerCredential;
+import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;

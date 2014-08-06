@@ -1,6 +1,6 @@
 package com.clemble.casino.server.connection;
 
-import com.clemble.casino.player.social.ClembleSocialUtils;
+import com.clemble.casino.social.ClembleSocialUtils;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;

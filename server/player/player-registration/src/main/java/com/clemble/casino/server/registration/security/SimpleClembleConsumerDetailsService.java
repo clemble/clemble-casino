@@ -1,6 +1,6 @@
 package com.clemble.casino.server.registration.security;
 
-import com.clemble.casino.player.client.ClembleConsumerDetails;
+import com.clemble.casino.security.ClembleConsumerDetails;
 
 import java.util.HashMap;
 

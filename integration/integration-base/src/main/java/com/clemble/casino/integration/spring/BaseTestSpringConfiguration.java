@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.annotation.PostConstruct;
 
 import com.clemble.casino.player.service.*;
+import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;

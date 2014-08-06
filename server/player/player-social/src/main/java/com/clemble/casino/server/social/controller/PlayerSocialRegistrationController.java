@@ -4,7 +4,7 @@ import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.service.PlayerSocialRegistrationService;
+import com.clemble.casino.registration.service.PlayerSocialRegistrationService;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
 import com.clemble.casino.server.social.ServerProfileSocialRegistrationService;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
-import com.clemble.casino.player.security.PlayerToken;
-import com.clemble.casino.player.web.PlayerSocialGrantRegistrationRequest;
-import com.clemble.casino.player.web.PlayerSocialRegistrationRequest;
+import com.clemble.casino.registration.PlayerToken;
+import com.clemble.casino.registration.PlayerSocialGrantRegistrationRequest;
+import com.clemble.casino.registration.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.security.PlayerTokenFactory;

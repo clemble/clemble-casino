@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.player.service.PlayerSocialProfileService;
+import com.clemble.casino.social.SocialConnectionData;
+import com.clemble.casino.social.service.PlayerSocialProfileServiceContract;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.web.mapping.WebMapping;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
-public class PlayerSocialProfileController implements PlayerSocialProfileService, ExternalController {
+public class PlayerSocialProfileController implements PlayerSocialProfileServiceContract, ExternalController {
 
     final private SocialConnectionDataAdapter socialConnectionDataAdapter;
 

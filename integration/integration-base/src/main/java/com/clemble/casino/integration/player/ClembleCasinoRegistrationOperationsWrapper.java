@@ -9,9 +9,9 @@ import org.springframework.test.context.support.AbstractTestExecutionListener;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.SocialAccessGrant;
-import com.clemble.casino.player.SocialConnectionData;
-import com.clemble.casino.player.security.PlayerCredential;
+import com.clemble.casino.social.SocialAccessGrant;
+import com.clemble.casino.social.SocialConnectionData;
+import com.clemble.casino.registration.PlayerCredential;
 
 public class ClembleCasinoRegistrationOperationsWrapper extends AbstractTestExecutionListener implements ClembleCasinoRegistrationOperations {
 

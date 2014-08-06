@@ -18,7 +18,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
-import com.clemble.casino.player.security.PlayerSession;
+import com.clemble.casino.player.PlayerSession;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

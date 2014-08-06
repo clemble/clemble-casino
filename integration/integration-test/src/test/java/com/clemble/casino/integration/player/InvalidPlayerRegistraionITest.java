@@ -19,7 +19,7 @@ import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.security.PlayerCredential;
+import com.clemble.casino.registration.PlayerCredential;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

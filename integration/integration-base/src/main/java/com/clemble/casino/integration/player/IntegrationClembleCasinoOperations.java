@@ -40,9 +40,9 @@ import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
-import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.player.security.PlayerSession;
-import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.registration.PlayerCredential;
+import com.clemble.casino.player.PlayerSession;
+import com.clemble.casino.registration.PlayerToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class IntegrationClembleCasinoOperations implements ClembleCasinoOperations {

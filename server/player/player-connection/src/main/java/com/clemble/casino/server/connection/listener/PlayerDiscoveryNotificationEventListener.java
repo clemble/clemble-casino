@@ -2,7 +2,7 @@ package com.clemble.casino.server.connection.listener;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.player.PlayerDiscoveredConnectionEvent;
+import com.clemble.casino.player.event.PlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.event.player.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;

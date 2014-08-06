@@ -18,9 +18,9 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.player.client.ClembleConsumerDetails;
-import com.clemble.casino.player.security.PlayerCredential;
-import com.clemble.casino.player.web.PlayerRegistrationRequest;
+import com.clemble.casino.security.ClembleConsumerDetails;
+import com.clemble.casino.registration.PlayerCredential;
+import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -1,7 +1,7 @@
 package com.clemble.casino.server.security;
 
-import com.clemble.casino.player.client.ClembleConsumerDetails;
-import com.clemble.casino.player.security.PlayerToken;
+import com.clemble.casino.security.ClembleConsumerDetails;
+import com.clemble.casino.registration.PlayerToken;
 
 public interface PlayerTokenFactory {
 
