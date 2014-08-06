@@ -8,27 +8,23 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.PlayerSession;
-import com.clemble.casino.player.service.PlayerSessionService;
+import com.clemble.casino.player.service.PlayerSessionServiceContract;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.presence.repository.PlayerSessionRepository;
 
 @Controller
-public class PlayerSessionController implements PlayerSessionService, ExternalController {
+public class PlayerSessionServiceController implements PlayerSessionServiceContract, ExternalController {
 
     final private PlayerSessionRepository sessionRepository;
     final private SystemNotificationService notificationService;
     final private ServerPlayerPresenceService playerPresenceService;
 
-    public PlayerSessionController(
+    public PlayerSessionServiceController(
         final PlayerSessionRepository sessionRepository,
         final ServerPlayerPresenceService playerPresenceService,
         final SystemNotificationService notificationService) {
@@ -37,11 +33,10 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
         this.notificationService = notificationService;
     }
 
-    @Override
     @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody
-    PlayerSession create(@PathVariable("playerId") String playerId) {
+    PlayerSession create(@CookieValue("player") String playerId) {
         // Step 1. Generated player session
         PlayerSession playerSession = new PlayerSession().setPlayer(playerId);
         // Step 2. Providing result as a Session data
@@ -51,11 +46,10 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
         return playerSession;
     }
 
-    @Override
     @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody
-    PlayerSession refreshPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") String sessionId) {
+    PlayerSession refreshPlayerSession(@CookieValue("player") String playerId, @PathVariable("sessionId") String sessionId) {
         // Step 1. Fetching session
         PlayerSession playerSession = getPlayerSession(playerId, sessionId);
         // Step 2. Sanity check
@@ -67,10 +61,9 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
         return playerSession;
     }
 
-    @Override
     @RequestMapping(method = RequestMethod.DELETE, value = PRESENCE_SESSIONS_PLAYER_SESSION)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody void endPlayerSession(@PathVariable("playerId") String player, @PathVariable("sessionId") String sessionId) {
+    public @ResponseBody void endPlayerSession(@CookieValue("player") String player, @PathVariable("sessionId") String sessionId) {
         // Step 1. Fetching player session
         PlayerSession playerSession = getPlayerSession(player, sessionId);
         if (playerSession.expired())
@@ -83,11 +76,10 @@ public class PlayerSessionController implements PlayerSessionService, ExternalCo
         sessionRepository.save(playerSession);
     }
 
-    @Override
     @RequestMapping(method = RequestMethod.GET, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody
-    PlayerSession getPlayerSession(@PathVariable("playerId") String playerId, @PathVariable("sessionId") String sessionId) {
+    PlayerSession getPlayerSession(@CookieValue("player") String playerId, @PathVariable("sessionId") String sessionId) {
         // Step 2. Reading specific session
         PlayerSession playerSession = sessionRepository.findOne(sessionId);
         if (!playerSession.getPlayer().equals(playerId))

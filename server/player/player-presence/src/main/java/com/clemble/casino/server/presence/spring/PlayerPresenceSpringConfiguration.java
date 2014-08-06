@@ -10,7 +10,7 @@ import com.clemble.casino.server.presence.listener.PlayerPresenceGameStartedEven
 import com.clemble.casino.server.presence.repository.PlayerSessionRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
-import com.clemble.casino.server.presence.controller.PlayerSessionController;
+import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,11 +68,11 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerSessionController playerSessionController(
+    public PlayerSessionServiceController playerSessionController(
             PlayerSessionRepository playerSessionRepository,
             ServerPlayerPresenceService playerStateManager,
             SystemNotificationService notificationService) {
-        return new PlayerSessionController(playerSessionRepository, playerStateManager, notificationService);
+        return new PlayerSessionServiceController(playerSessionRepository, playerStateManager, notificationService);
     }
 
 }

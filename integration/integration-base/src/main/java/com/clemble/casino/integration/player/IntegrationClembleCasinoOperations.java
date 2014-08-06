@@ -3,7 +3,6 @@ package com.clemble.casino.integration.player;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.integration.goal.IntegrationGoalService;
-import com.clemble.casino.client.player.*;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.integration.payment.IntegrationPlayerAccountService;
 import com.clemble.casino.payment.service.PaymentTransactionOperations;
@@ -14,6 +13,7 @@ import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
+import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import org.springframework.web.client.RestTemplate;
@@ -63,7 +63,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     final private PlayerProfileService profileOperations;
     final private PlayerImageService imageOperations;
     final private PlayerConnectionService connectionOperations;
-    final private PlayerSessionOperations playerSessionOperations;
+    final private PlayerSessionService playerSessionOperations;
     final private PlayerAccountService accountService;
     final private PaymentTransactionOperations paymentTransactionOperations;
     final private GameActionOperationsFactory actionOperationsFactory;
@@ -78,7 +78,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final PlayerProfileServiceController playerProfileService,
         final PlayerImageServiceController imageService,
         final PlayerConnectionServiceController playerConnectionService,
-        final PlayerSessionService sessionOperations,
+        final PlayerSessionServiceController sessionOperations,
         final PlayerAccountServiceController accountServiceController,
         final PaymentTransactionServiceController paymentTransactionService,
         final EventListenerOperationsFactory listenerOperationsFactory,
@@ -93,7 +93,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     ) {
         this.host = host;
         this.player = playerIdentity.getPlayer();
-        this.playerSessionOperations = new PlayerSessionTemplate(player, sessionOperations);
+        this.playerSessionOperations = new IntegrationPlayerSessionService(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
         this.listenerOperations = listenerOperationsFactory.construct(player, host, objectMapper);
 
@@ -129,7 +129,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     }
 
     @Override
-    public PlayerSessionOperations sessionOperations() {
+    public PlayerSessionService sessionOperations() {
         return playerSessionOperations;
     }
 

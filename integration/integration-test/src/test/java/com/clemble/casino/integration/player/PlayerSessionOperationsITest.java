@@ -13,7 +13,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.client.player.PlayerSessionOperations;
+import com.clemble.casino.player.service.PlayerSessionService;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -36,7 +36,7 @@ public class PlayerSessionOperationsITest {
     public void testStart() {
         // Step 1. Creating fake player
         ClembleCasinoOperations player = playerOperations.createPlayer();
-        PlayerSessionOperations sessionOperations = player.sessionOperations();
+        PlayerSessionService sessionOperations = player.sessionOperations();
         // Step 2. When player was created he started session
         PlayerSession currentSession = sessionOperations.create();
         Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
@@ -49,7 +49,7 @@ public class PlayerSessionOperationsITest {
     public void testRefresh() {
         // Step 1. Creating fake player
         ClembleCasinoOperations player = playerOperations.createPlayer();
-        PlayerSessionOperations sessionOperations = player.sessionOperations();
+        PlayerSessionService sessionOperations = player.sessionOperations();
         // Step 2. When player was created he started session
         PlayerSession currentSession = sessionOperations.create();
         Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
@@ -64,7 +64,7 @@ public class PlayerSessionOperationsITest {
     public void testEnd() {
         // Step 1. Creating fake player
         ClembleCasinoOperations player = playerOperations.createPlayer();
-        PlayerSessionOperations sessionOperations = player.sessionOperations();
+        PlayerSessionService sessionOperations = player.sessionOperations();
         // Step 2. When player was created he started session
         PlayerSession currentSession = sessionOperations.create();
         Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
