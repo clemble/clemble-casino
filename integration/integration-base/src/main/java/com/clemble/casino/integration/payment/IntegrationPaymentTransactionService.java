@@ -42,8 +42,4 @@ public class IntegrationPaymentTransactionService implements PaymentTransactionS
         return paymentTransactionService.getPlayerTransactions(player);
     }
 
-    @Override
-    public List<PaymentTransaction> getPlayerTransactionsWithSource(String player, String source) {
-        return paymentTransactionService.getPlayerTransactionsWithSource(player, source);
-    }
 }

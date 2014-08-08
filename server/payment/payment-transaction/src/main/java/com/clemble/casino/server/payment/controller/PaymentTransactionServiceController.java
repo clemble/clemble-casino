@@ -65,11 +65,4 @@ public class PaymentTransactionServiceController implements PaymentTransactionSe
         return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
     }
 
-    @Override
-    @RequestMapping(method = RequestMethod.GET, value = TRANSACTION_BY_SOURCE, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PaymentTransaction> getPlayerTransactionsWithSource(@PathVariable("player") String player, @PathVariable("source") String source) {
-        return paymentTransactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, source);
-    }
-
 }
