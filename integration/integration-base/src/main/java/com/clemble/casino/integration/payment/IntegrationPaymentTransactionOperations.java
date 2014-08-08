@@ -22,7 +22,7 @@ public class IntegrationPaymentTransactionOperations extends AbstractPaymentTran
     @Override
     public PaymentTransaction get(ClembleCasinoOperations player, String source, String transactionId) {
         // Step 1. Performing empty signed GET request
-        return restTemplate.exchange(toPaymentUrl(PAYMENT_TRANSACTIONS_TRANSACTION).replace("{host}", baseUrl), HttpMethod.GET, null, PaymentTransaction.class, baseUrl, source, transactionId).getBody();
+        return restTemplate.exchange(toPaymentUrl(TRANSACTIONS_BY_ID).replace("{host}", baseUrl), HttpMethod.GET, null, PaymentTransaction.class, baseUrl, source, transactionId).getBody();
     }
 
 }

@@ -25,7 +25,7 @@ public class RestServerPlayerAccountService implements ServerPlayerAccountServic
 
     @Override
     public List<String> canAfford(Collection<String> playerId, Money amount) {
-        String url = toPaymentUrl(PAYMENT_ACCOUNTS).replace("{host}", host)
+        String url = toPaymentUrl(ACCOUNTS).replace("{host}", host)
                 + "?player=" + StringUtils.collectionToCommaDelimitedString(playerId)
                 + "&currency=" + amount.getCurrency()
                 + "&amount=" + amount.getAmount();

@@ -40,7 +40,7 @@ public class PaymentTransactionServiceController implements PaymentTransactionSe
 
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PAYMENT_TRANSACTIONS_TRANSACTION, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = TRANSACTIONS_BY_ID, produces = WebMapping.PRODUCES)
     public @ResponseBody PaymentTransaction getTransaction(
         @PathVariable("source") String source,
         @PathVariable("transaction") String transactionId
@@ -56,7 +56,7 @@ public class PaymentTransactionServiceController implements PaymentTransactionSe
     
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PLAYER_TRANSACTIONS, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = TRANSACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<PaymentTransaction> getPlayerTransactions(
         @PathVariable("player") String player
@@ -66,7 +66,7 @@ public class PaymentTransactionServiceController implements PaymentTransactionSe
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = PLAYER_TRANSACTION_BY_SOURCE, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = TRANSACTION_BY_SOURCE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody List<PaymentTransaction> getPlayerTransactionsWithSource(@PathVariable("player") String player, @PathVariable("source") String source) {
         return paymentTransactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, source);

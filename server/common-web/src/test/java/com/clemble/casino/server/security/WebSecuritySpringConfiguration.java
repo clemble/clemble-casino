@@ -1,4 +1,4 @@
-package com.clemble.casino.server.spring;
+package com.clemble.casino.server.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

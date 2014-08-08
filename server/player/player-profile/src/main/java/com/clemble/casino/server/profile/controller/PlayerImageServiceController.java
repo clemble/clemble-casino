@@ -14,7 +14,7 @@ import static com.clemble.casino.web.player.PlayerWebMapping.*;
 public class PlayerImageServiceController implements PlayerImageServiceContract {
 
 
-    @RequestMapping(value = PLAYER_IMAGE, method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value = MY_IMAGE, method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public @ResponseBody byte[] myImage(@CookieValue("player") String player) {
         return new byte[0];
     }

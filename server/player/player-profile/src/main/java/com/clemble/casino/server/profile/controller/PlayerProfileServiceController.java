@@ -28,7 +28,7 @@ public class PlayerProfileServiceController implements PlayerProfileServiceContr
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_PROFILE, produces = PRODUCES)
-    public PlayerProfile myProfile(@CookieValue("player") String player) {
+    public @ResponseBody PlayerProfile myProfile(@CookieValue("player") String player) {
         return getProfile(player);
     }
 

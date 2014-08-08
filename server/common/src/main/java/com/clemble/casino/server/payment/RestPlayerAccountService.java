@@ -30,7 +30,7 @@ public class RestPlayerAccountService implements PlayerAccountServiceContract {
     @Override
     public List<String> canAfford(Collection<String> players, Currency currency, Long amount) {
         // Step 1. Generating URL
-        String url = toPaymentUrl(PAYMENT_ACCOUNTS).replace("{host}", base) + "?currency=" + currency + "&amount=" + amount;
+        String url = toPaymentUrl(ACCOUNTS).replace("{host}", base) + "?currency=" + currency + "&amount=" + amount;
         for(String player: players)
             url += "&player=" + player;
         // Step 2. Sending and receiving response
