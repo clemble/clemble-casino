@@ -17,7 +17,10 @@ env:
     - secure: MQrdtV90hr3phOX6sL2kN2XpRRtuSaNYI0F7SOxCDZtA9J1r8Vo0TWW6AXtdY7pTBqmAsOul2MABO6Q1c9eMbzq998o+LR785neHaIIs2yMMVFucjfYgsDTkZ+mcGltQp9t416nLu+qha630BFe6kV/Jt6ZLPhGbFyf/hgZaWKn60E4Lxx9dP/qhm7Qr9Uy2k2HKhRU/C21pFV/hOt70vhOtWni+c8WhGdHAjSffjdOJwvsT35kGh1rM5/MAKOwZd+mUfGepmr+o3vVWW9aG3iytmQ4uR4HuovZkBHitS2WT3iqQCiiV0IXc1Aawrk+P09DZDmY2E+B64vn8gtsbRg==
 before_script:
     - mkdir -p ~/clemble/config
+    - mkdir -p ~/shippable/testresults
     - cp ./config/*.properties ~/clemble/config/
+script:
+    - mvn install -Dproject.reporting.outputDirectory="~/shippable/testresults"
 after_success:
-    - aws s3 cp ./server/player/player-web/target/player-web-0.9.0-SNAPSHOT.war s3://clemble/player/player-web-0.9.0-SNAPSHOT.war
     - mvn clean cobertura:cobertura coveralls:cobertura
+#    - aws s3 cp ./server/player/player-web/target/player-web-0.9.0-SNAPSHOT.war s3://clemble/player/player-web-0.9.0-SNAPSHOT.war
