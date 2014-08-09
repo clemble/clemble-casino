@@ -15,7 +15,7 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
-import static com.clemble.casino.web.game.GameWebMapping.*;
+import static com.clemble.casino.game.GameWebMapping.*;
 
 @Controller
 public class GameInitiationController implements GameInitiationService, ExternalController {

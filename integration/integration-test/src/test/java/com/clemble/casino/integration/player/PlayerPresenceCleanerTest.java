@@ -22,7 +22,7 @@ import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.player.PlayerPresenceChangedEvent;
+import com.clemble.casino.player.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
 
 @Ignore

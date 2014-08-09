@@ -10,11 +10,7 @@ import com.clemble.casino.server.registration.security.ClembleConsumerDetailsSer
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
@@ -33,7 +29,7 @@ import com.clemble.casino.web.mapping.WebMapping;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-@Controller
+@RestController
 public class PlayerManualRegistrationController implements PlayerManualRegistrationService, ExternalController {
     // !!!TODO need a safe restoration process for all Registrations not only for login!!!
 
@@ -76,7 +72,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerToken httpLogin(@RequestBody PlayerLoginRequest loginRequest, HttpServletResponse response) {
+    public PlayerToken httpLogin(@RequestBody PlayerLoginRequest loginRequest, HttpServletResponse response) {
         return PlayerTokenUtils.updateResponse(login(loginRequest), response);
     }
 
@@ -113,7 +109,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PlayerToken httpCreatePlayer(@RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
+    public PlayerToken httpCreatePlayer(@RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
         return PlayerTokenUtils.updateResponse(createPlayer(registrationRequest), response);
     }
 

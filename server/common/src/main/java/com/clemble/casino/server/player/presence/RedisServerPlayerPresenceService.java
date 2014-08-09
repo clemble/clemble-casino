@@ -6,7 +6,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
-import com.clemble.casino.player.PlayerPresenceChangedEvent;
+import com.clemble.casino.player.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 

@@ -9,11 +9,7 @@ import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
 import com.clemble.casino.server.social.ServerProfileSocialRegistrationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.registration.PlayerToken;
@@ -24,7 +20,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.web.mapping.WebMapping;
 
-@Controller
+@RestController
 public class PlayerSocialRegistrationController implements PlayerSocialRegistrationService, ExternalController {
 
     final private PlayerTokenFactory playerTokenFactory;
@@ -46,7 +42,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
     @Override
     @RequestMapping(method = RequestMethod.POST, value = SOCIAL_REGISTRATION_DESCRIPTION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PlayerToken createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
+    public PlayerToken createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
         validationService.validate(socialRegistrationRequest.getSocialConnectionData());
         // Step 1. Checking if this user already exists
         PlayerProfile playerProfile = registrationService.create(socialRegistrationRequest.getSocialConnectionData());
@@ -61,7 +57,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
     @Override
     @RequestMapping(method = RequestMethod.POST, value = SOCIAL_REGISTRATION_GRANT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody PlayerToken createSocialGrantPlayer(@RequestBody PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
+    public PlayerToken createSocialGrantPlayer(@RequestBody PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
         validationService.validate(grantRegistrationRequest.getAccessGrant());
         // Step 1. Checking if this user already exists
         PlayerProfile playerProfile = registrationService.create(grantRegistrationRequest.getAccessGrant());

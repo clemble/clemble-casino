@@ -16,7 +16,7 @@ import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
-@Controller
+@RestController
 public class PlayerPresenceServiceController implements PlayerPresenceServiceContract, ExternalController {
 
     final private ServerPlayerPresenceService presenceServerService;
@@ -27,21 +27,21 @@ public class PlayerPresenceServiceController implements PlayerPresenceServiceCon
 
     @RequestMapping(value = MY_PRESENCE, method = RequestMethod.GET, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerPresence myPresence(@CookieValue("player") String player) {
+    public PlayerPresence myPresence(@CookieValue("player") String player) {
         return presenceServerService.getPresence(player);
     }
 
     @Override
     @RequestMapping(value = PLAYER_PRESENCE, method = RequestMethod.GET, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerPresence getPresence(@PathVariable("player") String player) {
+    public PlayerPresence getPresence(@PathVariable("player") String player) {
         return presenceServerService.getPresence(player);
     }
 
     @Override
     @RequestMapping(value = PLAYER_PRESENCES, method = RequestMethod.GET, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PlayerPresence> getPresences(@RequestParam(required = true, value = PLAYER_PRESENCES_PARAM) List<String> players) {
+    public List<PlayerPresence> getPresences(@RequestParam(required = true, value = PLAYER_PRESENCES_PARAM) List<String> players) {
         return presenceServerService.getPresences(players);
     }
 

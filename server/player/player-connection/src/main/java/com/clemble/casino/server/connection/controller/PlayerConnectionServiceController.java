@@ -7,6 +7,7 @@ import java.util.List;
 import com.clemble.casino.player.service.PlayerConnectionServiceContract;
 import com.clemble.casino.social.ClembleSocialUtils;
 import com.clemble.casino.server.connection.PlayerConnectionKey;
+import org.springframework.http.HttpStatus;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import com.clemble.casino.server.connection.repository.PlayerConnectionNetworkRe
 import com.clemble.casino.web.mapping.WebMapping;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
-@Controller
+@RestController
 public class PlayerConnectionServiceController implements PlayerConnectionServiceContract {
 
     final private PlayerConnectionNetworkRepository connectionsRepository;
@@ -26,13 +27,15 @@ public class PlayerConnectionServiceController implements PlayerConnectionServic
     }
 
     @RequestMapping(value = MY_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    public @ResponseBody List<ConnectionKey> myConnections(@CookieValue("player") String player) {
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<ConnectionKey> myConnections(@CookieValue("player") String player) {
         return getConnections(player);
     }
 
     @Override
     @RequestMapping(value = PLAYER_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    public @ResponseBody List<ConnectionKey> getConnections(@PathVariable("player") String player) {
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<ConnectionKey> getConnections(@PathVariable("player") String player) {
         // Step 1. Generating result collection
         List<ConnectionKey> connectionKeys = new ArrayList<>();
         PlayerConnectionNetwork playerConnections = connectionsRepository.findByPlayer(player);;

@@ -4,12 +4,11 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import com.clemble.casino.web.game.GameWebMapping;
+import com.clemble.casino.game.GameWebMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.event.NotificationMapping;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;

@@ -21,7 +21,7 @@ import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.player.PlayerPresence;
-import com.clemble.casino.player.PlayerPresenceChangedEvent;
+import com.clemble.casino.player.event.PlayerPresenceChangedEvent;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })

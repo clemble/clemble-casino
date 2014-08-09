@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.profile.repository.PlayerProfileRepository;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
-@Controller
+@RestController
 public class PlayerProfileServiceController implements PlayerProfileServiceContract, ExternalController {
 
     // TODO need a listener, that adds ConnectionKey to PlayerProfile when connection added
@@ -28,12 +29,14 @@ public class PlayerProfileServiceController implements PlayerProfileServiceContr
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_PROFILE, produces = PRODUCES)
-    public @ResponseBody PlayerProfile myProfile(@CookieValue("player") String player) {
+    @ResponseStatus(HttpStatus.OK)
+    public PlayerProfile myProfile(@CookieValue("player") String player) {
         return getProfile(player);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = MY_PROFILE, produces = PRODUCES)
-    public @ResponseBody PlayerProfile updateProfile(@CookieValue("player") String player, @RequestBody PlayerProfile playerProfile) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public PlayerProfile updateProfile(@CookieValue("player") String player, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (playerProfile == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileInvalid);
@@ -50,7 +53,8 @@ public class PlayerProfileServiceController implements PlayerProfileServiceContr
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_PROFILE, produces = PRODUCES)
-    public @ResponseBody PlayerProfile getProfile(@PathVariable("player") String player) {
+    @ResponseStatus(HttpStatus.OK)
+    public PlayerProfile getProfile(@PathVariable("player") String player) {
         // Step 1. Fetching playerProfile
         PlayerProfile playerProfile = profileRepository.findOne(player);
         // Step 2. Checking profile
@@ -62,7 +66,8 @@ public class PlayerProfileServiceController implements PlayerProfileServiceContr
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_PROFILES, produces = PRODUCES)
-    public @ResponseBody List<PlayerProfile> getProfiles(@RequestParam("player") Collection<String> players) {
+    @ResponseStatus(HttpStatus.OK)
+    public List<PlayerProfile> getProfiles(@RequestParam("player") Collection<String> players) {
         return profileRepository.findAll(players);
     }
 

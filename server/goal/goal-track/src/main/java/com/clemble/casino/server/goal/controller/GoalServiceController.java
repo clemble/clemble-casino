@@ -8,6 +8,7 @@ import com.clemble.casino.goal.service.GoalServiceContract;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.id.IdGenerator;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ import static com.clemble.casino.goal.GoalWebMapping.*;
 /**
  * Created by mavarazy on 8/2/14.
  */
-@Controller
+@RestController
 public class GoalServiceController implements GoalServiceContract, ExternalController {
 
     final private GoalRepository goalRepository;
@@ -33,7 +34,8 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
 
 
     @RequestMapping(method = RequestMethod.POST, value = MY_GOALS, produces = PRODUCES)
-    public @ResponseBody Goal addMyGoal(@CookieValue("player") String player, @RequestBody Goal goal) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Goal addMyGoal(@CookieValue("player") String player, @RequestBody Goal goal) {
         // Step 0.1. Checking player is valid
         if(goal.getPlayer() != null && !goal.getPlayer().equals(player))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalPlayerIncorrect);
@@ -50,46 +52,54 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS, produces = PRODUCES)
-    public @ResponseBody Collection<Goal> myGoals(@CookieValue("player") String player) {
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<Goal> myGoals(@CookieValue("player") String player) {
         return goalRepository.findByPlayer(player);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_PENDING, produces = PRODUCES)
-    public @ResponseBody Collection<Goal> myPendingGoals(@CookieValue("player") String player) {
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<Goal> myPendingGoals(@CookieValue("player") String player) {
         return goalRepository.findByPlayerAndState(player, GoalState.pending);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_REACHED, produces = PRODUCES)
-    public @ResponseBody Collection<Goal> myReachedGoals(@CookieValue("player") String player) {
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<Goal> myReachedGoals(@CookieValue("player") String player) {
         return goalRepository.findByPlayerAndState(player, GoalState.reached);
     }
 
 
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_MISSED, produces = PRODUCES)
-    public @ResponseBody Collection<Goal> myMissedGoals(@CookieValue("player") String player) {
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<Goal> myMissedGoals(@CookieValue("player") String player) {
         return goalRepository.findByPlayerAndState(player, GoalState.missed);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_GOALS, produces = PRODUCES)
-    public @ResponseBody Collection<Goal> getGoals(@PathVariable("player") String player) {
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<Goal> getGoals(@PathVariable("player") String player) {
         return goalRepository.findByPlayer(player);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_GOALS_PENDING, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody Collection<Goal> getPendingGoals(@PathVariable("player") String player) {
         return goalRepository.findByPlayerAndState(player, GoalState.pending);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_GOALS_REACHED, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody Collection<Goal> getReachedGoals(@PathVariable("player") String player) {
         return goalRepository.findByPlayerAndState(player, GoalState.reached);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_GOALS_MISSED, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody Collection<Goal> getMissedGoals(@PathVariable("player") String player) {
         return goalRepository.findByPlayerAndState(player, GoalState.missed);
     }

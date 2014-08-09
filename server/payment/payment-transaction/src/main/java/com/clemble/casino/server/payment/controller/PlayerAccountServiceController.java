@@ -19,7 +19,7 @@ import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 import com.clemble.casino.web.mapping.WebMapping;
 import static com.clemble.casino.payment.PaymentWebMapping.*;
 
-@Controller
+@RestController
 public class PlayerAccountServiceController implements PlayerAccountServiceContract, ExternalController {
 
     final private ServerPlayerAccountService playerAccountService;
@@ -33,7 +33,7 @@ public class PlayerAccountServiceController implements PlayerAccountServiceContr
 
     @RequestMapping(method = RequestMethod.GET, value = MY_ACCOUNT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerAccount myAccount(@CookieValue("player") String playerId) {
+    public PlayerAccount myAccount(@CookieValue("player") String playerId) {
         // Step 1. Returning account from repository
         return accountTemplate.findOne(playerId);
     }
@@ -41,7 +41,7 @@ public class PlayerAccountServiceController implements PlayerAccountServiceContr
     @Override
     @RequestMapping(method = RequestMethod.GET, value = ACCOUNT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody PlayerAccount getAccount(@PathVariable("player") String playerId) {
+    public PlayerAccount getAccount(@PathVariable("player") String playerId) {
         // Step 1. Returning account from repository
         return accountTemplate.findOne(playerId);
     }
@@ -49,7 +49,7 @@ public class PlayerAccountServiceController implements PlayerAccountServiceContr
     @Override
     @RequestMapping(method = RequestMethod.GET, value = ACCOUNTS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<String> canAfford(@RequestParam("player") Collection<String> players, @RequestParam("currency") Currency currency, @RequestParam("amount") Long amount) {
+    public List<String> canAfford(@RequestParam("player") Collection<String> players, @RequestParam("currency") Currency currency, @RequestParam("amount") Long amount) {
         return playerAccountService.canAfford(players, Money.create(currency, amount));
     }
 

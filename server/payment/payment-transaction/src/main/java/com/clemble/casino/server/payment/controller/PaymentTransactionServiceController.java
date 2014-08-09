@@ -16,7 +16,7 @@ import com.clemble.casino.server.payment.repository.PaymentTransactionRepository
 import com.clemble.casino.web.mapping.WebMapping;
 import static com.clemble.casino.payment.PaymentWebMapping.*;
 
-@Controller
+@RestController
 public class PaymentTransactionServiceController implements PaymentTransactionServiceContract, ExternalController {
 
     final private PaymentTransactionRepository paymentTransactionRepository;
@@ -27,21 +27,22 @@ public class PaymentTransactionServiceController implements PaymentTransactionSe
 
     @RequestMapping(method = RequestMethod.GET, value = MY_TRANSACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PaymentTransaction> myTransactions(@CookieValue("player") String player) {
+    public List<PaymentTransaction> myTransactions(@CookieValue("player") String player) {
         // Step 1. Sending transactions
         return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_TRANSACTIONS_BY_SOURCE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PaymentTransaction> myTransactions(@CookieValue("player") String player, @PathVariable("source") String source) {
+    public List<PaymentTransaction> myTransactions(@CookieValue("player") String player, @PathVariable("source") String source) {
         return paymentTransactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, source);
     }
 
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = TRANSACTIONS_BY_ID, produces = WebMapping.PRODUCES)
-    public @ResponseBody PaymentTransaction getTransaction(
+    @ResponseStatus(value = HttpStatus.OK)
+    public PaymentTransaction getTransaction(
         @PathVariable("source") String source,
         @PathVariable("transaction") String transactionId
     ) {
@@ -58,7 +59,7 @@ public class PaymentTransactionServiceController implements PaymentTransactionSe
     @Override
     @RequestMapping(method = RequestMethod.GET, value = TRANSACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<PaymentTransaction> getPlayerTransactions(
+    public List<PaymentTransaction> getPlayerTransactions(
         @PathVariable("player") String player
     ) {
         // Step 1. Sending transactions

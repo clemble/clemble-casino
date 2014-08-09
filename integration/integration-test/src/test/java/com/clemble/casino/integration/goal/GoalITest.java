@@ -12,12 +12,14 @@ import com.clemble.casino.money.Money;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotEquals;
 
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -29,6 +31,7 @@ import java.util.Date;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
+@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class GoalITest {
 
@@ -84,7 +87,7 @@ public class GoalITest {
     public void testSavingInMissedState() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis()), GoalState.missed);
+        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.missed);
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalStateIncorrect));
         // Step 4. Trying to save new value
@@ -117,7 +120,7 @@ public class GoalITest {
 
     public void check(ClembleCasinoOperations A, String goalKey, String player) {
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(player, goalKey, "Pending A goal", new Date(System.currentTimeMillis()), GoalState.pending);
+        Goal goalToSave = new Goal(player, goalKey, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.pending);
         // Step 3. Saving and checking goal is valid
         Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
         assertNotNull(savedGoal);
