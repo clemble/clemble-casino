@@ -33,17 +33,10 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
     @RequestMapping(method = RequestMethod.POST, value = MY_GOALS, produces = PRODUCES)
     public @ResponseBody Goal addMyGoal(@CookieValue("player") String player, @RequestBody Goal goal) {
         // Step 1. Generating saved goal
-        Goal savedGoal = new Goal(
-            player,
-            goalIdGenerator.newId(),
-            goal.getDescription(),
-            goal.getBet(),
-            goal.getDueDate(),
-            goal.getRate(),
-            goal.getState());
+        Goal goalToSave = goal.cloneWithPlayerAndGoal(player,goalIdGenerator.newId());
         // Step 2. Saving goal for future
         // TODO add player credentials
-        return goalRepository.save(goal);
+        return goalRepository.save(goalToSave);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS, produces = PRODUCES)

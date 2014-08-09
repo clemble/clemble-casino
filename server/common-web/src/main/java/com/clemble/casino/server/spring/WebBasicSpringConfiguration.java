@@ -36,11 +36,6 @@ public class WebBasicSpringConfiguration extends WebMvcConfigurationSupport impl
         return messageConverter;
     }
 
-    @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthenticationHandleInterceptor());
-    }
-
     @Bean
     @Override
     public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {

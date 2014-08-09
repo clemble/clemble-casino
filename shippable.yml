@@ -20,6 +20,5 @@ before_script:
     - mkdir -p ~/clemble-casino/shippable/testresults
     - cp ./config/*.properties ~/clemble/config/
 after_success:
-    - mvn clean install -Dproject.reporting.outputDirectory="~/clemble-casino/shippable/testresults"
     - mvn clean cobertura:cobertura coveralls:cobertura
 #    - aws s3 cp ./server/player/player-web/target/player-web-0.9.0-SNAPSHOT.war s3://clemble/player/player-web-0.9.0-SNAPSHOT.war
