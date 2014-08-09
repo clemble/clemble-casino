@@ -24,6 +24,7 @@ shippable/*
 **/.idea
 **/*.iml
 **/*.log
+**/shippable
 # Build directories #
 target
 bin
