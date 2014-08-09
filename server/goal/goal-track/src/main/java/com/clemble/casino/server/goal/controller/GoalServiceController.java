@@ -1,5 +1,7 @@
 package com.clemble.casino.server.goal.controller;
 
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.Goal;
 import com.clemble.casino.goal.GoalState;
 import com.clemble.casino.goal.service.GoalServiceContract;
@@ -32,10 +34,18 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
 
     @RequestMapping(method = RequestMethod.POST, value = MY_GOALS, produces = PRODUCES)
     public @ResponseBody Goal addMyGoal(@CookieValue("player") String player, @RequestBody Goal goal) {
+        // Step 0.1. Checking player is valid
+        if(goal.getPlayer() != null && !goal.getPlayer().equals(player))
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalPlayerIncorrect);
+        // Step 0.2. Checking state is pending or null
+        if(goal.getState() != null && !GoalState.pending.equals(goal.getState()))
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalStateIncorrect);
+        // Step 0.3. Checking due date
+        if(goal.getDueDate() == null || goal.getDueDate().getTime() < System.currentTimeMillis())
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalDueDateInPast);
         // Step 1. Generating saved goal
-        Goal goalToSave = goal.cloneWithPlayerAndGoal(player,goalIdGenerator.newId());
+        Goal goalToSave = goal.cloneWithPlayerAndGoal(player, goalIdGenerator.newId(), GoalState.pending);
         // Step 2. Saving goal for future
-        // TODO add player credentials
         return goalRepository.save(goalToSave);
     }
 
