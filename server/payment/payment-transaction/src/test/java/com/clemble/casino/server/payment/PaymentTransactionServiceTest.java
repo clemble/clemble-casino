@@ -52,8 +52,8 @@ public class PaymentTransactionServiceTest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(transactionKey)
             .setTransactionDate(new Date())
-            .addPaymentOperation(new PaymentOperation().setOperation(Operation.Credit).setPlayer(playerFrom).setAmount(amount))
-            .addPaymentOperation(new PaymentOperation().setOperation(Operation.Debit).setPlayer(playerTo).setAmount(amount));
+            .addPaymentOperation(new PaymentOperation(playerFrom, amount, Operation.Credit))
+            .addPaymentOperation(new PaymentOperation(playerTo, amount, Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 

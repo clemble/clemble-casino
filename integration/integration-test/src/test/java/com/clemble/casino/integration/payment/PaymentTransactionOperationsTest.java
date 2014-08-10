@@ -64,15 +64,13 @@ public class PaymentTransactionOperationsTest {
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(new PaymentTransactionKey("TicTacToe", ObjectGenerator.generate(Long.class)))
-                .setTransactionDate(new Date())
-                .setProcessingDate(new Date())
-                .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
-                                .setAmount(Money.create(Currency.FakeMoney, 60)))
-                .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
-                                .setAmount(Money.create(Currency.FakeMoney, 50)));
+            .setTransactionKey(new PaymentTransactionKey("TicTacToe", ObjectGenerator.generate(Long.class)))
+            .setTransactionDate(new Date())
+            .setProcessingDate(new Date())
+            .addPaymentOperation(
+                new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 60), Operation.Credit))
+            .addPaymentOperation(
+                new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionDebitAndCreditNotMatched));
 
@@ -88,11 +86,9 @@ public class PaymentTransactionOperationsTest {
                 .setTransactionKey(new PaymentTransactionKey("TicTacToe", ObjectGenerator.generate(Long.class)))
                 .setTransactionDate(new Date())
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
-                                .setAmount(Money.create(Currency.FakeMoney, 50)))
+                        new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
-                                .setAmount(Money.create(Currency.FakeMoney, 50)));
+                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
@@ -112,11 +108,9 @@ public class PaymentTransactionOperationsTest {
                 .setTransactionKey(new PaymentTransactionKey(source, transactionId))
                 .setTransactionDate(new Date())
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
-                                .setAmount(Money.create(Currency.FakeMoney, 50)))
+                        new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
                 .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
-                                .setAmount(Money.create(Currency.FakeMoney, 50)));
+                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
@@ -137,13 +131,11 @@ public class PaymentTransactionOperationsTest {
         ClembleCasinoOperations therdPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(new PaymentTransactionKey(source, transactionId))
-                .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Credit).setPlayer(player.getPlayer())
-                                .setAmount(Money.create(Currency.FakeMoney, 50)))
-                .addPaymentOperation(
-                        new PaymentOperation().setOperation(Operation.Debit).setPlayer(anotherPlayer.getPlayer())
-                                .setAmount(Money.create(Currency.FakeMoney, 50)));
+            .setTransactionKey(new PaymentTransactionKey(source, transactionId))
+            .addPaymentOperation(
+                    new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
+            .addPaymentOperation(
+                    new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 

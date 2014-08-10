@@ -143,11 +143,9 @@ public class IntegrationObjectTest {
                         .setTransactionDate(new Date())
                         .setProcessingDate(new Date())
                         .addPaymentOperation(
-                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Credit)
-                                        .setPlayer(RandomStringUtils.random(5)))
+                                new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Credit))
                         .addPaymentOperation(
-                                new PaymentOperation().setAmount(Money.create(Currency.FakeMoney, 50)).setOperation(Operation.Debit)
-                                        .setPlayer(RandomStringUtils.random(5)));
+                                new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Debit));
             }
         });
         register(PlayerCredential.class, new AbstractValueGenerator<PlayerCredential>() {
