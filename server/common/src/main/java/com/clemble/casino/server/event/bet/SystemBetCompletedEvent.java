@@ -1,9 +1,9 @@
 package com.clemble.casino.server.event.bet;
 
+import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Created by mavarazy on 8/9/14.
@@ -12,18 +12,18 @@ public class SystemBetCompletedEvent implements SystemBetEvent, PlayerAware {
 
     final public static String CHANNEL = "bet:completed";
 
-    final private String betKey;
+    final private PaymentTransactionKey transactionKey;
     final private String player;
 
     @JsonCreator
-    public SystemBetCompletedEvent(@JsonProperty("betKey") String betKey, @JsonProperty("player") String player) {
-        this.betKey = betKey;
+    public SystemBetCompletedEvent(@JsonProperty("transactionKey") PaymentTransactionKey transactionKey, @JsonProperty("player") String player) {
+        this.transactionKey = transactionKey;
         this.player = player;
     }
 
     @Override
-    public String toBetKey() {
-        return betKey;
+    public PaymentTransactionKey getTransactionKey() {
+        return transactionKey;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SystemBetCompletedEvent implements SystemBetEvent, PlayerAware {
 
         SystemBetCompletedEvent that = (SystemBetCompletedEvent) o;
 
-        if (!betKey.equals(that.betKey)) return false;
+        if (!transactionKey.equals(that.transactionKey)) return false;
         if (!player.equals(that.player)) return false;
 
         return true;
@@ -51,7 +51,7 @@ public class SystemBetCompletedEvent implements SystemBetEvent, PlayerAware {
 
     @Override
     public int hashCode() {
-        int result = betKey.hashCode();
+        int result = transactionKey.hashCode();
         result = 31 * result + player.hashCode();
         return result;
     }

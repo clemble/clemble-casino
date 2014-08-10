@@ -24,9 +24,9 @@ import com.clemble.casino.server.repository.game.PendingPlayerRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
 import com.google.common.collect.ImmutableList;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.TEST)
 @ContextConfiguration(classes = { SimpleGameSpringConfiguration.class })
 public class PendingGameTest {
 
@@ -35,11 +35,6 @@ public class PendingGameTest {
 
     @Autowired
     public PendingGameInitiationRepository initiationRepository;
-
-    @Before
-    public void clean() {
-        playerRepository.deleteAll();
-    }
 
     @Test
     public void testCreation(){

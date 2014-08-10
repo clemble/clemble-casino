@@ -1,5 +1,6 @@
 package com.clemble.casino.server.event.bet;
 
+import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,12 +13,12 @@ public class SystemBetCanceledEvent implements SystemBetEvent, PlayerAware {
     final public static String CHANNEL = "bet:canceled";
 
     final private String player;
-    final private String betKey;
+    final private PaymentTransactionKey transactionKey;
 
     @JsonCreator
-    public SystemBetCanceledEvent(@JsonProperty("player") String player, @JsonProperty("betKey") String betKey) {
+    public SystemBetCanceledEvent(@JsonProperty("player") String player, @JsonProperty("transactionKey") PaymentTransactionKey transactionKey) {
         this.player = player;
-        this.betKey = betKey;
+        this.transactionKey = transactionKey;
     }
 
     @Override
@@ -26,8 +27,8 @@ public class SystemBetCanceledEvent implements SystemBetEvent, PlayerAware {
     }
 
     @Override
-    public String toBetKey() {
-        return betKey;
+    public PaymentTransactionKey getTransactionKey() {
+        return transactionKey;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class SystemBetCanceledEvent implements SystemBetEvent, PlayerAware {
 
         SystemBetCanceledEvent that = (SystemBetCanceledEvent) o;
 
-        if (!betKey.equals(that.betKey)) return false;
+        if (!transactionKey.equals(that.transactionKey)) return false;
         if (!player.equals(that.player)) return false;
 
         return true;
@@ -46,7 +47,7 @@ public class SystemBetCanceledEvent implements SystemBetEvent, PlayerAware {
     @Override
     public int hashCode() {
         int result = player.hashCode();
-        result = 31 * result + betKey.hashCode();
+        result = 31 * result + transactionKey.hashCode();
         return result;
     }
 
