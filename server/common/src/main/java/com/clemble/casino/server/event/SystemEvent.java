@@ -1,6 +1,8 @@
 package com.clemble.casino.server.event;
 
 import com.clemble.casino.event.Event;
+import com.clemble.casino.server.event.bet.SystemBetCanceledEvent;
+import com.clemble.casino.server.event.bet.SystemBetCompletedEvent;
 import com.clemble.casino.server.event.game.SystemGameEndedEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
@@ -23,7 +25,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemPlayerSocialRegistered.CHANNEL, value = SystemPlayerSocialRegistered.class),
     @JsonSubTypes.Type(name = SystemGameStartedEvent.CHANNEL, value = SystemGameStartedEvent.class),
     @JsonSubTypes.Type(name = SystemGameEndedEvent.CHANNEL, value = SystemGameEndedEvent.class),
-    @JsonSubTypes.Type(name = SystemPaymentTransactionRequestEvent.CHANNEL, value = SystemPaymentTransactionRequestEvent.class)
+    @JsonSubTypes.Type(name = SystemPaymentTransactionRequestEvent.CHANNEL, value = SystemPaymentTransactionRequestEvent.class),
+    @JsonSubTypes.Type(name = SystemBetCanceledEvent.CHANNEL, value = SystemBetCanceledEvent.class),
+    @JsonSubTypes.Type(name = SystemBetCompletedEvent.CHANNEL, value = SystemBetCompletedEvent.class)
 })
 public interface SystemEvent extends Event {
 
