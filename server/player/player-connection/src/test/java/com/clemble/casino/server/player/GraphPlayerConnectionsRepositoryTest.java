@@ -12,6 +12,8 @@ import com.clemble.casino.server.connection.GraphPlayerConnections;
 import com.clemble.casino.server.connection.GraphConnectionKey;
 import com.clemble.casino.server.connection.repository.GraphPlayerConnectionsRepository;
 import com.clemble.casino.server.connection.spring.PlayerConnectionSpringConfiguration;
+import com.clemble.casino.server.connection.spring.ServerPlayerConnectionsSpringConfiguration;
+import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = PlayerConnectionSpringConfiguration.class)
+@ContextConfiguration(classes = {ServerPlayerConnectionsSpringConfiguration.GraphPlayerConnectionsSpringConfigurations.class, PropertiesSpringConfiguration.class})
 public class GraphPlayerConnectionsRepositoryTest {
 
     @Autowired
