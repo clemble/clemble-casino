@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.clemble.casino.player.PlayerConnections;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -15,7 +16,7 @@ import org.springframework.social.connect.ConnectionKey;
 import com.clemble.casino.player.PlayerAware;
 
 @NodeEntity
-public class PlayerConnectionNetwork implements PlayerAware {
+public class GraphPlayerConnections implements PlayerAware {
 
     /**
      * Generated 29/12/13
@@ -29,15 +30,25 @@ public class PlayerConnectionNetwork implements PlayerAware {
     private String player;
 
     @RelatedTo(type = "OWN", direction = Direction.OUTGOING)
-    private Set<PlayerConnectionKey> owns = new HashSet<PlayerConnectionKey>();
+    private Set<GraphConnectionKey> owns = new HashSet<GraphConnectionKey>();
 
     @RelatedTo(type = "CONNECTED", direction = Direction.OUTGOING)
-    private Set<PlayerConnectionKey> connections = new HashSet<PlayerConnectionKey>();
+    private Set<GraphConnectionKey> connections = new HashSet<GraphConnectionKey>();
 
-    public PlayerConnectionNetwork() {
+    public GraphPlayerConnections() {
     }
 
-    public PlayerConnectionNetwork(String player) {
+    public GraphPlayerConnections(PlayerConnections connections) {
+        this.player = connections.getPlayer();
+        this.owns = new HashSet<>();
+        for(ConnectionKey ownedKey: connections.getOwned())
+            owns.add(new GraphConnectionKey(ownedKey));
+        this.connections = new HashSet<>();
+        for(ConnectionKey connectionKey: connections.getConnected())
+            this.connections.add(new GraphConnectionKey(connectionKey));
+    }
+
+    public GraphPlayerConnections(String player) {
         this.player = player;
     }
 
@@ -53,47 +64,60 @@ public class PlayerConnectionNetwork implements PlayerAware {
         return player;
     }
 
-    public PlayerConnectionNetwork setPlayer(String player) {
+    public GraphPlayerConnections setPlayer(String player) {
         this.player = player;
         return this;
     }
 
-    public Set<PlayerConnectionKey> getOwns() {
+    public Set<GraphConnectionKey> getOwns() {
         return owns;
     }
 
-    public PlayerConnectionNetwork addOwned(ConnectionKey connectionKey) {
-        owns.add(new PlayerConnectionKey(connectionKey));
+    public GraphPlayerConnections addOwned(ConnectionKey connectionKey) {
+        owns.add(new GraphConnectionKey(connectionKey));
         return this;
     }
     
-    public PlayerConnectionNetwork addOwned(Collection<ConnectionKey> connectionKey) {
+    public GraphPlayerConnections addOwned(Collection<ConnectionKey> connectionKey) {
         for(ConnectionKey connection: connectionKey)
             addOwned(connection);
         return this;
     }
 
-    public void setOwns(Set<PlayerConnectionKey> owns) {
+    public void setOwns(Set<GraphConnectionKey> owns) {
         this.owns = owns;
     }
 
-    public Set<PlayerConnectionKey> getConnections() {
+    public Set<GraphConnectionKey> getConnections() {
         return connections;
     }
 
-    public PlayerConnectionNetwork addConnection(ConnectionKey connectionKey) {
-        this.connections.add(new PlayerConnectionKey(connectionKey));
+    public GraphPlayerConnections addConnection(ConnectionKey connectionKey) {
+        this.connections.add(new GraphConnectionKey(connectionKey));
         return this;
     }
 
-    public PlayerConnectionNetwork addConnections(Collection<ConnectionKey> connectionKeys) {
+    public GraphPlayerConnections addConnections(Collection<ConnectionKey> connectionKeys) {
         for(ConnectionKey connection: connectionKeys)
-            this.connections.add(new PlayerConnectionKey(connection));
+            this.connections.add(new GraphConnectionKey(connection));
         return this;
     }
 
-    public void setConnections(Set<PlayerConnectionKey> connections) {
+    public void setConnections(Set<GraphConnectionKey> connections) {
         this.connections = connections;
+    }
+
+    public PlayerConnections toPlayerConnections() {
+        // Step 1. Converting connection to keys
+        Set<ConnectionKey> ownedKeys = new HashSet<>();
+        for(GraphConnectionKey connection: owns)
+            ownedKeys.add(connection.toConnectionKey());
+        // Step 2. Converting connections to keys
+        Set<ConnectionKey> connectedKeys = new HashSet<>();
+        for(GraphConnectionKey connection: connections)
+            connectedKeys.add(connection.toConnectionKey());
+        // Step 3. Creating player connections
+        return new PlayerConnections(player, ownedKeys, connectedKeys);
     }
 
     @Override
@@ -115,7 +139,7 @@ public class PlayerConnectionNetwork implements PlayerAware {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerConnectionNetwork other = (PlayerConnectionNetwork) obj;
+        GraphPlayerConnections other = (GraphPlayerConnections) obj;
         if (connections == null) {
             if (other.connections != null)
                 return false;

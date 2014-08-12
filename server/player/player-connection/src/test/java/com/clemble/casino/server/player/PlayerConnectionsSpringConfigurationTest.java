@@ -13,7 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = PlayerConnectionSpringConfiguration.class)
-public class PlayerConnectionSpringConfigurationTest {
+public class PlayerConnectionsSpringConfigurationTest {
 
     @Test
     public void test() {

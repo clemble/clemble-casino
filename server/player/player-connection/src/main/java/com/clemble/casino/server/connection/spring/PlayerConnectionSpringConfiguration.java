@@ -1,12 +1,14 @@
 package com.clemble.casino.server.connection.spring;
 
 import com.clemble.casino.server.connection.listener.PlayerDiscoveryNotificationEventListener;
+import com.clemble.casino.server.connection.repository.GraphPlayerConnectionsRepository;
+import com.clemble.casino.server.connection.service.GraphPlayerConnectionService;
+import com.clemble.casino.server.connection.service.ServerPlayerConnectionService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
-import com.clemble.casino.server.connection.listener.PlayerConnectionNetworkPopulatorListener;
+import com.clemble.casino.server.connection.listener.PlayerConnectionNetworkPopulateListener;
 import com.clemble.casino.server.connection.listener.PlayerConnectionNetworkCreationListener;
-import com.clemble.casino.server.connection.repository.PlayerConnectionNetworkRepository;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,15 +28,15 @@ public class PlayerConnectionSpringConfiguration extends BasicNeo4JSpringConfigu
     }
 
     @Bean
-    public PlayerConnectionNetworkCreationListener playerSocialNetworkCreationListener(PlayerConnectionNetworkRepository playerRepository, SystemNotificationServiceListener notificationServiceListener) {
+    public PlayerConnectionNetworkCreationListener playerSocialNetworkCreationListener(ServerPlayerConnectionService playerRepository, SystemNotificationServiceListener notificationServiceListener) {
         PlayerConnectionNetworkCreationListener networkCreationService = new PlayerConnectionNetworkCreationListener(playerRepository);
         notificationServiceListener.subscribe(networkCreationService);
         return networkCreationService;
     }
 
     @Bean
-    public PlayerConnectionNetworkPopulatorListener socialNetworkConnectionCreatorListener(PlayerConnectionNetworkRepository playerRepository, SystemNotificationService notificationService, SystemNotificationServiceListener notificationServiceListener) {
-        PlayerConnectionNetworkPopulatorListener connectionCreatorListener = new PlayerConnectionNetworkPopulatorListener(playerRepository, notificationService);
+    public PlayerConnectionNetworkPopulateListener socialNetworkConnectionCreatorListener(ServerPlayerConnectionService playerRepository, SystemNotificationService notificationService, SystemNotificationServiceListener notificationServiceListener) {
+        PlayerConnectionNetworkPopulateListener connectionCreatorListener = new PlayerConnectionNetworkPopulateListener(playerRepository, notificationService);
         notificationServiceListener.subscribe(connectionCreatorListener);
         return connectionCreatorListener;
     }
@@ -54,8 +56,13 @@ public class PlayerConnectionSpringConfiguration extends BasicNeo4JSpringConfigu
     }
 
     @Bean
-    public PlayerConnectionServiceController playerConnectionController(PlayerConnectionNetworkRepository socialNetworkRepository) {
-        return new PlayerConnectionServiceController(socialNetworkRepository);
+    public GraphPlayerConnectionService connectionService(GraphPlayerConnectionsRepository connectionRepository) {
+        return new GraphPlayerConnectionService(connectionRepository);
+    }
+
+    @Bean
+    public PlayerConnectionServiceController playerConnectionController(ServerPlayerConnectionService connectionService) {
+        return new PlayerConnectionServiceController(connectionService);
     }
 
 }

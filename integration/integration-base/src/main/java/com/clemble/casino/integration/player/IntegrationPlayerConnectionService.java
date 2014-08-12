@@ -3,7 +3,9 @@ package com.clemble.casino.integration.player;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.List;
+import java.util.Set;
 
+import com.clemble.casino.player.PlayerConnections;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import org.springframework.social.connect.ConnectionKey;
@@ -24,13 +26,33 @@ public class IntegrationPlayerConnectionService implements PlayerConnectionServi
     }
 
     @Override
-    public List<ConnectionKey> myConnections() {
+    public PlayerConnections myConnections() {
         return connectionService.myConnections(player);
     }
 
     @Override
-    public List<ConnectionKey> getConnections(String player) {
+    public Set<ConnectionKey> myOwnedConnections() {
+        return connectionService.myOwnedConnections(player);
+    }
+
+    @Override
+    public Set<ConnectionKey> myConnectedConnections() {
+        return connectionService.myConnectedConnections(player);
+    }
+
+    @Override
+    public PlayerConnections getConnections(String player) {
         return connectionService.getConnections(player);
+    }
+
+    @Override
+    public Set<ConnectionKey> getOwnedConnections(String player) {
+        return connectionService.getOwnedConnections(player);
+    }
+
+    @Override
+    public Set<ConnectionKey> getConnectedConnection(String player) {
+        return connectionService.getConnectedConnection(player);
     }
 
 }

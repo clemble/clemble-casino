@@ -1,58 +1,79 @@
 package com.clemble.casino.server.connection.controller;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
-import com.clemble.casino.player.service.PlayerConnectionServiceContract;
-import com.clemble.casino.social.ClembleSocialUtils;
-import com.clemble.casino.server.connection.PlayerConnectionKey;
+import com.clemble.casino.player.PlayerConnections;
+import com.clemble.casino.player.service.PlayerConnectionService;
+import com.clemble.casino.server.connection.service.ServerPlayerConnectionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.social.connect.ConnectionKey;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.server.connection.PlayerConnectionNetwork;
-import com.clemble.casino.server.connection.repository.PlayerConnectionNetworkRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 import static com.clemble.casino.web.player.PlayerWebMapping.*;
 
 @RestController
-public class PlayerConnectionServiceController implements PlayerConnectionServiceContract {
+public class PlayerConnectionServiceController implements PlayerConnectionService {
 
-    final private PlayerConnectionNetworkRepository connectionsRepository;
+    final private ServerPlayerConnectionService connectionService;
 
-    public PlayerConnectionServiceController(PlayerConnectionNetworkRepository connectionsRepository) {
-        this.connectionsRepository = connectionsRepository;
+    public PlayerConnectionServiceController(ServerPlayerConnectionService connectionService) {
+        this.connectionService = connectionService;
+    }
+
+    @Override
+    public PlayerConnections myConnections() {
+        throw new IllegalAccessError();
     }
 
     @RequestMapping(value = MY_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<ConnectionKey> myConnections(@CookieValue("player") String player) {
-        return getConnections(player);
+    public PlayerConnections myConnections(@CookieValue("player") String player) {
+        return connectionService.myConnections(player);
+    }
+
+    @Override
+    public Set<ConnectionKey> myOwnedConnections(){
+        throw new IllegalAccessError();
+    }
+
+
+    @RequestMapping(value = MY_OWNED_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Set<ConnectionKey> myOwnedConnections(String me) {
+        return connectionService.myOwnedConnections(me);
+    }
+
+    @Override
+    public Set<ConnectionKey> myConnectedConnections() {
+        throw new IllegalAccessError();
+    }
+
+    @RequestMapping(value = MY_CONNECTED_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Set<ConnectionKey> myConnectedConnections(String me) {
+        return connectionService.myConnectedConnections(me);
     }
 
     @Override
     @RequestMapping(value = PLAYER_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<ConnectionKey> getConnections(@PathVariable("player") String player) {
-        // Step 1. Generating result collection
-        List<ConnectionKey> connectionKeys = new ArrayList<>();
-        PlayerConnectionNetwork playerConnections = connectionsRepository.findByPlayer(player);;
-        for(PlayerConnectionKey connection: playerConnections.getConnections())
-            connectionKeys.add(ClembleSocialUtils.fromString(connection.getConnectionKey()));
-        // Step 2. Going through existing connections
-        Iterator<PlayerConnectionNetwork> relatedConnections = connectionsRepository.findRelations(player).iterator();
-        while (relatedConnections.hasNext()) {
-            PlayerConnectionNetwork relatedConnection = relatedConnections.next();
-            // Step 2.1. Removing owned connections
-            for(PlayerConnectionKey connection: relatedConnection.getOwns())
-                connectionKeys.remove(ClembleSocialUtils.fromString(connection.getConnectionKey()));
-            // Step 2.2. Adding internal connection
-            connectionKeys.add(new ConnectionKey(WebMapping.PROVIDER_ID, relatedConnection.getPlayer()));
-        }
-        // Step 3. Checking values
-        return connectionKeys;
+    public PlayerConnections getConnections(@PathVariable("player") String player) {
+        return connectionService.getConnections(player);
+    }
+
+    @Override
+    @RequestMapping(value = PLAYER_OWNED_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Set<ConnectionKey> getOwnedConnections(String player) {
+        return connectionService.getOwnedConnections(player);
+    }
+
+    @Override
+    @RequestMapping(value = PLAYER_CONNECTION_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Set<ConnectionKey> getConnectedConnection(String player) {
+        return connectionService.getConnectedConnection(player);
     }
 
 }

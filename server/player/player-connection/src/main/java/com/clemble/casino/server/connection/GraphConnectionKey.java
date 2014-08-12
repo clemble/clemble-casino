@@ -4,21 +4,22 @@ import com.clemble.casino.social.ClembleSocialUtils;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.support.index.IndexType;
 import org.springframework.social.connect.ConnectionKey;
 
 @NodeEntity
-public class PlayerConnectionKey {
+public class GraphConnectionKey {
 
     @GraphId
     private Long id;
 
-    @Indexed(unique = true)
+    @Indexed(unique = true, indexName = "connectionKeyIndex", indexType= IndexType.FULLTEXT)
     private String connectionKey;
 
-    public PlayerConnectionKey() {
+    public GraphConnectionKey() {
     }
 
-    public PlayerConnectionKey(ConnectionKey connectionKey) {
+    public GraphConnectionKey(ConnectionKey connectionKey) {
        this.connectionKey = ClembleSocialUtils.toString(connectionKey);
     }
 
@@ -38,6 +39,10 @@ public class PlayerConnectionKey {
         this.connectionKey = connectionKey;
     }
 
+    public ConnectionKey toConnectionKey(){
+        return ClembleSocialUtils.fromString(connectionKey);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -55,7 +60,7 @@ public class PlayerConnectionKey {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PlayerConnectionKey other = (PlayerConnectionKey) obj;
+        GraphConnectionKey other = (GraphConnectionKey) obj;
         if (connectionKey == null) {
             if (other.connectionKey != null)
                 return false;

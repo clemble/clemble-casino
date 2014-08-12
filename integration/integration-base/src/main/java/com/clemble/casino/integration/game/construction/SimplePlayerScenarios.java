@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
+import com.clemble.casino.player.PlayerConnections;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import com.clemble.test.concurrent.Get;
@@ -135,9 +136,9 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             }
         }, 5_000);
         // Step 4. Getting PlayerConnection
-        AsyncCompletionUtils.get(new Get<List<ConnectionKey>>() {
+        AsyncCompletionUtils.get(new Get<PlayerConnections>() {
             @Override
-            public List<ConnectionKey> get() {
+            public PlayerConnections get() {
                 return player.connectionOperations().myConnections();
             }
         }, 5_000);
