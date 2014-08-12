@@ -9,7 +9,6 @@ import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.id.IdGenerator;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -37,14 +36,16 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
     @ResponseStatus(HttpStatus.CREATED)
     public Goal addMyGoal(@CookieValue("player") String player, @RequestBody Goal goal) {
         // Step 0.1. Checking player is valid
-        if(goal.getPlayer() != null && !goal.getPlayer().equals(player))
+        if (goal.getGoalKey() != null && goal.getGoalKey().getPlayer() != null && !goal.getGoalKey().getPlayer().equals(player))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalPlayerIncorrect);
         // Step 0.2. Checking state is pending or null
-        if(goal.getState() != null && !GoalState.pending.equals(goal.getState()))
+        if (goal.getState() != null && !GoalState.pending.equals(goal.getState()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalStateIncorrect);
         // Step 0.3. Checking due date
-        if(goal.getDueDate() == null || goal.getDueDate().getTime() < System.currentTimeMillis())
+        if (goal.getDueDate() == null || goal.getDueDate().getTime() < System.currentTimeMillis())
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalDueDateInPast);
+        if (goal.getBid() == null || goal.getBid().getBidAmount().getAmount() < 0 || !player.equals(goal.getBid().getBidder()))
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalBidInvalid);
         // Step 1. Generating saved goal
         Goal goalToSave = goal.cloneWithPlayerAndGoal(player, goalIdGenerator.newId(), GoalState.pending);
         // Step 2. Saving goal for future

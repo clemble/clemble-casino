@@ -1,24 +1,25 @@
 package com.clemble.casino.server.bonus;
 
-import com.clemble.casino.payment.AmountAware;
-import com.clemble.casino.payment.PaymentTransactionAware;
-import com.clemble.casino.payment.PaymentTransactionKey;
+import com.clemble.casino.money.Operation;
+import com.clemble.casino.payment.*;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.bonus.PaymentBonusSourceAware;
 import com.clemble.casino.payment.event.BonusPaymentEvent;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.player.PlayerAware;
 
-public class BonusPaymentTransaction implements PlayerAware, AmountAware, PaymentBonusSourceAware, PaymentTransactionAware {
+import java.util.Date;
+
+public class BonusPaymentTransaction implements PlayerAware, AmountAware, PaymentBonusSourceAware, PaymentTransactionConvertible {
 
     /**
      * Generated 08/01/14
      */
     private static final long serialVersionUID = 1L;
 
+    final private PaymentTransactionKey transactionKey;
     final private String player;
     final private PaymentBonusSource bonusSource;
-    final private PaymentTransactionKey transactionKey;
     final private Money amount;
 
     public BonusPaymentTransaction(String player, PaymentTransactionKey transactionKey, PaymentBonusSource bonusSource, Money amount) {
@@ -46,6 +47,15 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
     @Override
     public PaymentTransactionKey getTransactionKey(){
         return transactionKey;
+    }
+
+    public PaymentTransaction toTransaction() {
+        return new PaymentTransaction().
+            setTransactionKey(transactionKey).
+            setTransactionDate(new Date()).
+            addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit)).
+            addPaymentOperation(new PaymentOperation(player, amount, Operation.Debit));
+
     }
 
     public BonusPaymentEvent toEvent(){

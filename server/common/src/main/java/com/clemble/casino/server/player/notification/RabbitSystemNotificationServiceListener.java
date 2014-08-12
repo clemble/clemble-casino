@@ -124,12 +124,15 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
             try {
                 keepClosed.set(true);
                 if(rabbitConnection.get() != null) {
-                    rabbitConnection.get().close();
+                    Connection connection = rabbitConnection.get();
+                    if(connection.isOpen())
+                        connection.close();
                 } else {
                     LOG.error("Failed to start {} {}", eventListener.getQueueName(), eventListener.getChannel());
                 }
             } catch (ShutdownSignalException exception) {
                 LOG.error("Failure to close listener ShutdownSignalException", exception);
+                LOG.error("Exception source {}", exception.getReference());
             } catch (IOException ioException) {
                 LOG.error("Failure to close IOException", ioException);
             }

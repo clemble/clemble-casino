@@ -40,10 +40,7 @@ public class BonusService {
         if (bonus == null)
             return;
         // Step 2. Checking last bonus marker
-        PaymentTransaction transaction = new PaymentTransaction()
-            .setTransactionKey(bonus.getTransactionKey()).setTransactionDate(new Date())
-            .addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, bonus.getAmount(), Operation.Credit))
-            .addPaymentOperation(new PaymentOperation(bonus.getPlayer(), bonus.getAmount(), Operation.Debit));
+        PaymentTransaction transaction = bonus.toTransaction();
         // Step 3. Processing new transaction and updating bonus marker
         if(bonusPolicy.eligible(transaction)) {
             // Step 4. Sending bonus notification to system
