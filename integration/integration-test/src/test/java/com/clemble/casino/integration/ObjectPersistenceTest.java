@@ -52,7 +52,7 @@ public class ObjectPersistenceTest extends IntegrationObjectTest implements Appl
         ScheduledGame savedScheduledGame = gameScheduleRepository.saveAndFlush(scheduledGame);
         Assert.assertEquals(scheduledGame, savedScheduledGame);
 
-        ScheduledGame foundScheduledGame = gameScheduleRepository.findOne(savedScheduledGame.getSession());
+        ScheduledGame foundScheduledGame = gameScheduleRepository.findOne(savedScheduledGame.getSessionKey());
         Assert.assertEquals(foundScheduledGame, savedScheduledGame);
         Assert.assertEquals(foundScheduledGame, scheduledGame);
     }

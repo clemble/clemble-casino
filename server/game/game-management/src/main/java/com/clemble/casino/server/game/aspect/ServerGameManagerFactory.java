@@ -3,7 +3,6 @@ package com.clemble.casino.server.game.aspect;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.server.game.action.GameManager;
 import org.slf4j.Logger;
@@ -32,7 +31,7 @@ public class ServerGameManagerFactory<GC extends GameConfiguration, C extends Ga
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
         for (GameAspectFactory<?, C, GC> aspectFactory : aspectFactories) {
             GameAspect<?> gameAspect = aspectFactory.construct(configuration, context);
-            LOG.debug("{} processing aspect factory {} with aspect {}", context.getSession(), aspectFactory, gameAspect);
+            LOG.debug("{} processing aspect factory {} with aspect {}", context.getSessionKey(), aspectFactory, gameAspect);
             if(gameAspect != null) {
                 gameAspects.add(aspectFactory.construct(configuration, context));
             }

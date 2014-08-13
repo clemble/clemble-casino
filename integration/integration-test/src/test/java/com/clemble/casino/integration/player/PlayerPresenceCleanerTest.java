@@ -66,7 +66,7 @@ public class PlayerPresenceCleanerTest {
         }
         assertNotNull(presenceChangedEvent);
         assertEquals(presenceChangedEvent.getPresence(), Presence.offline);
-        assertEquals(A.presenceOperations().myPresence().getSession(), GameSessionKey.DEFAULT_SESSION);
+        assertEquals(A.presenceOperations().myPresence().getSessionKey(), GameSessionKey.DEFAULT_SESSION);
         assertEquals(A.presenceOperations().myPresence().getPresence(), Presence.offline);
     }
 

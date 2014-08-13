@@ -53,7 +53,7 @@ public class GameEventTaskExecutor {
         @Override
         public void run() {
             Collection<GameAction> events = eventTask.execute();
-            GameManager<?> manager = GameEventTaskExecutor.this.sessionProcessor.get(eventTask.getSession());
+            GameManager<?> manager = GameEventTaskExecutor.this.sessionProcessor.get(eventTask.getSessionKey());
             for (GameAction event : events) {
                 manager.process(event);
             }

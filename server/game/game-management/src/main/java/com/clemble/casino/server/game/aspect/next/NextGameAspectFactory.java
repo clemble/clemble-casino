@@ -24,10 +24,10 @@ public class NextGameAspectFactory implements GameAspectFactory<GameEndedEvent<?
     @Override
     public GameAspect<GameEndedEvent<?>> construct(GameConfiguration configuration, GameContext<?> context) {
         if (context.getParent() != null) {
-            LOG.debug("{} has a parent, constructig next game aspect", context.getSession());
+            LOG.debug("{} has a parent, constructig next game aspect", context.getSessionKey());
             return new NextGameAspect(context, managerFactory);
         }
-        LOG.debug("{} does not have a parent", context.getSession());
+        LOG.debug("{} does not have a parent", context.getSessionKey());
         return null;
     }
 

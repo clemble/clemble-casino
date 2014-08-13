@@ -19,7 +19,7 @@ public class GameTimeAspectFactory implements RoundGameAspectFactory<GameManagem
 
     @Override
     public GameAspect<GameManagementEvent> construct(RoundGameConfiguration configuration, RoundGameContext context) {
-        return new GameTimeAspect(context.getSession(), configuration, context, eventTaskExecutor);
+        return new GameTimeAspect(context.getSessionKey(), configuration, context, eventTaskExecutor);
     }
 
     @Override

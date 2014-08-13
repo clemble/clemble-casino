@@ -52,12 +52,12 @@ public class GameActionOperationsGetStateITest {
         RoundGameConfiguration configuration = configurations.get(0);
         GameConstruction construction = constructionOperations.constructAutomatch(configuration);
         // Step 3. Checking getState works fine
-        final GameActionOperations<NumberState> aoA = A.gameActionOperations(construction.getSession());
+        final GameActionOperations<NumberState> aoA = A.gameActionOperations(construction.getSessionKey());
         assertNull(aoA.getState());
         // Step 4. Creating construction from B side
         B.gameConstructionOperations().constructAutomatch(configuration);
         // Step 5. Checking value is not null anymore
-        gameScenarios.round(construction.getSession(), A).waitForStart();
+        gameScenarios.round(construction.getSessionKey(), A).waitForStart();
         AsyncCompletionUtils.<GameState>get(new Get<GameState>() {
             @Override
             public GameState get() {

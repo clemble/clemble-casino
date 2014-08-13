@@ -53,7 +53,7 @@ public class PlayerEmulator implements Runnable, GameConfigurationAware {
                 player = playerOperations.createPlayer();
                 // Step 1. Start player emulator
                 GamePlayer playerState = sessionPlayerFactory.construct(specification, player);
-                LOG.info("Registered {} with construction {} ", playerState.playerOperations(), playerState.getSession());
+                LOG.info("Registered {} with construction {} ", playerState.playerOperations(), playerState.getSessionKey());
                 currentPlayer.set(playerState);
                 lastMoved.set(System.currentTimeMillis());
                 actor.play(playerState);

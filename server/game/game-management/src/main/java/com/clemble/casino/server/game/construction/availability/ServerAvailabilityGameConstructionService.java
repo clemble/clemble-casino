@@ -69,7 +69,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         GameConstruction construction = new GameConstruction(id, request);
         construction = constructionRepository.saveAndFlush(construction);
         // Step 4. Sending invitation to opponents
-        playerNotificationService.notify(request.getParticipants(), new PlayerInvitedEvent(construction.getSession(), request));
+        playerNotificationService.notify(request.getParticipants(), new PlayerInvitedEvent(construction.getSessionKey(), request));
         // Step 5. Returning constructed construction
         return construction;
     }
@@ -98,7 +98,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     final private GameConstruction tryReply(InvitationResponseEvent response) {
         try {
             // Step 1. Checking associated construction
-            GameConstruction construction = constructionRepository.findOne(response.getSession());
+            GameConstruction construction = constructionRepository.findOne(response.getSessionKey());
             if (construction == null)
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionDoesNotExistent);
             if (construction.getState() != GameConstructionState.pending)
@@ -120,7 +120,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
                 construction.setState(GameConstructionState.constructed);
                 construction = constructionRepository.saveAndFlush(construction);
                 // Step 6. Notifying Participants
-                playerNotificationService.notify(initiation.getParticipants(), new GameConstructedEvent(construction.getSession()));
+                playerNotificationService.notify(initiation.getParticipants(), new GameConstructedEvent(construction.getSessionKey()));
                 // Step 7. Moving to the next step
                 pendingInitiationService.add(initiation);
             }

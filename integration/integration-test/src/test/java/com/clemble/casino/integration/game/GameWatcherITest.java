@@ -47,7 +47,7 @@ public class GameWatcherITest {
         RoundGamePlayer B = players.get(1);
 
         EventAccumulator<GameSessionAwareEvent> watcherListener = new EventAccumulator<GameSessionAwareEvent>();
-        player.gameConstructionOperations().watch(A.getSession(), watcherListener);
+        player.gameConstructionOperations().watch(A.getSessionKey(), watcherListener);
 
         assertTrue(A.isAlive());
         assertTrue(B.isAlive());

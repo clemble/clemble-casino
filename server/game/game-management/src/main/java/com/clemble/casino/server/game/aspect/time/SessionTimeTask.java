@@ -38,7 +38,7 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
     }
 
     @Override
-    public GameSessionKey getSession() {
+    public GameSessionKey getSessionKey() {
         return session;
     }
 

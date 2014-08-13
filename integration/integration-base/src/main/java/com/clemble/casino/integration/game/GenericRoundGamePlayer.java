@@ -39,8 +39,8 @@ public class GenericRoundGamePlayer<State extends GameState> implements RoundGam
     }
 
     @Override
-    final public GameSessionKey getSession() {
-        return actualPlayer.getSession();
+    final public GameSessionKey getSessionKey() {
+        return actualPlayer.getSessionKey();
     }
 
     @Override

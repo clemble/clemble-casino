@@ -42,8 +42,8 @@ public class InstantGameConstructionTest {
         String B = RandomStringUtils.random(10);
         GameConstruction constructionB = constructionService.construct(new AutomaticGameRequest(B, specification));
         // Step 4. Checking all of them matched
-        Assert.assertEquals(constructionRepository.findOne(constructionA.getSession()).getState(), GameConstructionState.constructed);
-        Assert.assertEquals(constructionRepository.findOne(constructionB.getSession()).getState(), GameConstructionState.constructed);
+        Assert.assertEquals(constructionRepository.findOne(constructionA.getSessionKey()).getState(), GameConstructionState.constructed);
+        Assert.assertEquals(constructionRepository.findOne(constructionB.getSessionKey()).getState(), GameConstructionState.constructed);
     }
 
 }

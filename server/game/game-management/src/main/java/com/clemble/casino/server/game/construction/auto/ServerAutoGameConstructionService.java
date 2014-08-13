@@ -60,7 +60,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
 
         public GameInitiation toInitiation() {
             // Step 1. Creating instant game request
-            return new GameInitiation(construction.getSession(), participants, configuration);
+            return new GameInitiation(construction.getSessionKey(), participants, configuration);
         }
     }
 
@@ -103,7 +103,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
         String id = idGenerator.newId();
         PlayerPresence playerPresence = playerStateManager.getPresence(request.getPlayer());
         if (playerPresence.getPresence() == Presence.playing) {
-            GameConstruction activeConstruction = constructionRepository.findOne(playerPresence.getSession());
+            GameConstruction activeConstruction = constructionRepository.findOne(playerPresence.getSessionKey());
             if (activeConstruction != null)
                 return activeConstruction;
         }

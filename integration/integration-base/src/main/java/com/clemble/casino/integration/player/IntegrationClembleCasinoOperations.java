@@ -114,7 +114,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
             @Override
             public void onEvent(GameInitiatedEvent event) {
                 // Step 1. Fetching session key
-                GameSessionKey sessionKey = event.getSession();
+                GameSessionKey sessionKey = event.getSessionKey();
                 initiationService.confirm(sessionKey.getGame(), sessionKey.getSession(), player);
             }
         });

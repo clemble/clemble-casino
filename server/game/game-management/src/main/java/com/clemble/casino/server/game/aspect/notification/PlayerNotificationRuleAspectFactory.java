@@ -26,7 +26,7 @@ public class PlayerNotificationRuleAspectFactory implements GameAspectFactory<Ga
     public GameAspect<GameManagementEvent> construct(GameConfiguration configuration, GameContext<?> context) {
         switch (configuration.getPrivacyRule()) {
             case everybody:
-                return new PublicNotificationRuleAspect(context.getSession(), PlayerAwareUtils.toPlayerList(context.getPlayerContexts()), notificationService);
+                return new PublicNotificationRuleAspect(context.getSessionKey(), PlayerAwareUtils.toPlayerList(context.getPlayerContexts()), notificationService);
             case players:
                 return new PrivateNotificationRuleAspect(PlayerAwareUtils.toPlayerList(context.getPlayerContexts()), notificationService);
             default:

@@ -38,7 +38,7 @@ public class MatchDrawRuleAspect extends BasicGameAspect<MatchEndedEvent> {
         if (outcome instanceof DrawOutcome) {
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()
-                    .setTransactionKey(context.getSession().toPaymentTransactionKey())
+                    .setTransactionKey(context.getSessionKey().toPaymentTransactionKey())
                     .setTransactionDate(new Date());
             // Step 3. Specifying pot transaction
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {

@@ -20,14 +20,14 @@ public class SystemGameStartedEvent implements SystemEvent, GameSessionAware {
 
     @JsonCreator
     public SystemGameStartedEvent(
-        @JsonProperty("session") GameSessionKey sessionKey,
+        @JsonProperty(GameSessionAware.SESSION_KEY) GameSessionKey sessionKey,
         @JsonProperty("participants") Collection<String> participants) {
         this.sessionKey = sessionKey;
         this.participants = participants;
     }
 
     @Override
-    public GameSessionKey getSession() {
+    public GameSessionKey getSessionKey() {
         return sessionKey;
     }
 

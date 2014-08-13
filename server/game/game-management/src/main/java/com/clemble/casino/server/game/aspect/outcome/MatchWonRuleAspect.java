@@ -39,7 +39,7 @@ public class MatchWonRuleAspect extends BasicGameAspect<MatchEndedEvent> {
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()
-                    .setTransactionKey(context.getSession().toPaymentTransactionKey())
+                    .setTransactionKey(context.getSessionKey().toPaymentTransactionKey())
                     .setTransactionDate(new Date());
             // Step 3. Specifying pot transaction
             transaction.addPaymentOperation(new PaymentOperation(winnerId, Money.create(currency, context.getPot()), Operation.Debit));

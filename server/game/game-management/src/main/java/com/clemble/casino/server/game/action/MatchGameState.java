@@ -48,7 +48,7 @@ public class MatchGameState implements GameState<MatchGameContext, Event> {
 
     @Override
     public GameManagementEvent process(Event event) {
-        LOG.debug("{} match processing {}", context.getSession(), event);
+        LOG.debug("{} match processing {}", context.getSessionKey(), event);
         if(event instanceof GameEndedEvent) {
             context.addOutcome(((GameEndedEvent<?>) event).getOutcome());
             int gamesLeft = configuration.getConfigurations().size() - context.getOutcomes().size();
@@ -70,20 +70,20 @@ public class MatchGameState implements GameState<MatchGameContext, Event> {
                 // Step 2. Checking leader can be reached
                 if (leaderScore > nextAfterLeaderScore && 
                    (nextAfterLeaderScore + gamesLeft < leaderScore)) {
-                    LOG.debug("{} match winner determined {}", context.getSession(), leader.getKey());
-                    return new MatchEndedEvent(context.getSession(), new PlayerWonOutcome(leader.getKey()), context);
+                    LOG.debug("{} match winner determined {}", context.getSessionKey(), leader.getKey());
+                    return new MatchEndedEvent(context.getSessionKey(), new PlayerWonOutcome(leader.getKey()), context);
                 }
                 // Step 3. If no games left mark as a draw
                 if (gamesLeft == 0) {
                     LOG.debug("{} no more games left, considering this as a draw");
-                    return new MatchEndedEvent(context.getSession(), new DrawOutcome(), context);
+                    return new MatchEndedEvent(context.getSessionKey(), new DrawOutcome(), context);
                 }
             }
         }
         // Step 4. Constructing next match initiation
         int gameNum = context.getOutcomes().size();
-        GameSessionKey nextSessionKey = context.getSession().append(String.valueOf(gameNum));
-        LOG.debug("{} launching new game {} with key {}", context.getSession(), gameNum, nextSessionKey);
+        GameSessionKey nextSessionKey = context.getSessionKey().append(String.valueOf(gameNum));
+        LOG.debug("{} launching new game {} with key {}", context.getSessionKey(), gameNum, nextSessionKey);
         context.setCurrentSession(nextSessionKey);
         GameInitiation subInitiation = new GameInitiation(
                 nextSessionKey,
@@ -91,7 +91,7 @@ public class MatchGameState implements GameState<MatchGameContext, Event> {
                 PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
         GameManager<?> manager = managerFactory.start(subInitiation, context);
         // Step 5. Sending Game Changed event
-        return new MatchChangedEvent(context.getSession(), context, nextSessionKey);
+        return new MatchChangedEvent(context.getSessionKey(), context, nextSessionKey);
     }
 
     @Override

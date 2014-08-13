@@ -83,12 +83,12 @@ public class PlayerSessionOperationsITest {
         PlayerSessionOperations sessionOperations = player.sessionOperations();
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
         // Step 2. When player was created he started session
-        PlayerSession currentSession = player.getSession();
+        PlayerSession currentSession = player.getSessionKey();
         Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(currentSession.getSessionId()));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotSessionOwner));
 
-        sessionOperations.endPlayerSession(anotherPlayer.getSession().getSessionId());
+        sessionOperations.endPlayerSession(anotherPlayer.getSessionKey().getSessionId());
     }
 
     @Test
@@ -98,11 +98,11 @@ public class PlayerSessionOperationsITest {
         PlayerSessionOperations sessionOperations = player.sessionOperations();
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
         // Step 2. When player was created he started session
-        PlayerSession currentSession = player.getSession();
+        PlayerSession currentSession = player.getSessionKey();
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PlayerNotSessionOwner));
 
-        Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(anotherPlayer.getSession().getSessionId()));
+        Assert.assertEquals(currentSession, sessionOperations.getPlayerSession(anotherPlayer.getSessionKey().getSessionId()));
     }
 */
 }

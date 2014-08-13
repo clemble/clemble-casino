@@ -43,7 +43,7 @@ public class GameTimeAspectITest {
         RoundGamePlayer playerB = players.get(1);
 
         Assert.assertNotNull(players);
-        Assert.assertEquals(playerA.getSession(), playerB.getSession());
+        Assert.assertEquals(playerA.getSessionKey(), playerB.getSessionKey());
         Assert.assertEquals(players.size(), 2);
 
         playerA.perform(new SelectNumberAction(playerA.getPlayer(), 1));
@@ -70,7 +70,7 @@ public class GameTimeAspectITest {
 //        try {
 //
 //            Assert.assertNotNull(players);
-//            Assert.assertEquals(playerA.getSession(), playerB.getSession());
+//            Assert.assertEquals(playerA.getSessionKey(), playerB.getSessionKey());
 //            Assert.assertEquals(players.size(), 2);
 //
 //            playerA.select(0, 0);

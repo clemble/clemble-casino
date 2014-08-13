@@ -87,7 +87,7 @@ public class ServerPlayerPresenceServiceTest {
         playerPresenceService.markPlaying(player, new GameSessionKey(Game.pic, session));
 
         assertFalse("Player must not be available", playerPresenceService.isAvailable(player));
-        assertEquals("Player active session must match", playerPresenceService.getPresence(player).getSession().getSession(), session);
+        assertEquals("Player active session must match", playerPresenceService.getPresence(player).getSessionKey().getSession(), session);
     }
 
     @Test
@@ -108,7 +108,7 @@ public class ServerPlayerPresenceServiceTest {
         assertFalse("None of the players supposed to be available ", playerPresenceService.areAvailable(players));
         for (String player : players) {
             assertFalse(playerPresenceService.isAvailable(player));
-            assertEquals(playerPresenceService.getPresence(player).getSession().getSession(), session);
+            assertEquals(playerPresenceService.getPresence(player).getSessionKey().getSession(), session);
         }
     }
 

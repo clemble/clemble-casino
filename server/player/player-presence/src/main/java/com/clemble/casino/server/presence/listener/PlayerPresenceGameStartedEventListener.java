@@ -18,7 +18,7 @@ public class PlayerPresenceGameStartedEventListener implements SystemEventListen
     @Override
     public void onEvent(SystemGameEndedEvent event) {
         // TODO make check that player is currently occupied by the game or free
-        presenceService.markPlaying(event.getParticipants(), event.getSession());
+        presenceService.markPlaying(event.getParticipants(), event.getSessionKey());
     }
 
     @Override

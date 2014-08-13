@@ -42,7 +42,7 @@ public class InstantGameConstructionITest {
         GameConstruction constA = constructionOperations.constructAutomatch(specification);
 
         GameConstruction constB = B.gameConstructionOperations().constructAutomatch(specification);
-        assertEquals(constA.getSession(), constB.getSession());
+        assertEquals(constA.getSessionKey(), constB.getSessionKey());
     }
 
 }

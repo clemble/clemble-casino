@@ -109,7 +109,7 @@ public class PlayerAccountOperationsITest {
             assertTrue(cashBbefore.getAmount() >= 0);
 
             RoundGamePlayer<GameState> AvsB = gameOperations.round(Game.num, A, B.getPlayer());
-            RoundGamePlayer<GameState> BvsA = gameOperations.accept(AvsB.getSession(), B);
+            RoundGamePlayer<GameState> BvsA = gameOperations.accept(AvsB.getSessionKey(), B);
 
             AvsB.waitForStart();
             BvsA.waitForStart();

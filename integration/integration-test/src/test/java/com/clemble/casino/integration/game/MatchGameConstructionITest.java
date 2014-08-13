@@ -106,7 +106,7 @@ public class MatchGameConstructionITest {
         AvsB.waitVersion(2);
 
         // Step 3. Checking there is a payment transaction
-        PaymentTransaction transaction = BvsA.playerOperations().paymentOperations().getTransaction(AvsB.getSession());
+        PaymentTransaction transaction = BvsA.playerOperations().paymentOperations().getTransaction(AvsB.getSessionKey());
         assertNotNull(transaction);
 
         Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
@@ -114,7 +114,7 @@ public class MatchGameConstructionITest {
 
         assertEquals(mB.getAmount(), mA.add(300).getAmount());
 
-        GameRecord record = AvsB.playerOperations().gameRecordOperations().get(AvsB.getSession());
+        GameRecord record = AvsB.playerOperations().gameRecordOperations().get(AvsB.getSessionKey());
         assertEquals(record.getEventRecords().size(), 6);
     }
 }

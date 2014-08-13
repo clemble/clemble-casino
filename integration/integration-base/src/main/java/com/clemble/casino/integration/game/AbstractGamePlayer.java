@@ -46,7 +46,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     
 
     public AbstractGamePlayer(final ClembleCasinoOperations player, final GameConstruction construction) {
-        this(player, construction.getSession(), construction.getRequest().getConfiguration().getConfigurationKey());
+        this(player, construction.getSessionKey(), construction.getRequest().getConfiguration().getConfigurationKey());
     }
 
     public AbstractGamePlayer(final ClembleCasinoOperations player, final GameSessionKey sessionKey, final GameConfigurationKey configurationKey) {
@@ -77,7 +77,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    final public GameSessionKey getSession() {
+    final public GameSessionKey getSessionKey() {
         return sessionKey;
     }
 
@@ -150,7 +150,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
 
     @Override
     final public GamePlayer waitForStart(long timeout) {
-        System.out.println("gp >> " + getPlayer() + " >> " + getSession() + " >> wait for start");
+        System.out.println("gp >> " + getPlayer() + " >> " + getSessionKey() + " >> wait for start");
         long expirationTime = timeout > 0 ? System.currentTimeMillis() + timeout : Long.MAX_VALUE;
         synchronized (versionLock) {
             while (keepAlive.get() && getVersion() < 0 && expirationTime > System.currentTimeMillis()) {
@@ -166,7 +166,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
             }
         }
         if (getVersion() < 0) {
-            System.out.println("gp >> " + getPlayer() + " >> " + getSession() + " >> start failed");
+            System.out.println("gp >> " + getPlayer() + " >> " + getSessionKey() + " >> start failed");
             throw new RuntimeException(player.getPlayer() + " " + sessionKey + " was not started after " + timeout);
         }
         return this;

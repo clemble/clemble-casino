@@ -58,10 +58,10 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         // Step 1. Sanity check
         if (initiation == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.ServerError);
-        if (sessionToInitiation.containsKey(initiation.getSession()))
+        if (sessionToInitiation.containsKey(initiation.getSessionKey()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.ServerError);
         // Step 2. Adding to internal cache
-        final GameSessionKey sessionKey = initiation.getSession();
+        final GameSessionKey sessionKey = initiation.getSessionKey();
         executorService.schedule(new Runnable() {
             @Override
             public void run() {
@@ -79,7 +79,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
                 }
             }
         }, CANCEL_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        sessionToInitiation.put(initiation.getSession(), new ImmutablePair<GameInitiation, Set<String>>(initiation, new ConcurrentSkipListSet<String>()));
+        sessionToInitiation.put(initiation.getSessionKey(), new ImmutablePair<GameInitiation, Set<String>>(initiation, new ConcurrentSkipListSet<String>()));
         // Step 3. Sending notification to the players, that they need to confirm
         notificationService.notify(initiation.getParticipants(), new GameInitiatedEvent(initiation));
     }
@@ -103,7 +103,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
             // Step 3. Checking everybody confirmed
             if (confirmations.size() == initiation.getParticipants().size()) {
                 sessionToInitiation.remove(sessionKey);
-                if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSession())) {
+                if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSessionKey())) {
                     LOG.trace("{} successfully updated presences, starting a new game", sessionKey);
                     managerFactory.start(initiation, null);
                 } else {

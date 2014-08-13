@@ -19,13 +19,13 @@ public class SystemGameEndedEvent implements SystemEvent, GameSessionAware {
     final private Collection<String> participants;
 
     @JsonCreator
-    public SystemGameEndedEvent(@JsonProperty("session") GameSessionKey sessionKey, @JsonProperty("participants") Collection<String> participants) {
+    public SystemGameEndedEvent(@JsonProperty(GameSessionAware.SESSION_KEY) GameSessionKey sessionKey, @JsonProperty("participants") Collection<String> participants) {
         this.sessionKey = sessionKey;
         this.participants = participants;
     }
 
     @Override
-    public GameSessionKey getSession() {
+    public GameSessionKey getSessionKey() {
         return sessionKey;
     }
 

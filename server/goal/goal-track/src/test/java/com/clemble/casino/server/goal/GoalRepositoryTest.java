@@ -30,7 +30,7 @@ public class GoalRepositoryTest {
 
     @Test
     public void testFindByPatient(){
-        Goal ga = new Goal(new GoalKey("A", "A"), "A", "A", new Date(System.currentTimeMillis()), GoalState.pending, new Bid("A", "A", Money.create(Currency.DEFAULT, 50), Money.create(Currency.DEFAULT, 50)));
+        Goal ga = new Goal(new GoalKey("A", "A"), "A", "A", new Date(System.currentTimeMillis()), GoalState.pending, new Bid("A", "A", Money.create(Currency.DEFAULT, 50)));
         goalRepository.save(ga);
         Assert.assertEquals(goalRepository.findByPlayer("A").iterator().next(), ga);
     }

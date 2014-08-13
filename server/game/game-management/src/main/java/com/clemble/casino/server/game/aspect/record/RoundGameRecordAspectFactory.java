@@ -2,10 +2,7 @@ package com.clemble.casino.server.game.aspect.record;
 
 import com.clemble.casino.event.GameEvent;
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 import com.clemble.casino.server.repository.game.GameRecordRepository;
@@ -24,7 +21,7 @@ public class RoundGameRecordAspectFactory implements GameAspectFactory<GameEvent
 
     @Override
     public GameAspect<GameEvent> construct(GameConfiguration configuration, GameContext<?> context) {
-        return new GameRecordEventAspect(context.getSession(), recordRepository);
+        return new GameRecordEventAspect(context.getSessionKey(), recordRepository);
     }
 
     @Override

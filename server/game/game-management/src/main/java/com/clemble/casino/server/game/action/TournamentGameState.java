@@ -43,12 +43,12 @@ public class TournamentGameState implements GameState<TournamentGameContext, Eve
         // Step 1. Calculating number of levels
         int numLevels = Double.valueOf(Math.log(players.size()) / Math.log(configuration.getNumberRule().getMinPlayers())).intValue();
         for(int i = 0; i < numLevels; i++)
-            levels.add(new TournamentLevel(context.getSession().append(TOURNAME_SEPARATOR + i), configuration.getConfiguration(), context));
+            levels.add(new TournamentLevel(context.getSessionKey().append(TOURNAME_SEPARATOR + i), configuration.getConfiguration(), context));
         TournamentLevel tournamentLevel = levels.get(levels.size() - 1);
         // Step 2. Deviding in groups
         int groupSize = configuration.getConfiguration().getNumberRule().getMinPlayers();
         for(int i = 0; i < players.size(); i++) {
-            tournamentLevel.add(i / groupSize,new TournamentLeaf(players.get(i), context.getSession(), null));
+            tournamentLevel.add(i / groupSize,new TournamentLeaf(players.get(i), context.getSessionKey(), null));
         }
     }
 
@@ -59,22 +59,22 @@ public class TournamentGameState implements GameState<TournamentGameContext, Eve
     public GameManagementEvent process(Event event) {
         if (event instanceof GameEndedEvent) {
             // Step 0. Reading session key and outcome
-            GameSessionKey sessionKey = ((GameEndedEvent) event).getContext().getSession();
+            GameSessionKey sessionKey = ((GameEndedEvent) event).getContext().getSessionKey();
             GameOutcome outcome = ((GameEndedEvent<?>) event).getOutcome();
             TournamentGameContext leafContext = (TournamentGameContext) ((GameEndedEvent<?>) event).getContext().getParent();
             if (outcome instanceof PlayerWonOutcome) {
                 String leader = ((PlayerWonOutcome) outcome).getWinner();
                 TournamentLeaf leaf = leafContext.getLeaf();
-                String sessionStr = leafContext.getSession().getSession();
+                String sessionStr = leafContext.getSessionKey().getSession();
                 // Step 1. Reading group and level
                 int firstSeparator = sessionStr.indexOf(TOURNAME_SEPARATOR);
                 int lastSeparator = sessionStr.lastIndexOf(TOURNAME_SEPARATOR);
                 int level = Integer.valueOf(sessionStr.substring(firstSeparator, lastSeparator));
                 int group = Integer.valueOf(sessionStr.substring(lastSeparator));
-                TournamentLeaf finalLeaf = new TournamentLeaf(((PlayerWonOutcome) outcome).getWinner(), leaf.getSession(), leaf.getLeafs());
+                TournamentLeaf finalLeaf = new TournamentLeaf(((PlayerWonOutcome) outcome).getWinner(), leaf.getSessionKey(), leaf.getLeafs());
                 // Step 2. Processing level & group
                 if (level == 0) {
-                    return new TournamentEndedEvent(context.getSession(), outcome, context);
+                    return new TournamentEndedEvent(context.getSessionKey(), outcome, context);
                 } else {
                     // Step 3. Creating final leaf
                     Entry<Integer, Integer> levToGroup = new ImmutablePair<>(level, group);

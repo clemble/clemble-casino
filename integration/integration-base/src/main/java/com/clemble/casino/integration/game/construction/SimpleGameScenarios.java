@@ -142,7 +142,7 @@ public class SimpleGameScenarios implements GameScenarios {
         // Step 2. Creating availability game request
         GameConstruction construction = players.get(0).gameConstructionOperations().constructAvailability(configuration, participants);
         gamePlayers.add(playerFactory.<T>construct(players.get(0), construction));
-        GameSessionKey sessionKey = construction.getSession();
+        GameSessionKey sessionKey = construction.getSessionKey();
         for (int i = 1; i < numPlayers; i++) {
             GameConstruction gameConstruction = players.get(i).gameConstructionOperations().accept(sessionKey);
             T gamePlayer = playerFactory.construct(players.get(i), gameConstruction);

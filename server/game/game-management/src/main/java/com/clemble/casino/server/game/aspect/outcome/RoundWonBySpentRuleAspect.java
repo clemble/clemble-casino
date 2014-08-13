@@ -42,7 +42,7 @@ public class RoundWonBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()
-                    .setTransactionKey(context.getSession().toPaymentTransactionKey())
+                    .setTransactionKey(context.getSessionKey().toPaymentTransactionKey())
                     .setTransactionDate(new Date());
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();

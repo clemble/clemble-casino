@@ -25,7 +25,7 @@ public class MatchGameSecurityAspect extends BasicGameAspect<Event> {
         if (!(event instanceof GameEndedEvent)) // TODO replace with Clemble errors
             throw new IllegalArgumentException();
         // Step 2. Checking game relates to the curently active game
-        GameSessionKey sessionKey = ((GameEndedEvent<?>) event).getContext().getSession();
+        GameSessionKey sessionKey = ((GameEndedEvent<?>) event).getContext().getSessionKey();
         if (!context.getCurrentSession().equals(sessionKey))
             throw new IllegalArgumentException();
     }

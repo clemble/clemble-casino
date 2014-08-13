@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGameState;
 import com.clemble.casino.game.action.GameAction;
@@ -59,13 +58,13 @@ public class NumberState implements RoundGameState {
                 for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
-                        resultEvent = new RoundEndedEvent(context.getSession(), this, new PlayerWonOutcome(selectNumberEvent.getPlayer()), context);
+                        resultEvent = new RoundEndedEvent(context.getSessionKey(), this, new PlayerWonOutcome(selectNumberEvent.getPlayer()), context);
                     } else if (selectNumberEvent.getNumber() == maxBet) {
-                        resultEvent = new RoundEndedEvent(context.getSession(), this, new DrawOutcome(), context);
+                        resultEvent = new RoundEndedEvent(context.getSessionKey(), this, new DrawOutcome(), context);
                     }
                 }
             } else {
-                resultEvent = new PlayerMovedEvent(context.getSession(), action.getPlayer());
+                resultEvent = new PlayerMovedEvent(context.getSessionKey(), action.getPlayer());
             }
         } else if (action instanceof SurrenderAction) {
             // Step 1. Fetching player identifier

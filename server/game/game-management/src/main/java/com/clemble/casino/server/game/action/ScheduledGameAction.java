@@ -24,7 +24,7 @@ public class ScheduledGameAction implements GameSessionAware, Comparable<Schedul
     }
 
     @Override
-    public GameSessionKey getSession() {
+    public GameSessionKey getSessionKey() {
         return sessionKey;
     }
 

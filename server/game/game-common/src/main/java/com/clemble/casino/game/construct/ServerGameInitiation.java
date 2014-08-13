@@ -29,7 +29,7 @@ public class ServerGameInitiation implements GameSessionAware, GameConfiguration
     }
 
     @Override
-    public GameSessionKey getSession() {
+    public GameSessionKey getSessionKey() {
         return sessionKey;
     }
 

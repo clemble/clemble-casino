@@ -52,7 +52,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
         final GameRecordOperations recordOperations = playerOperations().gameRecordOperations();
         if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
             GameRecord record = recordOperations.get(sessionKey);
-            Assert.assertNotNull(context.getSession() + " >> " + sessionKey + " >> not found in DB", record);
+            Assert.assertNotNull(context.getSessionKey() + " >> " + sessionKey + " >> not found in DB", record);
             synchronized (lock) {
                 if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
                     GameConfigurationKey configurationKey = record.getConfigurationKey();
@@ -74,7 +74,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
 
     @Override
     public GamePlayer giveUp() {
-        playerOperations().gameActionOperations(getSession()).giveUp();
+        playerOperations().gameActionOperations(getSessionKey()).giveUp();
         return this;
     }
 

@@ -88,7 +88,7 @@ public class GameConstructionRepositoryTest {
         anotherConstruction = constructionRepository.saveAndFlush(anotherConstruction);
         Assert.assertNotNull(anotherConstruction.getResponses());
         
-        assertNotEquals(anotherConstruction.getSession(), construction.getSession());
+        assertNotEquals(anotherConstruction.getSessionKey(), construction.getSessionKey());
 
     }
 }

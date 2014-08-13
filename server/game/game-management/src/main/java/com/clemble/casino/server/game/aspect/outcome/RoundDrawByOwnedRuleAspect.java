@@ -42,7 +42,7 @@ public class RoundDrawByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?
         if (outcome instanceof DrawOutcome) {
             // Step 2. Generating payment transaction
             PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(context.getSession().toPaymentTransactionKey())
+                .setTransactionKey(context.getSessionKey().toPaymentTransactionKey())
                 .setTransactionDate(new Date());
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();

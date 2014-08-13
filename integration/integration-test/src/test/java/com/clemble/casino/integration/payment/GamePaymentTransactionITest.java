@@ -55,7 +55,7 @@ public class GamePaymentTransactionITest {
         assertTrue(event instanceof FinishedPaymentEvent);
         // Step 5. Checking transaction key is the same as game construction
         PaymentTransactionKey transactionKey = ((FinishedPaymentEvent) event).getTransactionKey();
-        GameSessionKey sessionKey = A.getSession();
+        GameSessionKey sessionKey = A.getSessionKey();
         assertEquals(sessionKey.getSession(), transactionKey.getTransaction());
         assertEquals(sessionKey.getGame().name(), transactionKey.getSource());
     }

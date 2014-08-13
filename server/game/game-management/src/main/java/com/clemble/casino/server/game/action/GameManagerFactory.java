@@ -75,16 +75,16 @@ public class GameManagerFactory {
         RoundGameState state = stateFactory.constructState(initiation, roundGameContext);
         // Step 2. Saving game record
         GameRecord roundRecord = new GameRecord()
-            .setSession(initiation.getSession())
+            .setSession(initiation.getSessionKey())
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
         roundRecord = recordRepository.saveAndFlush(roundRecord);
         // Step 3. Constructing manager and saving in a session
         GameManager<RoundGameContext> roundManager = roundManagerFactory.create(state, roundConfiguration, roundGameContext);
-        sessionToManager.put(initiation.getSession(), roundManager);
+        sessionToManager.put(initiation.getSessionKey(), roundManager);
         // Step 4. Sending round started event
-        RoundStartedEvent<RoundGameState> startedEvent = new RoundStartedEvent<RoundGameState>(initiation.getSession(), state);
+        RoundStartedEvent<RoundGameState> startedEvent = new RoundStartedEvent<RoundGameState>(initiation.getSessionKey(), state);
         notificationService.notify(initiation.getParticipants(), startedEvent);
         return roundManager;
     }
@@ -105,7 +105,7 @@ public class GameManagerFactory {
         }
         // Step 2. Generating new pot game record
         GameRecord matchGameRecord = new GameRecord()
-            .setSession(initiation.getSession())
+            .setSession(initiation.getSessionKey())
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
@@ -116,11 +116,11 @@ public class GameManagerFactory {
         MatchGameState gameProcessor = new MatchGameState(context, configuration, this);
         GameManager<MatchGameContext> matchGameManager = matchManagerFactory.create(gameProcessor, configuration, context);
         // Step 4. Generating match started event
-        MatchStartedEvent matchStartedEvent = new MatchStartedEvent(initiation.getSession(), context);
+        MatchStartedEvent matchStartedEvent = new MatchStartedEvent(initiation.getSessionKey(), context);
         notificationService.notify(initiation.getParticipants(), matchStartedEvent);
         // Step 5. Processing match started event
         matchGameManager.process(matchStartedEvent);
-        sessionToManager.put(initiation.getSession(), matchGameManager);
+        sessionToManager.put(initiation.getSessionKey(), matchGameManager);
         return matchGameManager;
     }
 

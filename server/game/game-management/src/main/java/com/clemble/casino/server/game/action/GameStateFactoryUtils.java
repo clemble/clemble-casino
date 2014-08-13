@@ -32,7 +32,7 @@ public class GameStateFactoryUtils {
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameStateReCreationFailure);
         }
         // Step 2. Re creating state
-        GameInitiation initiation = new GameInitiation(session.getSession(), session.getPlayers(), (RoundGameConfiguration) configurationRepository.findOne(session.getConfigurationKey()).getConfiguration());
+        GameInitiation initiation = new GameInitiation(session.getSessionKey(), session.getPlayers(), (RoundGameConfiguration) configurationRepository.findOne(session.getConfigurationKey()).getConfiguration());
         // TODO define politics for restart, all time track is lost here
         RoundGameContext context = new RoundGameContext(initiation);
         GameState restoredState = stateFactory.constructState(initiation, context);

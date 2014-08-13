@@ -122,7 +122,7 @@ public class GoalITest {
 
     public void check(ClembleCasinoOperations A, String goalKey, String player) {
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(new GoalKey(player, goalKey), player, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.pending, new Bid(A.getPlayer(), A.getPlayer(), Money.create(Currency.FakeMoney, 40), Money.create(Currency.FakeMoney, 60)));
+        Goal goalToSave = new Goal(new GoalKey(player, goalKey), player, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.pending, new Bid(A.getPlayer(), A.getPlayer(), Money.create(Currency.FakeMoney, 40)));
         // Step 3. Saving and checking goal is valid
         Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
         assertNotNull(savedGoal);

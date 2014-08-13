@@ -88,13 +88,13 @@ public class PlayerPresenceITest {
             });
             // Step 5. Initiating a game between B and C
             RoundGamePlayer<GameState> BtoC = gameScenarios.round(Game.num, B, C.getPlayer());
-            RoundGamePlayer<GameState> CtoB = gameScenarios.accept(BtoC.getSession(), C);
+            RoundGamePlayer<GameState> CtoB = gameScenarios.accept(BtoC.getSessionKey(), C);
             // Step 6. Checking presences
             PlayerPresence Bpresence = BtoApresence.poll(15, TimeUnit.SECONDS);
             PlayerPresence Cpresence = CtoApresence.poll(15, TimeUnit.SECONDS);
             // Step 7. Checking received same session for A and C
-            assertEquals(Bpresence.getSession(), BtoC.getSession());
-            assertEquals(Cpresence.getSession(), CtoB.getSession());
+            assertEquals(Bpresence.getSessionKey(), BtoC.getSessionKey());
+            assertEquals(Cpresence.getSessionKey(), CtoB.getSessionKey());
             assertEquals(BtoApresence.size(), 0);
             assertEquals(CtoApresence.size(), 0);
         } finally {

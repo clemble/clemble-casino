@@ -38,7 +38,7 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, Seriali
     }
 
     public PendingGameInitiation(GameInitiation initiation) {
-        this.sessionKey = initiation.getSession().toString();
+        this.sessionKey = initiation.getSessionKey().toString();
         this.configurationKey = initiation.getConfiguration().getConfigurationKey();
         for (String player : initiation.getParticipants())
             participants.add(new PendingPlayer(player));

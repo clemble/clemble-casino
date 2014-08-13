@@ -8,12 +8,10 @@ import java.util.List;
 
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 
-import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -44,7 +42,7 @@ public class AvailabilityGameConstructionITest {
         ClembleCasinoOperations B = playerOperations.createPlayer();
 
         RoundGamePlayer playerA = gameScenarios.round(Game.num, A, B.getPlayer());
-        B.gameConstructionOperations().accept(playerA.getSession());
+        B.gameConstructionOperations().accept(playerA.getSessionKey());
 
         playerA.waitForStart();
         Assert.assertTrue(playerA.isAlive());
@@ -67,11 +65,11 @@ public class AvailabilityGameConstructionITest {
         RoundGamePlayer AtoB = gameScenarios.round(Game.num, A, B.getPlayer());
         RoundGamePlayer AtoC = gameScenarios.round(Game.num, A, C.getPlayer());
         // Step 3. Accepting A - C game request to start A - C game
-        RoundGamePlayer CtoA = gameScenarios.accept(AtoC.getSession(), C);
+        RoundGamePlayer CtoA = gameScenarios.accept(AtoC.getSessionKey(), C);
         AtoC.waitForStart();
         AtoC.syncWith(CtoA);
         // Step 4. Accepting A - B game request to start A - B game, it should not be started until A - C game finishes
-        RoundGamePlayer BtoA = gameScenarios.accept(AtoB.getSession(), B);
+        RoundGamePlayer BtoA = gameScenarios.accept(AtoB.getSessionKey(), B);
         // Step 4.1 Checking appropriate alive states for A - B game
         assertLivenes(BtoA, false);
         assertLivenes(AtoB, false);
@@ -99,7 +97,7 @@ public class AvailabilityGameConstructionITest {
         ClembleCasinoOperations B = playerOperations.createPlayer();
 
         RoundGamePlayer playerA = gameScenarios.round(Game.num, A, B.getPlayer());
-        GameSessionKey sessionKey = playerA.getSession();
+        GameSessionKey sessionKey = playerA.getSessionKey();
         PlayerAware AtoAresponse = A.gameConstructionOperations().getResponce(sessionKey, A.getPlayer());
         PlayerAware AtoBresponse = A.gameConstructionOperations().getResponce(sessionKey, B.getPlayer());
 
@@ -116,10 +114,10 @@ public class AvailabilityGameConstructionITest {
     private <State extends GameState> void assertLivenes(RoundGamePlayer<State> player, boolean alive) {
         if ((player.isAlive() && !alive) || (!player.isAlive() && alive)) {
             String playerIdentifier = player.playerOperations().getPlayer();
-            GameConstruction construction = player.playerOperations().gameConstructionOperations().getConstruct(player.getSession());
+            GameConstruction construction = player.playerOperations().gameConstructionOperations().getConstruct(player.getSessionKey());
             List<String> opponents = new ArrayList<String>(construction.getResponses().fetchParticipants());
             opponents.remove(playerIdentifier);
-            Assert.fail(player.getState().getVersion() + " " + playerIdentifier + " with opponents " + opponents + " expected "+ (alive ? "to be" : "not to be") + " alive in " + construction.getSession());
+            Assert.fail(player.getState().getVersion() + " " + playerIdentifier + " with opponents " + opponents + " expected "+ (alive ? "to be" : "not to be") + " alive in " + construction.getSessionKey());
         }
     }
 }

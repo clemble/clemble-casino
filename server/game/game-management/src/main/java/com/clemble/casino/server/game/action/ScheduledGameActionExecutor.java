@@ -30,7 +30,7 @@ public class ScheduledGameActionExecutor implements Runnable {
                 scheduledActions.add(action);
                 return;
             }
-            sessionProcessor.get(action.getSession()).process(action.getAction());
+            sessionProcessor.get(action.getSessionKey()).process(action.getAction());
         }
     }
 
