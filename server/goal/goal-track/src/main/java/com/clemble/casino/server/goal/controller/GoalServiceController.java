@@ -44,8 +44,8 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
         // Step 0.3. Checking due date
         if (goal.getDueDate() == null || goal.getDueDate().getTime() < System.currentTimeMillis())
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalDueDateInPast);
-        if (goal.getBid() == null || goal.getBid().getAmount().getAmount() < 0 || !player.equals(goal.getBid().getBidder()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalBidInvalid);
+//        if (goal.getBid() == null || goal.getBid().getAmount().getAmount() < 0 || !player.equals(goal.getBid().getBidder()))
+//            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalBidInvalid);
         // Step 1. Generating saved goal
         Goal goalToSave = goal.cloneWithPlayerAndGoal(player, goalIdGenerator.newId(), GoalState.pending);
         // Step 2. Saving goal for future

@@ -6,6 +6,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.goal.Goal;
 import com.clemble.casino.goal.GoalKey;
 import com.clemble.casino.goal.GoalState;
+import com.clemble.casino.goal.GoalStatus;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
@@ -22,12 +23,13 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.TreeSet;
 
 /**
  * Created by mavarazy on 8/2/14.
@@ -89,7 +91,7 @@ public class GoalITest {
     public void testSavingInMissedState() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.missed, null);
+        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.missed, new TreeSet<GoalStatus>());
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalStateIncorrect));
         // Step 4. Trying to save new value
@@ -100,7 +102,7 @@ public class GoalITest {
     public void testSavingInReachedState() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis()), GoalState.reached, null);
+        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis()), GoalState.reached, new TreeSet<GoalStatus>());
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalStateIncorrect));
         // Step 4. Trying to save new value
@@ -111,7 +113,7 @@ public class GoalITest {
     public void testSavingWithPassedDueDate() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(0), GoalState.pending, null);
+        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(0), GoalState.pending, new TreeSet<GoalStatus>());
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalDueDateInPast));
         // Step 4. Trying to save new value
@@ -122,7 +124,8 @@ public class GoalITest {
 
     public void check(ClembleCasinoOperations A, String goalKey, String player) {
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(new GoalKey(player, goalKey), player, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.pending, new Bid(A.getPlayer(), A.getPlayer(), Money.create(Currency.FakeMoney, 40)));
+        Bid bid = new Bid(A.getPlayer(), A.getPlayer(), Money.create(Currency.FakeMoney, 40));
+        Goal goalToSave = new Goal(new GoalKey(player, goalKey), player, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.pending, new TreeSet<GoalStatus>());
         // Step 3. Saving and checking goal is valid
         Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
         assertNotNull(savedGoal);
