@@ -28,7 +28,7 @@ public class GoalSpringConfiguration {
 
     @Bean
     public IdGenerator goalIdGenerator(JedisPool jedisPool) {
-        return new RedisIdGenerator("GOAL_COUNTER", "P", jedisPool);
+        return new RedisIdGenerator("GOAL_COUNTER", "A", jedisPool);
     }
 
     @Bean

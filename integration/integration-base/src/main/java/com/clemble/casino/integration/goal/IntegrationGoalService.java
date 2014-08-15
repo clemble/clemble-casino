@@ -20,6 +20,11 @@ public class IntegrationGoalService implements GoalService {
     }
 
     @Override
+    public Goal getGoal(String player, String id) {
+        return goalService.getGoal(player, id);
+    }
+
+    @Override
     public Collection<Goal> getGoals(String player) {
         return goalService.getGoals(player);
     }
@@ -45,6 +50,11 @@ public class IntegrationGoalService implements GoalService {
     }
 
     @Override
+    public Goal myGoal(String id) {
+        return goalService.myGoal(player, id);
+    }
+
+    @Override
     public Collection<Goal> myGoals() {
         return goalService.getGoals(player);
     }
@@ -63,4 +73,5 @@ public class IntegrationGoalService implements GoalService {
     public Collection<Goal> myMissedGoals() {
         return goalService.getMissedGoals(player);
     }
+
 }

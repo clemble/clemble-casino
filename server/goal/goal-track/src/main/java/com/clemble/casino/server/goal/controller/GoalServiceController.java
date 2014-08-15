@@ -3,7 +3,9 @@ package com.clemble.casino.server.goal.controller;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.Goal;
+import com.clemble.casino.goal.GoalKey;
 import com.clemble.casino.goal.GoalState;
+import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.goal.service.GoalServiceContract;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.goal.repository.GoalRepository;
@@ -11,6 +13,7 @@ import com.clemble.casino.server.id.IdGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.Path;
 import java.util.Collection;
 
 import static com.clemble.casino.web.mapping.WebMapping.PRODUCES;
@@ -21,7 +24,7 @@ import static com.clemble.casino.goal.GoalWebMapping.*;
  * Created by mavarazy on 8/2/14.
  */
 @RestController
-public class GoalServiceController implements GoalServiceContract, ExternalController {
+public class GoalServiceController implements GoalService, ExternalController {
 
     final private GoalRepository goalRepository;
     final private IdGenerator goalIdGenerator;
@@ -31,6 +34,10 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
         this.goalRepository = goalRepository;
     }
 
+    @Override
+    public Goal addMyGoal(Goal goal) {
+        throw new IllegalAccessError();
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = MY_GOALS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.CREATED)
@@ -52,10 +59,31 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
         return goalRepository.save(goalToSave);
     }
 
+    @Override
+    public Goal myGoal(String id) {
+        throw new IllegalAccessError();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_GOAL, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.OK)
+    public Goal myGoal(@CookieValue("player") String player, @PathVariable("id") String id) {
+        return goalRepository.findOne(new GoalKey(player, id));
+    }
+
+    @Override
+    public Collection<Goal> myGoals() {
+        throw new IllegalAccessError();
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
     public Collection<Goal> myGoals(@CookieValue("player") String player) {
         return goalRepository.findByPlayer(player);
+    }
+
+    @Override
+    public Collection<Goal> myPendingGoals() {
+        throw new IllegalAccessError();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_PENDING, produces = PRODUCES)
@@ -64,12 +92,21 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
         return goalRepository.findByPlayerAndState(player, GoalState.pending);
     }
 
+    @Override
+    public Collection<Goal> myReachedGoals() {
+        throw new IllegalAccessError();
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_REACHED, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
     public Collection<Goal> myReachedGoals(@CookieValue("player") String player) {
         return goalRepository.findByPlayerAndState(player, GoalState.reached);
     }
 
+    @Override
+    public Collection<Goal> myMissedGoals() {
+        throw new IllegalAccessError();
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_MISSED, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
@@ -104,4 +141,12 @@ public class GoalServiceController implements GoalServiceContract, ExternalContr
     public @ResponseBody Collection<Goal> getMissedGoals(@PathVariable("player") String player) {
         return goalRepository.findByPlayerAndState(player, GoalState.missed);
     }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = PLAYER_GOALS_GOAL, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.OK)
+    public Goal getGoal(@PathVariable("player") String player, @PathVariable("id") String id) {
+        return goalRepository.findOne(new GoalKey(player, id));
+    }
+
 }
