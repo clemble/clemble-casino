@@ -2,6 +2,7 @@ package com.clemble.casino.server.goal.spring;
 
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
+import com.clemble.casino.server.goal.repository.GoalStatusHistoryRepository;
 import com.clemble.casino.server.id.IdGenerator;
 import com.clemble.casino.server.id.RedisIdGenerator;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
@@ -32,15 +33,15 @@ public class GoalSpringConfiguration {
     }
 
     @Bean
-    public MongoRepositoryFactory playerGoalRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
+    public MongoRepositoryFactory goalRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
         MongoClient mongoClient = new MongoClient(host, port);
         MongoOperations mongoOperations = new MongoTemplate(mongoClient, "clemble");
         return new MongoRepositoryFactory(mongoOperations);
     }
 
     @Bean
-    public GoalRepository playerGoalRepository(@Qualifier("playerGoalRepositoryFactory") MongoRepositoryFactory playerGoalRepositoryFactory) {
-        return playerGoalRepositoryFactory.getRepository(GoalRepository.class);
+    public GoalRepository playerGoalRepository(@Qualifier("goalRepositoryFactory") MongoRepositoryFactory goalRepositoryFactory) {
+        return goalRepositoryFactory.getRepository(GoalRepository.class);
     }
 
     @Bean

@@ -21,7 +21,7 @@ public class IntegrationGoalService implements GoalService {
     }
 
     @Override
-    public Collection<GoalStatus> myGoalStatuses(String id) {
+    public GoalStatus myGoalStatuses(String id) {
         return goalController.myGoalStatuses(player, id);
     }
 

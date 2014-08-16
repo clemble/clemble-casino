@@ -93,7 +93,7 @@ public class GoalITest {
     public void testSavingInMissedState() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.missed, new TreeSet<GoalStatus>());
+        Goal goalToSave = new Goal(null, null, "Pending A goal", null, new Date(System.currentTimeMillis() + 10_000), GoalState.missed, null);
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalStateIncorrect));
         // Step 4. Trying to save new value
@@ -104,7 +104,7 @@ public class GoalITest {
     public void testSavingInReachedState() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis()), GoalState.reached, new TreeSet<GoalStatus>());
+        Goal goalToSave = new Goal(null, null, "Pending A goal", null, new Date(System.currentTimeMillis()), GoalState.reached, null);
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalStateIncorrect));
         // Step 4. Trying to save new value
@@ -115,7 +115,7 @@ public class GoalITest {
     public void testSavingWithPassedDueDate() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        Goal goalToSave = new Goal(null, null, "Pending A goal", new Date(0), GoalState.pending, new TreeSet<GoalStatus>());
+        Goal goalToSave = new Goal(null, null, "Pending A goal", null, new Date(0), GoalState.pending, null);
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalDueDateInPast));
         // Step 4. Trying to save new value
@@ -126,17 +126,15 @@ public class GoalITest {
     public void testUpdateGoalStatus() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        Goal goal = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)), GoalState.pending, new TreeSet<GoalStatus>());
+        Goal goal = new Goal(null, null, "Pending A goal", null, new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)), GoalState.pending, null);
         // Step 2. Creating goal save
         Goal savedGoal = A.goalOperations().addMyGoal(goal);
-        assertEquals(savedGoal.getStatuses().size(), 0);
         // Step 3. Updating goal status
         GoalStatus status = A.goalOperations().updateMyGoal(savedGoal.getGoalKey().getGoal(), GoalStatus.create("Test Update"));
         // Step 4. Checking goal status updated
         Goal updatedGoal = A.goalOperations().myGoal(savedGoal.getGoalKey().getGoal());
         // Step 5. Checking goal has a new status
-        assertEquals(updatedGoal.getStatuses().size(), 1);
-        assertEquals(updatedGoal.getStatuses().iterator().next().getStatus(), "Test Update");
+        assertEquals(updatedGoal.getStatus().getStatus(), "Test Update");
     }
 
 
@@ -144,7 +142,7 @@ public class GoalITest {
     public void check(ClembleCasinoOperations A, String goalKey, String player) {
         // Step 1. Creating random goal
         Bid bid = new Bid(A.getPlayer(), A.getPlayer(), Money.create(Currency.FakeMoney, 40));
-        Goal goalToSave = new Goal(new GoalKey(player, goalKey), player, "Pending A goal", new Date(System.currentTimeMillis() + 10_000), GoalState.pending, new TreeSet<GoalStatus>());
+        Goal goalToSave = new Goal(new GoalKey(player, goalKey), player, "Pending A goal", null, new Date(System.currentTimeMillis() + 10_000), GoalState.pending, null);
         // Step 3. Saving and checking goal is valid
         Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
         assertNotNull(savedGoal);
