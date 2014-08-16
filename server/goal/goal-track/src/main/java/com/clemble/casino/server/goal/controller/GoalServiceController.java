@@ -5,6 +5,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.Goal;
 import com.clemble.casino.goal.GoalKey;
 import com.clemble.casino.goal.GoalState;
+import com.clemble.casino.goal.GoalStatus;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.goal.service.GoalServiceContract;
 import com.clemble.casino.server.ExternalController;
@@ -37,6 +38,32 @@ public class GoalServiceController implements GoalService, ExternalController {
     @Override
     public Goal addMyGoal(Goal goal) {
         throw new IllegalAccessError();
+    }
+
+    @Override
+    public Collection<GoalStatus> myGoalStatuses(String id) {
+        throw new IllegalArgumentException();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_GOAL_STATUS, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<GoalStatus> myGoalStatuses(@CookieValue("player") String player, @PathVariable("id") String id) {
+        return goalRepository.findOne(new GoalKey(player, id)).getStatuses();
+    }
+
+    @Override
+    public GoalStatus updateMyGoal(String id, GoalStatus status) {
+        throw new IllegalAccessError();
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = MY_GOALS_GOAL_STATUS, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.CREATED)
+    public GoalStatus updateMyGoal(@CookieValue("player") String player, @PathVariable("id") String id, @RequestBody GoalStatus status) {
+        Goal goal = goalRepository.findOne(new GoalKey(player, id));
+        GoalStatus savedStatus = new GoalStatus(status.getStatus());
+        goal.getStatuses().add(savedStatus);
+        goalRepository.save(goal);
+        return savedStatus;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = MY_GOALS, produces = PRODUCES)

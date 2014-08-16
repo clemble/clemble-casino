@@ -1,6 +1,7 @@
 package com.clemble.casino.integration.goal;
 
 import com.clemble.casino.goal.Goal;
+import com.clemble.casino.goal.GoalStatus;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 
@@ -12,66 +13,76 @@ import java.util.Collection;
 public class IntegrationGoalService implements GoalService {
 
     final private String player;
-    final private GoalServiceController goalService;
+    final private GoalServiceController goalController;
 
-    public IntegrationGoalService(String player, GoalServiceController goalService) {
+    public IntegrationGoalService(String player, GoalServiceController goalController) {
         this.player = player;
-        this.goalService = goalService;
+        this.goalController = goalController;
+    }
+
+    @Override
+    public Collection<GoalStatus> myGoalStatuses(String id) {
+        return goalController.myGoalStatuses(player, id);
     }
 
     @Override
     public Goal getGoal(String player, String id) {
-        return goalService.getGoal(player, id);
+        return goalController.getGoal(player, id);
     }
 
     @Override
     public Collection<Goal> getGoals(String player) {
-        return goalService.getGoals(player);
+        return goalController.getGoals(player);
     }
 
     @Override
     public Collection<Goal> getPendingGoals(String player) {
-        return goalService.getPendingGoals(player);
+        return goalController.getPendingGoals(player);
     }
 
     @Override
     public Collection<Goal> getReachedGoals(String player) {
-        return goalService.getReachedGoals(player);
+        return goalController.getReachedGoals(player);
     }
 
     @Override
     public Collection<Goal> getMissedGoals(String player) {
-        return goalService.getMissedGoals(player);
+        return goalController.getMissedGoals(player);
     }
 
     @Override
     public Goal addMyGoal(Goal goal) {
-        return goalService.addMyGoal(player, goal);
+        return goalController.addMyGoal(player, goal);
+    }
+
+    @Override
+    public GoalStatus updateMyGoal(String id, GoalStatus status) {
+        return goalController.updateMyGoal(player, id, status);
     }
 
     @Override
     public Goal myGoal(String id) {
-        return goalService.myGoal(player, id);
+        return goalController.myGoal(player, id);
     }
 
     @Override
     public Collection<Goal> myGoals() {
-        return goalService.getGoals(player);
+        return goalController.getGoals(player);
     }
 
     @Override
     public Collection<Goal> myPendingGoals() {
-        return goalService.getPendingGoals(player);
+        return goalController.getPendingGoals(player);
     }
 
     @Override
     public Collection<Goal> myReachedGoals() {
-        return goalService.getReachedGoals(player);
+        return goalController.getReachedGoals(player);
     }
 
     @Override
     public Collection<Goal> myMissedGoals() {
-        return goalService.getMissedGoals(player);
+        return goalController.getMissedGoals(player);
     }
 
 }
