@@ -60,7 +60,7 @@ public class GameConstructionRepositoryTest {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
-        construction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
+        construction.setSessionKey(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         construction.setState(GameConstructionState.pending);
         construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
@@ -74,14 +74,14 @@ public class GameConstructionRepositoryTest {
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setState(GameConstructionState.pending);
-        construction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
+        construction.setSessionKey(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
         Assert.assertNotNull(construction.getResponses());
 
         GameConstruction anotherConstruction = new GameConstruction(availabilityGameRequest);
-        anotherConstruction.setSession(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
+        anotherConstruction.setSessionKey(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
         anotherConstruction.setState(GameConstructionState.pending);
         anotherConstruction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(anotherConstruction.getResponses());

@@ -10,10 +10,7 @@ import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerSocialAddedEvent implements
-    SystemEvent,
-    ConnectionKeyAware,
-    PlayerAware {
+public class SystemPlayerSocialAddedEvent implements SystemPlayerEvent, ConnectionKeyAware {
 
     /**
      * Generated 06/01/14

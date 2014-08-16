@@ -27,7 +27,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemGameEndedEvent.CHANNEL, value = SystemGameEndedEvent.class),
     @JsonSubTypes.Type(name = SystemPaymentTransactionRequestEvent.CHANNEL, value = SystemPaymentTransactionRequestEvent.class),
     @JsonSubTypes.Type(name = SystemBetCanceledEvent.CHANNEL, value = SystemBetCanceledEvent.class),
-    @JsonSubTypes.Type(name = SystemBetCompletedEvent.CHANNEL, value = SystemBetCompletedEvent.class)
+    @JsonSubTypes.Type(name = SystemBetCompletedEvent.CHANNEL, value = SystemBetCompletedEvent.class),
+    @JsonSubTypes.Type(name = SystemPlayerImageChanged.CHANNEL, value = SystemPlayerImageChanged.class)
 })
 public interface SystemEvent extends Event {
 

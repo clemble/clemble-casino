@@ -173,7 +173,7 @@ public class IntegrationObjectTest {
             @Override
             public GameConstruction generate() {
                 return new GameConstruction()
-                        .setSession(new GameSessionKey(Game.pic, "0"))
+                        .setSessionKey(new GameSessionKey(Game.pic, "0"))
                         .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT))
                         .setResponses(new ActionLatch().expectNext(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), InvitationResponseEvent.class))
                         .setState(GameConstructionState.pending);

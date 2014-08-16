@@ -7,7 +7,7 @@ import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerPresenceChangedEvent implements SystemEvent, PlayerAware {
+public class SystemPlayerPresenceChangedEvent implements SystemPlayerEvent {
 
     /**
      * Generated 13/12/13

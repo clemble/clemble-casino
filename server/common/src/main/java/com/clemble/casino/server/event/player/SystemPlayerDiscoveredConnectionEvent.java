@@ -5,7 +5,7 @@ import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SystemPlayerDiscoveredConnectionEvent implements PlayerAware, SystemEvent {
+public class SystemPlayerDiscoveredConnectionEvent implements SystemPlayerEvent {
 
     final public static String CHANNEL = "discovered";
 

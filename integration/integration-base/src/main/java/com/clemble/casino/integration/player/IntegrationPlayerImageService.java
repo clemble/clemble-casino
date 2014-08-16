@@ -18,7 +18,7 @@ public class IntegrationPlayerImageService implements PlayerImageService {
 
     @Override
     public byte[] myImage() {
-        return imageService.myImage(player);
+        return imageService.myImage();
     }
 
     @Override

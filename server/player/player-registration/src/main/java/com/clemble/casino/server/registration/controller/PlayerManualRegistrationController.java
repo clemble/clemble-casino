@@ -4,9 +4,11 @@ import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
+import com.clemble.casino.server.event.player.SystemPlayerImageChanged;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
 import com.clemble.casino.server.id.IdGenerator;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
+import com.clemble.casino.server.registration.service.GravatarService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -140,6 +142,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         // Step 1. Create new credentials
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(player);
         playerCredentials = playerCredentialRepository.save(playerCredentials);
+        notificationService.notify(new SystemPlayerImageChanged(player, GravatarService.toRedirect(playerCredentials.getEmail())));
         // Step 2. Specifying player type
         // TODO move to registration listener playerProfile.setType(PlayerType.free);
         // Step 3. Create new token
