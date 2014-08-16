@@ -1,6 +1,7 @@
 package com.clemble.casino.integration.goal;
 
 import com.clemble.casino.goal.Goal;
+import com.clemble.casino.goal.GoalRequest;
 import com.clemble.casino.goal.GoalStatus;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
@@ -51,7 +52,7 @@ public class IntegrationGoalService implements GoalService {
     }
 
     @Override
-    public Goal addMyGoal(Goal goal) {
+    public Goal addMyGoal(GoalRequest goal) {
         return goalController.addMyGoal(player, goal);
     }
 

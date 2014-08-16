@@ -1,8 +1,11 @@
 package com.clemble.casino.server.goal.spring;
 
+import com.clemble.casino.bet.BetSpecification;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.goal.repository.GoalStatusHistoryRepository;
+import com.clemble.casino.server.goal.service.BidCalculator;
+import com.clemble.casino.server.goal.service.SpecificationBidCalculator;
 import com.clemble.casino.server.id.IdGenerator;
 import com.clemble.casino.server.id.RedisIdGenerator;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
@@ -45,8 +48,13 @@ public class GoalSpringConfiguration {
     }
 
     @Bean
-    public GoalServiceController playerGoalController(@Qualifier("goalIdGenerator") IdGenerator goalIdGenerator,GoalRepository goalRepository) {
-        return new GoalServiceController(goalIdGenerator, goalRepository);
+    public BidCalculator bidCalculator() {
+        return new SpecificationBidCalculator(new BetSpecification(Long.MAX_VALUE, 10, 20));
+    }
+
+    @Bean
+    public GoalServiceController playerGoalController(@Qualifier("goalIdGenerator") IdGenerator goalIdGenerator, BidCalculator bidCalculator, GoalRepository goalRepository) {
+        return new GoalServiceController(goalIdGenerator, bidCalculator, goalRepository);
     }
 
 }

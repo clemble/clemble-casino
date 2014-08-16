@@ -1,20 +1,20 @@
 package com.clemble.casino.server.goal.controller;
 
+import com.clemble.casino.bet.Bid;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.goal.Goal;
-import com.clemble.casino.goal.GoalKey;
-import com.clemble.casino.goal.GoalState;
-import com.clemble.casino.goal.GoalStatus;
+import com.clemble.casino.goal.*;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.goal.repository.GoalRepository;
+import com.clemble.casino.server.goal.service.BidCalculator;
 import com.clemble.casino.server.id.IdGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static com.clemble.casino.web.mapping.WebMapping.PRODUCES;
 import static com.clemble.casino.goal.GoalWebMapping.*;
@@ -26,16 +26,18 @@ import static com.clemble.casino.goal.GoalWebMapping.*;
 @RestController
 public class GoalServiceController implements GoalService, ExternalController {
 
-    final private GoalRepository goalRepository;
     final private IdGenerator goalIdGenerator;
+    final private GoalRepository goalRepository;
+    final private BidCalculator bidCalculator;
 
-    public GoalServiceController(IdGenerator idGenerator, GoalRepository goalRepository) {
+    public GoalServiceController(IdGenerator idGenerator, BidCalculator bidCalculator, GoalRepository goalRepository) {
         this.goalIdGenerator = idGenerator;
+        this.bidCalculator = bidCalculator;
         this.goalRepository = goalRepository;
     }
 
     @Override
-    public Goal addMyGoal(Goal goal) {
+    public Goal addMyGoal(GoalRequest goal) {
         throw new IllegalAccessError();
     }
 
@@ -67,27 +69,25 @@ public class GoalServiceController implements GoalService, ExternalController {
 
     @RequestMapping(method = RequestMethod.POST, value = MY_GOALS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.CREATED)
-    public Goal addMyGoal(@CookieValue("player") String player, @RequestBody Goal goal) {
+    public Goal addMyGoal(@CookieValue("player") String player, @RequestBody GoalRequest goal) {
         // Step 0.1. Checking player is valid
-        if (goal.getGoalKey() != null && goal.getGoalKey().getPlayer() != null && !goal.getGoalKey().getPlayer().equals(player))
+        if ((goal.getPlayer() != null && !goal.getPlayer().equals(player)))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalPlayerIncorrect);
-        // Step 0.2. Checking state is pending or null
-        if (goal.getState() != null && !GoalState.pending.equals(goal.getState()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalStateIncorrect);
         // Step 0.3. Checking due date
-        if (goal.getDueDate() == null || goal.getDueDate().getTime() < System.currentTimeMillis())
+        if (goal.getTimeInDays() <= 0)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalDueDateInPast);
-//        if (goal.getBid() == null || goal.getBid().getAmount().getAmount() < 0 || !player.equals(goal.getBid().getBidder()))
-//            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalBidInvalid);
         // Step 1. Generating saved goal
+        Date startDate = new Date();
+        Bid bid = bidCalculator.calculate(goal);
         Goal goalToSave = new Goal(
             new GoalKey(player, goalIdGenerator.newId()),
             player,
-            goal.getDescription(),
-            new Date(),
-            goal.getDueDate(),
+            goal.getGoal(),
+            startDate,
+            new Date(startDate.getTime() + TimeUnit.DAYS.toMillis(goal.getTimeInDays())),
             GoalState.pending,
-            new GoalStatus("Go", new Date())
+            new GoalStatus("Go Champ", new Date()),
+            bid
         );
         // Step 2. Saving goal for future
         return goalRepository.save(goalToSave);
