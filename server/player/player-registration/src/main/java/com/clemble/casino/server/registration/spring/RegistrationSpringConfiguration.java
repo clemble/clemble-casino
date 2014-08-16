@@ -1,9 +1,11 @@
 package com.clemble.casino.server.registration.spring;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
+import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.server.id.IdGenerator;
 import com.clemble.casino.server.id.RedisIdGenerator;
+import com.clemble.casino.server.id.SafeIdGenerator;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.registration.repository.PlayerCredentialRepository;
@@ -37,8 +39,8 @@ import java.security.NoSuchAlgorithmException;
 public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public IdGenerator playerIdGenerator(JedisPool jedisPool) {
-        return new RedisIdGenerator("PLAYER_COUNTER", "P", jedisPool);
+    public IdGenerator playerIdGenerator(PlayerCredentialRepository credentialRepository) {
+        return new SafeIdGenerator<PlayerCredential>(10, credentialRepository);
     }
 
     @Bean
