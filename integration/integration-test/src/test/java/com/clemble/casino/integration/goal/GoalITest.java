@@ -18,6 +18,7 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
+import junit.framework.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -30,6 +31,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mavarazy on 8/2/14.
@@ -118,6 +120,23 @@ public class GoalITest {
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalDueDateInPast));
         // Step 4. Trying to save new value
         A.goalOperations().addMyGoal(goalToSave);
+    }
+
+    @Test
+    public void testUpdateGoalStatus() {
+        ClembleCasinoOperations A = playerScenarios.createPlayer();
+        // Step 1. Creating random goal
+        Goal goal = new Goal(null, null, "Pending A goal", new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)), GoalState.pending, new TreeSet<GoalStatus>());
+        // Step 2. Creating goal save
+        Goal savedGoal = A.goalOperations().addMyGoal(goal);
+        assertEquals(savedGoal.getStatuses().size(), 0);
+        // Step 3. Updating goal status
+        GoalStatus status = A.goalOperations().updateMyGoal(savedGoal.getGoalKey().getGoal(), GoalStatus.create("Test Update"));
+        // Step 4. Checking goal status updated
+        Goal updatedGoal = A.goalOperations().myGoal(savedGoal.getGoalKey().getGoal());
+        // Step 5. Checking goal has a new status
+        assertEquals(updatedGoal.getStatuses().size(), 1);
+        assertEquals(updatedGoal.getStatuses().iterator().next().getStatus(), "Test Update");
     }
 
 

@@ -60,7 +60,7 @@ public class GoalServiceController implements GoalService, ExternalController {
     @ResponseStatus(HttpStatus.CREATED)
     public GoalStatus updateMyGoal(@CookieValue("player") String player, @PathVariable("id") String id, @RequestBody GoalStatus status) {
         Goal goal = goalRepository.findOne(new GoalKey(player, id));
-        GoalStatus savedStatus = new GoalStatus(status.getStatus());
+        GoalStatus savedStatus = GoalStatus.create(status.getStatus());
         goal.getStatuses().add(savedStatus);
         goalRepository.save(goal);
         return savedStatus;
