@@ -33,7 +33,7 @@ public class GoalRepositoryTest {
     public void testFindByPatient(){
         Bid bid = new Bid(Money.create(Currency.DEFAULT, 50), Money.create(Currency.DEFAULT, 60));
         String player = RandomStringUtils.random(5);
-        Goal ga = new Goal(new GoalKey(player, "A"), player, "A", null, new Date(System.currentTimeMillis()), GoalState.pending, null, bid);
+        Goal ga = new Goal(new GoalKey(player, "A"), player, player, "A", null, new Date(System.currentTimeMillis()), GoalState.pending, null, bid);
         goalRepository.save(ga);
         Assert.assertEquals(goalRepository.findByPlayer(player).iterator().next(), ga);
     }

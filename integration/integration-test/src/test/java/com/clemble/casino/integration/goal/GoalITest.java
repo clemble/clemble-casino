@@ -1,6 +1,5 @@
 package com.clemble.casino.integration.goal;
 
-import com.clemble.casino.bet.PlayerBid;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.goal.*;
@@ -13,7 +12,6 @@ import static org.junit.Assert.assertNotEquals;
 
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -21,13 +19,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mavarazy on 8/2/14.
@@ -90,7 +84,7 @@ public class GoalITest {
     public void testSavingInMissedState() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        GoalRequest goalToSave = new GoalRequest(null, "Pending A goal", 7, Money.create(Currency.FakeMoney, 100));
+        GoalRequest goalToSave = new GoalRequest(null, null, "Pending A goal", 7, Money.create(Currency.FakeMoney, 100));
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalStateIncorrect));
         // Step 4. Trying to save new value
@@ -102,7 +96,7 @@ public class GoalITest {
     public void testSavingInReachedState() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        GoalRequest goalToSave = new GoalRequest(null, "Pending A goal", 0, Money.create(Currency.FakeMoney, 100));
+        GoalRequest goalToSave = new GoalRequest(null, null,  "Pending A goal", 0, Money.create(Currency.FakeMoney, 100));
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalStateIncorrect));
         // Step 4. Trying to save new value
@@ -113,7 +107,7 @@ public class GoalITest {
     public void testSavingWithPassedDueDate() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        GoalRequest goalToSave = new GoalRequest(null, "Pending A goal", 0, Money.create(Currency.FakeMoney, 100));
+        GoalRequest goalToSave = new GoalRequest(null, null, "Pending A goal", 0, Money.create(Currency.FakeMoney, 100));
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalDueDateInPast));
         // Step 4. Trying to save new value
@@ -124,7 +118,7 @@ public class GoalITest {
     public void testUpdateGoalStatus() {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 1. Creating random goal
-        GoalRequest goalToSave = new GoalRequest(null, "Pending A goal", 1, Money.create(Currency.FakeMoney, 100));
+        GoalRequest goalToSave = new GoalRequest(null, null, "Pending A goal", 1, Money.create(Currency.FakeMoney, 100));
         // Step 2. Creating goal save
         Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
         // Step 3. Updating goal status
@@ -139,13 +133,13 @@ public class GoalITest {
 
     public void check(ClembleCasinoOperations A, String goalKey, String player) {
         // Step 1. Creating random goal
-        GoalRequest goalToSave = new GoalRequest(player, "Pending A goal", 1, Money.create(Currency.FakeMoney, 100));
+        GoalRequest goalToSave = new GoalRequest(player, player, "Pending A goal", 1, Money.create(Currency.FakeMoney, 100));
         // Step 3. Saving and checking goal is valid
         Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
         assertNotNull(savedGoal);
         assertEquals(savedGoal.getGoalKey().getPlayer(), A.getPlayer());
         assertNotEquals(savedGoal.getGoalKey(), goalKey);
-        assertEquals(savedGoal.getDescription(), goalToSave.getGoal());
+        assertEquals(savedGoal.getGoal(), goalToSave.getGoal());
         assertEquals(savedGoal.getPlayer(), A.getPlayer());
         // Step 4. Checking GoalOperations return goal
         assertEquals(A.goalOperations().myGoals().size(), 1);

@@ -82,6 +82,7 @@ public class GoalServiceController implements GoalService, ExternalController {
         Goal goalToSave = new Goal(
             new GoalKey(player, goalIdGenerator.newId()),
             player,
+            goal.getJudge() != null ? goal.getJudge() : player,
             goal.getGoal(),
             startDate,
             new Date(startDate.getTime() + TimeUnit.DAYS.toMillis(goal.getTimeInDays())),
