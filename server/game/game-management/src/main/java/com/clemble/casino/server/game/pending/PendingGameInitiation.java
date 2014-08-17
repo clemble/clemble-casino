@@ -68,7 +68,7 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, Seriali
         return GameSessionKey.fromString(sessionKey);
     }
 
-    public void setSession(String session) {
+    public void setSessionKey(String session) {
         this.sessionKey = session;
     }
 

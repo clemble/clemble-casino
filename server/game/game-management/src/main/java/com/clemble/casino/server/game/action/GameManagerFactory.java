@@ -75,7 +75,7 @@ public class GameManagerFactory {
         RoundGameState state = stateFactory.constructState(initiation, roundGameContext);
         // Step 2. Saving game record
         GameRecord roundRecord = new GameRecord()
-            .setSession(initiation.getSessionKey())
+            .setSessionKey(initiation.getSessionKey())
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
@@ -105,7 +105,7 @@ public class GameManagerFactory {
         }
         // Step 2. Generating new pot game record
         GameRecord matchGameRecord = new GameRecord()
-            .setSession(initiation.getSessionKey())
+            .setSessionKey(initiation.getSessionKey())
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
