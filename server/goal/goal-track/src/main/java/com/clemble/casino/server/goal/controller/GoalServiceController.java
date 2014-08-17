@@ -71,8 +71,8 @@ public class GoalServiceController implements GoalService, ExternalController {
     @ResponseStatus(HttpStatus.CREATED)
     public Goal addMyGoal(@CookieValue("player") String player, @RequestBody GoalRequest goal) {
         // Step 0.1. Checking player is valid
-        if ((goal.getPlayer() != null && !goal.getPlayer().equals(player)))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalPlayerIncorrect);
+//        if ((goal.getPlayer() != null && !goal.getPlayer().equals(player)))
+//            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalPlayerIncorrect);
         // Step 0.3. Checking due date
         if (goal.getTimeInDays() <= 0)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalDueDateInPast);
