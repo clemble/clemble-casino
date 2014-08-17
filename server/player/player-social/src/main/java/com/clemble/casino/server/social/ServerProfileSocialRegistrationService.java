@@ -2,6 +2,7 @@ package com.clemble.casino.server.social;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.server.event.player.SystemPlayerImageChanged;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.server.ServerService;
@@ -51,6 +52,9 @@ public class ServerProfileSocialRegistrationService implements ServerService {
         playerProfile.setPlayer(socialConnection.getPlayer());
         // Step 2. Notifying of added social connection
         notificationService.notify(new SystemPlayerSocialAddedEvent(socialConnection.getPlayer(), socialConnection.getConnection().getKey()));
+        String imageUrl = adapter.toImageUrl(socialConnection.getConnection());
+        if (imageUrl != null)
+            notificationService.notify(new SystemPlayerImageChanged(socialConnection.getPlayer(), imageUrl));
         // Step 3. Returning social connection
         return playerProfile;
     }

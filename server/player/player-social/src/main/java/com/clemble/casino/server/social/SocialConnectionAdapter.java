@@ -2,6 +2,7 @@ package com.clemble.casino.server.social;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionKey;
 
@@ -26,6 +27,8 @@ public abstract class SocialConnectionAdapter<A> {
     abstract public PlayerProfile fetchPlayerProfile(A api);
 
     abstract public Collection<ConnectionKey> fetchConnections(A api);
+
+    abstract public String toImageUrl(Connection<A> connectionKey);
 
     abstract public ConnectionData toConnectionData(SocialAccessGrant accessGrant);
 

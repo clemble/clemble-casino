@@ -43,8 +43,12 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
             .setFirstName(linkedInProfile.getFirstName())
             .setLastName(linkedInProfile.getLastName())
             .setNickName(linkedInProfile.getFirstName())
-            // TODO restore .setImageUrl(linkedInProfile.getProfilePictureUrl())
             ;
+    }
+
+    @Override
+    public String toImageUrl(Connection<LinkedIn> connection) {
+        return connection.getApi().profileOperations().getUserProfileFull().getProfilePictureUrl();
     }
 
     @Override
