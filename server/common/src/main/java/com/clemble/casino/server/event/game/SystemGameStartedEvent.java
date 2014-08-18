@@ -11,7 +11,7 @@ import java.util.Collection;
 /**
  * Created by mavarazy on 7/4/14.
  */
-public class SystemGameStartedEvent implements SystemEvent, GameSessionAware {
+public class SystemGameStartedEvent implements SystemGameEvent {
 
     final public static String CHANNEL = "game:started";
 

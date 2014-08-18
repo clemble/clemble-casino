@@ -3,6 +3,7 @@ package com.clemble.casino.integration.spring;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clemble.casino.goal.spring.GoalJudgeSpringConfiguration;
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.registration.PlayerToken;
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
@@ -71,6 +72,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         PaymentBonusSpringConfiguration.class,
         PaymentSpringConfiguration.class,
         GoalSpringConfiguration.class,
+        GoalJudgeSpringConfiguration.class,
         IntegrationGameSpringConfiguration.class })
     public static class LocalTestConfiguration {
 

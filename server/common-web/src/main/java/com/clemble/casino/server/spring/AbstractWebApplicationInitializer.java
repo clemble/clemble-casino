@@ -35,6 +35,7 @@ abstract public class AbstractWebApplicationInitializer implements WebApplicatio
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         for(Class<?> configuration: configurations)
             rootContext.register(configuration);
+        rootContext.register(WebCommonSpringConfiguration.class);
         // Step 3. Registering appropriate Dispatcher
         ServletRegistration.Dynamic dispatcher = container.addServlet(getClass().getSimpleName(), new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);

@@ -6,9 +6,11 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.*;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.server.ExternalController;
+import com.clemble.casino.server.event.goal.SystemGoalCreatedEvent;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.goal.service.BidCalculator;
 import com.clemble.casino.server.id.IdGenerator;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +31,13 @@ public class GoalServiceController implements GoalService, ExternalController {
     final private IdGenerator goalIdGenerator;
     final private GoalRepository goalRepository;
     final private BidCalculator bidCalculator;
+    final private SystemNotificationService systemNotificationService;
 
-    public GoalServiceController(IdGenerator idGenerator, BidCalculator bidCalculator, GoalRepository goalRepository) {
+    public GoalServiceController(IdGenerator idGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService systemNotificationService) {
         this.goalIdGenerator = idGenerator;
         this.bidCalculator = bidCalculator;
         this.goalRepository = goalRepository;
+        this.systemNotificationService = systemNotificationService;
     }
 
     @Override
@@ -70,10 +74,7 @@ public class GoalServiceController implements GoalService, ExternalController {
     @RequestMapping(method = RequestMethod.POST, value = MY_GOALS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.CREATED)
     public Goal addMyGoal(@CookieValue("player") String player, @RequestBody GoalRequest goal) {
-        // Step 0.1. Checking player is valid
-//        if ((goal.getPlayer() != null && !goal.getPlayer().equals(player)))
-//            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalPlayerIncorrect);
-        // Step 0.3. Checking due date
+        // Step 0. Checking due date
         if (goal.getTimeInDays() <= 0)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalDueDateInPast);
         // Step 1. Generating saved goal
@@ -91,7 +92,11 @@ public class GoalServiceController implements GoalService, ExternalController {
             bid
         );
         // Step 2. Saving goal for future
-        return goalRepository.save(goalToSave);
+        Goal savedGoal = goalRepository.save(goalToSave);
+        // Step 3. Sending system notification, for newly created goal
+        systemNotificationService.notify(new SystemGoalCreatedEvent(savedGoal));
+        // Step 4. We are done returning saved Goal
+        return savedGoal;
     }
 
     @Override

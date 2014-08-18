@@ -8,6 +8,7 @@ import com.clemble.casino.server.goal.service.BidCalculator;
 import com.clemble.casino.server.goal.service.SpecificationBidCalculator;
 import com.clemble.casino.server.id.IdGenerator;
 import com.clemble.casino.server.id.RedisIdGenerator;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
 import com.mongodb.MongoClient;
@@ -53,8 +54,8 @@ public class GoalSpringConfiguration {
     }
 
     @Bean
-    public GoalServiceController playerGoalController(@Qualifier("goalIdGenerator") IdGenerator goalIdGenerator, BidCalculator bidCalculator, GoalRepository goalRepository) {
-        return new GoalServiceController(goalIdGenerator, bidCalculator, goalRepository);
+    public GoalServiceController playerGoalController(@Qualifier("goalIdGenerator") IdGenerator goalIdGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService notificationService) {
+        return new GoalServiceController(goalIdGenerator, bidCalculator, goalRepository, notificationService);
     }
 
 }
