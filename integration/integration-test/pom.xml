@@ -36,6 +36,10 @@
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
+            <artifactId>goal-judge</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
             <artifactId>player-connection</artifactId>
         </dependency>
         <dependency>
@@ -194,6 +198,13 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>goal-judge</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                            <destFileName>goal-judge.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>payment-bonus</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
@@ -261,6 +272,10 @@
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/goal-track.war</war>
                                     <contextPath>/goal/track</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/goal-judge.war</war>
+                                    <contextPath>/goal/judge</contextPath>
                                 </contextHandler>
                             </contextHandlers>
                             <systemProperties>
