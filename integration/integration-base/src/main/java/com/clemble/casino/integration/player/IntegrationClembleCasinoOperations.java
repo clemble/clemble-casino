@@ -2,6 +2,9 @@ package com.clemble.casino.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
+import com.clemble.casino.goal.service.GoalJudgeInvitationService;
+import com.clemble.casino.integration.goal.IntegrationGoalJudgeInvitationService;
 import com.clemble.casino.integration.goal.IntegrationGoalService;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.integration.payment.IntegrationPlayerAccountService;
@@ -69,6 +72,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     final private GameActionOperationsFactory actionOperationsFactory;
     final private GameRecordOperations recordOperations;
     final private GoalService goalService;
+    final private GoalJudgeInvitationService invitationService;
 
     public IntegrationClembleCasinoOperations(
         final String host,
@@ -89,7 +93,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final GameConfigurationService specificationService,
         final GameActionService actionService,
         final GameRecordService recordService,
-        final GoalServiceController goalService
+        final GoalServiceController goalService,
+        final GoalJudgeInvitationServiceController goalInvitationService
     ) {
         this.host = host;
         this.player = playerIdentity.getPlayer();
@@ -121,6 +126,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
 
         this.recordOperations = new GameRecordTemplate(recordService);
         this.goalService = new IntegrationGoalService(player, goalService);
+        this.invitationService = new IntegrationGoalJudgeInvitationService(player, goalInvitationService);
     }
 
     @Override
@@ -161,6 +167,11 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     @Override
     public GoalService goalOperations() {
         return goalService;
+    }
+
+    @Override
+    public GoalJudgeInvitationService goalInvitationOperations() {
+        return invitationService;
     }
 
     @Override

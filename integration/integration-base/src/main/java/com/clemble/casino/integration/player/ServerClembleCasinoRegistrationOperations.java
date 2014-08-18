@@ -10,6 +10,7 @@ import com.clemble.casino.game.service.AutoGameConstructionService;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.game.service.GameRecordService;
+import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
@@ -54,6 +55,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private GameActionService actionService;
     final private GameRecordService recordService;
     final private GoalServiceController goalService;
+    final private GoalJudgeInvitationServiceController invitationServiceController;
 
     public ServerClembleCasinoRegistrationOperations(
         String host,
@@ -73,7 +75,8 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         GameConfigurationService specificationService,
         GameActionService actionService,
         GameRecordService recordService,
-        GoalServiceController goalService) {
+        GoalServiceController goalService,
+        GoalJudgeInvitationServiceController invitationServiceController) {
         this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
@@ -92,6 +95,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         this.actionService = checkNotNull(actionService);
         this.recordService = checkNotNull(recordService);
         this.goalService = checkNotNull(goalService);
+        this.invitationServiceController = invitationServiceController;
     }
 
     @Override
@@ -127,7 +131,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     }
 
     private ClembleCasinoOperations create(PlayerToken playerIdentity, PlayerCredential credential) {
-        return new IntegrationClembleCasinoOperations(host, objectMapper, playerIdentity, credential, profileOperations, imageService, connectionService, sessionOperations, paymentService, paymentTransactionService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService);
+        return new IntegrationClembleCasinoOperations(host, objectMapper, playerIdentity, credential, profileOperations, imageService, connectionService, sessionOperations, paymentService, paymentTransactionService, listenerOperations, presenceService, gameConstructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService, invitationServiceController);
     }
 
 }
