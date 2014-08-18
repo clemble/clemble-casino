@@ -1,6 +1,8 @@
 package com.clemble.casino.server.event.goal;
 
 import com.clemble.casino.goal.GoalJudgeInvitation;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by mavarazy on 8/18/14.
@@ -12,7 +14,8 @@ public class SystemGoalJudgeInvitationCreatedEvent implements SystemGoalEvent {
 
     final private GoalJudgeInvitation invitation;
 
-    public SystemGoalJudgeInvitationCreatedEvent(GoalJudgeInvitation invitation) {
+    @JsonCreator
+    public SystemGoalJudgeInvitationCreatedEvent(@JsonProperty("invitation") GoalJudgeInvitation invitation) {
         this.invitation = invitation;
     }
 

@@ -29,7 +29,7 @@ public class GoalJudgeInvitationCreatorEventListener implements SystemEventListe
         if (newGoal.getJudge().equals(newGoal.getPlayer()))
             return;
         // Step 3. Creating new GoalJudgeInvitation
-        GoalJudgeInvitation invitationToSave = new GoalJudgeInvitation(newGoal);
+        GoalJudgeInvitation invitationToSave = GoalJudgeInvitation.fromGoal(newGoal);
         GoalJudgeInvitation savedInvitation = invitationRepository.save(invitationToSave);
         // Step 4. Notifying system of new invitation
         notificationService.notify(new SystemGoalJudgeInvitationCreatedEvent(savedInvitation));
