@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -53,4 +54,67 @@ public class GoalJudgeInvitationTest {
         // Step 3. Checking proper duties returned by controller
         Assert.assertEquals(invitationService.myDuties(B).iterator().next(), invitation);
     }
+
+    @Test
+    public void testInvitations() {
+        // Step 1. Generating GoalRequest
+        String A = ObjectGenerator.generate(String.class);
+        String B = ObjectGenerator.generate(String.class);
+        Goal goal = new Goal(new GoalKey(A, ObjectGenerator.generate(String.class)),
+            A,
+            B,
+            "Run 10K",
+            new Date(),
+            new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)),
+            GoalState.pending,
+            new GoalStatus("On my way", new Date()),
+            new Bid(Money.create(Currency.FakeMoney, 10), Money.create(Currency.FakeMoney, 20)));
+        // Step 2. Generating and saving invitation out of this goal request
+        GoalJudgeInvitation invitation = GoalJudgeInvitation.fromGoal(goal);
+        invitationRepository.save(invitation);
+        // Step 3. Checking proper duties returned by controller
+        Assert.assertEquals(invitationService.myInvitations(A).iterator().next(), invitation);
+    }
+
+    @Test
+    public void testInvitationsAndDuties() {
+        // Step 1. Generating GoalRequest
+        String A = ObjectGenerator.generate(String.class);
+        String B = ObjectGenerator.generate(String.class);
+        Goal goalA = new Goal(new GoalKey(A, ObjectGenerator.generate(String.class)),
+            A,
+            B,
+            "Run 10K",
+            new Date(),
+            new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)),
+            GoalState.pending,
+            new GoalStatus("On my way", new Date()),
+            new Bid(Money.create(Currency.FakeMoney, 10), Money.create(Currency.FakeMoney, 20)));
+        // Step 2. Generating and saving invitation out of this goal request
+        GoalJudgeInvitation invitationA = GoalJudgeInvitation.fromGoal(goalA);
+        invitationRepository.save(invitationA);
+        // Step 3. Create goal by B
+        Goal goalB = new Goal(new GoalKey(B, ObjectGenerator.generate(String.class)),
+            B,
+            A,
+            "Run 10K",
+            new Date(),
+            new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)),
+            GoalState.pending,
+            new GoalStatus("On my way", new Date()),
+            new Bid(Money.create(Currency.FakeMoney, 10), Money.create(Currency.FakeMoney, 20)));
+        // Step 4. Generating and saving invitation out of this goal request
+        GoalJudgeInvitation invitationB = GoalJudgeInvitation.fromGoal(goalA);
+        invitationRepository.save(invitationB);
+        // Step 5. Checking proper duties returned by controller
+        Collection<GoalJudgeInvitation> invitations = invitationService.myDutiesAndInvitations(A);
+        Assert.assertTrue(invitations.contains(invitationA));
+        Assert.assertTrue(invitations.contains(invitationB));
+
+        invitations = invitationService.myDutiesAndInvitations(B);
+        Assert.assertTrue(invitations.contains(invitationA));
+        Assert.assertTrue(invitations.contains(invitationB));
+    }
+
+
 }

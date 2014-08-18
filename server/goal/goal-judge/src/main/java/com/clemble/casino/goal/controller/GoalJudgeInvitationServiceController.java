@@ -12,7 +12,9 @@ import static org.springframework.http.HttpStatus.*;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by mavarazy on 8/17/14.
@@ -56,7 +58,10 @@ public class GoalJudgeInvitationServiceController implements GoalJudgeInvitation
     @RequestMapping(method = GET, value = MY_DUTIES_AND_INVITATIONS,produces = WebMapping.PRODUCES)
     @ResponseStatus(OK)
     public Collection<GoalJudgeInvitation> myDutiesAndInvitations(@CookieValue("player") String player) {
-        return invitationRepository.findByPlayerOrJudge(player);
+        List<GoalJudgeInvitation> allInvitations = new ArrayList<>();
+        allInvitations.addAll(invitationRepository.findByPlayer(player));
+        allInvitations.addAll(invitationRepository.findByJudge(player));
+        return allInvitations;
     }
 
     @Override

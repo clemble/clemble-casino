@@ -15,6 +15,4 @@ public interface GoalJudgeInvitationRepository extends MongoRepository<GoalJudge
 
     public List<GoalJudgeInvitation> findByJudge(String player);
 
-    public List<GoalJudgeInvitation> findByPlayerOrJudge(String player);
-
 }
