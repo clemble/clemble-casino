@@ -23,7 +23,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationServiceLi
 import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import com.clemble.casino.server.social.SocialNetworkPopulatorEventListener;
-import com.clemble.casino.server.social.SocialProfileConnectionSignUp;
+import com.clemble.casino.server.social.PlayerSocialKeyGenerator;
 import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
 import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
@@ -99,9 +99,8 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ConnectionSignUp connectionSignUp(SocialConnectionAdapterRegistry socialAdapterRegistry) {
-        ConnectionSignUp signUp = new SocialProfileConnectionSignUp(socialAdapterRegistry);
-        return signUp;
+    public ConnectionSignUp connectionSignUp() {
+        return new PlayerSocialKeyGenerator();
     }
 
     @Bean

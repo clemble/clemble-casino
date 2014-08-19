@@ -2,16 +2,14 @@ package com.clemble.casino.server.social;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.server.KeyGenerator;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.ConnectionSignUp;
 
-public class SocialProfileConnectionSignUp implements ConnectionSignUp {
+public class PlayerSocialKeyGenerator implements ConnectionSignUp, KeyGenerator {
 
-    final private SocialConnectionAdapterRegistry socialAdapterRegistry;
-
-    public SocialProfileConnectionSignUp(final SocialConnectionAdapterRegistry socialAdapterRegistry) {
-        this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
+    public PlayerSocialKeyGenerator() {
     }
 
     @Override

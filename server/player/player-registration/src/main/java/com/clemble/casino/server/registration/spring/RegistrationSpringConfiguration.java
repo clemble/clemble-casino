@@ -6,6 +6,7 @@ import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.server.id.KeyFactory;
 import com.clemble.casino.server.id.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.server.registration.PlayerKeyGenerator;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.registration.repository.PlayerCredentialRepository;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
@@ -37,8 +38,8 @@ import java.security.NoSuchAlgorithmException;
 public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public KeyFactory playerIdGenerator(PlayerCredentialRepository credentialRepository) {
-        return new SafeKeyFactory<PlayerCredential>(10, credentialRepository);
+    public PlayerKeyGenerator playerKeyGenerator(PlayerCredentialRepository credentialRepository) {
+        return new PlayerKeyGenerator(new SafeKeyFactory<PlayerCredential>(10, credentialRepository));
     }
 
     @Bean
@@ -60,13 +61,13 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerManualRegistrationController playerRegistrationController(
-            @Qualifier("playerIdGenerator") KeyFactory idGenerator,
+            @Qualifier("playerKeyGenerator") PlayerKeyGenerator playerKeyGenerator,
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,
             ClembleCasinoValidationService clembleValidationService,
             PlayerTokenFactory playerTokenFactory,
             SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
-        return new PlayerManualRegistrationController(idGenerator, playerTokenFactory, playerCredentialRepository,
+        return new PlayerManualRegistrationController(playerKeyGenerator, playerTokenFactory, playerCredentialRepository,
                 clembleConsumerDetailsService, clembleValidationService, systemNotificationService);
     }
 
