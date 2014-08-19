@@ -1,14 +1,13 @@
 package com.clemble.casino.server.event.bet;
 
 import com.clemble.casino.payment.PaymentTransactionKey;
-import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by mavarazy on 8/9/14.
  */
-public class SystemBetCompletedEvent implements SystemBetEvent, PlayerAware {
+public class SystemBetCompletedEvent implements SystemBetEvent {
 
     final public static String CHANNEL = "bet:completed";
 
@@ -16,7 +15,7 @@ public class SystemBetCompletedEvent implements SystemBetEvent, PlayerAware {
     final private String player;
 
     @JsonCreator
-    public SystemBetCompletedEvent(@JsonProperty("transactionKey") PaymentTransactionKey transactionKey, @JsonProperty("player") String player) {
+    public SystemBetCompletedEvent(@JsonProperty("transactionKey") PaymentTransactionKey transactionKey, @JsonProperty(PLAYER) String player) {
         this.transactionKey = transactionKey;
         this.player = player;
     }

@@ -17,7 +17,7 @@ public class SystemPlayerProfileRegistered implements PlayerProfileAware, System
 
     @JsonCreator
     public SystemPlayerProfileRegistered(
-        @JsonProperty("player") String player,
+        @JsonProperty(PLAYER) String player,
         @JsonProperty("playerProfile") PlayerProfile profile) {
         this.player = player;
         this.profile = profile;

@@ -9,7 +9,7 @@ import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.event.goal.SystemGoalCreatedEvent;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.goal.service.BidCalculator;
-import com.clemble.casino.server.id.IdGenerator;
+import com.clemble.casino.server.id.KeyGenerator;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +28,13 @@ import static com.clemble.casino.goal.GoalWebMapping.*;
 @RestController
 public class GoalServiceController implements GoalService, ExternalController {
 
-    final private IdGenerator goalIdGenerator;
+    final private KeyGenerator goalKeyGenerator;
     final private GoalRepository goalRepository;
     final private BidCalculator bidCalculator;
     final private SystemNotificationService systemNotificationService;
 
-    public GoalServiceController(IdGenerator idGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService systemNotificationService) {
-        this.goalIdGenerator = idGenerator;
+    public GoalServiceController(KeyGenerator idGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService systemNotificationService) {
+        this.goalKeyGenerator = idGenerator;
         this.bidCalculator = bidCalculator;
         this.goalRepository = goalRepository;
         this.systemNotificationService = systemNotificationService;
@@ -81,7 +81,7 @@ public class GoalServiceController implements GoalService, ExternalController {
         Date startDate = new Date();
         Bid bid = bidCalculator.calculate(goal);
         Goal goalToSave = new Goal(
-            new GoalKey(player, goalIdGenerator.newId()),
+            new GoalKey(player, goalKeyGenerator.generate()),
             player,
             goal.getJudge() != null ? goal.getJudge() : player,
             goal.getGoal(),

@@ -1,5 +1,6 @@
 package com.clemble.casino.server.profile;
 
+import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
@@ -7,7 +8,7 @@ import org.springframework.data.annotation.Id;
 /**
  * Created by mavarazy on 8/16/14.
  */
-public class PlayerImageRedirect {
+public class PlayerImageRedirect implements PlayerAware {
 
     @Id
     final private String player;
@@ -15,7 +16,7 @@ public class PlayerImageRedirect {
     final private String smallImage;
 
     @JsonCreator
-    public PlayerImageRedirect(@JsonProperty("player") String player, @JsonProperty("redirect") String redirect, @JsonProperty("smallImage") String smallImage) {
+    public PlayerImageRedirect(@JsonProperty(PLAYER) String player, @JsonProperty("redirect") String redirect, @JsonProperty("smallImage") String smallImage) {
         this.player = player;
         this.redirect = redirect;
         this.smallImage = smallImage;

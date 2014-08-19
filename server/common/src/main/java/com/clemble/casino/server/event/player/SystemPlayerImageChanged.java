@@ -16,7 +16,7 @@ public class SystemPlayerImageChanged implements SystemPlayerEvent {
 
     @JsonCreator
     public SystemPlayerImageChanged(
-        @JsonProperty("player") String player,
+        @JsonProperty(PLAYER) String player,
         @JsonProperty("redirect") String redirect,
         @JsonProperty("smallImage") String smallImage) {
         this.player = player;

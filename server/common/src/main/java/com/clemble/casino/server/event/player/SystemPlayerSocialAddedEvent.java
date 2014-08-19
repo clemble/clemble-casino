@@ -3,10 +3,8 @@ package com.clemble.casino.server.event.player;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.ConnectionKeyAware;
-import com.clemble.casino.server.event.SystemEvent;
 import org.springframework.social.connect.ConnectionKey;
 
-import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,7 +21,7 @@ public class SystemPlayerSocialAddedEvent implements SystemPlayerEvent, Connecti
     final private ConnectionKey connection;
 
     @JsonCreator
-    public SystemPlayerSocialAddedEvent(@JsonProperty("player") String player, @JsonProperty("connection") ConnectionKey connection) {
+    public SystemPlayerSocialAddedEvent(@JsonProperty(PLAYER) String player, @JsonProperty("connection") ConnectionKey connection) {
         this.player = checkNotNull(player);
         this.connection = checkNotNull(connection);
     }

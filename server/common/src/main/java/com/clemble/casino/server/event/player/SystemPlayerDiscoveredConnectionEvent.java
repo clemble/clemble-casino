@@ -1,7 +1,5 @@
 package com.clemble.casino.server.event.player;
 
-import com.clemble.casino.player.PlayerAware;
-import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,7 +16,7 @@ public class SystemPlayerDiscoveredConnectionEvent implements SystemPlayerEvent 
     final private String discovered;
 
     @JsonCreator
-    public SystemPlayerDiscoveredConnectionEvent(@JsonProperty("player") String player, @JsonProperty("discovered") String discovered) {
+    public SystemPlayerDiscoveredConnectionEvent(@JsonProperty(PLAYER) String player, @JsonProperty("discovered") String discovered) {
         this.player = player;
         this.discovered = discovered;
     }

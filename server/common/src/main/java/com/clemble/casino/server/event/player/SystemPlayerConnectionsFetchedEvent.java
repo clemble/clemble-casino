@@ -1,8 +1,6 @@
 package com.clemble.casino.server.event.player;
 
 import com.clemble.casino.player.ConnectionKeyAware;
-import com.clemble.casino.player.PlayerAware;
-import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.social.connect.ConnectionKey;
@@ -21,7 +19,7 @@ public class SystemPlayerConnectionsFetchedEvent implements SystemPlayerEvent, C
     final private Collection<ConnectionKey> connections;
 
     @JsonCreator
-    public SystemPlayerConnectionsFetchedEvent(@JsonProperty("player") String player, @JsonProperty("connectionKey") ConnectionKey connectionKey, @JsonProperty("connections") Collection<ConnectionKey> connections) {
+    public SystemPlayerConnectionsFetchedEvent(@JsonProperty(PLAYER) String player, @JsonProperty("connectionKey") ConnectionKey connectionKey, @JsonProperty("connections") Collection<ConnectionKey> connections) {
         this.player = player;
         this.connectionKey = connectionKey;
         this.connections = connections;

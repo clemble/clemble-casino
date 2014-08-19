@@ -6,12 +6,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.server.event.player.SystemPlayerImageChanged;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
-import com.clemble.casino.server.id.IdGenerator;
+import com.clemble.casino.server.id.KeyGenerator;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.service.GravatarService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
@@ -29,20 +28,19 @@ import com.clemble.casino.server.registration.repository.PlayerCredentialReposit
 import com.clemble.casino.web.mapping.WebMapping;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 @RestController
 public class PlayerManualRegistrationController implements PlayerManualRegistrationService, ExternalController {
     // !!!TODO need a safe restoration process for all Registrations not only for login!!!
 
-    final private IdGenerator playerIdentifierGenerator;
+    final private KeyGenerator playerIdentifierGenerator;
     final private PlayerTokenFactory playerTokenFactory;
     final private PlayerCredentialRepository playerCredentialRepository;
     final private SystemNotificationService notificationService;
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
 
-    public PlayerManualRegistrationController(final IdGenerator playerIdentifierGenerator,
+    public PlayerManualRegistrationController(final KeyGenerator playerIdentifierGenerator,
                                               final PlayerTokenFactory playerTokenFactory,
                                               final PlayerCredentialRepository playerCredentialRepository,
                                               final ClembleConsumerDetailsService playerIdentityRepository,
@@ -88,7 +86,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         validationService.validate(registrationRequest.getPlayerProfile());
         validationService.validate(registrationRequest.getConsumerDetails());
         // Step 2. Creating appropriate PlayerProfile
-        String player = playerIdentifierGenerator.newId();
+        String player = playerIdentifierGenerator.generate();
         // Step 3. Adding initial fields to PlayerProfile
         if (registrationRequest.getPlayerProfile() == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileInvalid);

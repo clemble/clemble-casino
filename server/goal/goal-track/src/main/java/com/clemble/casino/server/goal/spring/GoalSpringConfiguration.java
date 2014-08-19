@@ -3,11 +3,10 @@ package com.clemble.casino.server.goal.spring;
 import com.clemble.casino.bet.BetSpecification;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
-import com.clemble.casino.server.goal.repository.GoalStatusHistoryRepository;
 import com.clemble.casino.server.goal.service.BidCalculator;
 import com.clemble.casino.server.goal.service.SpecificationBidCalculator;
-import com.clemble.casino.server.id.IdGenerator;
-import com.clemble.casino.server.id.RedisIdGenerator;
+import com.clemble.casino.server.id.KeyGenerator;
+import com.clemble.casino.server.id.RedisKeyGenerator;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
@@ -32,8 +31,8 @@ import java.net.UnknownHostException;
 public class GoalSpringConfiguration {
 
     @Bean
-    public IdGenerator goalIdGenerator(JedisPool jedisPool) {
-        return new RedisIdGenerator("GOAL_COUNTER", "A", jedisPool);
+    public KeyGenerator goalIdGenerator(JedisPool jedisPool) {
+        return new RedisKeyGenerator("GOAL_COUNTER", "A", jedisPool);
     }
 
     @Bean
@@ -54,8 +53,8 @@ public class GoalSpringConfiguration {
     }
 
     @Bean
-    public GoalServiceController playerGoalController(@Qualifier("goalIdGenerator") IdGenerator goalIdGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService notificationService) {
-        return new GoalServiceController(goalIdGenerator, bidCalculator, goalRepository, notificationService);
+    public GoalServiceController playerGoalController(@Qualifier("goalIdGenerator") KeyGenerator goalKeyGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService notificationService) {
+        return new GoalServiceController(goalKeyGenerator, bidCalculator, goalRepository, notificationService);
     }
 
 }

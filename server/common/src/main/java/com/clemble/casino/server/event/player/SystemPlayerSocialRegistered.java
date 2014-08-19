@@ -18,7 +18,7 @@ public class SystemPlayerSocialRegistered
     final private SocialConnectionData socialConnectionData;
 
     @JsonCreator
-    public SystemPlayerSocialRegistered(@JsonProperty("player") String player,
+    public SystemPlayerSocialRegistered(@JsonProperty(PLAYER) String player,
         @JsonProperty("socialConnectionData") SocialConnectionData socialConnectionData) {
         this.player = player;
         this.socialConnectionData = socialConnectionData;

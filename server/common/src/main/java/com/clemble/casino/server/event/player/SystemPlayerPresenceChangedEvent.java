@@ -1,9 +1,7 @@
 package com.clemble.casino.server.event.player;
 
-import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,7 +22,7 @@ public class SystemPlayerPresenceChangedEvent implements SystemPlayerEvent {
     }
 
     @JsonCreator
-    public SystemPlayerPresenceChangedEvent(@JsonProperty("player") String player, @JsonProperty("presence") Presence presence) {
+    public SystemPlayerPresenceChangedEvent(@JsonProperty(PLAYER) String player, @JsonProperty("presence") Presence presence) {
         this.player = player;
         this.presence = presence;
     }
