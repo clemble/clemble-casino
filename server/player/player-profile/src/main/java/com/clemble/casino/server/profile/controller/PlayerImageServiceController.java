@@ -36,16 +36,40 @@ public class PlayerImageServiceController implements PlayerImageService {
         getImage(player, response);
     }
 
+    @Override
+    public byte[] mySmallImage() {
+        throw new IllegalAccessError();
+    }
+
+    @RequestMapping(value = MY_IMAGE_SMALL, method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
+    public void mySmallImage(@CookieValue("player") String player, HttpServletResponse response) throws IOException {
+        getSmallImage(player, response);
+    }
 
     public byte[] getImage(String player) {
         throw new IllegalAccessError();
     }
 
-    @RequestMapping(value = PLAYER_IMAGE, method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value = PLAYER_IMAGE, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     public void getImage(@PathVariable("player") String player, HttpServletResponse response) throws IOException {
         // Step 1. Extracting redirect URL
         String redirect = imageRedirectRepository.findOne(player).getRedirect();
+        // Step 2. Sending redirect as a Response
+        response.sendRedirect(redirect);
+    }
+
+    @Override
+    public byte[] getSmallImage(String player) {
+        return new byte[0];
+    }
+
+    @RequestMapping(value = PLAYER_IMAGE_SMALL, method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
+    public void getSmallImage(@PathVariable("player") String player, HttpServletResponse response) throws IOException {
+        // Step 1. Extracting redirect URL
+        String redirect = imageRedirectRepository.findOne(player).getSmallImage();
         // Step 2. Sending redirect as a Response
         response.sendRedirect(redirect);
     }

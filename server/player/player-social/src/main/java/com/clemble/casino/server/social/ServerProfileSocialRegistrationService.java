@@ -8,6 +8,7 @@ import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.server.ServerService;
 import com.clemble.casino.server.event.player.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.apache.commons.lang3.tuple.Pair;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -52,9 +53,9 @@ public class ServerProfileSocialRegistrationService implements ServerService {
         playerProfile.setPlayer(socialConnection.getPlayer());
         // Step 2. Notifying of added social connection
         notificationService.notify(new SystemPlayerSocialAddedEvent(socialConnection.getPlayer(), socialConnection.getConnection().getKey()));
-        String imageUrl = adapter.toImageUrl(socialConnection.getConnection());
+        Pair<String, String> imageUrl = adapter.toImageUrl(socialConnection.getConnection());
         if (imageUrl != null)
-            notificationService.notify(new SystemPlayerImageChanged(socialConnection.getPlayer(), imageUrl));
+            notificationService.notify(new SystemPlayerImageChanged(socialConnection.getPlayer(), imageUrl.getLeft(), imageUrl.getRight()));
         // Step 3. Returning social connection
         return playerProfile;
     }

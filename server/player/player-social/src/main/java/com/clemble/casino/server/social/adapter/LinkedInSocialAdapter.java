@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionKey;
@@ -47,8 +49,10 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
     }
 
     @Override
-    public String toImageUrl(Connection<LinkedIn> connection) {
-        return connection.getApi().profileOperations().getUserProfileFull().getProfilePictureUrl();
+    public Pair<String, String> toImageUrl(Connection<LinkedIn> connection) {
+        String primaryImage = connection.getApi().profileOperations().getUserProfileFull().getProfilePictureUrl();
+        String smallImage = primaryImage;
+        return new ImmutablePair<>(primaryImage, smallImage);
     }
 
     @Override

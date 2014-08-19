@@ -1,5 +1,7 @@
 package com.clemble.casino.server.social.adapter;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionKey;
@@ -41,8 +43,10 @@ public class TwitterSocialAdapter extends SocialConnectionAdapter<Twitter>{
     }
 
     @Override
-    public String toImageUrl(Connection<Twitter> connection) {
-        return connection.getApi().userOperations().getUserProfile().getProfileImageUrl();
+    public Pair<String, String> toImageUrl(Connection<Twitter> connection) {
+        String primaryImage = connection.getApi().userOperations().getUserProfile().getProfileImageUrl();
+        String smallImage = primaryImage + "?size=normal";
+        return new ImmutablePair<>(primaryImage, smallImage);
     }
 
     @Override

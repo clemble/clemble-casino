@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionKey;
@@ -61,8 +63,10 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
     }
 
     @Override
-    public String toImageUrl(Connection<Facebook> connectionKey) {
-        return "http://graph.facebook.com/" + connectionKey.getKey().getProviderUserId() + "/picture";
+    public Pair<String, String> toImageUrl(Connection<Facebook> connectionKey) {
+        String primaryImage = "http://graph.facebook.com/" + connectionKey.getKey().getProviderUserId() + "/picture";
+        String smallImage = primaryImage + "?redirect=0&height=48&type=normal&width=48";
+        return new ImmutablePair<String, String>(primaryImage, smallImage);
     }
 
     @Override

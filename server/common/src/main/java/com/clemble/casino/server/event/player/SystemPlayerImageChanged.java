@@ -12,11 +12,16 @@ public class SystemPlayerImageChanged implements SystemPlayerEvent {
 
     final private String player;
     final private String redirect;
+    final private String smallImage;
 
     @JsonCreator
-    public SystemPlayerImageChanged(@JsonProperty("player") String player, @JsonProperty("redirect") String redirect) {
+    public SystemPlayerImageChanged(
+        @JsonProperty("player") String player,
+        @JsonProperty("redirect") String redirect,
+        @JsonProperty("smallImage") String smallImage) {
         this.player = player;
         this.redirect = redirect;
+        this.smallImage = smallImage;
     }
 
     @Override
@@ -26,6 +31,10 @@ public class SystemPlayerImageChanged implements SystemPlayerEvent {
 
     public String getRedirect() {
         return redirect;
+    }
+
+    public String getSmallImage() {
+        return smallImage;
     }
 
     @Override

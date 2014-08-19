@@ -2,6 +2,7 @@ package com.clemble.casino.server.social;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionKey;
@@ -28,7 +29,7 @@ public abstract class SocialConnectionAdapter<A> {
 
     abstract public Collection<ConnectionKey> fetchConnections(A api);
 
-    abstract public String toImageUrl(Connection<A> connectionKey);
+    abstract public Pair<String, String> toImageUrl(Connection<A> connectionKey);
 
     abstract public ConnectionData toConnectionData(SocialAccessGrant accessGrant);
 

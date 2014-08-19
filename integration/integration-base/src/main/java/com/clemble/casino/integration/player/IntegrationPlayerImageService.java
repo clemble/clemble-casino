@@ -5,6 +5,7 @@ import com.clemble.casino.server.profile.controller.PlayerImageServiceController
 
 /**
  * Created by mavarazy on 7/26/14.
+ * TODO this is effectively non working, make some tests for this functionality
  */
 public class IntegrationPlayerImageService implements PlayerImageService {
 
@@ -22,7 +23,17 @@ public class IntegrationPlayerImageService implements PlayerImageService {
     }
 
     @Override
+    public byte[] mySmallImage() {
+        return imageService.mySmallImage();
+    }
+
+    @Override
     public byte[] getImage(String player) {
         return imageService.getImage(player);
+    }
+
+    @Override
+    public byte[] getSmallImage(String player) {
+        return imageService.getSmallImage(player);
     }
 }

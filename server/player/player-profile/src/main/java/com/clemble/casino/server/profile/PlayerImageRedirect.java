@@ -1,5 +1,7 @@
 package com.clemble.casino.server.profile;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -10,10 +12,13 @@ public class PlayerImageRedirect {
     @Id
     final private String player;
     final private String redirect;
+    final private String smallImage;
 
-    public PlayerImageRedirect(String player, String redirect) {
+    @JsonCreator
+    public PlayerImageRedirect(@JsonProperty("player") String player, @JsonProperty("redirect") String redirect, @JsonProperty("smallImage") String smallImage) {
         this.player = player;
         this.redirect = redirect;
+        this.smallImage = smallImage;
     }
 
     public String getPlayer() {
@@ -22,6 +27,10 @@ public class PlayerImageRedirect {
 
     public String getRedirect() {
         return redirect;
+    }
+
+    public String getSmallImage() {
+        return smallImage;
     }
 
     @Override

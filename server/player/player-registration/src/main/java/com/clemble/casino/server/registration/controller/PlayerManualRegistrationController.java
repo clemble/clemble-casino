@@ -142,7 +142,8 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         // Step 1. Create new credentials
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(player);
         playerCredentials = playerCredentialRepository.save(playerCredentials);
-        notificationService.notify(new SystemPlayerImageChanged(player, GravatarService.toRedirect(playerCredentials.getEmail())));
+        String imageRedirect = GravatarService.toRedirect(playerCredentials.getEmail());
+        notificationService.notify(new SystemPlayerImageChanged(player, imageRedirect, imageRedirect + "?s=48"));
         // Step 2. Specifying player type
         // TODO move to registration listener playerProfile.setType(PlayerType.free);
         // Step 3. Create new token
