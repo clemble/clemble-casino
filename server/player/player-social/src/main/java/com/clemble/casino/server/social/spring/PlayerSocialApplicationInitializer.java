@@ -5,7 +5,7 @@ import com.clemble.casino.server.spring.AbstractWebApplicationInitializer;
 public class PlayerSocialApplicationInitializer extends AbstractWebApplicationInitializer {
 
     public PlayerSocialApplicationInitializer() {
-        super(PlayerSocialWebSpringConfiguration.class);
+        super(PlayerSocialSpringConfiguration.class);
     }
 
 }

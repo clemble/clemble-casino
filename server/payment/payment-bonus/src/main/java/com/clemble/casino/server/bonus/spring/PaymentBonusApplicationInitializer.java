@@ -8,7 +8,7 @@ import com.clemble.casino.server.spring.AbstractWebApplicationInitializer;
 public class PaymentBonusApplicationInitializer extends AbstractWebApplicationInitializer {
 
     public PaymentBonusApplicationInitializer(){
-        super(PaymentBonusWebSpringConfiguration.class);
+        super(PaymentBonusSpringConfiguration.class);
     }
 
 }

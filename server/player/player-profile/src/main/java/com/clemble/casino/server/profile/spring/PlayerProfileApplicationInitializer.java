@@ -14,7 +14,7 @@ import javax.servlet.ServletRegistration;
 public class PlayerProfileApplicationInitializer extends AbstractWebApplicationInitializer {
 
     public PlayerProfileApplicationInitializer() {
-        super(PlayerProfileWebSpringConfiguration.class);
+        super(PlayerProfileSpringConfiguration.class);
     }
 
 }

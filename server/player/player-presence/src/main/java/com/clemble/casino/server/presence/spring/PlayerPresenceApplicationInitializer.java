@@ -8,7 +8,7 @@ import com.clemble.casino.server.spring.AbstractWebApplicationInitializer;
 public class PlayerPresenceApplicationInitializer extends AbstractWebApplicationInitializer {
 
     public PlayerPresenceApplicationInitializer() {
-        super(PlayerPresenceWebSpringConfiguration.class);
+        super(PlayerPresenceSpringConfiguration.class);
     }
 
 }
