@@ -6,14 +6,14 @@ import redis.clients.jedis.JedisPool;
 /**
  * Created by mavarazy on 8/2/14.
  */
-public class RedisKeyGenerator implements KeyGenerator {
+public class RedisKeyFactory implements KeyFactory {
 
     final private String KEY;
     final private String PREFIX;
 
     final private JedisPool jedisPool;
 
-    public RedisKeyGenerator(String key, String prefix, JedisPool jedisPool) {
+    public RedisKeyFactory(String key, String prefix, JedisPool jedisPool) {
         this.KEY = key;
         this.PREFIX = prefix;
         this.jedisPool = jedisPool;

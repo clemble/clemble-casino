@@ -13,8 +13,8 @@ import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
-import com.clemble.casino.server.id.KeyGenerator;
-import com.clemble.casino.server.id.RedisKeyGenerator;
+import com.clemble.casino.server.id.KeyFactory;
+import com.clemble.casino.server.id.RedisKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.repository.game.*;
 import com.clemble.casino.server.spring.common.*;
@@ -55,8 +55,8 @@ import redis.clients.jedis.JedisPool;
 public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public KeyGenerator gameIdGenerator(JedisPool jedisPool) {
-        return new RedisKeyGenerator("GAME_COUNTER", "G", jedisPool);
+    public KeyFactory gameIdGenerator(JedisPool jedisPool) {
+        return new RedisKeyFactory("GAME_COUNTER", "G", jedisPool);
     }
 
     @Bean
@@ -115,7 +115,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ServerAutoGameConstructionService serverAutoGameConstructionService(final @Qualifier("gameIdGenerator") KeyGenerator idGenerator,
+    public ServerAutoGameConstructionService serverAutoGameConstructionService(final @Qualifier("gameIdGenerator") KeyFactory idGenerator,
             final ServerGameInitiationService initiatorService, final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService, final ServerPlayerPresenceService playerStateManager) {
         return new ServerAutoGameConstructionService(idGenerator, initiatorService, constructionRepository, playerLockService, playerStateManager);
@@ -123,7 +123,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
-            @Qualifier("gameIdGenerator") KeyGenerator idGenerator,
+            @Qualifier("gameIdGenerator") KeyFactory idGenerator,
             @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,

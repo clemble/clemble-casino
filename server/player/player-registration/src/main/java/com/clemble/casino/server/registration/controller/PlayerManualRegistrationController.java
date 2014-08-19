@@ -6,7 +6,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.server.event.player.SystemPlayerImageChanged;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
-import com.clemble.casino.server.id.KeyGenerator;
+import com.clemble.casino.server.id.KeyFactory;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.service.GravatarService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
@@ -33,14 +33,14 @@ import javax.servlet.http.HttpServletResponse;
 public class PlayerManualRegistrationController implements PlayerManualRegistrationService, ExternalController {
     // !!!TODO need a safe restoration process for all Registrations not only for login!!!
 
-    final private KeyGenerator playerIdentifierGenerator;
+    final private KeyFactory playerIdentifierGenerator;
     final private PlayerTokenFactory playerTokenFactory;
     final private PlayerCredentialRepository playerCredentialRepository;
     final private SystemNotificationService notificationService;
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
 
-    public PlayerManualRegistrationController(final KeyGenerator playerIdentifierGenerator,
+    public PlayerManualRegistrationController(final KeyFactory playerIdentifierGenerator,
                                               final PlayerTokenFactory playerTokenFactory,
                                               final PlayerCredentialRepository playerCredentialRepository,
                                               final ClembleConsumerDetailsService playerIdentityRepository,

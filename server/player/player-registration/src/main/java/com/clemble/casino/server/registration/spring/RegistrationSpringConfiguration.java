@@ -3,8 +3,8 @@ package com.clemble.casino.server.registration.spring;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
-import com.clemble.casino.server.id.KeyGenerator;
-import com.clemble.casino.server.id.SafeKeyGenerator;
+import com.clemble.casino.server.id.KeyFactory;
+import com.clemble.casino.server.id.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.registration.repository.PlayerCredentialRepository;
@@ -37,8 +37,8 @@ import java.security.NoSuchAlgorithmException;
 public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public KeyGenerator playerIdGenerator(PlayerCredentialRepository credentialRepository) {
-        return new SafeKeyGenerator<PlayerCredential>(10, credentialRepository);
+    public KeyFactory playerIdGenerator(PlayerCredentialRepository credentialRepository) {
+        return new SafeKeyFactory<PlayerCredential>(10, credentialRepository);
     }
 
     @Bean
@@ -60,7 +60,7 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerManualRegistrationController playerRegistrationController(
-            @Qualifier("playerIdGenerator") KeyGenerator idGenerator,
+            @Qualifier("playerIdGenerator") KeyFactory idGenerator,
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,
             ClembleCasinoValidationService clembleValidationService,

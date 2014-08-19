@@ -7,9 +7,10 @@ import com.clemble.casino.goal.*;
 import com.clemble.casino.goal.service.GoalService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.event.goal.SystemGoalCreatedEvent;
+import com.clemble.casino.server.goal.GoalKeyGenerator;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.goal.service.BidCalculator;
-import com.clemble.casino.server.id.KeyGenerator;
+import com.clemble.casino.server.id.KeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +29,12 @@ import static com.clemble.casino.goal.GoalWebMapping.*;
 @RestController
 public class GoalServiceController implements GoalService, ExternalController {
 
-    final private KeyGenerator goalKeyGenerator;
+    final private GoalKeyGenerator goalKeyGenerator;
     final private GoalRepository goalRepository;
     final private BidCalculator bidCalculator;
     final private SystemNotificationService systemNotificationService;
 
-    public GoalServiceController(KeyGenerator idGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService systemNotificationService) {
+    public GoalServiceController(GoalKeyGenerator idGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService systemNotificationService) {
         this.goalKeyGenerator = idGenerator;
         this.bidCalculator = bidCalculator;
         this.goalRepository = goalRepository;
@@ -81,7 +82,7 @@ public class GoalServiceController implements GoalService, ExternalController {
         Date startDate = new Date();
         Bid bid = bidCalculator.calculate(goal);
         Goal goalToSave = new Goal(
-            new GoalKey(player, goalKeyGenerator.generate()),
+            goalKeyGenerator.generate(player),
             player,
             goal.getJudge() != null ? goal.getJudge() : player,
             goal.getGoal(),

@@ -22,7 +22,7 @@ import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
-import com.clemble.casino.server.id.KeyGenerator;
+import com.clemble.casino.server.id.KeyFactory;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.repository.game.GameConstructionRepository;
@@ -74,7 +74,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
 
     final private Map<String, AutomaticGameConstruction> playerConstructions = new ConcurrentHashMap<>();
 
-    final private KeyGenerator idGenerator;
+    final private KeyFactory idGenerator;
 
     final private GameConstructionRepository constructionRepository;
     final private ServerGameInitiationService initiatorService;
@@ -83,7 +83,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
     final private ServerPlayerPresenceService playerStateManager;
 
     public ServerAutoGameConstructionService(
-            final KeyGenerator idGenerator,
+            final KeyFactory idGenerator,
             final ServerGameInitiationService initiatorService,
             final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService,

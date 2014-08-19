@@ -1,6 +1,6 @@
 package com.clemble.casino.server.id;
 
-public interface KeyGenerator {
+public interface KeyFactory {
 
     public String generate();
 

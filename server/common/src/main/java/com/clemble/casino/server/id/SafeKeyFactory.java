@@ -6,14 +6,14 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * Created by mavarazy on 8/16/14.
  */
-public class SafeKeyGenerator<T> implements KeyGenerator {
+public class SafeKeyFactory<T> implements KeyFactory {
 
     // TODO Check SecurityRandom as alternative
 
     final private int size;
     final private CrudRepository<T, String> targetRepository;
 
-    public SafeKeyGenerator(int size, CrudRepository<T, String> targetRepository) {
+    public SafeKeyFactory(int size, CrudRepository<T, String> targetRepository) {
         this.size = size;
         this.targetRepository = targetRepository;
     }
