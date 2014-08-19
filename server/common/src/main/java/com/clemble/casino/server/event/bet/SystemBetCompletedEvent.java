@@ -15,7 +15,7 @@ public class SystemBetCompletedEvent implements SystemBetEvent {
     final private String player;
 
     @JsonCreator
-    public SystemBetCompletedEvent(@JsonProperty("transactionKey") PaymentTransactionKey transactionKey, @JsonProperty(PLAYER) String player) {
+    public SystemBetCompletedEvent(@JsonProperty(TRANSACTION_KEY) PaymentTransactionKey transactionKey, @JsonProperty(PLAYER) String player) {
         this.transactionKey = transactionKey;
         this.player = player;
     }

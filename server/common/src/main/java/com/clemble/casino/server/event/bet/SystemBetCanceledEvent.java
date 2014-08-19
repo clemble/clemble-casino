@@ -15,7 +15,7 @@ public class SystemBetCanceledEvent implements SystemBetEvent {
     final private PaymentTransactionKey transactionKey;
 
     @JsonCreator
-    public SystemBetCanceledEvent(@JsonProperty(PLAYER) String player, @JsonProperty("transactionKey") PaymentTransactionKey transactionKey) {
+    public SystemBetCanceledEvent(@JsonProperty(PLAYER) String player, @JsonProperty(TRANSACTION_KEY) PaymentTransactionKey transactionKey) {
         this.player = player;
         this.transactionKey = transactionKey;
     }
