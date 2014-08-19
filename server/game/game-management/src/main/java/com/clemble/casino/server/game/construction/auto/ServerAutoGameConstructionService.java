@@ -25,7 +25,7 @@ import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.id.KeyFactory;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
-import com.clemble.casino.server.repository.game.GameConstructionRepository;
+import com.clemble.casino.server.game.repository.GameConstructionRepository;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

@@ -4,11 +4,9 @@ import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.event.GameEvent;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.GameEventRecord;
-import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
-import com.clemble.casino.server.repository.game.GameRecordRepository;
+import com.clemble.casino.server.game.repository.GameRecordRepository;
 
 import java.util.Date;
 

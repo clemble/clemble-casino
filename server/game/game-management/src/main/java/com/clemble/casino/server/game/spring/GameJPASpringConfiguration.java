@@ -1,10 +1,8 @@
-package com.clemble.casino.server.spring.game;
+package com.clemble.casino.server.game.spring;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import com.clemble.casino.server.repository.game.MadeMoveRepository;
-import com.clemble.casino.server.repository.game.GameRecordRepository;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -24,7 +22,7 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 
 @Configuration
 @Import(BasicJPASpringConfiguration.class)
-@EnableJpaRepositories(basePackages = "com.clemble.casino.server.repository.game",
+@EnableJpaRepositories(basePackages = "com.clemble.casino.server.game.repository",
     entityManagerFactoryRef = "gameEntityManagerFactory",
     transactionManagerRef = "gameTransactionManager",
     includeFilters = { @Filter(value = JpaRepository.class, type = FilterType.ASSIGNABLE_TYPE) })

@@ -1,4 +1,4 @@
-package com.clemble.casino.server.repository.game;
+package com.clemble.casino.server.game.repository;
 
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;

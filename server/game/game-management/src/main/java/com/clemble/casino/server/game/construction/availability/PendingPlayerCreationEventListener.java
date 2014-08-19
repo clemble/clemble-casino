@@ -5,7 +5,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.game.pending.PendingPlayer;
 import com.clemble.casino.server.player.notification.SystemEventListener;
-import com.clemble.casino.server.repository.game.PendingPlayerRepository;
+import com.clemble.casino.server.game.repository.PendingPlayerRepository;
 
 public class PendingPlayerCreationEventListener implements SystemEventListener<SystemPlayerCreatedEvent> {
 

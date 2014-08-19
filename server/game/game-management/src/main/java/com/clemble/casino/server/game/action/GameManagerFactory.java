@@ -16,8 +16,8 @@ import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.game.specification.TournamentGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.repository.game.GameRecordRepository;
-import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
+import com.clemble.casino.server.game.repository.GameRecordRepository;
+import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
 
 public class GameManagerFactory {
 

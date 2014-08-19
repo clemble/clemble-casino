@@ -5,7 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
@@ -20,7 +19,7 @@ import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
-import com.clemble.casino.server.repository.game.GameConstructionRepository;
+import com.clemble.casino.server.game.repository.GameConstructionRepository;
 import static com.clemble.casino.game.GameWebMapping.*;
 import com.clemble.casino.web.mapping.WebMapping;
 

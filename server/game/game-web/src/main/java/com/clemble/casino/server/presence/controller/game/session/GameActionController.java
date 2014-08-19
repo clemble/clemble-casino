@@ -7,7 +7,6 @@ import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.game.action.GameAction;
@@ -16,7 +15,7 @@ import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.action.GameManager;
 import com.clemble.casino.server.game.action.GameManagerFactory;
-import com.clemble.casino.server.repository.game.GameRecordRepository;
+import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 

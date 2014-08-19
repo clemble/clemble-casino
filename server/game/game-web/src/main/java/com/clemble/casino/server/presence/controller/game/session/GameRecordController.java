@@ -3,7 +3,6 @@ package com.clemble.casino.server.presence.controller.game.session;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.game.Game;
@@ -11,7 +10,7 @@ import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.repository.game.GameRecordRepository;
+import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 

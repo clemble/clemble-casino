@@ -25,8 +25,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.ScheduledGame;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.server.repository.game.GameConstructionRepository;
-import com.clemble.casino.server.repository.game.GameScheduleRepository;
+import com.clemble.casino.server.game.repository.GameConstructionRepository;
+import com.clemble.casino.server.game.repository.GameScheduleRepository;
 import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)

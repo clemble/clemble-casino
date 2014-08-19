@@ -8,23 +8,19 @@ import java.util.List;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.server.game.pending.PendingGameInitiation;
 import com.clemble.casino.server.game.pending.PendingPlayer;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.server.repository.game.PendingGameInitiationRepository;
-import com.clemble.casino.server.repository.game.PendingPlayerRepository;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
+import com.clemble.casino.server.game.repository.PendingGameInitiationRepository;
+import com.clemble.casino.server.game.repository.PendingPlayerRepository;
+import com.clemble.casino.server.game.spring.SimpleGameSpringConfiguration;
 import com.google.common.collect.ImmutableList;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { SimpleGameSpringConfiguration.class })

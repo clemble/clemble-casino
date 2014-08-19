@@ -54,7 +54,7 @@ public class GoalSpringConfiguration {
     }
 
     @Bean
-    public GoalServiceController playerGoalController(@Qualifier("goalIdGenerator") GoalKeyGenerator goalKeyGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService notificationService) {
+    public GoalServiceController playerGoalController(@Qualifier("goalKeyGenerator") GoalKeyGenerator goalKeyGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService notificationService) {
         return new GoalServiceController(goalKeyGenerator, bidCalculator, goalRepository, notificationService);
     }
 

@@ -1,4 +1,4 @@
-package com.clemble.casino.server.repository.game;
+package com.clemble.casino.server.game.repository;
 
 import java.util.List;
 

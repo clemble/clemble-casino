@@ -1,4 +1,4 @@
-package com.clemble.casino.server.repository.game;
+package com.clemble.casino.server.game.repository;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 

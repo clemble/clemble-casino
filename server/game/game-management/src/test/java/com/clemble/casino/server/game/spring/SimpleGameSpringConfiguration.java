@@ -1,4 +1,4 @@
-package com.clemble.casino.server.spring.game;
+package com.clemble.casino.server.game.spring;
 
 import com.clemble.casino.game.*;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -11,9 +11,10 @@ import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.game.aspect.TournamentGameAspectFactory;
+import com.clemble.casino.server.game.spring.GameManagementSpringConfiguration;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.repository.game.GameRecordRepository;
-import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
+import com.clemble.casino.server.game.repository.GameRecordRepository;
+import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

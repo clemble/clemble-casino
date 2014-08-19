@@ -16,9 +16,9 @@ import com.clemble.casino.server.game.pending.PendingPlayer;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
-import com.clemble.casino.server.repository.game.PendingGameInitiationRepository;
-import com.clemble.casino.server.repository.game.PendingPlayerRepository;
-import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
+import com.clemble.casino.server.game.repository.PendingGameInitiationRepository;
+import com.clemble.casino.server.game.repository.PendingPlayerRepository;
+import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
 
 public class PendingGameInitiationEventListener implements SystemEventListener<SystemPlayerPresenceChangedEvent> {
 

@@ -5,7 +5,7 @@ import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
-import com.clemble.casino.server.repository.game.GameRecordRepository;
+import com.clemble.casino.server.game.repository.GameRecordRepository;
 import org.springframework.core.Ordered;
 
 /**

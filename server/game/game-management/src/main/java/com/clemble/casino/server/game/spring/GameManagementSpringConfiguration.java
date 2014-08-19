@@ -1,4 +1,4 @@
-package com.clemble.casino.server.spring.game;
+package com.clemble.casino.server.game.spring;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,10 +13,10 @@ import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
+import com.clemble.casino.server.game.repository.*;
 import com.clemble.casino.server.id.KeyFactory;
 import com.clemble.casino.server.id.RedisKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import com.clemble.casino.server.repository.game.*;
 import com.clemble.casino.server.spring.common.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

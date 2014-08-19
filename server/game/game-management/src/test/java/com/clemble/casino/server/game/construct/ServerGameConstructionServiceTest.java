@@ -26,9 +26,9 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 import com.clemble.casino.game.service.AvailabilityGameConstructionService;
-import com.clemble.casino.server.repository.game.GameConstructionRepository;
+import com.clemble.casino.server.game.repository.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
+import com.clemble.casino.server.game.spring.SimpleGameSpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(SpringConfiguration.TEST)

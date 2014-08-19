@@ -15,9 +15,9 @@ import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.service.AutoGameConstructionService;
-import com.clemble.casino.server.repository.game.GameConstructionRepository;
+import com.clemble.casino.server.game.repository.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.clemble.casino.server.spring.game.SimpleGameSpringConfiguration;
+import com.clemble.casino.server.game.spring.SimpleGameSpringConfiguration;
 
 @Ignore
 @RunWith(SpringJUnit4ClassRunner.class)

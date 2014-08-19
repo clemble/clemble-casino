@@ -10,7 +10,7 @@ import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
-import com.clemble.casino.server.repository.game.ServerGameConfigurationRepository;
+import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
