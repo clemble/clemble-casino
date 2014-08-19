@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
-import com.clemble.casino.server.id.KeyFactory;
+import com.clemble.casino.server.game.GameSessionKeyGenerator;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,20 +32,20 @@ import com.clemble.casino.server.game.repository.ServerGameConfigurationReposito
 
 public class ServerAvailabilityGameConstructionService implements AvailabilityGameConstructionService {
 
-    final private KeyFactory idGenerator;
+    final private GameSessionKeyGenerator sessionKeyGenerator;
     final private GameConstructionRepository constructionRepository;
     final private PlayerNotificationService playerNotificationService;
     final private PlayerAccountServiceContract accountService;
     final private PendingGameInitiationEventListener pendingInitiationService;
 
     public ServerAvailabilityGameConstructionService(
-            KeyFactory idGenerator,
+            GameSessionKeyGenerator sessionKeyGenerator,
             PlayerAccountServiceContract accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,
             PlayerNotificationService notificationService,
             PendingGameInitiationEventListener pendingInitiationService) {
-        this.idGenerator = checkNotNull(idGenerator);
+        this.sessionKeyGenerator = checkNotNull(sessionKeyGenerator);
         this.accountService = checkNotNull(accountServerService);
         this.constructionRepository = checkNotNull(constructionRepository);
         this.playerNotificationService = checkNotNull(notificationService);
@@ -57,7 +57,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         // Step 1. Sanity check
         if (request == null || request.getConfiguration() == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidRequest);
-        String id = idGenerator.generate();
+        //String id = sessionKeyGenerator.generate();
         // Step 2. Checking players can afford operations
         // Step 2.1. Checking initiator
         Money price = request.getConfiguration().getPrice();
@@ -66,7 +66,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         if (!players.isEmpty())
             throw ClembleCasinoException.fromFailures(ClembleCasinoFailure.construct(ClembleCasinoError.GameConstructionInsufficientMoney, players));
         // Step 3. Processing to opponents creation
-        GameConstruction construction = new GameConstruction(id, request);
+        GameConstruction construction = new GameConstruction(sessionKeyGenerator.generate(request.getConfiguration()), request);
         construction = constructionRepository.saveAndFlush(construction);
         // Step 4. Sending invitation to opponents
         playerNotificationService.notify(request.getParticipants(), new PlayerInvitedEvent(construction.getSessionKey(), request));

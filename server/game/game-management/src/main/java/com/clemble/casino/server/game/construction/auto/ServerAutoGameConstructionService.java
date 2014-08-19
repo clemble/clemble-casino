@@ -12,7 +12,6 @@ import java.util.concurrent.ExecutionException;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -21,8 +20,8 @@ import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
+import com.clemble.casino.server.game.GameSessionKeyGenerator;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
-import com.clemble.casino.server.id.KeyFactory;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.game.repository.GameConstructionRepository;
@@ -74,7 +73,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
 
     final private Map<String, AutomaticGameConstruction> playerConstructions = new ConcurrentHashMap<>();
 
-    final private KeyFactory idGenerator;
+    final private GameSessionKeyGenerator sessionKeyGenerator;
 
     final private GameConstructionRepository constructionRepository;
     final private ServerGameInitiationService initiatorService;
@@ -83,12 +82,12 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
     final private ServerPlayerPresenceService playerStateManager;
 
     public ServerAutoGameConstructionService(
-            final KeyFactory idGenerator,
+            final GameSessionKeyGenerator sessionKeyGenerator,
             final ServerGameInitiationService initiatorService,
             final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService,
             final ServerPlayerPresenceService playerStateManager) {
-        this.idGenerator = checkNotNull(idGenerator);
+        this.sessionKeyGenerator = checkNotNull(sessionKeyGenerator);
         this.initiatorService = checkNotNull(initiatorService);
         this.constructionRepository = checkNotNull(constructionRepository);
         this.playerLockService = checkNotNull(playerLockService);
@@ -100,7 +99,6 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
         // Step 1. Sanity check
         if (request == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState);
-        String id = idGenerator.generate();
         PlayerPresence playerPresence = playerStateManager.getPresence(request.getPlayer());
         if (playerPresence.getPresence() == Presence.playing) {
             GameConstruction activeConstruction = constructionRepository.findOne(playerPresence.getSessionKey());
@@ -129,7 +127,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             if (pendingConstuction == null) {
                 // Step 3.1 Construction was not present, creating new one
                 GameConstruction construction = new GameConstruction(request);
-                construction.setSessionKey(new GameSessionKey(request.getConfiguration().getConfigurationKey().getGame(), id));
+                construction.setSessionKey(sessionKeyGenerator.generate(request.getConfiguration()));
                 construction = constructionRepository.saveAndFlush(construction);
 
                 pendingConstuction = new AutomaticGameConstruction(construction);
