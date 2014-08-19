@@ -20,7 +20,7 @@ public class GoalStatusHistory implements GoalAware {
     final private TreeSet<GoalStatus> statusHistory;
 
     @JsonCreator
-    public GoalStatusHistory(@JsonProperty("goalKey") GoalKey goalKey, @JsonProperty("statusHistory") Collection<GoalStatus> statusHistory) {
+    public GoalStatusHistory(@JsonProperty(GOAL_KEY) GoalKey goalKey, @JsonProperty("statusHistory") Collection<GoalStatus> statusHistory) {
         this.goalKey = goalKey;
         this.statusHistory = new TreeSet<GoalStatus>(statusHistory);
     }
