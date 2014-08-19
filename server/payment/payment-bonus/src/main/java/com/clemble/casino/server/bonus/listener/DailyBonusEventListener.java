@@ -9,6 +9,7 @@ import java.util.Date;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.money.Money;
+import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.event.player.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
 import com.clemble.casino.server.bonus.BonusService;
@@ -16,7 +17,17 @@ import com.clemble.casino.server.bonus.BonusService;
 public class DailyBonusEventListener implements BonusEventListener<SystemPlayerEnteredEvent> {
 
     final private static PaymentBonusSource SOURCE = PaymentBonusSource.dailybonus;
-    final private static DateFormat DATE_FORMAT = new SimpleDateFormat("ddmmyy");
+    final private static DailyBonusKeyGenerator KEY_GENERATOR = new DailyBonusKeyGenerator();
+
+    public static class DailyBonusKeyGenerator implements KeyGenerator {
+
+        final private static DateFormat DATE_FORMAT = new SimpleDateFormat("ddmmyy");
+
+        public PaymentTransactionKey generate(String player) {
+            return new PaymentTransactionKey(SOURCE + DATE_FORMAT.format(new Date()), player);
+        }
+
+    }
 
     final private Money amount;
     final private BonusService bonusService;
@@ -32,9 +43,7 @@ public class DailyBonusEventListener implements BonusEventListener<SystemPlayerE
         if (event == null)
             return;
         // Step 2. Generating unique bonus marker for the day
-        String transactionSource = SOURCE.name() + DATE_FORMAT.format(new Date());
-        String transaction = event.getPlayer();
-        PaymentTransactionKey transactionKey = new PaymentTransactionKey(transactionSource, transaction);
+        PaymentTransactionKey transactionKey = KEY_GENERATOR.generate(event.getPlayer());
         // Step 3. Processing bonus in bonusService 
         bonusService.process(new BonusPaymentTransaction(event.getPlayer(), transactionKey, SOURCE, amount));
     }

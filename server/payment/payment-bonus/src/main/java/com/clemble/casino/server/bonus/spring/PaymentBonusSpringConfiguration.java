@@ -4,8 +4,8 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.bonus.BonusService;
 import com.clemble.casino.server.bonus.listener.DailyBonusEventListener;
-import com.clemble.casino.server.bonus.listener.PlayerConnectionDiscoveryBonusEventListener;
-import com.clemble.casino.server.bonus.listener.PlayerRegistrationBonusEventListener;
+import com.clemble.casino.server.bonus.listener.DiscoveryBonusEventListener;
+import com.clemble.casino.server.bonus.listener.RegistrationBonusEventListener;
 import com.clemble.casino.server.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.bonus.policy.NoBonusPolicy;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -50,26 +50,26 @@ public class PaymentBonusSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @DependsOn("bonusService")
-    public PlayerConnectionDiscoveryBonusEventListener dicoveryBonusService(
+    public DiscoveryBonusEventListener dicoveryBonusService(
             BonusService bonusService,
             SystemNotificationServiceListener notificationServiceListener,
             @Value("${clemble.bonus.discovery.currency}") Currency discoveryCurrency,
             @Value("${clemble.bonus.discovery.amount}") int discoveryBonus) {
         Money bonus = new Money(discoveryCurrency, discoveryBonus);
-        PlayerConnectionDiscoveryBonusEventListener discoveryBonusService = new PlayerConnectionDiscoveryBonusEventListener(bonus, bonusService);
+        DiscoveryBonusEventListener discoveryBonusService = new DiscoveryBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(discoveryBonusService);
         return discoveryBonusService;
     }
 
     @Bean
     @DependsOn("bonusService")
-    public PlayerRegistrationBonusEventListener registrationBonusService(
+    public RegistrationBonusEventListener registrationBonusService(
             BonusService bonusService,
             SystemNotificationServiceListener notificationServiceListener,
             @Value("${clemble.bonus.registration.currency}") Currency registrationCurrency,
             @Value("${clemble.bonus.registration.amount}") int registrationBonus) {
         Money bonus = new Money(registrationCurrency, registrationBonus);
-        PlayerRegistrationBonusEventListener registrationBonusService = new PlayerRegistrationBonusEventListener(bonus, bonusService);
+        RegistrationBonusEventListener registrationBonusService = new RegistrationBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(registrationBonusService);
         return registrationBonusService;
     }

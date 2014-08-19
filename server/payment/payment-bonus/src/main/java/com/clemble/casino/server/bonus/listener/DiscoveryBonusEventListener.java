@@ -2,21 +2,34 @@ package com.clemble.casino.server.bonus.listener;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
+import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.money.Money;
+import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.event.player.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
 import com.clemble.casino.server.bonus.BonusService;
 
-public class PlayerConnectionDiscoveryBonusEventListener implements BonusEventListener<SystemPlayerDiscoveredConnectionEvent> {
+public class DiscoveryBonusEventListener implements BonusEventListener<SystemPlayerDiscoveredConnectionEvent> {
 
     final private static PaymentBonusSource SOURCE = PaymentBonusSource.discovery;
+    final private static DiscoveryBonusKeyGenerator KEY_GENERATOR = new DiscoveryBonusKeyGenerator();
+
+    final private static class DiscoveryBonusKeyGenerator implements KeyGenerator {
+
+        public PaymentTransactionKey generate(String player, String discovered){
+            String transactionSource = SOURCE.name() + discovered;
+            String transaction = player;
+            return new PaymentTransactionKey(transactionSource, transaction);
+        }
+
+    }
 
     final private Money amount;
     final private BonusService bonusService;
 
-    public PlayerConnectionDiscoveryBonusEventListener(Money bonusAmount, BonusService bonusService) {
+    public DiscoveryBonusEventListener(Money bonusAmount, BonusService bonusService) {
         this.amount = checkNotNull(bonusAmount);
         this.bonusService = checkNotNull(bonusService);
     }
@@ -27,9 +40,7 @@ public class PlayerConnectionDiscoveryBonusEventListener implements BonusEventLi
         if (event == null)
             return;
         // Step 2. Generating unique bonus for discovery event
-        String transactionSource = SOURCE.name() + event.getDiscovered();
-        String transaction = event.getPlayer();
-        PaymentTransactionKey transactionKey = new PaymentTransactionKey(transactionSource, transaction);
+        PaymentTransactionKey transactionKey = KEY_GENERATOR.generate(event.getPlayer(), event.getDiscovered());
         // Step 3. Processing bonus in transaction system
         bonusService.process(new BonusPaymentTransaction(event.getPlayer(), transactionKey, SOURCE, amount));
     }
