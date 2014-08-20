@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.game.GameSessionAware;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -66,7 +66,7 @@ public class PlayerPresenceCleanerTest {
         }
         assertNotNull(presenceChangedEvent);
         assertEquals(presenceChangedEvent.getPresence(), Presence.offline);
-        assertEquals(A.presenceOperations().myPresence().getSessionKey(), GameSessionKey.DEFAULT_SESSION);
+        assertEquals(A.presenceOperations().myPresence().getSessionKey(), GameSessionAware.DEFAULT_SESSION);
         assertEquals(A.presenceOperations().myPresence().getPresence(), Presence.offline);
     }
 

@@ -14,8 +14,6 @@ import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.PlayerAwareEvent;
-import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
@@ -83,8 +81,8 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
 
 
     @Override
-    public PlayerAwareEvent getReply(Game game, String session, String player) {
-        return constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().filterAction(player);
+    public PlayerAwareEvent getReply(String sessionKey, String player) {
+        return constructionRepository.findOne(sessionKey).getResponses().filterAction(player);
     }
 
     @Override
@@ -131,8 +129,8 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     }
 
     @Override
-    public GameConstruction getConstruction(Game game, String session) {
-        return constructionRepository.findOne(new GameSessionKey(game, session));
+    public GameConstruction getConstruction(String sessionKey) {
+        return constructionRepository.findOne(sessionKey);
     }
 
     @Override

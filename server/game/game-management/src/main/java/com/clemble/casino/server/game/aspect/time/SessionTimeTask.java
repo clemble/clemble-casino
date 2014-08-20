@@ -10,7 +10,6 @@ import com.clemble.casino.game.specification.RoundGameConfiguration;
 import org.springframework.scheduling.TriggerContext;
 
 import com.clemble.casino.game.GameSessionAware;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.GameEventTask;
@@ -22,10 +21,10 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
      */
     private static final long serialVersionUID = -7157994014672627030L;
 
-    final private GameSessionKey session;
+    final private String session;
     final private Collection<PlayerTimeTracker> playerTimeTrackers;
 
-    public SessionTimeTask(GameSessionKey sessionKey, RoundGameConfiguration initiation, RoundGameContext context) {
+    public SessionTimeTask(String sessionKey, RoundGameConfiguration initiation, RoundGameContext context) {
         this.session = sessionKey;
 
         final RoundGameConfiguration specification = initiation;
@@ -38,7 +37,7 @@ public class SessionTimeTask implements GameEventTask, GameSessionAware {
     }
 
     @Override
-    public GameSessionKey getSessionKey() {
+    public String getSessionKey() {
         return session;
     }
 

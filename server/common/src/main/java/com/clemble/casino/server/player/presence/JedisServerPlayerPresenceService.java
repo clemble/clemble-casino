@@ -19,7 +19,6 @@ import redis.clients.jedis.JedisPool;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameSessionAware;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
@@ -32,7 +31,6 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     final private Logger LOG = LoggerFactory.getLogger(JedisServerPlayerPresenceService.class);
 
     final private int EXPIRATION_TIME = (int) TimeUnit.MINUTES.toMillis(20);
-    final private String ZERO_SESSION = ":";
 
     final private String UPDATE_SCRIPT;
     final private JedisPool jedisPool;
@@ -46,7 +44,7 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
         this.systemNotificationService = checkNotNull(systemNotificationService);
         Jedis jedis = jedisPool.getResource();
         try {
-            this.UPDATE_SCRIPT = jedis.scriptLoad(" for i = 1,table.getn(KEYS) do " + " local state = redis.call('get', KEYS[i])" + " if (state ~= ':') then "
+            this.UPDATE_SCRIPT = jedis.scriptLoad(" for i = 1,table.getn(KEYS) do " + " local state = redis.call('get', KEYS[i])" + " if (state ~= '') then "
                     + " redis.log(redis.LOG_DEBUG, ARGV[1] .. ' > ' .. KEYS[i] .. ' is in ' .. state); " + " return 'false'" + " end " + " end "
                     + " redis.log(redis.LOG_DEBUG, 'Starting ' .. ARGV[1]) " + " for i = 1,table.getn(KEYS) do " + " redis.call('set', KEYS[i], ARGV[1])"
                     + " end " + " return 'true'");
@@ -55,11 +53,11 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
         }
     }
 
-    public GameSessionKey getActiveSession(String player) {
+    public String getActiveSession(String player) {
         Jedis jedis = jedisPool.getResource();
         LOG.trace("Available connection + {}", jedis);
         try {
-            return GameSessionKey.fromString(jedis.get(player));
+            return jedis.get(player);
         } finally {
             LOG.trace("Available connection - {}", jedis);
             jedisPool.returnResource(jedis);
@@ -68,7 +66,7 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
 
     @Override
     public PlayerPresence getPresence(String player) {
-        GameSessionKey session = getActiveSession(player);
+        String session = getActiveSession(player);
         if (session == null) {
             return new PlayerPresence(player, GameSessionAware.DEFAULT_SESSION, Presence.offline);
         } else if (session.equals(GameSessionAware.DEFAULT_SESSION)) {
@@ -88,7 +86,7 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     @Override
     public boolean isAvailable(final String player) {
         // Step 1. Fetch active session
-        GameSessionKey activePlayerSession = getActiveSession(player);
+        String activePlayerSession = getActiveSession(player);
         // Step 2. Only if player has session 0, it is available
         return activePlayerSession != null && activePlayerSession.equals(GameSessionAware.DEFAULT_SESSION);
     }
@@ -103,18 +101,18 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     }
 
     @Override
-    public boolean markPlaying(final String player, final GameSessionKey sessionId) {
+    public boolean markPlaying(final String player, final String sessionKey) {
         if (!isAvailable(player))
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionTimeout);
-        return markPlaying(Collections.singleton(player), sessionId);
+        return markPlaying(Collections.singleton(player), sessionKey);
     }
 
     @Override
-    public boolean markPlaying(final Collection<String> players, final GameSessionKey sessionKey) {
+    public boolean markPlaying(final Collection<String> players, final String sessionKey) {
         Jedis jedis = jedisPool.getResource();
         boolean updated = false;
         try {
-            updated = Boolean.valueOf(String.valueOf(jedis.evalsha(UPDATE_SCRIPT, new ArrayList<>(players), Collections.singletonList(sessionKey.toString()))));
+            updated = Boolean.valueOf(String.valueOf(jedis.evalsha(UPDATE_SCRIPT, new ArrayList<>(players), Collections.singletonList(sessionKey))));
         } finally {
             jedisPool.returnResource(jedis);
         }
@@ -155,7 +153,7 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
         Jedis jedis = jedisPool.getResource();
         try {
             // Step 1. Setting new expiration time
-            jedis.set(player, ZERO_SESSION);
+            jedis.set(player, GameSessionAware.DEFAULT_SESSION);
             jedis.expireAt(player, newExpirationTime.getTime());
         } finally {
             jedisPool.returnResource(jedis);

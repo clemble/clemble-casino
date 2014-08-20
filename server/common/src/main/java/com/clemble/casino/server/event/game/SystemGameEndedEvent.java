@@ -1,9 +1,5 @@
 package com.clemble.casino.server.event.game;
 
-import com.clemble.casino.game.GameSessionAware;
-import com.clemble.casino.game.GameSessionKey;
-import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.event.bet.SystemBetEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,17 +12,17 @@ public class SystemGameEndedEvent implements SystemGameEvent {
 
     final public static String CHANNEL = "game:ended";
 
-    final private GameSessionKey sessionKey;
+    final private String sessionKey;
     final private Collection<String> participants;
 
     @JsonCreator
-    public SystemGameEndedEvent(@JsonProperty(GameSessionAware.SESSION_KEY) GameSessionKey sessionKey, @JsonProperty("participants") Collection<String> participants) {
+    public SystemGameEndedEvent(@JsonProperty(SESSION_KEY) String sessionKey, @JsonProperty("participants") Collection<String> participants) {
         this.sessionKey = sessionKey;
         this.participants = participants;
     }
 
     @Override
-    public GameSessionKey getSessionKey() {
+    public String getSessionKey() {
         return sessionKey;
     }
 

@@ -28,7 +28,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.clemble.casino.ImmutablePair;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.player.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
@@ -70,7 +69,7 @@ public class ServerPlayerPresenceServiceTest {
 
         assertFalse(playerPresenceService.isAvailable(player));
 
-        playerPresenceService.markPlaying(player, new GameSessionKey(Game.pic, session));
+        playerPresenceService.markPlaying(player, session);
     }
 
     @Test
@@ -84,10 +83,10 @@ public class ServerPlayerPresenceServiceTest {
 
         assertTrue(playerPresenceService.isAvailable(player));
 
-        playerPresenceService.markPlaying(player, new GameSessionKey(Game.pic, session));
+        playerPresenceService.markPlaying(player, session);
 
         assertFalse("Player must not be available", playerPresenceService.isAvailable(player));
-        assertEquals("Player active session must match", playerPresenceService.getPresence(player).getSessionKey().getSession(), session);
+        assertEquals("Player active session must match", playerPresenceService.getPresence(player).getSessionKey(), session);
     }
 
     @Test
@@ -103,12 +102,12 @@ public class ServerPlayerPresenceServiceTest {
             assertTrue(playerPresenceService.isAvailable(player));
         }
 
-        assertTrue(playerPresenceService.markPlaying(players, new GameSessionKey(Game.pic, session)));
+        assertTrue(playerPresenceService.markPlaying(players, session));
 
         assertFalse("None of the players supposed to be available ", playerPresenceService.areAvailable(players));
         for (String player : players) {
             assertFalse(playerPresenceService.isAvailable(player));
-            assertEquals(playerPresenceService.getPresence(player).getSessionKey().getSession(), session);
+            assertEquals(playerPresenceService.getPresence(player).getSessionKey(), session);
         }
     }
 
@@ -151,7 +150,7 @@ public class ServerPlayerPresenceServiceTest {
                         }
                         startLatch.await(10, TimeUnit.SECONDS);
 
-                        GameSessionKey sessionKey = new GameSessionKey(Game.pic, randomSession);
+                        String sessionKey = randomSession;
                         if (playerPresenceService.markPlaying(participants, sessionKey)) {
                             LOG.info("Success on mark playing with {}", sessionKey);
                             numLocksReceived.incrementAndGet();
@@ -206,7 +205,7 @@ public class ServerPlayerPresenceServiceTest {
         presenceListenerService.subscribe(playerListener);
 
         playerPresenceService.markOnline(player);
-        playerPresenceService.markPlaying(player, new GameSessionKey(Game.pic, String.valueOf(RANDOM.nextLong())));
+        playerPresenceService.markPlaying(player, String.valueOf(RANDOM.nextLong()));
         playerPresenceService.markOnline(player);
 
         playerListener.countDownLatch.await(1, TimeUnit.SECONDS);

@@ -1,7 +1,6 @@
 package com.clemble.casino.server.game;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.id.KeyFactory;
@@ -17,12 +16,12 @@ public class GameSessionKeyGenerator implements KeyGenerator {
         this.keyFactory = keyFactory;
     }
 
-    public GameSessionKey generate(Game game) {
-        return new GameSessionKey(game, keyFactory.generate());
+    public String generate(Game game) {
+        return game.name() + keyFactory.generate();
     }
 
-    public GameSessionKey generate(GameConfiguration gameConfiguration) {
-        return new GameSessionKey(gameConfiguration.getConfigurationKey().getGame(), keyFactory.generate());
+    public String generate(GameConfiguration gameConfiguration) {
+        return gameConfiguration.getConfigurationKey().getGame() + keyFactory.generate();
     }
 
 }

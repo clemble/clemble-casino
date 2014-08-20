@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.server.ServerService;
 
@@ -24,8 +23,8 @@ public interface ServerPlayerPresenceService extends ServerService {
 
     public void markOffline(String player);
 
-    public boolean markPlaying(String player, GameSessionKey session);
+    public boolean markPlaying(String player, String sessionKey);
 
-    public boolean markPlaying(Collection<String> players, GameSessionKey sessionKey);
+    public boolean markPlaying(Collection<String> players, String sessionKey);
 
 }

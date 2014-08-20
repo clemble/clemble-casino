@@ -2,7 +2,6 @@ package com.clemble.casino.server.game.action;
 
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.ComparatorUtils;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -82,7 +81,7 @@ public class MatchGameState implements GameState<MatchGameContext, Event> {
         }
         // Step 4. Constructing next match initiation
         int gameNum = context.getOutcomes().size();
-        GameSessionKey nextSessionKey = context.getSessionKey().append(String.valueOf(gameNum));
+        String nextSessionKey = context.getSessionKey() + String.valueOf(gameNum);
         LOG.debug("{} launching new game {} with key {}", context.getSessionKey(), gameNum, nextSessionKey);
         context.setCurrentSession(nextSessionKey);
         GameInitiation subInitiation = new GameInitiation(

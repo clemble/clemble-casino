@@ -8,6 +8,7 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
@@ -16,6 +17,7 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
+import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -42,7 +44,7 @@ public class RoundDrawByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?
         if (outcome instanceof DrawOutcome) {
             // Step 2. Generating payment transaction
             PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(context.getSessionKey().toPaymentTransactionKey())
+                .setTransactionKey(new PaymentTransactionKey(GameSessionAware.TRANSACTION_TOKEN, context.getSessionKey()))
                 .setTransactionDate(new Date());
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();

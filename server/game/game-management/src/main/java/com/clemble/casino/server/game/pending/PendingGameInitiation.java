@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.clemble.casino.game.GameSessionAware;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
@@ -11,13 +12,12 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.game.specification.GameConfigurationKeyAware;
 
 @NodeEntity
-public class PendingGameInitiation implements GameConfigurationKeyAware, Serializable {
+public class PendingGameInitiation implements GameConfigurationKeyAware, GameSessionAware, Serializable {
 
     /**
      * Generated 20/01/14
@@ -60,12 +60,9 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, Seriali
         this.participants = participants;
     }
 
-    public String getSession() {
+    @Override
+    public String getSessionKey() {
         return sessionKey;
-    }
-
-    public GameSessionKey getSessionKey() {
-        return GameSessionKey.fromString(sessionKey);
     }
 
     public void setSessionKey(String session) {

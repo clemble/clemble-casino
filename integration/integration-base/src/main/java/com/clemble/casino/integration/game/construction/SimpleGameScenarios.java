@@ -10,7 +10,6 @@ import java.util.List;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameConfiguration;
@@ -101,7 +100,7 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T accept(GameSessionKey sessionKey, ClembleCasinoOperations participant) {
+    public <T extends RoundGamePlayer<?>> T accept(String sessionKey, ClembleCasinoOperations participant) {
         // Step 1. Fetching construction
         GameConstruction construction = participant.gameConstructionOperations().accept(sessionKey);
         // Step 2. Generating GameSessionPlayer
@@ -109,7 +108,7 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T round(GameSessionKey sessionKey, ClembleCasinoOperations player) {
+    public <T extends RoundGamePlayer<?>> T round(String sessionKey, ClembleCasinoOperations player) {
         // Step 1. Generating GameSessionPlayer
         return playerFactory.construct(player, player.gameConstructionOperations().getConstruct(sessionKey));
     }
@@ -142,7 +141,7 @@ public class SimpleGameScenarios implements GameScenarios {
         // Step 2. Creating availability game request
         GameConstruction construction = players.get(0).gameConstructionOperations().constructAvailability(configuration, participants);
         gamePlayers.add(playerFactory.<T>construct(players.get(0), construction));
-        GameSessionKey sessionKey = construction.getSessionKey();
+        String sessionKey = construction.getSessionKey();
         for (int i = 1; i < numPlayers; i++) {
             GameConstruction gameConstruction = players.get(i).gameConstructionOperations().accept(sessionKey);
             T gamePlayer = playerFactory.construct(players.get(i), gameConstruction);

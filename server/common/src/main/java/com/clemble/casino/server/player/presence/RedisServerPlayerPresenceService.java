@@ -2,9 +2,7 @@ package com.clemble.casino.server.player.presence;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameSessionAware;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
@@ -27,7 +25,6 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     final private Logger LOG = LoggerFactory.getLogger(RedisServerPlayerPresenceService.class);
 
     final private long EXPIRATION_TIME = TimeUnit.MINUTES.toMillis(20);
-    final private String ZERO_SESSION = ":";
 
     final private StringRedisTemplate redisTemplate;
     final private PlayerNotificationService presenceNotification;
@@ -38,19 +35,18 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
         this.presenceNotification = checkNotNull(presenceNotification);
     }
 
-    public GameSessionKey getActiveSession(String player) {
+    public String getActiveSession(String player) {
         String session = redisTemplate.boundValueOps(player).get();
         if (session == null)
             return null;
         if (session.length() == 1)
             return GameSessionAware.DEFAULT_SESSION;
-        String[] splittedSession = session.split(":");
-        return splittedSession[0].equals("") ? GameSessionAware.DEFAULT_SESSION : new GameSessionKey(Game.valueOf(splittedSession[0]), splittedSession[1]);
+        return session;
     }
 
     @Override
     public PlayerPresence getPresence(String player) {
-        GameSessionKey session = getActiveSession(player);
+        String session = getActiveSession(player);
         if (session == null) {
             return new PlayerPresence(player, GameSessionAware.DEFAULT_SESSION, Presence.offline);
         } else if (session.equals(GameSessionAware.DEFAULT_SESSION)) {
@@ -70,7 +66,7 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     @Override
     public boolean isAvailable(final String player) {
         // Step 1. Fetch active session
-        GameSessionKey activePlayerSession = getActiveSession(player);
+        String activePlayerSession = getActiveSession(player);
         // Step 2. Only if player has session 0, it is available
         return activePlayerSession != null && activePlayerSession.equals(GameSessionAware.DEFAULT_SESSION);
     }
@@ -85,14 +81,14 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     }
 
     @Override
-    public boolean markPlaying(final String player, final GameSessionKey sessionId) {
+    public boolean markPlaying(final String player, final String sessionId) {
         if (!isAvailable(player))
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionTimeout);
         return markPlaying(Collections.singleton(player), sessionId);
     }
 
     @Override
-    public boolean markPlaying(final Collection<String> players, final GameSessionKey sessionKey) {
+    public boolean markPlaying(final Collection<String> players, final String sessionKey) {
         // Step 1. Performing atomic update of the state
         boolean updated = redisTemplate.execute(new SessionCallback<Boolean>() {
 
@@ -108,7 +104,7 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
                 }
                 // Step 2. Performing atomic operation
                 operations.multi();
-                String sessionKeyPresentation = sessionKey.getGame().name() + ":" + sessionKey.getSession();
+                String sessionKeyPresentation = sessionKey;
                 for (String player : players) {
                     operations.boundValueOps(player).set(sessionKeyPresentation);
                 }
@@ -148,7 +144,7 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
         // Step 1. Setting new expiration time
         Date newExpirationTime = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
         BoundValueOperations<String, String> valueOperations = redisTemplate.boundValueOps(player);
-        valueOperations.set(ZERO_SESSION);
+        valueOperations.set(GameSessionAware.DEFAULT_SESSION);
         valueOperations.expireAt(newExpirationTime);
         // Step 2. Sending notification, for player state update
         notifyStateChange(PlayerPresence.online(player));

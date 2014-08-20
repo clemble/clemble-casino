@@ -8,7 +8,6 @@ import com.clemble.casino.game.specification.RoundGameConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameConfiguration;
 import com.clemble.casino.game.specification.GameConfigurationKey;
@@ -20,13 +19,13 @@ public class GamePlayerFactory implements ApplicationListener<ContextRefreshedEv
     final private RoundGamePlayerFactory<?> defaultMatchPlayerFactory = new SimpleRoundGamePlayerFactory<>();
     final private Map<Game, RoundGamePlayerFactory<?>> gameToPlayerFactory = new HashMap<>();
 
-    public <P extends GamePlayer> P construct(ClembleCasinoOperations player, GameSessionKey sessionKey) {
+    public <P extends GamePlayer> P construct(ClembleCasinoOperations player, String sessionKey) {
         GameConstruction construction = player.gameConstructionOperations().getConstruct(sessionKey);
         return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration().getConfigurationKey());
     }
 
     @SuppressWarnings("unchecked")
-    public <P extends GamePlayer> P construct(ClembleCasinoOperations player, GameSessionKey sessionKey, GameConfigurationKey configurationKey) {
+    public <P extends GamePlayer> P construct(ClembleCasinoOperations player, String sessionKey, GameConfigurationKey configurationKey) {
         GameConfiguration configuration = player.gameConstructionOperations().getConfigurations().getConfiguration(configurationKey);
         if (configuration instanceof RoundGameConfiguration) {
             Game game = configuration.getConfigurationKey().getGame();

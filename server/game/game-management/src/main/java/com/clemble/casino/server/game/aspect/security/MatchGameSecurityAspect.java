@@ -2,7 +2,6 @@ package com.clemble.casino.server.game.aspect.security;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.MatchEvent;
@@ -25,7 +24,7 @@ public class MatchGameSecurityAspect extends BasicGameAspect<Event> {
         if (!(event instanceof GameEndedEvent)) // TODO replace with Clemble errors
             throw new IllegalArgumentException();
         // Step 2. Checking game relates to the curently active game
-        GameSessionKey sessionKey = ((GameEndedEvent<?>) event).getContext().getSessionKey();
+        String sessionKey = ((GameEndedEvent<?>) event).getContext().getSessionKey();
         if (!context.getCurrentSession().equals(sessionKey))
             throw new IllegalArgumentException();
     }

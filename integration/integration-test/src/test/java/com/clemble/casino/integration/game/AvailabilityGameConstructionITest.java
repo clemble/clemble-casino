@@ -18,7 +18,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.clemble.casino.base.ExpectedEvent;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
@@ -97,7 +96,7 @@ public class AvailabilityGameConstructionITest {
         ClembleCasinoOperations B = playerOperations.createPlayer();
 
         RoundGamePlayer playerA = gameScenarios.round(Game.num, A, B.getPlayer());
-        GameSessionKey sessionKey = playerA.getSessionKey();
+        String sessionKey = playerA.getSessionKey();
         PlayerAware AtoAresponse = A.gameConstructionOperations().getResponce(sessionKey, A.getPlayer());
         PlayerAware AtoBresponse = A.gameConstructionOperations().getResponce(sessionKey, B.getPlayer());
 

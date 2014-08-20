@@ -7,7 +7,6 @@ import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameRecordOperations;
 import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.MatchEvent;
 import com.clemble.casino.game.specification.GameConfigurationKey;
@@ -30,7 +29,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
     final private AtomicReference<GamePlayer> currentPlayer = new AtomicReference<>();
     final private AtomicReference<MatchGameContext> potContext = new AtomicReference<>();
 
-    public SimpleMatchGamePlayer(final ClembleCasinoOperations player, final GameSessionKey sessionKey, GameConfigurationKey configurationKey, GamePlayerFactory playerFactory) {
+    public SimpleMatchGamePlayer(final ClembleCasinoOperations player, final String sessionKey, GameConfigurationKey configurationKey, GamePlayerFactory playerFactory) {
         super(player, sessionKey, configurationKey);
         this.playerFactory = playerFactory;
         player.listenerOperations().subscribe(new EventTypeSelector(MatchEvent.class), new EventListener<MatchEvent>() {
@@ -48,7 +47,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
         if (context == null)
             return;
         // Step 2. Going through potcontext
-        final GameSessionKey sessionKey = context.getCurrentSession();
+        final String sessionKey = context.getCurrentSession();
         final GameRecordOperations recordOperations = playerOperations().gameRecordOperations();
         if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
             GameRecord record = recordOperations.get(sessionKey);

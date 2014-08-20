@@ -16,7 +16,6 @@ import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.GameSessionEventSelector;
 import com.clemble.casino.game.GameSessionAwareEvent;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
@@ -36,7 +35,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
 
     final protected Object versionLock = new Object();
 
-    final private GameSessionKey sessionKey;
+    final private String sessionKey;
     final private GameConfigurationKey configurationKey;
     final private ClembleCasinoOperations player;
     final private EventAccumulator<GameSessionAwareEvent> eventAccumulator;
@@ -49,7 +48,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
         this(player, construction.getSessionKey(), construction.getRequest().getConfiguration().getConfigurationKey());
     }
 
-    public AbstractGamePlayer(final ClembleCasinoOperations player, final GameSessionKey sessionKey, final GameConfigurationKey configurationKey) {
+    public AbstractGamePlayer(final ClembleCasinoOperations player, final String sessionKey, final GameConfigurationKey configurationKey) {
         this.player = checkNotNull(player);
         this.sessionKey = checkNotNull(sessionKey);
         this.configurationKey = checkNotNull(configurationKey);
@@ -77,7 +76,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    final public GameSessionKey getSessionKey() {
+    final public String getSessionKey() {
         return sessionKey;
     }
 

@@ -11,7 +11,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
@@ -46,9 +45,9 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GAME_CONSTRUCTION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public GameConstruction getConstruction(@PathVariable("game") final Game game, @PathVariable("session") final String session) {
+    public GameConstruction getConstruction(@PathVariable("session") final String session) {
         // Step 1. Searching for construction
-        GameConstruction construction = constructionRepository.findOne(new GameSessionKey(game, session));
+        GameConstruction construction = constructionRepository.findOne(session);
         // Step 2. Sending error in case resource not found
         if (construction == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionDoesNotExistent);
@@ -59,8 +58,8 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     @Override
     @RequestMapping(method = RequestMethod.GET, value = CONSTRUCTION_RESPONSES_PLAYER, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public PlayerAwareEvent getReply(@PathVariable("game") final Game game, @PathVariable("session") final String session, @PathVariable("playerId") final String player) {
-        return constructionRepository.findOne(new GameSessionKey(game, session)).getResponses().filterAction(player);
+    public PlayerAwareEvent getReply(@PathVariable("session") final String session, @PathVariable("playerId") final String player) {
+        return constructionRepository.findOne(session).getResponses().filterAction(player);
     }
 
     @Override

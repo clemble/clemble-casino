@@ -63,7 +63,7 @@ public class JedisSystemNoficiationServiceListener extends JedisPubSub implement
     public void unsubscribe(SystemEventListener<? extends SystemEvent> messageListener) {
         // Step 1. Removing specific listener
         subscribers.get(messageListener.getChannel()).remove(messageListener);
-        // Step 2. If there is nothing to subscribe to for the player remove entry and unsubscribe
+        // Step 2. If there is nothing to subscribeToGameSession to for the player remove entry and unsubscribe
         if (subscribers.get(messageListener.getChannel()).isEmpty()) {
             subscribers.remove(messageListener.getChannel());
             // Step 2.1 Calling inherited unsubscribe method

@@ -8,7 +8,6 @@ import java.util.Date;
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.event.server.RoundEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.RoundStateChangedEvent;
@@ -27,7 +26,7 @@ public class GameTimeAspect extends BasicGameAspect<GameManagementEvent> {
     final private GameEventTaskExecutor gameEventTaskExecutor;
 
     public GameTimeAspect(
-            GameSessionKey sessionKey,
+            String sessionKey,
             RoundGameConfiguration specification,
             RoundGameContext context,
             GameEventTaskExecutor gameEventTaskExecutor) {

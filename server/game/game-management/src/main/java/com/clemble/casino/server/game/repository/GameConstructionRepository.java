@@ -9,12 +9,11 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameConstruction;
 
 @Repository
 @Transactional
-public interface GameConstructionRepository extends JpaRepository<GameConstruction, GameSessionKey> {
+public interface GameConstructionRepository extends JpaRepository<GameConstruction, String> {
 
     @Override
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)

@@ -17,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.base.ActionLatch;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
@@ -60,7 +59,7 @@ public class GameConstructionRepositoryTest {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
-        construction.setSessionKey(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
+        construction.setSessionKey(UUID.randomUUID().toString());
         construction.setState(GameConstructionState.pending);
         construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
@@ -74,14 +73,14 @@ public class GameConstructionRepositoryTest {
 
         GameConstruction construction = new GameConstruction(availabilityGameRequest);
         construction.setState(GameConstructionState.pending);
-        construction.setSessionKey(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
+        construction.setSessionKey(UUID.randomUUID().toString());
         construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.saveAndFlush(construction);
         Assert.assertNotNull(construction.getResponses());
 
         GameConstruction anotherConstruction = new GameConstruction(availabilityGameRequest);
-        anotherConstruction.setSessionKey(new GameSessionKey(Game.num, UUID.randomUUID().toString()));
+        anotherConstruction.setSessionKey(UUID.randomUUID().toString());
         anotherConstruction.setState(GameConstructionState.pending);
         anotherConstruction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(anotherConstruction.getResponses());

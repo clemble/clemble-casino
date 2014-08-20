@@ -2,7 +2,6 @@ package com.clemble.casino.integration.game;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.specification.GameConfigurationKey;
@@ -27,7 +26,7 @@ public class SimpleRoundGamePlayerFactory<State extends GameState> implements Ro
     }
 
     @Override
-    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, GameSessionKey sessionKey) {
+    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, String sessionKey) {
         // Step 1. Fetching game construction
         GameConstruction gameConstruction = player.gameConstructionOperations().getConstruct(sessionKey);
         // Step 2. Processing to the generic constructor
@@ -35,7 +34,7 @@ public class SimpleRoundGamePlayerFactory<State extends GameState> implements Ro
     }
 
     @Override
-    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, GameSessionKey sessionKey, GameConfigurationKey configurationKey) {
+    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, String sessionKey, GameConfigurationKey configurationKey) {
         return new SimpleRoundGamePlayer(player, sessionKey, configurationKey);
     }
 

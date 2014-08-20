@@ -18,7 +18,6 @@ import com.clemble.casino.ImmutablePair;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.server.GameInitiatedEvent;
 import com.clemble.casino.game.event.server.GameInitiationCanceledEvent;
@@ -35,7 +34,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
     final static public long CANCEL_TIMEOUT_SECONDS = 10;
     final private Logger LOG = LoggerFactory.getLogger(ServerGameInitiationService.class);
 
-    final private ConcurrentHashMap<GameSessionKey, Entry<GameInitiation, Set<String>>> sessionToInitiation = new ConcurrentHashMap<>();
+    final private ConcurrentHashMap<String, Entry<GameInitiation, Set<String>>> sessionToInitiation = new ConcurrentHashMap<>();
 
     final private GameManagerFactory managerFactory;
     final private PlayerNotificationService notificationService;
@@ -61,7 +60,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         if (sessionToInitiation.containsKey(initiation.getSessionKey()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.ServerError);
         // Step 2. Adding to internal cache
-        final GameSessionKey sessionKey = initiation.getSessionKey();
+        final String sessionKey = initiation.getSessionKey();
         executorService.schedule(new Runnable() {
             @Override
             public void run() {
@@ -85,8 +84,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
     }
 
     @Override
-    public GameInitiation confirm(Game game, String session, String player) {
-        GameSessionKey sessionKey = new GameSessionKey(game, session);
+    public GameInitiation confirm(String sessionKey, String player) {
         // Step 1. Sanity check
         Entry<GameInitiation, Set<String>> initiationToConfirmed = sessionToInitiation.get(sessionKey);
         if (initiationToConfirmed == null)

@@ -4,6 +4,8 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Date;
 
+import com.clemble.casino.game.GameSessionAware;
+import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.slf4j.Logger;
@@ -47,7 +49,7 @@ public class RoundWonByPriceRuleAspect extends BasicGameAspect<GameEndedEvent<?>
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()
-                    .setTransactionKey(context.getSessionKey().toPaymentTransactionKey())
+                    .setTransactionKey(new PaymentTransactionKey(GameSessionAware.TRANSACTION_TOKEN, context.getSessionKey()))
                     .setTransactionDate(new Date());
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 if (!playerContext.getPlayer().equals(winnerId)) {

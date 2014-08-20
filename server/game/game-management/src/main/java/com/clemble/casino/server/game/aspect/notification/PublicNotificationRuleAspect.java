@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -22,7 +21,7 @@ public class PublicNotificationRuleAspect extends BasicGameAspect<GameManagement
     final private Collection<String> participants;
     final private PlayerNotificationService notificationService;
 
-    public PublicNotificationRuleAspect(GameSessionKey sessionKey, Collection<String> participants, PlayerNotificationService notificationService) {
+    public PublicNotificationRuleAspect(String sessionKey, Collection<String> participants, PlayerNotificationService notificationService) {
         super(new EventTypeSelector(GameManagementEvent.class));
         this.tableChannel = GameWebMapping.toTable(sessionKey);
         this.participants = checkNotNull(participants);

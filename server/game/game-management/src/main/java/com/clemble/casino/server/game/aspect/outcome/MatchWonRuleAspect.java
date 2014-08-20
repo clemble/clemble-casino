@@ -7,6 +7,7 @@ import java.util.Date;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.MatchEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
@@ -16,6 +17,7 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
+import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -39,7 +41,7 @@ public class MatchWonRuleAspect extends BasicGameAspect<MatchEndedEvent> {
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()
-                    .setTransactionKey(context.getSessionKey().toPaymentTransactionKey())
+                    .setTransactionKey(new PaymentTransactionKey(GameSessionAware.TRANSACTION_TOKEN, context.getSessionKey()))
                     .setTransactionDate(new Date());
             // Step 3. Specifying pot transaction
             transaction.addPaymentOperation(new PaymentOperation(winnerId, Money.create(currency, context.getPot()), Operation.Debit));

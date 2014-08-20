@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.clemble.casino.ImmutablePair;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.TournamentGameContext;
 import com.clemble.casino.game.TournamentLeaf;
@@ -43,7 +42,7 @@ public class TournamentGameState implements GameState<TournamentGameContext, Eve
         // Step 1. Calculating number of levels
         int numLevels = Double.valueOf(Math.log(players.size()) / Math.log(configuration.getNumberRule().getMinPlayers())).intValue();
         for(int i = 0; i < numLevels; i++)
-            levels.add(new TournamentLevel(context.getSessionKey().append(TOURNAME_SEPARATOR + i), configuration.getConfiguration(), context));
+            levels.add(new TournamentLevel(context.getSessionKey() + (TOURNAME_SEPARATOR + i), configuration.getConfiguration(), context));
         TournamentLevel tournamentLevel = levels.get(levels.size() - 1);
         // Step 2. Deviding in groups
         int groupSize = configuration.getConfiguration().getNumberRule().getMinPlayers();
@@ -59,13 +58,13 @@ public class TournamentGameState implements GameState<TournamentGameContext, Eve
     public GameManagementEvent process(Event event) {
         if (event instanceof GameEndedEvent) {
             // Step 0. Reading session key and outcome
-            GameSessionKey sessionKey = ((GameEndedEvent) event).getContext().getSessionKey();
+            String sessionKey = ((GameEndedEvent) event).getContext().getSessionKey();
             GameOutcome outcome = ((GameEndedEvent<?>) event).getOutcome();
             TournamentGameContext leafContext = (TournamentGameContext) ((GameEndedEvent<?>) event).getContext().getParent();
             if (outcome instanceof PlayerWonOutcome) {
                 String leader = ((PlayerWonOutcome) outcome).getWinner();
                 TournamentLeaf leaf = leafContext.getLeaf();
-                String sessionStr = leafContext.getSessionKey().getSession();
+                String sessionStr = leafContext.getSessionKey();
                 // Step 1. Reading group and level
                 int firstSeparator = sessionStr.indexOf(TOURNAME_SEPARATOR);
                 int lastSeparator = sessionStr.lastIndexOf(TOURNAME_SEPARATOR);
@@ -103,11 +102,11 @@ public class TournamentGameState implements GameState<TournamentGameContext, Eve
 
         final private AtomicInteger level;
         final private GameContext<?> parent;
-        final private GameSessionKey session;
+        final private String session;
         final private GameConfiguration configuration;
         final private List<TournamentLeaf> waitingList = new ArrayList<>();
 
-        public TournamentLevel(GameSessionKey session, GameConfiguration configuration, GameContext<?> context) {
+        public TournamentLevel(String session, GameConfiguration configuration, GameContext<?> context) {
             this.level = new AtomicInteger();
             this.parent = context;
             this.session = session;
@@ -118,8 +117,8 @@ public class TournamentGameState implements GameState<TournamentGameContext, Eve
             // This is synchronous due to GameManager, careful with GameManager
             waitingList.add(pending);
             if(waitingList.size() == configuration.getNumberRule().getMinPlayers()) {
-                GameSessionKey sessionKey = session.append(TOURNAME_SEPARATOR + level.getAndIncrement());
-                GameInitiation initiation = new GameInitiation(session.append(TOURNAME_SEPARATOR + level), PlayerAwareUtils.toPlayerList(waitingList), configuration);
+                String sessionKey = session + TOURNAME_SEPARATOR + level.getAndIncrement();
+                GameInitiation initiation = new GameInitiation(session + TOURNAME_SEPARATOR + level, PlayerAwareUtils.toPlayerList(waitingList), configuration);
                 TournamentLeaf leaf = new TournamentLeaf(PlayerAware.DEFAULT_PLAYER, sessionKey, waitingList);
                 TournamentGameContext parentContext = new TournamentGameContext(initiation, leaf, parent);
                 managerFactory.start(initiation, parentContext);

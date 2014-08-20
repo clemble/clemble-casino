@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.GameSessionAware;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.specification.GameConfigurationAware;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
@@ -17,11 +16,11 @@ public class ServerGameInitiation implements GameSessionAware, GameConfiguration
     private static final long serialVersionUID = -3413033971589908905L;
 
     final private RoundGameContext context;
-    final private GameSessionKey sessionKey;
+    final private String sessionKey;
     final private RoundGameConfiguration configuration;
     final private List<String> participants;
 
-    public ServerGameInitiation(GameSessionKey sessionKey, RoundGameContext context, RoundGameConfiguration specification) {
+    public ServerGameInitiation(String sessionKey, RoundGameContext context, RoundGameConfiguration specification) {
         this.context = context;
         this.sessionKey = sessionKey;
         this.configuration = specification;
@@ -29,7 +28,7 @@ public class ServerGameInitiation implements GameSessionAware, GameConfiguration
     }
 
     @Override
-    public GameSessionKey getSessionKey() {
+    public String getSessionKey() {
         return sessionKey;
     }
 

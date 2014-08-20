@@ -21,7 +21,7 @@ import com.clemble.casino.server.game.repository.ServerGameConfigurationReposito
 
 public class GameManagerFactory {
 
-    final private ConcurrentHashMap<GameSessionKey, GameManager<?>> sessionToManager = new ConcurrentHashMap<>();
+    final private ConcurrentHashMap<String, GameManager<?>> sessionToManager = new ConcurrentHashMap<>();
     
     final private GameStateFactoryFacade stateFactory;
     final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundManagerFactory;
@@ -49,7 +49,7 @@ public class GameManagerFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public <GC extends GameContext> GameManager<GC> get(GameSessionKey sessionKey) {
+    public <GC extends GameContext> GameManager<GC> get(String sessionKey) {
         return (GameManager<GC>) sessionToManager.get(sessionKey);
     }
 

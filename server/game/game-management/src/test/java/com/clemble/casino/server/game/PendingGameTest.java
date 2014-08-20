@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.server.game.repository.PendingGameInitiationRepository;
 import com.clemble.casino.server.game.repository.PendingPlayerRepository;
@@ -40,7 +38,7 @@ public class PendingGameTest {
         PendingPlayer B = new PendingPlayer("B");
         playerRepository.save(B);
         // Step 2. Creating and saving game initiation
-        GameInitiation initiation = new GameInitiation(new GameSessionKey(Game.pic, "AB"), ImmutableList.<String>of("A", "B"), RoundGameConfiguration.DEFAULT);
+        GameInitiation initiation = new GameInitiation("AB", ImmutableList.<String>of("A", "B"), RoundGameConfiguration.DEFAULT);
         PendingGameInitiation pendingGameInitiation = new PendingGameInitiation(initiation);
         pendingGameInitiation = initiationRepository.save(pendingGameInitiation);
         // Step 3. Checking values
@@ -50,7 +48,7 @@ public class PendingGameTest {
         List<PendingGameInitiation> initiations = initiationRepository.findPending("A");
         PendingGameInitiation pendingInitiation = initiations.get(0);
         assertNotNull(pendingInitiation);
-        assertNotNull(pendingInitiation.getSession());
+        assertNotNull(pendingInitiation.getSessionKey());
         assertNotNull(pendingInitiation.getConfigurationKey());
     }
 

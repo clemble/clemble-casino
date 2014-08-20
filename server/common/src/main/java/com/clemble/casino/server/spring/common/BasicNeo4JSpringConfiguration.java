@@ -18,7 +18,6 @@ import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 import com.clemble.casino.server.converters.GameConfigurationKeyConverter;
-import com.clemble.casino.server.converters.GameSessionKeyConverter;
 import com.clemble.casino.server.error.ClembleConstraintExceptionResolver;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.data.neo4j.rest.SpringRestGraphDatabase;
@@ -49,7 +48,6 @@ abstract public class BasicNeo4JSpringConfiguration extends Neo4jConfiguration i
     protected ConversionService neo4jConversionService() throws Exception {
         GenericConversionService conversionService = (GenericConversionService) super.neo4jConversionService();
         conversionService.addConverter(new GameConfigurationKeyConverter());
-        conversionService.addConverter(new GameSessionKeyConverter());
         return conversionService;
     }
 

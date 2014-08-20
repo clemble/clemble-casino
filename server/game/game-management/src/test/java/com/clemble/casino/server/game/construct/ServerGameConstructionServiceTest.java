@@ -20,7 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameConstructionState;
@@ -98,13 +97,13 @@ public class ServerGameConstructionServiceTest {
     public static class GameResponce implements Callable<GameConstruction> {
 
         final public String player;
-        final public GameSessionKey construction;
+        final public String sessionKey;
         final public CountDownLatch endLatch;
         final public AvailabilityGameConstructionService constructionService;
 
-        public GameResponce(GameSessionKey construction, String player, CountDownLatch endLatch, AvailabilityGameConstructionService constructionService) {
+        public GameResponce(String sessionKey, String player, CountDownLatch endLatch, AvailabilityGameConstructionService constructionService) {
             this.player = player;
-            this.construction = construction;
+            this.sessionKey = sessionKey;
             this.endLatch = endLatch;
             this.constructionService = constructionService;
         }
@@ -113,11 +112,11 @@ public class ServerGameConstructionServiceTest {
         public GameConstruction call() {
             try {
                 Thread.sleep(RANDOM.nextInt(1000));
-                GameConstruction construct = constructionService.reply(new InvitationAcceptedEvent(player, construction));
+                GameConstruction construct = constructionService.reply(new InvitationAcceptedEvent(player, sessionKey));
                 System.out.println(construct.getVersion());
                 return construct;
             } catch (Throwable throwable) {
-                System.err.println("Failed to process " + construction.getGame() + construction.getSession());
+                System.err.println("Failed to process " + sessionKey);
                 throwable.printStackTrace();
                 try {
                     Thread.sleep(1 + RANDOM.nextInt(1000));

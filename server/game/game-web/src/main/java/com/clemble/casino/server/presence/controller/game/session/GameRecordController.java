@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
@@ -26,8 +25,7 @@ public class GameRecordController implements GameRecordService, ExternalControll
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.SESSIONS_RECORD, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public GameRecord get(@PathVariable("game") Game game, @PathVariable("session") String session) {
-        GameSessionKey sessionKey = new GameSessionKey(game, session);
+    public GameRecord get(@PathVariable("session") String sessionKey) {
         return roundGameRecordRepository.findOne(sessionKey);
     }
 }

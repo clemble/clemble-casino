@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionKey;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.SelectNumberAction;
@@ -55,9 +55,9 @@ public class GamePaymentTransactionITest {
         assertTrue(event instanceof FinishedPaymentEvent);
         // Step 5. Checking transaction key is the same as game construction
         PaymentTransactionKey transactionKey = ((FinishedPaymentEvent) event).getTransactionKey();
-        GameSessionKey sessionKey = A.getSessionKey();
-        assertEquals(sessionKey.getSession(), transactionKey.getTransaction());
-        assertEquals(sessionKey.getGame().name(), transactionKey.getSource());
+        String sessionKey = A.getSessionKey();
+        assertEquals(sessionKey, transactionKey.getTransaction());
+        assertEquals(GameSessionAware.TRANSACTION_TOKEN, transactionKey.getSource());
     }
 
 }
