@@ -140,7 +140,7 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
                 interfaces.addAll(Arrays.asList(superClass.getInterfaces()));
                 superClass = superClass.getSuperclass();
             }
-        } while (superClass != Object.class && !found);
+        } while (superClass != Object.class && !found && superClass != null);
 
         if (!found) {
             Set<Class<?>> interfaceParents = new HashSet<Class<?>>();
