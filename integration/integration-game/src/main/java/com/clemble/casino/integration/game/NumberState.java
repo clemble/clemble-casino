@@ -28,14 +28,15 @@ public class NumberState implements RoundGameState {
     private static final long serialVersionUID = 6467228372170341563L;
 
     final private RoundGameContext context;
-
+    final private GameUnit state;
     private int version;
 
     @JsonCreator
     public NumberState(@JsonProperty("context") RoundGameContext context,
-            @JsonProperty("state") GameUnit parent,
+            @JsonProperty("state") GameUnit state,
             @JsonProperty("version") int version) {
         this.context = context;
+        this.state = state;
         this.context.getActionLatch().expectNext(context.getPlayerIterator().getPlayers(), SelectNumberAction.class);
 
         this.version = version;
@@ -43,7 +44,7 @@ public class NumberState implements RoundGameState {
 
     @Override
     public GameUnit getState() {
-        return null;
+        return state;
     }
 
     @Override
@@ -72,11 +73,11 @@ public class NumberState implements RoundGameState {
             Collection<String> opponents = context.getPlayerIterator().whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table
-                resultEvent = new RoundEndedEvent(context, this, new NoOutcome());
+                resultEvent = RoundEndedEvent.fromContext(context, this, new NoOutcome());
             } else {
                 String winner = opponents.iterator().next();
                 // Step 2. Player gave up, consists of 2 parts - Gave up, and Ended since there is no players involved
-                resultEvent = new RoundEndedEvent(context, this, new PlayerWonOutcome(winner));
+                resultEvent = RoundEndedEvent.fromContext(context, this, new PlayerWonOutcome(winner));
             }
         }
         // Step 3. Sanity check

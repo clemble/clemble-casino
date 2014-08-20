@@ -3,6 +3,8 @@ package com.clemble.casino.server.game.spring;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import com.clemble.casino.base.ActionLatchService;
+import com.clemble.casino.base.JavaActionLatchService;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.game.GameSessionKeyGenerator;
 import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
@@ -49,7 +51,7 @@ import redis.clients.jedis.JedisPool;
 @Import(value = { CommonSpringConfiguration.class,
     PresenceServiceSpringConfiguration.class,
     GameNeo4jSpringConfiguration.class,
-    GameJPASpringConfiguration.class,
+    GameMongoSpringConfiguration.class,
     PaymentClientSpringConfiguration.class,
     RedisSpringConfiguration.class
 })
@@ -123,14 +125,20 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public ActionLatchService constructionActionLatchService() {
+        return new JavaActionLatchService();
+    }
+
+    @Bean
     public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
-            @Qualifier("gameSessionKeyGenerator") GameSessionKeyGenerator sessionKeyGenerator,
-            @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService,
-            ServerGameConfigurationRepository configurationRepository,
-            GameConstructionRepository constructionRepository,
-            @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
-            PendingGameInitiationEventListener pendingInitiationService) {
-        return new ServerAvailabilityGameConstructionService(sessionKeyGenerator, accountServerService, configurationRepository, constructionRepository, notificationService, pendingInitiationService);
+        @Qualifier("constructionActionLatchService") ActionLatchService constructionActionLatchService,
+        @Qualifier("gameSessionKeyGenerator") GameSessionKeyGenerator sessionKeyGenerator,
+        @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService,
+        ServerGameConfigurationRepository configurationRepository,
+        GameConstructionRepository constructionRepository,
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        PendingGameInitiationEventListener pendingInitiationService) {
+        return new ServerAvailabilityGameConstructionService(constructionActionLatchService, sessionKeyGenerator, accountServerService, configurationRepository, constructionRepository, notificationService, pendingInitiationService);
     }
 
     @Bean

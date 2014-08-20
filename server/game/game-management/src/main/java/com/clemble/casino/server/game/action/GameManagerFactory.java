@@ -70,7 +70,7 @@ public class GameManagerFactory {
 
     public GameManager<RoundGameContext> round(GameInitiation initiation, GameContext<?> parent) {
         RoundGameConfiguration roundConfiguration = (RoundGameConfiguration) initiation.getConfiguration();
-        RoundGameContext roundGameContext = new RoundGameContext(initiation, parent);
+        RoundGameContext roundGameContext = RoundGameContext.fromInitiation(initiation, parent);
         // Step 1. Allocating table for game initiation
         RoundGameState state = stateFactory.constructState(initiation, roundGameContext);
         // Step 2. Saving game record
@@ -79,7 +79,7 @@ public class GameManagerFactory {
             .setConfiguration(initiation.getConfiguration().getConfigurationKey())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
-        roundRecord = recordRepository.saveAndFlush(roundRecord);
+        roundRecord = recordRepository.save(roundRecord);
         // Step 3. Constructing manager and saving in a session
         GameManager<RoundGameContext> roundManager = roundManagerFactory.create(state, roundConfiguration, roundGameContext);
         sessionToManager.put(initiation.getSessionKey(), roundManager);
@@ -91,7 +91,7 @@ public class GameManagerFactory {
 
     // TODO make this internal to the system, with no available processing from outside
     public GameManager<MatchGameContext> match(GameInitiation initiation, GameContext<?> parent) {
-        MatchGameContext context = new MatchGameContext(initiation, parent);
+        MatchGameContext context = MatchGameContext.fromInitiation(initiation, parent);
         // Step 1. Fetching first pot configuration
         MatchGameConfiguration matchConfiguration = (MatchGameConfiguration) initiation.getConfiguration();
         long guaranteedPotSize = matchConfiguration.getPrice().getAmount();
@@ -110,7 +110,7 @@ public class GameManagerFactory {
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
         // Step 3. Saving match record
-        matchGameRecord = recordRepository.saveAndFlush(matchGameRecord);
+        matchGameRecord = recordRepository.save(matchGameRecord);
         // Step 3. Generating game manager
         MatchGameConfiguration configuration = (MatchGameConfiguration) initiation.getConfiguration();
         MatchGameState gameProcessor = new MatchGameState(context, configuration, this);

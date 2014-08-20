@@ -43,19 +43,20 @@ public class ObjectPersistenceTest extends IntegrationObjectTest implements Appl
     @Autowired
     public GameConstructionRepository constructionRepository;
     
-    @Test
-    public void testSpecialCase() {
-        check(constructionRepository, GameConstruction.class);
-
-        ScheduledGame scheduledGame = ObjectGenerator.generate(ScheduledGame.class);
-
-        ScheduledGame savedScheduledGame = gameScheduleRepository.saveAndFlush(scheduledGame);
-        Assert.assertEquals(scheduledGame, savedScheduledGame);
-
-        ScheduledGame foundScheduledGame = gameScheduleRepository.findOne(savedScheduledGame.getSessionKey());
-        Assert.assertEquals(foundScheduledGame, savedScheduledGame);
-        Assert.assertEquals(foundScheduledGame, scheduledGame);
-    }
+//    This is no longer valid, since switched to mongo
+//    @Test
+//    public void testSpecialCase() {
+//        check(constructionRepository, GameConstruction.class);
+//
+//        ScheduledGame scheduledGame = ObjectGenerator.generate(ScheduledGame.class);
+//
+//        ScheduledGame savedScheduledGame = gameScheduleRepository.saveAndFlush(scheduledGame);
+//        Assert.assertEquals(scheduledGame, savedScheduledGame);
+//
+//        ScheduledGame foundScheduledGame = gameScheduleRepository.findOne(savedScheduledGame.getSessionKey());
+//        Assert.assertEquals(foundScheduledGame, savedScheduledGame);
+//        Assert.assertEquals(foundScheduledGame, scheduledGame);
+//    }
 
     @Test
     @SuppressWarnings({ "unchecked", "rawtypes" })

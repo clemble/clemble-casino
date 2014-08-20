@@ -44,6 +44,12 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, GameSes
             participants.add(new PendingPlayer(player));
     }
 
+    public PendingGameInitiation(GameInitiation initiation, Set<PendingPlayer> participants) {
+        this.sessionKey = initiation.getSessionKey().toString();
+        this.configurationKey = initiation.getConfiguration().getConfigurationKey();
+        this.participants = participants;
+    }
+
     public Long getId() {
         return id;
     }

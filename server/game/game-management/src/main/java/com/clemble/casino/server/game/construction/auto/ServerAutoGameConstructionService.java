@@ -126,9 +126,8 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             pendingConstuction = specificationQueue.poll();
             if (pendingConstuction == null) {
                 // Step 3.1 Construction was not present, creating new one
-                GameConstruction construction = new GameConstruction(request);
-                construction.setSessionKey(sessionKeyGenerator.generate(request.getConfiguration()));
-                construction = constructionRepository.saveAndFlush(construction);
+                GameConstruction construction = GameConstruction.fromRequest(sessionKeyGenerator.generate(request.getConfiguration()), request);
+                construction = constructionRepository.save(construction);
 
                 pendingConstuction = new AutomaticGameConstruction(construction);
                 playerConstructions.put(player, pendingConstuction);

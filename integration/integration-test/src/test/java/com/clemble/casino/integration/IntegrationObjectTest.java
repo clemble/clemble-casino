@@ -66,67 +66,64 @@ public class IntegrationObjectTest {
         register(InvitationResponseEvent.class, new AbstractValueGenerator<InvitationResponseEvent>() {
             @Override
             public InvitationResponseEvent generate() {
-                return new InvitationAcceptedEvent("d", "b");
+            return new InvitationAcceptedEvent("d", "b");
             }
         });
         register(ExpectedEvent.class, new AbstractValueGenerator<ExpectedEvent>() {
             @Override
             public ExpectedEvent generate() {
-                return new ExpectedEvent("S", InvitationAcceptedEvent.class);
+            return ExpectedEvent.fromClass("S", InvitationAcceptedEvent.class);
             }
         });
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {
             @Override
             public NumberState generate() {
-                GameInitiation initiation = new GameInitiation(GameSessionAware.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
-                return new NumberState(new RoundGameContext(initiation), null, 0);
+            GameInitiation initiation = new GameInitiation(GameSessionAware.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
+            return new NumberState(RoundGameContext.fromInitiation(initiation, null), null, 0);
             }
         });
         register(RoundGameContext.class, new AbstractValueGenerator<RoundGameContext>(){
             @Override
             public RoundGameContext generate() {
-                GameInitiation initiation = new GameInitiation(GameSessionAware.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
-                return new RoundGameContext(initiation);
+            GameInitiation initiation = new GameInitiation(GameSessionAware.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
+            return RoundGameContext.fromInitiation(initiation, null);
             }
             
         });
         register(FixedBetRule.class, new AbstractValueGenerator<FixedBetRule>() {
             @Override
             public FixedBetRule generate() {
-                return FixedBetRule.create(new long[] { 10 });
+            return FixedBetRule.create(new long[] { 10 });
             }
         });
         register(GameAction.class, new AbstractValueGenerator<GameAction>() {
             @Override
             public GameAction generate() {
-                return new GiveUpAction(RandomStringUtils.random(5));
+            return new GiveUpAction(RandomStringUtils.random(5));
             }
         });
         register(BetAction.class, new AbstractValueGenerator<BetAction>() {
             @Override
             public BetAction generate() {
-                return new BetAction(RandomStringUtils.random(5), 100);
+            return new BetAction(RandomStringUtils.random(5), 100);
             }
         });
         register(PlayerAccount.class, new AbstractValueGenerator<PlayerAccount>() {
             @Override
             public PlayerAccount generate() {
-                return new PlayerAccount(RandomStringUtils.random(5), ImmutableMap.of(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500)));
+            return new PlayerAccount(RandomStringUtils.random(5), ImmutableMap.of(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500)));
             }
         });
         register(GameUnit.class, new AbstractValueGenerator<GameUnit>() {
             @Override
             public GameUnit generate() {
-                return new NumberUnit(Collections.<GameUnit>emptyList());
+            return new NumberUnit(Collections.<GameUnit>emptyList());
             }
         });
         register(GameState.class, new AbstractValueGenerator<GameState>() {
             @Override
             public GameState generate() {
-                return new NumberState(
-                    ObjectGenerator.generate(RoundGameContext.class),
-                    ObjectGenerator.generate(GameUnit.class),
-                    0);
+            return new NumberState(ObjectGenerator.generate(RoundGameContext.class), null, 0);
             }
         });
         register(PaymentTransaction.class, new AbstractValueGenerator<PaymentTransaction>() {
@@ -166,11 +163,10 @@ public class IntegrationObjectTest {
         register(GameConstruction.class, new AbstractValueGenerator<GameConstruction>() {
             @Override
             public GameConstruction generate() {
-                return new GameConstruction()
-                        .setSessionKey("0")
-                        .setRequest(new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT))
-                        .setResponses(new ActionLatch().expectNext(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), InvitationResponseEvent.class))
-                        .setState(GameConstructionState.pending);
+                return new GameConstruction("0",
+                        new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT),
+                        GameConstructionState.pending,
+                        new ActionLatch().expectNext(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), InvitationResponseEvent.class));
             }
         });
         register(LimitedBetRule.class, new AbstractValueGenerator<LimitedBetRule>() {

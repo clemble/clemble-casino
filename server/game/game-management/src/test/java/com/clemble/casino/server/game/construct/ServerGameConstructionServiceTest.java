@@ -11,7 +11,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.game.construct.GameDeclineBehavior;
 import com.clemble.casino.game.specification.RoundGameConfiguration;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +54,7 @@ public class ServerGameConstructionServiceTest {
         List<String> participants = new ArrayList<>(players);
         RoundGameConfiguration specification = generate(participants);
 
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants, GameDeclineBehavior.invalidate);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
 
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
@@ -67,11 +69,11 @@ public class ServerGameConstructionServiceTest {
     public void testAsynchronousAvailabilityConstruction() throws InterruptedException {
         LinkedHashSet<String> players = new LinkedHashSet<>();
         for (int i = 0; i < NUM_PARTICIPANTS; i++)
-            players.add(String.valueOf(RANDOM.nextLong()));
+            players.add(RandomStringUtils.randomAlphanumeric(10));
         List<String> participants = new ArrayList<>(players);
         RoundGameConfiguration specification = generate(participants);
 
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants, GameDeclineBehavior.invalidate);
         GameConstruction construction = constructionService.construct(availabilityGameRequest);
 
         final CountDownLatch downLatch = new CountDownLatch(NUM_PARTICIPANTS - 1);
@@ -113,17 +115,9 @@ public class ServerGameConstructionServiceTest {
             try {
                 Thread.sleep(RANDOM.nextInt(1000));
                 GameConstruction construct = constructionService.reply(new InvitationAcceptedEvent(player, sessionKey));
-                System.out.println(construct.getVersion());
                 return construct;
             } catch (Throwable throwable) {
-                System.err.println("Failed to process " + sessionKey);
                 throwable.printStackTrace();
-                try {
-                    Thread.sleep(1 + RANDOM.nextInt(1000));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                call();
             } finally {
                 endLatch.countDown();
             }

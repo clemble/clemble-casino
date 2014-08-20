@@ -2,9 +2,7 @@ package com.clemble.casino.server.game.construction.availability;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameConfiguration;
@@ -72,11 +70,14 @@ public class PendingGameInitiationEventListener implements SystemEventListener<S
     public void add(final GameInitiation initiation) {
         final Collection<String> players = initiation.getParticipants();
         if (!presenceService.areAvailable(players)) {
-            Collection<PendingPlayer> pendingPlayers = new ArrayList<>();
-            for (String player : players)
-                pendingPlayers.add(new PendingPlayer(player));
+            Set<PendingPlayer> pendingPlayers = new HashSet<>();
+            for (String player : players) {
+                PendingPlayer pending = playerRepository.findByPropertyValue("player", player);
+                if(pending != null)
+                    pendingPlayers.add(pending);
+            }
             // Step 1. Saving new PendingGameInitiation
-            initiationRepository.save(new PendingGameInitiation(initiation));
+            initiationRepository.save(new PendingGameInitiation(initiation, pendingPlayers));
         } else {
             initiationService.start(initiation);
         }

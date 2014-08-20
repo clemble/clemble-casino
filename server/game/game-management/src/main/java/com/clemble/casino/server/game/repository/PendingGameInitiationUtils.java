@@ -2,9 +2,7 @@ package com.clemble.casino.server.game.repository;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.specification.GameConfiguration;
@@ -28,11 +26,11 @@ public class PendingGameInitiationUtils {
 
     public void add(final GameInitiation initiation) {
         final Collection<String> players = initiation.getParticipants();
-        Collection<PendingPlayer> pendingPlayers = new ArrayList<>();
+        Set<PendingPlayer> pendingPlayers = new HashSet<>();
         for (String player : players)
-            pendingPlayers.add(new PendingPlayer(player));
+            pendingPlayers.add(playerRepository.findByPropertyValue("player", player));
         // Step 1. Saving new PendingGameInitiation
-        initiationRepository.save(new PendingGameInitiation(initiation));
+        initiationRepository.save(new PendingGameInitiation(initiation, pendingPlayers));
     }
 
     public List<PendingGameInitiation> findPending(String player) {

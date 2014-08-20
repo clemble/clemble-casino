@@ -29,8 +29,8 @@ public class GameInitiationController implements GameInitiationService, External
     @Override
     @RequestMapping(method = RequestMethod.POST, value = INITIATION_READY, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody GameInitiation confirm(@PathVariable("game") final Game game, @PathVariable("session") final String session, @PathVariable("playerId") final String player) {
-        return initiationService.confirm(game, session, player);
+    public @ResponseBody GameInitiation confirm(@PathVariable("session") final String session, @PathVariable("playerId") final String player) {
+        return initiationService.confirm(session, player);
     }
 
 }

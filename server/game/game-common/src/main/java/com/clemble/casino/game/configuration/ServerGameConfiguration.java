@@ -21,12 +21,21 @@ public class ServerGameConfiguration implements GameConfigurationKeyAware, GameC
      */
     private static final long serialVersionUID = -7670016401258035073L;
 
+    @org.springframework.data.annotation.Id
     @EmbeddedId
     private GameConfigurationKey configurationKey;
 
     @Type(type = "com.clemble.casino.game.configuration.ServerGameConfigurationHibernate")
     @Column(name = "CONFIGURATION", length = 40960)
     private GameConfiguration configuration;
+
+    public ServerGameConfiguration(){
+    }
+
+    public ServerGameConfiguration(GameConfigurationKey configurationKey, GameConfiguration configuration) {
+        this.configurationKey = configurationKey;
+        this.configuration = configuration;
+    }
 
     @Override
     public GameConfigurationKey getConfigurationKey() {

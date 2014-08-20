@@ -4,6 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.clemble.casino.base.ActionLatchService;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.game.GameSessionKeyGenerator;
@@ -30,6 +31,7 @@ import com.clemble.casino.server.game.repository.ServerGameConfigurationReposito
 
 public class ServerAvailabilityGameConstructionService implements AvailabilityGameConstructionService {
 
+    final private ActionLatchService latchService;
     final private GameSessionKeyGenerator sessionKeyGenerator;
     final private GameConstructionRepository constructionRepository;
     final private PlayerNotificationService playerNotificationService;
@@ -37,12 +39,14 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     final private PendingGameInitiationEventListener pendingInitiationService;
 
     public ServerAvailabilityGameConstructionService(
+            ActionLatchService latchService,
             GameSessionKeyGenerator sessionKeyGenerator,
             PlayerAccountServiceContract accountServerService,
             ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,
             PlayerNotificationService notificationService,
             PendingGameInitiationEventListener pendingInitiationService) {
+        this.latchService = latchService;
         this.sessionKeyGenerator = checkNotNull(sessionKeyGenerator);
         this.accountService = checkNotNull(accountServerService);
         this.constructionRepository = checkNotNull(constructionRepository);
@@ -64,8 +68,9 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         if (!players.isEmpty())
             throw ClembleCasinoException.fromFailures(ClembleCasinoFailure.construct(ClembleCasinoError.GameConstructionInsufficientMoney, players));
         // Step 3. Processing to opponents creation
-        GameConstruction construction = new GameConstruction(sessionKeyGenerator.generate(request.getConfiguration()), request);
-        construction = constructionRepository.saveAndFlush(construction);
+        GameConstruction construction = GameConstruction.fromAvailability(sessionKeyGenerator.generate(request.getConfiguration()), request);
+        construction = constructionRepository.save(construction);
+        latchService.save(construction.getSessionKey(), construction.getResponses());
         // Step 4. Sending invitation to opponents
         playerNotificationService.notify(request.getParticipants(), new PlayerInvitedEvent(construction.getSessionKey(), request));
         // Step 5. Returning constructed construction
@@ -102,26 +107,24 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             if (construction.getState() != GameConstructionState.pending)
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState);
             // Step 2. Checking if player is part of the game
-            ActionLatch responseLatch = construction.getResponses();
-            responseLatch.put(response);
+            ActionLatch responseLatch = latchService.update(response.getSessionKey(), response);
             // Step 3. Notifying of applied response
-            construction = constructionRepository.saveAndFlush(construction);
             playerNotificationService.notify(responseLatch.fetchParticipants(), response);
+            construction = construction.cloneWithResponses(responseLatch);
             // Step 4. Checking if latch is full
             if (response instanceof InvitationDeclinedEvent) {
                 // Step 4.1. In case declined send game canceled notification
-                construction.setState(GameConstructionState.canceled);
-                construction = constructionRepository.saveAndFlush(construction);
+                construction = construction.cloneWithState(GameConstructionState.canceled);
             } else if (responseLatch.complete()) {
                 GameInitiation initiation = construction.toInitiation();
                 // Step 5. Updating state
-                construction.setState(GameConstructionState.constructed);
-                construction = constructionRepository.saveAndFlush(construction);
+                construction = construction.cloneWithState(GameConstructionState.constructed);
                 // Step 6. Notifying Participants
                 playerNotificationService.notify(initiation.getParticipants(), new GameConstructedEvent(construction.getSessionKey()));
                 // Step 7. Moving to the next step
                 pendingInitiationService.add(initiation);
             }
+            construction = constructionRepository.save(construction);
             return construction;
         } catch (ConcurrencyFailureException concurrencyFailureException) {
             return tryReply(response);
