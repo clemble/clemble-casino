@@ -124,9 +124,9 @@ public class GoalITest {
         // Step 2. Creating goal save
         Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
         // Step 3. Updating goal status
-        GoalStatus status = A.goalOperations().updateMyGoal(savedGoal.getGoalKey().getId(), GoalStatus.create("Test Update"));
+        GoalStatus status = A.goalOperations().updateMyGoal(savedGoal.getGoalKey(), GoalStatus.create("Test Update"));
         // Step 4. Checking goal status updated
-        Goal updatedGoal = A.goalOperations().myGoal(savedGoal.getGoalKey().getId());
+        Goal updatedGoal = A.goalOperations().myGoal(savedGoal.getGoalKey());
         // Step 5. Checking goal has a new status
         assertEquals(updatedGoal.getStatus().getStatus(), "Test Update");
     }
@@ -139,7 +139,7 @@ public class GoalITest {
         // Step 3. Saving and checking goal is valid
         Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
         assertNotNull(savedGoal);
-        assertEquals(savedGoal.getGoalKey().getPlayer(), A.getPlayer());
+        assertEquals(savedGoal.getPlayer(), A.getPlayer());
         assertNotEquals(savedGoal.getGoalKey(), goalKey);
         assertEquals(savedGoal.getGoal(), goalToSave.getGoal());
         assertEquals(savedGoal.getPlayer(), A.getPlayer());
@@ -147,7 +147,7 @@ public class GoalITest {
         assertEquals(A.goalOperations().myGoals().size(), 1);
         Goal resGoal = A.goalOperations().myGoals().iterator().next();
         assertNotNull(resGoal);
-        assertEquals(resGoal.getGoalKey().getPlayer(), A.getPlayer());
+        assertEquals(resGoal.getPlayer(), A.getPlayer());
         assertEquals(resGoal, savedGoal);
     }
 

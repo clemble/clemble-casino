@@ -1,6 +1,5 @@
 package com.clemble.casino.server.goal;
 
-import com.clemble.casino.goal.GoalKey;
 import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.id.KeyFactory;
 
@@ -15,7 +14,7 @@ public class GoalKeyGenerator implements KeyGenerator {
         this.keyFactory = keyFactory;
     }
 
-    public GoalKey generate(String player) {
-        return new GoalKey(player, keyFactory.generate());
+    public String generate(String player) {
+        return player + keyFactory.generate();
     }
 }

@@ -1,8 +1,6 @@
 package com.clemble.casino.server.event.goal;
 
 import com.clemble.casino.goal.Goal;
-import com.clemble.casino.goal.GoalKey;
-import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -39,7 +39,7 @@ public class GoalJudgeInvitationTest {
         // Step 1. Generating GoalRequest
         String A = ObjectGenerator.generate(String.class);
         String B = ObjectGenerator.generate(String.class);
-        Goal goal = new Goal(new GoalKey(A, ObjectGenerator.generate(String.class)),
+        Goal goal = new Goal(ObjectGenerator.generate(String.class),
             A,
             B,
             "Run 10K",
@@ -60,7 +60,7 @@ public class GoalJudgeInvitationTest {
         // Step 1. Generating GoalRequest
         String A = ObjectGenerator.generate(String.class);
         String B = ObjectGenerator.generate(String.class);
-        Goal goal = new Goal(new GoalKey(A, ObjectGenerator.generate(String.class)),
+        Goal goal = new Goal(ObjectGenerator.generate(String.class),
             A,
             B,
             "Run 10K",
@@ -81,7 +81,7 @@ public class GoalJudgeInvitationTest {
         // Step 1. Generating GoalRequest
         String A = ObjectGenerator.generate(String.class);
         String B = ObjectGenerator.generate(String.class);
-        Goal goalA = new Goal(new GoalKey(A, ObjectGenerator.generate(String.class)),
+        Goal goalA = new Goal(ObjectGenerator.generate(String.class),
             A,
             B,
             "Run 10K",
@@ -94,7 +94,7 @@ public class GoalJudgeInvitationTest {
         GoalJudgeInvitation invitationA = GoalJudgeInvitation.fromGoal(goalA);
         invitationRepository.save(invitationA);
         // Step 3. Create goal by B
-        Goal goalB = new Goal(new GoalKey(B, ObjectGenerator.generate(String.class)),
+        Goal goalB = new Goal(ObjectGenerator.generate(String.class),
             B,
             A,
             "Run 10K",

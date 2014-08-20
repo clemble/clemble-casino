@@ -1,7 +1,6 @@
 package com.clemble.casino.integration.goal;
 
 import com.clemble.casino.goal.GoalJudgeInvitation;
-import com.clemble.casino.goal.GoalKey;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.goal.service.GoalJudgeInvitationService;
 import com.clemble.casino.player.PlayerAware;
@@ -37,7 +36,7 @@ public class IntegrationGoalJudgeInvitationService implements GoalJudgeInvitatio
     }
 
     @Override
-    public GoalJudgeInvitation reply(GoalKey goalKey, GoalJudgeInvitation response) {
+    public GoalJudgeInvitation reply(String goalKey, GoalJudgeInvitation response) {
         return invitationServiceController.reply(goalKey, response);
     }
 

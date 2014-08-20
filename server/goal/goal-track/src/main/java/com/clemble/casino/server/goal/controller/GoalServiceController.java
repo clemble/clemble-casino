@@ -53,8 +53,8 @@ public class GoalServiceController implements GoalService, ExternalController {
 
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_GOAL_STATUS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
-    public GoalStatus myGoalStatuses(@CookieValue("player") String player, @PathVariable("id") String id) {
-        return goalRepository.findOne(new GoalKey(player, id)).getStatus();
+    public GoalStatus myGoalStatuses(@CookieValue("player") String player, @PathVariable("id") String goalKey) {
+        return goalRepository.findOne(goalKey).getStatus();
     }
 
     @Override
@@ -64,8 +64,8 @@ public class GoalServiceController implements GoalService, ExternalController {
 
     @RequestMapping(method = RequestMethod.POST, value = MY_GOALS_GOAL_STATUS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.CREATED)
-    public GoalStatus updateMyGoal(@CookieValue("player") String player, @PathVariable("id") String id, @RequestBody GoalStatus status) {
-        Goal goal = goalRepository.findOne(new GoalKey(player, id));
+    public GoalStatus updateMyGoal(@CookieValue("player") String player, @PathVariable("id") String goalKey, @RequestBody GoalStatus status) {
+        Goal goal = goalRepository.findOne(goalKey);
         GoalStatus updatedStatus = GoalStatus.create(status.getStatus());
         Goal updatedGoal = goal.cloneWithStatus(updatedStatus);
         goalRepository.save(updatedGoal);
@@ -107,8 +107,8 @@ public class GoalServiceController implements GoalService, ExternalController {
 
     @RequestMapping(method = RequestMethod.GET, value = MY_GOALS_GOAL, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
-    public Goal myGoal(@CookieValue("player") String player, @PathVariable("id") String id) {
-        return goalRepository.findOne(new GoalKey(player, id));
+    public Goal myGoal(@CookieValue("player") String player, @PathVariable("id") String goalKey) {
+        return goalRepository.findOne(goalKey);
     }
 
     @Override
@@ -186,8 +186,8 @@ public class GoalServiceController implements GoalService, ExternalController {
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_GOALS_GOAL, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
-    public Goal getGoal(@PathVariable("player") String player, @PathVariable("id") String id) {
-        return goalRepository.findOne(new GoalKey(player, id));
+    public Goal getGoal(@PathVariable("player") String player, @PathVariable("id") String goalKey) {
+        return goalRepository.findOne(goalKey);
     }
 
 }
