@@ -34,8 +34,8 @@ public class GoalJudgeInvitationITest {
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
         final ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 1.1 Checking A & B are empty
-        Assert.assertEquals(B.goalInvitationOperations().myDuties().size(), 0);
-        Assert.assertEquals(A.goalInvitationOperations().myDuties().size(), 0);
+        Assert.assertEquals(B.goalInvitationOperations().myPending().size(), 0);
+        Assert.assertEquals(A.goalInvitationOperations().myPending().size(), 0);
         // Step 2. Creating invitation
         Goal goal = A.goalOperations().addMyGoal(new GoalRequest(B.getPlayer(), "Run 30K", 7, Money.create(Currency.FakeMoney, 50)));
         Assert.assertNotNull(goal);
@@ -44,14 +44,7 @@ public class GoalJudgeInvitationITest {
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
-                return B.goalInvitationOperations().myDuties().size() == 1;
-            }
-        }, 30_000, 1_000);
-        // Step 4. Checking invitation created for the player
-        AsyncCompletionUtils.check(new Check() {
-            @Override
-            public boolean check() {
-                return A.goalInvitationOperations().myInvitations().size() == 1;
+                return B.goalInvitationOperations().myPending().size() == 1;
             }
         }, 30_000, 1_000);
     }

@@ -1,6 +1,7 @@
 package com.clemble.casino.goal.repository;
 
 import com.clemble.casino.goal.GoalJudgeInvitation;
+import com.clemble.casino.goal.GoalJudgeInvitationStatus;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -13,5 +14,7 @@ public interface GoalJudgeInvitationRepository extends MongoRepository<GoalJudge
     public List<GoalJudgeInvitation> findByPlayer(String player);
 
     public List<GoalJudgeInvitation> findByJudge(String player);
+
+    public List<GoalJudgeInvitation> findByJudgeAndStatus(String player, GoalJudgeInvitationStatus status);
 
 }

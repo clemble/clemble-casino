@@ -4,6 +4,8 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.GoalJudgeInvitation;
 import static com.clemble.casino.goal.GoalJudgeWebMapping.*;
+
+import com.clemble.casino.goal.GoalJudgeInvitationStatus;
 import com.clemble.casino.goal.repository.GoalJudgeInvitationRepository;
 import com.clemble.casino.goal.service.GoalJudgeInvitationService;
 import com.clemble.casino.web.mapping.WebMapping;
@@ -28,39 +30,36 @@ public class GoalJudgeInvitationServiceController implements GoalJudgeInvitation
     }
 
     @Override
-    public Collection<GoalJudgeInvitation> myDuties() {
+    public Collection<GoalJudgeInvitation> myPending() {
         throw new IllegalAccessError();
     }
 
-    @RequestMapping(method = GET, value = MY_DUTIES,produces = WebMapping.PRODUCES)
+    @RequestMapping(method = GET, value = MY_INVITATIONS_PENDING,produces = WebMapping.PRODUCES)
     @ResponseStatus(OK)
-    public Collection<GoalJudgeInvitation> myDuties(@CookieValue("player") String player) {
-        return invitationRepository.findByJudge(player);
+    public Collection<GoalJudgeInvitation> myPending(@CookieValue("player") String player) {
+        return invitationRepository.findByJudgeAndStatus(player, GoalJudgeInvitationStatus.pending);
     }
 
     @Override
-    public Collection<GoalJudgeInvitation> myInvitations() {
+    public Collection<GoalJudgeInvitation> myAccepted() {
         throw new IllegalAccessError();
     }
 
-    @RequestMapping(method = GET, value = MY_INVITATIONS,produces = WebMapping.PRODUCES)
+    @RequestMapping(method = GET, value = MY_INVITATIONS_ACCEPTED, produces = WebMapping.PRODUCES)
     @ResponseStatus(OK)
-    public Collection<GoalJudgeInvitation> myInvitations(@CookieValue("player") String player) {
-        return invitationRepository.findByPlayer(player);
+    public Collection<GoalJudgeInvitation> myAccepted(@CookieValue("player") String player) {
+        return invitationRepository.findByJudgeAndStatus(player, GoalJudgeInvitationStatus.accepted);
     }
 
     @Override
-    public Collection<GoalJudgeInvitation> myDutiesAndInvitations() {
-        throw new IllegalAccessError();
+    public Collection<GoalJudgeInvitation> myDeclined() {
+        return null;
     }
 
-    @RequestMapping(method = GET, value = MY_DUTIES_AND_INVITATIONS,produces = WebMapping.PRODUCES)
+    @RequestMapping(method = GET, value = MY_INVITATIONS_DECLINED, produces = WebMapping.PRODUCES)
     @ResponseStatus(OK)
-    public Collection<GoalJudgeInvitation> myDutiesAndInvitations(@CookieValue("player") String player) {
-        List<GoalJudgeInvitation> allInvitations = new ArrayList<>();
-        allInvitations.addAll(invitationRepository.findByPlayer(player));
-        allInvitations.addAll(invitationRepository.findByJudge(player));
-        return allInvitations;
+    public Collection<GoalJudgeInvitation> myDeclined(@CookieValue("player") String player) {
+        return invitationRepository.findByJudgeAndStatus(player, GoalJudgeInvitationStatus.declined);
     }
 
     @Override

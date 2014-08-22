@@ -21,18 +21,18 @@ public class IntegrationGoalJudgeInvitationService implements GoalJudgeInvitatio
     }
 
     @Override
-    public Collection<GoalJudgeInvitation> myDuties() {
-        return invitationServiceController.myDuties(player);
+    public Collection<GoalJudgeInvitation> myPending() {
+        return invitationServiceController.myPending(player);
     }
 
     @Override
-    public Collection<GoalJudgeInvitation> myInvitations() {
-        return invitationServiceController.myInvitations(player);
+    public Collection<GoalJudgeInvitation> myAccepted() {
+        return invitationServiceController.myAccepted(player);
     }
 
     @Override
-    public Collection<GoalJudgeInvitation> myDutiesAndInvitations() {
-        return invitationServiceController.myDutiesAndInvitations(player);
+    public Collection<GoalJudgeInvitation> myDeclined() {
+        return invitationServiceController.myDeclined(player);
     }
 
     @Override
@@ -44,4 +44,5 @@ public class IntegrationGoalJudgeInvitationService implements GoalJudgeInvitatio
     public String getPlayer() {
         return player;
     }
+
 }
