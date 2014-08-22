@@ -6,6 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import com.clemble.casino.integration.game.RoundGamePlayer;
+import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.test.concurrent.Get;
 import org.junit.Assert;
@@ -37,6 +38,7 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
+import sun.nio.cs.MS1250;
 
 import static org.junit.Assert.*;
 
@@ -78,7 +80,7 @@ public class PlayerAccountOperationsITest {
         assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
         // Step 3. Checking registration transaction
         A.paymentOperations().myTransactions();
-        PaymentTransaction transaction = A.paymentOperations().getTransaction("registration", A.getPlayer());
+        PaymentTransaction transaction = A.paymentOperations().getTransaction(A.getPlayer() + MoneySource.registration);
         Set<PaymentOperation> paymentOperations = transaction.getPaymentOperations();
         Money transactionAmount = paymentOperations.iterator().next().getAmount();
         // Step 4. Checking bonus transaction (Which might be delayed, because of the system event delays)
@@ -165,14 +167,14 @@ public class PlayerAccountOperationsITest {
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
         // Step 3. Checking no other player can access the transactions
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
-        player.paymentOperations().getTransaction("registration", anotherPlayer.getPlayer());
+        player.paymentOperations().getTransaction(anotherPlayer.getPlayer() + MoneySource.registration);
     }
 
     @Test
     public void testAccessNonExistent() {
         // Step 1. Checking player has no transactions to access
         ClembleCasinoOperations player = playerOperations.createPlayer();
-        assertNull(player.paymentOperations().getTransaction("TicTacToe", "-1"));
+        assertNull(player.paymentOperations().getTransaction("TicTacToe-1"));
     }
 
 }

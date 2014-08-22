@@ -2,8 +2,6 @@ package com.clemble.casino.server.bonus.listener;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.KeyGenerator;
@@ -18,10 +16,8 @@ public class DiscoveryBonusEventListener implements BonusEventListener<SystemPla
 
     final private static class DiscoveryBonusKeyGenerator implements KeyGenerator {
 
-        public PaymentTransactionKey generate(String player, String discovered){
-            String transactionSource = SOURCE.name() + discovered;
-            String transaction = player;
-            return new PaymentTransactionKey(transactionSource, transaction);
+        public String generate(String player, String discovered){
+            return player + SOURCE + discovered;
         }
 
     }
@@ -40,7 +36,7 @@ public class DiscoveryBonusEventListener implements BonusEventListener<SystemPla
         if (event == null)
             return;
         // Step 2. Generating unique bonus for discovery event
-        PaymentTransactionKey transactionKey = KEY_GENERATOR.generate(event.getPlayer(), event.getDiscovered());
+        String transactionKey = KEY_GENERATOR.generate(event.getPlayer(), event.getDiscovered());
         // Step 3. Processing bonus in transaction system
         bonusService.process(new BonusPaymentTransaction(event.getPlayer(), transactionKey, SOURCE, amount));
     }

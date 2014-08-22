@@ -17,12 +17,12 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
      */
     private static final long serialVersionUID = 1L;
 
-    final private PaymentTransactionKey transactionKey;
+    final private String transactionKey;
     final private String player;
     final private PaymentBonusSource bonusSource;
     final private Money amount;
 
-    public BonusPaymentTransaction(String player, PaymentTransactionKey transactionKey, PaymentBonusSource bonusSource, Money amount) {
+    public BonusPaymentTransaction(String player, String transactionKey, PaymentBonusSource bonusSource, Money amount) {
         this.bonusSource = bonusSource;
         this.transactionKey = transactionKey;
         this.player = player;
@@ -45,7 +45,7 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
     }
 
     @Override
-    public PaymentTransactionKey getTransactionKey(){
+    public String getTransactionKey(){
         return transactionKey;
     }
 

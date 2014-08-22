@@ -46,7 +46,6 @@ import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.NumberUnit;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -130,7 +129,7 @@ public class IntegrationObjectTest {
             @Override
             public PaymentTransaction generate() {
                 return new PaymentTransaction()
-                        .setTransactionKey(new PaymentTransactionKey().setSource("TicTacToe").setTransaction(RandomStringUtils.random(5)))
+                        .setTransactionKey(RandomStringUtils.random(5))
                         .setTransactionDate(new Date())
                         .setProcessingDate(new Date())
                         .addPaymentOperation(

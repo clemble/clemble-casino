@@ -7,11 +7,9 @@ import java.util.List;
 import com.clemble.casino.payment.service.PaymentTransactionServiceContract;
 import com.clemble.casino.server.ExternalController;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
 import com.clemble.casino.web.mapping.WebMapping;
 import static com.clemble.casino.payment.PaymentWebMapping.*;
@@ -35,20 +33,16 @@ public class PaymentTransactionServiceController implements PaymentTransactionSe
     @RequestMapping(method = RequestMethod.GET, value = MY_TRANSACTIONS_BY_SOURCE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public List<PaymentTransaction> myTransactions(@CookieValue("player") String player, @PathVariable("source") String source) {
-        return paymentTransactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, source);
+        return paymentTransactionRepository.findByPaymentOperationsPlayerAndTransactionKeyLike(player, source);
     }
 
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = TRANSACTIONS_BY_ID, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public PaymentTransaction getTransaction(
-        @PathVariable("source") String source,
-        @PathVariable("transaction") String transactionId
-    ) {
+    public PaymentTransaction getTransaction(@PathVariable("transaction") String transactionKey) {
         // Step 1. Checking payment transaction exists
-        PaymentTransactionKey paymentTransactionId = new PaymentTransactionKey(source, transactionId);
-        PaymentTransaction paymentTransaction = paymentTransactionRepository.findOne(paymentTransactionId);
+        PaymentTransaction paymentTransaction = paymentTransactionRepository.findOne(transactionKey);
 //        TODO PaymentTransactionNotExists exception might be overrated
 //        if (paymentTransaction == null)
 //            throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionNotExists);

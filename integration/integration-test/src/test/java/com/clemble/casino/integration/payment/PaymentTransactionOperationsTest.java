@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
@@ -30,7 +31,6 @@ import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
@@ -42,9 +42,6 @@ import com.clemble.test.concurrent.Get;
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
 public class PaymentTransactionOperationsTest {
-
-    @Autowired
-    public PaymentTransactionOperations paymentTransactionOperations;
 
     @Autowired
     public SystemPaymentTransactionRequestEventListener eventListener;
@@ -64,7 +61,7 @@ public class PaymentTransactionOperationsTest {
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-            .setTransactionKey(new PaymentTransactionKey("TicTacToe", ObjectGenerator.generate(Long.class)))
+            .setTransactionKey(ObjectGenerator.generate(String.class))
             .setTransactionDate(new Date())
             .setProcessingDate(new Date())
             .addPaymentOperation(
@@ -83,12 +80,12 @@ public class PaymentTransactionOperationsTest {
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(new PaymentTransactionKey("TicTacToe", ObjectGenerator.generate(Long.class)))
+                .setTransactionKey(ObjectGenerator.generate(String.class))
                 .setTransactionDate(new Date())
                 .addPaymentOperation(
                         new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
                 .addPaymentOperation(
-                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                    new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
@@ -99,55 +96,50 @@ public class PaymentTransactionOperationsTest {
     @Test
     public void testValidTransactionAccess() {
         String source = "TicTacToe";
-        long transactionId = ObjectGenerator.generate(Long.class);
+        String transactionId = ObjectGenerator.generate(String.class);
 
         ClembleCasinoOperations player = playerOperations.createPlayer();
         ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(new PaymentTransactionKey(source, transactionId))
+                .setTransactionKey(transactionId)
                 .setTransactionDate(new Date())
                 .addPaymentOperation(
                         new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
                 .addPaymentOperation(
-                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
-
-        eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
-
-        PaymentTransaction savedPaymentTransaction = transactionRepository.findOne(paymentTransaction.getTransactionKey());
-
-        assertEquals(savedPaymentTransaction, paymentTransaction);
-        assertEquals(paymentTransaction, player.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
-        assertEquals(paymentTransaction, player.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
-    }
-
-    // TODO restore @Test
-    public void testInValidTransactionAccess() {
-        String source = "TicTacToe";
-        long transactionId = ObjectGenerator.generate(Long.class);
-
-        ClembleCasinoOperations player = playerOperations.createPlayer();
-        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
-        ClembleCasinoOperations therdPlayer = playerOperations.createPlayer();
-
-        PaymentTransaction paymentTransaction = new PaymentTransaction()
-            .setTransactionKey(new PaymentTransactionKey(source, transactionId))
-            .addPaymentOperation(
-                    new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
-            .addPaymentOperation(
                     new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
         PaymentTransaction savedPaymentTransaction = transactionRepository.findOne(paymentTransaction.getTransactionKey());
 
+        assertEquals(savedPaymentTransaction, paymentTransaction);
+    }
+
+    // TODO restore @Test
+    public void testInValidTransactionAccess() {
+        String source = "TicTacToe";
+        String transactionId = ObjectGenerator.generate(String.class);
+
+        ClembleCasinoOperations player = playerOperations.createPlayer();
+        ClembleCasinoOperations anotherPlayer = playerOperations.createPlayer();
+        ClembleCasinoOperations therdPlayer = playerOperations.createPlayer();
+
+        PaymentTransaction paymentTransaction = new PaymentTransaction()
+            .setTransactionKey(transactionId)
+            .addPaymentOperation(
+                    new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
+            .addPaymentOperation(
+                new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+
+        eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
+
+        PaymentTransaction savedPaymentTransaction = transactionRepository.findOne(paymentTransaction.getTransactionKey());
+
 
         assertEquals(savedPaymentTransaction, paymentTransaction);
-        assertEquals(paymentTransaction, player.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
-        assertEquals(paymentTransaction, anotherPlayer.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionAccessDenied));
-        assertEquals(paymentTransaction, therdPlayer.paymentOperations().getTransaction(source, String.valueOf(transactionId)));
     }
 
     @Test
@@ -158,7 +150,7 @@ public class PaymentTransactionOperationsTest {
         PaymentTransaction paymentTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>() {
             @Override
             public PaymentTransaction get() {
-                return player.paymentOperations().getTransaction("registration", player.getPlayer());
+                return player.paymentOperations().getTransaction(player.getPlayer() + MoneySource.registration);
             }
         }, 5_000);
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();

@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
@@ -47,7 +46,7 @@ public class PaymentTransactionServiceTest {
     public void testWalletUpdate() {
         Money amount = Money.create(Currency.FakeMoney, RANDOM.nextInt(100));
 
-        PaymentTransactionKey transactionKey = new PaymentTransactionKey().setSource("TicTacToe").setTransaction(String.valueOf(RANDOM.nextLong()));
+        String transactionKey = "TicTacToe" + RANDOM.nextLong();
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(transactionKey)

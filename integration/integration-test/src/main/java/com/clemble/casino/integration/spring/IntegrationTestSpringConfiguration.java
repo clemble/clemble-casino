@@ -40,14 +40,11 @@ import com.clemble.casino.android.AndroidCasinoRegistrationTemplate;
 import com.clemble.casino.android.player.AndroidPlayerFacadeRegistrationService;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.client.error.ClembleCasinoResponseErrorHandler;
-import com.clemble.casino.integration.payment.PaymentTransactionOperations;
-import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.game.spring.IntegrationGameSpringConfiguration;
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
-import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.annotation.PostConstruct;
@@ -78,13 +75,6 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
 
         @Autowired
         public SystemNotificationServiceListener serviceListener;
-
-        @Bean
-        public PaymentTransactionOperations paymentTransactionOperations(
-            PaymentTransactionServiceController paymentTransactionServiceController,
-            SystemNotificationService systemNotificationService) {
-            return new WebPaymentTransactionOperations(paymentTransactionServiceController, systemNotificationService);
-        }
 
         @Bean
         public PlayerFacadeRegistrationService playerFacadeRegistrationService(final PlayerManualRegistrationService registrationService, final PlayerSocialRegistrationService socialRegistrationService) {

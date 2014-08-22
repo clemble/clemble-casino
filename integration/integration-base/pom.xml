@@ -29,6 +29,10 @@
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
+            <artifactId>payment-bonus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
             <artifactId>goal-judge</artifactId>
         </dependency>
         <dependency>

@@ -8,7 +8,6 @@ import com.clemble.casino.server.bonus.BonusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
@@ -18,12 +17,12 @@ public class RegistrationBonusEventListener implements BonusEventListener<System
     final private static Logger LOG = LoggerFactory.getLogger(RegistrationBonusEventListener.class);
 
     final private static PaymentBonusSource SOURCE = PaymentBonusSource.registration;
-    final private static RegistrationKeyGenerator KEY_GENERATOR = new RegistrationKeyGenerator();
+    final public static RegistrationKeyGenerator KEY_GENERATOR = new RegistrationKeyGenerator();
 
     private static class RegistrationKeyGenerator implements KeyGenerator {
 
-        public PaymentTransactionKey generate(String player){
-            return new PaymentTransactionKey(SOURCE, player);
+        public String generate(String player){
+            return player + SOURCE;
         }
 
     }
@@ -43,7 +42,7 @@ public class RegistrationBonusEventListener implements BonusEventListener<System
         if (event == null)
             return;
         // Step 2. Checking last bonus marker
-        PaymentTransactionKey transactionKey = KEY_GENERATOR.generate(event.getPlayer());
+        String transactionKey = KEY_GENERATOR.generate(event.getPlayer());
         LOG.debug("creating transaction with key {}", transactionKey);
         // Step 3. If day passed since last bonus change bonus
         BonusPaymentTransaction transaction = new BonusPaymentTransaction(event.getPlayer(), transactionKey, SOURCE, bonusAmount);

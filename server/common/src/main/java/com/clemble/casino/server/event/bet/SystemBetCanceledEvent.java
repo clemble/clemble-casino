@@ -1,6 +1,5 @@
 package com.clemble.casino.server.event.bet;
 
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,10 +11,10 @@ public class SystemBetCanceledEvent implements SystemBetEvent {
     final public static String CHANNEL = "bet:canceled";
 
     final private String player;
-    final private PaymentTransactionKey transactionKey;
+    final private String transactionKey;
 
     @JsonCreator
-    public SystemBetCanceledEvent(@JsonProperty(PLAYER) String player, @JsonProperty(TRANSACTION_KEY) PaymentTransactionKey transactionKey) {
+    public SystemBetCanceledEvent(@JsonProperty(PLAYER) String player, @JsonProperty(TRANSACTION_KEY) String transactionKey) {
         this.player = player;
         this.transactionKey = transactionKey;
     }
@@ -26,7 +25,7 @@ public class SystemBetCanceledEvent implements SystemBetEvent {
     }
 
     @Override
-    public PaymentTransactionKey getTransactionKey() {
+    public String getTransactionKey() {
         return transactionKey;
     }
 

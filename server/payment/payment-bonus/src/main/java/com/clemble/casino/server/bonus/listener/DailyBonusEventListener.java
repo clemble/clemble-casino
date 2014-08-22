@@ -5,8 +5,6 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.KeyGenerator;
@@ -23,8 +21,8 @@ public class DailyBonusEventListener implements BonusEventListener<SystemPlayerE
 
         final private static DateFormat DATE_FORMAT = new SimpleDateFormat("ddmmyy");
 
-        public PaymentTransactionKey generate(String player) {
-            return new PaymentTransactionKey(SOURCE + DATE_FORMAT.format(new Date()), player);
+        public String generate(String player) {
+            return player + SOURCE + DATE_FORMAT.format(new Date());
         }
 
     }
@@ -43,7 +41,7 @@ public class DailyBonusEventListener implements BonusEventListener<SystemPlayerE
         if (event == null)
             return;
         // Step 2. Generating unique bonus marker for the day
-        PaymentTransactionKey transactionKey = KEY_GENERATOR.generate(event.getPlayer());
+        String transactionKey = KEY_GENERATOR.generate(event.getPlayer());
         // Step 3. Processing bonus in bonusService 
         bonusService.process(new BonusPaymentTransaction(event.getPlayer(), transactionKey, SOURCE, amount));
     }

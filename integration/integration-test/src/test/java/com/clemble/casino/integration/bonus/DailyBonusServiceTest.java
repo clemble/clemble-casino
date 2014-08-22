@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PaymentTransactionKey;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -48,12 +47,12 @@ public class DailyBonusServiceTest {
         // Step 2. Creating money
         Money amount = Money.create(Currency.FakeMoney, 100);
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-            .setTransactionKey(new PaymentTransactionKey(PaymentBonusSource.dailybonus, player))
+            .setTransactionKey(PaymentBonusSource.dailybonus + player)
             .setTransactionDate(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
             .addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
             .addPaymentOperation(new PaymentOperation(player, amount, Operation.Debit));
         transactionRepository.save(paymentTransaction);
-        assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, PaymentBonusSource.dailybonus.name()).size(), 1);
+        assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeyLike(player, PaymentBonusSource.dailybonus.name()).size(), 1);
         // Step 3. Checking value in payment transaction
         dailyBonusService.onEvent(new SystemPlayerEnteredEvent(player));
         // Step 4. Checking new transaction performed
@@ -64,7 +63,7 @@ public class DailyBonusServiceTest {
             }
         }, 5000);
         assertEquals(transactionRepository.findByPaymentOperationsPlayer(player).size(), 2);
-        assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeySourceLike(player, PaymentBonusSource.dailybonus.name()).size(), 2);
+        assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeyLike(player, PaymentBonusSource.dailybonus.name()).size(), 2);
     }
 
 }

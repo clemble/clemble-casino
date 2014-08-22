@@ -7,13 +7,11 @@ import java.security.NoSuchAlgorithmException;
 import javax.annotation.PostConstruct;
 
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
-import com.clemble.casino.player.service.*;
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
-import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
@@ -26,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
-
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.service.AvailabilityGameConstructionService;
@@ -44,11 +41,8 @@ import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.game.construction.SimplePlayerScenarios;
 import com.clemble.casino.integration.game.construction.SimpleSyncGameScenarios;
 import com.clemble.casino.integration.game.construction.SyncGameScenarios;
-import com.clemble.casino.integration.payment.PaymentTransactionOperations;
-import com.clemble.casino.integration.payment.WebPaymentTransactionOperations;
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.integration.player.ServerClembleCasinoRegistrationOperations;
-import com.clemble.casino.payment.service.PaymentTransactionServiceContract;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -109,11 +103,6 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         @Bean
         public EventListenerOperationsFactory playerListenerOperations() {
             return new EventListenerOperationsFactory.RabbitEventListenerServiceFactory();
-        }
-
-        @Bean
-        public PaymentTransactionOperations paymentTransactionOperations(PaymentTransactionServiceContract paymentTransactionController, SystemNotificationService systemNotificationService) {
-            return new WebPaymentTransactionOperations(paymentTransactionController, systemNotificationService);
         }
 
         @Bean

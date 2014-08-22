@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.clemble.casino.integration.event.EventAccumulator;
-import com.clemble.casino.payment.PaymentTransactionKey;
+import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.player.PlayerConnections;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
@@ -115,7 +115,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             }
         }, 5_000);
         // Step 2. Checking registration && daily bonus received
-        final PaymentTransactionKey registrationTransaction = new PaymentTransactionKey("registration", player.getPlayer());
+        final String registrationTransaction = player.getPlayer() + MoneySource.registration;
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {

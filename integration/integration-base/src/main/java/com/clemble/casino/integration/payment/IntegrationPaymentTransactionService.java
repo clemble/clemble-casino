@@ -33,8 +33,8 @@ public class IntegrationPaymentTransactionService implements PaymentTransactionS
     }
 
     @Override
-    public PaymentTransaction getTransaction(String source, String transactionId) {
-        return paymentTransactionService.getTransaction(source, transactionId);
+    public PaymentTransaction getTransaction(String transactionKey) {
+        return paymentTransactionService.getTransaction(transactionKey);
     }
 
     @Override
