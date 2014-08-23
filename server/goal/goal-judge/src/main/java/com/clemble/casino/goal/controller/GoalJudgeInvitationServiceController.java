@@ -67,9 +67,9 @@ public class GoalJudgeInvitationServiceController implements GoalJudgeInvitation
         throw new IllegalAccessError();
     }
 
-    @RequestMapping(method = POST, value = INVITATION_REPLY,produces = WebMapping.PRODUCES)
+    @RequestMapping(method = PUT, value = INVITATION_REPLY,produces = WebMapping.PRODUCES)
     @ResponseStatus(OK)
-    public GoalJudgeInvitation reply(@CookieValue("player") String requester, @PathVariable("player") String player, @PathVariable("id") String goalKey, @RequestBody GoalJudgeInvitation response) {
+    public GoalJudgeInvitation reply(@CookieValue("player") String requester, @PathVariable("goalKey") String goalKey, @RequestBody GoalJudgeInvitation response) {
         // Step 1. Looking up invitation
         GoalJudgeInvitation invitation = invitationRepository.findOne(goalKey);
         // Step 2. In case some one else replies, not a judge, throw exception

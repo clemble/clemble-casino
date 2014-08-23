@@ -37,7 +37,7 @@ public class PaymentTransactionRepositoryTest {
         Money amount = ObjectGenerator.generate(Money.class);
         // Step 1. Creating stub transaction
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-            .setTransactionKey(player + RandomStringUtils.randomAlphanumeric(5))
+            .setTransactionKey(player + RandomStringUtils.randomAlphabetic(5))
             .setTransactionDate(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
             .addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
             .addPaymentOperation(new PaymentOperation(player, amount, Operation.Debit));
