@@ -3,7 +3,8 @@ package com.clemble.casino.goal.controller;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.GoalJudgeInvitation;
-import static com.clemble.casino.goal.GoalJudgeWebMapping.*;
+
+import static com.clemble.casino.goal.GoalJudgeInvitationWebMapping.*;
 
 import com.clemble.casino.goal.GoalJudgeInvitationStatus;
 import com.clemble.casino.goal.repository.GoalJudgeInvitationRepository;
@@ -15,9 +16,7 @@ import static org.springframework.http.HttpStatus.*;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by mavarazy on 8/17/14.

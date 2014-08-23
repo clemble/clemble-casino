@@ -5,7 +5,6 @@ import com.clemble.casino.goal.GoalJudgeInvitation;
 import com.clemble.casino.goal.repository.GoalJudgeDutyRepository;
 import com.clemble.casino.server.event.goal.SystemGoalJudgeInvitationAcceptedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by mavarazy on 8/23/14.
