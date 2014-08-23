@@ -11,6 +11,7 @@
     <modules>
         <module>goal-track</module>
         <module>goal-judge</module>
+        <module>goal-duty</module>
     </modules>
     <dependencies>
         <dependency>

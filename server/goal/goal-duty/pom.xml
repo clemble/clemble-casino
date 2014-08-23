@@ -10,22 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>war</packaging>
 
-    <artifactId>goal-track</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.server</groupId>
-            <artifactId>common-web</artifactId>
-        </dependency>
-    </dependencies>
+    <artifactId>goal-duty</artifactId>
 
     <build>
         <plugins>

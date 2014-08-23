@@ -31,8 +31,8 @@ import java.net.UnknownHostException;
 public class GoalJudgeSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public GoalJudgeInvitationServiceController judgeInvitationServiceController(GoalJudgeInvitationRepository invitationRepository) {
-        return new GoalJudgeInvitationServiceController(invitationRepository);
+    public GoalJudgeInvitationServiceController judgeInvitationServiceController(GoalJudgeInvitationRepository invitationRepository, SystemNotificationService notificationService) {
+        return new GoalJudgeInvitationServiceController(invitationRepository, notificationService);
     }
 
     @Bean

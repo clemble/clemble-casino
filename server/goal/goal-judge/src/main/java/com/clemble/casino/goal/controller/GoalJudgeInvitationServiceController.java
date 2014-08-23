@@ -8,6 +8,8 @@ import static com.clemble.casino.goal.GoalJudgeWebMapping.*;
 import com.clemble.casino.goal.GoalJudgeInvitationStatus;
 import com.clemble.casino.goal.repository.GoalJudgeInvitationRepository;
 import com.clemble.casino.goal.service.GoalJudgeInvitationService;
+import com.clemble.casino.server.event.goal.SystemGoalJudgeInvitationAcceptedEvent;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.web.mapping.WebMapping;
 import static org.springframework.http.HttpStatus.*;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +25,11 @@ import java.util.List;
 @RestController
 public class GoalJudgeInvitationServiceController implements GoalJudgeInvitationService {
 
+    final private SystemNotificationService notificationService;
     final private GoalJudgeInvitationRepository invitationRepository;
 
-    public GoalJudgeInvitationServiceController(GoalJudgeInvitationRepository invitationRepository) {
+    public GoalJudgeInvitationServiceController(GoalJudgeInvitationRepository invitationRepository, SystemNotificationService notificationService) {
+        this.notificationService = notificationService;
         this.invitationRepository = invitationRepository;
     }
 
@@ -76,7 +80,11 @@ public class GoalJudgeInvitationServiceController implements GoalJudgeInvitation
         if  (!requester.equals(invitation.getJudge()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalJudgeOnlyJudgeCanReplay);
         // Step 3. Ignore any changes to invitation, except for status, and save
-        return invitationRepository.save(new GoalJudgeInvitation(invitation.getPlayer(), invitation.getJudge(), goalKey, invitation.getGoal(), response.getStatus()));
+        GoalJudgeInvitation savedInvitation = invitationRepository.save(new GoalJudgeInvitation(invitation.getPlayer(), invitation.getJudge(), goalKey, invitation.getGoal(), response.getStatus()));
+        if (response.getStatus() == GoalJudgeInvitationStatus.accepted)
+            notificationService.notify(new SystemGoalJudgeInvitationAcceptedEvent(invitation));
+        // Step 4. Save changing invitation
+        return savedInvitation;
     }
 
 }
