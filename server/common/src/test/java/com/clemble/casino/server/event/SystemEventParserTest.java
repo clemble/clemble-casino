@@ -20,5 +20,5 @@ public class SystemEventParserTest {
         SystemEvent invitationAccepted = objectMapper.readValue(GOAL_JUDGE_INVITATION_ACCEPTED_EVENT, SystemEvent.class);
         Assert.assertNotNull(invitationAccepted);
     }
-    
+
 }

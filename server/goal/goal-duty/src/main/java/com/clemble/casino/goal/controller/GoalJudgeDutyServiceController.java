@@ -3,6 +3,7 @@ package com.clemble.casino.goal.controller;
 import com.clemble.casino.goal.GoalJudgeDuty;
 import com.clemble.casino.goal.repository.GoalJudgeDutyRepository;
 import com.clemble.casino.goal.service.*;
+import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.web.mapping.WebMapping;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by mavarazy on 8/23/14.
  */
 @RestController
-public class GoalJudgeDutyServiceController implements GoalJudgeDutyService {
+public class GoalJudgeDutyServiceController implements GoalJudgeDutyService, ExternalController {
 
     final GoalJudgeDutyRepository dutyRepository;
 
