@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -33,11 +34,11 @@ public class PaymentTransactionRepositoryTest {
 
     @Test
     public void testSave() {
-        String player = ObjectGenerator.generate(String.class);
+        String player = RandomStringUtils.randomAlphanumeric(5);
         Money amount = ObjectGenerator.generate(Money.class);
         // Step 1. Creating stub transaction
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-            .setTransactionKey(player + RandomStringUtils.randomAlphabetic(5))
+            .setTransactionKey(player + RandomStringUtils.randomAlphanumeric(5))
             .setTransactionDate(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
             .addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
             .addPaymentOperation(new PaymentOperation(player, amount, Operation.Debit));

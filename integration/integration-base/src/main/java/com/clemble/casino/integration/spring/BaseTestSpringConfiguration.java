@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.annotation.PostConstruct;
 
+import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
@@ -125,8 +126,9 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             GameActionService actionService,
             GameRecordService recordService,
             GoalServiceController goalService,
-            GoalJudgeInvitationServiceController invitationServiceController) {
-            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService, invitationServiceController);
+            GoalJudgeInvitationServiceController invitationServiceController,
+            GoalJudgeDutyServiceController dutyServiceController) {
+            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService, invitationServiceController, dutyServiceController);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }

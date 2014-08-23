@@ -5,12 +5,14 @@ import com.clemble.casino.goal.listener.GoalJudgeDutyCreatorEventListener;
 import com.clemble.casino.goal.repository.GoalJudgeDutyRepository;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
+import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
@@ -21,6 +23,7 @@ import java.net.UnknownHostException;
  * Created by mavarazy on 8/23/14.
  */
 @Configuration
+@Import(CommonSpringConfiguration.class)
 public class GoalJudgeDutySpringConfiguration implements SpringConfiguration {
 
     @Bean

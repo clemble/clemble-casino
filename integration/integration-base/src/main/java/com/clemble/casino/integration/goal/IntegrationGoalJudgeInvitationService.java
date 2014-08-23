@@ -37,7 +37,7 @@ public class IntegrationGoalJudgeInvitationService implements GoalJudgeInvitatio
 
     @Override
     public GoalJudgeInvitation reply(String goalKey, GoalJudgeInvitation response) {
-        return invitationServiceController.reply(goalKey, response);
+        return invitationServiceController.reply(player, goalKey, response);
     }
 
     @Override

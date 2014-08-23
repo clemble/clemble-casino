@@ -2,11 +2,14 @@ package com.clemble.casino.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
+import com.clemble.casino.goal.service.GoalJudgeDutyService;
 import com.clemble.casino.goal.service.GoalJudgeInvitationService;
 import com.clemble.casino.integration.goal.IntegrationGoalJudgeInvitationService;
 import com.clemble.casino.integration.goal.IntegrationGoalService;
 import com.clemble.casino.goal.service.GoalService;
+import com.clemble.casino.integration.goal.InvitationGoalJudgeDutyService;
 import com.clemble.casino.integration.payment.IntegrationPlayerAccountService;
 import com.clemble.casino.payment.service.PaymentTransactionOperations;
 import com.clemble.casino.payment.service.PlayerAccountService;
@@ -72,6 +75,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     final private GameRecordOperations recordOperations;
     final private GoalService goalService;
     final private GoalJudgeInvitationService invitationService;
+    final private GoalJudgeDutyService dutyService;
 
     public IntegrationClembleCasinoOperations(
         final String host,
@@ -93,7 +97,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final GameActionService actionService,
         final GameRecordService recordService,
         final GoalServiceController goalService,
-        final GoalJudgeInvitationServiceController goalInvitationService
+        final GoalJudgeInvitationServiceController goalInvitationService,
+        final GoalJudgeDutyServiceController dutyServiceController
     ) {
         this.host = host;
         this.player = playerIdentity.getPlayer();
@@ -122,10 +127,11 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
                 initiationService.confirm(sessionKey, player);
             }
         });
-
         this.recordOperations = new GameRecordTemplate(recordService);
+
         this.goalService = new IntegrationGoalService(player, goalService);
         this.invitationService = new IntegrationGoalJudgeInvitationService(player, goalInvitationService);
+        this.dutyService = new InvitationGoalJudgeDutyService(player, dutyServiceController);
     }
 
     @Override
@@ -171,6 +177,11 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     @Override
     public GoalJudgeInvitationService goalInvitationOperations() {
         return invitationService;
+    }
+
+    @Override
+    public GoalJudgeDutyService goalDutyOperations() {
+        return dutyService;
     }
 
     @Override
