@@ -20,7 +20,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameSessionAwareEvent;
+import com.clemble.casino.game.event.GameSessionAwareEvent;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;

@@ -4,7 +4,7 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.specification.GameConfigurationKey;
+import com.clemble.casino.game.configuration.GameConfigurationKey;
 
 public class SimpleRoundGamePlayerFactory<State extends GameState> implements RoundGamePlayerFactory<State> {
 

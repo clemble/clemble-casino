@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGamePlayerContext;
-import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.ScheduledGameAction;
 import com.clemble.casino.server.game.action.ScheduledGameActionExecutor;

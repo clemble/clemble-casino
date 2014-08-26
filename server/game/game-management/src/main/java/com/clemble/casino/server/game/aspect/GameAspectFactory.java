@@ -4,7 +4,7 @@ import org.springframework.core.PriorityOrdered;
 
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfiguration;
 
 public interface GameAspectFactory<T extends Event, GC extends GameContext<?>, GI extends GameConfiguration> extends PriorityOrdered {
 

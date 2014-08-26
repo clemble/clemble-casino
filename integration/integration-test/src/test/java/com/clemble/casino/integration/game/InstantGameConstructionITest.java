@@ -2,7 +2,7 @@ package com.clemble.casino.integration.game;
 
 import static org.junit.Assert.assertEquals;
 
-import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;

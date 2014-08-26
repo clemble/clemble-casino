@@ -13,7 +13,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.PreDestroy;
 
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.integration.game.GamePlayerFactory;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;

@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.GameSessionAware;
-import com.clemble.casino.game.specification.GameConfigurationAware;
-import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.configuration.GameConfigurationAware;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
 
 public class ServerGameInitiation implements GameSessionAware, GameConfigurationAware {

@@ -1,7 +1,7 @@
 package com.clemble.casino.integration.emulator;
 
-import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 

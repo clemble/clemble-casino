@@ -7,11 +7,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.GameConfigurationAware;
-import com.clemble.casino.game.specification.GameConfigurationKey;
-import com.clemble.casino.game.specification.GameConfigurationKeyAware;
-
 @Entity
 @Table(name = "GAME_CONFIGURATION")
 public class ServerGameConfiguration implements GameConfigurationKeyAware, GameConfigurationAware {

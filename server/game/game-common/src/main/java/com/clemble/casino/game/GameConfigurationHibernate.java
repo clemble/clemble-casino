@@ -1,6 +1,6 @@
 package com.clemble.casino.game;
 
-import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.server.hibernate.AbstractJsonHibernateType;
 
 public class GameConfigurationHibernate extends AbstractJsonHibernateType<GameConfiguration> {

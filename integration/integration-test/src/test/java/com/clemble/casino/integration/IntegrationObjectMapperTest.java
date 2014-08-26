@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.clemble.casino.game.rule.RoundRule;
-import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;

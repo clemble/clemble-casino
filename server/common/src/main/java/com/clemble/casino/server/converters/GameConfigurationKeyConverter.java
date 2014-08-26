@@ -6,7 +6,7 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.GenericConverter;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.specification.GameConfigurationKey;
+import com.clemble.casino.game.configuration.GameConfigurationKey;
 import com.google.common.collect.ImmutableSet;
 
 public class GameConfigurationKeyConverter implements GenericConverter {

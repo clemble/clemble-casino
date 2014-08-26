@@ -1,7 +1,7 @@
 package com.clemble.casino.server.game.aspect.time;
 
 import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.game.event.server.GameManagementEvent;

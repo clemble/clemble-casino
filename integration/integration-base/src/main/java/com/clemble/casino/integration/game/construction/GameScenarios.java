@@ -2,7 +2,7 @@ package com.clemble.casino.integration.game.construction;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.integration.game.GamePlayer;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 

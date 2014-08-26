@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
-import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.base.ActionLatch;
-import com.clemble.casino.game.Game;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.construct.GameDeclineBehavior;
 import com.clemble.casino.server.game.repository.GameConstructionRepository;
 import com.clemble.casino.server.spring.common.SpringConfiguration;

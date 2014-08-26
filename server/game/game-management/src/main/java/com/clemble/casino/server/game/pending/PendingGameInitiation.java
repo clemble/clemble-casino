@@ -1,6 +1,5 @@
 package com.clemble.casino.server.game.pending;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,8 +12,8 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.specification.GameConfigurationKey;
-import com.clemble.casino.game.specification.GameConfigurationKeyAware;
+import com.clemble.casino.game.configuration.GameConfigurationKey;
+import com.clemble.casino.game.configuration.GameConfigurationKeyAware;
 
 @NodeEntity
 public class PendingGameInitiation implements GameConfigurationKeyAware, GameSessionAware {

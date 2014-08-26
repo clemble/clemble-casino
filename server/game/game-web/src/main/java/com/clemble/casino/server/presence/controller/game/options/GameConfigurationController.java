@@ -3,11 +3,10 @@ package com.clemble.casino.server.presence.controller.game.options;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.game.service.GameConfigurationService;
-import com.clemble.casino.game.specification.GameConfigurations;
+import com.clemble.casino.game.configuration.GameConfigurations;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import static com.clemble.casino.game.GameWebMapping.*;

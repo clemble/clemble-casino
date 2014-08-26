@@ -6,10 +6,9 @@ import java.util.Date;
 
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGamePlayerContext;
-import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.springframework.scheduling.TriggerContext;
 
-import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.GameEventTask;

@@ -8,7 +8,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;

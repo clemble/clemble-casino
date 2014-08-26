@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.GameConfigurationAware;
+import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfigurationAware;
 import com.clemble.casino.integration.game.GamePlayer;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import org.slf4j.Logger;

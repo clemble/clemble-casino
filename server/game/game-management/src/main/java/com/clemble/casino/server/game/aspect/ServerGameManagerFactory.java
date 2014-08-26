@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.aspect;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.server.game.action.GameManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

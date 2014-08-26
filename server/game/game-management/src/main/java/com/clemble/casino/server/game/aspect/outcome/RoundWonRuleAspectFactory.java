@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.aspect.outcome;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.core.Ordered;
 

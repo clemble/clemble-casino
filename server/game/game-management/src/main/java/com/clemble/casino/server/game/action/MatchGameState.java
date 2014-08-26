@@ -12,7 +12,7 @@ import com.clemble.casino.game.event.server.MatchEndedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.player.PlayerAwareUtils;
 

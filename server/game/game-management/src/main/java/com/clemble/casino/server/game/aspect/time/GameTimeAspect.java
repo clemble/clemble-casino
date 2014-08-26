@@ -12,7 +12,7 @@ import com.clemble.casino.game.event.server.RoundEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.RoundStateChangedEvent;
 import com.clemble.casino.game.event.server.PlayerMovedEvent;
-import com.clemble.casino.game.specification.RoundGameConfiguration;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;

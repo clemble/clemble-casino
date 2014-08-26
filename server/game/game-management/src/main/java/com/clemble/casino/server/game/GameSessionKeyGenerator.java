@@ -1,7 +1,7 @@
 package com.clemble.casino.server.game;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.specification.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.id.KeyFactory;
 

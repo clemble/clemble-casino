@@ -2,11 +2,10 @@ package com.clemble.casino.integration.game.spring;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.configuration.ServerGameConfiguration;
-import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.GameConfigurationKey;
+import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfigurationKey;
 import com.clemble.casino.json.ObjectMapperUtils;
 import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

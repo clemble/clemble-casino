@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.specification.GameConfiguration;
-import com.clemble.casino.game.specification.MatchGameConfiguration;
+import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import com.clemble.casino.integration.game.GamePlayer;
 import com.clemble.casino.integration.game.MatchGamePlayer;
 import com.clemble.casino.integration.game.RoundGamePlayer;
