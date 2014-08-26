@@ -14,7 +14,7 @@ import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.GameEventTask;
 
-public class SessionTimeTask implements GameEventTask, GameSessionAware {
+public class SessionTimeTask implements GameEventTask {
 
     /**
      * Generated 29/12/13

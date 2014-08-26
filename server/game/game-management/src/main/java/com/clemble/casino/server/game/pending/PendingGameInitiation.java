@@ -17,7 +17,7 @@ import com.clemble.casino.game.specification.GameConfigurationKey;
 import com.clemble.casino.game.specification.GameConfigurationKeyAware;
 
 @NodeEntity
-public class PendingGameInitiation implements GameConfigurationKeyAware, GameSessionAware, Serializable {
+public class PendingGameInitiation implements GameConfigurationKeyAware, GameSessionAware {
 
     /**
      * Generated 20/01/14
