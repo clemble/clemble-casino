@@ -12,6 +12,7 @@ import com.clemble.casino.server.registration.repository.PlayerCredentialReposit
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.security.SimpleClembleConsumerDetailsService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
+import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
@@ -34,7 +35,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by mavarazy on 7/4/14.
  */
 @Configuration
-@Import({CommonSpringConfiguration.class, OAuthSpringConfiguration.class, PlayerTokenSpringConfiguration.class, RedisSpringConfiguration.class})
+@Import({CommonSpringConfiguration.class, OAuthSpringConfiguration.class, PlayerTokenSpringConfiguration.class, RedisSpringConfiguration.class, MongoSpringConfiguration.class})
 public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -43,15 +44,8 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public MongoRepositoryFactory playerRegistrationRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
-        MongoClient mongoClient = new MongoClient(host, port);
-        MongoOperations mongoOperations = new MongoTemplate(mongoClient, "clemble");
-        return new MongoRepositoryFactory(mongoOperations);
-    }
-
-    @Bean
-    public PlayerCredentialRepository playerCredentialRepository(@Qualifier("playerRegistrationRepositoryFactory") MongoRepositoryFactory playerRegistrationRepositoryFactory) {
-        return playerRegistrationRepositoryFactory.getRepository(PlayerCredentialRepository.class);
+    public PlayerCredentialRepository playerCredentialRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+        return mongoRepositoryFactory.getRepository(PlayerCredentialRepository.class);
     }
 
     @Bean

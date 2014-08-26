@@ -6,11 +6,10 @@ import com.clemble.casino.server.payment.listener.SystemPaymentTransactionReques
 import com.clemble.casino.server.payment.repository.JedisPlayerAccountTemplate;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
+import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
-import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,12 +20,8 @@ import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import redis.clients.jedis.JedisPool;
-
-import java.net.UnknownHostException;
 
 @Configuration
 @Import({PaymentSpringConfiguration.PaymentManagementSpringConfiguration.class})
@@ -67,18 +62,12 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     }
 
     @Configuration
+    @Import(MongoSpringConfiguration.class)
     public static class PaymentMongoSpringConfiguration implements SpringConfiguration {
 
         @Bean
-        public MongoRepositoryFactory paymentRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
-            MongoClient mongoClient = new MongoClient(host, port);
-            MongoOperations mongoOperations = new MongoTemplate(mongoClient, "clemble");
-            return new MongoRepositoryFactory(mongoOperations);
-        }
-
-        @Bean
-        public PaymentTransactionRepository paymentTransactionRepository(@Qualifier("paymentRepositoryFactory") MongoRepositoryFactory paymentRepositoryFactory) {
-            return paymentRepositoryFactory.getRepository(PaymentTransactionRepository.class);
+        public PaymentTransactionRepository paymentTransactionRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+            return mongoRepositoryFactory.getRepository(PaymentTransactionRepository.class);
         }
 
     }

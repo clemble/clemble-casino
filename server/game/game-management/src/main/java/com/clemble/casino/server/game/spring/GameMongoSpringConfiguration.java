@@ -4,48 +4,38 @@ import com.clemble.casino.server.game.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.server.game.repository.GameScheduleRepository;
 import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
+import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.mongodb.MongoClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
-
-import java.net.UnknownHostException;
 
 /**
  * Created by mavarazy on 8/20/14.
  */
 @Configuration
+@Import(MongoSpringConfiguration.class)
 public class GameMongoSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public MongoRepositoryFactory gameRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
-        MongoClient mongoClient = new MongoClient(host, port);
-        MongoOperations mongoOperations = new MongoTemplate(mongoClient, "clemble");
-        return new MongoRepositoryFactory(mongoOperations);
+    public GameConstructionRepository gameConstructionRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+        return mongoRepositoryFactory.getRepository(GameConstructionRepository.class);
     }
 
     @Bean
-    public GameConstructionRepository gameConstructionRepository(MongoRepositoryFactory gameRepositoryFactory) {
-        return gameRepositoryFactory.getRepository(GameConstructionRepository.class);
+    public GameRecordRepository gameRecordRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+        return mongoRepositoryFactory.getRepository(GameRecordRepository.class);
     }
 
     @Bean
-    public GameRecordRepository gameRecordRepository(MongoRepositoryFactory gameRepositoryFactory) {
-        return gameRepositoryFactory.getRepository(GameRecordRepository.class);
+    public GameScheduleRepository gameScheduleRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+        return mongoRepositoryFactory.getRepository(GameScheduleRepository.class);
     }
 
     @Bean
-    public GameScheduleRepository gameScheduleRepository(MongoRepositoryFactory gameRepositoryFactory) {
-        return gameRepositoryFactory.getRepository(GameScheduleRepository.class);
-    }
-
-    @Bean
-    public ServerGameConfigurationRepository serverGameConfigurationRepository(MongoRepositoryFactory gameRepositoryFactory) {
-        return gameRepositoryFactory.getRepository(ServerGameConfigurationRepository.class);
+    public ServerGameConfigurationRepository serverGameConfigurationRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+        return mongoRepositoryFactory.getRepository(ServerGameConfigurationRepository.class);
     }
 
 }

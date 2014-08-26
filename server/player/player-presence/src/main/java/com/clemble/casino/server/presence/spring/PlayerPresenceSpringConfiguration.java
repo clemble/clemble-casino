@@ -8,35 +8,22 @@ import com.clemble.casino.server.presence.PlayerPresenceCleaner;
 import com.clemble.casino.server.presence.listener.PlayerPresenceGameEndedListener;
 import com.clemble.casino.server.presence.listener.PlayerPresenceGameStartedEventListener;
 import com.clemble.casino.server.presence.repository.PlayerSessionRepository;
+import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PresenceServiceSpringConfiguration;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
-import com.mongodb.MongoClient;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import redis.clients.jedis.JedisPool;
 
-import java.net.UnknownHostException;
-
 @Configuration
-@Import(value = {CommonSpringConfiguration.class, PresenceServiceSpringConfiguration.class})
+@Import(value = {CommonSpringConfiguration.class, PresenceServiceSpringConfiguration.class, MongoSpringConfiguration.class})
 public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
-
-    @Bean
-    public MongoRepositoryFactory playerPresenceRepositoryFactory(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port) throws UnknownHostException {
-        MongoClient mongoClient = new MongoClient(host, port);
-        MongoOperations mongoOperations = new MongoTemplate(mongoClient, "clemble");
-        return new MongoRepositoryFactory(mongoOperations);
-    }
 
     @Bean
     public PlayerPresenceGameEndedListener playerPresenceGameEndedListener(ServerPlayerPresenceService presenceService, SystemNotificationServiceListener notificationServiceListener) {
@@ -53,8 +40,8 @@ public class PlayerPresenceSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerSessionRepository playerSessionRepository(@Qualifier("playerPresenceRepositoryFactory") MongoRepositoryFactory playerPresenceRepositoryFactory) {
-        return playerPresenceRepositoryFactory.getRepository(PlayerSessionRepository.class);
+    public PlayerSessionRepository playerSessionRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+        return mongoRepositoryFactory.getRepository(PlayerSessionRepository.class);
     }
 
     @Bean
