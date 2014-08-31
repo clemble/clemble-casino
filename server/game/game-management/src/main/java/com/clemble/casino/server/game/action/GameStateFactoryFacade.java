@@ -2,18 +2,40 @@ package com.clemble.casino.server.game.action;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameStateFactory;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGameState;
 import com.clemble.casino.game.construct.GameInitiation;
+import org.reflections.Reflections;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.SimpleBeanDefinitionRegistry;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.type.filter.AssignableTypeFilter;
+import org.springframework.core.type.filter.TypeFilter;
 
 public class GameStateFactoryFacade implements ApplicationListener<ContextRefreshedEvent> {
 
     final private Map<Game, GameStateFactory<?>> gameToStateFactory = new HashMap<Game, GameStateFactory<?>>();
+
+    public GameStateFactoryFacade(){
+        Reflections reflections = new Reflections("com.clemble.casino");
+        Set<Class<? extends GameStateFactory>> stateFactories = reflections.getSubTypesOf(GameStateFactory.class);
+        for(Class<? extends GameStateFactory> factoryClass: stateFactories) {
+            try {
+                GameStateFactory factory = factoryClass.newInstance();
+                gameToStateFactory.put(factory.getGame(), factory);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @SuppressWarnings("unchecked")
     public <S extends RoundGameState> S constructState(final GameInitiation initiation, final RoundGameContext context){

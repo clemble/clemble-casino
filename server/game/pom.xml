@@ -13,7 +13,6 @@
         <module>game-construction</module>
         <module>game-common</module>
         <module>game-management</module>
-        <module>game-web</module>
     </modules>
     <dependencyManagement>
         <dependencies>

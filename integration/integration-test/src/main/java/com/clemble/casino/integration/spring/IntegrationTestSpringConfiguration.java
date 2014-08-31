@@ -23,9 +23,9 @@ import com.clemble.casino.server.game.configuration.ServerGameConfiguration;
 import com.clemble.casino.server.game.configuration.repository.ServerGameConfigurationRepository;
 import com.clemble.casino.server.game.configuration.spring.GameConfigurationSpringConfiguration;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
+import com.clemble.casino.server.game.spring.GameManagementSpringConfiguration;
 import com.clemble.casino.server.goal.spring.GoalSpringConfiguration;
 import com.clemble.casino.server.player.notification.SystemEventListener;
-import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import com.clemble.casino.server.bonus.spring.PaymentBonusSpringConfiguration;
@@ -50,7 +50,6 @@ import com.clemble.casino.android.AndroidCasinoRegistrationTemplate;
 import com.clemble.casino.android.player.AndroidPlayerFacadeRegistrationService;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.client.error.ClembleCasinoResponseErrorHandler;
-import com.clemble.casino.integration.game.spring.IntegrationGameSpringConfiguration;
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
@@ -81,7 +80,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         GoalSpringConfiguration.class,
         GoalJudgeSpringConfiguration.class,
         GoalJudgeDutySpringConfiguration.class,
-        IntegrationGameSpringConfiguration.class,
+        GameManagementSpringConfiguration.class,
         GameConfigurationSpringConfiguration.class,
         GameConstructionSpringConfiguration.class
     })

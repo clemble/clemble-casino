@@ -70,16 +70,19 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>game-construction</artifactId>
         </dependency>
-
-
         <dependency>
-            <groupId>com.clemble.casino.integration</groupId>
-            <artifactId>integration-base</artifactId>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>game-management</artifactId>
         </dependency>
+
 
         <dependency>
             <groupId>com.clemble.casino.integration</groupId>
             <artifactId>integration-game</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.integration</groupId>
+            <artifactId>integration-base</artifactId>
         </dependency>
 
         <dependency>
@@ -239,10 +242,10 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.integration</groupId>
-                                            <artifactId>integration-game</artifactId>
+                                            <artifactId>game-management</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
-                                            <destFileName>game.war</destFileName>
+                                            <destFileName>game-management.war</destFileName>
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
@@ -274,10 +277,6 @@
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/payment.war</war>
                                     <contextPath>/payment</contextPath>
-                                </contextHandler>
-                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/game.war</war>
-                                    <contextPath>/game</contextPath>
                                 </contextHandler>
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/player-social.war</war>
@@ -323,6 +322,10 @@
                                     <war>${project.build.directory}/wars-to-be-tested/game-construction.war</war>
                                     <contextPath>/game/construction</contextPath>
                                 </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/game-management.war</war>
+                                    <contextPath>/game/management</contextPath>
+                                </contextHandler>
                             </contextHandlers>
                             <systemProperties>
                                 <force>true</force>
@@ -342,6 +345,13 @@
                             <stopPort>9991</stopPort>
                             <stopKey>test</stopKey>
                         </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.clemble.casino.integration</groupId>
+                                <artifactId>integration-game</artifactId>
+                                <version>${project.version}</version>
+                            </dependency>
+                        </dependencies>
                         <executions>
                             <execution>
                                 <id>start-jetty</id>
