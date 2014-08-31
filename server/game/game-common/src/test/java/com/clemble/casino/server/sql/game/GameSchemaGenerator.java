@@ -9,7 +9,6 @@ import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.clemble.casino.game.configuration.ServerGameConfiguration;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.ScheduledGame;
 
@@ -48,7 +47,7 @@ public class GameSchemaGenerator {
 
     private Configuration addAnnotatedClasses(Configuration configuration){
         return configuration
-                .addAnnotatedClass(ServerGameConfiguration.class)
+                // Moved to separate project .addAnnotatedClass(ServerGameConfiguration.class)
                 .addAnnotatedClass(GameRecord.class)
                 .addAnnotatedClass(GameConstruction.class)
                 .addAnnotatedClass(ScheduledGame.class);

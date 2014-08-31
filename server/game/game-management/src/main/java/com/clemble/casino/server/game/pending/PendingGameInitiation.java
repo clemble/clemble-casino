@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.clemble.casino.game.GameSessionAware;
+import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfigurationAware;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
@@ -12,11 +14,9 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.configuration.GameConfigurationKey;
-import com.clemble.casino.game.configuration.GameConfigurationKeyAware;
 
 @NodeEntity
-public class PendingGameInitiation implements GameConfigurationKeyAware, GameSessionAware {
+public class PendingGameInitiation implements GameConfigurationAware, GameSessionAware {
 
     /**
      * Generated 20/01/14
@@ -28,7 +28,7 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, GameSes
     // TODO make GameSessionAware and restore configuration key serialization
     @Indexed(unique = true)
     private String sessionKey;
-    private GameConfigurationKey configurationKey;
+    private GameConfiguration configuration;
     @Fetch
     @RelatedTo(type = "PARTICIPATE", direction = Direction.OUTGOING)
     private Set<PendingPlayer> participants = new HashSet<>();
@@ -38,14 +38,14 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, GameSes
 
     public PendingGameInitiation(GameInitiation initiation) {
         this.sessionKey = initiation.getSessionKey().toString();
-        this.configurationKey = initiation.getConfiguration().getConfigurationKey();
+        this.configuration = initiation.getConfiguration();
         for (String player : initiation.getParticipants())
             participants.add(new PendingPlayer(player));
     }
 
     public PendingGameInitiation(GameInitiation initiation, Set<PendingPlayer> participants) {
         this.sessionKey = initiation.getSessionKey().toString();
-        this.configurationKey = initiation.getConfiguration().getConfigurationKey();
+        this.configuration = initiation.getConfiguration();
         this.participants = participants;
     }
 
@@ -74,17 +74,18 @@ public class PendingGameInitiation implements GameConfigurationKeyAware, GameSes
         this.sessionKey = session;
     }
 
-    public GameConfigurationKey getConfigurationKey() {
-        return configurationKey;
+    @Override
+    public GameConfiguration getConfiguration() {
+        return configuration;
     }
 
-    public void setConfiguration(GameConfigurationKey name) {
-        this.configurationKey = name;
+    public void setConfiguration(GameConfiguration name) {
+        this.configuration = name;
     }
 
     @Override
     public String toString() {
-        return "penging:" + sessionKey + ":" + participants + ":" + configurationKey;
+        return "penging:" + sessionKey + ":" + participants + ":" + configuration;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.clemble.casino.server.spring.common;
 
+import com.clemble.casino.server.converters.GameConfigurationConverter;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.config.Setting;
 import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
@@ -48,6 +49,7 @@ abstract public class BasicNeo4JSpringConfiguration extends Neo4jConfiguration i
     protected ConversionService neo4jConversionService() throws Exception {
         GenericConversionService conversionService = (GenericConversionService) super.neo4jConversionService();
         conversionService.addConverter(new GameConfigurationKeyConverter());
+        conversionService.addConverter(new GameConfigurationConverter());
         return conversionService;
     }
 

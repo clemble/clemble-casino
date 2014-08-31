@@ -13,7 +13,6 @@ import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.game.aspect.TournamentGameAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
-import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -34,9 +33,8 @@ public class SimpleGameSpringConfiguration {
                                             ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory,
                                             ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory,
                                             GameRecordRepository sessionRepository,
-                                            ServerGameConfigurationRepository configurationRepository,
                                             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerFactory(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, sessionRepository, configurationRepository, notificationService);
+        return new GameManagerFactory(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, sessionRepository, notificationService);
     }
 
     @Bean

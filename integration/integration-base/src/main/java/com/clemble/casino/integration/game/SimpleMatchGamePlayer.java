@@ -8,6 +8,7 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameRecordOperations;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.MatchGameContext;
+import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.event.server.MatchEvent;
 import com.clemble.casino.game.configuration.GameConfigurationKey;
 import org.junit.Assert;
@@ -54,8 +55,8 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
             Assert.assertNotNull(context.getSessionKey() + " >> " + sessionKey + " >> not found in DB", record);
             synchronized (lock) {
                 if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
-                    GameConfigurationKey configurationKey = record.getConfigurationKey();
-                    GamePlayer newPlayer = playerFactory.construct(playerOperations(), sessionKey, configurationKey);
+                    GameConfiguration configuration = record.getConfiguration();
+                    GamePlayer newPlayer = playerFactory.construct(playerOperations(), sessionKey, configuration.getConfigurationKey());
                     System.out.println("match >> " + getPlayer() + " >> constructed new player for >> " + sessionKey);
                     currentPlayer.set(newPlayer);
                     potContext.set(context);

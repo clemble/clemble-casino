@@ -17,7 +17,6 @@ import com.clemble.casino.game.configuration.TournamentGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
-import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
 
 public class GameManagerFactory {
 
@@ -29,7 +28,6 @@ public class GameManagerFactory {
     final private ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentAspectFactory;
     final private GameRecordRepository recordRepository;
     final private PlayerNotificationService notificationService;
-    final private ServerGameConfigurationRepository configurationRepository;
 
     public GameManagerFactory(
             GameStateFactoryFacade stateFactory,
@@ -37,12 +35,10 @@ public class GameManagerFactory {
             ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory,
             ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory,
             GameRecordRepository roundRepository,
-            ServerGameConfigurationRepository configurationRepository,
             PlayerNotificationService notificationService) {
         this.stateFactory = checkNotNull(stateFactory);
         this.recordRepository = checkNotNull(roundRepository);
         this.notificationService = checkNotNull(notificationService);
-        this.configurationRepository = checkNotNull(configurationRepository);
         this.matchManagerFactory = checkNotNull(matchGameManagerFactory);
         this.roundManagerFactory = checkNotNull(roundGameManagerFactory);
         this.tournamentAspectFactory = checkNotNull(tournamentGameManagerFactory);
@@ -76,7 +72,7 @@ public class GameManagerFactory {
         // Step 2. Saving game record
         GameRecord roundRecord = new GameRecord()
             .setSessionKey(initiation.getSessionKey())
-            .setConfiguration(initiation.getConfiguration().getConfigurationKey())
+            .setConfiguration(initiation.getConfiguration())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
         roundRecord = recordRepository.save(roundRecord);
@@ -106,7 +102,7 @@ public class GameManagerFactory {
         // Step 2. Generating new pot game record
         GameRecord matchGameRecord = new GameRecord()
             .setSessionKey(initiation.getSessionKey())
-            .setConfiguration(initiation.getConfiguration().getConfigurationKey())
+            .setConfiguration(initiation.getConfiguration())
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
         // Step 3. Saving match record

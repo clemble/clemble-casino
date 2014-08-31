@@ -49,7 +49,7 @@ public class PendingGameTest {
         PendingGameInitiation pendingInitiation = initiations.get(0);
         assertNotNull(pendingInitiation);
         assertNotNull(pendingInitiation.getSessionKey());
-        assertNotNull(pendingInitiation.getConfigurationKey());
+        assertNotNull(pendingInitiation.getConfiguration());
     }
 
 }

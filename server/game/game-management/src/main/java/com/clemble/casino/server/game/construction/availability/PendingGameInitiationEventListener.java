@@ -5,7 +5,6 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.*;
 
 import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.player.SystemPlayerPresenceChangedEvent;
@@ -16,13 +15,11 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.game.repository.PendingGameInitiationRepository;
 import com.clemble.casino.server.game.repository.PendingPlayerRepository;
-import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
 
 public class PendingGameInitiationEventListener implements SystemEventListener<SystemPlayerPresenceChangedEvent> {
 
     final private ServerPlayerPresenceService presenceService;
     final private ServerGameInitiationService initiationService;
-    final private ServerGameConfigurationRepository configurationRepository;
 
     final private PendingPlayerRepository playerRepository;
     final private PendingGameInitiationRepository initiationRepository;
@@ -30,13 +27,11 @@ public class PendingGameInitiationEventListener implements SystemEventListener<S
     public PendingGameInitiationEventListener(PendingPlayerRepository playerRepository,
             PendingGameInitiationRepository initiationRepository,
             ServerPlayerPresenceService presenceService,
-            ServerGameInitiationService initiationService,
-            ServerGameConfigurationRepository configurationRepository) {
+            ServerGameInitiationService initiationService) {
         this.initiationService = checkNotNull(initiationService);
         this.presenceService = checkNotNull(presenceService);
         this.initiationRepository = checkNotNull(initiationRepository);
         this.playerRepository = checkNotNull(playerRepository);
-        this.configurationRepository = checkNotNull(configurationRepository);
     }
 
     @Override
@@ -94,8 +89,7 @@ public class PendingGameInitiationEventListener implements SystemEventListener<S
     }
 
     private GameInitiation toInitiation(PendingGameInitiation initiation){
-        GameConfiguration configuration = configurationRepository.findOne(initiation.getConfigurationKey()).getConfiguration();
-        return new GameInitiation(initiation.getSessionKey(), configuration, PlayerAwareUtils.toPlayerList(initiation.getParticipants()));
+        return new GameInitiation(initiation.getSessionKey(), initiation.getConfiguration(), PlayerAwareUtils.toPlayerList(initiation.getParticipants()));
     }
 
 }

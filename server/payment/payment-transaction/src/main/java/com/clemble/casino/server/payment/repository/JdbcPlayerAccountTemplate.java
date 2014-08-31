@@ -45,7 +45,7 @@ public class JdbcPlayerAccountTemplate implements PlayerAccountTemplate {
                 Integer playerBalance = jdbc.queryForObject(UPDATE_QUERY, Integer.class, player, amount.getCurrency().ordinal());
                 linesUpdated = jdbc.update(UPDATE_ALTER, playerBalance + amount.getAmount(), player, amount.getCurrency().ordinal(), playerBalance);
             } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
-                // TODO SECURITY - you can create players, that are not in the system and process requests for them
+                // TODO SECURITY - you can construct players, that are not in the system and process requests for them
                 try {
                     jdbc.update(INSERT, player, amount.getCurrency().ordinal(), 0);
                 } catch (Throwable throwable) {

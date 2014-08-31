@@ -194,6 +194,11 @@
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
+                <artifactId>game-configuration</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>goal-track</artifactId>
                 <version>${project.version}</version>
             </dependency>

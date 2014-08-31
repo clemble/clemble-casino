@@ -15,13 +15,9 @@ public class PendingGameInitiationUtils {
     final private PendingPlayerRepository playerRepository;
     final private PendingGameInitiationRepository initiationRepository;
 
-    final private ServerGameConfigurationRepository configurationRepository;
-
-    public PendingGameInitiationUtils(PendingPlayerRepository playerRepository, PendingGameInitiationRepository initiationRepository,
-            ServerGameConfigurationRepository configurationRepository) {
+    public PendingGameInitiationUtils(PendingPlayerRepository playerRepository, PendingGameInitiationRepository initiationRepository) {
         this.playerRepository = checkNotNull(playerRepository);
         this.initiationRepository = checkNotNull(initiationRepository);
-        this.configurationRepository = configurationRepository;
     }
 
     public void add(final GameInitiation initiation) {
@@ -47,7 +43,7 @@ public class PendingGameInitiationUtils {
     }
 
     public GameInitiation toInitiation(PendingGameInitiation initiation) {
-        GameConfiguration configuration = configurationRepository.findOne(initiation.getConfigurationKey()).getConfiguration();
+        GameConfiguration configuration = initiation.getConfiguration();
         return new GameInitiation(initiation.getSessionKey(), configuration, PlayerAwareUtils.toPlayerList(initiation.getParticipants()));
     }
 }

@@ -13,7 +13,6 @@ import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 import com.clemble.casino.server.game.aspect.TournamentGameAspectFactory;
-import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructionService;
 import com.clemble.casino.server.game.construction.availability.PendingPlayerCreationEventListener;
@@ -21,12 +20,10 @@ import com.clemble.casino.server.game.construction.availability.ServerAvailabili
 import com.clemble.casino.server.game.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.server.game.repository.PendingPlayerRepository;
-import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.game.spring.GameManagementSpringConfiguration;
-import com.clemble.casino.server.presence.controller.game.options.GameConfigurationController;
 import com.clemble.casino.server.presence.controller.game.session.AutoGameConstructionController;
 import com.clemble.casino.server.presence.controller.game.session.AvailabilityGameConstructionController;
 import com.clemble.casino.server.presence.controller.game.session.GameActionController;
@@ -49,9 +46,8 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
         ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory,
         ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory,
         GameRecordRepository roundRecordRepository,
-        ServerGameConfigurationRepository configurationRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerFactory(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, roundRecordRepository, configurationRepository, notificationService);
+        return new GameManagerFactory(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, roundRecordRepository, notificationService);
     }
 
     @Bean
@@ -80,11 +76,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     @Bean
     public ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory() {
         return new ServerGameManagerFactory<>(TournamentGameAspectFactory.class);
-    }
-
-    @Bean
-    public GameConfigurationController gameConfigurationController(ServerGameConfigurationService configurationService) {
-        return new GameConfigurationController(configurationService);
     }
 
     @Bean

@@ -55,6 +55,10 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>player-presence</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>game-configuration</artifactId>
+        </dependency>
 
 
         <dependency>

@@ -27,7 +27,6 @@ import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.game.repository.GameConstructionRepository;
-import com.clemble.casino.server.game.repository.ServerGameConfigurationRepository;
 
 public class ServerAvailabilityGameConstructionService implements AvailabilityGameConstructionService {
 
@@ -42,7 +41,6 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             ActionLatchService latchService,
             GameSessionKeyGenerator sessionKeyGenerator,
             PlayerAccountServiceContract accountServerService,
-            ServerGameConfigurationRepository configurationRepository,
             GameConstructionRepository constructionRepository,
             PlayerNotificationService notificationService,
             PendingGameInitiationEventListener pendingInitiationService) {

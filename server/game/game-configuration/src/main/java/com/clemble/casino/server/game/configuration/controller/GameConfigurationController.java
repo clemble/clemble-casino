@@ -1,4 +1,4 @@
-package com.clemble.casino.server.presence.controller.game.options;
+package com.clemble.casino.server.game.configuration.controller;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.clemble.casino.game.service.GameConfigurationService;
 import com.clemble.casino.game.configuration.GameConfigurations;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
+import com.clemble.casino.server.game.configuration.service.ServerGameConfigurationService;
 import static com.clemble.casino.game.GameWebMapping.*;
 
 @RestController

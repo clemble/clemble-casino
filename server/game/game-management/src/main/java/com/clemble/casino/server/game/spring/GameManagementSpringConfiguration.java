@@ -17,7 +17,6 @@ import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFac
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
 import com.clemble.casino.server.game.repository.*;
-import com.clemble.casino.server.id.KeyFactory;
 import com.clemble.casino.server.id.RedisKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.spring.common.*;
@@ -34,7 +33,6 @@ import com.clemble.casino.server.game.aspect.notification.PlayerNotificationRule
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
-import com.clemble.casino.server.game.configuration.ServerGameConfigurationService;
 import com.clemble.casino.server.game.construct.ServerGameInitiationService;
 import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructionService;
 import com.clemble.casino.server.game.construction.availability.PendingGameInitiationEventListener;
@@ -113,11 +111,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ServerGameConfigurationService serverGameConfigurationService(ServerGameConfigurationRepository configurationRepository) {
-        return new ServerGameConfigurationService(configurationRepository);
-    }
-
-    @Bean
     public ServerAutoGameConstructionService serverAutoGameConstructionService(final @Qualifier("gameSessionKeyGenerator") GameSessionKeyGenerator sessionKeyGenerator,
             final ServerGameInitiationService initiatorService, final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService, final ServerPlayerPresenceService playerStateManager) {
@@ -134,11 +127,10 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Qualifier("constructionActionLatchService") ActionLatchService constructionActionLatchService,
         @Qualifier("gameSessionKeyGenerator") GameSessionKeyGenerator sessionKeyGenerator,
         @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService,
-        ServerGameConfigurationRepository configurationRepository,
         GameConstructionRepository constructionRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
         PendingGameInitiationEventListener pendingInitiationService) {
-        return new ServerAvailabilityGameConstructionService(constructionActionLatchService, sessionKeyGenerator, accountServerService, configurationRepository, constructionRepository, notificationService, pendingInitiationService);
+        return new ServerAvailabilityGameConstructionService(constructionActionLatchService, sessionKeyGenerator, accountServerService, constructionRepository, notificationService, pendingInitiationService);
     }
 
     @Bean
@@ -153,9 +145,9 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public PendingGameInitiationEventListener pendingGameInitiationEventListener(PendingPlayerRepository playerRepository,
             PendingGameInitiationRepository initiationRepository, ServerPlayerPresenceService presenceService, ServerGameInitiationService initiationService,
-            ServerGameConfigurationRepository configurationRepository, SystemNotificationServiceListener notificationServiceListener) {
+            SystemNotificationServiceListener notificationServiceListener) {
         PendingGameInitiationEventListener eventListener = new PendingGameInitiationEventListener(playerRepository, initiationRepository, presenceService,
-                initiationService, configurationRepository);
+                initiationService);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }
