@@ -1,6 +1,5 @@
 package com.clemble.casino.server.game.spring;
 
-import com.clemble.casino.server.game.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.server.game.repository.GameScheduleRepository;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
@@ -16,11 +15,6 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 @Configuration
 @Import(MongoSpringConfiguration.class)
 public class GameMongoSpringConfiguration implements SpringConfiguration {
-
-    @Bean
-    public GameConstructionRepository gameConstructionRepository(MongoRepositoryFactory mongoRepositoryFactory) {
-        return mongoRepositoryFactory.getRepository(GameConstructionRepository.class);
-    }
 
     @Bean
     public GameRecordRepository gameRecordRepository(MongoRepositoryFactory mongoRepositoryFactory) {

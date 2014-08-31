@@ -13,19 +13,11 @@ import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 import com.clemble.casino.server.game.aspect.TournamentGameAspectFactory;
-import com.clemble.casino.server.game.construct.ServerGameInitiationService;
-import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructionService;
-import com.clemble.casino.server.game.construction.availability.PendingPlayerCreationEventListener;
-import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
-import com.clemble.casino.server.game.repository.GameConstructionRepository;
+import com.clemble.casino.server.game.construction.ServerGameInitiationService;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
-import com.clemble.casino.server.game.repository.PendingPlayerRepository;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
-import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.game.spring.GameManagementSpringConfiguration;
-import com.clemble.casino.server.presence.controller.game.session.AutoGameConstructionController;
-import com.clemble.casino.server.presence.controller.game.session.AvailabilityGameConstructionController;
 import com.clemble.casino.server.presence.controller.game.session.GameActionController;
 import com.clemble.casino.server.presence.controller.game.session.GameInitiationController;
 import com.clemble.casino.server.presence.controller.game.session.GameRecordController;
@@ -56,14 +48,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
     }
 
     @Bean
-    public PendingPlayerCreationEventListener pendingPlayerCreationListener(PendingPlayerRepository playerRepository,
-                                                                            SystemNotificationServiceListener notificationServiceListener) {
-        PendingPlayerCreationEventListener initiationListener = new PendingPlayerCreationEventListener(playerRepository);
-        notificationServiceListener.subscribe(initiationListener);
-        return initiationListener;
-    }
-
-    @Bean
     public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory() {
         return new ServerGameManagerFactory<>(RoundGameAspectFactory.class);
     }
@@ -83,19 +67,6 @@ abstract public class AbstractGameSpringConfiguration<State extends GameState> i
         GameManagerFactory sessionProcessor,
         GameRecordRepository roundGameRecordRepository) {
         return new GameActionController<>(roundGameRecordRepository, sessionProcessor);
-    }
-
-    @Bean
-    public AutoGameConstructionController<State> autoGameConstructionController(
-        ServerAutoGameConstructionService constructionService) {
-        return new AutoGameConstructionController<>(constructionService);
-    }
-
-    @Bean
-    public AvailabilityGameConstructionController availabilityGameConstructionController(
-        ServerAvailabilityGameConstructionService constructionService,
-        GameConstructionRepository constructionRepository) {
-        return new AvailabilityGameConstructionController(constructionService, constructionRepository);
     }
 
     @Bean

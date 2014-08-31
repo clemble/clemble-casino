@@ -3,10 +3,6 @@ package com.clemble.casino.server.game.spring;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.clemble.casino.base.ActionLatchService;
-import com.clemble.casino.base.JavaActionLatchService;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
-import com.clemble.casino.server.game.GameSessionKeyGenerator;
 import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
@@ -16,9 +12,11 @@ import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
+import com.clemble.casino.server.game.construction.ServerGameInitiationService;
+import com.clemble.casino.server.game.construction.ServerGameReadyEventListener;
 import com.clemble.casino.server.game.repository.*;
-import com.clemble.casino.server.id.RedisKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -33,32 +31,17 @@ import com.clemble.casino.server.game.aspect.notification.PlayerNotificationRule
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
-import com.clemble.casino.server.game.construct.ServerGameInitiationService;
-import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructionService;
-import com.clemble.casino.server.game.construction.availability.PendingGameInitiationEventListener;
-import com.clemble.casino.server.game.construction.availability.PendingPlayerCreationEventListener;
-import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
-import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
-import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import redis.clients.jedis.JedisPool;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class,
-    PresenceServiceSpringConfiguration.class,
-    GameNeo4jSpringConfiguration.class,
+@Import(value = {
+    CommonSpringConfiguration.class,
     GameMongoSpringConfiguration.class,
-    PaymentClientSpringConfiguration.class,
-    RedisSpringConfiguration.class
+    PresenceServiceSpringConfiguration.class
 })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
-
-    @Bean
-    public GameSessionKeyGenerator gameSessionKeyGenerator(JedisPool jedisPool) {
-        return new GameSessionKeyGenerator(new RedisKeyFactory("GAME_COUNTER", "G", jedisPool));
-    }
 
     @Bean
     public BetRuleAspectFactory gameBetAspectFactory() {
@@ -109,53 +92,21 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     public PlayerNotificationRuleAspectFactory gameNotificationManagementAspectFactory(PlayerNotificationService playerNotificationService) {
         return new PlayerNotificationRuleAspectFactory(playerNotificationService);
     }
-
     @Bean
-    public ServerAutoGameConstructionService serverAutoGameConstructionService(final @Qualifier("gameSessionKeyGenerator") GameSessionKeyGenerator sessionKeyGenerator,
-            final ServerGameInitiationService initiatorService, final GameConstructionRepository constructionRepository,
-            final PlayerLockService playerLockService, final ServerPlayerPresenceService playerStateManager) {
-        return new ServerAutoGameConstructionService(sessionKeyGenerator, initiatorService, constructionRepository, playerLockService, playerStateManager);
+    public ServerGameInitiationService serverGameInitiationActivator(
+        GameManagerFactory processor,
+        ServerPlayerPresenceService presenceService,
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        return new ServerGameInitiationService(processor, presenceService, notificationService);
     }
 
     @Bean
-    public ActionLatchService constructionActionLatchService() {
-        return new JavaActionLatchService();
-    }
-
-    @Bean
-    public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
-        @Qualifier("constructionActionLatchService") ActionLatchService constructionActionLatchService,
-        @Qualifier("gameSessionKeyGenerator") GameSessionKeyGenerator sessionKeyGenerator,
-        @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService,
-        GameConstructionRepository constructionRepository,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
-        PendingGameInitiationEventListener pendingInitiationService) {
-        return new ServerAvailabilityGameConstructionService(constructionActionLatchService, sessionKeyGenerator, accountServerService, constructionRepository, notificationService, pendingInitiationService);
-    }
-
-    @Bean
-    public PendingPlayerCreationEventListener pendingPlayerCreationEventListener(
-        SystemNotificationServiceListener notificationServiceListener,
-        PendingPlayerRepository playerRepository) {
-        PendingPlayerCreationEventListener playerEventListener = new PendingPlayerCreationEventListener(playerRepository);
-        notificationServiceListener.subscribe(playerEventListener);
-        return playerEventListener;
-    }
-
-    @Bean
-    public PendingGameInitiationEventListener pendingGameInitiationEventListener(PendingPlayerRepository playerRepository,
-            PendingGameInitiationRepository initiationRepository, ServerPlayerPresenceService presenceService, ServerGameInitiationService initiationService,
-            SystemNotificationServiceListener notificationServiceListener) {
-        PendingGameInitiationEventListener eventListener = new PendingGameInitiationEventListener(playerRepository, initiationRepository, presenceService,
-                initiationService);
+    public ServerGameReadyEventListener serverGameReadyEventListener(
+        ServerGameInitiationService serverGameInitiationService,
+        SystemNotificationServiceListener notificationServiceListener) {
+        ServerGameReadyEventListener eventListener = new ServerGameReadyEventListener(serverGameInitiationService);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
-    }
-
-    @Bean
-    public ServerGameInitiationService serverGameInitiationActivator(GameManagerFactory processor, ServerPlayerPresenceService presenceService,
-            @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new ServerGameInitiationService(processor, presenceService, notificationService);
     }
 
     @Bean

@@ -70,24 +70,24 @@ public class AvailabilityGameConstructionITest {
         // Step 4. Accepting A - B game request to start A - B game, it should not be started until A - C game finishes
         RoundGamePlayer BtoA = gameScenarios.accept(AtoB.getSessionKey(), B);
         // Step 4.1 Checking appropriate alive states for A - B game
-        assertLivenes(BtoA, false);
-        assertLivenes(AtoB, false);
+        assertAlive(BtoA, false);
+        assertAlive(AtoB, false);
         // Step 4.1 Checking appropriate alive states for A - C game
-        assertLivenes(AtoC, true);
-        assertLivenes(CtoA, true);
+        assertAlive(AtoC, true);
+        assertAlive(CtoA, true);
         // Step 5. Stopping A - C game
         AtoC.giveUp();
         AtoC.waitForEnd();
-        assertLivenes(AtoC, false);
+        assertAlive(AtoC, false);
         // Step 6. Game A - B must start automatically
         BtoA.waitForStart();
         BtoA.syncWith(AtoB);
         // Step 7. Checking appropriate alive states for A - B game
-        assertLivenes(BtoA, true);
-        assertLivenes(AtoB, true);
+        assertAlive(BtoA, true);
+        assertAlive(AtoB, true);
         // Step 8. Checking appropriate alive states for A - C game
         CtoA.syncWith(AtoC);
-        assertLivenes(CtoA, false);
+        assertAlive(CtoA, false);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class AvailabilityGameConstructionITest {
     }
 
 
-    private <State extends GameState> void assertLivenes(RoundGamePlayer<State> player, boolean alive) {
+    private <State extends GameState> void assertAlive(RoundGamePlayer<State> player, boolean alive) {
         if ((player.isAlive() && !alive) || (!player.isAlive() && alive)) {
             String playerIdentifier = player.playerOperations().getPlayer();
             GameConstruction construction = player.playerOperations().gameConstructionOperations().getConstruct(player.getSessionKey());

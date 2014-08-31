@@ -44,8 +44,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-@TestExecutionListeners(inheritListeners = true, listeners = {ClembleCasinoRegistrationOperationsWrapper.class,
-        DependencyInjectionTestExecutionListener.class})
+@TestExecutionListeners(inheritListeners = true, listeners = {
+    ClembleCasinoRegistrationOperationsWrapper.class,
+    DependencyInjectionTestExecutionListener.class
+})
 public class MatchGameConstructionITest {
 
     @Autowired

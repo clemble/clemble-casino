@@ -25,7 +25,7 @@ import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.server.game.construct.ServerGameInitiationService;
+import com.clemble.casino.server.game.construction.ServerGameInitiationService;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import com.clemble.test.concurrent.Get;

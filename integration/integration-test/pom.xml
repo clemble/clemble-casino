@@ -66,6 +66,10 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>game-configuration</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>game-construction</artifactId>
+        </dependency>
 
 
         <dependency>
@@ -247,6 +251,13 @@
                                             <type>war</type>
                                             <destFileName>game-configuration.war</destFileName>
                                         </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>game-construction</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                            <destFileName>game-construction.war</destFileName>
+                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
@@ -307,6 +318,10 @@
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/game-configuration.war</war>
                                     <contextPath>/game/configuration</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/game-construction.war</war>
+                                    <contextPath>/game/construction</contextPath>
                                 </contextHandler>
                             </contextHandlers>
                             <systemProperties>
