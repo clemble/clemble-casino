@@ -10,7 +10,6 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.configuration.GameConfigurationKey;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -25,10 +24,10 @@ public class GamePlayerFactory implements ApplicationListener<ContextRefreshedEv
     }
 
     @SuppressWarnings("unchecked")
-    public <P extends GamePlayer> P construct(ClembleCasinoOperations player, String sessionKey, GameConfigurationKey configurationKey) {
+    public <P extends GamePlayer> P construct(ClembleCasinoOperations player, String sessionKey, String configurationKey) {
         GameConfiguration configuration = player.gameConstructionOperations().getConfigurations().getConfiguration(configurationKey);
         if (configuration instanceof RoundGameConfiguration) {
-            Game game = configuration.getConfigurationKey().getGame();
+            Game game = configuration.getGame();
             if (gameToPlayerFactory.get(game) != null)
                 return (P) gameToPlayerFactory.get(game).construct(player, sessionKey, configurationKey);
             return (P) defaultMatchPlayerFactory.construct(player, sessionKey, configurationKey);

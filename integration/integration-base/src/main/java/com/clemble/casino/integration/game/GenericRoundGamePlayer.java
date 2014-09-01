@@ -12,7 +12,6 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.configuration.GameConfigurationKey;
 
 public class GenericRoundGamePlayer<State extends GameState> implements RoundGamePlayer<State> {
 
@@ -43,7 +42,7 @@ public class GenericRoundGamePlayer<State extends GameState> implements RoundGam
     }
 
     @Override
-    final public GameConfigurationKey getConfigurationKey() {
+    final public String getConfigurationKey() {
         return actualPlayer.getConfigurationKey();
     }
 

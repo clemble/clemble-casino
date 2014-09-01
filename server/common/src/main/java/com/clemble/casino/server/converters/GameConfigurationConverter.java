@@ -1,8 +1,6 @@
 package com.clemble.casino.server.converters;
 
-import com.clemble.casino.game.Game;
 import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.configuration.GameConfigurationKey;
 import com.clemble.casino.json.ObjectMapperUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.ImmutableSet;

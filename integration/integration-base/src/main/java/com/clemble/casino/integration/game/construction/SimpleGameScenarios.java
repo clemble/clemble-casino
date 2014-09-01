@@ -43,7 +43,7 @@ public class SimpleGameScenarios implements GameScenarios {
 
     @Override
     public <State extends GameState> List<RoundGamePlayer<State>> round(GameConfiguration configuration) {
-        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
+        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         // Step 1. Constructing players
         List<RoundGamePlayer<State>> constructedGames = construct(configuration);
@@ -77,7 +77,7 @@ public class SimpleGameScenarios implements GameScenarios {
 
     @Override
     public <T extends RoundGamePlayer<?>> T round(GameConfiguration configuration, ClembleCasinoOperations initiator) {
-        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
+        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         // Step 2. Creating availability game request
         GameConstruction construction = initiator.gameConstructionOperations().constructAutomatch(configuration);
@@ -92,7 +92,7 @@ public class SimpleGameScenarios implements GameScenarios {
 
     @Override
     public <T extends RoundGamePlayer<?>> T round(GameConfiguration configuration, ClembleCasinoOperations initiator, String... participants) {
-        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
+        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         // Step 2. Creating availability game request
         GameConstruction construction = initiator.gameConstructionOperations().constructAvailability(configuration, Arrays.asList(participants));
@@ -125,7 +125,7 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     public <T extends GamePlayer> List<T> construct(GameConfiguration configuration) {
-        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getConfigurationKey().getGame() == null)
+        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         List<T> gamePlayers = new ArrayList<>();
         // Step 0. Generating players

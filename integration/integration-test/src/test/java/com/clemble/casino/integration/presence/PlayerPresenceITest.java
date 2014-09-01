@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameState;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
@@ -87,8 +86,8 @@ public class PlayerPresenceITest {
                 }
             });
             // Step 5. Initiating a game between B and C
-            RoundGamePlayer<GameState> BtoC = gameScenarios.round(Game.num, B, C.getPlayer());
-            RoundGamePlayer<GameState> CtoB = gameScenarios.accept(BtoC.getSessionKey(), C);
+            RoundGamePlayer BtoC = gameScenarios.round(Game.num, B, C.getPlayer());
+            RoundGamePlayer CtoB = gameScenarios.accept(BtoC.getSessionKey(), C);
             // Step 6. Checking presences
             PlayerPresence Bpresence = BtoApresence.poll(15, TimeUnit.SECONDS);
             PlayerPresence Cpresence = CtoApresence.poll(15, TimeUnit.SECONDS);

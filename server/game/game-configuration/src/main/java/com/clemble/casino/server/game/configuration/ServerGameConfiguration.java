@@ -1,17 +1,13 @@
 package com.clemble.casino.server.game.configuration;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.configuration.GameConfigurationAware;
-import com.clemble.casino.game.configuration.GameConfigurationKey;
 import com.clemble.casino.game.configuration.GameConfigurationKeyAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "GAME_CONFIGURATION")
@@ -22,17 +18,17 @@ public class ServerGameConfiguration implements GameConfigurationKeyAware, GameC
      */
     private static final long serialVersionUID = -7670016401258035073L;
 
-    final private GameConfigurationKey configurationKey;
+    final private String configurationKey;
     final private GameConfiguration configuration;
 
     @JsonCreator
-    public ServerGameConfiguration(@JsonProperty("configurationKey") GameConfigurationKey configurationKey, @JsonProperty("configuration") GameConfiguration configuration) {
+    public ServerGameConfiguration(@JsonProperty("configurationKey") String configurationKey, @JsonProperty("configuration") GameConfiguration configuration) {
         this.configurationKey = configurationKey;
         this.configuration = configuration;
     }
 
     @Override
-    public GameConfigurationKey getConfigurationKey() {
+    public String getConfigurationKey() {
         return configurationKey;
     }
 

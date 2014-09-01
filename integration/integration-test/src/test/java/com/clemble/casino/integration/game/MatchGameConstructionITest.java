@@ -29,7 +29,6 @@ import com.clemble.casino.game.rule.time.MoveTimeRule;
 import com.clemble.casino.game.rule.time.TimeBreachPunishment;
 import com.clemble.casino.game.rule.time.TotalTimeRule;
 import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.configuration.GameConfigurationKey;
 import com.clemble.casino.game.configuration.GameConfigurations;
 import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
@@ -69,7 +68,7 @@ public class MatchGameConstructionITest {
         configurations.add(configuration);
         configurations.add(configuration);
 
-        MatchGameConfiguration potConfiguration = new MatchGameConfiguration(new GameConfigurationKey(Game.pot, "pot"), Money.create(Currency.FakeMoney, 200), PrivacyRule.everybody, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, TimeBreachPunishment.loose), new TotalTimeRule(500000, TimeBreachPunishment.loose), WonRule.owned, DrawRule.owned, configurations, null);
+        MatchGameConfiguration potConfiguration = new MatchGameConfiguration(Game.pot, "pot", Money.create(Currency.FakeMoney, 200), PrivacyRule.everybody, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, TimeBreachPunishment.loose), new TotalTimeRule(500000, TimeBreachPunishment.loose), WonRule.owned, DrawRule.owned, configurations, null);
 
         System.out.println(objectMapper.writeValueAsString(potConfiguration));
     }

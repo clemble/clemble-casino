@@ -4,11 +4,12 @@
     <parent>
         <groupId>com.clemble.casino.server</groupId>
         <artifactId>server</artifactId>
-        <version>0.11.0-SNAPSHOT</version>
+        <version>0.12.0-SNAPSHOT</version>
     </parent>
     <artifactId>goal</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>goal-configuration</module>
         <module>goal-track</module>
         <module>goal-judge</module>
         <module>goal-duty</module>

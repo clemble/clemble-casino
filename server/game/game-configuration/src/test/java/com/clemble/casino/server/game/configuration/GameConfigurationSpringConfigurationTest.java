@@ -2,7 +2,6 @@ package com.clemble.casino.server.game.configuration;
 
 import com.clemble.casino.server.game.configuration.controller.GameConfigurationController;
 import com.clemble.casino.server.game.configuration.spring.GameConfigurationSpringConfiguration;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

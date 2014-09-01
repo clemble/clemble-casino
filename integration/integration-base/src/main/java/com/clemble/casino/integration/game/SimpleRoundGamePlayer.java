@@ -14,7 +14,6 @@ import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.RoundEvent;
-import com.clemble.casino.game.configuration.GameConfigurationKey;
 
 public class SimpleRoundGamePlayer<State extends RoundGameState> extends AbstractGamePlayer implements RoundGamePlayer<State> {
 
@@ -26,7 +25,7 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
     final private AtomicReference<State> state = new AtomicReference<>();
     final private GameActionOperations<State> actionOperations;
 
-    public SimpleRoundGamePlayer(final ClembleCasinoOperations player, final String sessionKey, final GameConfigurationKey configurationKey) {
+    public SimpleRoundGamePlayer(final ClembleCasinoOperations player, final String sessionKey, final String configurationKey) {
         super(player, sessionKey, configurationKey);
         this.actionOperations = checkNotNull(player).gameActionOperations(sessionKey);
         this.actionOperations.subscribe(new EventTypeSelector(RoundEvent.class), new EventListener<RoundEvent>() {

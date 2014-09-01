@@ -21,7 +21,7 @@ public class GameSessionKeyGenerator implements KeyGenerator {
     }
 
     public String generate(GameConfiguration gameConfiguration) {
-        return gameConfiguration.getConfigurationKey().getGame() + keyFactory.generate();
+        return gameConfiguration.getGame() + keyFactory.generate();
     }
 
 }

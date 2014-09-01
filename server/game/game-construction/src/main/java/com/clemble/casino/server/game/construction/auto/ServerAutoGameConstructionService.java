@@ -17,7 +17,6 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.service.AutoGameConstructionService;
 import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.configuration.GameConfigurationKey;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.game.SystemGameReadyEvent;
@@ -64,10 +63,10 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
         }
     }
 
-    final private LoadingCache<GameConfigurationKey, Queue<AutomaticGameConstruction>> PENDING_CONSTRUCTIONS = CacheBuilder.newBuilder().build(
-            new CacheLoader<GameConfigurationKey, Queue<AutomaticGameConstruction>>() {
+    final private LoadingCache<String, Queue<AutomaticGameConstruction>> PENDING_CONSTRUCTIONS = CacheBuilder.newBuilder().build(
+            new CacheLoader<String, Queue<AutomaticGameConstruction>>() {
                 @Override
-                public Queue<AutomaticGameConstruction> load(GameConfigurationKey key) throws Exception {
+                public Queue<AutomaticGameConstruction> load(String key) throws Exception {
                     return new ArrayBlockingQueue<AutomaticGameConstruction>(100);
                 }
             });
@@ -118,7 +117,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             // Step 2.2. Acquire and process Queue
             Queue<AutomaticGameConstruction> specificationQueue = null;
             try {
-                GameConfigurationKey constructionKey = request.getConfiguration().getConfigurationKey();
+                String constructionKey = request.getConfiguration().getConfigurationKey();
                 specificationQueue = PENDING_CONSTRUCTIONS.get(constructionKey);
             } catch (ExecutionException e) {
                 throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCacheError);

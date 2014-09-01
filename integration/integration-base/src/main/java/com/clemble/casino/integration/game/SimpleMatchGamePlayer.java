@@ -10,7 +10,6 @@ import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.event.server.MatchEvent;
-import com.clemble.casino.game.configuration.GameConfigurationKey;
 import org.junit.Assert;
 
 /**
@@ -30,7 +29,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
     final private AtomicReference<GamePlayer> currentPlayer = new AtomicReference<>();
     final private AtomicReference<MatchGameContext> potContext = new AtomicReference<>();
 
-    public SimpleMatchGamePlayer(final ClembleCasinoOperations player, final String sessionKey, GameConfigurationKey configurationKey, GamePlayerFactory playerFactory) {
+    public SimpleMatchGamePlayer(final ClembleCasinoOperations player, final String sessionKey, String configurationKey, GamePlayerFactory playerFactory) {
         super(player, sessionKey, configurationKey);
         this.playerFactory = playerFactory;
         player.listenerOperations().subscribe(new EventTypeSelector(MatchEvent.class), new EventListener<MatchEvent>() {
