@@ -53,6 +53,8 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 @Import(value = {
     CommonSpringConfiguration.class,
     GameManagementSpringConfiguration.GameMongoSpringConfiguration.class,
+    GameManagementSpringConfiguration.GameAspectSpringConfiguration.class,
+    GameManagementSpringConfiguration.GameManagementControllerSpringConfiguration.class,
     PresenceServiceSpringConfiguration.class
 })
 public class GameManagementSpringConfiguration implements SpringConfiguration {
@@ -212,21 +214,26 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         return new ServerGameManagerFactory<>(TournamentGameAspectFactory.class);
     }
 
-    @Bean
-    public GameActionController picPacPoeEngineController(
-        GameManagerFactory sessionProcessor,
-        GameRecordRepository roundGameRecordRepository) {
-        return new GameActionController(roundGameRecordRepository, sessionProcessor);
-    }
+    @Configuration
+    public static class GameManagementControllerSpringConfiguration implements SpringConfiguration {
 
-    @Bean
-    public GameRecordController gameRecordController(GameRecordRepository roundGameRecordRepository) {
-        return new GameRecordController(roundGameRecordRepository);
-    }
+        @Bean
+        public GameActionController picPacPoeEngineController(
+            GameManagerFactory sessionProcessor,
+            GameRecordRepository roundGameRecordRepository) {
+            return new GameActionController(roundGameRecordRepository, sessionProcessor);
+        }
 
-    @Bean
-    public GameInitiationController gameInitiationController(ServerGameInitiationService initiationService) {
-        return new GameInitiationController(initiationService);
+        @Bean
+        public GameRecordController gameRecordController(GameRecordRepository roundGameRecordRepository) {
+            return new GameRecordController(roundGameRecordRepository);
+        }
+
+        @Bean
+        public GameInitiationController gameInitiationController(ServerGameInitiationService initiationService) {
+            return new GameInitiationController(initiationService);
+        }
+
     }
 
 }

@@ -14,12 +14,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.clemble.casino.server</groupId>
-            <artifactId>common-web</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.clemble.casino</groupId>
             <artifactId>api-game</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>common-web</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

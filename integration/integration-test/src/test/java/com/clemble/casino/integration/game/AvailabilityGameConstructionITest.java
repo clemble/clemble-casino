@@ -8,10 +8,12 @@ import java.util.List;
 
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -26,6 +28,7 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.player.PlayerAware;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+//@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class AvailabilityGameConstructionITest {
 
