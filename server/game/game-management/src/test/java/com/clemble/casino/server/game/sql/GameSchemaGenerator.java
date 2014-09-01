@@ -1,4 +1,4 @@
-package com.clemble.casino.server.sql.game;
+package com.clemble.casino.server.game.sql;
 
 import com.clemble.casino.game.GameRecord;
 import org.hibernate.cfg.Configuration;

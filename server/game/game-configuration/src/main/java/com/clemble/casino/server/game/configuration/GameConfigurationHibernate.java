@@ -1,4 +1,4 @@
-package com.clemble.casino.game;
+package com.clemble.casino.server.game.configuration;
 
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.server.hibernate.AbstractJsonHibernateType;

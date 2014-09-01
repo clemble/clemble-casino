@@ -1,4 +1,4 @@
-package com.clemble.casino.game;
+package com.clemble.casino.server.game;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.clemble.casino.game.GameRecord;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;

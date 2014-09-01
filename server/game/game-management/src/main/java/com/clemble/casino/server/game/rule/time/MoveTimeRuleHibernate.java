@@ -1,10 +1,13 @@
-package com.clemble.casino.game.rule.time;
+package com.clemble.casino.server.game.rule.time;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import com.clemble.casino.game.rule.time.MoveTimeRule;
+import com.clemble.casino.game.rule.time.TimeBreachPunishment;
+import com.clemble.casino.game.rule.time.TimeRule;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 
