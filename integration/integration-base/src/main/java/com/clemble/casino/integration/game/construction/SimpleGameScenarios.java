@@ -125,8 +125,12 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     public <T extends GamePlayer> List<T> construct(GameConfiguration configuration) {
-        if (configuration == null || configuration.getConfigurationKey() == null || configuration.getGame() == null)
-            throw new IllegalArgumentException("Specification is invalid");
+        if (configuration == null)
+            throw new IllegalArgumentException("Specification is invalid: Can't create with null CONFIGURATION");
+        if (configuration.getConfigurationKey() == null || configuration.getGame() == null)
+            throw new IllegalArgumentException("Specification is invalid: Can't create with null KEY");
+        if (configuration.getGame() == null)
+            throw new IllegalArgumentException("Specification is invalid: Can't create with null GAME");
         List<T> gamePlayers = new ArrayList<>();
         // Step 0. Generating players
         int numPlayers = configuration.getNumberRule().getMaxPlayers();
