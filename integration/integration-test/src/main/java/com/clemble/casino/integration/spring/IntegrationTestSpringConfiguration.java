@@ -2,13 +2,29 @@ package com.clemble.casino.integration.spring;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.Game;
+import com.clemble.casino.game.configuration.MatchGameConfiguration;
+import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.rule.bet.UnlimitedBetRule;
+import com.clemble.casino.game.rule.construct.PlayerNumberRule;
+import com.clemble.casino.game.rule.giveup.GiveUpRule;
+import com.clemble.casino.game.rule.match.MatchFillRule;
+import com.clemble.casino.game.rule.outcome.DrawRule;
+import com.clemble.casino.game.rule.outcome.WonRule;
+import com.clemble.casino.game.rule.time.MoveTimeRule;
+import com.clemble.casino.game.rule.time.TimeBreachPunishment;
+import com.clemble.casino.game.rule.time.TotalTimeRule;
+import com.clemble.casino.game.rule.visibility.VisibilityRule;
+import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.goal.spring.GoalJudgeDutySpringConfiguration;
 import com.clemble.casino.goal.spring.GoalJudgeSpringConfiguration;
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.json.ObjectMapperUtils;
+import com.clemble.casino.money.Currency;
+import com.clemble.casino.money.Money;
 import com.clemble.casino.registration.PlayerToken;
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.registration.service.PlayerSocialRegistrationService;
@@ -16,6 +32,7 @@ import com.clemble.casino.registration.PlayerLoginRequest;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.registration.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.registration.PlayerSocialRegistrationRequest;
+import com.clemble.casino.rule.privacy.PrivacyRule;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.game.configuration.ServerGameConfiguration;
 import com.clemble.casino.server.game.configuration.repository.ServerGameConfigurationRepository;
@@ -32,7 +49,9 @@ import com.clemble.casino.server.profile.spring.PlayerProfileSpringConfiguration
 import com.clemble.casino.server.social.spring.PlayerSocialSpringConfiguration;
 import com.clemble.casino.server.registration.spring.RegistrationSpringConfiguration;
 import com.clemble.casino.server.presence.spring.PlayerPresenceSpringConfiguration;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -145,16 +164,40 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         @PostConstruct
         public void initConfigurations() throws IOException {
             ObjectMapper objectMapper = ObjectMapperUtils.OBJECT_MAPPER;
-            // Step 1. Creating configuration key A
-            String configurationKey = "low";
-            GameConfiguration configuration = objectMapper.readValue("{\"type\":\"round\",\"game\":\"num\",\"configurationKey\":\"low\",\"price\":{\"currency\":\"FakeMoney\",\"amount\":50},\"betRule\":{\"betType\":\"unlimited\"},\"giveUpRule\":{\"giveUp\":\"all\"},\"moveTimeRule\":{\"rule\":\"moveTime\",\"limit\":2000,\"punishment\":\"loose\"},\"totalTimeRule\":{\"rule\":\"totalTime\",\"limit\":4000,\"punishment\":\"loose\"},\"privacyRule\":[\"privacy\",\"everybody\"],\"numberRule\":[\"participants\",\"two\"],\"visibilityRule\":\"visible\",\"drawRule\":[\"DrawRule\",\"owned\"],\"wonRule\":[\"WonRule\",\"price\"],\"roles\":[\"A\",\"B\"]}", GameConfiguration.class);
-            configurationRepository.save(new ServerGameConfiguration(configurationKey, configuration));
-            // Step 2. Creating configuration key B
-            configurationKey = "pot";
-            configuration = objectMapper.readValue("{\"drawRule\":[\"DrawRule\",\"owned\"],\"wonRule\":[\"WonRule\",\"price\"],\"type\":\"pot\",\"game\":\"pot\",\"configurationKey\":\"pot\",\"price\":{\"currency\":\"FakeMoney\",\"amount\":200},\"privacyRule\":[\"privacy\",\"everybody\"],\"numberRule\":[\"participants\",\"two\"],\"matchFillRule\":\"maxcommon\",\"moveTimeRule\":{\"rule\":\"moveTime\",\"limit\":50000,\"punishment\":\"loose\"},\"totalTimeRule\":{\"rule\":\"totalTime\",\"limit\":500000,\"punishment\":\"loose\"},\"configurations\":[{\"type\":\"round\",\"game\":\"num\",\"configurationKey\":\"low\",\"price\":{\"currency\":\"FakeMoney\",\"amount\":50},\"betRule\":{\"betType\":\"unlimited\"},\"giveUpRule\":{\"giveUp\":\"all\"},\"moveTimeRule\":{\"rule\":\"moveTime\",\"limit\":2000,\"punishment\":\"loose\"},\"totalTimeRule\":{\"rule\":\"totalTime\",\"limit\":4000,\"punishment\":\"loose\"},\"privacyRule\":[\"privacy\",\"everybody\"],\"numberRule\":[\"participants\",\"two\"],\"visibilityRule\":\"visible\",\"roles\":[\"A\",\"B\"]},{\"type\":\"round\",\"game\":\"num\",\"configurationKey\":\"low\",\"price\":{\"currency\":\"FakeMoney\",\"amount\":50},\"betRule\":{\"betType\":\"unlimited\"},\"giveUpRule\":{\"giveUp\":\"all\"},\"moveTimeRule\":{\"rule\":\"moveTime\",\"limit\":2000,\"punishment\":\"loose\"},\"totalTimeRule\":{\"rule\":\"totalTime\",\"limit\":4000,\"punishment\":\"loose\"},\"privacyRule\":[\"privacy\",\"everybody\"],\"numberRule\":[\"participants\",\"two\"],\"visibilityRule\":\"visible\",\"roles\":[\"A\",\"B\"]},{\"type\":\"round\",\"game\":\"num\",\"configurationKey\":\"low\",\"price\":{\"currency\":\"FakeMoney\",\"amount\":50},\"betRule\":{\"betType\":\"unlimited\"},\"giveUpRule\":{\"giveUp\":\"all\"},\"moveTimeRule\":{\"rule\":\"moveTime\",\"limit\":2000,\"punishment\":\"loose\"},\"totalTimeRule\":{\"rule\":\"totalTime\",\"limit\":4000,\"punishment\":\"loose\"},\"privacyRule\":[\"privacy\",\"everybody\"],\"numberRule\":[\"participants\",\"two\"],\"visibilityRule\":\"visible\",\"roles\":[\"A\",\"B\"]}]}", GameConfiguration.class);
-            configurationRepository.save(new ServerGameConfiguration(configurationKey, configuration));
+            // Step 1. Creating round configuration
+            RoundGameConfiguration roundConfiguration = new RoundGameConfiguration(
+                Game.num,
+                "low",
+                Money.create(Currency.FakeMoney, 50),
+                UnlimitedBetRule.INSTANCE,
+                GiveUpRule.all,
+                new MoveTimeRule(2000, TimeBreachPunishment.loose),
+                new TotalTimeRule(4000, TimeBreachPunishment.loose),
+                PrivacyRule.everybody,
+                PlayerNumberRule.two,
+                VisibilityRule.visible,
+                DrawRule.owned,
+                WonRule.price,
+                ImmutableList.of("A", "B"),
+                new ArrayList<GameUnit>()
+            );
+            configurationRepository.save(new ServerGameConfiguration("low", roundConfiguration));
+            // Step 2. Creating match configuration
+            MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(
+                Game.pot,
+                "pot",
+                Money.create(Currency.FakeMoney, 200),
+                PrivacyRule.everybody,
+                PlayerNumberRule.two,
+                MatchFillRule.maxcommon,
+                new MoveTimeRule(50000, TimeBreachPunishment.loose),
+                new TotalTimeRule(500000, TimeBreachPunishment.loose),
+                WonRule.price,
+                DrawRule.owned,
+                ImmutableList.of(roundConfiguration, roundConfiguration, roundConfiguration),
+                Collections.emptyList());
+            configurationRepository.save(new ServerGameConfiguration("pot", matchConfiguration));
         }
-
 
     }
 

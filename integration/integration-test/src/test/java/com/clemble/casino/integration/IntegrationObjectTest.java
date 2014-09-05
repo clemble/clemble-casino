@@ -16,6 +16,7 @@ import com.clemble.casino.base.ExpectedEvent;
 import com.clemble.casino.game.*;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
+import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.rule.RoundRule;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.unit.GameUnit;
@@ -38,7 +39,7 @@ import com.clemble.casino.game.rule.bet.FixedBetRule;
 import com.clemble.casino.game.rule.bet.LimitedBetRule;
 import com.clemble.casino.game.rule.bet.UnlimitedBetRule;
 import com.clemble.casino.game.rule.construct.PlayerNumberRule;
-import com.clemble.casino.game.rule.construct.PrivacyRule;
+import com.clemble.casino.rule.privacy.PrivacyRule;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.configuration.TournamentGameConfiguration;
 import com.clemble.casino.integration.game.NumberState;
@@ -152,9 +153,9 @@ public class IntegrationObjectTest {
                         .setPlayer(RandomStringUtils.random(5));
             }
         });
-        register(RoundRule.class, new AbstractValueGenerator<RoundRule>() {
+        register(GameRule.class, new AbstractValueGenerator<GameRule>() {
             @Override
-            public RoundRule generate() {
+            public GameRule generate() {
                 return UnlimitedBetRule.INSTANCE;
             }
         });

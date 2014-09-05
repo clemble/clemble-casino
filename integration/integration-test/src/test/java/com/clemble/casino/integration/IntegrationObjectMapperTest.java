@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.rule.RoundRule;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -51,7 +52,7 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
 
     @Test
     public void specialCase() {
-        ObjectGenerator.generate(RoundRule.class);
+        ObjectGenerator.generate(GameRule.class);
 
         ObjectGenerator.generate(RoundGameConfiguration.class);
         ObjectGenerator.generate(PlayerInvitedEvent.class);
