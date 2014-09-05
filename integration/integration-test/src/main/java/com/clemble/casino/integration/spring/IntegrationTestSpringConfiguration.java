@@ -15,7 +15,6 @@ import com.clemble.casino.game.rule.match.MatchFillRule;
 import com.clemble.casino.game.rule.outcome.DrawRule;
 import com.clemble.casino.game.rule.outcome.WonRule;
 import com.clemble.casino.game.rule.time.MoveTimeRule;
-import com.clemble.casino.game.rule.time.TimeBreachPunishment;
 import com.clemble.casino.game.rule.time.TotalTimeRule;
 import com.clemble.casino.game.rule.visibility.VisibilityRule;
 import com.clemble.casino.game.unit.GameUnit;
@@ -32,6 +31,7 @@ import com.clemble.casino.registration.PlayerLoginRequest;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.registration.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.registration.PlayerSocialRegistrationRequest;
+import com.clemble.casino.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.rule.privacy.PrivacyRule;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.game.configuration.ServerGameConfiguration;
@@ -49,7 +49,6 @@ import com.clemble.casino.server.profile.spring.PlayerProfileSpringConfiguration
 import com.clemble.casino.server.social.spring.PlayerSocialSpringConfiguration;
 import com.clemble.casino.server.registration.spring.RegistrationSpringConfiguration;
 import com.clemble.casino.server.presence.spring.PlayerPresenceSpringConfiguration;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,8 +170,8 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                 Money.create(Currency.FakeMoney, 50),
                 UnlimitedBetRule.INSTANCE,
                 GiveUpRule.all,
-                new MoveTimeRule(2000, TimeBreachPunishment.loose),
-                new TotalTimeRule(4000, TimeBreachPunishment.loose),
+                new MoveTimeRule(2000, LooseBreachPunishment.getInstance()),
+                new TotalTimeRule(4000, LooseBreachPunishment.getInstance()),
                 PrivacyRule.everybody,
                 PlayerNumberRule.two,
                 VisibilityRule.visible,
@@ -190,8 +189,8 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                 PrivacyRule.everybody,
                 PlayerNumberRule.two,
                 MatchFillRule.maxcommon,
-                new MoveTimeRule(50000, TimeBreachPunishment.loose),
-                new TotalTimeRule(500000, TimeBreachPunishment.loose),
+                new MoveTimeRule(50000, LooseBreachPunishment.getInstance()),
+                new TotalTimeRule(500000, LooseBreachPunishment.getInstance()),
                 WonRule.price,
                 DrawRule.owned,
                 ImmutableList.of(roundConfiguration, roundConfiguration, roundConfiguration),

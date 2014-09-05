@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
+import com.clemble.casino.rule.breach.LooseBreachPunishment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ import com.clemble.casino.game.rule.outcome.DrawRule;
 import com.clemble.casino.game.rule.outcome.WonRule;
 import com.clemble.casino.game.rule.match.MatchFillRule;
 import com.clemble.casino.game.rule.time.MoveTimeRule;
-import com.clemble.casino.game.rule.time.TimeBreachPunishment;
 import com.clemble.casino.game.rule.time.TotalTimeRule;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.configuration.GameConfigurations;
@@ -67,7 +67,7 @@ public class MatchGameConstructionITest {
         configurations.add(configuration);
         configurations.add(configuration);
 
-        MatchGameConfiguration potConfiguration = new MatchGameConfiguration(Game.pot, "pot", Money.create(Currency.FakeMoney, 200), PrivacyRule.everybody, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, TimeBreachPunishment.loose), new TotalTimeRule(500000, TimeBreachPunishment.loose), WonRule.owned, DrawRule.owned, configurations, null);
+        MatchGameConfiguration potConfiguration = new MatchGameConfiguration(Game.pot, "pot", Money.create(Currency.FakeMoney, 200), PrivacyRule.everybody, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, LooseBreachPunishment.getInstance()), new TotalTimeRule(500000, LooseBreachPunishment.getInstance()), WonRule.owned, DrawRule.owned, configurations, null);
 
         System.out.println(objectMapper.writeValueAsString(potConfiguration));
     }
