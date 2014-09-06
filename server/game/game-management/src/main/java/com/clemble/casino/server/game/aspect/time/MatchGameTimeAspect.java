@@ -21,7 +21,7 @@ public class MatchGameTimeAspect extends BasicGameAspect<RoundEndedEvent> {
         for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
             MatchGamePlayerContext potPlayerContext = this.context.getPlayerContext(playerContext.getPlayer());
             // TODO Get rid of this small hack to change the pot clocks
-            potPlayerContext.getClock().markToMove(-playerContext.getClock().getTimeSpent());
+            potPlayerContext.getClock().markToMove(- playerContext.getClock().getTimeSpent());
             potPlayerContext.getClock().markMoved();
         }
     }
