@@ -4,11 +4,11 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.server.game.action.GameManagerFactory;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
+import com.clemble.casino.server.game.aspect.GameAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NextGameAspect extends BasicGameAspect<GameEndedEvent<?>> {
+public class NextGameAspect extends GameAspect<GameEndedEvent<?>> {
 
     final private static Logger LOG = LoggerFactory.getLogger(NextGameAspect.class);
 

@@ -17,7 +17,7 @@ import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundWonRuleAspectFactory;
-import com.clemble.casino.server.game.aspect.pot.MatchFillAspectFactory;
+import com.clemble.casino.server.game.aspect.match.MatchFillAspectFactory;
 import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory;
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;

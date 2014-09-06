@@ -6,10 +6,10 @@ import java.util.Collection;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
+import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
-public class PrivateNotificationRuleAspect extends BasicGameAspect<GameManagementEvent>{
+public class PrivateNotificationRuleAspect extends GameAspect<GameManagementEvent> {
 
     final private Collection<String> participants;
     final private PlayerNotificationService notificationService;

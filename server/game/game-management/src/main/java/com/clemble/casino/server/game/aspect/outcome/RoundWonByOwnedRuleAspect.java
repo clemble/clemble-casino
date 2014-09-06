@@ -17,10 +17,10 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
+import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 
-public class RoundWonByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
+public class RoundWonByOwnedRuleAspect extends GameAspect<GameEndedEvent<?>> {
 
     final private Currency currency;
     final private SystemNotificationService systemNotificationService;

@@ -2,10 +2,9 @@ package com.clemble.casino.server.game.aspect.outcome;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.event.server.GameEndedEvent;
-import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
+import com.clemble.casino.server.game.aspect.GameAspect;
 
-public class RoundDrawBySpentRuleAspect extends BasicGameAspect<GameEndedEvent<?>> {
+public class RoundDrawBySpentRuleAspect extends GameAspect<GameEndedEvent<?>> {
 
     final public static RoundDrawBySpentRuleAspect INSTANCE = new RoundDrawBySpentRuleAspect();
 

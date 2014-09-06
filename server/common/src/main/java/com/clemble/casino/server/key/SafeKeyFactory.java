@@ -1,4 +1,4 @@
-package com.clemble.casino.server.id;
+package com.clemble.casino.server.key;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.repository.CrudRepository;

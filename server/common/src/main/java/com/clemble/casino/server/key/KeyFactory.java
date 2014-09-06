@@ -1,4 +1,4 @@
-package com.clemble.casino.server.id;
+package com.clemble.casino.server.key;
 
 public interface KeyFactory {
 

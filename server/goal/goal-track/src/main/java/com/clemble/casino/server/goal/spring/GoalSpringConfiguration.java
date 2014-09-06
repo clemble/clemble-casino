@@ -6,7 +6,7 @@ import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.goal.service.BidCalculator;
 import com.clemble.casino.server.goal.service.SpecificationBidCalculator;
-import com.clemble.casino.server.id.RedisKeyFactory;
+import com.clemble.casino.server.key.RedisKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;

@@ -1,13 +1,13 @@
-package com.clemble.casino.server.game.aspect.pot;
+package com.clemble.casino.server.game.aspect.match;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.RoundEndedEvent;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
+import com.clemble.casino.server.game.aspect.GameAspect;
 
-public class MatchFillMaxCommonAspect extends BasicGameAspect<RoundEndedEvent>{
+public class MatchFillMaxCommonAspect extends GameAspect<RoundEndedEvent> {
 
     final private MatchGameContext context;
 

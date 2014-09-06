@@ -13,7 +13,7 @@ import com.clemble.casino.server.game.construction.controller.AvailabilityGameCo
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.repository.PendingGameInitiationRepository;
 import com.clemble.casino.server.game.construction.repository.PendingPlayerRepository;
-import com.clemble.casino.server.id.RedisKeyFactory;
+import com.clemble.casino.server.key.RedisKeyFactory;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;

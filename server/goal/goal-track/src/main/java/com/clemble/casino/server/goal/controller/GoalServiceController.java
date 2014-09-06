@@ -10,7 +10,6 @@ import com.clemble.casino.server.event.goal.SystemGoalCreatedEvent;
 import com.clemble.casino.server.goal.GoalKeyGenerator;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.goal.service.BidCalculator;
-import com.clemble.casino.server.id.KeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

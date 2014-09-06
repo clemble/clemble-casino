@@ -4,10 +4,10 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.event.server.RoundEndedEvent;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
+import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
-public class GameEndPresenceAspect extends BasicGameAspect<RoundEndedEvent> {
+public class GameEndPresenceAspect extends GameAspect<RoundEndedEvent> {
 
     final private ServerPlayerPresenceService presenceService;
 

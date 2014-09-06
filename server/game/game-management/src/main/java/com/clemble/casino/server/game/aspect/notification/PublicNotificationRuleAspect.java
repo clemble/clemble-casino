@@ -5,15 +5,15 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.clemble.casino.game.GameWebMapping;
+import com.clemble.casino.server.game.aspect.GameAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
-public class PublicNotificationRuleAspect extends BasicGameAspect<GameManagementEvent> {
+public class PublicNotificationRuleAspect extends GameAspect<GameManagementEvent> {
 
     final private Logger LOG = LoggerFactory.getLogger(PublicNotificationRuleAspect.class);
 

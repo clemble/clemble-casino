@@ -1,7 +1,7 @@
 package com.clemble.casino.server.registration;
 
 import com.clemble.casino.server.KeyGenerator;
-import com.clemble.casino.server.id.KeyFactory;
+import com.clemble.casino.server.key.KeyFactory;
 
 /**
  * Created by mavarazy on 8/19/14.

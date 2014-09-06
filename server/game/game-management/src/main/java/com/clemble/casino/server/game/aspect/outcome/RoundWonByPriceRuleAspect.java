@@ -5,6 +5,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.Date;
 
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,11 @@ import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class RoundWonByPriceRuleAspect extends BasicGameAspect<GameEndedEvent<?>>{
+public class RoundWonByPriceRuleAspect extends GameAspect<GameEndedEvent<?>> {
     
     final private Logger LOG = LoggerFactory.getLogger(RoundWonByPriceRuleAspect.class);
 

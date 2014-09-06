@@ -3,8 +3,7 @@ package com.clemble.casino.server.registration.spring;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
-import com.clemble.casino.server.id.KeyFactory;
-import com.clemble.casino.server.id.SafeKeyFactory;
+import com.clemble.casino.server.key.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
 import com.clemble.casino.server.security.PlayerTokenFactory;
@@ -18,17 +17,12 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.registration.controller.PlayerBaseRegistrationController;
 import com.clemble.casino.server.registration.controller.PlayerManualRegistrationController;
-import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 
-import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 
 /**

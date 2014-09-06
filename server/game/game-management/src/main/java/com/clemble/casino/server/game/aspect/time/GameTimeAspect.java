@@ -16,9 +16,9 @@ import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.action.GameEventTaskExecutor;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
+import com.clemble.casino.server.game.aspect.GameAspect;
 
-public class GameTimeAspect extends BasicGameAspect<GameManagementEvent> {
+public class GameTimeAspect extends GameAspect<GameManagementEvent> {
 
     final private RoundGameContext context;
     final private Collection<String> participants;

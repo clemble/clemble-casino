@@ -1,11 +1,15 @@
 package com.clemble.casino.server.game.aspect;
 
-import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.server.aspect.ClembleAspect;
 
-public interface GameAspect<T extends Event> extends EventListener<T> {
+abstract public class GameAspect<T extends Event> extends ClembleAspect<T> {
 
-    public EventSelector getSelector();
+    public GameAspect(EventSelector selector) {
+        super(selector);
+    }
+
+    abstract public void doEvent(T event);
 
 }

@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.aspect.pot;
+package com.clemble.casino.server.game.aspect.match;
 
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.event.server.RoundEndedEvent;

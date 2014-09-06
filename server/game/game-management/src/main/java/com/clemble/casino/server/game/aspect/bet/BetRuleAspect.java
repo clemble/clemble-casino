@@ -7,9 +7,9 @@ import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.event.bet.BetEvent;
 import com.clemble.casino.rule.bet.BetRule;
-import com.clemble.casino.server.game.aspect.BasicGameAspect;
+import com.clemble.casino.server.game.aspect.GameAspect;
 
-public class BetRuleAspect extends BasicGameAspect<BetEvent> {
+public class BetRuleAspect extends GameAspect<BetEvent> {
 
     final private BetRule betRule;
     final private GameContext<?> context;

@@ -1,4 +1,4 @@
-package com.clemble.casino.server.id;
+package com.clemble.casino.server.key;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

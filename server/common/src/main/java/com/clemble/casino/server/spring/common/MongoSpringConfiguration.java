@@ -1,8 +1,6 @@
 package com.clemble.casino.server.spring.common;
 
-import com.clemble.casino.server.converters.BetRuleToString;
 import com.clemble.casino.server.converters.BreachPunishmentToString;
-import com.clemble.casino.server.converters.StringToBetRule;
 import com.clemble.casino.server.converters.StringToBreachPunishment;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Value;
