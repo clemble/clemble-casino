@@ -21,8 +21,10 @@ import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.rule.outcome.WonRule;
 import com.clemble.casino.game.unit.GameUnit;
 
+import com.clemble.casino.rule.ConfigurationRule;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
@@ -152,9 +154,9 @@ public class IntegrationObjectTest {
                         .setPlayer(RandomStringUtils.random(5));
             }
         });
-        register(GameRule.class, new AbstractValueGenerator<GameRule>() {
+        register(ConfigurationRule.class, new AbstractValueGenerator<ConfigurationRule>() {
             @Override
-            public GameRule generate() {
+            public ConfigurationRule generate() {
                 return UnlimitedBetRule.INSTANCE;
             }
         });
@@ -192,6 +194,12 @@ public class IntegrationObjectTest {
 
             public ValueGenerator<Integer> clone() {
                 return this;
+            }
+        });
+        register(WonRule.class, new AbstractValueGenerator<WonRule>() {
+            @Override
+            public WonRule generate() {
+                return WonRule.owned;
             }
         });
         register(GameConfiguration.class, new AbstractValueGenerator<GameConfiguration>() {
