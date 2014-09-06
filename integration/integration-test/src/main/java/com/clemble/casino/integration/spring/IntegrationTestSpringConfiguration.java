@@ -8,7 +8,7 @@ import java.util.List;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
-import com.clemble.casino.game.rule.bet.UnlimitedBetRule;
+import com.clemble.casino.rule.bet.UnlimitedBetRule;
 import com.clemble.casino.game.rule.construct.PlayerNumberRule;
 import com.clemble.casino.game.rule.giveup.GiveUpRule;
 import com.clemble.casino.game.rule.match.MatchFillRule;

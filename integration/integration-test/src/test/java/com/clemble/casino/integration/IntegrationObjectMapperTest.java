@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.clemble.casino.event.surrender.GiveUpEvent;
-import com.clemble.casino.game.action.BetEvent;
+import com.clemble.casino.event.bet.BetEvent;
 import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.apache.commons.lang3.RandomStringUtils;

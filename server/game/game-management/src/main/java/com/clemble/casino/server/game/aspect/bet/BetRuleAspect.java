@@ -5,8 +5,8 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GamePlayerAccount;
-import com.clemble.casino.game.action.BetEvent;
-import com.clemble.casino.game.rule.bet.BetRule;
+import com.clemble.casino.event.bet.BetEvent;
+import com.clemble.casino.rule.bet.BetRule;
 import com.clemble.casino.server.game.aspect.BasicGameAspect;
 
 public class BetRuleAspect extends BasicGameAspect<BetEvent> {
