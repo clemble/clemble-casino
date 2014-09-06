@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Created by mavarazy on 7/4/14.
  */
-public class SystemPlayerSocialRegistered
+public class SystemPlayerSocialRegisteredEvent
     implements SocialConnectionDataAware,
         SystemPlayerRegisteredEvent {
 
@@ -18,8 +18,8 @@ public class SystemPlayerSocialRegistered
     final private SocialConnectionData socialConnectionData;
 
     @JsonCreator
-    public SystemPlayerSocialRegistered(@JsonProperty(PLAYER) String player,
-        @JsonProperty("socialConnectionData") SocialConnectionData socialConnectionData) {
+    public SystemPlayerSocialRegisteredEvent(@JsonProperty(PLAYER) String player,
+                                             @JsonProperty("socialConnectionData") SocialConnectionData socialConnectionData) {
         this.player = player;
         this.socialConnectionData = socialConnectionData;
     }

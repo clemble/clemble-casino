@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.integration.game.RoundGamePlayer;
+import com.clemble.casino.integration.game.SelectNumberEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.NumberState;
-import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
@@ -43,8 +43,8 @@ public class GamePaymentTransactionITest {
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make a surrender by player B
-        A.perform(new SelectNumberAction(A.getPlayer(), 2));
-        B.perform(new SelectNumberAction(B.getPlayer(), 1));
+        A.perform(new SelectNumberEvent(A.getPlayer(), 2));
+        B.perform(new SelectNumberEvent(B.getPlayer(), 1));
         // Step 3. Synching players
         B.syncWith(A);
         // Step 4. Checking payment transaction complete

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Created by mavarazy on 7/4/14.
  */
-public class SystemPlayerProfileRegistered implements PlayerProfileAware, SystemPlayerRegisteredEvent {
+public class SystemPlayerProfileRegisteredEvent implements PlayerProfileAware, SystemPlayerRegisteredEvent {
 
     final public static String CHANNEL = "registered:profile";
 
@@ -16,7 +16,7 @@ public class SystemPlayerProfileRegistered implements PlayerProfileAware, System
     final private PlayerProfile profile;
 
     @JsonCreator
-    public SystemPlayerProfileRegistered(
+    public SystemPlayerProfileRegisteredEvent(
         @JsonProperty(PLAYER) String player,
         @JsonProperty("playerProfile") PlayerProfile profile) {
         this.player = player;
@@ -44,7 +44,7 @@ public class SystemPlayerProfileRegistered implements PlayerProfileAware, System
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        SystemPlayerProfileRegistered that = (SystemPlayerProfileRegistered) o;
+        SystemPlayerProfileRegisteredEvent that = (SystemPlayerProfileRegisteredEvent) o;
 
         if (profile != null ? !profile.equals(that.profile) : that.profile != null) return false;
 

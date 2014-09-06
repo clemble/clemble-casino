@@ -2,13 +2,13 @@ package com.clemble.casino.server.game.action;
 
 import java.util.Collection;
 
+import com.clemble.casino.event.Event;
 import org.springframework.scheduling.Trigger;
 
 import com.clemble.casino.game.GameSessionAware;
-import com.clemble.casino.game.action.GameAction;
 
 public interface GameEventTask extends Trigger, GameSessionAware {
 
-    public Collection<GameAction> execute();
+    public Collection<Event> execute();
 
 }

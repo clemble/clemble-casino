@@ -2,8 +2,8 @@ package com.clemble.casino.server.game.aspect.time;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.game.GamePlayerClock;
-import com.clemble.casino.game.rule.time.TimeRule;
+import com.clemble.casino.rule.time.PlayerClock;
+import com.clemble.casino.rule.time.TimeRule;
 import com.clemble.casino.server.game.action.ScheduledGameAction;
 import com.clemble.casino.server.game.action.ScheduledGameActionExecutor;
 
@@ -12,13 +12,13 @@ public class PlayerGameTimeTracker {
     final private static long MOVE_TIMEOUT = 5_000;
 
     final private TimeRule timeRule;
-    final private GamePlayerClock playerClock;
+    final private PlayerClock playerClock;
 
     final private ScheduledGameAction action;
     final private ScheduledGameActionExecutor scheduledActionExecutor;
 
     public PlayerGameTimeTracker( 
-            GamePlayerClock playerClock,
+            PlayerClock playerClock,
             ScheduledGameAction action,
             TimeRule timeRule,
             ScheduledGameActionExecutor scheduledActionExecutor) {

@@ -4,9 +4,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import com.clemble.casino.game.GamePlayerClock;
-import com.clemble.casino.game.action.GameAction;
-import com.clemble.casino.game.rule.time.TimeRule;
+import com.clemble.casino.event.Event;
+import com.clemble.casino.rule.time.PlayerClock;
+import com.clemble.casino.rule.time.TimeRule;
 import com.clemble.casino.player.PlayerAware;
 
 public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTracker> {
@@ -20,9 +20,9 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
 
     final private String player;
     final private TimeRule timeRule;
-    final private GamePlayerClock playerClock;
+    final private PlayerClock playerClock;
 
-    public PlayerTimeTracker(String player, GamePlayerClock playerClock, TimeRule timeRule) {
+    public PlayerTimeTracker(String player, PlayerClock playerClock, TimeRule timeRule) {
         this.timeRule = checkNotNull(timeRule);
         this.playerClock = playerClock;
         this.player = player;
@@ -53,7 +53,7 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
         return timeUntilBreach < Long.MAX_VALUE ? System.currentTimeMillis() + timeUntilBreach : timeUntilBreach;
     }
 
-    public void appendBreachEvent(Collection<GameAction> events) {
+    public void appendBreachEvent(Collection<Event> events) {
         if (timeRule.timeUntilBreach(playerClock) <= 0)
             events.add(timeRule.toTimeBreachedEvent(player));
     }

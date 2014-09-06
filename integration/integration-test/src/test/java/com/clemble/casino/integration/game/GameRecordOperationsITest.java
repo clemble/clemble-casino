@@ -12,7 +12,6 @@ import com.clemble.casino.payment.event.PaymentEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -47,8 +46,8 @@ public class GameRecordOperationsITest {
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make a surrender by player B
-        A.perform(new SelectNumberAction(A.getPlayer(), 2));
-        B.perform(new SelectNumberAction(B.getPlayer(), 1));
+        A.perform(new SelectNumberEvent(A.getPlayer(), 2));
+        B.perform(new SelectNumberEvent(B.getPlayer(), 1));
         // Step 3. Synching players
         B.syncWith(A);
         // Step 4. Checking payment transaction complete
@@ -66,9 +65,9 @@ public class GameRecordOperationsITest {
         assertEquals(AgameRecord, BgameRecord);
         assertEquals(AgameRecord.getEventRecords().size(), 4);
         Iterator<GameEventRecord> moveIterator = AgameRecord.getEventRecords().iterator();
-        assertEquals(moveIterator.next().getEvent(), new SelectNumberAction(A.getPlayer(), 2));
+        assertEquals(moveIterator.next().getEvent(), new SelectNumberEvent(A.getPlayer(), 2));
         moveIterator.next();
-        assertEquals(moveIterator.next().getEvent(), new SelectNumberAction(B.getPlayer(), 1));
+        assertEquals(moveIterator.next().getEvent(), new SelectNumberEvent(B.getPlayer(), 1));
     }
 
 }

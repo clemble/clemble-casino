@@ -46,11 +46,11 @@ public class GameTimeAspectITest {
         Assert.assertEquals(playerA.getSessionKey(), playerB.getSessionKey());
         Assert.assertEquals(players.size(), 2);
 
-        playerA.perform(new SelectNumberAction(playerA.getPlayer(), 1));
+        playerA.perform(new SelectNumberEvent(playerA.getPlayer(), 1));
         Thread.sleep(playerA.getConfiguration().getMoveTimeRule().getLimit() + 100);
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GamePlayGameEnded));
-        playerB.perform(new SelectNumberAction(playerA.getPlayer(), 1));
+        playerB.perform(new SelectNumberEvent(playerA.getPlayer(), 1));
     }
 
     @Test

@@ -4,8 +4,8 @@ import static com.clemble.casino.web.player.PlayerWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
-import com.clemble.casino.server.event.player.SystemPlayerImageChanged;
-import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
+import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.service.GravatarService;
@@ -102,7 +102,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         // Step 4. Registration done through separate registration service
         PlayerToken token = register(registrationRequest, player);
         // Step 5. Notifying system of new user
-        notificationService.notify(new SystemPlayerProfileRegistered(player, normalizedProfile));
+        notificationService.notify(new SystemPlayerProfileRegisteredEvent(player, normalizedProfile));
         // Step 6. All done returning response
         return token;
     }
@@ -141,7 +141,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(player);
         playerCredentials = playerCredentialRepository.save(playerCredentials);
         String imageRedirect = GravatarService.toRedirect(playerCredentials.getEmail());
-        notificationService.notify(new SystemPlayerImageChanged(player, imageRedirect, imageRedirect + "?s=48"));
+        notificationService.notify(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));
         // Step 2. Specifying player type
         // TODO move to registration listener playerProfile.setType(PlayerType.free);
         // Step 3. Create new token

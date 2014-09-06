@@ -1,6 +1,6 @@
 package com.clemble.casino.server.game.action;
 
-import com.clemble.casino.game.action.GameAction;
+import com.clemble.casino.event.Event;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,9 +52,9 @@ public class GameEventTaskExecutor {
 
         @Override
         public void run() {
-            Collection<GameAction> events = eventTask.execute();
+            Collection<Event> events = eventTask.execute();
             GameManager<?> manager = GameEventTaskExecutor.this.sessionProcessor.get(eventTask.getSessionKey());
-            for (GameAction event : events) {
+            for (Event event : events) {
                 manager.process(event);
             }
             reschedule(eventTask);

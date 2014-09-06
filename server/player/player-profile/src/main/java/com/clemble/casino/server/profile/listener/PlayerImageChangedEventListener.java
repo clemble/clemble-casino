@@ -1,7 +1,6 @@
 package com.clemble.casino.server.profile.listener;
 
-import com.clemble.casino.server.event.player.SystemPlayerImageChanged;
-import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
+import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.profile.PlayerImageRedirect;
 import com.clemble.casino.server.profile.repository.PlayerImageRedirectRepository;
@@ -9,7 +8,7 @@ import com.clemble.casino.server.profile.repository.PlayerImageRedirectRepositor
 /**
  * Created by mavarazy on 8/16/14.
  */
-public class PlayerImageChangedEventListener implements SystemEventListener<SystemPlayerImageChanged> {
+public class PlayerImageChangedEventListener implements SystemEventListener<SystemPlayerImageChangedEvent> {
 
     final private PlayerImageRedirectRepository imageRedirectRepository;
 
@@ -18,18 +17,18 @@ public class PlayerImageChangedEventListener implements SystemEventListener<Syst
     }
 
     @Override
-    public void onEvent(SystemPlayerImageChanged event) {
+    public void onEvent(SystemPlayerImageChangedEvent event) {
         // Step 1. Updating image redirect
         imageRedirectRepository.save(new PlayerImageRedirect(event.getPlayer(), event.getRedirect(), event.getSmallImage()));
     }
 
     @Override
     public String getChannel() {
-        return SystemPlayerImageChanged.CHANNEL;
+        return SystemPlayerImageChangedEvent.CHANNEL;
     }
 
     @Override
     public String getQueueName() {
-        return SystemPlayerImageChanged.CHANNEL + " > player:image:redirect";
+        return SystemPlayerImageChangedEvent.CHANNEL + " > player:image:redirect";
     }
 }

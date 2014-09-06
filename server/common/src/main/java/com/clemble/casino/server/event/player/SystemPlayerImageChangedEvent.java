@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Created by mavarazy on 8/16/14.
  */
-public class SystemPlayerImageChanged implements SystemPlayerEvent {
+public class SystemPlayerImageChangedEvent implements SystemPlayerEvent {
 
     final public static String CHANNEL = "player:image:update";
 
@@ -15,7 +15,7 @@ public class SystemPlayerImageChanged implements SystemPlayerEvent {
     final private String smallImage;
 
     @JsonCreator
-    public SystemPlayerImageChanged(
+    public SystemPlayerImageChangedEvent(
         @JsonProperty(PLAYER) String player,
         @JsonProperty("redirect") String redirect,
         @JsonProperty("smallImage") String smallImage) {
@@ -52,7 +52,7 @@ public class SystemPlayerImageChanged implements SystemPlayerEvent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SystemPlayerImageChanged that = (SystemPlayerImageChanged) o;
+        SystemPlayerImageChangedEvent that = (SystemPlayerImageChangedEvent) o;
 
         if (!player.equals(that.player)) return false;
         if (!redirect.equals(that.redirect)) return false;

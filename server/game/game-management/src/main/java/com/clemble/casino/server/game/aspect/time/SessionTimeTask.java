@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import com.clemble.casino.event.Event;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGamePlayerContext;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.springframework.scheduling.TriggerContext;
 
-import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.action.GameEventTask;
 
@@ -64,8 +64,8 @@ public class SessionTimeTask implements GameEventTask {
         }
     }
 
-    public Collection<GameAction> execute() {
-        Collection<GameAction> breachEvents = new ArrayList<>();
+    public Collection<Event> execute() {
+        Collection<Event> breachEvents = new ArrayList<>();
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers)
             playerTimeTracker.appendBreachEvent(breachEvents);
         return breachEvents;

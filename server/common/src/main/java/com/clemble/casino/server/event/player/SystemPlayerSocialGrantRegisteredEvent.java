@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Created by mavarazy on 7/4/14.
  */
-public class SystemPlayerSocialGrantRegistered
+public class SystemPlayerSocialGrantRegisteredEvent
     implements SocialAccessGrantAware,
         SystemPlayerRegisteredEvent {
 
@@ -18,7 +18,7 @@ public class SystemPlayerSocialGrantRegistered
     final private SocialAccessGrant socialGrant;
 
     @JsonCreator
-    public SystemPlayerSocialGrantRegistered(@JsonProperty(PLAYER) String player, @JsonProperty("accessGrant") SocialAccessGrant socialGrant) {
+    public SystemPlayerSocialGrantRegisteredEvent(@JsonProperty(PLAYER) String player, @JsonProperty("accessGrant") SocialAccessGrant socialGrant) {
         this.player = player;
         this.socialGrant = socialGrant;
     }
@@ -44,7 +44,7 @@ public class SystemPlayerSocialGrantRegistered
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        SystemPlayerSocialGrantRegistered that = (SystemPlayerSocialGrantRegistered) o;
+        SystemPlayerSocialGrantRegisteredEvent that = (SystemPlayerSocialGrantRegisteredEvent) o;
 
         if (socialGrant != null ? !socialGrant.equals(that.socialGrant) : that.socialGrant != null) return false;
 

@@ -1,6 +1,7 @@
 package com.clemble.casino.server.game.aspect.record;
 
 import com.clemble.casino.client.event.EventSelector;
+import com.clemble.casino.event.Event;
 import com.clemble.casino.event.GameEvent;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.action.GameEventRecord;
@@ -12,7 +13,7 @@ import java.util.Date;
 /**
  * Created by mavarazy on 10/03/14.
  */
-public class GameRecordEventAspect extends BasicGameAspect<GameEvent> {
+public class GameRecordEventAspect extends BasicGameAspect<Event> {
 
     final private String sessionKey;
     final private GameRecordRepository recordRepository;
@@ -24,7 +25,7 @@ public class GameRecordEventAspect extends BasicGameAspect<GameEvent> {
     }
 
     @Override
-    public void doEvent(GameEvent event) {
+    public void doEvent(Event event) {
         // Step 1. Constructing event record
         GameEventRecord move = new GameEventRecord()
             .setEvent(event)

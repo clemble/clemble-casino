@@ -9,7 +9,6 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.event.GameSessionAwareEvent;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.action.GameAction;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.configuration.GameConfiguration;
 
@@ -96,7 +95,7 @@ public class GenericRoundGamePlayer<State extends GameState> implements RoundGam
     }
 
     @Override
-    final public void perform(GameAction gameAction) {
+    final public void perform(Event gameAction) {
         actualPlayer.perform(gameAction);
     }
 

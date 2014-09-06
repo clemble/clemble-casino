@@ -11,8 +11,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.clemble.casino.event.surrender.GiveUpEvent;
+import com.clemble.casino.game.action.BetEvent;
 import com.clemble.casino.game.rule.GameRule;
-import com.clemble.casino.game.rule.RoundRule;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -23,8 +24,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.action.BetAction;
-import com.clemble.casino.game.action.surrender.GiveUpAction;
 import com.clemble.casino.game.construct.ScheduledGameRequest;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
@@ -63,15 +62,15 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
         Assert.assertNull(checkSerialization(InvitationDeclinedEvent.class));
         Assert.assertNull(checkSerialization(ScheduledGameRequest.class));
         Assert.assertNull(checkSerialization(RoundStartedEvent.class));
-        Assert.assertNull(checkSerialization(BetAction.class));
+        Assert.assertNull(checkSerialization(BetEvent.class));
         Assert.assertNull(checkSerialization(NumberState.class));
     }
 
     @Test
     public void testGiveUpReadWrite() throws JsonParseException, JsonMappingException, IOException {
-        GiveUpAction event = new GiveUpAction(RandomStringUtils.random(5));
+        GiveUpEvent event = new GiveUpEvent(RandomStringUtils.random(5));
         String stringEvent = objectMapper.writeValueAsString(event);
-        GiveUpAction readEvent = (GiveUpAction) objectMapper.readValue(stringEvent, Event.class);
+        GiveUpEvent readEvent = (GiveUpEvent) objectMapper.readValue(stringEvent, Event.class);
         Assert.assertEquals(event, readEvent);
     }
 

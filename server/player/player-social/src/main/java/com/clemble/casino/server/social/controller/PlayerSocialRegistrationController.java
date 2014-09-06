@@ -5,10 +5,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.service.PlayerSocialRegistrationService;
-import com.clemble.casino.server.event.player.SystemPlayerProfileRegistered;
+import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
 import com.clemble.casino.server.social.ServerProfileSocialRegistrationService;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
@@ -49,7 +48,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
         // Step 2. Creating appropriate PlayerProfile
         PlayerToken token =  playerTokenFactory.create(playerProfile.getPlayer(), socialRegistrationRequest.getConsumerDetails());
         // Step 5. Notifying system of new user
-        notificationService.notify(new SystemPlayerProfileRegistered(playerProfile.getPlayer(), playerProfile));
+        notificationService.notify(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
         // Step 6. All done continue
         return token;
     }
@@ -64,7 +63,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
         // Step 2. Creating appropriate PlayerProfile
         PlayerToken token =  playerTokenFactory.create(playerProfile.getPlayer(), grantRegistrationRequest.getConsumerDetails());
         // Step 5. Notifying system of new user
-        notificationService.notify(new SystemPlayerProfileRegistered(playerProfile.getPlayer(), playerProfile));
+        notificationService.notify(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
         // Step 6. All done continue
         return token;
     }

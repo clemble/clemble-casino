@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.action;
 import java.util.Date;
 
 import com.clemble.casino.game.GameSessionAware;
-import com.clemble.casino.game.action.GameAction;
+import com.clemble.casino.game.action.ClientGameEvent;
 
 public class ScheduledGameAction implements GameSessionAware, Comparable<ScheduledGameAction> {
 
@@ -13,10 +13,10 @@ public class ScheduledGameAction implements GameSessionAware, Comparable<Schedul
     private static final long serialVersionUID = 4925081731664108806L;
 
     final private String sessionKey;
-    final private GameAction action;
+    final private ClientGameEvent action;
     private Date scheduled;
 
-    public ScheduledGameAction(String sessionKey, GameAction action, Date scheduled) {
+    public ScheduledGameAction(String sessionKey, ClientGameEvent action, Date scheduled) {
         this.sessionKey = sessionKey;
         this.scheduled = scheduled;
         this.action = action;
@@ -27,7 +27,7 @@ public class ScheduledGameAction implements GameSessionAware, Comparable<Schedul
         return sessionKey;
     }
 
-    public GameAction getAction() {
+    public ClientGameEvent getAction() {
         return action;
     }
 
