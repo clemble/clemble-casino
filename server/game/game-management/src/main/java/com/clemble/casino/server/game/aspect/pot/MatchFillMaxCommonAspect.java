@@ -24,10 +24,10 @@ public class MatchFillMaxCommonAspect extends BasicGameAspect<RoundEndedEvent>{
             maxCommon = Math.min(playerContext.getAccount().getLeft(), maxCommon);
         // Step 2. Adding max common to each player's pot value
         for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
-            GamePlayerAccount playerMatchAccount = playerContext.getAccount();
-            GamePlayerAccount playerPotAccount = context.getPlayerContext(playerContext.getPlayer()).getAccount();
-            playerPotAccount.subLeft(playerMatchAccount.getSpent() + maxCommon);
-            playerPotAccount.addOwned(playerMatchAccount.getOwned());
+            GamePlayerAccount playerRoundAccount = playerContext.getAccount();
+            GamePlayerAccount playerMatchAccount = context.getPlayerContext(playerContext.getPlayer()).getAccount();
+            playerMatchAccount.subLeft(playerRoundAccount.getSpent() + maxCommon);
+            playerMatchAccount.addOwned(playerRoundAccount.getOwned());
             context.add(maxCommon);
         }
 

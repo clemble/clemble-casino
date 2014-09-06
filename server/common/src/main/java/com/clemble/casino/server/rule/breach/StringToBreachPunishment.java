@@ -15,8 +15,7 @@ public class StringToBreachPunishment implements Converter<BreachPunishment, Str
     @Override
     public String convert(BreachPunishment source) {
         try {
-            String presentation = ObjectMapperUtils.OBJECT_MAPPER.writeValueAsString(source);
-            return presentation;
+            return ObjectMapperUtils.OBJECT_MAPPER.writeValueAsString(source);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;

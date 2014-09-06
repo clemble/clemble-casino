@@ -35,8 +35,8 @@ public class MatchWonRuleAspect extends BasicGameAspect<MatchEndedEvent> {
     @Override
     public void doEvent(MatchEndedEvent event) {
         GameOutcome outcome = event.getOutcome();
-        MatchGameContext context = event.getContext();
         if (outcome instanceof PlayerWonOutcome) {
+            MatchGameContext context = event.getContext();
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()

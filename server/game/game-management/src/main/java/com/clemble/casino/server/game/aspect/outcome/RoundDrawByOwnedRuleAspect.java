@@ -38,8 +38,8 @@ public class RoundDrawByOwnedRuleAspect extends BasicGameAspect<GameEndedEvent<?
     public void doEvent(GameEndedEvent<?> event) {
         // TODO Auto-generated method stub
         GameOutcome outcome = event.getOutcome();
-        GameContext<?> context = event.getContext();
         if (outcome instanceof DrawOutcome) {
+            GameContext<?> context = event.getContext();
             // Step 2. Generating payment transaction
             PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(context.getSessionKey())

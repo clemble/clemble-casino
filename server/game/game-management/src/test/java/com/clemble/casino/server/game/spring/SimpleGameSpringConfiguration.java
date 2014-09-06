@@ -32,9 +32,9 @@ public class SimpleGameSpringConfiguration {
                                             ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory,
                                             ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory,
                                             ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory,
-                                            GameRecordRepository sessionRepository,
+                                            GameRecordRepository recordRepository,
                                             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerFactory(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, sessionRepository, notificationService);
+        return new GameManagerFactory(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, recordRepository, notificationService);
     }
 
     @Bean

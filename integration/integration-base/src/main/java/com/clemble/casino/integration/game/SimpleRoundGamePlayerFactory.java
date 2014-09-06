@@ -3,6 +3,7 @@ package com.clemble.casino.integration.game;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.construct.GameConstruction;
 
 public class SimpleRoundGamePlayerFactory<State extends GameState> implements RoundGamePlayerFactory<State> {
@@ -21,7 +22,7 @@ public class SimpleRoundGamePlayerFactory<State extends GameState> implements Ro
     @SuppressWarnings("unchecked")
     public RoundGamePlayer<State> construct(ClembleCasinoOperations player, GameConstruction construction) {
         // Step 1. Processing game session player
-        return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration().getConfigurationKey());
+        return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration());
     }
 
     @Override
@@ -33,8 +34,8 @@ public class SimpleRoundGamePlayerFactory<State extends GameState> implements Ro
     }
 
     @Override
-    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, String sessionKey, String configurationKey) {
-        return new SimpleRoundGamePlayer(player, sessionKey, configurationKey);
+    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, String sessionKey, GameConfiguration configuration) {
+        return new SimpleRoundGamePlayer(player, sessionKey, configuration);
     }
 
 }

@@ -42,8 +42,8 @@ public class GenericRoundGamePlayer<State extends GameState> implements RoundGam
     }
 
     @Override
-    final public String getConfigurationKey() {
-        return actualPlayer.getConfigurationKey();
+    final public GameConfiguration getConfiguration() {
+        return actualPlayer.getConfiguration();
     }
 
     @Override
@@ -148,11 +148,6 @@ public class GenericRoundGamePlayer<State extends GameState> implements RoundGam
     public GamePlayer syncWith(GamePlayer anotherState) {
         actualPlayer.syncWith(anotherState);
         return this;
-    }
-
-    @Override
-    public GameConfiguration getConfiguration() {
-        return actualPlayer.getConfiguration();
     }
 
 }

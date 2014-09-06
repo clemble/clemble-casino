@@ -21,13 +21,13 @@ import com.clemble.casino.web.mapping.WebMapping;
 public class GameActionController<State extends GameState> implements GameActionService, ExternalController {
 
     final private GameManagerFactory managerFactory;
-    final private GameRecordRepository sessionRepository;
+    final private GameRecordRepository recordRepository;
 
     public GameActionController(
-            final GameRecordRepository sessionRepository,
+            final GameRecordRepository recordRepository,
             final GameManagerFactory sessionProcessor) {
         this.managerFactory = checkNotNull(sessionProcessor);
-        this.sessionRepository = checkNotNull(sessionRepository);
+        this.recordRepository = checkNotNull(recordRepository);
     }
 
     @Override

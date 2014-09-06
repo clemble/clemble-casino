@@ -13,6 +13,8 @@ import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by mavarazy on 7/5/14.
  */
 public class SystemPaymentTransactionRequestEventListener implements SystemEventListener<SystemPaymentTransactionRequestEvent>{
+
+    final private Logger LOG = LoggerFactory.getLogger(SystemPaymentTransactionRequestEventListener.class);
 
     final private PlayerAccountTemplate accountTemplate;
     final private PlayerNotificationService notificationService;
@@ -58,12 +62,14 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
     private PaymentTransaction processTransaction(PaymentTransaction paymentTransaction) {
         // Step 0. Sanity check
         if(paymentTransactionRepository.exists(paymentTransaction.getTransactionKey())) {
+            LOG.error("Payment transaction already exists {}", paymentTransaction);
             // TODO maybe you need to throw exception here
             return paymentTransactionRepository.findOne(paymentTransaction.getTransactionKey());
         }
         Collection<PaymentEvent> paymentEvents = new ArrayList<>();
         // Step 1. Processing payment transactions
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
+            LOG.debug("Processing {}", paymentOperation);
             if (paymentOperation.getOperation() == Operation.Credit) {
                 accountTemplate.credit(paymentOperation.getPlayer(), paymentOperation.getAmount());
             } else if (paymentOperation.getOperation() == Operation.Debit) {

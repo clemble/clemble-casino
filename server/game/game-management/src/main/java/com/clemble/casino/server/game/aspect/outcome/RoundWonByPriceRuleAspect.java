@@ -39,10 +39,10 @@ public class RoundWonByPriceRuleAspect extends BasicGameAspect<GameEndedEvent<?>
 
     @Override
     public void doEvent(GameEndedEvent<?> event) {
-        GameContext<?> context = event.getContext();
         LOG.debug("Processing ended event {}", event);
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof PlayerWonOutcome) {
+            GameContext<?> context = event.getContext();
             LOG.debug("Processing won outcome {}", event);
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction

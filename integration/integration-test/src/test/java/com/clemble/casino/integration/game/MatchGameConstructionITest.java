@@ -113,7 +113,7 @@ public class MatchGameConstructionITest {
         Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
         Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
 
-        assertEquals(mB.getAmount(), mA.add(300).getAmount());
+        assertEquals("Amount does not match for " + AvsB.getPlayer(), mB.getAmount(), mA.add(300).getAmount());
 
         GameRecord record = AvsB.playerOperations().gameRecordOperations().get(AvsB.getSessionKey());
         assertEquals(record.getEventRecords().size(), 6);

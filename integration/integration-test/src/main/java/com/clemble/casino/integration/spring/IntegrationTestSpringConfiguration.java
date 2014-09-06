@@ -188,7 +188,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                 Money.create(Currency.FakeMoney, 200),
                 PrivacyRule.everybody,
                 PlayerNumberRule.two,
-                MatchFillRule.maxcommon,
+                MatchFillRule.none,
                 new MoveTimeRule(50000, LooseBreachPunishment.getInstance()),
                 new TotalTimeRule(500000, LooseBreachPunishment.getInstance()),
                 WonRule.price,

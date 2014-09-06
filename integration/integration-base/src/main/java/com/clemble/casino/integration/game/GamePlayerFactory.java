@@ -20,26 +20,25 @@ public class GamePlayerFactory implements ApplicationListener<ContextRefreshedEv
 
     public <P extends GamePlayer> P construct(ClembleCasinoOperations player, String sessionKey) {
         GameConstruction construction = player.gameConstructionOperations().getConstruct(sessionKey);
-        return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration().getConfigurationKey());
+        return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration());
     }
 
     @SuppressWarnings("unchecked")
-    public <P extends GamePlayer> P construct(ClembleCasinoOperations player, String sessionKey, String configurationKey) {
-        GameConfiguration configuration = player.gameConstructionOperations().getConfigurations().getConfiguration(configurationKey);
+    public <P extends GamePlayer> P construct(ClembleCasinoOperations player, String sessionKey, GameConfiguration configuration) {
         if (configuration instanceof RoundGameConfiguration) {
             Game game = configuration.getGame();
             if (gameToPlayerFactory.get(game) != null)
-                return (P) gameToPlayerFactory.get(game).construct(player, sessionKey, configurationKey);
-            return (P) defaultMatchPlayerFactory.construct(player, sessionKey, configurationKey);
+                return (P) gameToPlayerFactory.get(game).construct(player, sessionKey, configuration);
+            return (P) defaultMatchPlayerFactory.construct(player, sessionKey, configuration);
         } else if (configuration instanceof MatchGameConfiguration) {
-            return (P) new SimpleMatchGamePlayer(player, sessionKey, configuration.getConfigurationKey(), this);
+            return (P) new SimpleMatchGamePlayer(player, sessionKey, configuration, this);
         } else {
             throw new IllegalArgumentException();
         } 
     }
 
     public <P extends GamePlayer> P construct(ClembleCasinoOperations player, GameConstruction construction) {
-        return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration().getConfigurationKey());
+        return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration());
     }
 
     @Override

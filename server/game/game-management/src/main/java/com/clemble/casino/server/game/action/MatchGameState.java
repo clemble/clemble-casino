@@ -51,32 +51,30 @@ public class MatchGameState implements GameState<MatchGameContext, Event> {
         if(event instanceof GameEndedEvent) {
             context.addOutcome(((GameEndedEvent<?>) event).getOutcome());
             int gamesLeft = configuration.getConfigurations().size() - context.getOutcomes().size();
-            if (context.getOutcomes().size() > gamesLeft) {
-                MultiValueMap<String, PlayerWonOutcome> wonOutcomes = new LinkedMultiValueMap<>();
-                for(GameOutcome outcome: context.getOutcomes())
-                    if(outcome instanceof  PlayerWonOutcome)
-                        wonOutcomes.add(((PlayerWonOutcome) outcome).getWinner(), (PlayerWonOutcome) outcome);
-                // Step 1. Searching for a leader in the pot
-                List<Entry<String, List<PlayerWonOutcome>>> sortedContexts = new ArrayList<>(wonOutcomes.entrySet());
-                Collections.sort(sortedContexts, ComparatorUtils.WON_OUT_COMPARATOR);
-                Entry<String, List<PlayerWonOutcome>> leader = sortedContexts.get(0);
-                int leaderScore = leader.getValue().size();
-                int nextAfterLeaderScore = 0;
-                if (sortedContexts.size() > 1) {
-                    Entry<String, List<PlayerWonOutcome>> nextAfterLeader = sortedContexts.get(1);
-                    nextAfterLeaderScore = nextAfterLeader.getValue().size();
-                }
-                // Step 2. Checking leader can be reached
-                if (leaderScore > nextAfterLeaderScore && 
-                   (nextAfterLeaderScore + gamesLeft < leaderScore)) {
-                    LOG.debug("{} match winner determined {}", context.getSessionKey(), leader.getKey());
-                    return new MatchEndedEvent(context.getSessionKey(), new PlayerWonOutcome(leader.getKey()), context);
-                }
-                // Step 3. If no games left mark as a draw
-                if (gamesLeft == 0) {
-                    LOG.debug("{} no more games left, considering this as a draw");
-                    return new MatchEndedEvent(context.getSessionKey(), new DrawOutcome(), context);
-                }
+            MultiValueMap<String, PlayerWonOutcome> wonOutcomes = new LinkedMultiValueMap<>();
+            for(GameOutcome outcome: context.getOutcomes())
+                if(outcome instanceof  PlayerWonOutcome)
+                    wonOutcomes.add(((PlayerWonOutcome) outcome).getWinner(), (PlayerWonOutcome) outcome);
+            // Step 1. Searching for a leader in the pot
+            List<Entry<String, List<PlayerWonOutcome>>> sortedContexts = new ArrayList<>(wonOutcomes.entrySet());
+            Collections.sort(sortedContexts, ComparatorUtils.WON_OUT_COMPARATOR);
+            Entry<String, List<PlayerWonOutcome>> leader = sortedContexts.get(0);
+            int leaderScore = leader.getValue().size();
+            int nextAfterLeaderScore = 0;
+            if (sortedContexts.size() > 1) {
+                Entry<String, List<PlayerWonOutcome>> nextAfterLeader = sortedContexts.get(1);
+                nextAfterLeaderScore = nextAfterLeader.getValue().size();
+            }
+            // Step 2. Checking leader can be reached
+            if (leaderScore > nextAfterLeaderScore &&
+               (nextAfterLeaderScore + gamesLeft < leaderScore)) {
+                LOG.debug("{} match winner determined {}", context.getSessionKey(), leader.getKey());
+                return new MatchEndedEvent(context.getSessionKey(), new PlayerWonOutcome(leader.getKey()), context);
+            }
+            // Step 3. If no games left mark as a draw
+            if (gamesLeft == 0) {
+                LOG.debug("{} no more games left, considering this as a draw");
+                return new MatchEndedEvent(context.getSessionKey(), new DrawOutcome(), context);
             }
         }
         // Step 4. Constructing next match initiation

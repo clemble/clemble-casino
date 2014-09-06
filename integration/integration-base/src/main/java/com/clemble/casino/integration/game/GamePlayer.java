@@ -6,13 +6,14 @@ import java.util.List;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.GameSessionAware;
+import com.clemble.casino.game.configuration.GameConfigurationAware;
 import com.clemble.casino.game.event.GameSessionAwareEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.configuration.GameConfigurationKeyAware;
 import com.clemble.casino.player.PlayerAware;
 
-public interface GamePlayer extends GameSessionAware, PlayerAware, Closeable, GameConfigurationKeyAware {
+public interface GamePlayer extends GameSessionAware, PlayerAware, Closeable, GameConfigurationAware {
 
     public ClembleCasinoOperations playerOperations();
 

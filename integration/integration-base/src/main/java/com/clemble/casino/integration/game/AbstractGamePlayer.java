@@ -35,7 +35,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     final protected Object versionLock = new Object();
 
     final private String sessionKey;
-    final private String configurationKey;
+    final private GameConfiguration configuration;
     final private ClembleCasinoOperations player;
     final private EventAccumulator<GameSessionAwareEvent> eventAccumulator;
 
@@ -44,13 +44,13 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     
 
     public AbstractGamePlayer(final ClembleCasinoOperations player, final GameConstruction construction) {
-        this(player, construction.getSessionKey(), construction.getRequest().getConfiguration().getConfigurationKey());
+        this(player, construction.getSessionKey(), construction.getRequest().getConfiguration());
     }
 
-    public AbstractGamePlayer(final ClembleCasinoOperations player, final String sessionKey, final String configurationKey) {
+    public AbstractGamePlayer(final ClembleCasinoOperations player, final String sessionKey, final GameConfiguration configuration) {
         this.player = checkNotNull(player);
         this.sessionKey = checkNotNull(sessionKey);
-        this.configurationKey = checkNotNull(configurationKey);
+        this.configuration = checkNotNull(configuration);
         // Step 1. Listening for outcomes
         EventSelector endEventSelector = EventSelectors.where(new GameSessionEventSelector(sessionKey))
             .and(new EventTypeSelector(GameEndedEvent.class));
@@ -80,12 +80,8 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    final public String getConfigurationKey() {
-        return configurationKey;
-    }
-
     final public GameConfiguration getConfiguration() {
-        return player.gameConstructionOperations().getConfigurations().getConfiguration(configurationKey);
+        return configuration;
     }
 
     @Override

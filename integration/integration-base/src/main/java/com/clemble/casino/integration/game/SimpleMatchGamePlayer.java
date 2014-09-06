@@ -29,8 +29,8 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
     final private AtomicReference<GamePlayer> currentPlayer = new AtomicReference<>();
     final private AtomicReference<MatchGameContext> potContext = new AtomicReference<>();
 
-    public SimpleMatchGamePlayer(final ClembleCasinoOperations player, final String sessionKey, String configurationKey, GamePlayerFactory playerFactory) {
-        super(player, sessionKey, configurationKey);
+    public SimpleMatchGamePlayer(final ClembleCasinoOperations player, final String sessionKey, GameConfiguration configuration, GamePlayerFactory playerFactory) {
+        super(player, sessionKey, configuration);
         this.playerFactory = playerFactory;
         player.listenerOperations().subscribe(new EventTypeSelector(MatchEvent.class), new EventListener<MatchEvent>() {
             @Override
@@ -55,7 +55,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
             synchronized (lock) {
                 if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
                     GameConfiguration configuration = record.getConfiguration();
-                    GamePlayer newPlayer = playerFactory.construct(playerOperations(), sessionKey, configuration.getConfigurationKey());
+                    GamePlayer newPlayer = playerFactory.construct(playerOperations(), sessionKey, configuration);
                     System.out.println("match >> " + getPlayer() + " >> constructed new player for >> " + sessionKey);
                     currentPlayer.set(newPlayer);
                     potContext.set(context);

@@ -220,13 +220,13 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Bean
         public GameActionController picPacPoeEngineController(
             GameManagerFactory sessionProcessor,
-            GameRecordRepository roundGameRecordRepository) {
-            return new GameActionController(roundGameRecordRepository, sessionProcessor);
+            GameRecordRepository recordRepository) {
+            return new GameActionController(recordRepository, sessionProcessor);
         }
 
         @Bean
-        public GameRecordController gameRecordController(GameRecordRepository roundGameRecordRepository) {
-            return new GameRecordController(roundGameRecordRepository);
+        public GameRecordController gameRecordController(GameRecordRepository recordRepository) {
+            return new GameRecordController(recordRepository);
         }
 
         @Bean

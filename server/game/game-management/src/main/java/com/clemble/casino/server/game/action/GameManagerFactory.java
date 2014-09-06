@@ -34,10 +34,10 @@ public class GameManagerFactory {
             ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory,
             ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory,
             ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory,
-            GameRecordRepository roundRepository,
+            GameRecordRepository recordRepository,
             PlayerNotificationService notificationService) {
         this.stateFactory = checkNotNull(stateFactory);
-        this.recordRepository = checkNotNull(roundRepository);
+        this.recordRepository = checkNotNull(recordRepository);
         this.notificationService = checkNotNull(notificationService);
         this.matchManagerFactory = checkNotNull(matchGameManagerFactory);
         this.roundManagerFactory = checkNotNull(roundGameManagerFactory);
