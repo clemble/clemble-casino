@@ -28,47 +28,15 @@ import com.google.common.cache.LoadingCache;
 
 public class ServerAutoGameConstructionService implements AutoGameConstructionService {
 
-    final public static class AutomaticGameConstruction {
-        final private GameConstruction construction;
-        final private GameConfiguration configuration;
-        final private List<String> participants = new ArrayList<>();
-
-        public AutomaticGameConstruction(GameConstruction construction) {
-            this.construction = construction;
-            this.configuration = construction.getRequest().getConfiguration();
-            this.participants.add(((AutomaticGameRequest) construction.getRequest()).getPlayer());
-        }
-
-        public GameConstruction getConstruction() {
-            return construction;
-        }
-
-        public boolean append(AutomaticGameRequest request) {
-            if (request != null) {
-                participants.add(request.getPlayer());
-            }
-            return participants.size() >= configuration.getNumberRule().getMinPlayers();
-        }
-
-        public boolean ready() {
-            return configuration.getNumberRule().getMinPlayers() <= participants.size();
-        }
-
-        public GameInitiation toInitiation() {
-            // Step 1. Creating instant game request
-            return new GameInitiation(construction.getSessionKey(), participants, configuration);
-        }
-    }
-
-    final private LoadingCache<String, Queue<AutomaticGameConstruction>> PENDING_CONSTRUCTIONS = CacheBuilder.newBuilder().build(
-            new CacheLoader<String, Queue<AutomaticGameConstruction>>() {
+    final private LoadingCache<String, Queue<GameConstruction>> PENDING_CONSTRUCTIONS = CacheBuilder.newBuilder().build(
+            new CacheLoader<String, Queue<GameConstruction>>() {
                 @Override
-                public Queue<AutomaticGameConstruction> load(String key) throws Exception {
-                    return new ArrayBlockingQueue<AutomaticGameConstruction>(100);
+                public Queue<GameConstruction> load(String key) throws Exception {
+                    return new ArrayBlockingQueue<GameConstruction>(100);
                 }
             });
 
-    final private Map<String, AutomaticGameConstruction> playerConstructions = new ConcurrentHashMap<>();
+    final private Map<String, GameConstruction> playerConstructions = new ConcurrentHashMap<>();
 
     final private GameSessionKeyGenerator sessionKeyGenerator;
 
@@ -105,14 +73,14 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
         // Step 2. Fetching associated Queue
         String player = request.getPlayer();
         playerLockService.lock(player);
-        AutomaticGameConstruction pendingConstuction;
+        GameConstruction pendingConstuction;
         try {
             pendingConstuction = playerConstructions.get(player);
             // Step 2.1 Check there is no pending constructions for the user
             if (pendingConstuction != null)
-                return pendingConstuction.getConstruction();
+                return pendingConstuction;
             // Step 2.2. Acquire and process Queue
-            Queue<AutomaticGameConstruction> specificationQueue = null;
+            Queue<GameConstruction> specificationQueue = null;
             try {
                 String constructionKey = request.getConfiguration().getConfigurationKey();
                 specificationQueue = PENDING_CONSTRUCTIONS.get(constructionKey);
@@ -123,16 +91,17 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             pendingConstuction = specificationQueue.poll();
             if (pendingConstuction == null) {
                 // Step 3.1 Construction was not present, creating new one
-                GameConstruction construction = GameConstruction.fromRequest(sessionKeyGenerator.generate(request.getConfiguration()), request);
-                construction = constructionRepository.save(construction);
+                pendingConstuction = GameConstruction.fromRequest(sessionKeyGenerator.generate(request.getConfiguration()), request);
+                pendingConstuction = constructionRepository.save(pendingConstuction);
 
-                pendingConstuction = new AutomaticGameConstruction(construction);
                 playerConstructions.put(player, pendingConstuction);
                 specificationQueue.add(pendingConstuction);
             } else {
                 // Step 3.2 Construction was present appending to existing one
-                if (pendingConstuction.append(request)) {
-                    GameInitiation initiation = pendingConstuction.toInitiation();
+                pendingConstuction.getParticipants().add(request.getPlayer());
+                // Step 3.3 If number rule satisfied process further
+                if (pendingConstuction.getParticipants().size() >= pendingConstuction.getConfiguration().getNumberRule().getMinPlayers()) {
+                    GameInitiation initiation = new GameInitiation(pendingConstuction.getSessionKey(), pendingConstuction.getConfiguration(), pendingConstuction.getParticipants());
                     notificationService.notify(new SystemGameReadyEvent(initiation));
                     for (String participant : initiation.getParticipants())
                         playerConstructions.remove(participant);
@@ -144,16 +113,16 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
         } finally {
             playerLockService.unlock(player);
         }
-        return pendingConstuction.getConstruction();
+        return pendingConstuction;
     }
 
     public Collection<GameConstruction> getPending(String player) {
         // Step 1. Fetching AutomaticGameConstruction
-        AutomaticGameConstruction construction = playerConstructions.get(player);
+        GameConstruction construction = playerConstructions.get(player);
         if(construction == null)
             return Collections.emptyList();
         // Step 2. Extracting GameConstruction and returning as singleton
-        return Collections.singletonList(construction.getConstruction());
+        return Collections.singletonList(construction);
     }
 
 }
