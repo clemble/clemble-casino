@@ -2,15 +2,12 @@ package com.clemble.casino.integration.game.construction;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.configuration.GameConfigurationUtils;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.configuration.MatchGameConfiguration;
@@ -36,7 +33,8 @@ public class SimpleGameScenarios implements GameScenarios {
             throw new IllegalArgumentException("Name must not be null");
         ClembleCasinoOperations A = playerOperations.createPlayer();
         // Step 0. Sanity check
-        RoundGameConfiguration configuration = GameScenariosUtils.random(A.gameConstructionOperations().getConfigurations().matchConfigurations(game));
+        List<RoundGameConfiguration> roundGameConfigurations = GameConfigurationUtils.matchConfigurations(game, A.gameConstructionOperations().getConfigurations());
+        RoundGameConfiguration configuration = GameScenariosUtils.random(roundGameConfigurations);
         // Step 1. Selecting configuration for the game
         return round(configuration);
     }
@@ -116,7 +114,8 @@ public class SimpleGameScenarios implements GameScenarios {
     @Override
     public List<MatchGamePlayer> match() {
         ClembleCasinoOperations player = playerOperations.createPlayer();
-        return match(player.gameConstructionOperations().getConfigurations().potConfigurations().get(0));
+        List<MatchGameConfiguration> matchGameConfigurations = GameConfigurationUtils.potConfigurations(player.gameConstructionOperations().getConfigurations());
+        return match(matchGameConfigurations.get(0));
     }
 
     @Override

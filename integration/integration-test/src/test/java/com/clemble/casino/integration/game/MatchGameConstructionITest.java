@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.clemble.casino.game.GameRecord;
+import com.clemble.casino.game.configuration.GameConfigurationUtils;
 import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.rule.breach.LooseBreachPunishment;
 import org.junit.Test;
@@ -28,7 +29,6 @@ import com.clemble.casino.game.rule.match.MatchFillRule;
 import com.clemble.casino.rule.time.MoveTimeRule;
 import com.clemble.casino.rule.time.TotalTimeRule;
 import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.configuration.GameConfigurations;
 import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.integration.game.construction.GameScenarios;
@@ -60,9 +60,9 @@ public class MatchGameConstructionITest {
 
     @Test
     public void testConstruction() throws JsonProcessingException{
-        GameConfigurations allConfiguration = playerScenarios.createPlayer().gameConstructionOperations().getConfigurations();
+        List<GameConfiguration> allConfiguration = playerScenarios.createPlayer().gameConstructionOperations().getConfigurations();
         List<GameConfiguration> configurations = new ArrayList<>();
-        RoundGameConfiguration configuration = allConfiguration.matchConfigurations().get(0);
+        RoundGameConfiguration configuration = GameConfigurationUtils.matchConfigurations(allConfiguration).get(0);
         configurations.add(configuration);
         configurations.add(configuration);
         configurations.add(configuration);

@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfigurationUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,10 @@ public class GameActionOperationsGetStateITest {
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 2. Constructing automatch game
         GameConstructionOperations constructionOperations = A.gameConstructionOperations();
-        List<RoundGameConfiguration> configurations = constructionOperations.getConfigurations().matchConfigurations(Game.num);
+
+        List<GameConfiguration> allConfigurations = constructionOperations.getConfigurations();
+        List<RoundGameConfiguration> configurations = GameConfigurationUtils.matchConfigurations(Game.num, allConfigurations);
+
         RoundGameConfiguration configuration = configurations.get(0);
         GameConstruction construction = constructionOperations.constructAutomatch(configuration);
         // Step 3. Checking getState works fine
@@ -76,7 +81,10 @@ public class GameActionOperationsGetStateITest {
         B.listenerOperations().subscribe(new EventTypeSelector(GameInitiationCanceledEvent.class), listener);
         // Step 2. Constructing automatch game
         GameConstructionOperations constructionOperations = A.gameConstructionOperations();
-        List<RoundGameConfiguration> specificationOptions = constructionOperations.getConfigurations().matchConfigurations(Game.num);
+
+        List<GameConfiguration> allConfigurations = constructionOperations.getConfigurations();
+        List<RoundGameConfiguration> specificationOptions = GameConfigurationUtils.matchConfigurations(Game.num, allConfigurations);
+
         RoundGameConfiguration specification = specificationOptions.get(0);
         constructionOperations.constructAutomatch(specification);
         // Step 3. Checking getState works fine

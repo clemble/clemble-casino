@@ -1,5 +1,6 @@
 package com.clemble.casino.goal.configuration.controller;
 
+import com.clemble.casino.goal.configuration.GoalConfiguration;
 import com.clemble.casino.goal.configuration.GoalConfigurations;
 import com.clemble.casino.goal.service.GoalConfigurationService;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 import static com.clemble.casino.goal.GoalWebMapping.MY_CONFIGURATIONS;
 import static com.clemble.casino.goal.GoalWebMapping.MY_GOALS_GOAL_STATUS;
@@ -20,7 +23,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
 
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
-    public GoalConfigurations getConfigurations() {
+    public List<GoalConfiguration> getConfigurations() {
         return null;
     }
 

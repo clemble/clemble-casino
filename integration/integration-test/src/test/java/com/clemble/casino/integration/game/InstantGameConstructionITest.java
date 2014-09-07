@@ -2,6 +2,8 @@ package com.clemble.casino.integration.game;
 
 import static org.junit.Assert.assertEquals;
 
+import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.configuration.GameConfigurationUtils;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import org.junit.Test;
@@ -19,6 +21,9 @@ import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.util.RedisCleaner;
+
+import java.util.Collection;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -38,7 +43,8 @@ public class InstantGameConstructionITest {
         ClembleCasinoOperations B = playerOperations.createPlayer();
 
         GameConstructionOperations constructionOperations = A.gameConstructionOperations();
-        RoundGameConfiguration specification = constructionOperations.getConfigurations().matchConfigurations().get(0);
+        List<GameConfiguration> allConfigurations = constructionOperations.getConfigurations();
+        RoundGameConfiguration specification = GameConfigurationUtils.matchConfigurations(allConfigurations).get(0);
         GameConstruction constA = constructionOperations.constructAutomatch(specification);
 
         GameConstruction constB = B.gameConstructionOperations().constructAutomatch(specification);
