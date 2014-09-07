@@ -15,6 +15,8 @@ import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructi
 import com.clemble.casino.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
+import java.util.Collection;
+
 @RestController
 public class AutoGameConstructionController implements AutoGameConstructionService, ExternalController {
 
@@ -34,6 +36,13 @@ public class AutoGameConstructionController implements AutoGameConstructionServi
         //    throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         // Step 2. Invoking actual matching service
         return autoConstructionService.construct(request);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.CONSTRUCTION_AUTO_PENDING, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Collection<GameConstruction> getPending(@PathVariable("player") String player) {
+        return autoConstructionService.getPending(player);
     }
 
 }

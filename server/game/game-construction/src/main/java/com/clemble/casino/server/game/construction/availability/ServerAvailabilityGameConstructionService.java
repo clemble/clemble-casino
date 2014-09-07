@@ -66,7 +66,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         if (!players.isEmpty())
             throw ClembleCasinoException.fromFailures(ClembleCasinoFailure.construct(ClembleCasinoError.GameConstructionInsufficientMoney, players));
         // Step 3. Processing to opponents creation
-        GameConstruction construction = GameConstruction.fromAvailability(sessionKeyGenerator.generate(request.getConfiguration()), request);
+        GameConstruction construction = GameConstruction.fromRequest(sessionKeyGenerator.generate(request.getConfiguration()), request);
         construction = constructionRepository.save(construction);
         latchService.save(construction.getSessionKey(), construction.getResponses());
         // Step 4. Sending invitation to opponents
@@ -135,8 +135,8 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     }
 
     @Override
-    public Collection<GameInitiation> getPending(String player) {
-        return pendingInitiationService.getPending(player);
+    public Collection<GameConstruction> getPending(String player) {
+        return constructionRepository.findByParticipants(player);
     }
 
 }

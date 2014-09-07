@@ -162,10 +162,7 @@ public class IntegrationObjectTest {
         register(GameConstruction.class, new AbstractValueGenerator<GameConstruction>() {
             @Override
             public GameConstruction generate() {
-                return new GameConstruction("0",
-                        new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT),
-                        ConstructionState.pending,
-                        new ActionLatch().expectNext(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), InvitationResponseEvent.class), RoundGameConfiguration.DEFAULT);
+                return GameConstruction.fromRequest("0", new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT));
             }
         });
         register(LimitedBetRule.class, new AbstractValueGenerator<LimitedBetRule>() {

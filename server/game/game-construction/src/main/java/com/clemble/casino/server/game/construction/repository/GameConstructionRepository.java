@@ -17,4 +17,6 @@ public interface GameConstructionRepository extends MongoRepository<GameConstruc
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public <S extends GameConstruction> List<S> save(Iterable<S> entities);
 
+    public List<GameConstruction> findByParticipants(String participant);
+
 }

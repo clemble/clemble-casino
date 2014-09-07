@@ -56,7 +56,7 @@ public class GameConstructionRepositoryTest {
     public void testSaving() {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
-        GameConstruction construction = GameConstruction.fromAvailability(UUID.randomUUID().toString(), availabilityGameRequest);
+        GameConstruction construction = GameConstruction.fromRequest(UUID.randomUUID().toString(), availabilityGameRequest);
         construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.save(construction);
@@ -67,13 +67,13 @@ public class GameConstructionRepositoryTest {
     public void testSaving2() {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
-        GameConstruction construction = GameConstruction.fromAvailability(UUID.randomUUID().toString(), availabilityGameRequest);
+        GameConstruction construction = GameConstruction.fromRequest(UUID.randomUUID().toString(), availabilityGameRequest);
         construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.save(construction);
         Assert.assertNotNull(construction.getResponses());
 
-        GameConstruction anotherConstruction = GameConstruction.fromAvailability(UUID.randomUUID().toString(), availabilityGameRequest);
+        GameConstruction anotherConstruction = GameConstruction.fromRequest(UUID.randomUUID().toString(), availabilityGameRequest);
         anotherConstruction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(anotherConstruction.getResponses());
         anotherConstruction = constructionRepository.save(anotherConstruction);

@@ -72,7 +72,7 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     @Override
     @RequestMapping(method = RequestMethod.GET, value = CONSTRUCTION_AVAILABILITY_PENDING, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public Collection<GameInitiation> getPending(@PathVariable("playerId") String player) {
+    public Collection<GameConstruction> getPending(@PathVariable("playerId") String player) {
         return availabilityConstructionService.getPending(player);
     }
 

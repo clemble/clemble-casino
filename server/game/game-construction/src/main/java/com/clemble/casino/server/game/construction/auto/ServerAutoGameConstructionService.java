@@ -2,10 +2,7 @@ package com.clemble.casino.server.game.construction.auto;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -149,4 +146,14 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
         }
         return pendingConstuction.getConstruction();
     }
+
+    public Collection<GameConstruction> getPending(String player) {
+        // Step 1. Fetching AutomaticGameConstruction
+        AutomaticGameConstruction construction = playerConstructions.get(player);
+        if(construction == null)
+            return Collections.emptyList();
+        // Step 2. Extracting GameConstruction and returning as singleton
+        return Collections.singletonList(construction.getConstruction());
+    }
+
 }
