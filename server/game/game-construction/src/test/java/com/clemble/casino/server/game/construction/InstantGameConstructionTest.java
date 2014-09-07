@@ -1,5 +1,6 @@
 package com.clemble.casino.server.game.construction;
 
+import com.clemble.casino.construct.ConstructionState;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
@@ -16,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 
 @Ignore
@@ -42,8 +42,8 @@ public class InstantGameConstructionTest {
         String B = RandomStringUtils.random(10);
         GameConstruction constructionB = constructionService.construct(new AutomaticGameRequest(B, specification));
         // Step 4. Checking all of them matched
-        Assert.assertEquals(constructionRepository.findOne(constructionA.getSessionKey()).getState(), GameConstructionState.constructed);
-        Assert.assertEquals(constructionRepository.findOne(constructionB.getSessionKey()).getState(), GameConstructionState.constructed);
+        Assert.assertEquals(constructionRepository.findOne(constructionA.getSessionKey()).getState(), ConstructionState.constructed);
+        Assert.assertEquals(constructionRepository.findOne(constructionB.getSessionKey()).getState(), ConstructionState.constructed);
     }
 
 }

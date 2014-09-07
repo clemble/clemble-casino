@@ -12,14 +12,14 @@ import java.util.Date;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import com.clemble.casino.base.ExpectedEvent;
+import com.clemble.casino.construct.ConstructionState;
+import com.clemble.casino.event.ExpectedEvent;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.event.surrender.GiveUpEvent;
 import com.clemble.casino.game.*;
 import com.clemble.casino.event.bet.BetEvent;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
-import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.rule.outcome.WonRule;
 import com.clemble.casino.game.unit.GameUnit;
@@ -30,10 +30,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.VersionAware;
-import com.clemble.casino.base.ActionLatch;
+import com.clemble.casino.ActionLatch;
 import com.clemble.casino.game.construct.AutomaticGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.rule.bet.FixedBetRule;
@@ -165,8 +164,8 @@ public class IntegrationObjectTest {
             public GameConstruction generate() {
                 return new GameConstruction("0",
                         new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT),
-                        GameConstructionState.pending,
-                        new ActionLatch().expectNext(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), InvitationResponseEvent.class));
+                        ConstructionState.pending,
+                        new ActionLatch().expectNext(ImmutableList.<String> of(RandomStringUtils.random(5), RandomStringUtils.random(5)), InvitationResponseEvent.class), RoundGameConfiguration.DEFAULT);
             }
         });
         register(LimitedBetRule.class, new AbstractValueGenerator<LimitedBetRule>() {

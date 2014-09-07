@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.construct.ConstructionState;
 import com.clemble.casino.game.construct.GameDeclineBehavior;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
@@ -27,7 +28,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
 import com.clemble.casino.game.service.AvailabilityGameConstructionService;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -63,7 +63,7 @@ public class ServerGameConstructionServiceTest {
         }
 
         GameConstruction finalConstructionState = constructionRepository.findOne(construction.getSessionKey());
-        Assert.assertEquals(finalConstructionState.getState(), GameConstructionState.constructed);
+        Assert.assertEquals(finalConstructionState.getState(), ConstructionState.constructed);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ServerGameConstructionServiceTest {
 
         GameConstruction finalConstructionState = constructionRepository.findOne(construction.getSessionKey());
         Assert.assertEquals(downLatch.getCount(), 0);
-        Assert.assertEquals(finalConstructionState.getState(), GameConstructionState.constructed);
+        Assert.assertEquals(finalConstructionState.getState(), ConstructionState.constructed);
     }
 
     private RoundGameConfiguration generate(List<String> roles) {

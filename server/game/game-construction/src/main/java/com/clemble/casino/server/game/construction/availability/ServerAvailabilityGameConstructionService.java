@@ -5,6 +5,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.clemble.casino.base.ActionLatchService;
+import com.clemble.casino.construct.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
@@ -12,13 +13,12 @@ import com.clemble.casino.server.game.construction.repository.GameConstructionRe
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.clemble.casino.base.ActionLatch;
+import com.clemble.casino.ActionLatch;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameConstructionState;
 import com.clemble.casino.game.construct.GameInitiation;
 import com.clemble.casino.game.event.schedule.GameConstructedEvent;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
@@ -102,7 +102,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             GameConstruction construction = constructionRepository.findOne(response.getSessionKey());
             if (construction == null)
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionDoesNotExistent);
-            if (construction.getState() != GameConstructionState.pending)
+            if (construction.getState() != ConstructionState.pending)
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState);
             // Step 2. Checking if player is part of the game
             ActionLatch responseLatch = latchService.update(response.getSessionKey(), response);
@@ -112,11 +112,11 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             // Step 4. Checking if latch is full
             if (response instanceof InvitationDeclinedEvent) {
                 // Step 4.1. In case declined send game canceled notification
-                construction = construction.cloneWithState(GameConstructionState.canceled);
+                construction = construction.cloneWithState(ConstructionState.canceled);
             } else if (responseLatch.complete()) {
                 GameInitiation initiation = construction.toInitiation();
                 // Step 5. Updating state
-                construction = construction.cloneWithState(GameConstructionState.constructed);
+                construction = construction.cloneWithState(ConstructionState.constructed);
                 // Step 6. Notifying Participants
                 playerNotificationService.notify(initiation.getParticipants(), new GameConstructedEvent(construction.getSessionKey()));
                 // Step 7. Moving to the next step

@@ -1,5 +1,6 @@
 package com.clemble.casino.base;
 
+import com.clemble.casino.ActionLatch;
 import com.clemble.casino.event.PlayerAwareEvent;
 
 import java.util.concurrent.ConcurrentHashMap;

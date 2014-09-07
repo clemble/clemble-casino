@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.Date;
 
-import com.clemble.casino.base.ActionLatch;
+import com.clemble.casino.ActionLatch;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.event.server.RoundEndedEvent;

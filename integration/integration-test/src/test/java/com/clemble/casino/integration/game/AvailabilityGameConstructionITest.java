@@ -8,16 +8,14 @@ import java.util.List;
 
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 
-import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.base.ExpectedEvent;
+import com.clemble.casino.event.ExpectedEvent;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;

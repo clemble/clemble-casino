@@ -17,7 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.base.ActionLatch;
+import com.clemble.casino.ActionLatch;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.construct.GameDeclineBehavior;
