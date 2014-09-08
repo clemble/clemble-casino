@@ -8,6 +8,7 @@ import com.clemble.casino.game.configuration.GameConfigurationAware;
 import com.clemble.casino.game.configuration.GameConfigurationKeyAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Id;
 
 @Entity
 @Table(name = "GAME_CONFIGURATION")
@@ -18,6 +19,7 @@ public class ServerGameConfiguration implements GameConfigurationKeyAware, GameC
      */
     private static final long serialVersionUID = -7670016401258035073L;
 
+    @Id
     final private String configurationKey;
     final private GameConfiguration configuration;
 

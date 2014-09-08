@@ -17,6 +17,8 @@ import static com.clemble.casino.game.GameWebMapping.*;
 @RestController
 public class GameConfigurationController implements GameConfigurationService, ExternalController {
 
+    final private static GameConfiguration[] CONFIGURATIONS_ARRAY_MARKER = new GameConfiguration[0];
+
     final private ServerGameConfigurationService configurationService;
 
     public GameConfigurationController(ServerGameConfigurationService configurationService) {
@@ -24,10 +26,15 @@ public class GameConfigurationController implements GameConfigurationService, Ex
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = CONFIGURATION, produces = PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
     public List<GameConfiguration> getConfigurations() {
         return configurationService.getConfigurations();
+    }
+
+    // TODO find a better solution, this is workaround for List serialization defisency in Jackson
+    @RequestMapping(method = RequestMethod.GET, value = CONFIGURATION, produces = PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public GameConfiguration[] getConfigurationsArray() {
+        return configurationService.getConfigurations().toArray(CONFIGURATIONS_ARRAY_MARKER);
     }
 
 }

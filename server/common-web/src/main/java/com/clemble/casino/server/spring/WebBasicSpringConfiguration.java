@@ -22,26 +22,21 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * Created by mavarazy on 8/9/14.
  */
 @Configuration
-@Import({ JsonSpringConfiguration.class })
+@Import({ WebJsonSpringConfiguration.class })
 public class WebBasicSpringConfiguration extends WebMvcConfigurationSupport implements SpringConfiguration {
 
     @Autowired
-    @Qualifier("objectMapper")
     public ObjectMapper objectMapper;
 
-    @Bean
-    public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter() {
-        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
-        messageConverter.setObjectMapper(objectMapper);
-        return messageConverter;
-    }
+    @Autowired
+    public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter;
 
     @Bean
     @Override
     public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
 
         RequestMappingHandlerAdapter handlerAdapter = super.requestMappingHandlerAdapter();
-        handlerAdapter.setMessageConverters(ImmutableList.<HttpMessageConverter<?>> of(jacksonHttpMessageConverter()));
+        handlerAdapter.setMessageConverters(ImmutableList.<HttpMessageConverter<?>> of(jacksonHttpMessageConverter));
 
         return handlerAdapter;
     }
