@@ -9,12 +9,12 @@ import com.clemble.casino.event.bet.BetEvent;
 import com.clemble.casino.rule.bet.BetRule;
 import com.clemble.casino.server.game.aspect.GameAspect;
 
-public class BetRuleAspect extends GameAspect<BetEvent> {
+public class GameBetRuleAspect extends GameAspect<BetEvent> {
 
     final private BetRule betRule;
     final private GameContext<?> context;
 
-    public BetRuleAspect(GameContext<?> context, BetRule betRule) {
+    public GameBetRuleAspect(GameContext<?> context, BetRule betRule) {
         super(new EventTypeSelector(BetEvent.class));
         this.context = context;
         this.betRule = betRule;

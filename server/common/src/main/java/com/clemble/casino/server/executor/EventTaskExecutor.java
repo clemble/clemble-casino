@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.action;
+package com.clemble.casino.server.executor;
 
 import com.clemble.casino.event.Event;
 
@@ -10,55 +10,56 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class GameEventTaskExecutor {
+public class EventTaskExecutor {
 
-    final private GameManagerFactory sessionProcessor;
-    final private ConcurrentHashMap<GameEventTask, ScheduledFuture<?>> concurrentHashMap = new ConcurrentHashMap<>();
+    final private EventTaskAdapter taskAdapter;
+    final private ConcurrentHashMap<EventTask, ScheduledFuture<?>> concurrentHashMap = new ConcurrentHashMap<>();
 
     final private ScheduledExecutorService scheduledExecutorService;
 
-    public GameEventTaskExecutor(GameManagerFactory gameManagerFactory, ScheduledExecutorService scheduledExecutorService) {
+    public EventTaskExecutor(EventTaskAdapter taskAdapter, ScheduledExecutorService scheduledExecutorService) {
         this.scheduledExecutorService = checkNotNull(scheduledExecutorService);
-        this.sessionProcessor = gameManagerFactory;
+        this.taskAdapter = taskAdapter;
     }
 
-    public void schedule(GameEventTask eventTask) {
+    public void schedule(EventTask eventTask) {
         // Step 1. Canceling existing task
         cancel(eventTask);
         // Step 2. Calculating start delay for the next execution
         long startDelay = Math.max(0, eventTask.nextExecutionTime(null).getTime() - System.currentTimeMillis());
         // Step 3. Saving mapping for reprocessing
-        ScheduledFuture<?> nextExecution = scheduledExecutorService.schedule(new GameEventTaskWrapper(eventTask), startDelay, TimeUnit.MILLISECONDS);
+        ScheduledFuture<?> nextExecution = scheduledExecutorService.schedule(new EventTaskWrapper(eventTask), startDelay, TimeUnit.MILLISECONDS);
         concurrentHashMap.put(eventTask, nextExecution);
     }
 
-    public void reschedule(GameEventTask eventTask) {
+    public void reschedule(EventTask eventTask) {
         schedule(eventTask);
     }
 
-    public void cancel(GameEventTask eventTask) {
+    public void cancel(EventTask eventTask) {
         // Step 1. Canceling existing task
         ScheduledFuture<?> existingTask = concurrentHashMap.remove(eventTask);
         if (existingTask != null)
             existingTask.cancel(false);
     }
 
-    public class GameEventTaskWrapper implements Runnable {
-        final private GameEventTask eventTask;
+    public class EventTaskWrapper implements Runnable {
+        final private EventTask eventTask;
 
-        public GameEventTaskWrapper(GameEventTask eventTask) {
+        public EventTaskWrapper(EventTask eventTask) {
             this.eventTask = checkNotNull(eventTask);
         }
 
         @Override
         public void run() {
+            // Step 1. Generating event tasks
             Collection<Event> events = eventTask.execute();
-            GameManager<?> manager = GameEventTaskExecutor.this.sessionProcessor.get(eventTask.getSessionKey());
-            for (Event event : events) {
-                manager.process(event);
-            }
+            // Step 2. Processing through event task adapter
+            taskAdapter.process(eventTask.getKey(), events);
+            // Step 3. Rescheduling for future events
             reschedule(eventTask);
         }
+
     }
 
 }

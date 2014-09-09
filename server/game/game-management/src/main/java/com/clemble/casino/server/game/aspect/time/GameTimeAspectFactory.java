@@ -5,15 +5,15 @@ import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.server.game.action.GameEventTaskExecutor;
+import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 
 public class GameTimeAspectFactory implements RoundGameAspectFactory<GameManagementEvent> {
 
-    final private GameEventTaskExecutor eventTaskExecutor;
+    final private EventTaskExecutor eventTaskExecutor;
 
-    public GameTimeAspectFactory(GameEventTaskExecutor eventTaskExecutor) {
+    public GameTimeAspectFactory(EventTaskExecutor eventTaskExecutor) {
         this.eventTaskExecutor = eventTaskExecutor;
     }
 

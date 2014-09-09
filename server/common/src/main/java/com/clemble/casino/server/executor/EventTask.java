@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.action;
+package com.clemble.casino.server.executor;
 
 import java.util.Collection;
 
@@ -7,8 +7,9 @@ import org.springframework.scheduling.Trigger;
 
 import com.clemble.casino.game.GameSessionAware;
 
-public interface GameEventTask extends Trigger, GameSessionAware {
+public interface EventTask extends Trigger {
 
     public Collection<Event> execute();
 
+    public String getKey();
 }

@@ -9,6 +9,9 @@ import com.clemble.casino.game.TournamentGameContext;
 import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.configuration.TournamentGameConfiguration;
+import com.clemble.casino.server.executor.EventTaskAdapter;
+import com.clemble.casino.server.executor.EventTaskExecutor;
+import com.clemble.casino.server.game.action.*;
 import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
@@ -36,9 +39,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.clemble.casino.server.game.action.GameEventTaskExecutor;
-import com.clemble.casino.server.game.action.GameManagerFactory;
-import com.clemble.casino.server.game.action.GameStateFactoryFacade;
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.notification.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
@@ -134,7 +134,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
          *
          */
         @Bean
-        public GameTimeAspectFactory gameTimeAspectFactory(GameEventTaskExecutor eventTaskExecutor) {
+        public GameTimeAspectFactory gameTimeAspectFactory(EventTaskExecutor eventTaskExecutor) {
             return new GameTimeAspectFactory(eventTaskExecutor);
         }
 
@@ -182,10 +182,15 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GameEventTaskExecutor eventTaskExecutor(GameManagerFactory managerFactory) {
+    public EventTaskAdapter eventTaskAdapter(GameManagerFactory managerFactory){
+        return new GameEventTaskAdapter(managerFactory);
+    }
+
+    @Bean
+    public EventTaskExecutor eventTaskExecutor(EventTaskAdapter eventTaskAdapter) {
         ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL EventTaskExecutor - %d");
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
-        return new GameEventTaskExecutor(managerFactory, executorService);
+        return new EventTaskExecutor(eventTaskAdapter, executorService);
     }
 
         @Bean
