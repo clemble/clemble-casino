@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.aspect.time;
+package com.clemble.casino.server.aspect.time;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

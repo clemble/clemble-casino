@@ -1,42 +1,32 @@
-package com.clemble.casino.server.game.aspect.time;
+package com.clemble.casino.server.aspect.time;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.RoundGamePlayerContext;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.executor.EventTask;
 import org.springframework.scheduling.TriggerContext;
 
 import com.clemble.casino.player.PlayerAware;
 
-public class SessionTimeTask implements EventTask {
+public class PlayerTimeTask implements EventTask {
 
     /**
      * Generated 29/12/13
      */
     private static final long serialVersionUID = -7157994014672627030L;
 
-    final private String session;
+    final private String key;
     final private Collection<PlayerTimeTracker> playerTimeTrackers;
 
-    public SessionTimeTask(String sessionKey, RoundGameConfiguration initiation, RoundGameContext context) {
-        this.session = sessionKey;
-
-        final RoundGameConfiguration specification = initiation;
-
-        this.playerTimeTrackers = new ArrayList<PlayerTimeTracker>();
-        for (RoundGamePlayerContext playerContext : context.getPlayerContexts()) {
-            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getTotalTimeRule()));
-            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getMoveTimeRule()));
-        }
+    public PlayerTimeTask(String key, Collection<PlayerTimeTracker> playerTimeTrackers) {
+        this.key = key;
+        this.playerTimeTrackers = playerTimeTrackers;
     }
 
     public String getKey() {
-        return session;
+        return key;
     }
 
     public void markMoved(PlayerAware move) {
