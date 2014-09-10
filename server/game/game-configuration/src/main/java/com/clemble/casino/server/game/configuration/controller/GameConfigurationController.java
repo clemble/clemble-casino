@@ -6,7 +6,7 @@ import com.clemble.casino.game.configuration.GameConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.game.service.GameConfigurationService;
+import com.clemble.casino.game.configuration.GameConfigurationService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.configuration.service.ServerGameConfigurationService;
 

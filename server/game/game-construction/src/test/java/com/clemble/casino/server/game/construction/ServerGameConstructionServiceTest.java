@@ -29,7 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.clemble.casino.game.construct.AvailabilityGameRequest;
 import com.clemble.casino.game.construct.GameConstruction;
 import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
-import com.clemble.casino.game.service.AvailabilityGameConstructionService;
+import com.clemble.casino.game.construct.AvailabilityGameConstructionService;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)

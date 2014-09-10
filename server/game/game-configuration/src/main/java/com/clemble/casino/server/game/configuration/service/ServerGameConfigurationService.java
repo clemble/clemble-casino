@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.clemble.casino.server.game.configuration.ServerGameConfiguration;
 import com.clemble.casino.server.game.configuration.repository.ServerGameConfigurationRepository;
-import com.clemble.casino.game.service.GameConfigurationService;
+import com.clemble.casino.game.configuration.GameConfigurationService;
 import com.clemble.casino.game.configuration.GameConfiguration;
 
 public class ServerGameConfigurationService implements GameConfigurationService {
