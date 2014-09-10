@@ -44,6 +44,6 @@ public class PendingGameInitiationUtils {
 
     public GameInitiation toInitiation(PendingGameInitiation initiation) {
         GameConfiguration configuration = initiation.getConfiguration();
-        return new GameInitiation(initiation.getSessionKey(), configuration, PlayerAwareUtils.toPlayerList(initiation.getParticipants()));
+        return new GameInitiation(initiation.getSessionKey(), PlayerAwareUtils.toPlayerList(initiation.getParticipants()), configuration);
     }
 }

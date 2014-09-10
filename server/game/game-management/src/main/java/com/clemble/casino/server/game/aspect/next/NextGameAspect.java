@@ -2,7 +2,7 @@ package com.clemble.casino.server.game.aspect.next;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.event.GameEndedEvent;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import org.slf4j.Logger;

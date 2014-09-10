@@ -90,7 +90,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             pendingConstuction = specificationQueue.poll();
             if (pendingConstuction == null) {
                 // Step 3.1 Construction was not present, creating new one
-                pendingConstuction = GameConstruction.fromRequest(sessionKeyGenerator.generate(request.getConfiguration()), request);
+                pendingConstuction = request.toConstruction(sessionKeyGenerator.generate(request.getConfiguration()));
                 pendingConstuction = constructionRepository.save(pendingConstuction);
 
                 playerConstructions.put(player, pendingConstuction);
@@ -100,7 +100,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
                 pendingConstuction.getParticipants().add(request.getPlayer());
                 // Step 3.3 If number rule satisfied process further
                 if (pendingConstuction.getParticipants().size() >= pendingConstuction.getConfiguration().getNumberRule().getMinPlayers()) {
-                    GameInitiation initiation = new GameInitiation(pendingConstuction.getSessionKey(), pendingConstuction.getConfiguration(), pendingConstuction.getParticipants());
+                    GameInitiation initiation = new GameInitiation(pendingConstuction.getSessionKey(), pendingConstuction.getParticipants(), pendingConstuction.getConfiguration());
                     notificationService.notify(new SystemGameReadyEvent(initiation));
                     for (String participant : initiation.getParticipants())
                         playerConstructions.remove(participant);

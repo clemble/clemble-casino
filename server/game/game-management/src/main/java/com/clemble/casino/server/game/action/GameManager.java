@@ -5,7 +5,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.event.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -12,8 +12,8 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.event.surrender.GiveUpEvent;
 import com.clemble.casino.game.RoundGameState;
 import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.RoundEvent;
+import com.clemble.casino.game.event.GameManagementEvent;
+import com.clemble.casino.game.event.RoundEvent;
 
 public class SimpleRoundGamePlayer<State extends RoundGameState> extends AbstractGamePlayer implements RoundGamePlayer<State> {
 

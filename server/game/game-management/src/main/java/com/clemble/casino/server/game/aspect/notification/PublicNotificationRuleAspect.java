@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.event.GameManagementEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class PublicNotificationRuleAspect extends GameAspect<GameManagementEvent> {

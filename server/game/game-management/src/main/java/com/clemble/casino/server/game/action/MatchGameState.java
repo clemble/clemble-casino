@@ -5,10 +5,10 @@ import com.clemble.casino.game.ComparatorUtils;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.event.server.GameEndedEvent;
-import com.clemble.casino.game.event.server.GameManagementEvent;
-import com.clemble.casino.game.event.server.MatchChangedEvent;
-import com.clemble.casino.game.event.server.MatchEndedEvent;
+import com.clemble.casino.game.event.GameEndedEvent;
+import com.clemble.casino.game.event.GameManagementEvent;
+import com.clemble.casino.game.event.MatchChangedEvent;
+import com.clemble.casino.game.event.MatchEndedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
@@ -83,9 +83,9 @@ public class MatchGameState implements GameState<MatchGameContext, Event> {
         LOG.debug("{} launching new game {} with key {}", context.getSessionKey(), gameNum, nextSessionKey);
         context.setCurrentSession(nextSessionKey);
         GameInitiation subInitiation = new GameInitiation(
-                nextSessionKey,
-                configuration.getConfigurations().get(gameNum),
-                PlayerAwareUtils.toPlayerList(context.getPlayerContexts()));
+            nextSessionKey,
+            PlayerAwareUtils.toPlayerList(context.getPlayerContexts()),
+            configuration.getConfigurations().get(gameNum));
         GameManager<?> manager = managerFactory.start(subInitiation, context);
         // Step 5. Sending Game Changed event
         return new MatchChangedEvent(context.getSessionKey(), context, nextSessionKey);

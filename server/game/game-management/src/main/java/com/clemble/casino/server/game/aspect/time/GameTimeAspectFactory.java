@@ -4,7 +4,7 @@ import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.event.GameManagementEvent;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;

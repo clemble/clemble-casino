@@ -4,7 +4,7 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.event.server.RoundEndedEvent;
+import com.clemble.casino.game.event.RoundEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 
 public class MatchFillMaxCommonAspect extends GameAspect<RoundEndedEvent> {

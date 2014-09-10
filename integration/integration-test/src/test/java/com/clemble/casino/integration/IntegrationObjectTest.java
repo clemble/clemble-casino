@@ -17,8 +17,8 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.event.surrender.GiveUpEvent;
 import com.clemble.casino.game.*;
 import com.clemble.casino.event.bet.BetEvent;
-import com.clemble.casino.game.event.schedule.InvitationAcceptedEvent;
-import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
+import com.clemble.casino.game.construction.event.InvitationAcceptedEvent;
+import com.clemble.casino.game.construction.event.InvitationResponseEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.rule.outcome.WonRule;
 import com.clemble.casino.game.unit.GameUnit;
@@ -160,7 +160,7 @@ public class IntegrationObjectTest {
         register(GameConstruction.class, new AbstractValueGenerator<GameConstruction>() {
             @Override
             public GameConstruction generate() {
-                return GameConstruction.fromRequest("0", new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT));
+                return new AutomaticGameRequest(RandomStringUtils.random(5), RoundGameConfiguration.DEFAULT).toConstruction(RandomStringUtils.random(5));
             }
         });
         register(LimitedBetRule.class, new AbstractValueGenerator<LimitedBetRule>() {

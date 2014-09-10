@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.IOException;
 import java.util.UUID;
 
-import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
+import com.clemble.casino.game.construction.event.InvitationResponseEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
@@ -56,7 +56,7 @@ public class GameConstructionRepositoryTest {
     public void testSaving() {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
-        GameConstruction construction = GameConstruction.fromRequest(UUID.randomUUID().toString(), availabilityGameRequest);
+        GameConstruction construction = availabilityGameRequest.toConstruction(UUID.randomUUID().toString());
         construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.save(construction);
@@ -67,13 +67,13 @@ public class GameConstructionRepositoryTest {
     public void testSaving2() {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest("1", RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
-        GameConstruction construction = GameConstruction.fromRequest(UUID.randomUUID().toString(), availabilityGameRequest);
+        GameConstruction construction = availabilityGameRequest.toConstruction((UUID.randomUUID().toString()));
         construction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.save(construction);
         Assert.assertNotNull(construction.getResponses());
 
-        GameConstruction anotherConstruction = GameConstruction.fromRequest(UUID.randomUUID().toString(), availabilityGameRequest);
+        GameConstruction anotherConstruction = availabilityGameRequest.toConstruction((UUID.randomUUID().toString()));
         anotherConstruction.getResponses().expectNext("1", InvitationResponseEvent.class);
         Assert.assertNotNull(anotherConstruction.getResponses());
         anotherConstruction = constructionRepository.save(anotherConstruction);

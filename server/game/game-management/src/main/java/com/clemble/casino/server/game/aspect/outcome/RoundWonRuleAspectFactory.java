@@ -7,7 +7,7 @@ import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.event.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 

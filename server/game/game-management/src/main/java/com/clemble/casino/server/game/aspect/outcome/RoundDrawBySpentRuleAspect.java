@@ -1,7 +1,7 @@
 package com.clemble.casino.server.game.aspect.outcome;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.event.GameEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 
 public class RoundDrawBySpentRuleAspect extends GameAspect<GameEndedEvent<?>> {

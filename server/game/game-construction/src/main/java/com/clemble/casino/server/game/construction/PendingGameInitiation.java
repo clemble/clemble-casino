@@ -88,7 +88,7 @@ public class PendingGameInitiation implements GameConfigurationAware, GameSessio
         LinkedHashSet<String> players = new LinkedHashSet<>();
         for(PendingPlayer pendingPlayer: participants)
             players.add(pendingPlayer.getPlayer());
-        return new GameInitiation(sessionKey, configuration, players);
+        return new GameInitiation(sessionKey, players, configuration);
     }
 
     @Override

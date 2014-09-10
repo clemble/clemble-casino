@@ -46,9 +46,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.construction.ScheduledGameRequest;
-import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
-import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
-import com.clemble.casino.game.event.server.RoundStartedEvent;
+import com.clemble.casino.game.construction.event.InvitationDeclinedEvent;
+import com.clemble.casino.game.construction.event.PlayerInvitedEvent;
+import com.clemble.casino.game.event.RoundStartedEvent;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.test.random.ObjectGenerator;
 import com.clemble.test.reflection.AnnotationReflectionUtils;

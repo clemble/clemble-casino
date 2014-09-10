@@ -8,8 +8,8 @@ import javax.persistence.OptimisticLockException;
 
 import com.clemble.casino.game.*;
 import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.event.server.MatchStartedEvent;
-import com.clemble.casino.game.event.server.RoundStartedEvent;
+import com.clemble.casino.game.event.MatchStartedEvent;
+import com.clemble.casino.game.event.RoundStartedEvent;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;

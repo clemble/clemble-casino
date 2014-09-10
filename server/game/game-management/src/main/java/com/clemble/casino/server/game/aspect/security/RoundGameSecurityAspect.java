@@ -11,7 +11,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.event.server.PlayerMovedEvent;
+import com.clemble.casino.game.event.PlayerMovedEvent;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.aspect.GameAspect;
 

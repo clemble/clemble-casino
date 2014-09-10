@@ -8,7 +8,7 @@ import com.clemble.casino.game.GameState;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.event.GameManagementEvent;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.action.GameManager;

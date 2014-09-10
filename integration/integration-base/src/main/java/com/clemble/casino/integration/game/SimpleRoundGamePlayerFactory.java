@@ -22,7 +22,7 @@ public class SimpleRoundGamePlayerFactory<State extends GameState> implements Ro
     @SuppressWarnings("unchecked")
     public RoundGamePlayer<State> construct(ClembleCasinoOperations player, GameConstruction construction) {
         // Step 1. Processing game session player
-        return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration());
+        return construct(player, construction.getSessionKey(), construction.getConfiguration());
     }
 
     @Override

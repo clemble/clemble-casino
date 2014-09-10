@@ -8,7 +8,7 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GamePlayerAccount;
 import com.clemble.casino.game.GamePlayerContext;
 import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.event.server.MatchEndedEvent;
+import com.clemble.casino.game.event.MatchEndedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.payment.PaymentOperation;

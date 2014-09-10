@@ -9,7 +9,7 @@ import com.clemble.casino.client.game.GameRecordOperations;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.event.server.MatchEvent;
+import com.clemble.casino.game.event.MatchEvent;
 import org.junit.Assert;
 
 /**

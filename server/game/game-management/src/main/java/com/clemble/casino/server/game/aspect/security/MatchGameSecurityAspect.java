@@ -3,8 +3,8 @@ package com.clemble.casino.server.game.aspect.security;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.event.server.GameEndedEvent;
-import com.clemble.casino.game.event.server.MatchEvent;
+import com.clemble.casino.game.event.GameEndedEvent;
+import com.clemble.casino.game.event.MatchEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 
 public class MatchGameSecurityAspect extends GameAspect<Event> {

@@ -1,12 +1,9 @@
 package com.clemble.casino.goal.construction.repository;
 
 import com.clemble.casino.construction.ConstructionState;
-import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.goal.construction.GoalConstruction;
 import com.clemble.casino.goal.construction.spring.GoalConstructionSpringConfiguration;
-import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -90,7 +90,7 @@ public class PendingGameInitiationEventListener implements SystemEventListener<S
     }
 
     private GameInitiation toInitiation(PendingGameInitiation initiation){
-        return new GameInitiation(initiation.getSessionKey(), initiation.getConfiguration(), PlayerAwareUtils.toPlayerList(initiation.getParticipants()));
+        return new GameInitiation(initiation.getSessionKey(), PlayerAwareUtils.toPlayerList(initiation.getParticipants()), initiation.getConfiguration());
     }
 
 }

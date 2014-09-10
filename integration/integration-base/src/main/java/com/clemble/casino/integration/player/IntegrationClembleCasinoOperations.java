@@ -37,7 +37,7 @@ import com.clemble.casino.client.game.GameRecordOperations;
 import com.clemble.casino.client.game.GameRecordTemplate;
 import com.clemble.casino.integration.payment.IntegrationPaymentTransactionService;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.event.server.GameInitiatedEvent;
+import com.clemble.casino.game.event.GameInitiatedEvent;
 import com.clemble.casino.game.construction.AutoGameConstructionService;
 import com.clemble.casino.game.construction.AvailabilityGameConstructionService;
 import com.clemble.casino.game.service.GameActionService;

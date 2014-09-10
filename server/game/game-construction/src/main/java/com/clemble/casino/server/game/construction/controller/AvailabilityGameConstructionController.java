@@ -13,7 +13,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.game.construction.AvailabilityGameRequest;
 import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
+import com.clemble.casino.game.construction.event.InvitationResponseEvent;
 import com.clemble.casino.game.construction.AvailabilityGameConstructionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;

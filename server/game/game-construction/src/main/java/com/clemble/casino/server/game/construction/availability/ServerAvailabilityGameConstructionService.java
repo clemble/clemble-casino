@@ -20,10 +20,10 @@ import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.game.construction.AvailabilityGameRequest;
 import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.event.schedule.GameConstructedEvent;
-import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
-import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
-import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
+import com.clemble.casino.game.construction.event.GameConstructedEvent;
+import com.clemble.casino.game.construction.event.InvitationDeclinedEvent;
+import com.clemble.casino.game.construction.event.InvitationResponseEvent;
+import com.clemble.casino.game.construction.event.PlayerInvitedEvent;
 import com.clemble.casino.game.construction.AvailabilityGameConstructionService;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -66,7 +66,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         if (!players.isEmpty())
             throw ClembleCasinoException.fromFailures(ClembleCasinoFailure.construct(ClembleCasinoError.GameConstructionInsufficientMoney, players));
         // Step 3. Processing to opponents creation
-        GameConstruction construction = GameConstruction.fromRequest(sessionKeyGenerator.generate(request.getConfiguration()), request);
+        GameConstruction construction = request.toConstruction(sessionKeyGenerator.generate(request.getConfiguration()));
         construction = constructionRepository.save(construction);
         latchService.save(construction.getSessionKey(), construction.getResponses());
         // Step 4. Sending invitation to opponents

@@ -20,7 +20,7 @@ public class GamePlayerFactory implements ApplicationListener<ContextRefreshedEv
 
     public <P extends GamePlayer> P construct(ClembleCasinoOperations player, String sessionKey) {
         GameConstruction construction = player.gameConstructionOperations().getConstruct(sessionKey);
-        return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration());
+        return construct(player, construction.getSessionKey(), construction.getConfiguration());
     }
 
     @SuppressWarnings("unchecked")
@@ -38,7 +38,7 @@ public class GamePlayerFactory implements ApplicationListener<ContextRefreshedEv
     }
 
     public <P extends GamePlayer> P construct(ClembleCasinoOperations player, GameConstruction construction) {
-        return construct(player, construction.getSessionKey(), construction.getRequest().getConfiguration());
+        return construct(player, construction.getSessionKey(), construction.getConfiguration());
     }
 
     @Override

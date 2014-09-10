@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GamePlayerContext;
-import com.clemble.casino.game.event.server.GameEndedEvent;
+import com.clemble.casino.game.event.GameEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.payment.PaymentOperation;

@@ -7,7 +7,7 @@ import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.action.GameEventRecord;
 import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.event.server.GameManagementEvent;
+import com.clemble.casino.game.event.GameManagementEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 
