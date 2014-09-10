@@ -18,9 +18,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.ActionLatch;
-import com.clemble.casino.game.construct.AvailabilityGameRequest;
-import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameDeclineBehavior;
+import com.clemble.casino.game.construction.AvailabilityGameRequest;
+import com.clemble.casino.game.construction.GameConstruction;
+import com.clemble.casino.game.construction.GameDeclineBehavior;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;

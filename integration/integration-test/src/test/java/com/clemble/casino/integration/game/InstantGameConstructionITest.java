@@ -17,12 +17,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.game.GameConstructionOperations;
-import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.util.RedisCleaner;
 
-import java.util.Collection;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)

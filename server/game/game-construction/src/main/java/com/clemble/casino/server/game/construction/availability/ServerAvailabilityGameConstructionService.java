@@ -5,7 +5,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.clemble.casino.base.ActionLatchService;
-import com.clemble.casino.construct.ConstructionState;
+import com.clemble.casino.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
@@ -17,14 +17,14 @@ import com.clemble.casino.ActionLatch;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.PlayerAwareEvent;
-import com.clemble.casino.game.construct.AvailabilityGameRequest;
-import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construction.AvailabilityGameRequest;
+import com.clemble.casino.game.construction.GameConstruction;
+import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.event.schedule.GameConstructedEvent;
 import com.clemble.casino.game.event.schedule.InvitationDeclinedEvent;
 import com.clemble.casino.game.event.schedule.InvitationResponseEvent;
 import com.clemble.casino.game.event.schedule.PlayerInvitedEvent;
-import com.clemble.casino.game.construct.AvailabilityGameConstructionService;
+import com.clemble.casino.game.construction.AvailabilityGameConstructionService;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 

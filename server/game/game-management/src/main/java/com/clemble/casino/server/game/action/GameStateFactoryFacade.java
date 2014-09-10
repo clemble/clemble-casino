@@ -8,7 +8,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameStateFactory;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGameState;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construction.GameInitiation;
 import org.reflections.Reflections;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

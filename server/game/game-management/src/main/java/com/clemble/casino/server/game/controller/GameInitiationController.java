@@ -4,10 +4,9 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.server.game.construction.ServerGameInitiationService;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.server.ExternalController;
 import static com.clemble.casino.game.GameWebMapping.*;

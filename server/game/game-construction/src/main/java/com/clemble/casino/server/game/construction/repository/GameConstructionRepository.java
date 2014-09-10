@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.construction.GameConstruction;
 
 @Repository
 public interface GameConstructionRepository extends MongoRepository<GameConstruction, String> {

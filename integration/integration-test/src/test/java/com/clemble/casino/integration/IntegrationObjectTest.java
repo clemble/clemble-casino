@@ -12,7 +12,6 @@ import java.util.Date;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import com.clemble.casino.construct.ConstructionState;
 import com.clemble.casino.event.ExpectedEvent;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.event.surrender.GiveUpEvent;
@@ -30,10 +29,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.VersionAware;
-import com.clemble.casino.ActionLatch;
-import com.clemble.casino.game.construct.AutomaticGameRequest;
-import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construction.AutomaticGameRequest;
+import com.clemble.casino.game.construction.GameConstruction;
+import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.rule.bet.FixedBetRule;
 import com.clemble.casino.rule.bet.LimitedBetRule;

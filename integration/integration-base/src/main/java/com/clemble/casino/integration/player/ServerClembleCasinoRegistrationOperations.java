@@ -4,9 +4,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
-import com.clemble.casino.game.construct.AvailabilityGameConstructionService;
+import com.clemble.casino.game.construction.AvailabilityGameConstructionService;
 import com.clemble.casino.game.service.GameActionService;
-import com.clemble.casino.game.construct.AutoGameConstructionService;
+import com.clemble.casino.game.construction.AutoGameConstructionService;
 import com.clemble.casino.game.service.GameInitiationService;
 import com.clemble.casino.game.configuration.GameConfigurationService;
 import com.clemble.casino.game.service.GameRecordService;

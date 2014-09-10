@@ -4,7 +4,7 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.game.ComparatorUtils;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.event.server.GameManagementEvent;
 import com.clemble.casino.game.event.server.MatchChangedEvent;

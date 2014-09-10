@@ -16,7 +16,7 @@ import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.GameSessionEventSelector;
 import com.clemble.casino.game.event.GameSessionAwareEvent;
-import com.clemble.casino.game.construct.GameConstruction;
+import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.event.server.GameEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.configuration.GameConfiguration;

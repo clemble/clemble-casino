@@ -1,7 +1,7 @@
 package com.clemble.casino.server.game.spring;
 
 import com.clemble.casino.game.*;
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.configuration.TournamentGameConfiguration;

@@ -9,8 +9,8 @@ import org.hibernate.tool.hbm2ddl.Target;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.ScheduledGame;
+import com.clemble.casino.game.construction.GameConstruction;
+import com.clemble.casino.game.construction.ScheduledGame;
 
 public class GameSchemaGenerator {
 

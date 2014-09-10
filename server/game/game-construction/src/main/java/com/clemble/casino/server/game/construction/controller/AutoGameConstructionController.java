@@ -5,9 +5,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.game.construct.AutomaticGameRequest;
-import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.AutoGameConstructionService;
+import com.clemble.casino.game.construction.AutomaticGameRequest;
+import com.clemble.casino.game.construction.GameConstruction;
+import com.clemble.casino.game.construction.AutoGameConstructionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructionService;
 import com.clemble.casino.game.GameWebMapping;

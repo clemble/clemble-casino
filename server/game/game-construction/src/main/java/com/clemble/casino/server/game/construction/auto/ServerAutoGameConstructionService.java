@@ -9,10 +9,10 @@ import java.util.concurrent.ExecutionException;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.construct.AutomaticGameRequest;
-import com.clemble.casino.game.construct.GameConstruction;
-import com.clemble.casino.game.construct.GameInitiation;
-import com.clemble.casino.game.construct.AutoGameConstructionService;
+import com.clemble.casino.game.construction.AutomaticGameRequest;
+import com.clemble.casino.game.construction.GameConstruction;
+import com.clemble.casino.game.construction.GameInitiation;
+import com.clemble.casino.game.construction.AutoGameConstructionService;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.game.SystemGameReadyEvent;

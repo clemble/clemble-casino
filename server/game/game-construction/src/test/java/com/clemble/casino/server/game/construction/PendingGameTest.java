@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
-import com.clemble.casino.server.game.construction.PendingGameInitiation;
-import com.clemble.casino.server.game.construction.PendingPlayer;
 import com.clemble.casino.server.game.construction.repository.PendingGameInitiationRepository;
 import com.clemble.casino.server.game.construction.repository.PendingPlayerRepository;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
@@ -17,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.game.construct.GameInitiation;
+import com.clemble.casino.game.construction.GameInitiation;
 import com.google.common.collect.ImmutableList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
