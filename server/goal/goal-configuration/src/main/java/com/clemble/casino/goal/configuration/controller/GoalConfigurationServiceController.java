@@ -3,6 +3,7 @@ package com.clemble.casino.goal.configuration.controller;
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.configuration.GoalConfiguration;
 import com.clemble.casino.goal.configuration.GoalConfigurations;
+import com.clemble.casino.goal.rule.judge.JudgeRule;
 import com.clemble.casino.goal.service.GoalConfigurationService;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -38,6 +39,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
         new GoalConfiguration(
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
             LimitedBetRule.create(5, 50),
+            JudgeRule.self,
             new MoveTimeRule(TimeUnit.MILLISECONDS.toDays(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.MILLISECONDS.toDays(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.everybody
