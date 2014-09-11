@@ -21,7 +21,7 @@ import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.event.GameInitiatedEvent;
 import com.clemble.casino.game.event.GameInitiationCanceledEvent;
 import com.clemble.casino.game.event.GameInitiationConfirmedEvent;
-import com.clemble.casino.game.service.GameInitiationService;
+import com.clemble.casino.game.construction.service.GameInitiationService;
 import com.clemble.casino.server.ServerService;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;

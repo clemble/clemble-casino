@@ -24,7 +24,7 @@ import com.clemble.casino.game.construction.event.GameConstructedEvent;
 import com.clemble.casino.game.construction.event.InvitationDeclinedEvent;
 import com.clemble.casino.game.construction.event.InvitationResponseEvent;
 import com.clemble.casino.game.construction.event.PlayerInvitedEvent;
-import com.clemble.casino.game.construction.AvailabilityGameConstructionService;
+import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 

@@ -11,21 +11,24 @@ import java.util.Collection;
 /**
  * Created by mavarazy on 9/10/14.
  */
-public class ServerGoalConstructionService implements GoalConstructionService {
+public class ServerGoalConstructionService implements GoalConstructionService<GoalConstructionRequest> {
 
     final private GoalConstructionRepository constructionRepository;
+    final private SelfGoalConstructionService selfGoalConstructionService;
 
-    public ServerGoalConstructionService(GoalConstructionRepository constructionRepository) {
+    public ServerGoalConstructionService(SelfGoalConstructionService selfGoalConstructionService, GoalConstructionRepository constructionRepository) {
         this.constructionRepository = constructionRepository;
+        this.selfGoalConstructionService = selfGoalConstructionService;
     }
 
     @Override
     public Construction<GoalConfiguration> construct(GoalConstructionRequest request) {
-        return null;
+        return selfGoalConstructionService.construct(request);
     }
 
     @Override
     public Collection<? extends Construction<GoalConfiguration>> getPending(String player) {
         return constructionRepository.findByPlayerAndState(player, ConstructionState.pending);
     }
+
 }

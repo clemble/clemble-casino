@@ -1,7 +1,7 @@
 package com.clemble.casino.server.goal.spring;
 
 import com.clemble.casino.bet.BetSpecification;
-import com.clemble.casino.server.goal.GoalKeyGenerator;
+import com.clemble.casino.server.goal.OldGoalKeyGenerator;
 import com.clemble.casino.server.goal.repository.GoalRepository;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.goal.service.BidCalculator;
@@ -26,8 +26,8 @@ import redis.clients.jedis.JedisPool;
 public class GoalSpringConfiguration {
 
     @Bean
-    public GoalKeyGenerator goalKeyGenerator(JedisPool jedisPool) {
-        return new GoalKeyGenerator(new RedisKeyFactory("GOAL_COUNTER", "A", jedisPool));
+    public OldGoalKeyGenerator goalKeyGenerator(JedisPool jedisPool) {
+        return new OldGoalKeyGenerator(new RedisKeyFactory("GOAL_COUNTER", "A", jedisPool));
     }
 
     @Bean
@@ -41,7 +41,7 @@ public class GoalSpringConfiguration {
     }
 
     @Bean
-    public GoalServiceController playerGoalController(@Qualifier("goalKeyGenerator") GoalKeyGenerator goalKeyGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService notificationService) {
+    public GoalServiceController playerGoalController(@Qualifier("goalKeyGenerator") OldGoalKeyGenerator goalKeyGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService notificationService) {
         return new GoalServiceController(goalKeyGenerator, bidCalculator, goalRepository, notificationService);
     }
 

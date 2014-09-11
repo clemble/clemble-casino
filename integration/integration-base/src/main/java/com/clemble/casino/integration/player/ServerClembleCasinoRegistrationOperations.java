@@ -4,11 +4,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
-import com.clemble.casino.game.construction.AvailabilityGameConstructionService;
+import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.game.service.GameActionService;
-import com.clemble.casino.game.construction.AutoGameConstructionService;
-import com.clemble.casino.game.service.GameInitiationService;
-import com.clemble.casino.game.configuration.GameConfigurationService;
+import com.clemble.casino.game.construction.service.AutoGameConstructionService;
+import com.clemble.casino.game.construction.service.GameInitiationService;
+import com.clemble.casino.game.configuration.service.GameConfigurationService;
 import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
