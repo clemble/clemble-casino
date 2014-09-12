@@ -27,4 +27,10 @@ public class SystemGoalJudgeDutyDueEvent implements SystemGoalEvent {
     public String getChannel() {
         return CHANNEL;
     }
+
+    @Override
+    public String toString() {
+        return "sys:" + duty.getGoalKey() +  ":" + CHANNEL;
+    }
+
 }

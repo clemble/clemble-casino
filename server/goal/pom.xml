@@ -11,6 +11,7 @@
     <modules>
         <module>goal-configuration</module>
         <module>goal-construction</module>
+        <module>goal-management</module>
         <module>goal-track</module>
         <module>goal-judge</module>
         <module>goal-duty</module>

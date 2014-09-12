@@ -29,4 +29,9 @@ public class SystemGameInitiationDueEvent implements SystemGameEvent {
         return CHANNEL;
     }
 
+    @Override
+    public String toString() {
+        return "sys:" + sessionKey +  ":" + CHANNEL;
+    }
+
 }

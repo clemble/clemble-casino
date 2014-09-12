@@ -53,4 +53,5 @@ public class SystemBetCanceledEvent implements SystemBetEvent {
     public String getChannel() {
         return CHANNEL;
     }
+
 }

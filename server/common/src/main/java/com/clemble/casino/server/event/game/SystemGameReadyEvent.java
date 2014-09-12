@@ -58,4 +58,10 @@ public class SystemGameReadyEvent implements SystemGameEvent {
         result = 31 * result + (initiation != null ? initiation.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "sys:" + sessionKey +  ":" + CHANNEL;
+    }
+
 }

@@ -29,7 +29,7 @@ public class SystemGoalJudgeInvitationAcceptedEvent implements SystemGoalEvent {
 
     @Override
     public String toString() {
-        return "sys:" + invitation.getJudge() +  ":" + CHANNEL;
+        return "sys:" + invitation.getGoalKey() +  ":" + CHANNEL + ":" + invitation.getJudge();
     }
 
 }

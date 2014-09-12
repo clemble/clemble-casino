@@ -47,6 +47,6 @@ public class SystemPaymentTransactionRequestEvent implements SystemPaymentEvent 
 
     @Override
     public String toString() {
-        return "sys:" + transaction.getTransactionKey().toString() + ":" + CHANNEL;
+        return "sys:" + transaction.getTransactionKey() + ":" + CHANNEL;
     }
 }

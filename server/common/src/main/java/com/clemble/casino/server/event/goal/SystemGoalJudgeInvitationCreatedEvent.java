@@ -44,4 +44,10 @@ public class SystemGoalJudgeInvitationCreatedEvent implements SystemGoalEvent {
     public int hashCode() {
         return invitation != null ? invitation.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "sys:" + invitation.getGoalKey() +  ":" + CHANNEL + ":" + invitation.getJudge();
+    }
+
 }

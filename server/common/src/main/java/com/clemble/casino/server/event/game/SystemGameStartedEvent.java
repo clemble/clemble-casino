@@ -32,4 +32,10 @@ public class SystemGameStartedEvent implements SystemGameEvent {
     public String getChannel() {
         return CHANNEL;
     }
+
+    @Override
+    public String toString() {
+        return "sys:" + sessionKey +  ":" + CHANNEL;
+    }
+
 }

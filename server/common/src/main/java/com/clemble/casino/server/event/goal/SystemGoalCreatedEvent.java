@@ -46,6 +46,6 @@ public class SystemGoalCreatedEvent implements SystemGoalEvent {
 
     @Override
     public String toString() {
-        return "sys:" + goal.getPlayer() +  ":" + CHANNEL;
+        return "sys:" + goal.getGoalKey() +  ":" + CHANNEL;
     }
 }
