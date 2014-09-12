@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.construction.service.GameInitiationService;
 import com.clemble.casino.server.ExternalController;
+
+import javax.ws.rs.CookieParam;
+
 import static com.clemble.casino.game.GameWebMapping.*;
 
 @RestController
@@ -21,9 +24,13 @@ public class GameInitiationController implements GameInitiationService, External
     }
 
     @Override
+    public GameInitiation confirm(String sessionKey) {
+        throw new IllegalAccessError();
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = INITIATION_READY, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public GameInitiation confirm(@PathVariable("session") final String session, @PathVariable("playerId") final String player) {
+    public GameInitiation confirm(@CookieValue("player") String player, @PathVariable("session") final String session) {
         return initiationService.confirm(session, player);
     }
 

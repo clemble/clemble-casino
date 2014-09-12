@@ -10,6 +10,7 @@ import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
+import com.clemble.casino.server.game.controller.GameInitiationController;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
@@ -121,7 +122,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             PlayerPresenceServiceController presenceService,
             @Qualifier("autoGameConstructionController") AutoGameConstructionService constructionService,
             @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,
-            @Qualifier("gameInitiationController") GameInitiationService initiationService,
+            GameInitiationController initiationService,
             @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
             GameActionService actionService,
             GameRecordService recordService,

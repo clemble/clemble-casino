@@ -14,6 +14,7 @@ import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.server.game.controller.GameInitiationController;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
@@ -50,7 +51,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private EventListenerOperationsFactory listenerOperations;
     final private AutoGameConstructionService gameConstructionService;
     final private AvailabilityGameConstructionService availabilityConstructionService;
-    final private GameInitiationService initiationService;
+    final private GameInitiationController initiationService;
     final private GameConfigurationService specificationService;
     final private GameActionService actionService;
     final private GameRecordService recordService;
@@ -72,7 +73,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         PlayerPresenceServiceController presenceService,
         AutoGameConstructionService gameConstructionService,
         AvailabilityGameConstructionService availabilityConstructionService,
-        GameInitiationService initiationService,
+        GameInitiationController initiationService,
         GameConfigurationService specificationService,
         GameActionService actionService,
         GameRecordService recordService,

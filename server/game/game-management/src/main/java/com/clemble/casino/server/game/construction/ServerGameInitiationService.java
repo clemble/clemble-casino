@@ -77,6 +77,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
     public void expire(String sessionKey) {
         // Step 1. Removing initiation from the list
         Entry<GameInitiation, Set<String>> initiationToConfirmed = sessionToInitiation.remove(sessionKey);
+        LOG.debug("Initiation for {} is due {}", sessionKey, initiationToConfirmed);
         // Step 2. Sending notification event
         if (initiationToConfirmed != null) {
             LOG.warn("Canceling initiation {}", sessionKey);
@@ -98,6 +99,10 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
     }
 
     @Override
+    public GameInitiation confirm(String sessionKey){
+        throw new IllegalAccessError();
+    }
+
     public GameInitiation confirm(String sessionKey, String player) {
         // Step 1. Sanity check
         Entry<GameInitiation, Set<String>> initiationToConfirmed = sessionToInitiation.get(sessionKey);

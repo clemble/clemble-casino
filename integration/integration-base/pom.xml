@@ -59,6 +59,10 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>game-configuration</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>game-management</artifactId>
+        </dependency>
 
 
         <dependency>
