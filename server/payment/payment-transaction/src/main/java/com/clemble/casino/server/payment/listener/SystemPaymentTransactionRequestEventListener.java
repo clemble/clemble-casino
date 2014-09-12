@@ -8,6 +8,7 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.money.Operation;
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
@@ -53,7 +54,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
         PaymentTransaction paymentTransaction = event.getTransaction();
         // Step 1. Sanity check
         if (paymentTransaction == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionEmpty);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionEmpty, PlayerAware.DEFAULT_PLAYER, event.getTransaction().getTransactionKey());
         // Step 2. Processing payment transactions
         validationService.validate(paymentTransaction);
         processTransaction(paymentTransaction);
@@ -75,7 +76,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
             } else if (paymentOperation.getOperation() == Operation.Debit) {
                 accountTemplate.debit(paymentOperation.getPlayer(), paymentOperation.getAmount());
             } else {
-                throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionInvalid);
+                throw ClembleCasinoException.withKey(ClembleCasinoError.PaymentTransactionInvalid, paymentTransaction.getTransactionKey());
             }
             paymentEvents.add(new FinishedPaymentEvent(paymentTransaction.getTransactionKey(), paymentOperation));
         }

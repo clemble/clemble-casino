@@ -54,7 +54,7 @@ public class PlayerSessionServiceController implements PlayerSessionServiceContr
         PlayerSession playerSession = getPlayerSession(playerId, sessionId);
         // Step 2. Sanity check
         if (playerSession.expired())
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed, playerId, sessionId);
         playerSession.setExpirationTime(playerPresenceService.markOnline(playerId));
         playerSession = sessionRepository.save(playerSession);
         // Step 3. Returning refreshed session
@@ -67,7 +67,7 @@ public class PlayerSessionServiceController implements PlayerSessionServiceContr
         // Step 1. Fetching player session
         PlayerSession playerSession = getPlayerSession(player, sessionId);
         if (playerSession.expired())
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed, player, sessionId);
         // Step 2. Notifying all listeners of the state change
         notificationService.notify(new SystemPlayerLeftEvent(player));
         // Step 3. Marking player state as ended
@@ -83,7 +83,7 @@ public class PlayerSessionServiceController implements PlayerSessionServiceContr
         // Step 2. Reading specific session
         PlayerSession playerSession = sessionRepository.findOne(sessionId);
         if (!playerSession.getPlayer().equals(playerId))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerNotSessionOwner);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerNotSessionOwner, playerId, sessionId);
         // Step 3. Returning session
         return playerSession;
     }

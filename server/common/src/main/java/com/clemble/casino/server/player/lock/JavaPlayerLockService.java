@@ -45,7 +45,7 @@ public class JavaPlayerLockService implements PlayerLockService {
                     playerGroupLock.lock.lock();
                 }
             } catch (InterruptedException e) {
-                throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerLockAcquireFailure);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerLockAcquireFailure, player);
             }
         }
     }

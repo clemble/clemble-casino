@@ -48,7 +48,7 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
         GameConstruction construction = constructionRepository.findOne(session);
         // Step 2. Sending error in case resource not found
         if (construction == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionDoesNotExistent);
+            throw ClembleCasinoException.withKey(ClembleCasinoError.GameConstructionDoesNotExistent, session);
         // Step 3. Returning construction
         return construction;
     }

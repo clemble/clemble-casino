@@ -125,7 +125,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
             public void onEvent(GameInitiatedEvent event) {
                 // Step 1. Fetching session key
                 String sessionKey = event.getSessionKey();
-                initiationService.confirm(sessionKey, player);
+                initiationService.confirm(player, sessionKey);
             }
         });
         this.recordOperations = new GameRecordTemplate(recordService);

@@ -10,7 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.TimeUnit;
 
-import com.clemble.casino.game.construction.event.GameInitiationExpired;
+import com.clemble.casino.game.construction.event.GameInitiationExpiredEvent;
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.action.GameInitiationExpirationTask;
 import org.slf4j.Logger;
@@ -57,11 +58,11 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         // Step 1. Sanity check
         if (initiation == null) {
             LOG.error("Invalid initiation {}", initiation);
-            throw ClembleCasinoException.fromError(ClembleCasinoError.ServerError);
+            throw ClembleCasinoException.withKey(ClembleCasinoError.ServerError, initiation.getSessionKey());
         }
         if (sessionToInitiation.containsKey(initiation.getSessionKey())) {
             LOG.error("Already have {} pending", initiation.getSessionKey());
-            throw ClembleCasinoException.fromError(ClembleCasinoError.ServerError);
+            throw ClembleCasinoException.withKey(ClembleCasinoError.ServerError, initiation.getSessionKey());
         }
         // Step 2. Adding to internal cache
         LOG.debug("Adding new pending session {}", initiation.getSessionKey());
@@ -92,7 +93,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
                 presenceService.markOffline(offlinePlayer);
             }
             LOG.warn("Notifying all participants of initiation cancel {}", sessionKey);
-            notificationService.notify(initiation.getParticipants(), new GameInitiationExpired(sessionKey));
+            notificationService.notify(initiation.getParticipants(), new GameInitiationExpiredEvent(sessionKey));
         } else {
             LOG.info("Game already initiated, processing unchanged {}", sessionKey);
         }
@@ -103,18 +104,18 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         throw new IllegalAccessError();
     }
 
-    public GameInitiation confirm(String sessionKey, String player) {
+    public GameInitiation confirm(String player, String sessionKey) {
         // Step 1. Sanity check
         Entry<GameInitiation, Set<String>> initiationToConfirmed = sessionToInitiation.get(sessionKey);
         if (initiationToConfirmed == null) {
             LOG.error("Can't find {} as pending in ", sessionKey, sessionToInitiation);
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GameInitiationInActive);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameInitiationInActive, player, sessionKey);
         }
         // Step 2. Adding confirmed player to initiation
         GameInitiation initiation = initiationToConfirmed.getKey();
         Set<String> confirmations = initiationToConfirmed.getValue();
         if (!initiation.isParticipates(player)) {
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GameInitiationInvalidPlayer);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameInitiationInvalidPlayer, player, sessionKey);
         }
         synchronized (confirmations) {
             confirmations.add(player);

@@ -33,10 +33,10 @@ public class RoundGameSecurityAspect extends GameAspect<PlayerAwareEvent> {
     public void doEvent(PlayerAwareEvent event) {
         // Step 1. Checking player is one of participants
         if (!participants.contains(event.getPlayer()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayPlayerNotParticipate);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayPlayerNotParticipate, event.getPlayer());
         // Step 2. Checking action was actually made
         if (context.getActionLatch().acted(event.getPlayer()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayMoveAlreadyMade);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayMoveAlreadyMade, event.getPlayer());
     }
 
 }

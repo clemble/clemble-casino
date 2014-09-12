@@ -70,4 +70,9 @@ public class PlayerTimeTask implements EventTask {
         return new Date(breachTime);
     }
 
+    @Override
+    public String toString() {
+        return "timer:" + key;
+    }
+
 }

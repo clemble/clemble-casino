@@ -78,7 +78,7 @@ public class GoalJudgeInvitationServiceController implements GoalJudgeInvitation
         GoalJudgeInvitation invitation = invitationRepository.findOne(goalKey);
         // Step 2. In case some one else replies, not a judge, throw exception
         if  (!requester.equals(invitation.getJudge()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalJudgeOnlyJudgeCanReplay);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalJudgeOnlyJudgeCanReplay, requester, invitation.getJudge());
         // Step 3. Ignore any changes to invitation, except for status, and save
         GoalJudgeInvitation savedInvitation = invitationRepository.save(invitation.cloneWithStatus(response.getStatus()));
         if (response.getStatus() == GoalJudgeInvitationStatus.accepted)

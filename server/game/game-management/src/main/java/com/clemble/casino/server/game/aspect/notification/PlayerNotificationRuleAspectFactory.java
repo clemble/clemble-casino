@@ -30,7 +30,7 @@ public class PlayerNotificationRuleAspectFactory implements GameAspectFactory<Ga
             case players:
                 return new PrivateNotificationRuleAspect(PlayerAwareUtils.toPlayerList(context.getPlayerContexts()), notificationService);
             default:
-                throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
+                throw ClembleCasinoException.withKey(ClembleCasinoError.GameSpecificationInvalid, context.getSessionKey());
         }
     }
 

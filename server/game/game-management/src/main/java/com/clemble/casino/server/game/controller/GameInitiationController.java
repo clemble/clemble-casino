@@ -31,7 +31,7 @@ public class GameInitiationController implements GameInitiationService, External
     @RequestMapping(method = RequestMethod.POST, value = INITIATION_READY, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public GameInitiation confirm(@CookieValue("player") String player, @PathVariable("session") final String session) {
-        return initiationService.confirm(session, player);
+        return initiationService.confirm(player, session);
     }
 
 }

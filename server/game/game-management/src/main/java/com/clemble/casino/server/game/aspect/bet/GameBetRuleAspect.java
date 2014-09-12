@@ -24,11 +24,11 @@ public class GameBetRuleAspect extends GameAspect<BetEvent> {
     public void doEvent(BetEvent bet) {
         // Step 1. Checking bet is valid, according to the account
         if (!betRule.isValid(bet))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayBetInvalid);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayBetInvalid, bet.getPlayer());
         // Step 2. Checking player has needed amount
         GamePlayerAccount playerAccount = context.getPlayerContext(bet.getPlayer()).getAccount();
         if (!playerAccount.canAfford(bet.getBet()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayBetOverflow);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayBetOverflow, bet.getPlayer());
     }
 
 }

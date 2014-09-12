@@ -9,6 +9,7 @@ import com.clemble.casino.game.action.GameEventRecord;
 import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.event.GameManagementEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -26,7 +27,7 @@ public class GameStateFactoryUtils {
     public GameState constructState(final GameRecord record) {
         // Step 1. Sanity check
         if (record == null || record.getConfiguration() == null) {
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GameStateReCreationFailure);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameStateReCreationFailure, PlayerAware.DEFAULT_PLAYER);
         }
         // Step 2. Re creating state
         GameInitiation initiation = new GameInitiation(record.getSessionKey(), record.getPlayers(), record.getConfiguration());

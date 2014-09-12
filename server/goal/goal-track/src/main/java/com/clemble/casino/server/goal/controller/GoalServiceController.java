@@ -76,7 +76,7 @@ public class GoalServiceController implements GoalService, ExternalController {
     public Goal addMyGoal(@CookieValue("player") String player, @RequestBody GoalRequest goal) {
         // Step 0. Checking due date
         if (goal.getTimeInDays() <= 0)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalDueDateInPast);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalDueDateInPast, player);
         // Step 1. Generating saved goal
         Date startDate = new Date();
         Bid bid = bidCalculator.calculate(goal);

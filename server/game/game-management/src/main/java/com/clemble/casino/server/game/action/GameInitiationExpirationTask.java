@@ -1,8 +1,5 @@
 package com.clemble.casino.server.game.action;
 
-import com.clemble.casino.event.Event;
-import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.construction.event.GameInitiationExpired;
 import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.executor.EventTask;
 import org.springframework.scheduling.TriggerContext;
@@ -38,4 +35,10 @@ public class GameInitiationExpirationTask implements EventTask {
     public Date nextExecutionTime(TriggerContext triggerContext) {
         return expirationTime;
     }
+
+    @Override
+    public String toString() {
+        return "initiation:" + sessionKey;
+    }
+
 }

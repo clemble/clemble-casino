@@ -21,8 +21,9 @@ public class ServerGameInitiationDueEventListener implements SystemEventListener
 
     @Override
     public void onEvent(SystemGameInitiationDueEvent event) {
-        LOG.debug("Processing {}", event.getSessionKey());
+        LOG.debug("Processing started {}", event.getSessionKey());
         initiationService.expire(event.getSessionKey());
+        LOG.debug("Processing finished {}", event.getSessionKey());
     }
 
     @Override

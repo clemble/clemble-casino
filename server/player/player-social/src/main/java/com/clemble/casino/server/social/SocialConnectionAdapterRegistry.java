@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.player.PlayerAware;
 
 public class SocialConnectionAdapterRegistry {
 
@@ -22,7 +23,7 @@ public class SocialConnectionAdapterRegistry {
         SocialConnectionAdapter<?> connectionAdapter = ADAPTERS_MAP.get(providerId);
         // Step 2. Sanity check
         if (connectionAdapter == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionProviderNotSupported);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionProviderNotSupported, PlayerAware.DEFAULT_PLAYER, providerId);
         // Step 3. Returning found ConnectionAdapters
         return connectionAdapter;
     }

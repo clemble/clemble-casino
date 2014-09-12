@@ -94,7 +94,7 @@ public class SocialConnectionDataAdapter {
     public SocialConnectionData add(String player, SocialConnectionData socialConnectionData) {
         // Step 1. Sanity check
         if (socialConnectionData == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid, player);
         // Step 2. Creating connection to Social network
         ConnectionData connectionData = socialAdapterRegistry.getSocialAdapter(socialConnectionData.getProviderId()).toConnectionData(socialConnectionData);
         Connection<?> connection = connectionFactoryLocator.getConnectionFactory(connectionData.getProviderId()).createConnection(connectionData);

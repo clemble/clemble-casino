@@ -92,7 +92,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     public GameConstruction reply(InvitationResponseEvent response) {
         // Step 1. Sanity check
         if (response == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse, response.getPlayer(), response.getSessionKey());
         return tryReply(response);
     }
 
@@ -103,7 +103,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             if (construction == null)
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionDoesNotExistent);
             if (construction.getState() != ConstructionState.pending)
-                throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState);
+                throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState, response.getPlayer(), response.getSessionKey());
             // Step 2. Checking if player is part of the game
             ActionLatch responseLatch = latchService.update(response.getSessionKey(), response);
             // Step 3. Notifying of applied response

@@ -39,14 +39,14 @@ public class PlayerProfileServiceController implements PlayerProfileServiceContr
     public PlayerProfile updateProfile(@CookieValue("player") String player, @RequestBody PlayerProfile playerProfile) {
         // Step 1. Sanity check
         if (playerProfile == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileInvalid);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileInvalid, player);
         if (!playerProfile.getPlayer().equals(player))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerNotProfileOwner);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerNotProfileOwner, player, playerProfile.getPlayer());
         playerProfile.setPlayer(player);
         // Step 1.1. Checking player does not try to add additional Social Connections
         PlayerProfile existingProfile = profileRepository.findOne(player);
         if (!existingProfile.getSocialConnections().equals(playerProfile.getSocialConnections()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileSocialCantBeEdited);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileSocialCantBeEdited, player);
         // Step 2. Updating Profile
         return profileRepository.save(playerProfile);
     }
@@ -59,7 +59,7 @@ public class PlayerProfileServiceController implements PlayerProfileServiceContr
         PlayerProfile playerProfile = profileRepository.findOne(player);
         // Step 2. Checking profile
         if (playerProfile == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileDoesNotExists);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerProfileDoesNotExists, player);
         // Step 3. Returning profile
         return playerProfile;
     }

@@ -103,7 +103,7 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     @Override
     public boolean markPlaying(final String player, final String sessionKey) {
         if (!isAvailable(player))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionTimeout);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionTimeout, player, sessionKey);
         return markPlaying(Collections.singleton(player), sessionKey);
     }
 
