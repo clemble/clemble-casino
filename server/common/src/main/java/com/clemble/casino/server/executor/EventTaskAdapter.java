@@ -9,6 +9,6 @@ import java.util.Collection;
  */
 public interface EventTaskAdapter {
 
-    void process(String sessionKey, Collection<Event> events);
+    void process(EventTask task);
 
 }

@@ -25,6 +25,7 @@ import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
+import com.clemble.casino.server.game.construction.ServerGameInitiationDueEventListener;
 import com.clemble.casino.server.game.construction.ServerGameInitiationService;
 import com.clemble.casino.server.game.construction.ServerGameReadyEventListener;
 import com.clemble.casino.server.game.controller.GameActionController;
@@ -163,8 +164,9 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     public ServerGameInitiationService serverGameInitiationActivator(
         GameManagerFactory processor,
         ServerPlayerPresenceService presenceService,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new ServerGameInitiationService(processor, presenceService, notificationService);
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        EventTaskExecutor taskExecutor) {
+        return new ServerGameInitiationService(processor, presenceService, notificationService, taskExecutor);
     }
 
     @Bean
@@ -177,13 +179,22 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public ServerGameInitiationDueEventListener serverGameInitiationDueEventListener(
+        ServerGameInitiationService serverGameInitiationService,
+        SystemNotificationServiceListener notificationServiceListener) {
+        ServerGameInitiationDueEventListener eventListener = new ServerGameInitiationDueEventListener(serverGameInitiationService);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
+    @Bean
     public GameStateFactoryFacade gameStateFactoryFacade() {
         return new GameStateFactoryFacade();
     }
 
     @Bean
-    public EventTaskAdapter eventTaskAdapter(GameManagerFactory managerFactory){
-        return new GameEventTaskAdapter(managerFactory);
+    public EventTaskAdapter eventTaskAdapter(GameManagerFactory managerFactory, SystemNotificationService notificationService){
+        return new GameEventTaskAdapter(managerFactory, notificationService);
     }
 
     @Bean

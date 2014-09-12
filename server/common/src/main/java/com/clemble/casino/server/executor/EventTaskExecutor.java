@@ -52,11 +52,9 @@ public class EventTaskExecutor {
 
         @Override
         public void run() {
-            // Step 1. Generating event tasks
-            Collection<Event> events = eventTask.execute();
-            // Step 2. Processing through event task adapter
-            taskAdapter.process(eventTask.getKey(), events);
-            // Step 3. Rescheduling for future events
+            // Step 1. Processing through event task adapter
+            taskAdapter.process(eventTask);
+            // Step 2. Rescheduling for future events
             reschedule(eventTask);
         }
 

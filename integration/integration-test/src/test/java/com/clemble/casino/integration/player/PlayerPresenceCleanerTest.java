@@ -53,7 +53,7 @@ public class PlayerPresenceCleanerTest {
         }
         // Step 4. Check player is offline
         PlayerPresenceChangedEvent presenceChangedEvent = accumulator.poll(2, TimeUnit.SECONDS);
-        // Player notification is not immediate, it's done by background process, 
+        // Player notification is not immediate, it's done by background,
         // calling get triggers key expire event
         if(presenceChangedEvent == null) {
             jedis = jedisPool.getResource();

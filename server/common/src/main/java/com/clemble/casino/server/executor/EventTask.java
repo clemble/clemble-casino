@@ -9,7 +9,7 @@ import com.clemble.casino.game.GameSessionAware;
 
 public interface EventTask extends Trigger {
 
-    public Collection<Event> execute();
+    public Collection<? extends Event> execute();
 
     public String getKey();
 }
