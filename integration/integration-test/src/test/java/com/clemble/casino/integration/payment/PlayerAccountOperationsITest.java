@@ -98,7 +98,6 @@ public class PlayerAccountOperationsITest {
     }
 
     @Test
-    @Repeat(100)
     public void runningOutOfMoney() {
         // TODO can fail, because cash transactions are asynchronous (Need to manage this)
         final ClembleCasinoOperations A = playerOperations.createPlayer();
