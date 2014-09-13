@@ -9,13 +9,13 @@ import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.event.PlayerMovedEvent;
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 
-public class RoundGameSecurityAspect extends GameAspect<PlayerAwareEvent> {
+public class RoundGameSecurityAspect extends GameAspect<PlayerEvent> {
 
     final private RoundGameContext context;
     final private Collection<String> participants;
@@ -30,7 +30,7 @@ public class RoundGameSecurityAspect extends GameAspect<PlayerAwareEvent> {
     }
 
     @Override
-    public void doEvent(PlayerAwareEvent event) {
+    public void doEvent(PlayerEvent event) {
         // Step 1. Checking player is one of participants
         if (!participants.contains(event.getPlayer()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayPlayerNotParticipate, event.getPlayer());

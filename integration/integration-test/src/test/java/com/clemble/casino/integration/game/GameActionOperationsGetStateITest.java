@@ -21,7 +21,7 @@ import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.event.GameInitiationCanceledEvent;
+import com.clemble.casino.game.construction.event.GameInitiationCanceledEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;

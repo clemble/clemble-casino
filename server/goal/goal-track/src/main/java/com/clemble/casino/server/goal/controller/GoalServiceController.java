@@ -94,7 +94,7 @@ public class GoalServiceController implements GoalService, ExternalController {
         // Step 2. Saving goal for future
         Goal savedGoal = goalRepository.save(goalToSave);
         // Step 3. Sending system notification, for newly created goal
-        systemNotificationService.notify(new SystemGoalCreatedEvent(savedGoal));
+        systemNotificationService.notify(new SystemGoalCreatedEvent(savedGoal.getGoalKey(), savedGoal));
         // Step 4. We are done returning saved Goal
         return savedGoal;
     }

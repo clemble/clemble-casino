@@ -2,11 +2,8 @@ package com.clemble.casino.server.event.game;
 
 import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.construction.GameInitiationAware;
-import com.clemble.casino.game.event.GameInitiatedEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.Collection;
 
 /**
  * Created by mavarazy on 7/4/14.

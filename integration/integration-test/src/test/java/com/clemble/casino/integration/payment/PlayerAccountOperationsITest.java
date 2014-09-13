@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
@@ -16,6 +17,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -96,7 +98,8 @@ public class PlayerAccountOperationsITest {
     }
 
     @Test
-    public void runingOutOfMoney() {
+    @Repeat(100)
+    public void runningOutOfMoney() {
         // TODO can fail, because cash transactions are asynchronous (Need to manage this)
         final ClembleCasinoOperations A = playerOperations.createPlayer();
         final ClembleCasinoOperations B = playerOperations.createPlayer();
@@ -110,8 +113,8 @@ public class PlayerAccountOperationsITest {
             assertTrue(cashAbefore.getAmount() >= 0);
             assertTrue(cashBbefore.getAmount() >= 0);
 
-            RoundGamePlayer<GameState> AvsB = gameOperations.round(Game.num, A, B.getPlayer());
-            RoundGamePlayer<GameState> BvsA = gameOperations.accept(AvsB.getSessionKey(), B);
+            RoundGamePlayer<NumberState> AvsB = gameOperations.round(Game.num, A, B.getPlayer());
+            RoundGamePlayer<NumberState> BvsA = gameOperations.accept(AvsB.getSessionKey(), B);
 
             AvsB.waitForStart();
             BvsA.waitForStart();

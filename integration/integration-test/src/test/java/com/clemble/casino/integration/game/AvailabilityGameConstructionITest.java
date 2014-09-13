@@ -98,11 +98,11 @@ public class AvailabilityGameConstructionITest {
 
         RoundGamePlayer playerA = gameScenarios.round(Game.num, A, B.getPlayer());
         String sessionKey = playerA.getSessionKey();
-        PlayerAware AtoAresponse = A.gameConstructionOperations().getResponce(sessionKey, A.getPlayer());
-        PlayerAware AtoBresponse = A.gameConstructionOperations().getResponce(sessionKey, B.getPlayer());
+        PlayerAware AtoAresponse = A.gameConstructionOperations().getResponse(sessionKey, A.getPlayer());
+        PlayerAware AtoBresponse = A.gameConstructionOperations().getResponse(sessionKey, B.getPlayer());
 
-        PlayerAware BtoAresponse = B.gameConstructionOperations().getResponce(sessionKey, A.getPlayer());
-        PlayerAware BtoBresponse = B.gameConstructionOperations().getResponce(sessionKey, B.getPlayer());
+        PlayerAware BtoAresponse = B.gameConstructionOperations().getResponse(sessionKey, A.getPlayer());
+        PlayerAware BtoBresponse = B.gameConstructionOperations().getResponse(sessionKey, B.getPlayer());
 
         assertEquals(AtoAresponse, BtoAresponse);
         assertEquals(AtoBresponse, BtoBresponse);

@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.event.surrender.SurrenderEvent;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGameState;
@@ -15,6 +14,7 @@ import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.NoOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.game.unit.GameUnit;
+import com.clemble.casino.player.event.PlayerEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -48,7 +48,7 @@ public class NumberState implements RoundGameState {
     }
 
     @Override
-    public GameManagementEvent process(PlayerAwareEvent action) {
+    public GameManagementEvent process(PlayerEvent action) {
         // Step 1. Processing Select cell move
         GameManagementEvent resultEvent = null;
 

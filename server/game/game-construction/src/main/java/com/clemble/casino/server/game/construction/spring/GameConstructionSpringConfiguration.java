@@ -171,7 +171,7 @@ public class GameConstructionSpringConfiguration {
 
     @Bean
     public EventTaskExecutor gameInitiationEventTaskExecutor(@Qualifier("gameInitiationEventTaskAdapter") EventTaskAdapter gameInitiationEventTaskAdapter) {
-        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL EventTaskExecutor - %d");
+        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL game:initiation:event:executor - %d");
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
         return new EventTaskExecutor(gameInitiationEventTaskAdapter, executorService);
     }

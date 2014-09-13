@@ -1,7 +1,7 @@
 package com.clemble.casino.base;
 
 import com.clemble.casino.ActionLatch;
-import com.clemble.casino.event.PlayerAwareEvent;
+import com.clemble.casino.player.event.PlayerEvent;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,7 +23,7 @@ public class JavaActionLatchService implements ActionLatchService {
     }
 
     @Override
-    public ActionLatch update(String key, PlayerAwareEvent event) {
+    public ActionLatch update(String key, PlayerEvent event) {
         return LATCH_MAP.computeIfPresent(key, (k, v) -> v.put(event));
     }
 }

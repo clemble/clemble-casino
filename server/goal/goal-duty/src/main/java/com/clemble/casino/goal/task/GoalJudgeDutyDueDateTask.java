@@ -38,6 +38,6 @@ public class GoalJudgeDutyDueDateTask implements Runnable {
         List<GoalJudgeDuty> savedDuties =  dutyRepository.save(dueDutiesToSave);
         // Step 5. Sending notification to interested parties
         for(GoalJudgeDuty savedDuty: savedDuties)
-            notificationService.notify(new SystemGoalJudgeDutyDueEvent(savedDuty));
+            notificationService.notify(new SystemGoalJudgeDutyDueEvent(savedDuty.getGoalKey(), savedDuty));
     }
 }

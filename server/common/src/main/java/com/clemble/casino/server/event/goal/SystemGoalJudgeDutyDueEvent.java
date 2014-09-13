@@ -12,11 +12,18 @@ public class SystemGoalJudgeDutyDueEvent implements SystemGoalEvent {
 
     final public static String CHANNEL = "goal:judge:duty:due";
 
+    final private String goalKey;
     final private GoalJudgeDuty duty;
 
     @JsonCreator
-    public SystemGoalJudgeDutyDueEvent(@JsonProperty("duty") GoalJudgeDuty duty) {
+    public SystemGoalJudgeDutyDueEvent(@JsonProperty("goalKey") String goalKey, @JsonProperty("duty") GoalJudgeDuty duty) {
+        this.goalKey = goalKey;
         this.duty = duty;
+    }
+
+    @Override
+    public String getGoalKey() {
+        return goalKey;
     }
 
     public GoalJudgeDuty getDuty() {
@@ -30,7 +37,7 @@ public class SystemGoalJudgeDutyDueEvent implements SystemGoalEvent {
 
     @Override
     public String toString() {
-        return "sys:" + duty.getGoalKey() +  ":" + CHANNEL;
+        return "sys:" + goalKey +  ":" + CHANNEL;
     }
 
 }

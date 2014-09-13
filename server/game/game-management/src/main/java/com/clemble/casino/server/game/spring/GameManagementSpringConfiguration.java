@@ -170,7 +170,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public EventTaskExecutor gameEventTaskExecutor(@Qualifier("gameEventTaskAdapter") EventTaskAdapter gameEventTaskAdapter) {
-        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL EventTaskExecutor - %d");
+        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL game:event:executor - %d");
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
         return new EventTaskExecutor(gameEventTaskAdapter, executorService);
     }

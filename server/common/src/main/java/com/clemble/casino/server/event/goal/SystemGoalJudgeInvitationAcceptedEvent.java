@@ -12,10 +12,17 @@ public class SystemGoalJudgeInvitationAcceptedEvent implements SystemGoalEvent {
     final public static String CHANNEL = "goal:judge:invitation:accepted";
 
     final private GoalJudgeInvitation invitation;
+    final private String goalKey;
 
     @JsonCreator
-    public SystemGoalJudgeInvitationAcceptedEvent(@JsonProperty("invitation") GoalJudgeInvitation invitation) {
+    public SystemGoalJudgeInvitationAcceptedEvent(@JsonProperty("goalKey") String goalKey, @JsonProperty("invitation") GoalJudgeInvitation invitation) {
+        this.goalKey = goalKey;
         this.invitation = invitation;
+    }
+
+    @Override
+    public String getGoalKey() {
+        return goalKey;
     }
 
     public GoalJudgeInvitation getInvitation() {
@@ -29,7 +36,7 @@ public class SystemGoalJudgeInvitationAcceptedEvent implements SystemGoalEvent {
 
     @Override
     public String toString() {
-        return "sys:" + invitation.getGoalKey() +  ":" + CHANNEL + ":" + invitation.getJudge();
+        return "sys:" + goalKey +  ":" + CHANNEL + ":" + invitation.getJudge();
     }
 
 }

@@ -11,11 +11,18 @@ public class SystemGoalCreatedEvent implements SystemGoalEvent {
 
     final public static String CHANNEL = "goal:created";
 
+    final private String goalKey;
     final private Goal goal;
 
     @JsonCreator
-    public SystemGoalCreatedEvent(@JsonProperty("goal") Goal goal) {
+    public SystemGoalCreatedEvent(@JsonProperty("goalKey") String goalKey, @JsonProperty("goal") Goal goal) {
+        this.goalKey = goalKey;
         this.goal = goal;
+    }
+
+    @Override
+    public String getGoalKey() {
+        return goalKey;
     }
 
     public Goal getGoal(){

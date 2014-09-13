@@ -1,7 +1,7 @@
 package com.clemble.casino.base;
 
 import com.clemble.casino.ActionLatch;
-import com.clemble.casino.event.PlayerAwareEvent;
+import com.clemble.casino.player.event.PlayerEvent;
 
 /**
  * Created by mavarazy on 8/20/14.
@@ -12,6 +12,6 @@ public interface ActionLatchService {
 
     ActionLatch get(String key);
 
-    ActionLatch update(String key, PlayerAwareEvent event);
+    ActionLatch update(String key, PlayerEvent event);
 
 }

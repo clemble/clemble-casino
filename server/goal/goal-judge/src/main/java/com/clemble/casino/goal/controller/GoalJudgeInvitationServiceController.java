@@ -82,7 +82,7 @@ public class GoalJudgeInvitationServiceController implements GoalJudgeInvitation
         // Step 3. Ignore any changes to invitation, except for status, and save
         GoalJudgeInvitation savedInvitation = invitationRepository.save(invitation.cloneWithStatus(response.getStatus()));
         if (response.getStatus() == GoalJudgeInvitationStatus.accepted)
-            notificationService.notify(new SystemGoalJudgeInvitationAcceptedEvent(invitation));
+            notificationService.notify(new SystemGoalJudgeInvitationAcceptedEvent(invitation.getGoalKey(), invitation));
         // Step 4. Save changing invitation
         return savedInvitation;
     }

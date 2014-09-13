@@ -8,6 +8,7 @@ import com.clemble.casino.base.ActionLatchService;
 import com.clemble.casino.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
+import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
 import com.clemble.casino.server.game.construction.listener.PendingGameInitiationEventListener;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clemble.casino.ActionLatch;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.event.PlayerAwareEvent;
 import com.clemble.casino.game.construction.AvailabilityGameRequest;
 import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.construction.GameInitiation;
@@ -85,7 +85,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
 
 
     @Override
-    public PlayerAwareEvent getReply(String sessionKey, String player) {
+    public PlayerEvent getReply(String sessionKey, String player) {
         return constructionRepository.findOne(sessionKey).getResponses().filterAction(player);
     }
 

@@ -16,10 +16,12 @@ import java.util.Collection;
 public class SelfGoalConstructionService implements GoalConstructionService<GoalConstructionRequest> {
 
     final private GoalKeyGenerator keyGenerator;
+    final private ServerGoalInitiationService initiationService;
     final private GoalConstructionRepository constructionRepository;
 
-    public SelfGoalConstructionService(GoalKeyGenerator keyGenerator, GoalConstructionRepository constructionRepository) {
+    public SelfGoalConstructionService(GoalKeyGenerator keyGenerator, ServerGoalInitiationService initiationService, GoalConstructionRepository constructionRepository) {
         this.keyGenerator = keyGenerator;
+        this.initiationService = initiationService;
         this.constructionRepository = constructionRepository;
     }
 
@@ -32,7 +34,9 @@ public class SelfGoalConstructionService implements GoalConstructionService<Goal
         GoalConstruction construction = request.toConstruction(keyGenerator.generate(request.getPlayer()));
         // Step 3. Saving game construction
         GoalConstruction savedConstruction =  constructionRepository.save(construction);
-        // Step 4. Returning saved construction
+        // Step 4. Initiating saved session right away
+        initiationService.start(savedConstruction.toInitiation());
+        // Step 5. Returning saved construction
         return savedConstruction;
     }
 

@@ -179,7 +179,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
                 event = (T) objectMapper.readValue(body, SystemEvent.class);
             } catch(IOException ioe) {
                 LOG.error("Failed to parse message {}", new String(body));
-                LOG.error("FIX_ASAP Ignoring message", ioe);
+                LOG.error("FIX_ASAP Ignoring message" , ioe);
             }
             // Step 2. If we were able to read event notify, otherwise ignore, some error happened
             if(event != null) {
