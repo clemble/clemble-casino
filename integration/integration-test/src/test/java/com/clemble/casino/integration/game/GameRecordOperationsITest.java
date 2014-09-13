@@ -10,9 +10,11 @@ import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.event.FinishedPaymentEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -29,6 +31,7 @@ import static org.junit.Assert.assertTrue;
  * Created by mavarazy on 09/03/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class GameRecordOperationsITest {

@@ -15,11 +15,11 @@ import java.util.Collection;
 import static com.clemble.casino.game.GameWebMapping.*;
 
 @RestController
-public class GameInitiationController implements GameInitiationService, ExternalController {
+public class GameInitiationServiceController implements GameInitiationService, ExternalController {
 
     final private ServerGameInitiationService initiationService;
 
-    public GameInitiationController(ServerGameInitiationService initiationService) {
+    public GameInitiationServiceController(ServerGameInitiationService initiationService) {
         this.initiationService = checkNotNull(initiationService);
     }
 

@@ -10,7 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.TimeUnit;
 
-import com.clemble.casino.game.construction.event.GameInitiationExpiredEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.construction.GameInitiationExpirationTask;
@@ -96,8 +95,6 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
             for(String offlinePlayer: offlinePlayers) {
                 presenceService.markOffline(offlinePlayer);
             }
-            LOG.warn("Notifying all participants of initiation cancel {}", sessionKey);
-            notificationService.notify(initiation.getParticipants(), new GameInitiationExpiredEvent(sessionKey));
         } else {
             LOG.info("Game already initiated, processing unchanged {}", sessionKey);
         }

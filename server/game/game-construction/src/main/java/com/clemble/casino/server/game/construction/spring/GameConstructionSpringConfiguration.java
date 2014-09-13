@@ -7,7 +7,7 @@ import com.clemble.casino.server.executor.EventTaskAdapter;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.construction.GameInitiationEventTaskAdapter;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
-import com.clemble.casino.server.game.construction.controller.GameInitiationController;
+import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
 import com.clemble.casino.server.game.construction.listener.ServerGameInitiationDueEventListener;
 import com.clemble.casino.server.game.construction.listener.ServerGameReadyEventListener;
 import com.clemble.casino.server.game.construction.service.PendingGameInitiationService;
@@ -127,8 +127,8 @@ public class GameConstructionSpringConfiguration {
     }
 
     @Bean
-    public GameInitiationController gameInitiationController(ServerGameInitiationService initiationService) {
-        return new GameInitiationController(initiationService);
+    public GameInitiationServiceController gameInitiationController(ServerGameInitiationService initiationService) {
+        return new GameInitiationServiceController(initiationService);
     }
 
     @Bean

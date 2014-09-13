@@ -15,7 +15,7 @@ import com.clemble.casino.payment.service.PaymentTransactionOperations;
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.player.service.*;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
-import com.clemble.casino.server.game.construction.controller.GameInitiationController;
+import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
@@ -92,7 +92,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final PlayerPresenceServiceController playerPresenceService,
         final AutoGameConstructionService gameConstructionService,
         final AvailabilityGameConstructionService availabilityConstructionService,
-        final GameInitiationController initiationService,
+        final GameInitiationServiceController initiationService,
         final GameConfigurationService specificationService,
         final GameActionService actionService,
         final GameRecordService recordService,
