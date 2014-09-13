@@ -2,6 +2,7 @@ package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameRecord;
+import com.clemble.casino.game.GameSessionState;
 import com.clemble.casino.game.action.GameEventRecord;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
@@ -68,6 +69,25 @@ public class GameRecordOperationsITest {
         assertEquals(moveIterator.next().getEvent(), new SelectNumberEvent(A.getPlayer(), 2));
         moveIterator.next();
         assertEquals(moveIterator.next().getEvent(), new SelectNumberEvent(B.getPlayer(), 1));
+    }
+
+    @Test
+    public void testRecordStateChangesToFinished() {
+        List<RoundGamePlayer<NumberState>> sessionPlayers = gameScenarios.round(Game.num);
+        // Step 1. Preparing game session listener
+        EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
+        RoundGamePlayer<NumberState> A = sessionPlayers.get(0);
+        A.playerOperations().listenerOperations().subscribeToPaymentEvents(paymentListener);
+        RoundGamePlayer<NumberState> B = sessionPlayers.get(1);
+        A.waitForStart();
+        B.waitForStart();
+        // Step 2. Make B surrender by player B
+        A.giveUp();
+        A.syncWith(B);
+        // Step 3. Checking game record state is Final
+        A.waitForEnd();
+        GameRecord finalRecord = A.getRecord();
+        assertEquals(finalRecord.getSessionState(), GameSessionState.finished);
     }
 
 }

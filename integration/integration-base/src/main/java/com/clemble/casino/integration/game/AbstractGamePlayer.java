@@ -15,6 +15,7 @@ import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.GameSessionEventSelector;
+import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.event.GameSessionAwareEvent;
 import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.event.GameEndedEvent;
@@ -208,6 +209,11 @@ abstract public class AbstractGamePlayer implements GamePlayer {
         for (GamePlayer player : players)
             addDependent(player);
         return this;
+    }
+
+    @Override
+    final public GameRecord getRecord(){
+        return player.gameRecordOperations().get(sessionKey);
     }
 
 }

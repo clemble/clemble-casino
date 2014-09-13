@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.configuration.GameConfigurationAware;
 import com.clemble.casino.game.event.GameSessionAwareEvent;
@@ -42,6 +43,8 @@ public interface GamePlayer extends GameSessionAware, PlayerAware, Closeable, Ga
     public GamePlayer giveUp();
 
     public void close();
+
+    public GameRecord getRecord();
 
     public GamePlayer addDependent(GamePlayer dependent);
 

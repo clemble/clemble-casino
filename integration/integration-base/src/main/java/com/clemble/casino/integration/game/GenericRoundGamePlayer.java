@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.event.GameSessionAwareEvent;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.outcome.GameOutcome;
@@ -108,6 +109,11 @@ public class GenericRoundGamePlayer<State extends GameState> implements RoundGam
     @Override
     final public void close() {
         actualPlayer.close();
+    }
+
+    @Override
+    public GameRecord getRecord() {
+        return actualPlayer.getRecord();
     }
 
     @Override
