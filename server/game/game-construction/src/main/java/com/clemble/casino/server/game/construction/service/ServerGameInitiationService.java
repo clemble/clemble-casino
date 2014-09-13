@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.construction;
+package com.clemble.casino.server.game.construction.service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -11,9 +11,10 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.game.construction.event.GameInitiationExpiredEvent;
-import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.server.event.game.SystemGameStartedEvent;
 import com.clemble.casino.server.executor.EventTaskExecutor;
-import com.clemble.casino.server.game.action.GameInitiationExpirationTask;
+import com.clemble.casino.server.game.construction.GameInitiationExpirationTask;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,6 @@ import com.clemble.casino.game.event.GameInitiationCanceledEvent;
 import com.clemble.casino.game.event.GameInitiationConfirmedEvent;
 import com.clemble.casino.game.construction.service.GameInitiationService;
 import com.clemble.casino.server.ServerService;
-import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
@@ -38,19 +38,23 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
     // TODO This made static to test assumption that wrong beans wired in Spring context
     final static private ConcurrentHashMap<String, Entry<GameInitiation, Set<String>>> sessionToInitiation = new ConcurrentHashMap<>();
 
-    final private GameManagerFactory managerFactory;
-    final private PlayerNotificationService notificationService;
+    final private PendingGameInitiationService pendingInitiationService;
     final private ServerPlayerPresenceService presenceService;
     final private EventTaskExecutor taskExecutor;
+    final private SystemNotificationService systemNotificationService;
+    final private PlayerNotificationService notificationService;
 
-    public ServerGameInitiationService(GameManagerFactory processor,
-            ServerPlayerPresenceService presenceService,
-            PlayerNotificationService notificationService,
-            EventTaskExecutor taskExecutor) {
+    public ServerGameInitiationService(
+        PendingGameInitiationService pendingInitiationService,
+        ServerPlayerPresenceService presenceService,
+        PlayerNotificationService notificationService,
+        SystemNotificationService systemNotificationService,
+        EventTaskExecutor taskExecutor) {
         this.presenceService = checkNotNull(presenceService);
-        this.managerFactory = checkNotNull(processor);
+        this.systemNotificationService = checkNotNull(systemNotificationService);
+        this.pendingInitiationService = checkNotNull(pendingInitiationService);
         this.notificationService = checkNotNull(notificationService);
-        this.taskExecutor = taskExecutor;
+        this.taskExecutor = checkNotNull(taskExecutor);
     }
 
     public void start(GameInitiation initiation) {
@@ -123,16 +127,25 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
             // Step 3. Checking everybody confirmed
             if (confirmations.size() == initiation.getParticipants().size()) {
                 sessionToInitiation.remove(sessionKey);
-                if (presenceService.markPlaying(initiation.getParticipants(), initiation.getSessionKey())) {
-                    LOG.trace("{} successfully updated presences, starting a new game", sessionKey);
-                    managerFactory.start(initiation, null);
+                if (presenceService.areAvailable(initiation.getParticipants())) {
+                    LOG.trace("{} all players available trigger game", sessionKey);
+                    systemNotificationService.notify(new SystemGameStartedEvent(sessionKey, initiation));
                 } else {
                     // TODO remove session from the lists
-                    LOG.trace("{} failed to update presences", sessionKey);
+                    LOG.trace("{} not all player available", sessionKey);
                 }
             }
         }
         return initiation;
+    }
+
+    @Override
+    public Collection<GameInitiation> getPending() {
+        throw new IllegalAccessError();
+    }
+
+    public Collection<GameInitiation> getPending(String player) {
+        return pendingInitiationService.getPending(player);
     }
 
 }

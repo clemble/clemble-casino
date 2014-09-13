@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.integration</groupId>
         <artifactId>integration</artifactId>
-        <version>0.12.0-SNAPSHOT</version>
+        <version>0.12.1-SNAPSHOT</version>
     </parent>
     <artifactId>integration-base</artifactId>
     <dependencies>
@@ -58,6 +58,10 @@
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>game-configuration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>game-construction</artifactId>
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>

@@ -1,5 +1,8 @@
 package com.clemble.casino.server.event.game;
 
+import com.clemble.casino.game.construction.GameInitiation;
+import com.clemble.casino.game.construction.GameInitiationAware;
+import com.clemble.casino.game.event.GameInitiatedEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,19 +11,24 @@ import java.util.Collection;
 /**
  * Created by mavarazy on 7/4/14.
  */
-public class SystemGameStartedEvent implements SystemGameEvent {
+public class SystemGameStartedEvent implements SystemGameEvent, GameInitiationAware {
 
     final public static String CHANNEL = "game:started";
 
     final private String sessionKey;
-    final private Collection<String> participants;
+    final private GameInitiation initiation;
 
     @JsonCreator
     public SystemGameStartedEvent(
         @JsonProperty(SESSION_KEY) String sessionKey,
-        @JsonProperty("participants") Collection<String> participants) {
+        @JsonProperty("initiation") GameInitiation initiation) {
         this.sessionKey = sessionKey;
-        this.participants = participants;
+        this.initiation = initiation;
+    }
+
+    @Override
+    public GameInitiation getInitiation() {
+        return initiation;
     }
 
     @Override

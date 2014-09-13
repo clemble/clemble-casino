@@ -16,7 +16,7 @@ import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.construction.event.InvitationResponseEvent;
 import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
+import com.clemble.casino.server.game.construction.service.ServerAvailabilityGameConstructionService;
 import static com.clemble.casino.game.GameWebMapping.*;
 import com.clemble.casino.web.mapping.WebMapping;
 

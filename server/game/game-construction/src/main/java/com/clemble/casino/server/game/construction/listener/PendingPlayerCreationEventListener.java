@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.construction.availability;
+package com.clemble.casino.server.game.construction.listener;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
@@ -28,7 +28,7 @@ public class PendingPlayerCreationEventListener implements SystemEventListener<S
 
     @Override
     public String getQueueName() {
-        return SystemPlayerCreatedEvent.CHANNEL + " > game:pending:player:registration";
+        return SystemPlayerCreatedEvent.CHANNEL + " > game:construction";
     }
 
 }

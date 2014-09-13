@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.construction.availability;
+package com.clemble.casino.server.game.construction.service;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
@@ -9,6 +9,7 @@ import com.clemble.casino.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
+import com.clemble.casino.server.game.construction.listener.PendingGameInitiationEventListener;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     final private GameConstructionRepository constructionRepository;
     final private PlayerNotificationService playerNotificationService;
     final private PlayerAccountServiceContract accountService;
-    final private PendingGameInitiationEventListener pendingInitiationService;
+    final private PendingGameInitiationService pendingInitiationService;
 
     public ServerAvailabilityGameConstructionService(
             ActionLatchService latchService,
@@ -43,7 +44,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             PlayerAccountServiceContract accountServerService,
             GameConstructionRepository constructionRepository,
             PlayerNotificationService notificationService,
-            PendingGameInitiationEventListener pendingInitiationService) {
+            PendingGameInitiationService pendingInitiationService) {
         this.latchService = latchService;
         this.sessionKeyGenerator = checkNotNull(sessionKeyGenerator);
         this.accountService = checkNotNull(accountServerService);

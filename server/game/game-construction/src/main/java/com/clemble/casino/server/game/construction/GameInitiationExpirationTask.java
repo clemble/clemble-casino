@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.action;
+package com.clemble.casino.server.game.construction;
 
 import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.executor.EventTask;

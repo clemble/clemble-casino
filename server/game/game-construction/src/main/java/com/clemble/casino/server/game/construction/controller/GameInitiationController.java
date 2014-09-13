@@ -1,8 +1,8 @@
-package com.clemble.casino.server.game.controller;
+package com.clemble.casino.server.game.construction.controller;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.server.game.construction.ServerGameInitiationService;
+import com.clemble.casino.server.game.construction.service.ServerGameInitiationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +10,7 @@ import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.construction.service.GameInitiationService;
 import com.clemble.casino.server.ExternalController;
 
-import javax.ws.rs.CookieParam;
+import java.util.Collection;
 
 import static com.clemble.casino.game.GameWebMapping.*;
 
@@ -27,6 +27,18 @@ public class GameInitiationController implements GameInitiationService, External
     public GameInitiation confirm(String sessionKey) {
         throw new IllegalAccessError();
     }
+
+    @Override
+    public Collection<GameInitiation> getPending() {
+        throw new IllegalArgumentException();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = INITIATION_PENDING, produces = PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Collection<GameInitiation> getPending(@CookieValue("player") String player) {
+        return initiationService.getPending(player);
+    }
+
 
     @RequestMapping(method = RequestMethod.POST, value = INITIATION_READY, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)

@@ -3,16 +3,24 @@ package com.clemble.casino.server.game.construction.spring;
 import com.clemble.casino.base.ActionLatchService;
 import com.clemble.casino.base.JavaActionLatchService;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
+import com.clemble.casino.server.executor.EventTaskAdapter;
+import com.clemble.casino.server.executor.EventTaskExecutor;
+import com.clemble.casino.server.game.construction.GameInitiationEventTaskAdapter;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
-import com.clemble.casino.server.game.construction.auto.ServerAutoGameConstructionService;
-import com.clemble.casino.server.game.construction.availability.PendingGameInitiationEventListener;
-import com.clemble.casino.server.game.construction.availability.PendingPlayerCreationEventListener;
-import com.clemble.casino.server.game.construction.availability.ServerAvailabilityGameConstructionService;
+import com.clemble.casino.server.game.construction.controller.GameInitiationController;
+import com.clemble.casino.server.game.construction.listener.ServerGameInitiationDueEventListener;
+import com.clemble.casino.server.game.construction.listener.ServerGameReadyEventListener;
+import com.clemble.casino.server.game.construction.service.PendingGameInitiationService;
+import com.clemble.casino.server.game.construction.service.ServerAutoGameConstructionService;
+import com.clemble.casino.server.game.construction.listener.PendingGameInitiationEventListener;
+import com.clemble.casino.server.game.construction.listener.PendingPlayerCreationEventListener;
+import com.clemble.casino.server.game.construction.service.ServerAvailabilityGameConstructionService;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.repository.PendingGameInitiationRepository;
 import com.clemble.casino.server.game.construction.repository.PendingPlayerRepository;
+import com.clemble.casino.server.game.construction.service.ServerGameInitiationService;
 import com.clemble.casino.server.key.RedisKeyFactory;
 import com.clemble.casino.server.player.lock.PlayerLockService;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -20,12 +28,16 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.spring.common.*;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import redis.clients.jedis.JedisPool;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Created by mavarazy on 8/31/14.
@@ -66,8 +78,17 @@ public class GameConstructionSpringConfiguration {
         @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService,
         GameConstructionRepository constructionRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
-        PendingGameInitiationEventListener pendingInitiationService) {
+        PendingGameInitiationService pendingInitiationService) {
         return new ServerAvailabilityGameConstructionService(constructionActionLatchService, sessionKeyGenerator, accountServerService, constructionRepository, notificationService, pendingInitiationService);
+    }
+
+    @Bean
+    public PendingGameInitiationService pendingGameInitiationService(
+        PendingPlayerRepository playerRepository,
+        PendingGameInitiationRepository initiationRepository,
+        ServerPlayerPresenceService presenceService,
+        SystemNotificationService notificationService){
+        return new PendingGameInitiationService(playerRepository, initiationRepository, presenceService, notificationService);
     }
 
 
@@ -106,8 +127,53 @@ public class GameConstructionSpringConfiguration {
     }
 
     @Bean
+    public GameInitiationController gameInitiationController(ServerGameInitiationService initiationService) {
+        return new GameInitiationController(initiationService);
+    }
+
+    @Bean
     public GameConstructionRepository gameConstructionRepository(MongoRepositoryFactory mongoRepositoryFactory) {
         return mongoRepositoryFactory.getRepository(GameConstructionRepository.class);
+    }
+
+       @Bean
+    public ServerGameInitiationService serverGameInitiationActivator(
+        PendingGameInitiationService processor,
+        ServerPlayerPresenceService presenceService,
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        SystemNotificationService systemNotificationService,
+        @Qualifier("gameInitiationEventTaskExecutor") EventTaskExecutor taskExecutor) {
+        return new ServerGameInitiationService(processor, presenceService, notificationService, systemNotificationService, taskExecutor);
+    }
+
+    @Bean
+    public ServerGameReadyEventListener serverGameReadyEventListener(
+        ServerGameInitiationService serverGameInitiationService,
+        SystemNotificationServiceListener notificationServiceListener) {
+        ServerGameReadyEventListener eventListener = new ServerGameReadyEventListener(serverGameInitiationService);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
+    @Bean
+    public ServerGameInitiationDueEventListener serverGameInitiationDueEventListener(
+        ServerGameInitiationService serverGameInitiationService,
+        SystemNotificationServiceListener notificationServiceListener) {
+        ServerGameInitiationDueEventListener eventListener = new ServerGameInitiationDueEventListener(serverGameInitiationService);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
+    @Bean
+    public EventTaskAdapter gameInitiationEventTaskAdapter(SystemNotificationService notificationService){
+        return new GameInitiationEventTaskAdapter(notificationService);
+    }
+
+    @Bean
+    public EventTaskExecutor gameInitiationEventTaskExecutor(@Qualifier("gameInitiationEventTaskAdapter") EventTaskAdapter gameInitiationEventTaskAdapter) {
+        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL EventTaskExecutor - %d");
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
+        return new EventTaskExecutor(gameInitiationEventTaskAdapter, executorService);
     }
 
     @Configuration

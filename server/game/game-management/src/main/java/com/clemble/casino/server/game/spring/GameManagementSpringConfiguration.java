@@ -25,12 +25,9 @@ import com.clemble.casino.server.game.aspect.record.RoundGameRecordAspectFactory
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
-import com.clemble.casino.server.game.construction.ServerGameInitiationDueEventListener;
-import com.clemble.casino.server.game.construction.ServerGameInitiationService;
-import com.clemble.casino.server.game.construction.ServerGameReadyEventListener;
 import com.clemble.casino.server.game.controller.GameActionController;
-import com.clemble.casino.server.game.controller.GameInitiationController;
 import com.clemble.casino.server.game.controller.GameRecordController;
+import com.clemble.casino.server.game.listener.ServerGameStartedEventListener;
 import com.clemble.casino.server.game.repository.*;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
@@ -135,8 +132,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
          *
          */
         @Bean
-        public GameTimeAspectFactory gameTimeAspectFactory(EventTaskExecutor eventTaskExecutor) {
-            return new GameTimeAspectFactory(eventTaskExecutor);
+        public GameTimeAspectFactory gameTimeAspectFactory(@Qualifier("gameEventTaskExecutor") EventTaskExecutor gameEventTaskExecutor) {
+            return new GameTimeAspectFactory(gameEventTaskExecutor);
         }
 
     }
@@ -160,32 +157,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     }
 
-    @Bean
-    public ServerGameInitiationService serverGameInitiationActivator(
-        GameManagerFactory processor,
-        ServerPlayerPresenceService presenceService,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
-        EventTaskExecutor taskExecutor) {
-        return new ServerGameInitiationService(processor, presenceService, notificationService, taskExecutor);
-    }
-
-    @Bean
-    public ServerGameReadyEventListener serverGameReadyEventListener(
-        ServerGameInitiationService serverGameInitiationService,
-        SystemNotificationServiceListener notificationServiceListener) {
-        ServerGameReadyEventListener eventListener = new ServerGameReadyEventListener(serverGameInitiationService);
-        notificationServiceListener.subscribe(eventListener);
-        return eventListener;
-    }
-
-    @Bean
-    public ServerGameInitiationDueEventListener serverGameInitiationDueEventListener(
-        ServerGameInitiationService serverGameInitiationService,
-        SystemNotificationServiceListener notificationServiceListener) {
-        ServerGameInitiationDueEventListener eventListener = new ServerGameInitiationDueEventListener(serverGameInitiationService);
-        notificationServiceListener.subscribe(eventListener);
-        return eventListener;
-    }
 
     @Bean
     public GameStateFactoryFacade gameStateFactoryFacade() {
@@ -193,18 +164,18 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public EventTaskAdapter eventTaskAdapter(GameManagerFactory managerFactory, SystemNotificationService notificationService){
+    public EventTaskAdapter gameEventTaskAdapter(GameManagerFactory managerFactory, SystemNotificationService notificationService){
         return new GameEventTaskAdapter(managerFactory, notificationService);
     }
 
     @Bean
-    public EventTaskExecutor eventTaskExecutor(EventTaskAdapter eventTaskAdapter) {
+    public EventTaskExecutor gameEventTaskExecutor(@Qualifier("gameEventTaskAdapter") EventTaskAdapter gameEventTaskAdapter) {
         ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL EventTaskExecutor - %d");
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
-        return new EventTaskExecutor(eventTaskAdapter, executorService);
+        return new EventTaskExecutor(gameEventTaskAdapter, executorService);
     }
 
-        @Bean
+    @Bean
     public GameManagerFactory gameProcessor(
         GameStateFactoryFacade stateFactory,
         ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory,
@@ -230,6 +201,17 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         return new ServerGameManagerFactory<>(TournamentGameAspectFactory.class);
     }
 
+    @Bean
+    public ServerGameStartedEventListener serverGameStartedEventListener(
+        GameManagerFactory managerFactory,
+        SystemNotificationServiceListener notificationServiceListener,
+        ServerPlayerPresenceService presenceService,
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        ServerGameStartedEventListener eventListener = new ServerGameStartedEventListener(managerFactory, presenceService, notificationService);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
     @Configuration
     public static class GameManagementControllerSpringConfiguration implements SpringConfiguration {
 
@@ -243,11 +225,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Bean
         public GameRecordController gameRecordController(GameRecordRepository recordRepository) {
             return new GameRecordController(recordRepository);
-        }
-
-        @Bean
-        public GameInitiationController gameInitiationController(ServerGameInitiationService initiationService) {
-            return new GameInitiationController(initiationService);
         }
 
     }

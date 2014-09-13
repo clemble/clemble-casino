@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.construction.auto;
+package com.clemble.casino.server.game.construction.service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

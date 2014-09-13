@@ -1,7 +1,7 @@
-package com.clemble.casino.server.game.construction;
+package com.clemble.casino.server.game.construction.listener;
 
 import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
-import com.clemble.casino.server.event.game.SystemGameReadyEvent;
+import com.clemble.casino.server.game.construction.service.ServerGameInitiationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +33,6 @@ public class ServerGameInitiationDueEventListener implements SystemEventListener
 
     @Override
     public String getQueueName() {
-        return SystemGameInitiationDueEvent.CHANNEL + " > game:management";
+        return SystemGameInitiationDueEvent.CHANNEL + " > game:construction";
     }
 }

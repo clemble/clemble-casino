@@ -1,4 +1,4 @@
-package com.clemble.casino.server.game.construction.availability;
+package com.clemble.casino.server.game.construction.listener;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
@@ -60,37 +60,7 @@ public class PendingGameInitiationEventListener implements SystemEventListener<S
 
     @Override
     public String getQueueName() {
-        return SystemPlayerPresenceChangedEvent.CHANNEL + " > game:pending";
-    }
-
-    public void add(final GameInitiation initiation) {
-        final Collection<String> players = initiation.getParticipants();
-        if (!presenceService.areAvailable(players)) {
-            Set<PendingPlayer> pendingPlayers = new HashSet<>();
-            for (String player : players) {
-                PendingPlayer pending = playerRepository.findByPropertyValue("player", player);
-                if(pending != null)
-                    pendingPlayers.add(pending);
-            }
-            // Step 1. Saving new PendingGameInitiation
-            initiationRepository.save(new PendingGameInitiation(initiation, pendingPlayers));
-        } else {
-            notificationService.notify(new SystemGameReadyEvent(initiation));
-        }
-    }
-
-    // TODO add filtering by game
-    public Collection<GameInitiation> getPending(String player) {
-        // Step 1. Fetching data from pending player
-        Collection<GameInitiation> initiations = new ArrayList<>();
-        for(PendingGameInitiation initiation: playerRepository.findPending(player))
-            initiations.add(toInitiation(initiation));
-        // Step 2. Returning pending initiations
-        return initiations;
-    }
-
-    private GameInitiation toInitiation(PendingGameInitiation initiation){
-        return new GameInitiation(initiation.getSessionKey(), PlayerAwareUtils.toPlayerList(initiation.getParticipants()), initiation.getConfiguration());
+        return SystemPlayerPresenceChangedEvent.CHANNEL + " > game:construction";
     }
 
 }
