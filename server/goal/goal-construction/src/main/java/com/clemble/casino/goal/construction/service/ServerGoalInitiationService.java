@@ -57,7 +57,11 @@ public class ServerGoalInitiationService implements GoalInitiationService {
 
     @Override
     public Collection<GoalInitiation> getPending() {
-        return null;
+        throw new UnsupportedOperationException();
+    }
+
+    public Collection<GoalInitiation> getPending(String player) {
+        return initiationRepository.findByPlayer(player);
     }
 
 }

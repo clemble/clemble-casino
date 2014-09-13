@@ -3,6 +3,7 @@ package com.clemble.casino.goal.construction.spring;
 import com.clemble.casino.goal.construction.GoalInitiationTaskAdapter;
 import com.clemble.casino.goal.construction.GoalKeyGenerator;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
+import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.construction.repository.GoalConstructionRepository;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.goal.construction.service.SelfGoalConstructionService;
@@ -52,6 +53,11 @@ public class GoalConstructionSpringConfiguration {
     @Bean
     public GoalConstructionServiceController goalConstructionServiceController(ServerGoalConstructionService constructionService) {
         return new GoalConstructionServiceController(constructionService);
+    }
+
+    @Bean
+    public GoalInitiationServiceController goalInitiationServiceController(ServerGoalInitiationService initiationService) {
+        return new GoalInitiationServiceController(initiationService);
     }
 
     @Bean

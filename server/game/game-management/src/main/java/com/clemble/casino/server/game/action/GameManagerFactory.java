@@ -113,10 +113,10 @@ public class GameManagerFactory {
         GameManager<MatchGameContext> matchGameManager = matchManagerFactory.create(gameProcessor, configuration, context);
         // Step 4. Generating match started event
         MatchStartedEvent matchStartedEvent = new MatchStartedEvent(initiation.getSessionKey(), context);
-        notificationService.notify(initiation.getParticipants(), matchStartedEvent);
-        // Step 5. Processing match started event
         matchGameManager.process(matchStartedEvent);
+        // Step 5. Processing match started event
         sessionToManager.put(initiation.getSessionKey(), matchGameManager);
+        notificationService.notify(initiation.getParticipants(), matchStartedEvent);
         return matchGameManager;
     }
 
