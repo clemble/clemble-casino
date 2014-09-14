@@ -26,7 +26,6 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class InstantGameConstructionITest {
 

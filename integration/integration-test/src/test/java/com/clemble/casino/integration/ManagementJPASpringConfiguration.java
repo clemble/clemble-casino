@@ -4,6 +4,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -21,6 +22,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.clemble.casino.server.spring.common.BasicJPASpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 
+@Ignore
 @Configuration
 @Import(BasicJPASpringConfiguration.class)
 @EnableJpaRepositories(basePackages = "com.clemble.casino.server.repository.player",

@@ -60,6 +60,7 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
 
     @Override
     public void perform(Event gameAction) {
+        LOG.debug("performing {}", gameAction);
         GameManagementEvent managementEvent = actionOperations.process(gameAction);
         if (managementEvent instanceof RoundEvent)
             setState((State) ((RoundEvent) managementEvent).getState());
@@ -89,8 +90,11 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
     @Override
     public GamePlayer giveUp() {
         // Step 1. Giving up if needed
-        if (isAlive())
+        if (isAlive()) {
             perform(new GiveUpEvent(getPlayer()));
+        } else {
+            LOG.debug("can't give up player is not ALIVE");
+        }
         return this;
     }
 }

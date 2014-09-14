@@ -34,7 +34,6 @@ import com.clemble.test.random.ObjectGenerator;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
 public class PlayerProfileOperationsITest {
 
     @Autowired

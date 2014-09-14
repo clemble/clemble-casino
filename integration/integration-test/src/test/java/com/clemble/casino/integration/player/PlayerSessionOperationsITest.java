@@ -23,7 +23,6 @@ import com.clemble.casino.player.PlayerSession;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
 public class PlayerSessionOperationsITest {
 
     @Autowired

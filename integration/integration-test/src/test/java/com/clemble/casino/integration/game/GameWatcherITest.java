@@ -29,7 +29,6 @@ import com.clemble.casino.integration.util.RedisCleaner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-@TestExecutionListeners(listeners = { RedisCleaner.class, DependencyInjectionTestExecutionListener.class })
 public class GameWatcherITest {
 
     @Autowired

@@ -26,8 +26,10 @@ import com.clemble.casino.server.bonus.listener.DailyBonusEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 import com.clemble.test.random.ObjectGenerator;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ContextConfiguration(classes = IntegrationTestSpringConfiguration.class)
 public class DailyBonusServiceTest {
 

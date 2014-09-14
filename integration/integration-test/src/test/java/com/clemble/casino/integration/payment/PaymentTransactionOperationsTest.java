@@ -40,7 +40,6 @@ import com.clemble.test.concurrent.Get;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class })
 public class PaymentTransactionOperationsTest {
 
     @Autowired

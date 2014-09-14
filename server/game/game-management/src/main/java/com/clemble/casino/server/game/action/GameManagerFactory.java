@@ -17,8 +17,12 @@ import com.clemble.casino.game.configuration.TournamentGameConfiguration;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GameManagerFactory {
+
+    final private Logger LOG = LoggerFactory.getLogger(GameManagerFactory.class);
 
     final private ConcurrentHashMap<String, GameManager<?>> sessionToManager = new ConcurrentHashMap<>();
     
@@ -46,11 +50,15 @@ public class GameManagerFactory {
 
     @SuppressWarnings("unchecked")
     public <GC extends GameContext> GameManager<GC> get(String sessionKey) {
-        return (GameManager<GC>) sessionToManager.get(sessionKey);
+        GameManager<GC> gameManager = (GameManager<GC>) sessionToManager.get(sessionKey);
+        if(gameManager == null)
+            LOG.warn("{} can't find in sessionToManager mapping {}", sessionKey, hashCode());
+        return gameManager;
     }
 
     public GameManager<?> start(GameInitiation initiation, GameContext<?> parent) {
         try {
+            LOG.debug("{} starting", initiation.getSessionKey());
             if (initiation.getConfiguration() instanceof RoundGameConfiguration) {
                 return round(initiation, parent);
             } else if (initiation.getConfiguration() instanceof MatchGameConfiguration) {
@@ -76,12 +84,15 @@ public class GameManagerFactory {
             .setSessionState(GameSessionState.active)
             .setPlayers(initiation.getParticipants());
         roundRecord = recordRepository.save(roundRecord);
+        LOG.debug("{} saved round record {}", initiation.getSessionKey(), hashCode());
         // Step 3. Constructing manager and saving in a session
         GameManager<RoundGameContext> roundManager = roundManagerFactory.create(state, roundConfiguration, roundGameContext);
         sessionToManager.put(initiation.getSessionKey(), roundManager);
+        LOG.debug("{} created and stored round manager {}", initiation.getSessionKey(), hashCode());
         // Step 4. Sending round started event
         RoundStartedEvent<RoundGameState> startedEvent = new RoundStartedEvent<RoundGameState>(initiation.getSessionKey(), state);
         notificationService.notify(initiation.getParticipants(), startedEvent);
+        LOG.debug("{} sent notification for initiation {}", initiation.getSessionKey(), hashCode());
         return roundManager;
     }
 

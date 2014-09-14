@@ -4,10 +4,12 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
 import org.hibernate.tool.hbm2ddl.Target;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.clemble.casino.player.PlayerProfile;
 
+@Ignore
 public class PlayerSchemaGenerator {
 
     @Test

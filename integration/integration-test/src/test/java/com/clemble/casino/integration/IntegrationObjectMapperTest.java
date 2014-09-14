@@ -22,6 +22,7 @@ import com.clemble.casino.game.rule.outcome.DrawRule;
 import com.clemble.casino.game.rule.outcome.WonRule;
 import com.clemble.casino.game.rule.visibility.VisibilityRule;
 import com.clemble.casino.game.unit.GameUnit;
+import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.rule.bet.UnlimitedBetRule;
@@ -57,9 +58,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { WebJsonSpringConfiguration.class })
+@WebAppConfiguration
+@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class IntegrationObjectMapperTest extends IntegrationObjectTest {
 
     @Autowired

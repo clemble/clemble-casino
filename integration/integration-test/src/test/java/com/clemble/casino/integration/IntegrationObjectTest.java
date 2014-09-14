@@ -26,6 +26,7 @@ import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.rule.ConfigurationRule;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Ignore;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.VersionAware;
@@ -57,6 +58,7 @@ import com.clemble.test.random.ObjectGenerator;
 import com.clemble.test.random.ValueGenerator;
 import com.google.common.collect.ImmutableList;
 
+@Ignore
 public class IntegrationObjectTest {
 
     static {

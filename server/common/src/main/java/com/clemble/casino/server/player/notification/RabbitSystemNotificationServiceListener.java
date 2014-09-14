@@ -54,13 +54,19 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
 
     @Override
     public void close(){
-        for(RabbitStartupTask<?> startupTask: listenerToTask.values())
-            startupTask.close();
+        LOG.debug("closing");
+        for(RabbitStartupTask<?> startupTask: listenerToTask.values()) {
+            try {
+                startupTask.close();
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }
     }
 
     public class RabbitStartupTask<T extends SystemEvent> implements Runnable, Closeable {
 
-        final private Logger LOG = LoggerFactory.getLogger(RabbitStartupTask.class);
+        final private Logger LOG;
 
         final private String configurations;
         final private ObjectMapper objectMapper;
@@ -71,6 +77,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         final private AtomicReference<Connection> rabbitConnection = new AtomicReference<>(null);
 
         public RabbitStartupTask(String configuration, ObjectMapper objectMapper, SystemEventListener<T> eventListener) {
+            this.LOG = LoggerFactory.getLogger(eventListener.getClass());
             this.configurations = checkNotNull(configuration);
             this.objectMapper = checkNotNull(objectMapper);
             this.eventListener = checkNotNull(eventListener);
@@ -121,6 +128,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         }
 
         public void close() {
+            LOG.debug("closing");
             try {
                 keepClosed.set(true);
                 if(rabbitConnection.get() != null) {

@@ -31,7 +31,7 @@ import static org.junit.Assert.assertTrue;
  * Created by mavarazy on 09/03/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
+//@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class GameRecordOperationsITest {

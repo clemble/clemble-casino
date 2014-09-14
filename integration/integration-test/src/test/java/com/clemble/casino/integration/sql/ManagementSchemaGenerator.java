@@ -4,12 +4,14 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
 import org.hibernate.tool.hbm2ddl.Target;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.PlayerToken;
 import com.clemble.casino.player.PlayerSession;
 
+@Ignore
 public class ManagementSchemaGenerator {
 
     @Test

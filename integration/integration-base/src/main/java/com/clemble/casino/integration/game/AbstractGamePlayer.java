@@ -22,6 +22,8 @@ import com.clemble.casino.game.event.GameEndedEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.integration.event.EventAccumulator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 abstract public class AbstractGamePlayer implements GamePlayer {
 
@@ -29,6 +31,8 @@ abstract public class AbstractGamePlayer implements GamePlayer {
      * Generated 04/07/13
      */
     private static final long serialVersionUID = -8412015352988124245L;
+
+    final protected Logger LOG;
 
     //TODO make an external concern
     final protected Collection<GamePlayer> dependents = new LinkedBlockingQueue<GamePlayer>();
@@ -49,6 +53,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     public AbstractGamePlayer(final ClembleCasinoOperations player, final String sessionKey, final GameConfiguration configuration) {
+        this.LOG = LoggerFactory.getLogger("GP > " + sessionKey + " > " + player.getPlayer());
         this.player = checkNotNull(player);
         this.sessionKey = checkNotNull(sessionKey);
         this.configuration = checkNotNull(configuration);
@@ -97,6 +102,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
 
     @Override
     final public GamePlayer waitVersion(int expectedVersion) {
+        LOG.debug("waiting for version {} current version", expectedVersion, getVersion());
         if (getVersion() >= expectedVersion)
             return this;
 
@@ -145,7 +151,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
 
     @Override
     final public GamePlayer waitForStart(long timeout) {
-        System.out.println("gp >> " + getPlayer() + " >> " + getSessionKey() + " >> wait for start");
+        LOG.debug("wait for start");
         long expirationTime = timeout > 0 ? System.currentTimeMillis() + timeout : Long.MAX_VALUE;
         synchronized (versionLock) {
             while (keepAlive.get() && getVersion() < 0 && expirationTime > System.currentTimeMillis()) {
@@ -161,14 +167,17 @@ abstract public class AbstractGamePlayer implements GamePlayer {
             }
         }
         if (getVersion() < 0) {
-            System.out.println("gp >> " + getPlayer() + " >> " + getSessionKey() + " >> start failed");
+            LOG.debug("start failed");
             throw new RuntimeException(player.getPlayer() + " " + sessionKey + " was not started after " + timeout);
+        } else {
+            LOG.debug("game started");
         }
         return this;
     }
 
     @Override
     final public void close() {
+        LOG.debug("closing player");
         // Step 1. Giving up
         giveUp();
         // Step 2. Marking for removal
