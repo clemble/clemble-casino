@@ -16,6 +16,7 @@ import com.clemble.casino.game.construction.GameDeclineBehavior;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
+import com.clemble.casino.server.game.construction.service.ServerAvailabilityGameConstructionService;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -42,7 +43,7 @@ public class ServerGameConstructionServiceTest {
     final private int NUM_PARTICIPANTS = 50;
 
     @Autowired
-    public AvailabilityGameConstructionController constructionService;
+    public ServerAvailabilityGameConstructionService constructionService;
 
     @Autowired
     public GameConstructionRepository constructionRepository;
@@ -55,8 +56,8 @@ public class ServerGameConstructionServiceTest {
         List<String> participants = new ArrayList<>(players);
         RoundGameConfiguration specification = generate(participants);
 
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants, GameDeclineBehavior.invalidate);
-        GameConstruction construction = constructionService.construct(availabilityGameRequest);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(specification, participants, GameDeclineBehavior.invalidate);
+        GameConstruction construction = constructionService.construct(participants.get(0), availabilityGameRequest);
 
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
             constructionService.reply(new InvitationAcceptedEvent(participants.get(i), construction.getSessionKey()));
@@ -74,8 +75,8 @@ public class ServerGameConstructionServiceTest {
         List<String> participants = new ArrayList<>(players);
         RoundGameConfiguration specification = generate(participants);
 
-        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(participants.get(0), specification, participants, GameDeclineBehavior.invalidate);
-        GameConstruction construction = constructionService.construct(availabilityGameRequest);
+        AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(specification, participants, GameDeclineBehavior.invalidate);
+        GameConstruction construction = constructionService.construct(participants.get(0), availabilityGameRequest);
 
         final CountDownLatch downLatch = new CountDownLatch(NUM_PARTICIPANTS - 1);
         Collection<Callable<GameConstruction>> constructionJobs = new ArrayList<>();

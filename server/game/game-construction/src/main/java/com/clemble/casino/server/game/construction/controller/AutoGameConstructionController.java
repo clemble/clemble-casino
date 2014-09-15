@@ -25,15 +25,19 @@ public class AutoGameConstructionController implements AutoGameConstructionServi
     }
 
     @Override
+    public GameConstruction construct(AutomaticGameRequest request) {
+        throw new UnsupportedOperationException();
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.CONSTRUCTION_AUTO, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public GameConstruction construct(@RequestBody final AutomaticGameRequest request) {
+    public GameConstruction construct(@CookieValue("player") String player, @RequestBody final AutomaticGameRequest request) {
         // Step 1. Checking that provided specification was valid
         // TODO return (through valid annotation) 
         // if (!configurationService.isValid(gameRequest.getConfiguration()))
         //    throw ClembleCasinoException.fromError(ClembleCasinoError.GameSpecificationInvalid);
         // Step 2. Invoking actual matching service
-        return autoConstructionService.construct(request);
+        return autoConstructionService.construct(player, request);
     }
 
     @Override

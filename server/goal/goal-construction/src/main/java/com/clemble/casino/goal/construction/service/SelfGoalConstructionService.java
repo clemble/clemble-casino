@@ -27,11 +27,16 @@ public class SelfGoalConstructionService implements GoalConstructionService {
 
     @Override
     public GoalConstruction construct(GoalConstructionRequest request) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public GoalConstruction construct(String player, GoalConstructionRequest request) {
         // Step 1. Checking this is appropriate request for this service
         if(request.getConfiguration().getJudgeRule().getType() != JudgeType.self)
             throw new IllegalArgumentException();
         // Step 2. Creating new GoalConfiguration
-        GoalConstruction construction = request.toConstruction(keyGenerator.generate(request.getPlayer()));
+        GoalConstruction construction = request.toConstruction(player, keyGenerator.generate(player));
         // Step 3. Saving game construction
         GoalConstruction savedConstruction =  constructionRepository.save(construction);
         // Step 4. Initiating saved session right away

@@ -10,6 +10,7 @@ import com.clemble.casino.game.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.goal.configuration.spring.GoalConfigurationSpringConfiguration;
 import com.clemble.casino.goal.construction.spring.GoalConstructionSpringConfiguration;
+import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.rule.bet.UnlimitedBetRule;
 import com.clemble.casino.game.rule.construct.PlayerNumberRule;
 import com.clemble.casino.game.rule.giveup.GiveUpRule;
@@ -22,7 +23,6 @@ import com.clemble.casino.game.rule.visibility.VisibilityRule;
 import com.clemble.casino.game.unit.GameUnit;
 import com.clemble.casino.goal.spring.GoalJudgeDutySpringConfiguration;
 import com.clemble.casino.goal.spring.GoalJudgeSpringConfiguration;
-import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.json.ObjectMapperUtils;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -234,7 +234,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
 
         @Bean
         public ClembleCasinoRegistrationOperations registrationOperations() {
-            return new ClembleCasinoRegistrationOperationsWrapper(new AndroidCasinoRegistrationTemplate(baseUrl));
+            return new IntegrationClembleCasinoRegistrationOperationsWrapper(new AndroidCasinoRegistrationTemplate(baseUrl));
         }
 
         @Bean

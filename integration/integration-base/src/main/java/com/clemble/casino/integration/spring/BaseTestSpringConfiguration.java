@@ -12,8 +12,12 @@ import com.clemble.casino.goal.construction.controller.GoalInitiationServiceCont
 import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
+import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperations;
+import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
+import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
+import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
 import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
@@ -46,8 +50,6 @@ import com.clemble.casino.integration.game.construction.SimpleGameScenarios;
 import com.clemble.casino.integration.game.construction.SimplePlayerScenarios;
 import com.clemble.casino.integration.game.construction.SimpleSyncGameScenarios;
 import com.clemble.casino.integration.game.construction.SyncGameScenarios;
-import com.clemble.casino.integration.player.ClembleCasinoRegistrationOperationsWrapper;
-import com.clemble.casino.integration.player.ServerClembleCasinoRegistrationOperations;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -138,15 +140,15 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             @Qualifier("playerAccountController") PlayerAccountServiceController accountOperations,
             PaymentTransactionServiceController paymentTransactionService,
             PlayerPresenceServiceController presenceService,
-            @Qualifier("autoGameConstructionController") AutoGameConstructionService constructionService,
-            @Qualifier("availabilityGameConstructionController") AvailabilityGameConstructionService availabilityConstructionService,
+            AutoGameConstructionController constructionService,
+            AvailabilityGameConstructionController availabilityConstructionService,
             GameInitiationServiceController initiationService,
             @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
             GameActionService actionService,
             GameRecordService recordService,
             IntegrationGoalOperationsFactory goalOperationsFactory) {
-            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalOperationsFactory);
-            return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
+            ClembleCasinoRegistrationOperations registrationOperations = new IntegrationClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalOperationsFactory);
+            return new IntegrationClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }
 }

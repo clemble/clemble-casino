@@ -53,8 +53,13 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         this.pendingInitiationService = checkNotNull(pendingInitiationService);
     }
 
-    @Transactional
+    @Override
     public GameConstruction construct(AvailabilityGameRequest request) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Transactional
+    public GameConstruction construct(String player, AvailabilityGameRequest request) {
         // Step 1. Sanity check
         if (request == null || request.getConfiguration() == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidRequest);
@@ -62,12 +67,13 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         // Step 2. Checking players can afford operations
         // Step 2.1. Checking initiator
         Money price = request.getConfiguration().getPrice();
+        // TODO Consider using special exceptions, for initiator missing data !!! WARNING USE construction participants, otherwise it's prone to error, since request might be missing initiator
+        GameConstruction construction = request.toConstruction(player, sessionKeyGenerator.generate(request.getConfiguration()));
         // Step 2.2. Checking opponents
-        Collection<String> players = accountService.canAfford(request.getParticipants(), price.getCurrency(), price.getAmount());
+        Collection<String> players = accountService.canAfford(construction.getParticipants(), price.getCurrency(), price.getAmount());
         if (!players.isEmpty())
             throw ClembleCasinoException.fromFailures(ClembleCasinoFailure.construct(ClembleCasinoError.GameConstructionInsufficientMoney, players));
         // Step 3. Processing to opponents creation
-        GameConstruction construction = request.toConstruction(sessionKeyGenerator.generate(request.getConfiguration()));
         construction = constructionRepository.save(construction);
         latchService.save(construction.getSessionKey(), construction.getResponses());
         // Step 4. Sending invitation to opponents

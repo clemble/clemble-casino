@@ -13,15 +13,15 @@ import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.registration.PlayerCredential;
 
-public class ClembleCasinoRegistrationOperationsWrapper extends AbstractTestExecutionListener implements ClembleCasinoRegistrationOperations {
+public class IntegrationClembleCasinoRegistrationOperationsWrapper extends AbstractTestExecutionListener implements ClembleCasinoRegistrationOperations {
 
     final private static AtomicReference<ClembleCasinoRegistrationOperations> delegate = new AtomicReference<>();
     final private static LinkedBlockingQueue<ClembleCasinoOperations> initializedOperations = new LinkedBlockingQueue<>();
 
-    public ClembleCasinoRegistrationOperationsWrapper(){
+    public IntegrationClembleCasinoRegistrationOperationsWrapper(){
     }
 
-    public ClembleCasinoRegistrationOperationsWrapper(ClembleCasinoRegistrationOperations delegate){
+    public IntegrationClembleCasinoRegistrationOperationsWrapper(ClembleCasinoRegistrationOperations delegate){
         this.delegate.set(delegate);
     }
 

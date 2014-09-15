@@ -33,11 +33,14 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
         this.availabilityConstructionService = checkNotNull(availabilityConstructionService);
     }
 
-    @Override
+    public GameConstruction construct(AvailabilityGameRequest gameRequest) {
+        throw new UnsupportedOperationException();
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = CONSTRUCTION_AVAILABILITY, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public GameConstruction construct(@RequestBody AvailabilityGameRequest gameRequest) {
-        return availabilityConstructionService.construct(gameRequest);
+    public GameConstruction construct(@CookieValue("player") String player, @RequestBody AvailabilityGameRequest gameRequest) {
+        return availabilityConstructionService.construct(player, gameRequest);
     }
 
     @Override

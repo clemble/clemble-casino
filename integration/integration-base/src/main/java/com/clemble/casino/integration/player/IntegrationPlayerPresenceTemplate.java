@@ -9,12 +9,12 @@ import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.service.PlayerPresenceService;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
 
-public class PlayerPresenceTemplate implements PlayerPresenceService {
+public class IntegrationPlayerPresenceTemplate implements PlayerPresenceService {
 
     final private String player;
     final private PlayerPresenceServiceController playerPresenceService;
 
-    public PlayerPresenceTemplate(String player, PlayerPresenceServiceController playerPresenceService) {
+    public IntegrationPlayerPresenceTemplate(String player, PlayerPresenceServiceController playerPresenceService) {
         this.player = checkNotNull(player);
         this.playerPresenceService = checkNotNull(playerPresenceService);
     }

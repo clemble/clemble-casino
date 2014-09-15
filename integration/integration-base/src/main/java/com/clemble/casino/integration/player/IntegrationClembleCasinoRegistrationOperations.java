@@ -14,6 +14,8 @@ import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
+import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.social.SocialAccessGrant;
@@ -36,7 +38,7 @@ import com.clemble.casino.server.profile.controller.PlayerProfileServiceControll
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoRegistrationOperations {
+public class IntegrationClembleCasinoRegistrationOperations implements ClembleCasinoRegistrationOperations {
 
     final private String host;
     final private ObjectMapper objectMapper;
@@ -49,15 +51,15 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private PlayerAccountServiceController paymentService;
     final private PaymentTransactionServiceController paymentTransactionService;
     final private EventListenerOperationsFactory listenerOperations;
-    final private AutoGameConstructionService gameConstructionService;
-    final private AvailabilityGameConstructionService availabilityConstructionService;
+    final private AutoGameConstructionController gameConstructionService;
+    final private AvailabilityGameConstructionController availabilityConstructionService;
     final private GameInitiationServiceController initiationService;
     final private GameConfigurationService specificationService;
     final private GameActionService actionService;
     final private GameRecordService recordService;
     final private IntegrationGoalOperationsFactory goalOperationsFactory;
 
-    public ServerClembleCasinoRegistrationOperations(
+    public IntegrationClembleCasinoRegistrationOperations(
         String host,
         ObjectMapper objectMapper,
         EventListenerOperationsFactory listenerOperations,
@@ -69,8 +71,8 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         PlayerAccountServiceController accountOperations,
         PaymentTransactionServiceController paymentTransactionService,
         PlayerPresenceServiceController presenceService,
-        AutoGameConstructionService gameConstructionService,
-        AvailabilityGameConstructionService availabilityConstructionService,
+        AutoGameConstructionController gameConstructionService,
+        AvailabilityGameConstructionController availabilityConstructionService,
         GameInitiationServiceController initiationService,
         GameConfigurationService specificationService,
         GameActionService actionService,

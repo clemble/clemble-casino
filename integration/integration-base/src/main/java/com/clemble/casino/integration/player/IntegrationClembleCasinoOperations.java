@@ -3,21 +3,16 @@ package com.clemble.casino.integration.player;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.goal.GoalOperations;
-import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
-import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
-import com.clemble.casino.goal.service.GoalJudgeDutyService;
-import com.clemble.casino.goal.service.GoalJudgeInvitationService;
-import com.clemble.casino.integration.goal.IntegrationGoalJudgeInvitationService;
-import com.clemble.casino.integration.goal.IntegrationGoalService;
-import com.clemble.casino.goal.service.GoalService;
-import com.clemble.casino.integration.goal.InvitationGoalJudgeDutyService;
+import com.clemble.casino.integration.game.IntegrationAutoGameConstructionService;
+import com.clemble.casino.integration.game.IntegrationAvailabilityGameConstructionService;
 import com.clemble.casino.integration.payment.IntegrationPlayerAccountService;
 import com.clemble.casino.payment.service.PaymentTransactionOperations;
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.player.service.*;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
+import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
+import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
-import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
@@ -89,8 +84,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final PaymentTransactionServiceController paymentTransactionService,
         final EventListenerOperationsFactory listenerOperationsFactory,
         final PlayerPresenceServiceController playerPresenceService,
-        final AutoGameConstructionService gameConstructionService,
-        final AvailabilityGameConstructionService availabilityConstructionService,
+        final AutoGameConstructionController gameConstructionService,
+        final AvailabilityGameConstructionController availabilityConstructionService,
         final GameInitiationServiceController initiationService,
         final GameConfigurationService specificationService,
         final GameActionService actionService,
@@ -102,7 +97,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         this.session = checkNotNull(playerSessionOperations.create());
         this.listenerOperations = listenerOperationsFactory.construct(player, host, objectMapper);
 
-        this.playerPresenceOperations = new PlayerPresenceTemplate(player, playerPresenceService);
+        this.playerPresenceOperations = new IntegrationPlayerPresenceTemplate(player, playerPresenceService);
 
         this.profileOperations = new IntegrationPlayerProfileService(player, playerProfileService);
         this.imageOperations = new IntegrationPlayerImageService(player, imageService);
@@ -110,9 +105,9 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         this.paymentTransactionOperations = new PaymentTransactionOperations(new IntegrationPaymentTransactionService(player, paymentTransactionService));
         this.accountService = new IntegrationPlayerAccountService(player, accountServiceController);
 
-        this.constructionService = checkNotNull(gameConstructionService);
+        this.constructionService = new IntegrationAutoGameConstructionService(player, checkNotNull(gameConstructionService));
 
-        this.gameConstructors = new GameConstructionTemplate(player, constructionService, availabilityConstructionService, initiationService, specificationService, listenerOperations);
+        this.gameConstructors = new GameConstructionTemplate(player, constructionService, new IntegrationAvailabilityGameConstructionService(player, availabilityConstructionService), initiationService, specificationService, listenerOperations);
         this.actionOperationsFactory = new GameActionTemplateFactory(player, listenerOperations, actionService);
 
         this.listenerOperations.subscribe(new EventTypeSelector(GameInitiatedEvent.class), new EventListener<GameInitiatedEvent>() {

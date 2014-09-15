@@ -60,17 +60,20 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
 
     @Override
     public GameConstruction construct(AutomaticGameRequest request) {
+        throw new UnsupportedOperationException();
+    }
+
+    public GameConstruction construct(String player, AutomaticGameRequest request) {
         // Step 1. Sanity check
         if (request == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState);
-        PlayerPresence playerPresence = playerStateManager.getPresence(request.getPlayer());
+        PlayerPresence playerPresence = playerStateManager.getPresence(player);
         if (playerPresence.getPresence() == Presence.playing) {
             GameConstruction activeConstruction = constructionRepository.findOne(playerPresence.getSessionKey());
             if (activeConstruction != null)
                 return activeConstruction;
         }
         // Step 2. Fetching associated Queue
-        String player = request.getPlayer();
         playerLockService.lock(player);
         GameConstruction pendingConstuction;
         try {
@@ -90,14 +93,14 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             pendingConstuction = specificationQueue.poll();
             if (pendingConstuction == null) {
                 // Step 3.1 Construction was not present, creating new one
-                pendingConstuction = request.toConstruction(sessionKeyGenerator.generate(request.getConfiguration()));
+                pendingConstuction = request.toConstruction(player, sessionKeyGenerator.generate(request.getConfiguration()));
                 pendingConstuction = constructionRepository.save(pendingConstuction);
 
                 playerConstructions.put(player, pendingConstuction);
                 specificationQueue.add(pendingConstuction);
             } else {
                 // Step 3.2 Construction was present appending to existing one
-                pendingConstuction.getParticipants().add(request.getPlayer());
+                pendingConstuction.getParticipants().add(player);
                 // Step 3.3 If number rule satisfied process further
                 if (pendingConstuction.getParticipants().size() >= pendingConstuction.getConfiguration().getNumberRule().getMinPlayers()) {
                     GameInitiation initiation = new GameInitiation(pendingConstuction.getSessionKey(), pendingConstuction.getParticipants(), pendingConstuction.getConfiguration());

@@ -109,8 +109,8 @@ public class PlayerAccountOperationsITest {
             final Money cashAbefore = A.accountService().myAccount().getMoney(Currency.FakeMoney);
             final Money cashBbefore = B.accountService().myAccount().getMoney(Currency.FakeMoney);
 
-            assertTrue(cashAbefore.getAmount() >= 0);
-            assertTrue(cashBbefore.getAmount() >= 0);
+            assertTrue("Unexpected amount " + cashAbefore.getAmount() + " for " + A.getPlayer(), cashAbefore.getAmount() >= 0);
+            assertTrue("Unexpected amount " + cashBbefore.getAmount() + " for " + B.getPlayer(),cashBbefore.getAmount() >= 0);
 
             RoundGamePlayer<NumberState> AvsB = gameOperations.round(Game.num, A, B.getPlayer());
             RoundGamePlayer<NumberState> BvsA = gameOperations.accept(AvsB.getSessionKey(), B);
