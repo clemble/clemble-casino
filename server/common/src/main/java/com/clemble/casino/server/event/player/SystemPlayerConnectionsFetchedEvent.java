@@ -19,7 +19,7 @@ public class SystemPlayerConnectionsFetchedEvent implements SystemPlayerEvent, C
     final private Collection<ConnectionKey> connections;
 
     @JsonCreator
-    public SystemPlayerConnectionsFetchedEvent(@JsonProperty(PLAYER) String player, @JsonProperty("connectionKey") ConnectionKey connectionKey, @JsonProperty("connections") Collection<ConnectionKey> connections) {
+    public SystemPlayerConnectionsFetchedEvent(@JsonProperty(PLAYER) String player, @JsonProperty("connection") ConnectionKey connectionKey, @JsonProperty("connections") Collection<ConnectionKey> connections) {
         this.player = player;
         this.connectionKey = connectionKey;
         this.connections = connections;

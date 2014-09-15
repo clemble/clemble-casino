@@ -30,7 +30,11 @@ import com.clemble.casino.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.rule.privacy.PrivacyRule;
 import com.clemble.casino.rule.time.MoveTimeRule;
 import com.clemble.casino.rule.time.TotalTimeRule;
+import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
+import com.clemble.casino.server.event.player.SystemPlayerSocialGrantRegisteredEvent;
+import com.clemble.casino.server.event.player.SystemPlayerSocialRegisteredEvent;
 import com.clemble.casino.server.spring.WebJsonSpringConfiguration;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -82,6 +86,8 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
 
     @Test
     public void testSpecialSerialization() {
+        Assert.assertNull(checkSerialization(SystemPlayerProfileRegisteredEvent.class));
+        Assert.assertNull(checkSerialization(SystemPlayerSocialGrantRegisteredEvent.class));
         Assert.assertNull(checkSerialization(InvitationDeclinedEvent.class));
         Assert.assertNull(checkSerialization(ScheduledGameRequest.class));
         Assert.assertNull(checkSerialization(RoundStartedEvent.class));
@@ -95,6 +101,29 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
         String stringEvent = objectMapper.writeValueAsString(event);
         GiveUpEvent readEvent = (GiveUpEvent) objectMapper.readValue(stringEvent, Event.class);
         Assert.assertEquals(event, readEvent);
+    }
+
+    @Test
+    public void testCreatorSerialization() throws IOException {
+        List<Class<?>> candidates = AnnotationReflectionUtils.findCandidates("com.clemble.casino", JsonCreator.class);
+
+        Map<Class<?>, Throwable> errors = new HashMap<Class<?>, Throwable>();
+
+        for (Class<?> candidate : candidates) {
+            Throwable error = checkSerialization(candidate);
+            if (error != null) {
+                errors.put(candidate, error);
+            }
+        }
+
+        if (errors.size() != 0) {
+            for (Entry<Class<?>, Throwable> problem : errors.entrySet()) {
+                System.out.println("Problem " + problem.getKey().getSimpleName() + " > " + problem.getValue().getClass().getSimpleName());
+                System.out.println("Sample: " + objectMapper.writeValueAsString(ObjectGenerator.generate(problem.getKey())));
+            }
+        }
+        Assert.assertTrue(errors.toString(), errors.isEmpty());
+
     }
 
     @Test
@@ -130,22 +159,23 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
             assertEquals(stringPresentation, expected, actual);
 
             Class<?> originalClass = getOriginal(candidate);
-            Assert.assertNotNull(originalClass);
-            actual = objectMapper.readValue(stringPresentation, originalClass);
+            if (originalClass != null) {
+                actual = objectMapper.readValue(stringPresentation, originalClass);
 
-            Assert.assertEquals(expected, actual);
+                Assert.assertEquals(expected, actual);
 
-            MockHttpOutputMessage outputMessage = new MockHttpOutputMessage();
-            httpMessageConverter.write(expected, MediaType.APPLICATION_JSON, outputMessage);
+                MockHttpOutputMessage outputMessage = new MockHttpOutputMessage();
+                httpMessageConverter.write(expected, MediaType.APPLICATION_JSON, outputMessage);
 
-            HttpInputMessage inputMessage = new MockHttpInputMessage(outputMessage.getBodyAsBytes());
-            actual = httpMessageConverter.read(candidate, inputMessage);
+                HttpInputMessage inputMessage = new MockHttpInputMessage(outputMessage.getBodyAsBytes());
+                actual = httpMessageConverter.read(candidate, inputMessage);
 
-            Assert.assertEquals(expected, actual);
+                Assert.assertEquals(expected, actual);
 
-            inputMessage = new MockHttpInputMessage(outputMessage.getBodyAsBytes());
-            actual = httpMessageConverter.read(originalClass, inputMessage);
-            Assert.assertEquals(expected, actual);
+                inputMessage = new MockHttpInputMessage(outputMessage.getBodyAsBytes());
+                actual = httpMessageConverter.read(originalClass, inputMessage);
+                Assert.assertEquals(expected, actual);
+            }
         } catch (Throwable throwable) {
             error = throwable;
         }

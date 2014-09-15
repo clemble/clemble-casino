@@ -280,6 +280,11 @@
                 <artifactId>api-presence</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.clemble.casino</groupId>
+                <artifactId>api-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Client dependencies -->
 

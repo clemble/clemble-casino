@@ -15,6 +15,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.clemble.casino</groupId>
+            <artifactId>api-test</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>common</artifactId>
         </dependency>

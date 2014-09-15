@@ -40,4 +40,24 @@ public class SystemGameEndedEvent implements SystemGameEvent {
         return "sys:" + sessionKey +  ":" + CHANNEL;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SystemGameEndedEvent that = (SystemGameEndedEvent) o;
+
+        if (!participants.equals(that.participants)) return false;
+        if (!sessionKey.equals(that.sessionKey)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sessionKey.hashCode();
+        result = 31 * result + participants.hashCode();
+        return result;
+    }
+
 }

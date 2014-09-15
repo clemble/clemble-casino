@@ -39,4 +39,24 @@ public class SystemGoalJudgeInvitationAcceptedEvent implements SystemGoalEvent {
         return "sys:" + goalKey +  ":" + CHANNEL + ":" + invitation.getJudge();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SystemGoalJudgeInvitationAcceptedEvent that = (SystemGoalJudgeInvitationAcceptedEvent) o;
+
+        if (!goalKey.equals(that.goalKey)) return false;
+        if (!invitation.equals(that.invitation)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = invitation.hashCode();
+        result = 31 * result + goalKey.hashCode();
+        return result;
+    }
+
 }

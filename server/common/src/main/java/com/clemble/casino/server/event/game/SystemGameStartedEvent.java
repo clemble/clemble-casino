@@ -43,4 +43,23 @@ public class SystemGameStartedEvent implements SystemGameEvent, GameInitiationAw
         return "sys:" + sessionKey +  ":" + CHANNEL;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SystemGameStartedEvent that = (SystemGameStartedEvent) o;
+
+        if (!initiation.equals(that.initiation)) return false;
+        if (!sessionKey.equals(that.sessionKey)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sessionKey.hashCode();
+        result = 31 * result + initiation.hashCode();
+        return result;
+    }
 }

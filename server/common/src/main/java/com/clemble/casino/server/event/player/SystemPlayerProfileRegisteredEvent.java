@@ -42,19 +42,19 @@ public class SystemPlayerProfileRegisteredEvent implements PlayerProfileAware, S
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
 
         SystemPlayerProfileRegisteredEvent that = (SystemPlayerProfileRegisteredEvent) o;
 
-        if (profile != null ? !profile.equals(that.profile) : that.profile != null) return false;
+        if (!player.equals(that.player)) return false;
+        if (!profile.equals(that.profile)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (profile != null ? profile.hashCode() : 0);
+        int result = player.hashCode();
+        result = 31 * result + profile.hashCode();
         return result;
     }
 

@@ -7,10 +7,7 @@ import com.clemble.casino.server.event.game.SystemGameEndedEvent;
 import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.event.game.SystemGameReadyEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
-import com.clemble.casino.server.event.goal.SystemGoalCreatedEvent;
-import com.clemble.casino.server.event.goal.SystemGoalJudgeDutyDueEvent;
-import com.clemble.casino.server.event.goal.SystemGoalJudgeInvitationAcceptedEvent;
-import com.clemble.casino.server.event.goal.SystemGoalJudgeInvitationCreatedEvent;
+import com.clemble.casino.server.event.goal.*;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.event.player.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemBetCompletedEvent.CHANNEL, value = SystemBetCompletedEvent.class),
     @JsonSubTypes.Type(name = SystemPlayerImageChangedEvent.CHANNEL, value = SystemPlayerImageChangedEvent.class),
     @JsonSubTypes.Type(name = SystemGoalCreatedEvent.CHANNEL, value = SystemGoalCreatedEvent.class),
+    @JsonSubTypes.Type(name = SystemGoalInitiationDueEvent.CHANNEL, value = SystemGoalInitiationDueEvent.class),
     @JsonSubTypes.Type(name = SystemGoalJudgeInvitationAcceptedEvent.CHANNEL, value = SystemGoalJudgeInvitationAcceptedEvent.class),
     @JsonSubTypes.Type(name = SystemGoalJudgeInvitationCreatedEvent.CHANNEL, value = SystemGoalJudgeInvitationCreatedEvent.class),
     @JsonSubTypes.Type(name = SystemGoalJudgeDutyDueEvent.CHANNEL, value = SystemGoalJudgeDutyDueEvent.class)

@@ -34,4 +34,21 @@ public class SystemGameInitiationDueEvent implements SystemGameEvent {
         return "sys:" + sessionKey +  ":" + CHANNEL;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SystemGameInitiationDueEvent that = (SystemGameInitiationDueEvent) o;
+
+        if (!sessionKey.equals(that.sessionKey)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return sessionKey.hashCode();
+    }
+
 }

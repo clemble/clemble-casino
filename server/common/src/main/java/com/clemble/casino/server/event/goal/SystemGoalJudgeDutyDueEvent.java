@@ -40,4 +40,24 @@ public class SystemGoalJudgeDutyDueEvent implements SystemGoalEvent {
         return "sys:" + goalKey +  ":" + CHANNEL;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SystemGoalJudgeDutyDueEvent that = (SystemGoalJudgeDutyDueEvent) o;
+
+        if (!duty.equals(that.duty)) return false;
+        if (!goalKey.equals(that.goalKey)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = goalKey.hashCode();
+        result = 31 * result + duty.hashCode();
+        return result;
+    }
+
 }

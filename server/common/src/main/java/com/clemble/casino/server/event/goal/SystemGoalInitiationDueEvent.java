@@ -33,4 +33,21 @@ public class SystemGoalInitiationDueEvent implements SystemGoalEvent {
         return "sys:" + goalKey +  ":" + CHANNEL;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SystemGoalInitiationDueEvent that = (SystemGoalInitiationDueEvent) o;
+
+        if (!goalKey.equals(that.goalKey)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return goalKey.hashCode();
+    }
+
 }

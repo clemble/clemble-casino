@@ -39,27 +39,28 @@ public class SystemPlayerSocialGrantRegisteredEvent
     }
 
     @Override
+    public String toString() {
+        return "sys:" + player + ":" + CHANNEL;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
 
         SystemPlayerSocialGrantRegisteredEvent that = (SystemPlayerSocialGrantRegisteredEvent) o;
 
-        if (socialGrant != null ? !socialGrant.equals(that.socialGrant) : that.socialGrant != null) return false;
+        if (!player.equals(that.player)) return false;
+        if (!socialGrant.equals(that.socialGrant)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (socialGrant != null ? socialGrant.hashCode() : 0);
+        int result = player.hashCode();
+        result = 31 * result + socialGrant.hashCode();
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "sys:" + player + ":" + CHANNEL;
-    }
 }

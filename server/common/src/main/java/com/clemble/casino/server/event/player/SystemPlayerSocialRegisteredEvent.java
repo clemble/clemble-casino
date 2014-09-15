@@ -44,4 +44,24 @@ public class SystemPlayerSocialRegisteredEvent
         return "sys:" + player + ":" + CHANNEL;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SystemPlayerSocialRegisteredEvent that = (SystemPlayerSocialRegisteredEvent) o;
+
+        if (!player.equals(that.player)) return false;
+        if (!socialConnectionData.equals(that.socialConnectionData)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = player.hashCode();
+        result = 31 * result + socialConnectionData.hashCode();
+        return result;
+    }
+
 }
