@@ -6,8 +6,12 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.annotation.PostConstruct;
 
+import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
+import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
+import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
+import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
@@ -107,6 +111,21 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         }
 
         @Bean
+        public IntegrationGoalOperationsFactory goalOperationsFactory(        GoalConfigurationServiceController configurationService,
+            GoalInitiationServiceController initiationService,
+            GoalConstructionServiceController constructionService,
+            GoalServiceController goalController,
+            GoalJudgeDutyServiceController dutyServiceController,
+            GoalJudgeInvitationServiceController invitationServiceController) {
+            return new IntegrationGoalOperationsFactory(configurationService,
+                initiationService,
+                constructionService,
+                goalController,
+                dutyServiceController,
+                invitationServiceController);
+        }
+
+        @Bean
         public ClembleCasinoRegistrationOperations registrationOperations(
             @Value("${clemble.host}") String host,
             ObjectMapper objectMapper,
@@ -125,10 +144,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
             GameActionService actionService,
             GameRecordService recordService,
-            GoalServiceController goalService,
-            GoalJudgeInvitationServiceController invitationServiceController,
-            GoalJudgeDutyServiceController dutyServiceController) {
-            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalService, invitationServiceController, dutyServiceController);
+            IntegrationGoalOperationsFactory goalOperationsFactory) {
+            ClembleCasinoRegistrationOperations registrationOperations = new ServerClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalOperationsFactory);
             return new ClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }

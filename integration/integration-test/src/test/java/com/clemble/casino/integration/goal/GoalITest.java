@@ -90,7 +90,7 @@ public class GoalITest {
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalStateIncorrect));
         // Step 4. Trying to save new value
-        A.goalOperations().addMyGoal(goalToSave);
+        A.goalOperations().goalService().addMyGoal(goalToSave);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class GoalITest {
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalStateIncorrect));
         // Step 4. Trying to save new value
-        A.goalOperations().addMyGoal(goalToSave);
+        A.goalOperations().goalService().addMyGoal(goalToSave);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class GoalITest {
         // Step 3. Saving and checking goal state is valid
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GoalDueDateInPast));
         // Step 4. Trying to save new value
-        A.goalOperations().addMyGoal(goalToSave);
+        A.goalOperations().goalService().addMyGoal(goalToSave);
     }
 
     @Test
@@ -122,11 +122,11 @@ public class GoalITest {
         // Step 1. Creating random goal
         GoalRequest goalToSave = new GoalRequest(null, "Pending A goal", 1, Money.create(Currency.FakeMoney, 100));
         // Step 2. Creating goal save
-        Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
+        Goal savedGoal = A.goalOperations().goalService().addMyGoal(goalToSave);
         // Step 3. Updating goal status
-        GoalStatus status = A.goalOperations().updateMyGoal(savedGoal.getGoalKey(), GoalStatus.create("Test Update"));
+        GoalStatus status = A.goalOperations().goalService().updateMyGoal(savedGoal.getGoalKey(), GoalStatus.create("Test Update"));
         // Step 4. Checking goal status updated
-        Goal updatedGoal = A.goalOperations().myGoal(savedGoal.getGoalKey());
+        Goal updatedGoal = A.goalOperations().goalService().myGoal(savedGoal.getGoalKey());
         // Step 5. Checking goal has a new status
         assertEquals(updatedGoal.getStatus().getStatus(), "Test Update");
     }
@@ -137,15 +137,15 @@ public class GoalITest {
         // Step 1. Creating random goal
         GoalRequest goalToSave = new GoalRequest(player, "Pending A goal", 1, Money.create(Currency.FakeMoney, 100));
         // Step 3. Saving and checking goal is valid
-        Goal savedGoal = A.goalOperations().addMyGoal(goalToSave);
+        Goal savedGoal = A.goalOperations().goalService().addMyGoal(goalToSave);
         assertNotNull(savedGoal);
         assertEquals(savedGoal.getPlayer(), A.getPlayer());
         assertNotEquals(savedGoal.getGoalKey(), goalKey);
         assertEquals(savedGoal.getGoal(), goalToSave.getGoal());
         assertEquals(savedGoal.getPlayer(), A.getPlayer());
         // Step 4. Checking GoalOperations return goal
-        assertEquals(A.goalOperations().myGoals().size(), 1);
-        Goal resGoal = A.goalOperations().myGoals().iterator().next();
+        assertEquals(A.goalOperations().goalService().myGoals().size(), 1);
+        Goal resGoal = A.goalOperations().goalService().myGoals().iterator().next();
         assertNotNull(resGoal);
         assertEquals(resGoal.getPlayer(), A.getPlayer());
         assertEquals(resGoal, savedGoal);

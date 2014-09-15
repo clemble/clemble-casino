@@ -12,6 +12,7 @@ import com.clemble.casino.game.service.GameRecordService;
 import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
+import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
@@ -54,9 +55,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
     final private GameConfigurationService specificationService;
     final private GameActionService actionService;
     final private GameRecordService recordService;
-    final private GoalServiceController goalService;
-    final private GoalJudgeInvitationServiceController invitationServiceController;
-    final private GoalJudgeDutyServiceController judgeDutyServiceController;
+    final private IntegrationGoalOperationsFactory goalOperationsFactory;
 
     public ServerClembleCasinoRegistrationOperations(
         String host,
@@ -76,9 +75,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         GameConfigurationService specificationService,
         GameActionService actionService,
         GameRecordService recordService,
-        GoalServiceController goalService,
-        GoalJudgeInvitationServiceController invitationServiceController,
-        GoalJudgeDutyServiceController judgeDutyServiceController) {
+        IntegrationGoalOperationsFactory goalOperationsFactory) {
         this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
@@ -96,9 +93,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
         this.specificationService = checkNotNull(specificationService);
         this.actionService = checkNotNull(actionService);
         this.recordService = checkNotNull(recordService);
-        this.goalService = checkNotNull(goalService);
-        this.invitationServiceController = checkNotNull(invitationServiceController);
-        this.judgeDutyServiceController = checkNotNull(judgeDutyServiceController);
+        this.goalOperationsFactory = checkNotNull(goalOperationsFactory);
     }
 
     @Override
@@ -153,9 +148,7 @@ public class ServerClembleCasinoRegistrationOperations implements ClembleCasinoR
             specificationService,
             actionService,
             recordService,
-            goalService,
-            invitationServiceController,
-            judgeDutyServiceController
+            goalOperationsFactory.construct(playerIdentity.getPlayer())
         );
     }
 

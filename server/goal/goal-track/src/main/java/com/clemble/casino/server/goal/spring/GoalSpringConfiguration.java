@@ -26,7 +26,7 @@ import redis.clients.jedis.JedisPool;
 public class GoalSpringConfiguration {
 
     @Bean
-    public OldGoalKeyGenerator goalKeyGenerator(JedisPool jedisPool) {
+    public OldGoalKeyGenerator oldGoalKeyGenerator(JedisPool jedisPool) {
         return new OldGoalKeyGenerator(new RedisKeyFactory("GOAL_COUNTER", "A", jedisPool));
     }
 
@@ -41,7 +41,7 @@ public class GoalSpringConfiguration {
     }
 
     @Bean
-    public GoalServiceController playerGoalController(@Qualifier("goalKeyGenerator") OldGoalKeyGenerator goalKeyGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService notificationService) {
+    public GoalServiceController playerGoalController(OldGoalKeyGenerator goalKeyGenerator, BidCalculator bidCalculator, GoalRepository goalRepository, SystemNotificationService notificationService) {
         return new GoalServiceController(goalKeyGenerator, bidCalculator, goalRepository, notificationService);
     }
 

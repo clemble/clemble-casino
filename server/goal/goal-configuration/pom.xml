@@ -19,6 +19,10 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>common-web</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

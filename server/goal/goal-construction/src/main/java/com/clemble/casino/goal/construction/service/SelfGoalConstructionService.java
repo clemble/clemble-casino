@@ -13,7 +13,7 @@ import java.util.Collection;
 /**
  * Created by mavarazy on 9/10/14.
  */
-public class SelfGoalConstructionService implements GoalConstructionService<GoalConstructionRequest> {
+public class SelfGoalConstructionService implements GoalConstructionService {
 
     final private GoalKeyGenerator keyGenerator;
     final private ServerGoalInitiationService initiationService;
@@ -26,7 +26,7 @@ public class SelfGoalConstructionService implements GoalConstructionService<Goal
     }
 
     @Override
-    public Construction<GoalConfiguration> construct(GoalConstructionRequest request) {
+    public GoalConstruction construct(GoalConstructionRequest request) {
         // Step 1. Checking this is appropriate request for this service
         if(request.getConfiguration().getJudgeRule().getType() != JudgeType.self)
             throw new IllegalArgumentException();
@@ -41,7 +41,7 @@ public class SelfGoalConstructionService implements GoalConstructionService<Goal
     }
 
     @Override
-    public Collection<? extends Construction<GoalConfiguration>> getPending(String player) {
+    public Collection<GoalConstruction> getPending(String player) {
         return null;
     }
 

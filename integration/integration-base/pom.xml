@@ -67,6 +67,14 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>game-management</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>goal-configuration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>goal-construction</artifactId>
+        </dependency>
 
 
         <dependency>

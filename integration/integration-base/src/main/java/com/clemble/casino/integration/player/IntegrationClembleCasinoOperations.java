@@ -2,6 +2,7 @@ package com.clemble.casino.integration.player;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.client.goal.GoalOperations;
 import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.goal.service.GoalJudgeDutyService;
@@ -57,7 +58,6 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
      */
     private static final long serialVersionUID = -4160641502466429770L;
 
-    final private String host;
     final private String player;
     final private PlayerSession session;
     final private EventListenerOperations listenerOperations;
@@ -73,9 +73,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     final private PaymentTransactionOperations paymentTransactionOperations;
     final private GameActionOperationsFactory actionOperationsFactory;
     final private GameRecordOperations recordOperations;
-    final private GoalService goalService;
-    final private GoalJudgeInvitationService invitationService;
-    final private GoalJudgeDutyService dutyService;
+
+    final private GoalOperations goalOperations;
 
     public IntegrationClembleCasinoOperations(
         final String host,
@@ -96,11 +95,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final GameConfigurationService specificationService,
         final GameActionService actionService,
         final GameRecordService recordService,
-        final GoalServiceController goalService,
-        final GoalJudgeInvitationServiceController goalInvitationService,
-        final GoalJudgeDutyServiceController dutyServiceController
+        final GoalOperations goalOperations
     ) {
-        this.host = host;
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new IntegrationPlayerSessionService(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
@@ -129,14 +125,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         });
         this.recordOperations = new GameRecordTemplate(recordService);
 
-        this.goalService = new IntegrationGoalService(player, goalService);
-        this.invitationService = new IntegrationGoalJudgeInvitationService(player, goalInvitationService);
-        this.dutyService = new InvitationGoalJudgeDutyService(player, dutyServiceController);
-    }
-
-    @Override
-    public String getHost() {
-        return host;
+        this.goalOperations = goalOperations;
     }
 
     @Override
@@ -170,18 +159,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     }
 
     @Override
-    public GoalService goalOperations() {
-        return goalService;
-    }
-
-    @Override
-    public GoalJudgeInvitationService goalInvitationOperations() {
-        return invitationService;
-    }
-
-    @Override
-    public GoalJudgeDutyService goalDutyOperations() {
-        return dutyService;
+    public GoalOperations goalOperations() {
+        return goalOperations;
     }
 
     @Override
