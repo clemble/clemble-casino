@@ -37,9 +37,9 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
             LimitedBetRule.create(5, 50),
             new JudgeRule("me", JudgeType.self),
-            new MoveTimeRule(TimeUnit.MILLISECONDS.toDays(1), LooseBreachPunishment.getInstance()),
-            new TotalTimeRule(TimeUnit.MILLISECONDS.toDays(7), LooseBreachPunishment.getInstance()),
-            PrivacyRule.everybody
+            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
+            new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
+            PrivacyRule.players
         )
     );
 
