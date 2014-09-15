@@ -13,11 +13,11 @@ import com.clemble.casino.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
 @RestController
-public class GameRecordController implements GameRecordService, ExternalController {
+public class GameRecordServiceController implements GameRecordService, ExternalController {
 
     final private GameRecordRepository recordRepository;
 
-    public GameRecordController(GameRecordRepository recordRepository) {
+    public GameRecordServiceController(GameRecordRepository recordRepository) {
         this.recordRepository = checkNotNull(recordRepository);
     }
 

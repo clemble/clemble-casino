@@ -26,7 +26,7 @@ import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFac
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
 import com.clemble.casino.server.game.controller.GameActionController;
-import com.clemble.casino.server.game.controller.GameRecordController;
+import com.clemble.casino.server.game.controller.GameRecordServiceController;
 import com.clemble.casino.server.game.listener.ServerGameStartedEventListener;
 import com.clemble.casino.server.game.repository.*;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -223,8 +223,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public GameRecordController gameRecordController(GameRecordRepository recordRepository) {
-            return new GameRecordController(recordRepository);
+        public GameRecordServiceController gameRecordController(GameRecordRepository recordRepository) {
+            return new GameRecordServiceController(recordRepository);
         }
 
     }

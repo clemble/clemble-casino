@@ -3,6 +3,9 @@ package com.clemble.casino.goal.construction.repository;
 import com.clemble.casino.construction.ConstructionState;
 import com.clemble.casino.goal.construction.GoalConstruction;
 import com.clemble.casino.goal.construction.spring.GoalConstructionSpringConfiguration;
+import com.clemble.casino.rule.bet.BetRule;
+import com.clemble.casino.rule.bet.LimitedBetRule;
+import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,6 +31,12 @@ public class GoalConstructionRepositoryTest {
 
     @Test
     public void simpleCRUDtest() {
+        ObjectGenerator.register(BetRule.class, new AbstractValueGenerator<BetRule>() {
+            @Override
+            public BetRule generate() {
+                return LimitedBetRule.create(0, 40);
+            }
+        });
         // Step 1. Generating random construction
         GoalConstruction construction = ObjectGenerator.generate(GoalConstruction.class);
         // Step 3. Checking saved matches original

@@ -73,7 +73,7 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
         synchronized (versionLock) {
             if (newState != null) {
                 if (getState() == null || getState().getVersion() < newState.getVersion()) {
-                    System.out.println("updating >> " + getPlayer() + " >> " + getSessionKey() + " >> " + newState.getVersion());
+                    LOG.info("updating state to {}", newState.getVersion());
                     this.state.set(newState);
                     this.versionLock.notifyAll();
                 }

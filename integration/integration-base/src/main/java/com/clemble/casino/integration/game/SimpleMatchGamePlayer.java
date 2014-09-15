@@ -5,11 +5,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.client.game.GameRecordOperations;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.MatchGameContext;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.event.MatchEvent;
+import com.clemble.casino.game.service.GameRecordService;
 import org.junit.Assert;
 
 /**
@@ -35,7 +35,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
         player.listenerOperations().subscribe(new EventTypeSelector(MatchEvent.class), new EventListener<MatchEvent>() {
             @Override
             public void onEvent(MatchEvent event) {
-                System.out.println("gp >> " + player.getPlayer() + " >> " + sessionKey + " >> received event " + event);
+                LOG.debug("received event {}", event);
                 setContext(event.getContext());
             }
         });
@@ -48,7 +48,9 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
             return;
         // Step 2. Going through potcontext
         final String sessionKey = context.getCurrentSession();
-        final GameRecordOperations recordOperations = playerOperations().gameRecordOperations();
+        if(sessionKey == null)
+            return;
+        final GameRecordService recordOperations = playerOperations().gameRecordOperations();
         if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
             GameRecord record = recordOperations.get(sessionKey);
             Assert.assertNotNull(context.getSessionKey() + " >> " + sessionKey + " >> not found in DB", record);
@@ -56,7 +58,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
                 if (potContext.get() == null || potContext.get().getOutcomes().size() < context.getOutcomes().size()) {
                     GameConfiguration configuration = record.getConfiguration();
                     GamePlayer newPlayer = playerFactory.construct(playerOperations(), sessionKey, configuration);
-                    System.out.println("match >> " + getPlayer() + " >> constructed new player for >> " + sessionKey);
+                    LOG.debug("constructed new player for >> {}", sessionKey);
                     currentPlayer.set(newPlayer);
                     potContext.set(context);
                     synchronized (versionLock) {

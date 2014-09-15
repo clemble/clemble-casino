@@ -30,13 +30,10 @@ import com.clemble.casino.client.game.GameActionOperationsFactory;
 import com.clemble.casino.client.game.GameActionTemplateFactory;
 import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.game.GameConstructionTemplate;
-import com.clemble.casino.client.game.GameRecordOperations;
-import com.clemble.casino.client.game.GameRecordTemplate;
 import com.clemble.casino.integration.payment.IntegrationPaymentTransactionService;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.construction.event.GameInitiatedEvent;
 import com.clemble.casino.game.construction.service.AutoGameConstructionService;
-import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.game.configuration.service.GameConfigurationService;
 import com.clemble.casino.game.service.GameRecordService;
@@ -67,7 +64,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     final private PlayerAccountService accountService;
     final private PaymentTransactionOperations paymentTransactionOperations;
     final private GameActionOperationsFactory actionOperationsFactory;
-    final private GameRecordOperations recordOperations;
+    final private GameRecordService recordService;
 
     final private GoalOperations goalOperations;
 
@@ -118,7 +115,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
                 initiationService.confirm(player, sessionKey);
             }
         });
-        this.recordOperations = new GameRecordTemplate(recordService);
+        this.recordService = recordService;
 
         this.goalOperations = goalOperations;
     }
@@ -199,8 +196,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     }
 
     @Override
-    public GameRecordOperations gameRecordOperations() {
-        return recordOperations;
+    public GameRecordService gameRecordOperations() {
+        return recordService;
     }
 
 }
