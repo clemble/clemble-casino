@@ -34,6 +34,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
     // TODO replace with SMART configurations
     final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
         new GoalConfiguration(
+            "basic",
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
             LimitedBetRule.create(5, 50),
             new JudgeRule("me", JudgeType.self),

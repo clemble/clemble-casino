@@ -2,19 +2,17 @@ package com.clemble.casino.server.game.configuration.service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.clemble.casino.server.game.configuration.ServerGameConfiguration;
-import com.clemble.casino.server.game.configuration.repository.ServerGameConfigurationRepository;
+import com.clemble.casino.server.game.configuration.repository.GameConfigurationRepository;
 import com.clemble.casino.game.configuration.service.GameConfigurationService;
 import com.clemble.casino.game.configuration.GameConfiguration;
 
 public class ServerGameConfigurationService implements GameConfigurationService {
 
-    final private ServerGameConfigurationRepository specificationRepository;
+    final private GameConfigurationRepository specificationRepository;
 
-    public ServerGameConfigurationService(ServerGameConfigurationRepository specificationRepository) {
+    public ServerGameConfigurationService(GameConfigurationRepository specificationRepository) {
         this.specificationRepository = checkNotNull(specificationRepository);
     }
 
@@ -24,10 +22,7 @@ public class ServerGameConfigurationService implements GameConfigurationService 
 
     @Override
     public List<GameConfiguration> getConfigurations() {
-        List<GameConfiguration> configurations = new ArrayList<>();
-        for(ServerGameConfiguration configuration: specificationRepository.findAll())
-            configurations.add(configuration.getConfiguration());
-        return configurations;
+        return specificationRepository.findAll();
     }
 
 

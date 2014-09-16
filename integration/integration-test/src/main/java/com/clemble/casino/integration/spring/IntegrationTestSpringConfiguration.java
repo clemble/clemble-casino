@@ -36,8 +36,7 @@ import com.clemble.casino.registration.PlayerSocialRegistrationRequest;
 import com.clemble.casino.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.rule.privacy.PrivacyRule;
 import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.game.configuration.ServerGameConfiguration;
-import com.clemble.casino.server.game.configuration.repository.ServerGameConfigurationRepository;
+import com.clemble.casino.server.game.configuration.repository.GameConfigurationRepository;
 import com.clemble.casino.server.game.configuration.spring.GameConfigurationSpringConfiguration;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
 import com.clemble.casino.server.game.spring.GameManagementSpringConfiguration;
@@ -164,7 +163,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         }
 
         @Autowired
-        public ServerGameConfigurationRepository configurationRepository;
+        public GameConfigurationRepository configurationRepository;
 
         @PostConstruct
         public void initConfigurations() throws IOException {
@@ -186,7 +185,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                 ImmutableList.of("A", "B"),
                 new ArrayList<GameUnit>()
             );
-            configurationRepository.save(new ServerGameConfiguration("low", roundConfiguration));
+            configurationRepository.save(roundConfiguration);
             // Step 2. Creating match configuration
             MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(
                 Game.pot,
@@ -201,7 +200,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                 DrawRule.owned,
                 ImmutableList.of(roundConfiguration, roundConfiguration, roundConfiguration),
                 Collections.emptyList());
-            configurationRepository.save(new ServerGameConfiguration("pot", matchConfiguration));
+            configurationRepository.save(matchConfiguration);
         }
 
     }
