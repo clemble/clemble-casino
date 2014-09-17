@@ -8,9 +8,9 @@ import com.clemble.casino.base.ActionLatchService;
 import com.clemble.casino.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.game.construction.event.GameConstructionCompleteEvent;
+import com.clemble.casino.game.construction.event.GameConstructionPlayerInvitedEvent;
 import com.clemble.casino.game.construction.event.GameInvitationDeclinedEvent;
 import com.clemble.casino.game.construction.event.GameInvitationResponseEvent;
-import com.clemble.casino.game.construction.event.GamePlayerInvitedEvent;
 import com.clemble.casino.game.event.GameConstructionCanceledEvent;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.player.event.PlayerEvent;
@@ -77,7 +77,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         construction = constructionRepository.save(construction);
         latchService.save(construction.getSessionKey(), construction.getResponses());
         // Step 4. Sending invitation to opponents
-        playerNotificationService.notify(request.getParticipants(), new GamePlayerInvitedEvent(construction.getSessionKey(), request));
+        playerNotificationService.notify(request.getParticipants(), new GameConstructionPlayerInvitedEvent(construction.getSessionKey(), request));
         // Step 5. Returning constructed construction
         return construction;
     }

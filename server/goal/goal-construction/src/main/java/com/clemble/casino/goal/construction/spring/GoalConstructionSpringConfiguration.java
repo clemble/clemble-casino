@@ -9,6 +9,7 @@ import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.goal.construction.service.SelfGoalConstructionService;
 import com.clemble.casino.goal.construction.service.ServerGoalConstructionService;
 import com.clemble.casino.goal.construction.service.ServerGoalInitiationService;
+import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.executor.EventTaskAdapter;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.key.RedisKeyFactory;
@@ -16,6 +17,7 @@ import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
+import com.clemble.casino.server.spring.common.PaymentClientSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,7 +34,11 @@ import java.util.concurrent.ScheduledExecutorService;
  * Created by mavarazy on 9/10/14.
  */
 @Configuration
-@Import({CommonSpringConfiguration.class, MongoSpringConfiguration.class, RedisSpringConfiguration.class})
+@Import({
+    CommonSpringConfiguration.class,
+    PaymentClientSpringConfiguration.class,
+    MongoSpringConfiguration.class,
+    RedisSpringConfiguration.class})
 public class GoalConstructionSpringConfiguration {
 
     @Bean
@@ -77,8 +83,9 @@ public class GoalConstructionSpringConfiguration {
     public SelfGoalConstructionService selfGoalConstructionService(
         GoalKeyGenerator keyGenerator,
         GoalConstructionRepository constructionRepository,
-        ServerGoalInitiationService initiationService) {
-        return new SelfGoalConstructionService(keyGenerator, initiationService, constructionRepository);
+        ServerGoalInitiationService initiationService,
+        @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServiceContract) {
+        return new SelfGoalConstructionService(keyGenerator, initiationService, constructionRepository, accountServiceContract);
     }
 
     @Bean

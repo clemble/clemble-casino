@@ -13,8 +13,8 @@ import com.clemble.casino.event.surrender.GiveUpAction;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.configuration.MatchGameConfiguration;
+import com.clemble.casino.game.construction.event.GameConstructionPlayerInvitedEvent;
 import com.clemble.casino.game.construction.event.GameInvitationDeclinedEvent;
-import com.clemble.casino.game.construction.event.GamePlayerInvitedEvent;
 import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.rule.construct.PlayerNumberRule;
@@ -79,7 +79,7 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
         ObjectGenerator.generate(GameRule.class);
 
         ObjectGenerator.generate(RoundGameConfiguration.class);
-        ObjectGenerator.generate(GamePlayerInvitedEvent.class);
+        ObjectGenerator.generate(GameConstructionPlayerInvitedEvent.class);
     }
 
     @Test

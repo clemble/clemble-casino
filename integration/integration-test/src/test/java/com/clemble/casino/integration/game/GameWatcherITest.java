@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import com.clemble.casino.game.event.GameEvent;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import org.junit.Test;
@@ -18,7 +19,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.event.GameSessionAwareEvent;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
@@ -42,7 +42,7 @@ public class GameWatcherITest {
         RoundGamePlayer A = players.get(0);
         RoundGamePlayer B = players.get(1);
 
-        EventAccumulator<GameSessionAwareEvent> watcherListener = new EventAccumulator<GameSessionAwareEvent>();
+        EventAccumulator<GameEvent> watcherListener = new EventAccumulator<GameEvent>();
         player.gameConstructionOperations().watch(A.getSessionKey(), watcherListener);
 
         assertTrue(A.isAlive());
@@ -61,7 +61,7 @@ public class GameWatcherITest {
 
         assertTrue(watcherListener.toList().size() > 0);
 
-        List<GameSessionAwareEvent> watchedEvents = watcherListener.toList();
+        List<GameEvent> watchedEvents = watcherListener.toList();
         assertTrue(watchedEvents.size() > 0);
 
         assertContains(A.getEvents(), watchedEvents);

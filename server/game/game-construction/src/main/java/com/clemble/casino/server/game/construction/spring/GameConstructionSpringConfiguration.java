@@ -63,8 +63,9 @@ public class GameConstructionSpringConfiguration {
         final GameConstructionRepository constructionRepository,
         final PlayerLockService playerLockService,
         final ServerPlayerPresenceService playerStateManager,
-        final @Qualifier("playerNotificationService") PlayerNotificationService playerNotificationService) {
-        return new ServerAutoGameConstructionService(sessionKeyGenerator, notificationService, constructionRepository, playerLockService, playerStateManager, playerNotificationService);
+        final @Qualifier("playerNotificationService") PlayerNotificationService playerNotificationService,
+        @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService) {
+        return new ServerAutoGameConstructionService(sessionKeyGenerator, notificationService, constructionRepository, playerLockService, playerStateManager, playerNotificationService, accountServerService);
     }
 
         @Bean

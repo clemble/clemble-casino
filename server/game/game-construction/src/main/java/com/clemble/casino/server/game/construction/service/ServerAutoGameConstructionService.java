@@ -9,11 +9,14 @@ import java.util.concurrent.ExecutionException;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.game.construction.AutomaticGameRequest;
 import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.construction.event.GameConstructionCompleteEvent;
 import com.clemble.casino.game.construction.service.AutoGameConstructionService;
+import com.clemble.casino.money.Money;
+import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.game.SystemGameReadyEvent;
@@ -37,12 +40,14 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
                 }
             });
 
-    final private Map<String, GameConstruction> playerConstructions = new ConcurrentHashMap<>();
+    final private Map<String, GameConstruction> playerConstructions = new ConcurrentHashMap<String, GameConstruction>();
 
     final private GameSessionKeyGenerator sessionKeyGenerator;
 
     final private GameConstructionRepository constructionRepository;
     final private SystemNotificationService notificationService;
+
+    final private PlayerAccountServiceContract accountServerService;
 
     final private PlayerNotificationService playerNotificationService;
     final private PlayerLockService playerLockService;
@@ -54,13 +59,15 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService,
             final ServerPlayerPresenceService playerStateManager,
-            final PlayerNotificationService playerNotificationService) {
+            final PlayerNotificationService playerNotificationService,
+            final PlayerAccountServiceContract accountServerService) {
         this.playerNotificationService = playerNotificationService;
         this.sessionKeyGenerator = checkNotNull(sessionKeyGenerator);
         this.notificationService = checkNotNull(initiatorService);
         this.constructionRepository = checkNotNull(constructionRepository);
         this.playerLockService = checkNotNull(playerLockService);
         this.playerStateManager = checkNotNull(playerStateManager);
+        this.accountServerService = checkNotNull(accountServerService);
     }
 
     @Override
@@ -78,14 +85,19 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             if (activeConstruction != null)
                 return activeConstruction;
         }
+        // Step 1.1. Check there is enough money in account for this game
+        Money price = request.getConfiguration().getPrice();
+        if (!accountServerService.canAfford(Collections.singleton(player), price.getCurrency(), price.getAmount()).isEmpty()){
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInsufficientMoney, player);
+        }
         // Step 2. Fetching associated Queue
         playerLockService.lock(player);
-        GameConstruction pendingConstuction;
+        GameConstruction pendingConstruction;
         try {
-            pendingConstuction = playerConstructions.get(player);
+            pendingConstruction = playerConstructions.get(player);
             // Step 2.1 Check there is no pending constructions for the user
-            if (pendingConstuction != null)
-                return pendingConstuction;
+            if (pendingConstruction != null)
+                return pendingConstruction;
             // Step 2.2. Acquire and process Queue
             Queue<GameConstruction> specificationQueue = null;
             try {
@@ -95,33 +107,33 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
                 throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCacheError);
             }
             // Step 3. Processing request
-            pendingConstuction = specificationQueue.poll();
-            if (pendingConstuction == null) {
+            pendingConstruction = specificationQueue.poll();
+            if (pendingConstruction == null) {
                 // Step 3.1 Construction was not present, creating new one
-                pendingConstuction = request.toConstruction(player, sessionKeyGenerator.generate(request.getConfiguration()));
-                pendingConstuction = constructionRepository.save(pendingConstuction);
+                pendingConstruction = request.toConstruction(player, sessionKeyGenerator.generate(request.getConfiguration()));
+                pendingConstruction = constructionRepository.save(pendingConstruction);
 
-                playerConstructions.put(player, pendingConstuction);
-                specificationQueue.add(pendingConstuction);
+                playerConstructions.put(player, pendingConstruction);
+                specificationQueue.add(pendingConstruction);
             } else {
                 // Step 3.2 Construction was present appending to existing one
-                pendingConstuction.getParticipants().add(player);
+                pendingConstruction.getParticipants().add(player);
                 // Step 3.3 If number rule satisfied process further
-                if (pendingConstuction.getParticipants().size() >= pendingConstuction.getConfiguration().getNumberRule().getMinPlayers()) {
-                    GameInitiation initiation = new GameInitiation(pendingConstuction.getSessionKey(), pendingConstuction.getParticipants(), pendingConstuction.getConfiguration());
-                    playerNotificationService.notify(pendingConstuction.getParticipants(), new GameConstructionCompleteEvent(pendingConstuction.getSessionKey()));
+                if (pendingConstruction.getParticipants().size() >= pendingConstruction.getConfiguration().getNumberRule().getMinPlayers()) {
+                    GameInitiation initiation = new GameInitiation(pendingConstruction.getSessionKey(), pendingConstruction.getParticipants(), pendingConstruction.getConfiguration());
+                    playerNotificationService.notify(pendingConstruction.getParticipants(), new GameConstructionCompleteEvent(pendingConstruction.getSessionKey()));
                     notificationService.notify(new SystemGameReadyEvent(initiation));
                     for (String participant : initiation.getParticipants())
                         playerConstructions.remove(participant);
                 } else {
-                    playerConstructions.put(player, pendingConstuction);
-                    specificationQueue.add(pendingConstuction);
+                    playerConstructions.put(player, pendingConstruction);
+                    specificationQueue.add(pendingConstruction);
                 }
             }
         } finally {
             playerLockService.unlock(player);
         }
-        return pendingConstuction;
+        return pendingConstruction;
     }
 
     public Collection<GameConstruction> getPending(String player) {

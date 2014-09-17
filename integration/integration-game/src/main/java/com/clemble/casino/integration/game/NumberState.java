@@ -59,9 +59,9 @@ public class NumberState implements RoundGameState {
                 for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
-                        resultEvent = new RoundEndedEvent(context.getSessionKey(), this, new PlayerWonOutcome(selectNumberEvent.getPlayer()), context);
+                        resultEvent = RoundEndedEvent.fromContext(context, this, new PlayerWonOutcome(selectNumberEvent.getPlayer()));
                     } else if (selectNumberEvent.getNumber() == maxBet) {
-                        resultEvent = new RoundEndedEvent(context.getSessionKey(), this, new DrawOutcome(), context);
+                        resultEvent = RoundEndedEvent.fromContext(context, this, new DrawOutcome());
                     }
                 }
             } else {

@@ -16,9 +16,9 @@ import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.GameSessionEventSelector;
 import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.event.GameSessionAwareEvent;
 import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.event.GameEndedEvent;
+import com.clemble.casino.game.event.GameEvent;
 import com.clemble.casino.game.outcome.GameOutcome;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.integration.event.EventAccumulator;
@@ -42,7 +42,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     final private String sessionKey;
     final private GameConfiguration configuration;
     final private ClembleCasinoOperations player;
-    final private EventAccumulator<GameSessionAwareEvent> eventAccumulator;
+    final private EventAccumulator<GameEvent> eventAccumulator;
 
     final protected AtomicBoolean keepAlive = new AtomicBoolean(true);
     final private AtomicReference<GameOutcome> outcome = new AtomicReference<>();
@@ -70,7 +70,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
             }
         });
         // Step 2. Listening for all possible events
-        eventAccumulator = new EventAccumulator<GameSessionAwareEvent>();
+        eventAccumulator = new EventAccumulator<GameEvent>();
         EventSelector eventSelector = new GameSessionEventSelector(sessionKey);
         this.player.listenerOperations().subscribe(eventSelector, eventAccumulator);
     }
@@ -119,7 +119,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    final public List<GameSessionAwareEvent> getEvents() {
+    final public List<GameEvent> getEvents() {
         return eventAccumulator.toList();
     }
 
