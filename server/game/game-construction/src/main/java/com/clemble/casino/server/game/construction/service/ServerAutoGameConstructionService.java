@@ -12,6 +12,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.construction.AutomaticGameRequest;
 import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.construction.GameInitiation;
+import com.clemble.casino.game.construction.event.GameConstructionCompleteEvent;
 import com.clemble.casino.game.construction.service.AutoGameConstructionService;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
@@ -19,6 +20,7 @@ import com.clemble.casino.server.event.game.SystemGameReadyEvent;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.player.lock.PlayerLockService;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.google.common.cache.CacheBuilder;
@@ -42,6 +44,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
     final private GameConstructionRepository constructionRepository;
     final private SystemNotificationService notificationService;
 
+    final private PlayerNotificationService playerNotificationService;
     final private PlayerLockService playerLockService;
     final private ServerPlayerPresenceService playerStateManager;
 
@@ -50,7 +53,9 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             final SystemNotificationService initiatorService,
             final GameConstructionRepository constructionRepository,
             final PlayerLockService playerLockService,
-            final ServerPlayerPresenceService playerStateManager) {
+            final ServerPlayerPresenceService playerStateManager,
+            final PlayerNotificationService playerNotificationService) {
+        this.playerNotificationService = playerNotificationService;
         this.sessionKeyGenerator = checkNotNull(sessionKeyGenerator);
         this.notificationService = checkNotNull(initiatorService);
         this.constructionRepository = checkNotNull(constructionRepository);
@@ -104,6 +109,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
                 // Step 3.3 If number rule satisfied process further
                 if (pendingConstuction.getParticipants().size() >= pendingConstuction.getConfiguration().getNumberRule().getMinPlayers()) {
                     GameInitiation initiation = new GameInitiation(pendingConstuction.getSessionKey(), pendingConstuction.getParticipants(), pendingConstuction.getConfiguration());
+                    playerNotificationService.notify(pendingConstuction.getParticipants(), new GameConstructionCompleteEvent(pendingConstuction.getSessionKey()));
                     notificationService.notify(new SystemGameReadyEvent(initiation));
                     for (String participant : initiation.getParticipants())
                         playerConstructions.remove(participant);

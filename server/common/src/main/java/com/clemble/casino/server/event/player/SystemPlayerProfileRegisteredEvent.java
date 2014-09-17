@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemPlayerProfileRegisteredEvent implements PlayerProfileAware, SystemPlayerRegisteredEvent {
 
-    final public static String CHANNEL = "registered:profile";
+    final public static String CHANNEL = "sys:registered:profile";
 
     final private String player;
     final private PlayerProfile profile;

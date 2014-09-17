@@ -1,6 +1,7 @@
 package com.clemble.casino.goal.configuration.controller;
 
 import com.clemble.casino.bet.Bid;
+import com.clemble.casino.configuration.Configuration;
 import com.clemble.casino.goal.configuration.GoalConfiguration;
 import com.clemble.casino.goal.rule.judge.JudgeRule;
 import com.clemble.casino.goal.configuration.service.GoalConfigurationService;
@@ -29,7 +30,7 @@ import static com.clemble.casino.web.mapping.WebMapping.PRODUCES;
  * Created by mavarazy on 9/1/14.
  */
 @RestController
-public class GoalConfigurationServiceController implements GoalConfigurationService {
+public class GoalConfigurationServiceController<T extends GoalConfiguration> implements GoalConfigurationService<T> {
 
     // TODO replace with SMART configurations
     final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
@@ -41,13 +42,22 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.players
+        ),
+        new GoalConfiguration(
+            "advanced",
+            new Bid(Money.create(Currency.FakeMoney, 5000), Money.create(Currency.FakeMoney, 5000)),
+            LimitedBetRule.create(5, 50),
+            new JudgeRule("me", JudgeType.self),
+            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
+            new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
+            PrivacyRule.players
         )
     );
 
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
-    public List<GoalConfiguration> getConfigurations() {
-        return DEFAULT_CONFIGURATIONS;
+    public List<T> getConfigurations() {
+        return (List<T>) DEFAULT_CONFIGURATIONS;
     }
 
 }

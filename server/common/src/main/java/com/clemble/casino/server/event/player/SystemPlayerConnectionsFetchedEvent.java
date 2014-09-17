@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 public class SystemPlayerConnectionsFetchedEvent implements SystemPlayerEvent, ConnectionKeyAware {
 
-    final public static String CHANNEL = "player:social:connections:fetched";
+    final public static String CHANNEL = "sys:player:social:connections:fetched";
 
     final private String player;
     final private ConnectionKey connectionKey;

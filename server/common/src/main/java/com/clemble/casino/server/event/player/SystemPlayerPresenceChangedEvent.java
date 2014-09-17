@@ -12,7 +12,7 @@ public class SystemPlayerPresenceChangedEvent implements SystemPlayerEvent {
      */
     private static final long serialVersionUID = 6335808874731056541L;
 
-    final public static String CHANNEL = "presence";
+    final public static String CHANNEL = "sys:player:presence:changed";
 
     final private String player;
     final private Presence presence;

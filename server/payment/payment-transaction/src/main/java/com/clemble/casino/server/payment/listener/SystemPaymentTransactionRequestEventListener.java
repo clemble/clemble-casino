@@ -5,7 +5,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.event.FinishedPaymentEvent;
+import com.clemble.casino.payment.event.PaymentCompleteEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.player.PlayerAware;
@@ -78,7 +78,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
             } else {
                 throw ClembleCasinoException.withKey(ClembleCasinoError.PaymentTransactionInvalid, paymentTransaction.getTransactionKey());
             }
-            paymentEvents.add(new FinishedPaymentEvent(paymentTransaction.getTransactionKey(), paymentOperation));
+            paymentEvents.add(new PaymentCompleteEvent(paymentTransaction.getTransactionKey(), paymentOperation));
         }
         // Step 3. Saving account transaction
         PaymentTransaction transaction = paymentTransactionRepository.save(paymentTransaction);

@@ -4,7 +4,7 @@ import com.clemble.casino.money.Operation;
 import com.clemble.casino.payment.*;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.bonus.PaymentBonusSourceAware;
-import com.clemble.casino.payment.event.BonusPaymentEvent;
+import com.clemble.casino.payment.event.PaymentBonusEvent;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.player.PlayerAware;
 
@@ -58,8 +58,8 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
 
     }
 
-    public BonusPaymentEvent toEvent(){
-        return new BonusPaymentEvent(player, amount, bonusSource, transactionKey);
+    public PaymentBonusEvent toEvent(){
+        return new PaymentBonusEvent(player, amount, bonusSource, transactionKey);
     }
 
     @Override

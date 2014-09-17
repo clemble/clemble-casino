@@ -24,7 +24,11 @@ public class ServerGoalConstructionService implements GoalConstructionService {
 
     @Override
     public GoalConstruction construct(GoalConstructionRequest request) {
-        return selfGoalConstructionService.construct(request);
+        throw new UnsupportedOperationException();
+    }
+
+    public GoalConstruction construct(String player, GoalConstructionRequest request) {
+        return selfGoalConstructionService.construct(player, request);
     }
 
     @Override

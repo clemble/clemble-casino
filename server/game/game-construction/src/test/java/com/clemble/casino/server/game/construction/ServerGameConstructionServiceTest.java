@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import com.clemble.casino.construction.ConstructionState;
 import com.clemble.casino.game.construction.GameDeclineBehavior;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
-import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
+import com.clemble.casino.game.construction.event.GameInvitationAcceptedEvent;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.service.ServerAvailabilityGameConstructionService;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
@@ -29,7 +29,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.game.construction.AvailabilityGameRequest;
 import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.construction.event.InvitationAcceptedEvent;
 import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 
@@ -60,7 +59,7 @@ public class ServerGameConstructionServiceTest {
         GameConstruction construction = constructionService.construct(participants.get(0), availabilityGameRequest);
 
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
-            constructionService.reply(new InvitationAcceptedEvent(participants.get(i), construction.getSessionKey()));
+            constructionService.reply(new GameInvitationAcceptedEvent(participants.get(i), construction.getSessionKey()));
         }
 
         GameConstruction finalConstructionState = constructionRepository.findOne(construction.getSessionKey());
@@ -116,7 +115,7 @@ public class ServerGameConstructionServiceTest {
         public GameConstruction call() {
             try {
                 Thread.sleep(RANDOM.nextInt(1000));
-                GameConstruction construct = constructionService.reply(new InvitationAcceptedEvent(player, sessionKey));
+                GameConstruction construct = constructionService.reply(new GameInvitationAcceptedEvent(player, sessionKey));
                 return construct;
             } catch (Throwable throwable) {
                 throwable.printStackTrace();

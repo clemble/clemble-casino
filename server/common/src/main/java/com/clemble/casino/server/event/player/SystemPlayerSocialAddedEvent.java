@@ -15,7 +15,7 @@ public class SystemPlayerSocialAddedEvent implements SystemPlayerEvent, Connecti
      */
     private static final long serialVersionUID = 5081512807506108684L;
     
-    final public static String CHANNEL = "social:added";
+    final public static String CHANNEL = "sys:player:social:added";
 
     final private String player;
     final private ConnectionKey connection;

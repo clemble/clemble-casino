@@ -10,7 +10,7 @@ public class SystemPlayerCreatedEvent implements SystemPlayerEvent {
      */
     private static final long serialVersionUID = 7637036341950271549L;
 
-    final public static String CHANNEL = "player:created";
+    final public static String CHANNEL = "sys:player:created";
 
     final private String player;
 

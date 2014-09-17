@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SystemGoalInitiationDueEvent implements SystemGoalEvent {
 
-    final public static String CHANNEL = "goal:initiation:due";
+    final public static String CHANNEL = "sys:goal:initiation:due";
 
     final private String goalKey;
 

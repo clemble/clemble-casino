@@ -12,7 +12,7 @@ public class SystemPlayerLeftEvent implements SystemPlayerEvent {
      */
     private static final long serialVersionUID = -7854654395683761302L;
 
-    final public static String CHANNEL = "left";
+    final public static String CHANNEL = "sys:player:left";
 
     final private String player;
 

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemBetCanceledEvent implements SystemBetEvent {
 
-    final public static String CHANNEL = "bet:canceled";
+    final public static String CHANNEL = "sys:bet:canceled";
 
     final private String player;
     final private String transactionKey;

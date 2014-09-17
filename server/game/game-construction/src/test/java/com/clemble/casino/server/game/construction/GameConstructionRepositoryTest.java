@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.IOException;
 import java.util.UUID;
 
-import com.clemble.casino.game.construction.event.InvitationResponseEvent;
+import com.clemble.casino.game.construction.event.GameInvitationResponseEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
@@ -42,7 +42,7 @@ public class GameConstructionRepositoryTest {
     public void testActionLatchSerialization() throws JsonParseException, JsonMappingException, IOException {
         String serializedLatch = null;
         try {
-            ActionLatch randomLatch = new ActionLatch().expectNext(ImmutableList.<String>of("1", "2"), InvitationResponseEvent.class);
+            ActionLatch randomLatch = new ActionLatch().expectNext(ImmutableList.<String>of("1", "2"), GameInvitationResponseEvent.class);
             serializedLatch = objectMapper.writeValueAsString(randomLatch);
             ActionLatch readLatch = objectMapper.readValue(serializedLatch, ActionLatch.class);
             Assert.assertEquals("Failed to deserialize: " + serializedLatch, readLatch, randomLatch);
@@ -57,7 +57,7 @@ public class GameConstructionRepositoryTest {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = availabilityGameRequest.toConstruction("1", UUID.randomUUID().toString());
-        construction.getResponses().expectNext("1", InvitationResponseEvent.class);
+        construction.getResponses().expectNext("1", GameInvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.save(construction);
         Assert.assertNotNull(construction.getResponses());
@@ -68,13 +68,13 @@ public class GameConstructionRepositoryTest {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = availabilityGameRequest.toConstruction((UUID.randomUUID().toString()), (UUID.randomUUID().toString()));
-        construction.getResponses().expectNext("1", InvitationResponseEvent.class);
+        construction.getResponses().expectNext("1", GameInvitationResponseEvent.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.save(construction);
         Assert.assertNotNull(construction.getResponses());
 
         GameConstruction anotherConstruction = availabilityGameRequest.toConstruction((UUID.randomUUID().toString()), (UUID.randomUUID().toString()));
-        anotherConstruction.getResponses().expectNext("1", InvitationResponseEvent.class);
+        anotherConstruction.getResponses().expectNext("1", GameInvitationResponseEvent.class);
         Assert.assertNotNull(anotherConstruction.getResponses());
         anotherConstruction = constructionRepository.save(anotherConstruction);
         Assert.assertNotNull(anotherConstruction.getResponses());

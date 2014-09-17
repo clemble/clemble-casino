@@ -11,10 +11,10 @@ import com.clemble.casino.ActionLatch;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGamePlayerContext;
+import com.clemble.casino.game.event.GamePlayerMovedEvent;
+import com.clemble.casino.game.event.RoundChangedEvent;
 import com.clemble.casino.game.event.RoundEndedEvent;
 import com.clemble.casino.game.event.GameManagementEvent;
-import com.clemble.casino.game.event.RoundStateChangedEvent;
-import com.clemble.casino.game.event.PlayerMovedEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
@@ -56,12 +56,12 @@ public class GameTimeAspect extends GameAspect<GameManagementEvent> {
             eventTaskExecutor.cancel(sessionTimeTracker);
         } else {
             ActionLatch latch = context.getActionLatch();
-            if(move instanceof RoundStateChangedEvent){
+            if(move instanceof RoundChangedEvent){
                 // Step 2.1. Mark all participants as moved
                 participants.forEach(sessionTimeTracker::markMoved);
                 // Step 2.2. Mark all pending participants as to move
                 latch.fetchParticipants().forEach(sessionTimeTracker::markToMove);
-            } else if(move instanceof PlayerMovedEvent) {
+            } else if(move instanceof GamePlayerMovedEvent) {
                 sessionTimeTracker.markMoved((PlayerAware) move);
             }
             // Step 3. Re scheduling if needed

@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.clemble.casino.game.construction.event.GameInvitationResponseEvent;
 import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.construction.AvailabilityGameRequest;
 import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.construction.event.InvitationResponseEvent;
 import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.construction.service.ServerAvailabilityGameConstructionService;
@@ -66,7 +66,7 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     @Override
     @RequestMapping(method = RequestMethod.POST, value = CONSTRUCTION_RESPONSES, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public GameConstruction reply(@RequestBody final InvitationResponseEvent gameRequest) {
+    public GameConstruction reply(@RequestBody final GameInvitationResponseEvent gameRequest) {
         // Step 1. Invoking actual matching service
         return availabilityConstructionService.invitationResponded(gameRequest);
     }

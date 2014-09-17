@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.integration.game.RoundGamePlayer;
-import com.clemble.casino.integration.game.SelectNumberEvent;
+import com.clemble.casino.integration.game.SelectNumberAction;
+import com.clemble.casino.payment.event.PaymentCompleteEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.payment.event.FinishedPaymentEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,16 +43,16 @@ public class GamePaymentTransactionITest {
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make a surrender by player B
-        A.perform(new SelectNumberEvent(A.getPlayer(), 2));
-        B.perform(new SelectNumberEvent(B.getPlayer(), 1));
+        A.perform(new SelectNumberAction(A.getPlayer(), 2));
+        B.perform(new SelectNumberAction(B.getPlayer(), 1));
         // Step 3. Synching players
         B.syncWith(A);
         // Step 4. Checking payment transaction complete
         PaymentEvent event = paymentListener.poll(5, TimeUnit.SECONDS);
         assertNotNull(event);
-        assertTrue(event instanceof FinishedPaymentEvent);
+        assertTrue(event instanceof PaymentCompleteEvent);
         // Step 5. Checking transaction key is the same as game construction
-        String transactionKey = ((FinishedPaymentEvent) event).getTransactionKey();
+        String transactionKey = ((PaymentCompleteEvent) event).getTransactionKey();
         String sessionKey = A.getSessionKey();
         assertEquals(sessionKey, transactionKey);
     }

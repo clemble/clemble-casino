@@ -12,13 +12,13 @@ import java.util.Date;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import com.clemble.casino.event.ExpectedEvent;
+import com.clemble.casino.event.PlayerExpectedAction;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.event.surrender.GiveUpEvent;
+import com.clemble.casino.event.bet.PlayerBetAction;
+import com.clemble.casino.event.surrender.GiveUpAction;
 import com.clemble.casino.game.*;
-import com.clemble.casino.event.bet.BetEvent;
-import com.clemble.casino.game.construction.event.InvitationAcceptedEvent;
-import com.clemble.casino.game.construction.event.InvitationResponseEvent;
+import com.clemble.casino.game.construction.event.GameInvitationAcceptedEvent;
+import com.clemble.casino.game.construction.event.GameInvitationResponseEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.rule.outcome.WonRule;
 import com.clemble.casino.game.unit.GameUnit;
@@ -62,16 +62,16 @@ import com.google.common.collect.ImmutableList;
 public class IntegrationObjectTest {
 
     static {
-        register(InvitationResponseEvent.class, new AbstractValueGenerator<InvitationResponseEvent>() {
+        register(GameInvitationResponseEvent.class, new AbstractValueGenerator<GameInvitationResponseEvent>() {
             @Override
-            public InvitationResponseEvent generate() {
-            return new InvitationAcceptedEvent("d", "b");
+            public GameInvitationResponseEvent generate() {
+            return new GameInvitationAcceptedEvent("d", "b");
             }
         });
-        register(ExpectedEvent.class, new AbstractValueGenerator<ExpectedEvent>() {
+        register(PlayerExpectedAction.class, new AbstractValueGenerator<PlayerExpectedAction>() {
             @Override
-            public ExpectedEvent generate() {
-            return ExpectedEvent.fromClass("S", InvitationAcceptedEvent.class);
+            public PlayerExpectedAction generate() {
+            return PlayerExpectedAction.fromClass("S", GameInvitationAcceptedEvent.class);
             }
         });
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {
@@ -98,13 +98,13 @@ public class IntegrationObjectTest {
         register(Event.class, new AbstractValueGenerator<Event>() {
             @Override
             public Event generate() {
-            return new GiveUpEvent(RandomStringUtils.random(5));
+            return new GiveUpAction(RandomStringUtils.random(5));
             }
         });
-        register(BetEvent.class, new AbstractValueGenerator<BetEvent>() {
+        register(PlayerBetAction.class, new AbstractValueGenerator<PlayerBetAction>() {
             @Override
-            public BetEvent generate() {
-            return new BetEvent(RandomStringUtils.random(5), 100);
+            public PlayerBetAction generate() {
+            return new PlayerBetAction(RandomStringUtils.random(5), 100);
             }
         });
         register(PlayerAccount.class, new AbstractValueGenerator<PlayerAccount>() {

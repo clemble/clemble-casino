@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class SystemEventParserTest {
     
-    final private String GOAL_JUDGE_INVITATION_ACCEPTED_EVENT = "{\"type\":\"goal:judge:invitation:accepted\",\"invitation\":{\"player\":\"2tKnc58CuA\",\"judge\":\"Vn0xb2joqu\",\"goalKey\":\"2tKnc58CuAA86\",\"goal\":\"Run 30K\",\"status\":\"pending\"}}";
+    final private String GOAL_JUDGE_INVITATION_ACCEPTED_EVENT = "{\"type\":\"sys:goal:judge:invitation:accepted\",\"invitation\":{\"player\":\"2tKnc58CuA\",\"judge\":\"Vn0xb2joqu\",\"goalKey\":\"2tKnc58CuAA86\",\"goal\":\"Run 30K\",\"status\":\"pending\"}}";
 
     @Test
     public void testInvitationAcceptedEventParsing() throws IOException {

@@ -8,8 +8,8 @@ import com.clemble.casino.event.surrender.SurrenderEvent;
 import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.RoundGameState;
 import com.clemble.casino.game.event.GameManagementEvent;
+import com.clemble.casino.game.event.GamePlayerMovedEvent;
 import com.clemble.casino.game.event.RoundEndedEvent;
-import com.clemble.casino.game.event.PlayerMovedEvent;
 import com.clemble.casino.game.outcome.DrawOutcome;
 import com.clemble.casino.game.outcome.NoOutcome;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
@@ -37,7 +37,7 @@ public class NumberState implements RoundGameState {
             @JsonProperty("version") int version) {
         this.context = context;
         this.state = state;
-        this.context.getActionLatch().expectNext(context.getPlayerIterator().getPlayers(), SelectNumberEvent.class);
+        this.context.getActionLatch().expectNext(context.getPlayerIterator().getPlayers(), SelectNumberAction.class);
 
         this.version = version;
     }
@@ -52,11 +52,11 @@ public class NumberState implements RoundGameState {
         // Step 1. Processing Select cell move
         GameManagementEvent resultEvent = null;
 
-        if (action instanceof SelectNumberEvent) {
+        if (action instanceof SelectNumberAction) {
             context.getActionLatch().put(action);
             if (context.getActionLatch().complete()) {
                 int maxBet = 0;
-                for (SelectNumberEvent selectNumberEvent : context.getActionLatch().<SelectNumberEvent>getActions()) {
+                for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
                     if (selectNumberEvent.getNumber() > maxBet) {
                         maxBet = selectNumberEvent.getNumber();
                         resultEvent = new RoundEndedEvent(context.getSessionKey(), this, new PlayerWonOutcome(selectNumberEvent.getPlayer()), context);
@@ -65,7 +65,7 @@ public class NumberState implements RoundGameState {
                     }
                 }
             } else {
-                resultEvent = new PlayerMovedEvent(context.getSessionKey(), action.getPlayer());
+                resultEvent = new GamePlayerMovedEvent(context.getSessionKey(), action.getPlayer());
             }
         } else if (action instanceof SurrenderEvent) {
             // Step 1. Fetching player identifier

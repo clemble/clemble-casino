@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.game.construction.event.GameInitiationCreatedEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.construction.GameInitiationExpirationTask;
@@ -21,7 +22,6 @@ import com.clemble.casino.ImmutablePair;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.construction.event.GameInitiatedEvent;
 import com.clemble.casino.game.construction.event.GameInitiationCanceledEvent;
 import com.clemble.casino.game.construction.event.GameInitiationConfirmedEvent;
 import com.clemble.casino.game.construction.service.GameInitiationService;
@@ -73,7 +73,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         sessionToInitiation.put(sessionKey, new ImmutablePair<GameInitiation, Set<String>>(initiation, new ConcurrentSkipListSet<String>()));
         // Step 3. Sending notification to the players, that they need to confirm
         LOG.debug("Notifying participants {}", initiation);
-        notificationService.notify(initiation.getParticipants(), new GameInitiatedEvent(initiation));
+        notificationService.notify(initiation.getParticipants(), new GameInitiationCreatedEvent(initiation));
         // Step 4. Scheduling Cancel task
         taskExecutor.schedule(new GameInitiationExpirationTask(sessionKey, new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(CANCEL_TIMEOUT_SECONDS))));
     }

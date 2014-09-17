@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemGameInitiationDueEvent implements SystemGameEvent {
 
-    final public static String CHANNEL = "game:initiation:due";
+    final public static String CHANNEL = "sys:game:initiation:due";
 
     final private String sessionKey;
 

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemPlayerImageChangedEvent implements SystemPlayerEvent {
 
-    final public static String CHANNEL = "player:image:update";
+    final public static String CHANNEL = "sys:player:image:changed";
 
     final private String player;
     final private String redirect;

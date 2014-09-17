@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemGoalJudgeInvitationAcceptedEvent implements SystemGoalEvent {
 
-    final public static String CHANNEL = "goal:judge:invitation:accepted";
+    final public static String CHANNEL = "sys:goal:judge:invitation:accepted";
 
     final private GoalJudgeInvitation invitation;
     final private String goalKey;

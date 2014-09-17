@@ -13,9 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -24,7 +22,6 @@ import com.clemble.casino.game.event.GameSessionAwareEvent;
 import com.clemble.casino.game.outcome.PlayerWonOutcome;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.util.RedisCleaner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -51,8 +48,8 @@ public class GameWatcherITest {
         assertTrue(A.isAlive());
         assertTrue(B.isAlive());
 
-        A.perform(new SelectNumberEvent(A.getPlayer(), 2));
-        B.perform(new SelectNumberEvent(B.getPlayer(), 1));
+        A.perform(new SelectNumberAction(A.getPlayer(), 2));
+        B.perform(new SelectNumberAction(B.getPlayer(), 1));
 
         A.waitForEnd();
 

@@ -9,6 +9,7 @@ import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
+import com.clemble.casino.payment.event.PaymentBonusEvent;
 import com.clemble.test.concurrent.Get;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -17,7 +18,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -27,7 +27,6 @@ import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameState;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -35,12 +34,10 @@ import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.payment.PlayerAccount;
-import com.clemble.casino.payment.event.BonusPaymentEvent;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
-import sun.nio.cs.MS1250;
 
 import static org.junit.Assert.*;
 
@@ -63,10 +60,10 @@ public class PlayerAccountOperationsITest {
         // Step 1. Creating random player A
         final ClembleCasinoOperations A = playerOperations.createPlayer();
         // Step 1.1 Registering bonus event listener, and waiting
-        final BlockingQueue<BonusPaymentEvent> bonusLatch = new ArrayBlockingQueue<>(2);
-        A.listenerOperations().subscribe(new EventTypeSelector(BonusPaymentEvent.class), new EventListener<BonusPaymentEvent>() {
+        final BlockingQueue<PaymentBonusEvent> bonusLatch = new ArrayBlockingQueue<>(2);
+        A.listenerOperations().subscribe(new EventTypeSelector(PaymentBonusEvent.class), new EventListener<PaymentBonusEvent>() {
             @Override
-            public void onEvent(BonusPaymentEvent event) {
+            public void onEvent(PaymentBonusEvent event) {
                 bonusLatch.add(event);
             }
         });

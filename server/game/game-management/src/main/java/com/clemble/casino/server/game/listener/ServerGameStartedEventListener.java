@@ -1,6 +1,7 @@
 package com.clemble.casino.server.game.listener;
 
 import com.clemble.casino.game.construction.event.GameInitiationCanceledEvent;
+import com.clemble.casino.game.construction.event.GameInitiationCompleteEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -31,6 +32,7 @@ public class ServerGameStartedEventListener implements SystemEventListener<Syste
         LOG.debug("{} started event received", event.getSessionKey());
         if(presenceService.markPlaying(event.getInitiation().getParticipants(), event.getInitiation().getSessionKey())) {
             LOG.debug("{} able to mark all players playing", event.getSessionKey());
+            notificationService.notify(event.getInitiation().getParticipants(), new GameInitiationCompleteEvent(event.getSessionKey(), event.getInitiation()));
             // Case 1. Starting game in managerFactory
             managerFactory.start(event.getInitiation(), null);
         } else {

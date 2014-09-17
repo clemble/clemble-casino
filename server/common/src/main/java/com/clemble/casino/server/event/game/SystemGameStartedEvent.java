@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemGameStartedEvent implements SystemGameEvent, GameInitiationAware {
 
-    final public static String CHANNEL = "game:started";
+    final public static String CHANNEL = "sys:game:started";
 
     final private String sessionKey;
     final private GameInitiation initiation;

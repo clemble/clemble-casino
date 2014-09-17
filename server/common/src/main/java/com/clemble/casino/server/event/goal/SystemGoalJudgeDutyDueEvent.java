@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemGoalJudgeDutyDueEvent implements SystemGoalEvent {
 
-    final public static String CHANNEL = "goal:judge:duty:due";
+    final public static String CHANNEL = "sys:goal:judge:duty:due";
 
     final private String goalKey;
     final private GoalJudgeDuty duty;

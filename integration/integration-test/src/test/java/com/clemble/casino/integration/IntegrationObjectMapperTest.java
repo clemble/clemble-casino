@@ -8,11 +8,13 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import com.clemble.casino.configuration.Configuration;
-import com.clemble.casino.event.surrender.GiveUpEvent;
-import com.clemble.casino.event.bet.BetEvent;
+import com.clemble.casino.event.bet.PlayerBetAction;
+import com.clemble.casino.event.surrender.GiveUpAction;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.configuration.MatchGameConfiguration;
+import com.clemble.casino.game.construction.event.GameInvitationDeclinedEvent;
+import com.clemble.casino.game.construction.event.GamePlayerInvitedEvent;
 import com.clemble.casino.game.rule.GameRule;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.rule.construct.PlayerNumberRule;
@@ -32,8 +34,6 @@ import com.clemble.casino.rule.time.MoveTimeRule;
 import com.clemble.casino.rule.time.TotalTimeRule;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
 import com.clemble.casino.server.event.player.SystemPlayerSocialGrantRegisteredEvent;
-import com.clemble.casino.server.event.player.SystemPlayerSocialRegisteredEvent;
-import com.clemble.casino.server.spring.WebJsonSpringConfiguration;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -51,8 +51,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.construction.ScheduledGameRequest;
-import com.clemble.casino.game.construction.event.InvitationDeclinedEvent;
-import com.clemble.casino.game.construction.event.PlayerInvitedEvent;
 import com.clemble.casino.game.event.RoundStartedEvent;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.test.random.ObjectGenerator;
@@ -81,25 +79,25 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
         ObjectGenerator.generate(GameRule.class);
 
         ObjectGenerator.generate(RoundGameConfiguration.class);
-        ObjectGenerator.generate(PlayerInvitedEvent.class);
+        ObjectGenerator.generate(GamePlayerInvitedEvent.class);
     }
 
     @Test
     public void testSpecialSerialization() {
         Assert.assertNull(checkSerialization(SystemPlayerProfileRegisteredEvent.class));
         Assert.assertNull(checkSerialization(SystemPlayerSocialGrantRegisteredEvent.class));
-        Assert.assertNull(checkSerialization(InvitationDeclinedEvent.class));
+        Assert.assertNull(checkSerialization(GameInvitationDeclinedEvent.class));
         Assert.assertNull(checkSerialization(ScheduledGameRequest.class));
         Assert.assertNull(checkSerialization(RoundStartedEvent.class));
-        Assert.assertNull(checkSerialization(BetEvent.class));
+        Assert.assertNull(checkSerialization(PlayerBetAction.class));
         Assert.assertNull(checkSerialization(NumberState.class));
     }
 
     @Test
     public void testGiveUpReadWrite() throws JsonParseException, JsonMappingException, IOException {
-        GiveUpEvent event = new GiveUpEvent(RandomStringUtils.random(5));
+        GiveUpAction event = new GiveUpAction(RandomStringUtils.random(5));
         String stringEvent = objectMapper.writeValueAsString(event);
-        GiveUpEvent readEvent = (GiveUpEvent) objectMapper.readValue(stringEvent, Event.class);
+        GiveUpAction readEvent = (GiveUpAction) objectMapper.readValue(stringEvent, Event.class);
         Assert.assertEquals(event, readEvent);
     }
 

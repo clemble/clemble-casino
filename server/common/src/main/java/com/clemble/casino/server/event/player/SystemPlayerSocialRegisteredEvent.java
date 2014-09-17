@@ -12,7 +12,7 @@ public class SystemPlayerSocialRegisteredEvent
     implements SocialConnectionDataAware,
         SystemPlayerRegisteredEvent {
 
-    final public static String CHANNEL = "registration:social";
+    final public static String CHANNEL = "sys:registration:social";
 
     final private String player;
     final private SocialConnectionData socialConnectionData;

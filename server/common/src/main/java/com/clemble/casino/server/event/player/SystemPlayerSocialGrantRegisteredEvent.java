@@ -12,7 +12,7 @@ public class SystemPlayerSocialGrantRegisteredEvent
     implements SocialAccessGrantAware,
         SystemPlayerRegisteredEvent {
 
-    final public static String CHANNEL = "registered:social:grant";
+    final public static String CHANNEL = "sys:registered:social:grant";
 
     final private String player;
     final private SocialAccessGrant socialGrant;

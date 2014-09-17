@@ -9,7 +9,7 @@ import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.event.surrender.GiveUpEvent;
+import com.clemble.casino.event.surrender.GiveUpAction;
 import com.clemble.casino.game.RoundGameState;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.event.GameManagementEvent;
@@ -91,7 +91,7 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
     public GamePlayer giveUp() {
         // Step 1. Giving up if needed
         if (isAlive()) {
-            perform(new GiveUpEvent(getPlayer()));
+            perform(new GiveUpAction(getPlayer()));
         } else {
             LOG.debug("can't give up player is not ALIVE");
         }

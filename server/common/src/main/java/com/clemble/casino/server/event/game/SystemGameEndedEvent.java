@@ -10,7 +10,7 @@ import java.util.Collection;
  */
 public class SystemGameEndedEvent implements SystemGameEvent {
 
-    final public static String CHANNEL = "game:ended";
+    final public static String CHANNEL = "sys:game:ended";
 
     final private String sessionKey;
     final private Collection<String> participants;

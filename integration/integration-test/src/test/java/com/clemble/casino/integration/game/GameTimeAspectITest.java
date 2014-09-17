@@ -12,15 +12,12 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.integration.game.construction.GameScenarios;
-import com.clemble.casino.integration.util.RedisCleaner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -45,11 +42,11 @@ public class GameTimeAspectITest {
         Assert.assertEquals(playerA.getSessionKey(), playerB.getSessionKey());
         Assert.assertEquals(players.size(), 2);
 
-        playerA.perform(new SelectNumberEvent(playerA.getPlayer(), 1));
+        playerA.perform(new SelectNumberAction(playerA.getPlayer(), 1));
         Thread.sleep(playerA.getConfiguration().getMoveTimeRule().getLimit() + 100);
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GamePlayGameEnded));
-        playerB.perform(new SelectNumberEvent(playerA.getPlayer(), 1));
+        playerB.perform(new SelectNumberAction(playerA.getPlayer(), 1));
     }
 
     @Test

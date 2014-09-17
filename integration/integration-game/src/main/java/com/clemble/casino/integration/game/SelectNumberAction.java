@@ -1,12 +1,12 @@
 package com.clemble.casino.integration.game;
 
-import com.clemble.casino.game.action.ClientGameEvent;
+import com.clemble.casino.game.action.PlayerGameAction;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-@JsonTypeName("selectNumber")
-public class SelectNumberEvent implements ClientGameEvent {
+@JsonTypeName("game:action:select:number")
+public class SelectNumberAction implements PlayerGameAction {
 
     private static final long serialVersionUID = 6819390579455234704L;
 
@@ -14,7 +14,7 @@ public class SelectNumberEvent implements ClientGameEvent {
     final private int number;
 
     @JsonCreator
-    public SelectNumberEvent(@JsonProperty(PLAYER) String player, @JsonProperty("number") int number) {
+    public SelectNumberAction(@JsonProperty(PLAYER) String player, @JsonProperty("number") int number) {
         this.player = player;
         this.number = number;
     }
@@ -42,7 +42,7 @@ public class SelectNumberEvent implements ClientGameEvent {
             return true;
         if (getClass() != obj.getClass())
             return false;
-        SelectNumberEvent other = (SelectNumberEvent) obj;
+        SelectNumberAction other = (SelectNumberAction) obj;
         if (number != other.number)
             return false;
         return true;

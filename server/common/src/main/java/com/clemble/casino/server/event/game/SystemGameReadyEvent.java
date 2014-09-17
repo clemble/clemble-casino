@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemGameReadyEvent implements SystemGameEvent {
 
-    final public static String CHANNEL = "game:ready";
+    final public static String CHANNEL = "sys:game:ready";
 
     final private String sessionKey;
     final private GameInitiation initiation;

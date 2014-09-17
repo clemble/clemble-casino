@@ -3,6 +3,7 @@ package com.clemble.casino.integration.player;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.goal.GoalOperations;
+import com.clemble.casino.game.construction.event.GameInitiationCreatedEvent;
 import com.clemble.casino.integration.game.IntegrationAutoGameConstructionService;
 import com.clemble.casino.integration.game.IntegrationAvailabilityGameConstructionService;
 import com.clemble.casino.integration.payment.IntegrationPlayerAccountService;
@@ -32,7 +33,6 @@ import com.clemble.casino.client.game.GameConstructionOperations;
 import com.clemble.casino.client.game.GameConstructionTemplate;
 import com.clemble.casino.integration.payment.IntegrationPaymentTransactionService;
 import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.construction.event.GameInitiatedEvent;
 import com.clemble.casino.game.construction.service.AutoGameConstructionService;
 import com.clemble.casino.game.service.GameActionService;
 import com.clemble.casino.game.configuration.service.GameConfigurationService;
@@ -107,9 +107,9 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         this.gameConstructors = new GameConstructionTemplate(player, constructionService, new IntegrationAvailabilityGameConstructionService(player, availabilityConstructionService), initiationService, specificationService, listenerOperations);
         this.actionOperationsFactory = new GameActionTemplateFactory(player, listenerOperations, actionService);
 
-        this.listenerOperations.subscribe(new EventTypeSelector(GameInitiatedEvent.class), new EventListener<GameInitiatedEvent>() {
+        this.listenerOperations.subscribe(new EventTypeSelector(GameInitiationCreatedEvent.class), new EventListener<GameInitiationCreatedEvent>() {
             @Override
-            public void onEvent(GameInitiatedEvent event) {
+            public void onEvent(GameInitiationCreatedEvent event) {
                 // Step 1. Fetching session key
                 String sessionKey = event.getSessionKey();
                 initiationService.confirm(player, sessionKey);

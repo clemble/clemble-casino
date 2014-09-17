@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemPaymentTransactionRequestEvent implements SystemPaymentEvent {
 
-    final public static String CHANNEL = "payment:transaction:request";
+    final public static String CHANNEL = "sys:payment:transaction:request";
 
     final private PaymentTransaction transaction;
 

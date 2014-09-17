@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SystemPlayerDiscoveredConnectionEvent implements SystemPlayerEvent {
 
-    final public static String CHANNEL = "discovered";
+    final public static String CHANNEL = "sys:player:discovered";
 
     /**
      * Generated 06/01/14

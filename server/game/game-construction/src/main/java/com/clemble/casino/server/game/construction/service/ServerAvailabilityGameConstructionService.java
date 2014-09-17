@@ -7,10 +7,14 @@ import java.util.Collection;
 import com.clemble.casino.base.ActionLatchService;
 import com.clemble.casino.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoFailure;
+import com.clemble.casino.game.construction.event.GameConstructionCompleteEvent;
+import com.clemble.casino.game.construction.event.GameInvitationDeclinedEvent;
+import com.clemble.casino.game.construction.event.GameInvitationResponseEvent;
+import com.clemble.casino.game.construction.event.GamePlayerInvitedEvent;
+import com.clemble.casino.game.event.GameConstructionCanceledEvent;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
-import com.clemble.casino.server.game.construction.listener.PendingGameInitiationEventListener;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +25,6 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.construction.AvailabilityGameRequest;
 import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.construction.event.GameConstructedEvent;
-import com.clemble.casino.game.construction.event.InvitationDeclinedEvent;
-import com.clemble.casino.game.construction.event.InvitationResponseEvent;
-import com.clemble.casino.game.construction.event.PlayerInvitedEvent;
 import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -77,12 +77,12 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         construction = constructionRepository.save(construction);
         latchService.save(construction.getSessionKey(), construction.getResponses());
         // Step 4. Sending invitation to opponents
-        playerNotificationService.notify(request.getParticipants(), new PlayerInvitedEvent(construction.getSessionKey(), request));
+        playerNotificationService.notify(request.getParticipants(), new GamePlayerInvitedEvent(construction.getSessionKey(), request));
         // Step 5. Returning constructed construction
         return construction;
     }
 
-    final public GameConstruction invitationResponded(InvitationResponseEvent response) {
+    final public GameConstruction invitationResponded(GameInvitationResponseEvent response) {
         // Step 1. Sanity check
         if (response == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse);
@@ -96,14 +96,14 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     }
 
     @Override
-    public GameConstruction reply(InvitationResponseEvent response) {
+    public GameConstruction reply(GameInvitationResponseEvent response) {
         // Step 1. Sanity check
         if (response == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse, response.getPlayer(), response.getSessionKey());
         return tryReply(response);
     }
 
-    final private GameConstruction tryReply(InvitationResponseEvent response) {
+    final private GameConstruction tryReply(GameInvitationResponseEvent response) {
         try {
             // Step 1. Checking associated construction
             GameConstruction construction = constructionRepository.findOne(response.getSessionKey());
@@ -117,15 +117,16 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             playerNotificationService.notify(responseLatch.fetchParticipants(), response);
             construction = construction.cloneWithResponses(responseLatch);
             // Step 4. Checking if latch is full
-            if (response instanceof InvitationDeclinedEvent) {
-                // Step 4.1. In case declined send game canceled notification
+            if (response instanceof GameInvitationDeclinedEvent) {
                 construction = construction.cloneWithState(ConstructionState.canceled);
+                // Step 4.1. In case declined send game canceled notification
+                playerNotificationService.notify(construction.getParticipants(), new GameConstructionCanceledEvent(construction.getSessionKey()));
             } else if (responseLatch.complete()) {
                 GameInitiation initiation = construction.toInitiation();
                 // Step 5. Updating state
                 construction = construction.cloneWithState(ConstructionState.constructed);
                 // Step 6. Notifying Participants
-                playerNotificationService.notify(initiation.getParticipants(), new GameConstructedEvent(construction.getSessionKey()));
+                playerNotificationService.notify(initiation.getParticipants(), new GameConstructionCompleteEvent(construction.getSessionKey()));
                 // Step 7. Moving to the next step
                 pendingInitiationService.add(initiation);
             }

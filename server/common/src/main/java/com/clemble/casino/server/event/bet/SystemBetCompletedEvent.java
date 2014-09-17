@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SystemBetCompletedEvent implements SystemBetEvent {
 
-    final public static String CHANNEL = "bet:completed";
+    final public static String CHANNEL = "sys:bet:completed";
 
     final private String transactionKey;
     final private String player;

@@ -10,7 +10,7 @@ public class SystemPlayerEnteredEvent implements SystemPlayerEvent {
      */
     private static final long serialVersionUID = -2179848922729269755L;
 
-    final public static String CHANNEL = "entered";
+    final public static String CHANNEL = "sys:player:entered";
 
     final private String player;
 
