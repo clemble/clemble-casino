@@ -7,6 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
+import com.clemble.casino.construction.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoFailure;
@@ -120,7 +121,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
                 pendingConstruction.getParticipants().add(player);
                 // Step 3.3 If number rule satisfied process further
                 if (pendingConstruction.getParticipants().size() >= pendingConstruction.getConfiguration().getNumberRule().getMinPlayers()) {
-                    GameInitiation initiation = new GameInitiation(pendingConstruction.getSessionKey(), pendingConstruction.getParticipants(), pendingConstruction.getConfiguration());
+                    GameInitiation initiation = new GameInitiation(pendingConstruction.getSessionKey(), InitiationState.pending, pendingConstruction.getParticipants(), pendingConstruction.getConfiguration());
                     playerNotificationService.notify(pendingConstruction.getParticipants(), new GameConstructionCompleteEvent(pendingConstruction.getSessionKey()));
                     notificationService.notify(new SystemGameReadyEvent(initiation));
                     for (String participant : initiation.getParticipants())

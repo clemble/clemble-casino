@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import com.clemble.casino.construction.InitiationState;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.repository.PendingGameInitiationRepository;
 import com.clemble.casino.server.game.construction.repository.PendingPlayerRepository;
@@ -36,7 +37,7 @@ public class PendingGameTest {
         PendingPlayer B = new PendingPlayer("B");
         playerRepository.save(B);
         // Step 2. Creating and saving game initiation
-        GameInitiation initiation = new GameInitiation("AB", ImmutableList.<String>of("A", "B"), RoundGameConfiguration.DEFAULT);
+        GameInitiation initiation = new GameInitiation("AB", InitiationState.pending, ImmutableList.<String>of("A", "B"), RoundGameConfiguration.DEFAULT);
         PendingGameInitiation pendingGameInitiation = new PendingGameInitiation(initiation);
         pendingGameInitiation = initiationRepository.save(pendingGameInitiation);
         // Step 3. Checking values

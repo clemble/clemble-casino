@@ -13,12 +13,12 @@ import java.util.Date;
 /**
  * Created by mavarazy on 9/13/14.
  */
-public class GoalStartTask implements EventTask {
+public class GoalInitiationExpirationTask implements EventTask {
 
     final private String goalKey;
     final private Date startDate;
 
-    public GoalStartTask(String goalKey, Date startDate) {
+    public GoalInitiationExpirationTask(String goalKey, Date startDate) {
         this.goalKey = goalKey;
         this.startDate = startDate;
     }

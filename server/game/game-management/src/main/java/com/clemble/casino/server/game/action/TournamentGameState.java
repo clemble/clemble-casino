@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.clemble.casino.ImmutablePair;
+import com.clemble.casino.construction.InitiationState;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameState;
@@ -118,7 +119,7 @@ public class TournamentGameState implements GameState<TournamentGameContext, Eve
             waitingList.add(pending);
             if(waitingList.size() == configuration.getNumberRule().getMinPlayers()) {
                 String sessionKey = session + TOURNAME_SEPARATOR + level.getAndIncrement();
-                GameInitiation initiation = new GameInitiation(session + TOURNAME_SEPARATOR + level, PlayerAwareUtils.toPlayerList(waitingList), configuration);
+                GameInitiation initiation = new GameInitiation(session + TOURNAME_SEPARATOR + level, InitiationState.pending, PlayerAwareUtils.toPlayerList(waitingList), configuration);
                 TournamentLeaf leaf = new TournamentLeaf(PlayerAware.DEFAULT_PLAYER, sessionKey, waitingList);
                 TournamentGameContext parentContext = new TournamentGameContext(initiation, leaf, parent);
                 managerFactory.start(initiation, parentContext);

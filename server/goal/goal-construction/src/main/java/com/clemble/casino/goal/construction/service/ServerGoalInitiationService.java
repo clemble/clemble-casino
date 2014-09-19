@@ -3,7 +3,7 @@ package com.clemble.casino.goal.construction.service;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.construction.GoalInitiation;
-import com.clemble.casino.goal.construction.GoalStartTask;
+import com.clemble.casino.goal.construction.GoalInitiationExpirationTask;
 import com.clemble.casino.goal.construction.event.GoalInitiationCreatedEvent;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
@@ -49,7 +49,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         LOG.debug("Notifying player {}", initiation);
         notificationService.notify(initiation.getPlayer(), new GoalInitiationCreatedEvent(initiation.getGoalKey()));
         // Step 4. Scheduling Cancel task
-        taskExecutor.schedule(new GoalStartTask(initiation.getGoalKey(), initiation.getStartDate()));
+        taskExecutor.schedule(new GoalInitiationExpirationTask(initiation.getGoalKey(), initiation.getStartDate()));
     }
 
     public void initiate(SystemGoalInitiationDueEvent dueEvent) {

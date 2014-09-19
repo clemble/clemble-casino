@@ -1,5 +1,6 @@
 package com.clemble.casino.server.game.action;
 
+import com.clemble.casino.construction.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameRecord;
@@ -30,7 +31,7 @@ public class GameStateFactoryUtils {
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameStateReCreationFailure, PlayerAware.DEFAULT_PLAYER);
         }
         // Step 2. Re creating state
-        GameInitiation initiation = new GameInitiation(record.getSessionKey(), record.getPlayers(), record.getConfiguration());
+        GameInitiation initiation = new GameInitiation(record.getSessionKey(), InitiationState.pending, record.getPlayers(), record.getConfiguration());
         // TODO define politics for restart, all time track is lost here
         RoundGameContext context = RoundGameContext.fromInitiation(initiation, null);
         GameState restoredState = stateFactory.constructState(initiation, context);

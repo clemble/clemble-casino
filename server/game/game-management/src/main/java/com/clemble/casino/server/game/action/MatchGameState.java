@@ -1,5 +1,6 @@
 package com.clemble.casino.server.game.action;
 
+import com.clemble.casino.construction.InitiationState;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.ComparatorUtils;
 import com.clemble.casino.game.GameState;
@@ -84,6 +85,7 @@ public class MatchGameState implements GameState<MatchGameContext, Event> {
         context.setCurrentSession(nextSessionKey);
         GameInitiation subInitiation = new GameInitiation(
             nextSessionKey,
+            InitiationState.pending,
             PlayerAwareUtils.toPlayerList(context.getPlayerContexts()),
             configuration.getConfigurations().get(gameNum));
         GameManager<?> manager = managerFactory.start(subInitiation, context);

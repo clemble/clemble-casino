@@ -47,6 +47,8 @@ public class SelfGoalConstructionService implements GoalConstructionService {
         // Step 1. Checking this is appropriate request for this service
         if(request.getConfiguration().getJudgeRule().getType() != JudgeType.self)
             throw new IllegalArgumentException();
+        if(request.getGoal() == null || request.getGoal().isEmpty())
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalIsEmpty, player);
         // Step 1.1. Checking there is enough money to complete it
         Money price = request.getConfiguration().getBid().getAmount();
         if (!accountService.canAfford(Collections.singleton(player), price.getCurrency(), price.getAmount()).isEmpty()){

@@ -4,6 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.*;
 
+import com.clemble.casino.construction.InitiationState;
 import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
@@ -61,6 +62,6 @@ public class PendingGameInitiationService {
 
     public GameInitiation toInitiation(PendingGameInitiation initiation) {
         GameConfiguration configuration = initiation.getConfiguration();
-        return new GameInitiation(initiation.getSessionKey(), PlayerAwareUtils.toPlayerList(initiation.getParticipants()), configuration);
+        return new GameInitiation(initiation.getSessionKey(), InitiationState.pending, PlayerAwareUtils.toPlayerList(initiation.getParticipants()), configuration);
     }
 }

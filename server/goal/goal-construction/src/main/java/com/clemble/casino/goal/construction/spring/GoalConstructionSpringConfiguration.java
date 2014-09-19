@@ -1,5 +1,8 @@
 package com.clemble.casino.goal.construction.spring;
 
+import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.goal.construction.GoalInitiation;
+import com.clemble.casino.goal.construction.GoalInitiationExpirationTask;
 import com.clemble.casino.goal.construction.GoalInitiationTaskAdapter;
 import com.clemble.casino.goal.construction.GoalKeyGenerator;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
@@ -27,6 +30,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import redis.clients.jedis.JedisPool;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -89,15 +93,20 @@ public class GoalConstructionSpringConfiguration {
     }
 
     @Bean
-    public EventTaskAdapter goalInitiationTaskAdapter(){
-        return new GoalInitiationTaskAdapter();
+    public EventTaskAdapter goalInitiationTaskAdapter(SystemNotificationService notificationService){
+        return new GoalInitiationTaskAdapter(notificationService);
     }
 
     @Bean
-    public EventTaskExecutor goalInitiationEventTaskExecutor(@Qualifier("goalInitiationTaskAdapter") EventTaskAdapter gameEventTaskAdapter) {
+    public EventTaskExecutor goalInitiationEventTaskExecutor(@Qualifier("goalInitiationTaskAdapter") EventTaskAdapter gameEventTaskAdapter, GoalInitiationRepository initiationRepository) {
         ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL goal:initiation:event:executor - %d");
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
-        return new EventTaskExecutor(gameEventTaskAdapter, executorService);
+        EventTaskExecutor taskExecutor = new EventTaskExecutor(gameEventTaskAdapter, executorService);
+        // Step 1. Restoring unfinished initiations
+        List<GoalInitiation> pendingInitiations = initiationRepository.findByState(InitiationState.pending);
+        pendingInitiations.forEach(initiation -> taskExecutor.schedule(new GoalInitiationExpirationTask(initiation.getGoalKey(), initiation.getStartDate())));
+        // Step 2. Returning task executor
+        return taskExecutor;
     }
 
 }

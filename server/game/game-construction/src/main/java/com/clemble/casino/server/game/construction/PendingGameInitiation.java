@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.clemble.casino.construction.InitiationState;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.game.configuration.GameConfigurationAware;
@@ -88,7 +89,7 @@ public class PendingGameInitiation implements GameConfigurationAware, GameSessio
         LinkedHashSet<String> players = new LinkedHashSet<>();
         for(PendingPlayer pendingPlayer: participants)
             players.add(pendingPlayer.getPlayer());
-        return new GameInitiation(sessionKey, players, configuration);
+        return new GameInitiation(sessionKey, InitiationState.pending,  players, configuration);
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.util.Date;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import com.clemble.casino.construction.InitiationState;
 import com.clemble.casino.event.PlayerExpectedAction;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.event.bet.PlayerBetAction;
@@ -77,14 +78,14 @@ public class IntegrationObjectTest {
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {
             @Override
             public NumberState generate() {
-            GameInitiation initiation = new GameInitiation(GameSessionAware.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
+            GameInitiation initiation = new GameInitiation(GameSessionAware.DEFAULT_SESSION, InitiationState.pending, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
             return new NumberState(RoundGameContext.fromInitiation(initiation, null), null, 0);
             }
         });
         register(RoundGameContext.class, new AbstractValueGenerator<RoundGameContext>(){
             @Override
             public RoundGameContext generate() {
-            GameInitiation initiation = new GameInitiation(GameSessionAware.DEFAULT_SESSION, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
+            GameInitiation initiation = new GameInitiation(GameSessionAware.DEFAULT_SESSION, InitiationState.pending, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
             return RoundGameContext.fromInitiation(initiation, null);
             }
             

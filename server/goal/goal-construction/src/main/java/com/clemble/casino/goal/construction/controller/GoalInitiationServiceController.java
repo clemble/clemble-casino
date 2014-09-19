@@ -4,11 +4,9 @@ import com.clemble.casino.goal.construction.GoalInitiation;
 import com.clemble.casino.goal.construction.service.GoalInitiationService;
 import com.clemble.casino.goal.construction.service.ServerGoalInitiationService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.CookieParam;
 import java.util.Collection;
 
 import static com.clemble.casino.goal.GoalWebMapping.GOAL_INITIATION_PENDING;
@@ -33,7 +31,7 @@ public class GoalInitiationServiceController implements GoalInitiationService {
 
     @RequestMapping(method = RequestMethod.GET, value = GOAL_INITIATION_PENDING, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public Collection<GoalInitiation> getPending(String player) {
+    public Collection<GoalInitiation> getPending(@CookieValue("player") String player) {
         return initiationService.getPending(player);
     }
 
