@@ -8,6 +8,8 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.Date;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -22,6 +24,7 @@ import com.clemble.casino.game.construction.event.GameInvitationAcceptedEvent;
 import com.clemble.casino.game.construction.event.GameInvitationResponseEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.rule.outcome.WonRule;
+import com.clemble.casino.game.unit.Chip;
 import com.clemble.casino.game.unit.GameUnit;
 
 import com.clemble.casino.rule.ConfigurationRule;
@@ -63,6 +66,17 @@ import com.google.common.collect.ImmutableList;
 public class IntegrationObjectTest {
 
     static {
+        ObjectGenerator.register(SortedSet.class, new AbstractValueGenerator<SortedSet>() {
+            public SortedSet generate() {
+                return new TreeSet();
+            }
+        });
+        ObjectGenerator.register(GameUnit.class, new AbstractValueGenerator<GameUnit>() {
+            @Override
+            public GameUnit generate() {
+                return Chip.zero;
+            }
+        });
         register(GameInvitationResponseEvent.class, new AbstractValueGenerator<GameInvitationResponseEvent>() {
             @Override
             public GameInvitationResponseEvent generate() {

@@ -81,7 +81,7 @@ public class GameManagerFactory {
         GameRecord roundRecord = new GameRecord()
             .setSessionKey(initiation.getSessionKey())
             .setConfiguration(initiation.getConfiguration())
-            .setSessionState(GameSessionState.active)
+            .setSessionState(GameRecordState.active)
             .setPlayers(initiation.getParticipants());
         roundRecord = recordRepository.save(roundRecord);
         LOG.debug("{} saved round record {}", initiation.getSessionKey(), hashCode());
@@ -114,7 +114,7 @@ public class GameManagerFactory {
         GameRecord matchGameRecord = new GameRecord()
             .setSessionKey(initiation.getSessionKey())
             .setConfiguration(initiation.getConfiguration())
-            .setSessionState(GameSessionState.active)
+            .setSessionState(GameRecordState.active)
             .setPlayers(initiation.getParticipants());
         // Step 3. Saving match record
         matchGameRecord = recordRepository.save(matchGameRecord);

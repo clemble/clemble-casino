@@ -2,11 +2,11 @@ package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.GameSessionState;
-import com.clemble.casino.game.action.GameEventRecord;
+import com.clemble.casino.game.GameRecordState;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
+import com.clemble.casino.management.EventRecord;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 
@@ -66,7 +66,7 @@ public class GameRecordOperationsITest {
         // Step 7. Checking game records are same
         assertEquals(AgameRecord, BgameRecord);
         assertEquals(AgameRecord.getEventRecords().size(), 4);
-        Iterator<GameEventRecord> moveIterator = AgameRecord.getEventRecords().iterator();
+        Iterator<EventRecord> moveIterator = AgameRecord.getEventRecords().iterator();
         assertEquals(moveIterator.next().getEvent(), new SelectNumberAction(A.getPlayer(), 2));
         moveIterator.next();
         assertEquals(moveIterator.next().getEvent(), new SelectNumberAction(B.getPlayer(), 1));
@@ -88,7 +88,7 @@ public class GameRecordOperationsITest {
         // Step 3. Checking game record state is Final
         A.waitForEnd();
         GameRecord finalRecord = A.getRecord();
-        assertEquals(finalRecord.getSessionState(), GameSessionState.finished);
+        assertEquals(finalRecord.getSessionState(), GameRecordState.finished);
     }
 
 }

@@ -6,10 +6,10 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.action.GameEventRecord;
 import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.event.GameManagementEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.management.EventRecord;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 
@@ -36,7 +36,7 @@ public class GameStateFactoryUtils {
         RoundGameContext context = RoundGameContext.fromInitiation(initiation, null);
         GameState restoredState = stateFactory.constructState(initiation, context);
         // Step 2.1 To prevent population of original session with duplicated events
-        for (GameEventRecord eventRecord : record.getEventRecords()) {
+        for (EventRecord eventRecord : record.getEventRecords()) {
             if(!(eventRecord.getEvent() instanceof GameManagementEvent))
                 restoredState.process(eventRecord.getEvent());
         }
