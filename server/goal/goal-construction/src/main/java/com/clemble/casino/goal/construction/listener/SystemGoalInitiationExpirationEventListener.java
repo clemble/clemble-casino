@@ -26,7 +26,7 @@ public class SystemGoalInitiationExpirationEventListener implements SystemEventL
         // Step 1. Fetching related initiation
         GoalInitiation initiation = initiationRepository.findOne(event.getGoalKey());
         // Step 1.1 Updating initiation state
-        initiation.copyWithState(InitiationState.initiated);
+        initiation = initiation.copyWithState(InitiationState.initiated);
         // Step 1.2 Saving new initiation
         initiationRepository.save(initiation);
         // Step 2. Notifying of goal started event, for manager processing
