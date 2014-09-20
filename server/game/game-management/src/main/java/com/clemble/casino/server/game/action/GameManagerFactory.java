@@ -78,11 +78,7 @@ public class GameManagerFactory {
         // Step 1. Allocating table for game initiation
         RoundGameState state = stateFactory.constructState(initiation, roundGameContext);
         // Step 2. Saving game record
-        GameRecord roundRecord = new GameRecord()
-            .setSessionKey(initiation.getSessionKey())
-            .setConfiguration(initiation.getConfiguration())
-            .setSessionState(GameRecordState.active)
-            .setPlayers(initiation.getParticipants());
+        GameRecord roundRecord = initiation.toRecord();
         roundRecord = recordRepository.save(roundRecord);
         LOG.debug("{} saved round record {}", initiation.getSessionKey(), hashCode());
         // Step 3. Constructing manager and saving in a session
@@ -111,11 +107,7 @@ public class GameManagerFactory {
             }
         }
         // Step 2. Generating new pot game record
-        GameRecord matchGameRecord = new GameRecord()
-            .setSessionKey(initiation.getSessionKey())
-            .setConfiguration(initiation.getConfiguration())
-            .setSessionState(GameRecordState.active)
-            .setPlayers(initiation.getParticipants());
+        GameRecord matchGameRecord = initiation.toRecord();
         // Step 3. Saving match record
         matchGameRecord = recordRepository.save(matchGameRecord);
         // Step 3. Generating game manager

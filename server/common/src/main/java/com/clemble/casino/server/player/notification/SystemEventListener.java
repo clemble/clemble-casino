@@ -10,6 +10,10 @@ public interface SystemEventListener<T extends SystemEvent>{
 
     public String getChannel();
 
+    /**
+     * Naming convension for the Queue is the name of the Channel > + name of the component
+     * @return
+     */
     public String getQueueName();
 
 }

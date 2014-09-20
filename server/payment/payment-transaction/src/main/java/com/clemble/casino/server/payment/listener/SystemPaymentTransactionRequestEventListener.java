@@ -67,7 +67,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
             // TODO maybe you need to throw exception here
             return paymentTransactionRepository.findOne(paymentTransaction.getTransactionKey());
         }
-        Collection<PaymentEvent> paymentEvents = new ArrayList<>();
+        Collection<PaymentEvent> paymentEvents = new ArrayList<PaymentEvent>();
         // Step 1. Processing payment transactions
         for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
             LOG.debug("Processing {}", paymentOperation);

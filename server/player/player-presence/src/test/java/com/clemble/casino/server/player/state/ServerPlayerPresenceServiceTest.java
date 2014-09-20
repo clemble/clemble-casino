@@ -245,8 +245,9 @@ public class ServerPlayerPresenceServiceTest {
 
         @Override
         public String getQueueName() {
-            return "test." + SystemPlayerPresenceChangedEvent.CHANNEL;
+            return SystemPlayerPresenceChangedEvent.CHANNEL + " > test:integration";
         }
+
     }
 
 }

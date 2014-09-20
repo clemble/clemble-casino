@@ -12,6 +12,8 @@ import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.game.GameWebMapping;
 import com.clemble.casino.web.mapping.WebMapping;
 
+import java.util.List;
+
 @RestController
 public class GameRecordServiceController implements GameRecordService, ExternalController {
 
@@ -22,8 +24,19 @@ public class GameRecordServiceController implements GameRecordService, ExternalC
     }
 
     @Override
+    public List<GameRecord> myRecords() {
+        throw new IllegalAccessError();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.MY_RECORDS, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<GameRecord> myRecords(@CookieValue("player") String player) {
+        return recordRepository.findByPlayers(player);
+    }
+
+    @Override
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.SESSIONS_RECORD, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @ResponseStatus(value = HttpStatus.OK)
     public GameRecord get(@PathVariable("session") String sessionKey) {
         return recordRepository.findOne(sessionKey);
     }
