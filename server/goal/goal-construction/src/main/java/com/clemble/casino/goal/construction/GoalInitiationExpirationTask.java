@@ -3,6 +3,7 @@ package com.clemble.casino.goal.construction;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
+import com.clemble.casino.server.event.goal.SystemGoalStartedEvent;
 import com.clemble.casino.server.executor.EventTask;
 import org.springframework.scheduling.TriggerContext;
 

@@ -7,6 +7,7 @@ import com.clemble.casino.goal.construction.GoalInitiationTaskAdapter;
 import com.clemble.casino.goal.construction.GoalKeyGenerator;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
+import com.clemble.casino.goal.construction.listener.SystemGoalInitiationExpirationEventListener;
 import com.clemble.casino.goal.construction.repository.GoalConstructionRepository;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.goal.construction.service.SelfGoalConstructionService;
@@ -18,6 +19,8 @@ import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.key.RedisKeyFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
+import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.PaymentClientSpringConfiguration;
@@ -107,6 +110,16 @@ public class GoalConstructionSpringConfiguration {
         pendingInitiations.forEach(initiation -> taskExecutor.schedule(new GoalInitiationExpirationTask(initiation.getGoalKey(), initiation.getStartDate())));
         // Step 2. Returning task executor
         return taskExecutor;
+    }
+
+    @Bean
+    public SystemGoalInitiationExpirationEventListener systemGoalInitiationExpirationEventListener(
+        SystemNotificationServiceListener notificationServiceListener,
+        SystemNotificationService notificationService,
+        GoalInitiationRepository initiationRepository) {
+        SystemGoalInitiationExpirationEventListener eventListener = new SystemGoalInitiationExpirationEventListener(notificationService, initiationRepository);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
     }
 
 }

@@ -35,7 +35,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
     final static private Logger LOG = LoggerFactory.getLogger(ServerGameInitiationService.class);
 
     // TODO This made static to test assumption that wrong beans wired in Spring context
-    final static private ConcurrentHashMap<String, Entry<GameInitiation, Set<String>>> sessionToInitiation = new ConcurrentHashMap<>();
+    final static private ConcurrentHashMap<String, Entry<GameInitiation, Set<String>>> sessionToInitiation = new ConcurrentHashMap<String, Entry<GameInitiation, Set<String>>>();
 
     final private PendingGameInitiationService pendingInitiationService;
     final private ServerPlayerPresenceService presenceService;

@@ -1,5 +1,6 @@
 package com.clemble.casino.goal.construction.service;
 
+import com.clemble.casino.construction.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.construction.GoalInitiation;
@@ -62,7 +63,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
     }
 
     public Collection<GoalInitiation> getPending(String player) {
-        return initiationRepository.findByPlayer(player);
+        return initiationRepository.findByPlayerAndState(player, InitiationState.pending);
     }
 
 }

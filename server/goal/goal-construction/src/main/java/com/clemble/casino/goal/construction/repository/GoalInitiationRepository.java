@@ -14,6 +14,8 @@ public interface GoalInitiationRepository extends MongoRepository<GoalInitiation
 
     public List<GoalInitiation> findByPlayer(String player);
 
+    public List<GoalInitiation> findByPlayerAndState(String player, InitiationState state);
+
     public List<GoalInitiation> findByState(InitiationState state);
 
 }
