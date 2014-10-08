@@ -3,6 +3,7 @@ package com.clemble.casino.server.game.aspect.outcome;
 import com.clemble.casino.game.lifecycle.management.MatchGameContext;
 import com.clemble.casino.game.lifecycle.management.event.MatchEndedEvent;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
+import com.clemble.casino.server.game.action.MatchGameState;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.core.Ordered;
 
@@ -18,7 +19,7 @@ public class MatchWonRuleAspectFactory implements MatchGameAspectFactory<MatchEn
     }
 
     @Override
-    public GameAspect<MatchEndedEvent> construct(MatchGameConfiguration configuration, MatchGameContext potContext) {
+    public GameAspect<MatchEndedEvent> construct(MatchGameConfiguration configuration, MatchGameState matchState) {
         // Step 1. Check won rule
         if (configuration.getWonRule() != null)
             return new MatchWonRuleAspect(configuration.getPrice().getCurrency(), systemNotificationService);

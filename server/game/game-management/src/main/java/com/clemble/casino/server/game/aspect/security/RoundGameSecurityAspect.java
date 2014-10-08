@@ -12,6 +12,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.lifecycle.management.RoundGameContext;
 import com.clemble.casino.game.lifecycle.management.event.GamePlayerMovedEvent;
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 
@@ -20,13 +21,13 @@ public class RoundGameSecurityAspect extends GameAspect<PlayerEvent> {
     final private RoundGameContext context;
     final private Collection<String> participants;
 
-    public RoundGameSecurityAspect(RoundGameContext context, Collection<String> participants) {
+    public RoundGameSecurityAspect(RoundGameContext context) {
         // This is on purpose to filter messages to detect messages that might be PlayerAware, but not PlayerAwareEvent
         super(EventSelectors
             .where(new EventTypeSelector(PlayerAware.class))
             .and(EventSelectors.not(new EventTypeSelector(GamePlayerMovedEvent.class))));
         this.context = context;
-        this.participants = new ArrayList<>(checkNotNull(participants));
+        this.participants = PlayerAwareUtils.toPlayerList(context.getPlayerContexts());
     }
 
     @Override

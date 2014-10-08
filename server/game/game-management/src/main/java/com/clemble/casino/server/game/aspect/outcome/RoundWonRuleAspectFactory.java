@@ -4,6 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.game.lifecycle.management.RoundGameContext;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.core.Ordered;
 
@@ -23,7 +24,7 @@ public class RoundWonRuleAspectFactory implements RoundGameAspectFactory<GameEnd
     }
 
     @Override
-    public GameAspect<GameEndedEvent<?>> construct(RoundGameConfiguration configuration, RoundGameContext context) {
+    public GameAspect<GameEndedEvent<?>> construct(RoundGameConfiguration configuration, RoundGameState roundState) {
         // Step 1. Checking won rule specified
         if (configuration.getWonRule() == null)
             return null;

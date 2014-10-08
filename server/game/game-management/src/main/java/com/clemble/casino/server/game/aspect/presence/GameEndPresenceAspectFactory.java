@@ -1,6 +1,6 @@
 package com.clemble.casino.server.game.aspect.presence;
 
-import com.clemble.casino.game.lifecycle.management.RoundGameContext;
+import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import org.springframework.core.Ordered;
@@ -18,7 +18,7 @@ public class GameEndPresenceAspectFactory implements RoundGameAspectFactory<Roun
     }
 
     @Override
-    public GameAspect<RoundEndedEvent> construct(RoundGameConfiguration configuration, RoundGameContext context) {
+    public GameAspect<RoundEndedEvent> construct(RoundGameConfiguration configuration, RoundGameState roundState) {
         return endPresenceAspect;
     }
 

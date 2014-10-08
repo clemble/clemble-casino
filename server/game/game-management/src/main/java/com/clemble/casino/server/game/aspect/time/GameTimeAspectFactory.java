@@ -2,6 +2,7 @@ package com.clemble.casino.server.game.aspect.time;
 
 import com.clemble.casino.game.lifecycle.management.RoundGameContext;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
@@ -18,8 +19,8 @@ public class GameTimeAspectFactory implements RoundGameAspectFactory<GameManagem
     }
 
     @Override
-    public GameAspect<GameManagementEvent> construct(RoundGameConfiguration configuration, RoundGameContext context) {
-        return new GameTimeAspect(context.getSessionKey(), configuration, context, eventTaskExecutor);
+    public GameAspect<GameManagementEvent> construct(RoundGameConfiguration configuration, RoundGameState roundState) {
+        return new GameTimeAspect(roundState.getContext().getSessionKey(), configuration, roundState.getContext(), eventTaskExecutor);
     }
 
     @Override

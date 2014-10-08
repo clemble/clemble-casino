@@ -1,5 +1,6 @@
 package com.clemble.casino.server.game.aspect.next;
 
+import com.clemble.casino.game.lifecycle.management.GameState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -11,7 +12,7 @@ import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
-public class NextGameAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameContext<?>, GameConfiguration> {
+public class NextGameAspectFactory implements GameAspectFactory<GameEndedEvent<?>, GameState<?, ?>, GameConfiguration> {
 
     final private Logger LOG = LoggerFactory.getLogger(NextGameAspectFactory.class);
 
@@ -22,12 +23,12 @@ public class NextGameAspectFactory implements GameAspectFactory<GameEndedEvent<?
     }
 
     @Override
-    public GameAspect<GameEndedEvent<?>> construct(GameConfiguration configuration, GameContext<?> context) {
-        if (context.getParent() != null) {
-            LOG.debug("{} has a parent, constructig next game aspect", context.getSessionKey());
-            return new NextGameAspect(context, managerFactory);
+    public GameAspect<GameEndedEvent<?>> construct(GameConfiguration configuration, GameState<?, ?> state) {
+        if (state.getContext().getParent() != null) {
+            LOG.debug("{} has a parent, constructig next game aspect", state.getContext().getSessionKey());
+            return new NextGameAspect(state.getContext(), managerFactory);
         }
-        LOG.debug("{} does not have a parent", context.getSessionKey());
+        LOG.debug("{} does not have a parent", state.getContext().getSessionKey());
         return null;
     }
 
