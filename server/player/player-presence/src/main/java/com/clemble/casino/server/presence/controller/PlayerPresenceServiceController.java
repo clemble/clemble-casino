@@ -13,7 +13,7 @@ import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.service.PlayerPresenceServiceContract;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
-import static com.clemble.casino.player.PlayerWebMapping.*;
+import static com.clemble.casino.player.PresenceWebMapping.*;
 
 @RestController
 public class PlayerPresenceServiceController implements PlayerPresenceServiceContract, ExternalController {

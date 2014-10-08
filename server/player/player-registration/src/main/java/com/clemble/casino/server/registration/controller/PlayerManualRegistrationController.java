@@ -1,6 +1,6 @@
 package com.clemble.casino.server.registration.controller;
 
-import static com.clemble.casino.player.PlayerWebMapping.*;
+import static com.clemble.casino.registration.RegistrationWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;

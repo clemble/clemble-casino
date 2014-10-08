@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
-import static com.clemble.casino.player.PlayerWebMapping.REGISTRATION_BASIC_LOGIN;
-import static com.clemble.casino.player.PlayerWebMapping.REGISTRATION_BASIC_PROFILE;
+import static com.clemble.casino.registration.RegistrationWebMapping.*;
 
 /**
  * Created by mavarazy on 7/28/14.
