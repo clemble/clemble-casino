@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.event.GameEndedEvent;
-import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.management.GameContext;
+import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;

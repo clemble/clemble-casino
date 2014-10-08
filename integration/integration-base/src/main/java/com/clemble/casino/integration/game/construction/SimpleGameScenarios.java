@@ -6,12 +6,12 @@ import java.util.*;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.configuration.GameConfigurationUtils;
-import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.configuration.MatchGameConfiguration;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.management.GameState;
+import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.integration.game.GamePlayer;
 import com.clemble.casino.integration.game.GamePlayerFactory;
 import com.clemble.casino.integration.game.MatchGamePlayer;

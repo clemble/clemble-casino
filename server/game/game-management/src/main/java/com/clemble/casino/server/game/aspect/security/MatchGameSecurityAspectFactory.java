@@ -1,7 +1,7 @@
 package com.clemble.casino.server.game.aspect.security;
 
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.configuration.MatchGameConfiguration;
+import com.clemble.casino.game.lifecycle.management.MatchGameContext;
+import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.event.Event;

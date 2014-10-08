@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.clemble.casino.event.PlayerExpectedAction;
-import com.clemble.casino.game.construction.event.GameInvitationAcceptedEvent;
+import com.clemble.casino.game.lifecycle.construction.event.GameInvitationAcceptedEvent;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 
 import org.junit.Assert;
@@ -19,8 +19,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.management.GameState;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.player.PlayerAware;

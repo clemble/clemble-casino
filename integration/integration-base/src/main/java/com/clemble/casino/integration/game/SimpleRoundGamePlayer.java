@@ -9,11 +9,11 @@ import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.event.surrender.GiveUpAction;
-import com.clemble.casino.game.RoundGameState;
-import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.event.GameManagementEvent;
-import com.clemble.casino.game.event.RoundEvent;
+import com.clemble.casino.lifecycle.management.event.surrender.GiveUpAction;
+import com.clemble.casino.game.lifecycle.management.RoundGameState;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
+import com.clemble.casino.game.lifecycle.management.event.RoundEvent;
 
 public class SimpleRoundGamePlayer<State extends RoundGameState> extends AbstractGamePlayer implements RoundGamePlayer<State> {
 

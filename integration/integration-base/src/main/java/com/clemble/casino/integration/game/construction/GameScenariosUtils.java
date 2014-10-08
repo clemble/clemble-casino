@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.configuration.GameConfigurationUtils;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.integration.util.RandomUtils;
 
 public class GameScenariosUtils {

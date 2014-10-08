@@ -1,8 +1,8 @@
 package com.clemble.casino.server.game.aspect.presence;
 
-import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.event.RoundEndedEvent;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.management.RoundGameContext;
+import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.server.game.aspect.GameAspect;

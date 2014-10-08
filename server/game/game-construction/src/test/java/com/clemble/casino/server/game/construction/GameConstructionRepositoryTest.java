@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.IOException;
 import java.util.UUID;
 
-import com.clemble.casino.game.construction.event.GameInvitationResponseEvent;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.construction.event.GameInvitationResponseEvent;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
 import org.junit.Assert;
@@ -18,9 +18,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.ActionLatch;
-import com.clemble.casino.game.construction.AvailabilityGameRequest;
-import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.construction.GameDeclineBehavior;
+import com.clemble.casino.game.lifecycle.construction.AvailabilityGameRequest;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.construction.GameDeclineBehavior;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;

@@ -1,6 +1,6 @@
 package com.clemble.casino.server.game.repository;
 
-import com.clemble.casino.game.GameRecord;
+import com.clemble.casino.game.lifecycle.record.GameRecord;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

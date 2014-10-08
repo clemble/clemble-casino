@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameStateFactory;
-import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.RoundGameState;
-import com.clemble.casino.game.construction.GameInitiation;
+import com.clemble.casino.game.lifecycle.management.GameStateFactory;
+import com.clemble.casino.game.lifecycle.management.RoundGameContext;
+import com.clemble.casino.game.lifecycle.management.RoundGameState;
+import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
 import org.reflections.Reflections;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -39,7 +39,7 @@ public class GameStateFactoryFacade implements ApplicationListener<ContextRefres
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        for(GameStateFactory<?> stateFactory : event.getApplicationContext().getBeansOfType(com.clemble.casino.game.GameStateFactory.class).values())
+        for(GameStateFactory<?> stateFactory : event.getApplicationContext().getBeansOfType(GameStateFactory.class).values())
             gameToStateFactory.put(stateFactory.getGame(), stateFactory);
     }
 

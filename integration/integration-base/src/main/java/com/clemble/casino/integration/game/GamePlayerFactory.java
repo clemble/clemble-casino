@@ -3,13 +3,13 @@ package com.clemble.casino.integration.game;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.clemble.casino.game.configuration.MatchGameConfiguration;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 

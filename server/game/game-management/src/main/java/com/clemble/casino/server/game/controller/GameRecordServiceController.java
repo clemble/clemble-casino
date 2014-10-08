@@ -5,8 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.service.GameRecordService;
+import com.clemble.casino.game.lifecycle.record.GameRecord;
+import com.clemble.casino.game.lifecycle.record.service.GameRecordService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.game.GameWebMapping;

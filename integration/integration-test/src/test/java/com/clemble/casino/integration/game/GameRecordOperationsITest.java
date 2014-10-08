@@ -1,7 +1,7 @@
 package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.GameRecord;
+import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;

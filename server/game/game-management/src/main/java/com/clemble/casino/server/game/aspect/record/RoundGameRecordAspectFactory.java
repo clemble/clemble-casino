@@ -1,8 +1,8 @@
 package com.clemble.casino.server.game.aspect.record;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.management.GameContext;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 import com.clemble.casino.server.game.repository.GameRecordRepository;

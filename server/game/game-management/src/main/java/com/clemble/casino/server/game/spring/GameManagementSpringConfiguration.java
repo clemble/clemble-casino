@@ -3,12 +3,12 @@ package com.clemble.casino.server.game.spring;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.TournamentGameContext;
-import com.clemble.casino.game.configuration.MatchGameConfiguration;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
-import com.clemble.casino.game.configuration.TournamentGameConfiguration;
+import com.clemble.casino.game.lifecycle.management.MatchGameContext;
+import com.clemble.casino.game.lifecycle.management.RoundGameContext;
+import com.clemble.casino.game.lifecycle.management.TournamentGameContext;
+import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
 import com.clemble.casino.server.executor.EventTaskAdapter;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.action.*;
@@ -148,11 +148,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Bean
         public GameRecordRepository gameRecordRepository(MongoRepositoryFactory mongoRepositoryFactory) {
             return mongoRepositoryFactory.getRepository(GameRecordRepository.class);
-        }
-
-        @Bean
-        public GameScheduleRepository gameScheduleRepository(MongoRepositoryFactory mongoRepositoryFactory) {
-            return mongoRepositoryFactory.getRepository(GameScheduleRepository.class);
         }
 
     }

@@ -1,7 +1,7 @@
 package com.clemble.casino.server.converters;
 
 import com.clemble.casino.json.ObjectMapperUtils;
-import com.clemble.casino.rule.bet.BetRule;
+import com.clemble.casino.lifecycle.configuration.rule.bet.BetRule;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.core.convert.converter.Converter;
 

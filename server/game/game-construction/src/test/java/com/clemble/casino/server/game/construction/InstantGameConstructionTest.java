@@ -1,7 +1,7 @@
 package com.clemble.casino.server.game.construction;
 
 import com.clemble.casino.lifecycle.construction.ConstructionState;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
@@ -15,8 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.game.construction.AutomaticGameRequest;
-import com.clemble.casino.game.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.construction.AutomaticGameRequest;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 
 @Ignore

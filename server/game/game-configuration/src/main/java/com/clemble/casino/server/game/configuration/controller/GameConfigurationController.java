@@ -2,11 +2,11 @@ package com.clemble.casino.server.game.configuration.controller;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.game.configuration.service.GameConfigurationService;
+import com.clemble.casino.game.lifecycle.configuration.service.GameConfigurationService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.configuration.service.ServerGameConfigurationService;
 

@@ -5,11 +5,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.event.MatchEvent;
-import com.clemble.casino.game.service.GameRecordService;
+import com.clemble.casino.game.lifecycle.record.GameRecord;
+import com.clemble.casino.game.lifecycle.management.MatchGameContext;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.management.event.MatchEvent;
+import com.clemble.casino.game.lifecycle.record.service.GameRecordService;
 import org.junit.Assert;
 
 /**

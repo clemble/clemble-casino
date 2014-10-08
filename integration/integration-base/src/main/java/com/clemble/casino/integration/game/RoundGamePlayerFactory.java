@@ -2,9 +2,9 @@ package com.clemble.casino.integration.game;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.GameAware;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.management.GameState;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
 
 public interface RoundGamePlayerFactory<State extends GameState> extends GameAware {
 

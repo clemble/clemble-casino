@@ -1,6 +1,6 @@
 package com.clemble.casino.integration.emulator;
 
-import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 
 abstract public class RoundGamePlayerActor<State extends GameState> implements GamePlayerActor<RoundGamePlayer<State>> {

@@ -5,8 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 
 import com.clemble.casino.server.game.configuration.repository.GameConfigurationRepository;
-import com.clemble.casino.game.configuration.service.GameConfigurationService;
-import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.service.GameConfigurationService;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 
 public class ServerGameConfigurationService implements GameConfigurationService {
 

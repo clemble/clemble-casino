@@ -5,8 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.rule.time.PlayerClock;
-import com.clemble.casino.rule.time.TimeRule;
+import com.clemble.casino.lifecycle.configuration.rule.time.PlayerClock;
+import com.clemble.casino.lifecycle.configuration.rule.time.TimeRule;
 import com.clemble.casino.player.PlayerAware;
 
 public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTracker> {

@@ -6,8 +6,8 @@ import com.clemble.casino.server.game.construction.service.ServerGameInitiationS
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.construction.service.GameInitiationService;
+import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
+import com.clemble.casino.game.lifecycle.initiation.service.GameInitiationService;
 import com.clemble.casino.server.ExternalController;
 
 import java.util.Collection;

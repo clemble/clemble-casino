@@ -1,9 +1,9 @@
 package com.clemble.casino.integration.game;
 
-import com.clemble.casino.game.construction.AvailabilityGameRequest;
-import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.construction.event.GameInvitationResponseEvent;
-import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
+import com.clemble.casino.game.lifecycle.construction.AvailabilityGameRequest;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.construction.event.GameInvitationResponseEvent;
+import com.clemble.casino.game.lifecycle.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 

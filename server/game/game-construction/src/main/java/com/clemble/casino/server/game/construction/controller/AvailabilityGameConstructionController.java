@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import com.clemble.casino.game.construction.event.GameInvitationResponseEvent;
+import com.clemble.casino.game.lifecycle.construction.event.GameInvitationResponseEvent;
 import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import org.springframework.http.HttpStatus;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.construction.AvailabilityGameRequest;
-import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
+import com.clemble.casino.game.lifecycle.construction.AvailabilityGameRequest;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.construction.service.ServerAvailabilityGameConstructionService;
 import static com.clemble.casino.game.GameWebMapping.*;

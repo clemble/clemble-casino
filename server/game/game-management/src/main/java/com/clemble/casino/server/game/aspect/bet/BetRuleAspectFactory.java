@@ -1,8 +1,8 @@
 package com.clemble.casino.server.game.aspect.bet;
 
-import com.clemble.casino.event.bet.PlayerBetAction;
-import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
+import com.clemble.casino.lifecycle.management.event.bet.PlayerBetAction;
+import com.clemble.casino.game.lifecycle.management.RoundGameContext;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;

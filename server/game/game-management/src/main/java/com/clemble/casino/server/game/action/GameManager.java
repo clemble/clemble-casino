@@ -3,9 +3,9 @@ package com.clemble.casino.server.game.action;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameState;
-import com.clemble.casino.game.event.GameManagementEvent;
+import com.clemble.casino.game.lifecycle.management.GameContext;
+import com.clemble.casino.game.lifecycle.management.GameState;
+import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.lifecycle.management.Manager;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class GameManager<GC extends GameContext> implements Manager<Event, GameManagementEvent> {
+public class GameManager<GC extends GameContext> implements Manager {
 
     final private static Logger LOG = LoggerFactory.getLogger(GameManager.class);
 

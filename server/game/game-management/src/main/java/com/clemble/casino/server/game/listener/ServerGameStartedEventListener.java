@@ -1,7 +1,7 @@
 package com.clemble.casino.server.game.listener;
 
-import com.clemble.casino.game.construction.event.GameInitiationCanceledEvent;
-import com.clemble.casino.game.construction.event.GameInitiationCompleteEvent;
+import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCanceledEvent;
+import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCompleteEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;

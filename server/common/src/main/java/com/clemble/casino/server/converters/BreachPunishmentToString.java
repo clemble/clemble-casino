@@ -1,12 +1,10 @@
 package com.clemble.casino.server.converters;
 
 import com.clemble.casino.json.ObjectMapperUtils;
-import com.clemble.casino.rule.breach.BreachPunishment;
+import com.clemble.casino.lifecycle.configuration.rule.breach.BreachPunishment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;
-
-import java.io.IOException;
 
 /**
  * Created by mavarazy on 9/5/14.

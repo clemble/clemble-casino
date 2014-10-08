@@ -6,8 +6,8 @@ import java.util.Set;
 
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.game.GameSessionAware;
-import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.configuration.GameConfigurationAware;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.GameConfigurationAware;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
@@ -15,7 +15,7 @@ import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
-import com.clemble.casino.game.construction.GameInitiation;
+import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
 
 @NodeEntity
 public class PendingGameInitiation implements GameConfigurationAware, GameSessionAware {

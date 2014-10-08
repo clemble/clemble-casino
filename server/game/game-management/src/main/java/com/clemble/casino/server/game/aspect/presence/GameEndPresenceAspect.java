@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.aspect.presence;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.event.RoundEndedEvent;
+import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 

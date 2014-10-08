@@ -11,11 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GamePlayerContext;
-import com.clemble.casino.game.event.GameEndedEvent;
-import com.clemble.casino.game.outcome.GameOutcome;
-import com.clemble.casino.game.outcome.PlayerWonOutcome;
+import com.clemble.casino.game.lifecycle.management.GameContext;
+import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
+import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
+import com.clemble.casino.game.lifecycle.management.outcome.GameOutcome;
+import com.clemble.casino.game.lifecycle.management.outcome.PlayerWonOutcome;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.money.Money;

@@ -24,7 +24,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
-import com.clemble.casino.server.game.repository.GameScheduleRepository;
 import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,9 +33,6 @@ public class ObjectPersistenceTest extends IntegrationObjectTest implements Appl
 
     @SuppressWarnings("rawtypes")
     public Map<String, JpaRepository> repositories;
-
-    @Autowired
-    public GameScheduleRepository gameScheduleRepository;
 
     @Autowired
     public GameConstructionRepository constructionRepository;

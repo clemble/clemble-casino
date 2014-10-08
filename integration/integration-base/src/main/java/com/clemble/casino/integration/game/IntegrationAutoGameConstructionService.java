@@ -1,8 +1,8 @@
 package com.clemble.casino.integration.game;
 
-import com.clemble.casino.game.construction.AutomaticGameRequest;
-import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.construction.service.AutoGameConstructionService;
+import com.clemble.casino.game.lifecycle.construction.AutomaticGameRequest;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.construction.service.AutoGameConstructionService;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 
 import java.util.Collection;

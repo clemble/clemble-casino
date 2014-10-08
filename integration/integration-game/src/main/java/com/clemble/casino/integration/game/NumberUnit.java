@@ -2,7 +2,7 @@ package com.clemble.casino.integration.game;
 
 import java.util.List;
 
-import com.clemble.casino.game.unit.GameUnit;
+import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;

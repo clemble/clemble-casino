@@ -6,14 +6,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.OptimisticLockException;
 
-import com.clemble.casino.game.*;
-import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.event.MatchStartedEvent;
-import com.clemble.casino.game.event.RoundStartedEvent;
-import com.clemble.casino.game.configuration.GameConfiguration;
-import com.clemble.casino.game.configuration.MatchGameConfiguration;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
-import com.clemble.casino.game.configuration.TournamentGameConfiguration;
+import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
+import com.clemble.casino.game.lifecycle.management.*;
+import com.clemble.casino.game.lifecycle.management.event.MatchStartedEvent;
+import com.clemble.casino.game.lifecycle.management.event.RoundStartedEvent;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
+import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.game.repository.GameRecordRepository;

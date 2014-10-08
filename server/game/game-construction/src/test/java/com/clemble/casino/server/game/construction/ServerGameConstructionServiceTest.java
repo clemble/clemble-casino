@@ -12,9 +12,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.lifecycle.construction.ConstructionState;
-import com.clemble.casino.game.construction.GameDeclineBehavior;
-import com.clemble.casino.game.configuration.RoundGameConfiguration;
-import com.clemble.casino.game.construction.event.GameInvitationAcceptedEvent;
+import com.clemble.casino.game.lifecycle.construction.GameDeclineBehavior;
+import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
+import com.clemble.casino.game.lifecycle.construction.event.GameInvitationAcceptedEvent;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.service.ServerAvailabilityGameConstructionService;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
@@ -27,9 +27,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.clemble.casino.game.construction.AvailabilityGameRequest;
-import com.clemble.casino.game.construction.GameConstruction;
-import com.clemble.casino.game.construction.service.AvailabilityGameConstructionService;
+import com.clemble.casino.game.lifecycle.construction.AvailabilityGameRequest;
+import com.clemble.casino.game.lifecycle.construction.GameConstruction;
+import com.clemble.casino.game.lifecycle.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)

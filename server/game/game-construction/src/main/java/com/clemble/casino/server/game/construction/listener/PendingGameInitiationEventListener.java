@@ -4,13 +4,11 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.*;
 
-import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.game.SystemGameReadyEvent;
 import com.clemble.casino.server.event.player.SystemPlayerPresenceChangedEvent;
 import com.clemble.casino.server.game.construction.PendingGameInitiation;
-import com.clemble.casino.server.game.construction.PendingPlayer;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;

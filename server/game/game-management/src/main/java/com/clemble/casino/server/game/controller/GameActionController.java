@@ -3,13 +3,13 @@ package com.clemble.casino.server.game.controller;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.GameContext;
-import com.clemble.casino.game.GameState;
+import com.clemble.casino.game.lifecycle.management.GameContext;
+import com.clemble.casino.game.lifecycle.management.GameState;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.game.event.GameManagementEvent;
-import com.clemble.casino.game.service.GameActionService;
+import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
+import com.clemble.casino.game.lifecycle.management.service.GameActionService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.action.GameManager;
 import com.clemble.casino.server.game.action.GameManagerFactory;

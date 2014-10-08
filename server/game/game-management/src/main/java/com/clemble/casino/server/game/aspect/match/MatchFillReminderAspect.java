@@ -1,10 +1,10 @@
 package com.clemble.casino.server.game.aspect.match;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.GamePlayerAccount;
-import com.clemble.casino.game.GamePlayerContext;
-import com.clemble.casino.game.MatchGameContext;
-import com.clemble.casino.game.event.RoundEndedEvent;
+import com.clemble.casino.game.lifecycle.management.GamePlayerAccount;
+import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
+import com.clemble.casino.game.lifecycle.management.MatchGameContext;
+import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 
 public class MatchFillReminderAspect extends GameAspect<RoundEndedEvent> {

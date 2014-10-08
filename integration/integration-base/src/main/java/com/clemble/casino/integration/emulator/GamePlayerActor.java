@@ -1,6 +1,6 @@
 package com.clemble.casino.integration.emulator;
 
-import com.clemble.casino.game.configuration.GameConfiguration;
+import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.integration.game.GamePlayer;
 
 /**

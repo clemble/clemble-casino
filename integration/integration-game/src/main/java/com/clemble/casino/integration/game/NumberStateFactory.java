@@ -1,9 +1,9 @@
 package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.RoundGameContext;
-import com.clemble.casino.game.construction.GameInitiation;
-import com.clemble.casino.game.GameStateFactory;
+import com.clemble.casino.game.lifecycle.management.RoundGameContext;
+import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
+import com.clemble.casino.game.lifecycle.management.GameStateFactory;
 
 public class NumberStateFactory implements GameStateFactory<NumberState> {
 
