@@ -1,6 +1,5 @@
 package com.clemble.casino.goal.construction.spring;
 
-import com.clemble.casino.goal.construction.GoalConstruction;
 import com.clemble.casino.server.spring.AbstractWebApplicationInitializer;
 
 /**

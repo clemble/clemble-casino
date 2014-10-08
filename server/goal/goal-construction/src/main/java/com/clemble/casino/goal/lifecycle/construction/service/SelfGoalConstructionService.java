@@ -1,10 +1,10 @@
-package com.clemble.casino.goal.construction.service;
+package com.clemble.casino.goal.lifecycle.construction.service;
 
 import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.goal.construction.GoalConstruction;
-import com.clemble.casino.goal.construction.GoalConstructionRequest;
+import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
+import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.construction.GoalKeyGenerator;
 import com.clemble.casino.goal.construction.repository.GoalConstructionRepository;
 import com.clemble.casino.goal.rule.judge.JudgeType;

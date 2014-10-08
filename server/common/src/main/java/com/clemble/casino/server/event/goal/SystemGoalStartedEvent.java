@@ -1,7 +1,7 @@
 package com.clemble.casino.server.event.goal;
 
-import com.clemble.casino.goal.construction.GoalInitiation;
-import com.clemble.casino.goal.construction.GoalInitiationAware;
+import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
+import com.clemble.casino.goal.lifecycle.initiation.GoalInitiationAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

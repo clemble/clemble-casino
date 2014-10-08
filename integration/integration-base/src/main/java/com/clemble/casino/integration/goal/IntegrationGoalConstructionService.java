@@ -1,9 +1,9 @@
 package com.clemble.casino.integration.goal;
 
-import com.clemble.casino.goal.construction.GoalConstruction;
-import com.clemble.casino.goal.construction.GoalConstructionRequest;
+import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
+import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
-import com.clemble.casino.goal.construction.service.GoalConstructionService;
+import com.clemble.casino.goal.lifecycle.construction.service.GoalConstructionService;
 
 import java.util.Collection;
 

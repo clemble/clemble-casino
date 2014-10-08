@@ -1,6 +1,6 @@
 package com.clemble.casino.goal.action;
 
-import com.clemble.casino.goal.construction.GoalInitiation;
+import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 
 /**

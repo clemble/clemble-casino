@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import com.clemble.casino.game.lifecycle.management.event.GameEvent;
+import com.clemble.casino.game.event.GameEvent;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import org.junit.Test;

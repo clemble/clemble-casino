@@ -1,11 +1,12 @@
-package com.clemble.casino.goal.construction.service;
+package com.clemble.casino.goal.lifecycle.construction.service;
 
+import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.goal.construction.GoalInitiation;
+import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.construction.GoalInitiationExpirationTask;
-import com.clemble.casino.goal.construction.event.GoalInitiationCreatedEvent;
+import com.clemble.casino.goal.lifecycle.construction.event.GoalInitiationCreatedEvent;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
 import com.clemble.casino.server.executor.EventTaskExecutor;

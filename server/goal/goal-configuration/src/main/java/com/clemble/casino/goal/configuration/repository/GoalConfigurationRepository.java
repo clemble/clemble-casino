@@ -1,6 +1,6 @@
 package com.clemble.casino.goal.configuration.repository;
 
-import com.clemble.casino.goal.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**

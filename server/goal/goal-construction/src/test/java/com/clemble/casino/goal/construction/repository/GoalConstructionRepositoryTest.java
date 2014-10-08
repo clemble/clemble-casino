@@ -1,7 +1,7 @@
 package com.clemble.casino.goal.construction.repository;
 
 import com.clemble.casino.lifecycle.construction.ConstructionState;
-import com.clemble.casino.goal.construction.GoalConstruction;
+import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.construction.spring.GoalConstructionSpringConfiguration;
 import com.clemble.casino.lifecycle.configuration.rule.bet.BetRule;
 import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBetRule;

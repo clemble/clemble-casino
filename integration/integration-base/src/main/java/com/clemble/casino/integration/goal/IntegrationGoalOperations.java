@@ -1,13 +1,12 @@
 package com.clemble.casino.integration.goal;
 
 import com.clemble.casino.client.goal.GoalOperations;
-import com.clemble.casino.goal.configuration.GoalConfiguration;
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
-import com.clemble.casino.goal.configuration.service.GoalConfigurationService;
+import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
-import com.clemble.casino.goal.construction.service.GoalConstructionService;
-import com.clemble.casino.goal.construction.service.GoalInitiationService;
+import com.clemble.casino.goal.lifecycle.construction.service.GoalConstructionService;
+import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
 import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
 import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.goal.service.GoalJudgeDutyService;

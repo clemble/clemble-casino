@@ -1,10 +1,9 @@
 package com.clemble.casino.goal.configurationn.controller;
 
-import com.clemble.casino.goal.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
 import com.clemble.casino.goal.configuration.spring.GoalConfigurationSpringConfiguration;
 import com.clemble.casino.json.ObjectMapperUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;

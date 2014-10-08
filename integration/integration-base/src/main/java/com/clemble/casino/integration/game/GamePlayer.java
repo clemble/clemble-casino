@@ -8,7 +8,7 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationAware;
-import com.clemble.casino.game.lifecycle.management.event.GameEvent;
+import com.clemble.casino.game.event.GameEvent;
 import com.clemble.casino.game.lifecycle.management.outcome.GameOutcome;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.player.PlayerAware;
