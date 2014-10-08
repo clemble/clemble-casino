@@ -1,6 +1,6 @@
 package com.clemble.casino.server.social.controller;
 
-import static com.clemble.casino.player.PlayerWebMapping.*;
+import static com.clemble.casino.social.SocialWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.PlayerProfile;
