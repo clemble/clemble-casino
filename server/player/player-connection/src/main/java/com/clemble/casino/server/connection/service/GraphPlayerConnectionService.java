@@ -5,7 +5,7 @@ import com.clemble.casino.server.connection.GraphConnectionKey;
 import com.clemble.casino.server.connection.GraphPlayerConnections;
 import com.clemble.casino.server.connection.repository.GraphPlayerConnectionsRepository;
 import com.clemble.casino.social.ClembleSocialUtils;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 import org.springframework.social.connect.ConnectionKey;
 
 import java.util.*;

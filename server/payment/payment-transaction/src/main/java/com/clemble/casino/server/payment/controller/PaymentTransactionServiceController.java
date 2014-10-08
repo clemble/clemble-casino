@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 import static com.clemble.casino.payment.PaymentWebMapping.*;
 
 @RestController

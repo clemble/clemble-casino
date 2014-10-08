@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.payment.PlayerAccount;
@@ -16,7 +15,7 @@ import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.payment.account.ServerPlayerAccountService;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 import static com.clemble.casino.payment.PaymentWebMapping.*;
 
 @RestController

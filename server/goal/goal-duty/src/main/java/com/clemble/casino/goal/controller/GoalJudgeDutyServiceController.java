@@ -4,7 +4,7 @@ import com.clemble.casino.goal.GoalJudgeDuty;
 import com.clemble.casino.goal.repository.GoalJudgeDutyRepository;
 import com.clemble.casino.goal.service.*;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;

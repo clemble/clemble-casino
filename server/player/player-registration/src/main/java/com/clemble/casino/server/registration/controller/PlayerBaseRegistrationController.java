@@ -9,19 +9,13 @@ import com.clemble.casino.registration.PlayerBaseRegistrationRequest;
 import com.clemble.casino.registration.PlayerLoginRequest;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.server.security.PlayerTokenUtils;
-import com.clemble.casino.web.mapping.WebMapping;
-import org.apache.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import com.clemble.casino.WebMapping;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.clemble.casino.web.player.PlayerWebMapping.REGISTRATION_BASIC_LOGIN;
-import static com.clemble.casino.web.player.PlayerWebMapping.REGISTRATION_BASIC_PROFILE;
+import static com.clemble.casino.player.PlayerWebMapping.REGISTRATION_BASIC_LOGIN;
+import static com.clemble.casino.player.PlayerWebMapping.REGISTRATION_BASIC_PROFILE;
 
 /**
  * Created by mavarazy on 7/28/14.

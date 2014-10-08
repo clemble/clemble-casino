@@ -1,6 +1,6 @@
 package com.clemble.casino.server.social.controller;
 
-import static com.clemble.casino.web.player.PlayerWebMapping.*;
+import static com.clemble.casino.player.PlayerWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.PlayerProfile;
@@ -17,7 +17,7 @@ import com.clemble.casino.registration.PlayerSocialRegistrationRequest;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.security.PlayerTokenFactory;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 
 @RestController
 public class PlayerSocialRegistrationController implements PlayerSocialRegistrationService, ExternalController {

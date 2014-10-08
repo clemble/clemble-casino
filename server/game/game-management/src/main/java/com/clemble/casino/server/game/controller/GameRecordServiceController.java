@@ -10,7 +10,7 @@ import com.clemble.casino.game.lifecycle.record.service.GameRecordService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.game.GameWebMapping;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 
 import java.util.List;
 

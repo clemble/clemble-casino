@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.social.service.PlayerSocialProfileServiceContract;
 import com.clemble.casino.server.social.SocialConnectionDataAdapter;
-import com.clemble.casino.web.mapping.WebMapping;
-import static com.clemble.casino.web.player.PlayerWebMapping.*;
+import com.clemble.casino.WebMapping;
+import static com.clemble.casino.player.PlayerWebMapping.*;
 
 @RestController
 public class PlayerSocialProfileController implements PlayerSocialProfileServiceContract, ExternalController {

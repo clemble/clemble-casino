@@ -2,7 +2,6 @@ package com.clemble.casino.server.profile.controller;
 
 import com.clemble.casino.player.service.PlayerImageService;
 import com.clemble.casino.server.profile.repository.PlayerImageRedirectRepository;
-import org.apache.http.HttpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import static com.clemble.casino.web.player.PlayerWebMapping.*;
+import static com.clemble.casino.player.PlayerWebMapping.*;
 
 /**
  * Created by mavarazy on 7/26/14.

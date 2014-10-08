@@ -7,14 +7,13 @@ import java.util.List;
 import com.clemble.casino.server.ExternalController;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.service.PlayerPresenceServiceContract;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
-import static com.clemble.casino.web.player.PlayerWebMapping.*;
+import static com.clemble.casino.player.PlayerWebMapping.*;
 
 @RestController
 public class PlayerPresenceServiceController implements PlayerPresenceServiceContract, ExternalController {

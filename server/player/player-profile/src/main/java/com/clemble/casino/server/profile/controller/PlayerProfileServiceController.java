@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
@@ -15,7 +14,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.player.service.PlayerProfileServiceContract;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.profile.repository.PlayerProfileRepository;
-import static com.clemble.casino.web.player.PlayerWebMapping.*;
+import static com.clemble.casino.player.PlayerWebMapping.*;
 
 @RestController
 public class PlayerProfileServiceController implements PlayerProfileServiceContract, ExternalController {

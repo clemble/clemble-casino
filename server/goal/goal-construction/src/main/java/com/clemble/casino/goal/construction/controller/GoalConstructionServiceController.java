@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 import static com.clemble.casino.goal.GoalWebMapping.*;
-import static com.clemble.casino.web.mapping.WebMapping.PRODUCES;
+import static com.clemble.casino.WebMapping.PRODUCES;
 
 /**
  * Created by mavarazy on 9/10/14.

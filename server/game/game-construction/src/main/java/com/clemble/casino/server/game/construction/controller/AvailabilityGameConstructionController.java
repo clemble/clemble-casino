@@ -18,7 +18,7 @@ import com.clemble.casino.game.lifecycle.construction.service.AvailabilityGameCo
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.game.construction.service.ServerAvailabilityGameConstructionService;
 import static com.clemble.casino.game.GameWebMapping.*;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 
 @RestController
 public class AvailabilityGameConstructionController implements AvailabilityGameConstructionService, ExternalController {

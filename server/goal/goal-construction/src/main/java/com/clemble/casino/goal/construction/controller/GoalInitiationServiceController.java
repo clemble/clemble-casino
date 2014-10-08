@@ -6,11 +6,10 @@ import com.clemble.casino.goal.construction.service.ServerGoalInitiationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.CookieParam;
 import java.util.Collection;
 
 import static com.clemble.casino.goal.GoalWebMapping.GOAL_INITIATION_PENDING;
-import static com.clemble.casino.web.mapping.WebMapping.PRODUCES;
+import static com.clemble.casino.WebMapping.PRODUCES;
 
 /**
  * Created by mavarazy on 9/13/14.

@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.event.player.SystemPlayerLeftEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import static com.clemble.casino.web.player.PlayerWebMapping.*;
+import static com.clemble.casino.player.PlayerWebMapping.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

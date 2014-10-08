@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.clemble.casino.goal.GoalWebMapping.MY_CONFIGURATIONS;
-import static com.clemble.casino.web.mapping.WebMapping.PRODUCES;
+import static com.clemble.casino.WebMapping.PRODUCES;
 
 /**
  * Created by mavarazy on 9/1/14.

@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static com.clemble.casino.web.mapping.WebMapping.PRODUCES;
+import static com.clemble.casino.WebMapping.PRODUCES;
 import static com.clemble.casino.goal.GoalWebMapping.*;
 
 

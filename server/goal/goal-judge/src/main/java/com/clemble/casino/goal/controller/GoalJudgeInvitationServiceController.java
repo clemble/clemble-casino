@@ -12,7 +12,7 @@ import com.clemble.casino.goal.service.GoalJudgeInvitationService;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.event.goal.SystemGoalJudgeInvitationAcceptedEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 import static org.springframework.http.HttpStatus.*;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;

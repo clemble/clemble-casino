@@ -1,11 +1,10 @@
 package com.clemble.casino.goal.controller;
 
-import com.clemble.casino.game.GameWebMapping;
 import com.clemble.casino.goal.GoalWebMapping;
 import com.clemble.casino.goal.management.GoalRecord;
 import com.clemble.casino.goal.management.service.GoalRecordService;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

@@ -15,7 +15,7 @@ import com.clemble.casino.server.game.action.GameManager;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.game.GameWebMapping;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 
 @RestController
 public class GameActionController<State extends GameState> implements GameActionService, ExternalController {

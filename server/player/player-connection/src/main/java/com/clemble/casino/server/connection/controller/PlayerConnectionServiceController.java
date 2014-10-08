@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.web.mapping.WebMapping;
-import static com.clemble.casino.web.player.PlayerWebMapping.*;
+import com.clemble.casino.WebMapping;
+import static com.clemble.casino.player.PlayerWebMapping.*;
 
 @RestController
 public class PlayerConnectionServiceController implements PlayerConnectionService {

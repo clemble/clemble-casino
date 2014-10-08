@@ -6,7 +6,7 @@ import com.clemble.casino.server.event.player.SystemPlayerConnectionsFetchedEven
 import com.clemble.casino.server.event.player.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import com.clemble.casino.web.mapping.WebMapping;
+import com.clemble.casino.WebMapping;
 import org.springframework.social.connect.ConnectionKey;
 
 import java.util.HashSet;
