@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import com.clemble.casino.game.lifecycle.management.MatchGameContext;
 import com.clemble.casino.game.lifecycle.management.RoundGameContext;
+import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.game.lifecycle.management.TournamentGameContext;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
@@ -173,26 +174,26 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public GameManagerFactory gameProcessor(
         GameStateFactoryFacade stateFactory,
-        ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory,
-        ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory,
-        ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory,
+        ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> roundGameManagerFactory,
+        ServerGameManagerFactory<MatchGameConfiguration, MatchGameState, MatchGameContext> matchGameManagerFactory,
+        ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameState, TournamentGameContext> tournamentGameManagerFactory,
         GameRecordRepository roundRecordRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new GameManagerFactory(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, roundRecordRepository, notificationService);
     }
 
     @Bean
-    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory() {
+    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> roundGameManagerFactory() {
         return new ServerGameManagerFactory<>(RoundGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory() {
+    public ServerGameManagerFactory<MatchGameConfiguration, MatchGameState, MatchGameContext> matchGameManagerFactory() {
         return new ServerGameManagerFactory<>(MatchGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory() {
+    public ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameState, TournamentGameContext> tournamentGameManagerFactory() {
         return new ServerGameManagerFactory<>(TournamentGameAspectFactory.class);
     }
 

@@ -1,8 +1,6 @@
 package com.clemble.casino.server.aspect;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
-import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.lifecycle.configuration.Configuration;
 import com.clemble.casino.lifecycle.management.State;
 import org.springframework.core.PriorityOrdered;

@@ -1,22 +1,19 @@
 package com.clemble.casino.server.game.aspect.outcome;
 
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
-import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.game.lifecycle.management.RoundGameState;
+import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.core.Ordered;
 
-import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
-import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class RoundDrawRuleAspectFactory implements RoundGameAspectFactory {
+public class RoundDrawRuleAspectFactory implements RoundGameAspectFactory<RoundEndedEvent<?>> {
 
     final private SystemNotificationService systemNotificationService;
 
@@ -25,7 +22,7 @@ public class RoundDrawRuleAspectFactory implements RoundGameAspectFactory {
     }
 
     @Override
-    public GameAspect<GameEndedEvent<?>> construct(RoundGameConfiguration configuration, RoundGameState state) {
+    public GameAspect<RoundEndedEvent<?>> construct(RoundGameConfiguration configuration, RoundGameState state) {
         // Step 1. Checking draw rule
         if (configuration.getDrawRule() == null)
             return null;

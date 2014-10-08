@@ -14,11 +14,11 @@ import org.springframework.core.OrderComparator;
 
 import java.util.*;
 
-public class ServerGameManagerFactory<GC extends GameConfiguration, C extends GameContext<?>> implements ApplicationListener<ContextRefreshedEvent> {
+public class ServerGameManagerFactory<GC extends GameConfiguration, S extends GameState<C, ?>, C extends GameContext<?>> implements ApplicationListener<ContextRefreshedEvent> {
 
     final private Logger LOG;
 
-    final private List<GameAspectFactory<?, C, GC>> aspectFactories = new ArrayList<>();
+    final private List<GameAspectFactory<?, S, GC>> aspectFactories = new ArrayList<>();
     final private Class<?> aspectFactoryClass;
 
     public ServerGameManagerFactory(Class<?> aspectFactoryClass) {
@@ -26,17 +26,17 @@ public class ServerGameManagerFactory<GC extends GameConfiguration, C extends Ga
         LOG = LoggerFactory.getLogger("GAF - " + aspectFactoryClass.getSimpleName());
     }
 
-    public GameManager<C> create(GameState<C, ? extends Event> processor, GC configuration, C context) {
+    public GameManager<C> create(S processor, GC configuration) {
         // Step 1. Constructing GameAspects
         Collection<GameAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
-        for (GameAspectFactory<?, C, GC> aspectFactory : aspectFactories) {
-            GameAspect<?> gameAspect = aspectFactory.construct(configuration, context);
-            LOG.debug("{} processing aspect factory {} with aspect {}", context.getSessionKey(), aspectFactory, gameAspect);
+        for (GameAspectFactory<?, S, GC> aspectFactory : aspectFactories) {
+            GameAspect<?> gameAspect = aspectFactory.construct(configuration, processor);
+            LOG.debug("{} processing aspect factory {} with aspect {}", processor.getContext().getSessionKey(), aspectFactory, gameAspect);
             if(gameAspect != null) {
-                gameAspects.add(aspectFactory.construct(configuration, context));
+                gameAspects.add(aspectFactory.construct(configuration, processor));
             }
         }
-        return new GameManager<>(context, processor, gameAspects);
+        return new GameManager<C>(processor.getContext(), processor, gameAspects);
     }
 
     @Override
@@ -49,11 +49,11 @@ public class ServerGameManagerFactory<GC extends GameConfiguration, C extends Ga
         //LOG.debug("Processing {}", bean);
         if (aspectFactoryClass.isAssignableFrom(bean.getClass())) {
             // Step 1. Checking that bean is assignable to the basic class
-            aspectFactories.add((GameAspectFactory<?, C, GC>) bean);
+            aspectFactories.add((GameAspectFactory<?, S, GC>) bean);
             LOG.debug("Adding as direct aspect {}", bean);
         } else if (Arrays.asList(bean.getClass().getInterfaces()).contains(GameAspectFactory.class)) {
             // Step 2. Adding general game aspect factories
-            aspectFactories.add((GameAspectFactory<?, C, GC>) bean);
+            aspectFactories.add((GameAspectFactory<?, S, GC>) bean);
             LOG.debug("Adding as generic aspect {}", bean);
         }
         Collections.sort(aspectFactories, OrderComparator.INSTANCE);

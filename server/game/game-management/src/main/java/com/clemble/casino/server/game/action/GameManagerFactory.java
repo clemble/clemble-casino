@@ -28,17 +28,17 @@ public class GameManagerFactory {
     final private ConcurrentHashMap<String, GameManager<?>> sessionToManager = new ConcurrentHashMap<>();
     
     final private GameStateFactoryFacade stateFactory;
-    final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundManagerFactory;
-    final private ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchManagerFactory;
-    final private ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentAspectFactory;
+    final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> roundManagerFactory;
+    final private ServerGameManagerFactory<MatchGameConfiguration, MatchGameState, MatchGameContext> matchManagerFactory;
+    final private ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameState, TournamentGameContext> tournamentAspectFactory;
     final private GameRecordRepository recordRepository;
     final private PlayerNotificationService notificationService;
 
     public GameManagerFactory(
             GameStateFactoryFacade stateFactory,
-            ServerGameManagerFactory<RoundGameConfiguration, RoundGameContext> roundGameManagerFactory,
-            ServerGameManagerFactory<MatchGameConfiguration, MatchGameContext> matchGameManagerFactory,
-            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameContext> tournamentGameManagerFactory,
+            ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> roundGameManagerFactory,
+            ServerGameManagerFactory<MatchGameConfiguration, MatchGameState, MatchGameContext> matchGameManagerFactory,
+            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameState, TournamentGameContext> tournamentGameManagerFactory,
             GameRecordRepository recordRepository,
             PlayerNotificationService notificationService) {
         this.stateFactory = checkNotNull(stateFactory);
@@ -83,7 +83,7 @@ public class GameManagerFactory {
         roundRecord = recordRepository.save(roundRecord);
         LOG.debug("{} saved round record {}", initiation.getSessionKey(), hashCode());
         // Step 3. Constructing manager and saving in a session
-        GameManager<RoundGameContext> roundManager = roundManagerFactory.create(state, roundConfiguration, roundGameContext);
+        GameManager<RoundGameContext> roundManager = roundManagerFactory.create(state, roundConfiguration);
         sessionToManager.put(initiation.getSessionKey(), roundManager);
         LOG.debug("{} created and stored round manager {}", initiation.getSessionKey(), hashCode());
         // Step 4. Sending round started event
@@ -114,7 +114,7 @@ public class GameManagerFactory {
         // Step 3. Generating game manager
         MatchGameConfiguration configuration = (MatchGameConfiguration) initiation.getConfiguration();
         MatchGameState gameProcessor = new MatchGameState(context, configuration, this);
-        GameManager<MatchGameContext> matchGameManager = matchManagerFactory.create(gameProcessor, configuration, context);
+        GameManager<MatchGameContext> matchGameManager = matchManagerFactory.create(gameProcessor, configuration);
         sessionToManager.put(initiation.getSessionKey(), matchGameManager);
         // Step 4. Generating match started event
         MatchStartedEvent matchStartedEvent = new MatchStartedEvent(initiation.getSessionKey(), context);
