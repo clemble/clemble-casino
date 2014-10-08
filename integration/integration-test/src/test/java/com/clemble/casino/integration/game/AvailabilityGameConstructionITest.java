@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.clemble.casino.event.PlayerExpectedAction;
-import com.clemble.casino.game.lifecycle.construction.event.GameInvitationAcceptedEvent;
+import com.clemble.casino.event.action.PlayerExpectedAction;
+import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAcceptedAction;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 
 import org.junit.Assert;
@@ -108,7 +108,7 @@ public class AvailabilityGameConstructionITest {
 
         assertEquals(AtoAresponse, BtoAresponse);
         assertEquals(AtoBresponse, BtoBresponse);
-        assertTrue(AtoAresponse instanceof GameInvitationAcceptedEvent);
+        assertTrue(AtoAresponse instanceof PlayerInvitationAcceptedAction);
         assertTrue(AtoBresponse instanceof PlayerExpectedAction);
     }
 

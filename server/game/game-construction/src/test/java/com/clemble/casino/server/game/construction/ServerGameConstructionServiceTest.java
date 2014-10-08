@@ -11,10 +11,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAcceptedAction;
 import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.game.lifecycle.construction.GameDeclineBehavior;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
-import com.clemble.casino.game.lifecycle.construction.event.GameInvitationAcceptedEvent;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.service.ServerAvailabilityGameConstructionService;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
@@ -59,7 +59,7 @@ public class ServerGameConstructionServiceTest {
         GameConstruction construction = constructionService.construct(participants.get(0), availabilityGameRequest);
 
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
-            constructionService.reply(new GameInvitationAcceptedEvent(participants.get(i), construction.getSessionKey()));
+            constructionService.reply(new PlayerInvitationAcceptedAction(participants.get(i), construction.getSessionKey()));
         }
 
         GameConstruction finalConstructionState = constructionRepository.findOne(construction.getSessionKey());
@@ -115,7 +115,7 @@ public class ServerGameConstructionServiceTest {
         public GameConstruction call() {
             try {
                 Thread.sleep(RANDOM.nextInt(1000));
-                GameConstruction construct = constructionService.reply(new GameInvitationAcceptedEvent(player, sessionKey));
+                GameConstruction construct = constructionService.reply(new PlayerInvitationAcceptedAction(player, sessionKey));
                 return construct;
             } catch (Throwable throwable) {
                 throwable.printStackTrace();

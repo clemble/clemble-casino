@@ -5,13 +5,11 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.clemble.casino.base.ActionLatchService;
+import com.clemble.casino.game.lifecycle.construction.event.*;
 import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoFailure;
-import com.clemble.casino.game.lifecycle.construction.event.GameConstructionCompleteEvent;
-import com.clemble.casino.game.lifecycle.construction.event.GameConstructionPlayerInvitedEvent;
-import com.clemble.casino.game.lifecycle.construction.event.GameInvitationDeclinedEvent;
-import com.clemble.casino.game.lifecycle.construction.event.GameInvitationResponseEvent;
-import com.clemble.casino.game.lifecycle.construction.event.GameConstructionCanceledEvent;
+import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
+import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
@@ -82,7 +80,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         return construction;
     }
 
-    final public GameConstruction invitationResponded(GameInvitationResponseEvent response) {
+    final public GameConstruction invitationResponded(PlayerInvitationAction response) {
         // Step 1. Sanity check
         if (response == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse);
@@ -91,19 +89,19 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
 
 
     @Override
-    public PlayerEvent getReply(String sessionKey, String player) {
+    public PlayerAction getReply(String sessionKey, String player) {
         return constructionRepository.findOne(sessionKey).getResponses().filterAction(player);
     }
 
     @Override
-    public GameConstruction reply(GameInvitationResponseEvent response) {
+    public GameConstruction reply(PlayerInvitationAction response) {
         // Step 1. Sanity check
         if (response == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse, response.getPlayer(), response.getSessionKey());
         return tryReply(response);
     }
 
-    final private GameConstruction tryReply(GameInvitationResponseEvent response) {
+    final private GameConstruction tryReply(PlayerInvitationAction response) {
         try {
             // Step 1. Checking associated construction
             GameConstruction construction = constructionRepository.findOne(response.getSessionKey());
@@ -117,7 +115,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             playerNotificationService.notify(responseLatch.fetchParticipants(), response);
             construction = construction.cloneWithResponses(responseLatch);
             // Step 4. Checking if latch is full
-            if (response instanceof GameInvitationDeclinedEvent) {
+            if (response instanceof PlayerInvitationDeclinedAction) {
                 construction = construction.cloneWithState(ConstructionState.canceled);
                 // Step 4.1. In case declined send game canceled notification
                 playerNotificationService.notify(construction.getParticipants(), new GameConstructionCanceledEvent(construction.getSessionKey()));

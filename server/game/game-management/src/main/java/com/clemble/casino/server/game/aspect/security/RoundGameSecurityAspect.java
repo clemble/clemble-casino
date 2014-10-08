@@ -1,22 +1,19 @@
 package com.clemble.casino.server.game.aspect.security;
 
-import static com.clemble.casino.utils.Preconditions.checkNotNull;
-
-import java.util.ArrayList;
 import java.util.Collection;
 
 import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.event.Event;
 import com.clemble.casino.game.lifecycle.management.RoundGameContext;
 import com.clemble.casino.game.lifecycle.management.event.GamePlayerMovedEvent;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
-import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
 
-public class RoundGameSecurityAspect extends GameAspect<PlayerEvent> {
+public class RoundGameSecurityAspect<T extends Event & PlayerAware> extends GameAspect<T> {
 
     final private RoundGameContext context;
     final private Collection<String> participants;
@@ -31,13 +28,14 @@ public class RoundGameSecurityAspect extends GameAspect<PlayerEvent> {
     }
 
     @Override
-    public void doEvent(PlayerEvent event) {
+    public void doEvent(T event) {
+        String player = event.getPlayer();
         // Step 1. Checking player is one of participants
-        if (!participants.contains(event.getPlayer()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayPlayerNotParticipate, event.getPlayer());
+        if (!participants.contains(player))
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayPlayerNotParticipate, player);
         // Step 2. Checking action was actually made
-        if (context.getActionLatch().acted(event.getPlayer()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayMoveAlreadyMade, event.getPlayer());
+        if (context.getActionLatch().acted(player))
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayMoveAlreadyMade, player);
     }
 
 }

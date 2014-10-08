@@ -14,15 +14,15 @@ import java.util.TreeSet;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAcceptedAction;
+import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
 import com.clemble.casino.game.lifecycle.management.*;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
-import com.clemble.casino.event.PlayerExpectedAction;
+import com.clemble.casino.event.action.PlayerExpectedAction;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.lifecycle.management.event.bet.PlayerBetAction;
-import com.clemble.casino.lifecycle.management.event.surrender.GiveUpAction;
+import com.clemble.casino.lifecycle.management.event.action.bet.PlayerBetAction;
+import com.clemble.casino.lifecycle.management.event.action.surrender.GiveUpAction;
 import com.clemble.casino.game.*;
-import com.clemble.casino.game.lifecycle.construction.event.GameInvitationAcceptedEvent;
-import com.clemble.casino.game.lifecycle.construction.event.GameInvitationResponseEvent;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.rule.outcome.WonRule;
 import com.clemble.casino.game.lifecycle.management.unit.Chip;
@@ -78,16 +78,16 @@ public class IntegrationObjectTest {
                 return Chip.zero;
             }
         });
-        register(GameInvitationResponseEvent.class, new AbstractValueGenerator<GameInvitationResponseEvent>() {
+        register(PlayerInvitationAction.class, new AbstractValueGenerator<PlayerInvitationAction>() {
             @Override
-            public GameInvitationResponseEvent generate() {
-            return new GameInvitationAcceptedEvent("d", "b");
+            public PlayerInvitationAction generate() {
+            return new PlayerInvitationAcceptedAction("d", "b");
             }
         });
         register(PlayerExpectedAction.class, new AbstractValueGenerator<PlayerExpectedAction>() {
             @Override
             public PlayerExpectedAction generate() {
-            return PlayerExpectedAction.fromClass("S", GameInvitationAcceptedEvent.class);
+            return PlayerExpectedAction.fromClass("S", PlayerInvitationAcceptedAction.class);
             }
         });
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {

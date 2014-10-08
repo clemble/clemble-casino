@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.aspect.bet;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.lifecycle.management.event.bet.PlayerBetAction;
+import com.clemble.casino.lifecycle.management.event.action.bet.PlayerBetAction;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.GamePlayerAccount;
 import com.clemble.casino.lifecycle.configuration.rule.bet.BetRule;

@@ -1,6 +1,7 @@
 package com.clemble.casino.base;
 
 import com.clemble.casino.ActionLatch;
+import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import com.clemble.casino.player.event.PlayerEvent;
 
 /**
@@ -12,6 +13,6 @@ public interface ActionLatchService {
 
     ActionLatch get(String key);
 
-    ActionLatch update(String key, PlayerEvent event);
+    ActionLatch update(String key, PlayerAction event);
 
 }

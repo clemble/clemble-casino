@@ -2,8 +2,9 @@ package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.lifecycle.construction.AvailabilityGameRequest;
 import com.clemble.casino.game.lifecycle.construction.GameConstruction;
-import com.clemble.casino.game.lifecycle.construction.event.GameInvitationResponseEvent;
+import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
 import com.clemble.casino.game.lifecycle.construction.service.AvailabilityGameConstructionService;
+import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 
@@ -38,12 +39,12 @@ public class IntegrationAvailabilityGameConstructionService implements Availabil
     }
 
     @Override
-    public PlayerEvent getReply(String sessionKey, String player) {
+    public PlayerAction getReply(String sessionKey, String player) {
         return constructionController.getReply(sessionKey, player);
     }
 
     @Override
-    public GameConstruction reply(GameInvitationResponseEvent gameRequest) {
+    public GameConstruction reply(PlayerInvitationAction gameRequest) {
         return constructionController.reply(gameRequest);
     }
 }

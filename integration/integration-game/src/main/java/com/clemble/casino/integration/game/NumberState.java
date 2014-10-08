@@ -4,7 +4,9 @@ import java.util.Collection;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.lifecycle.management.event.surrender.SurrenderEvent;
+import com.clemble.casino.event.Event;
+import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
+import com.clemble.casino.lifecycle.management.event.action.surrender.SurrenderAction;
 import com.clemble.casino.game.lifecycle.management.RoundGameContext;
 import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
@@ -48,7 +50,7 @@ public class NumberState implements RoundGameState {
     }
 
     @Override
-    public GameManagementEvent process(PlayerEvent action) {
+    public GameManagementEvent process(PlayerAction action) {
         // Step 1. Processing Select cell move
         GameManagementEvent resultEvent = null;
 
@@ -67,9 +69,9 @@ public class NumberState implements RoundGameState {
             } else {
                 resultEvent = new GamePlayerMovedEvent(context.getSessionKey(), action.getPlayer());
             }
-        } else if (action instanceof SurrenderEvent) {
+        } else if (action instanceof SurrenderAction) {
             // Step 1. Fetching player identifier
-            String looser = ((SurrenderEvent) action).getPlayer();
+            String looser = ((SurrenderAction) action).getPlayer();
             Collection<String> opponents = context.getPlayerIterator().whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table

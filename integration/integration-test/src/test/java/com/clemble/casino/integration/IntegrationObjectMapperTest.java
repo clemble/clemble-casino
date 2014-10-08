@@ -7,14 +7,14 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationDeclinedAction;
 import com.clemble.casino.lifecycle.configuration.Configuration;
-import com.clemble.casino.lifecycle.management.event.bet.PlayerBetAction;
-import com.clemble.casino.lifecycle.management.event.surrender.GiveUpAction;
+import com.clemble.casino.lifecycle.management.event.action.bet.PlayerBetAction;
+import com.clemble.casino.lifecycle.management.event.action.surrender.GiveUpAction;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.construction.event.GameConstructionPlayerInvitedEvent;
-import com.clemble.casino.game.lifecycle.construction.event.GameInvitationDeclinedEvent;
 import com.clemble.casino.game.lifecycle.configuration.rule.GameRule;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.rule.construct.PlayerNumberRule;
@@ -85,7 +85,7 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
     public void testSpecialSerialization() {
         Assert.assertNull(checkSerialization(SystemPlayerProfileRegisteredEvent.class));
         Assert.assertNull(checkSerialization(SystemPlayerSocialGrantRegisteredEvent.class));
-        Assert.assertNull(checkSerialization(GameInvitationDeclinedEvent.class));
+        Assert.assertNull(checkSerialization(PlayerInvitationDeclinedAction.class));
         Assert.assertNull(checkSerialization(RoundStartedEvent.class));
         Assert.assertNull(checkSerialization(PlayerBetAction.class));
         Assert.assertNull(checkSerialization(NumberState.class));
