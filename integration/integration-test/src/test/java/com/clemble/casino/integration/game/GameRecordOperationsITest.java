@@ -5,8 +5,8 @@ import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.lifecycle.management.EventRecord;
-import com.clemble.casino.lifecycle.management.RecordState;
+import com.clemble.casino.lifecycle.record.EventRecord;
+import com.clemble.casino.lifecycle.record.RecordState;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 

@@ -1,7 +1,7 @@
 package com.clemble.casino.server.game.repository;
 
 import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.lifecycle.management.EventRecord;
+import com.clemble.casino.lifecycle.record.EventRecord;
 
 public class MadeMoveRepository {
 

@@ -4,8 +4,8 @@ import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameRecord;
 import com.clemble.casino.game.event.GameEndedEvent;
-import com.clemble.casino.lifecycle.management.EventRecord;
-import com.clemble.casino.lifecycle.management.RecordState;
+import com.clemble.casino.lifecycle.record.EventRecord;
+import com.clemble.casino.lifecycle.record.RecordState;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 

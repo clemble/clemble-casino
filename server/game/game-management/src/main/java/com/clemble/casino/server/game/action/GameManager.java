@@ -6,6 +6,7 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameState;
 import com.clemble.casino.game.event.GameManagementEvent;
+import com.clemble.casino.lifecycle.management.Manager;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class GameManager<GC extends GameContext> {
+public class GameManager<GC extends GameContext> implements Manager<Event, GameManagementEvent> {
 
     final private static Logger LOG = LoggerFactory.getLogger(GameManager.class);
 
@@ -35,10 +36,12 @@ public class GameManager<GC extends GameContext> {
         return context;
     }
 
+    @Override
     public GameState<GC, Event> getState() {
         return state;
     }
 
+    @Override
     public GameManagementEvent process(Event action) {
         // Step 1. Sanity check
         if (action == null)
