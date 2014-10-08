@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.clemble.casino.construction.ConstructionState;
+import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.game.construction.GameDeclineBehavior;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.construction.event.GameInvitationAcceptedEvent;

@@ -1,10 +1,8 @@
 package com.clemble.casino.goal.construction.service;
 
-import com.clemble.casino.construction.Construction;
-import com.clemble.casino.construction.ConstructionState;
+import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.goal.configuration.GoalConfiguration;
 import com.clemble.casino.goal.construction.GoalConstruction;
 import com.clemble.casino.goal.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.construction.GoalKeyGenerator;

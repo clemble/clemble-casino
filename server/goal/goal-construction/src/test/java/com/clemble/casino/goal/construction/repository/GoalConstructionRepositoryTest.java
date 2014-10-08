@@ -1,9 +1,10 @@
 package com.clemble.casino.goal.construction.repository;
 
-import com.clemble.casino.construction.ConstructionState;
+import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.goal.construction.GoalConstruction;
 import com.clemble.casino.goal.construction.spring.GoalConstructionSpringConfiguration;
 import com.clemble.casino.rule.bet.BetRule;
+import com.clemble.casino.rule.bet.FixedBetRule;
 import com.clemble.casino.rule.bet.LimitedBetRule;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
@@ -35,6 +36,12 @@ public class GoalConstructionRepositoryTest {
             @Override
             public BetRule generate() {
                 return LimitedBetRule.create(0, 40);
+            }
+        });
+        ObjectGenerator.register(FixedBetRule.class, new AbstractValueGenerator<FixedBetRule>() {
+            @Override
+            public FixedBetRule generate() {
+                return FixedBetRule.create(10);
             }
         });
         // Step 1. Generating random construction

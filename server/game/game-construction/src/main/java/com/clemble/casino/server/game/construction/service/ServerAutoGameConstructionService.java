@@ -7,10 +7,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.game.construction.AutomaticGameRequest;
 import com.clemble.casino.game.construction.GameConstruction;
 import com.clemble.casino.game.construction.GameInitiation;

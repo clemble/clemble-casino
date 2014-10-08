@@ -1,6 +1,6 @@
 package com.clemble.casino.goal.construction.listener;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.goal.construction.GoalInitiation;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;

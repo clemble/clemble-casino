@@ -4,7 +4,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.*;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.configuration.GameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;

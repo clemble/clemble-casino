@@ -1,9 +1,8 @@
 package com.clemble.casino.goal.construction.repository;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.goal.construction.GoalInitiation;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.cdi.MongoRepositoryExtension;
 
 import java.util.List;
 

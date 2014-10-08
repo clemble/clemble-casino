@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
-import com.clemble.casino.configuration.Configuration;
+import com.clemble.casino.lifecycle.configuration.Configuration;
 import com.clemble.casino.event.bet.PlayerBetAction;
 import com.clemble.casino.event.surrender.GiveUpAction;
 import com.clemble.casino.game.Game;

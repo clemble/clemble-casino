@@ -1,6 +1,6 @@
 package com.clemble.casino.server.game.action;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.ComparatorUtils;
 import com.clemble.casino.game.GameState;

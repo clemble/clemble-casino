@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.clemble.casino.ImmutablePair;
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameContext;
 import com.clemble.casino.game.GameState;

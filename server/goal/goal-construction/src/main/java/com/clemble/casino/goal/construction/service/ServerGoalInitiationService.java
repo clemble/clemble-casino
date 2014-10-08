@@ -1,6 +1,6 @@
 package com.clemble.casino.goal.construction.service;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.construction.GoalInitiation;

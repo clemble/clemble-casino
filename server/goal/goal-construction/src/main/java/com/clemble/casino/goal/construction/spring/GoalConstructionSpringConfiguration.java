@@ -1,6 +1,6 @@
 package com.clemble.casino.goal.construction.spring;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.goal.construction.GoalInitiation;
 import com.clemble.casino.goal.construction.GoalInitiationExpirationTask;
 import com.clemble.casino.goal.construction.GoalInitiationTaskAdapter;
@@ -20,7 +20,6 @@ import com.clemble.casino.server.key.RedisKeyFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
-import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.PaymentClientSpringConfiguration;

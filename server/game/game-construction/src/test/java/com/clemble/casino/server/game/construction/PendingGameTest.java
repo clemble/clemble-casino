@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.repository.PendingGameInitiationRepository;
 import com.clemble.casino.server.game.construction.repository.PendingPlayerRepository;

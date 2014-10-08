@@ -1,7 +1,6 @@
 package com.clemble.casino.goal.configuration.controller;
 
 import com.clemble.casino.bet.Bid;
-import com.clemble.casino.configuration.Configuration;
 import com.clemble.casino.goal.configuration.GoalConfiguration;
 import com.clemble.casino.goal.rule.judge.JudgeRule;
 import com.clemble.casino.goal.configuration.service.GoalConfigurationService;

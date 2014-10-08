@@ -2,11 +2,11 @@ package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.GameRecordState;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.management.EventRecord;
+import com.clemble.casino.lifecycle.management.EventRecord;
+import com.clemble.casino.lifecycle.management.RecordState;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 
@@ -88,7 +88,7 @@ public class GameRecordOperationsITest {
         // Step 3. Checking game record state is Final
         A.waitForEnd();
         GameRecord finalRecord = A.getRecord();
-        assertEquals(finalRecord.getSessionState(), GameRecordState.finished);
+        assertEquals(finalRecord.getState(), RecordState.finished);
     }
 
 }

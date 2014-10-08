@@ -14,7 +14,7 @@ import java.util.TreeSet;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.event.PlayerExpectedAction;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.event.bet.PlayerBetAction;
@@ -107,7 +107,7 @@ public class IntegrationObjectTest {
         register(FixedBetRule.class, new AbstractValueGenerator<FixedBetRule>() {
             @Override
             public FixedBetRule generate() {
-            return FixedBetRule.create(new long[] { 10 });
+            return FixedBetRule.create(10);
             }
         });
         register(Event.class, new AbstractValueGenerator<Event>() {

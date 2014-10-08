@@ -1,6 +1,6 @@
 package com.clemble.casino.server.game.action;
 
-import com.clemble.casino.construction.InitiationState;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.game.GameRecord;
@@ -9,7 +9,7 @@ import com.clemble.casino.game.RoundGameContext;
 import com.clemble.casino.game.construction.GameInitiation;
 import com.clemble.casino.game.event.GameManagementEvent;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
-import com.clemble.casino.management.EventRecord;
+import com.clemble.casino.lifecycle.management.EventRecord;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
 

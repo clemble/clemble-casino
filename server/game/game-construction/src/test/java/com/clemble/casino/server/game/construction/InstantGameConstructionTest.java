@@ -1,6 +1,6 @@
 package com.clemble.casino.server.game.construction;
 
-import com.clemble.casino.construction.ConstructionState;
+import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.game.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;

@@ -5,7 +5,7 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.clemble.casino.base.ActionLatchService;
-import com.clemble.casino.construction.ConstructionState;
+import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.game.construction.event.GameConstructionCompleteEvent;
 import com.clemble.casino.game.construction.event.GameConstructionPlayerInvitedEvent;

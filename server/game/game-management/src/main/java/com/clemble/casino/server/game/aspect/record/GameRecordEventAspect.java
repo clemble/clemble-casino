@@ -3,9 +3,9 @@ package com.clemble.casino.server.game.aspect.record;
 import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.GameRecord;
-import com.clemble.casino.game.GameRecordState;
 import com.clemble.casino.game.event.GameEndedEvent;
-import com.clemble.casino.management.EventRecord;
+import com.clemble.casino.lifecycle.management.EventRecord;
+import com.clemble.casino.lifecycle.management.RecordState;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 
@@ -34,7 +34,7 @@ public class GameRecordEventAspect extends GameAspect<Event> {
         record.getEventRecords().add(move);
         // Step 3. Specifying ended state for the event
         if(event instanceof GameEndedEvent)
-            record.setSessionState(GameRecordState.finished);
+            record.setState(RecordState.finished);
         // Step 4. Serializing record
         recordRepository.save(record);
     }
