@@ -1,23 +1,25 @@
 package com.clemble.casino.server.game.aspect.next;
 
 import com.clemble.casino.game.lifecycle.management.GameState;
-import com.clemble.casino.server.game.action.GameManagerFactoryFacade;
 import com.clemble.casino.server.game.aspect.GenericGameAspectFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 
+import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
+import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
 public class NextGameAspectFactory implements GenericGameAspectFactory<GameEndedEvent<?>> {
 
     final private Logger LOG = LoggerFactory.getLogger(NextGameAspectFactory.class);
 
-    final private GameManagerFactoryFacade managerFactory;
+    final private GameManagerFactory managerFactory;
 
-    public NextGameAspectFactory(GameManagerFactoryFacade managerFactory) {
+    public NextGameAspectFactory(GameManagerFactory managerFactory) {
         this.managerFactory = managerFactory;
     }
 
