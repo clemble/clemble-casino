@@ -6,6 +6,7 @@ import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.event.action.GoalStatusUpdateAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
+import com.clemble.casino.goal.lifecycle.management.event.GoalReachedEvent;
 import com.clemble.casino.goal.lifecycle.management.event.GoalStatusUpdatedEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,6 +20,7 @@ public class SelfGoalState implements GoalState {
 
     private String goalKey;
     private GoalConfiguration configuration;
+
     private String status;
     private int parts;
     private int progress;
@@ -57,7 +59,11 @@ public class SelfGoalState implements GoalState {
             GoalStatusUpdateAction statusUpdateAction = ((GoalStatusUpdateAction) action);
             this.status = statusUpdateAction.getStatus();
             this.progress = progress + statusUpdateAction.getProgress();
-            return new GoalStatusUpdatedEvent(statusUpdateAction.getGoalKey(), statusUpdateAction.getPlayer(), status, progress);
+            if(this.progress >= parts) {
+                return new GoalReachedEvent(goalKey);
+            } else {
+                return new GoalStatusUpdatedEvent(goalKey, statusUpdateAction.getPlayer(), status, progress);
+            }
         } else {
             throw new IllegalArgumentException();
         }
