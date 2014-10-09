@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
+import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperations;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
@@ -110,10 +111,12 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         @Bean
         public IntegrationGoalOperationsFactory goalOperationsFactory(        GoalConfigurationServiceController configurationService,
             GoalInitiationServiceController initiationService,
-            GoalConstructionServiceController constructionService) {
+            GoalConstructionServiceController constructionService,
+            GoalActionServiceController actionServiceController) {
             return new IntegrationGoalOperationsFactory(configurationService,
                 initiationService,
-                constructionService);
+                constructionService,
+                actionServiceController);
         }
 
         @Bean
