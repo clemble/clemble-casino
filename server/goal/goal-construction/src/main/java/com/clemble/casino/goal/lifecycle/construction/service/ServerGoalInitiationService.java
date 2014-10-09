@@ -6,7 +6,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.construction.GoalInitiationExpirationTask;
-import com.clemble.casino.goal.lifecycle.construction.event.GoalInitiationCreatedEvent;
+import com.clemble.casino.goal.lifecycle.initiation.event.GoalInitiationCreatedEvent;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
 import com.clemble.casino.server.executor.EventTaskExecutor;

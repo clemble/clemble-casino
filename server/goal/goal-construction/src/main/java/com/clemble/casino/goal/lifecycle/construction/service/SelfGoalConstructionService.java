@@ -7,7 +7,7 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.construction.GoalKeyGenerator;
 import com.clemble.casino.goal.construction.repository.GoalConstructionRepository;
-import com.clemble.casino.goal.rule.judge.JudgeType;
+import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.service.PlayerAccountServiceContract;
 
