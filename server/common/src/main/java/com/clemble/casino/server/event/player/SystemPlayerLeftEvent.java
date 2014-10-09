@@ -58,6 +58,6 @@ public class SystemPlayerLeftEvent implements SystemPlayerEvent {
 
     @Override
     public String toString() {
-        return "sys:" + player + ":" + CHANNEL;
+        return player + " > " + CHANNEL;
     }
 }

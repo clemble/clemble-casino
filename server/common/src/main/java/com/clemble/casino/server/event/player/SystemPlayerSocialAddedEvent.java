@@ -74,7 +74,7 @@ public class SystemPlayerSocialAddedEvent implements SystemPlayerEvent, Connecti
 
     @Override
     public String toString() {
-        return "sys:" + player + ":" + CHANNEL + ":" + connection;
+        return player + " > " + CHANNEL + " > " + connection;
     }
 
 }

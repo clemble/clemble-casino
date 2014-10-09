@@ -61,7 +61,7 @@ public class SystemGameReadyEvent implements SystemGameEvent {
 
     @Override
     public String toString() {
-        return "sys:" + sessionKey +  ":" + CHANNEL;
+        return sessionKey +  " > " + CHANNEL;
     }
 
 }

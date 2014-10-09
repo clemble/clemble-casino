@@ -30,7 +30,7 @@ public class SystemGoalInitiationDueEvent implements SystemGoalEvent {
 
     @Override
     public String toString() {
-        return "sys:" + goalKey +  ":" + CHANNEL;
+        return goalKey +  " > " + CHANNEL;
     }
 
     @Override

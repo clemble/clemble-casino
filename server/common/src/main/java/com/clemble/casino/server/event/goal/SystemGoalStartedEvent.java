@@ -56,4 +56,9 @@ public class SystemGoalStartedEvent implements SystemGoalEvent, GoalInitiationAw
         return result;
     }
 
+    @Override
+    public String toString() {
+        return goalKey + " > " + CHANNEL;
+    }
+
 }

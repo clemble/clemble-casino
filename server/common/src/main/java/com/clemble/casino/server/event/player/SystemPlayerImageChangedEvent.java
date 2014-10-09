@@ -44,7 +44,7 @@ public class SystemPlayerImageChangedEvent implements SystemPlayerEvent {
 
     @Override
     public String toString() {
-        return "sys:" + player + ":" + CHANNEL + ":" + redirect;
+        return player + " > " + CHANNEL + " > " + redirect;
     }
 
     @Override

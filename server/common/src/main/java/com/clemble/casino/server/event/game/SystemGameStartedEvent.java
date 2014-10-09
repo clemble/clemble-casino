@@ -40,7 +40,7 @@ public class SystemGameStartedEvent implements SystemGameEvent, GameInitiationAw
 
     @Override
     public String toString() {
-        return "sys:" + sessionKey +  ":" + CHANNEL;
+        return sessionKey +  " > " + CHANNEL;
     }
 
     @Override

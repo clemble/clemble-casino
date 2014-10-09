@@ -54,4 +54,10 @@ public class SystemBetCompletedEvent implements SystemBetEvent {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return transactionKey + ":" + player + " > " + CHANNEL;
+    }
+
+
 }

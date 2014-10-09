@@ -60,7 +60,7 @@ public class SystemPlayerProfileRegisteredEvent implements PlayerProfileAware, S
 
     @Override
     public String toString() {
-        return "sys:" + player +  ":" + CHANNEL;
+        return player +  " > " + CHANNEL;
     }
 
 }

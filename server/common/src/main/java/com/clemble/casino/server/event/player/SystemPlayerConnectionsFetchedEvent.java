@@ -69,7 +69,7 @@ public class SystemPlayerConnectionsFetchedEvent implements SystemPlayerEvent, C
 
     @Override
     public String toString() {
-        return "sys:" + player +  ":" + CHANNEL + ":" + connectionKey;
+        return player +  " > " + CHANNEL + " > " + connectionKey;
     }
 
 }

@@ -30,6 +30,11 @@ public class SystemBetCanceledEvent implements SystemBetEvent {
     }
 
     @Override
+    public String getChannel() {
+        return CHANNEL;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -50,8 +55,8 @@ public class SystemBetCanceledEvent implements SystemBetEvent {
     }
 
     @Override
-    public String getChannel() {
-        return CHANNEL;
+    public String toString() {
+        return transactionKey + ":" + player + " > " + CHANNEL;
     }
 
 }

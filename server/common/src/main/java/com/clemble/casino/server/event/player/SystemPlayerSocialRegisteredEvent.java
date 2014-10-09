@@ -41,7 +41,7 @@ public class SystemPlayerSocialRegisteredEvent
 
     @Override
     public String toString() {
-        return "sys:" + player + ":" + CHANNEL;
+        return player + " > " + CHANNEL;
     }
 
     @Override

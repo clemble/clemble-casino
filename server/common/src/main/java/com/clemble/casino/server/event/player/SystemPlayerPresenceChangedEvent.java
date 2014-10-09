@@ -68,7 +68,7 @@ public class SystemPlayerPresenceChangedEvent implements SystemPlayerEvent {
 
     @Override
     public String toString() {
-        return "sys:" + player + ":" + CHANNEL + ":" + presence;
+        return player + " > " + CHANNEL + " > " + presence;
     }
 
 }
