@@ -3,6 +3,7 @@ package com.clemble.casino.goal.configuration.controller;
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.parts.GoalPartsRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
 import com.clemble.casino.money.Currency;
@@ -38,6 +39,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
             LimitedBetRule.create(5, 50),
             new JudgeRule("me", JudgeType.self),
+            new GoalPartsRule(1),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.players
@@ -47,6 +49,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new Bid(Money.create(Currency.FakeMoney, 5000), Money.create(Currency.FakeMoney, 5000)),
             LimitedBetRule.create(5, 50),
             new JudgeRule("me", JudgeType.self),
+            new GoalPartsRule(1),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.players

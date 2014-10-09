@@ -1,6 +1,7 @@
 package com.clemble.casino.goal.action;
 
 import com.clemble.casino.event.Event;
+import com.clemble.casino.goal.GoalPartsAware;
 import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.event.action.GoalStatusUpdateAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
@@ -19,6 +20,7 @@ public class SelfGoalState implements GoalState {
     private String goalKey;
     private GoalConfiguration configuration;
     private String status;
+    private int parts;
     private int progress;
 
     @JsonCreator
@@ -26,16 +28,22 @@ public class SelfGoalState implements GoalState {
         @JsonProperty("goalKey") String goalKey,
         @JsonProperty("configuration") GoalConfiguration configuration,
         @JsonProperty("status") String status,
-        @JsonProperty("property") int progress) {
+        @JsonProperty("progress") int progress,
+        @JsonProperty("parts") int parts) {
         this.goalKey = goalKey;
         this.configuration = configuration;
         this.status = status;
         this.progress = progress;
+        this.parts = parts;
     }
 
     @Override
     public String getGoalKey() {
         return goalKey;
+    }
+
+    public int getParts() {
+        return parts;
     }
 
     @Override

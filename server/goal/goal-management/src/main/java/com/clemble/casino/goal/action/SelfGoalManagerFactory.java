@@ -41,7 +41,7 @@ public class SelfGoalManagerFactory implements GoalManagerFactory {
         // Step 2. Notifying player goal started
         notificationService.notify(initiation.getPlayer(), new GoalStartedEvent(initiation.getGoalKey()));
         // Step 3. Checking notification factory
-        return managerFactory.create(new SelfGoalState(initiation.getGoalKey(), initiation.getConfiguration(), "", 0), initiation.getConfiguration());
+        return managerFactory.create(new SelfGoalState(initiation.getGoalKey(), initiation.getConfiguration(), "", 0, initiation.getConfiguration().getPartsRule().getParts()), initiation.getConfiguration());
     }
 
     public ClembleManager<GoalEvent, ? extends GoalState> get(String goalKey) {
