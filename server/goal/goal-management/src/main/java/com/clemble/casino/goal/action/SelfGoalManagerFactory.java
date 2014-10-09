@@ -4,11 +4,13 @@ import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
+import com.clemble.casino.goal.lifecycle.management.GoalPlayerContext;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalStartedEvent;
 import com.clemble.casino.goal.lifecycle.record.GoalRecord;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.lifecycle.configuration.rule.time.PlayerClock;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -37,14 +39,18 @@ public class SelfGoalManagerFactory implements GoalManagerFactory {
     }
 
     @Override
-    public ClembleManager<GoalEvent, ? extends GoalState> start(GoalInitiation initiation) {
+    public ClembleManager<GoalEvent, ? extends GoalState> start(GoalContext parent, GoalInitiation initiation) {
         // Step 1. Saving record
         GoalRecord record = initiation.toRecord();
         record = recordRepository.save(record);
         // Step 2. Notifying player goal started
         notificationService.notify(initiation.getPlayer(), new GoalStartedEvent(initiation.getGoalKey()));
-        // Step 3. Checking notification factory
-        return managerFactory.create(new SelfGoalState(initiation.getGoalKey(), initiation.getConfiguration(), new GoalContext(null, Collections.emptyList()), "", 0, initiation.getConfiguration().getPartsRule().getParts()), initiation.getConfiguration());
+        // Step 3. Creating state
+        GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), new PlayerClock(0, 0));
+        GoalContext goalContext = new GoalContext(parent, Collections.singletonList(playerContext));
+        GoalState state = new SelfGoalState(initiation.getGoalKey(), initiation.getConfiguration(), goalContext, "", 0, initiation.getConfiguration().getPartsRule().getParts());
+        // Step 4. Creating manager factory
+        return managerFactory.create(state, state.getConfiguration());
     }
 
     public ClembleManager<GoalEvent, ? extends GoalState> get(String goalKey) {

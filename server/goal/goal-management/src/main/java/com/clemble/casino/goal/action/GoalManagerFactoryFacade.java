@@ -3,6 +3,7 @@ package com.clemble.casino.goal.action;
 import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
+import com.clemble.casino.goal.lifecycle.management.GoalContext;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
@@ -27,11 +28,15 @@ public class GoalManagerFactoryFacade {
         this.selfManagerFactory = new SelfGoalManagerFactory(managerFactory, recordRepository, stateRepository, notificationService);
     }
 
-    public ClembleManager<GoalEvent, ? extends GoalState> start(GoalInitiation initiation) {
+    public ClembleManager<GoalEvent, ? extends GoalState> start(GoalContext parent, GoalInitiation initiation) {
         if (initiation.getPlayer().equals(initiation.getJudge())) {
-            return selfManagerFactory.start(initiation);
+            return selfManagerFactory.start(parent, initiation);
         }
         throw new IllegalArgumentException();
+    }
+
+    public ClembleManager<GoalEvent, ? extends GoalState> get(String goalKey) {
+        return selfManagerFactory.get(goalKey);
     }
 
 }

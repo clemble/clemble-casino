@@ -41,7 +41,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class MatchGameConstructionITest {
 

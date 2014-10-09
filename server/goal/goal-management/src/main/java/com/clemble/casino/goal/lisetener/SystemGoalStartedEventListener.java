@@ -17,7 +17,7 @@ public class SystemGoalStartedEventListener implements SystemEventListener<Syste
 
     @Override
     public void onEvent(SystemGoalStartedEvent event) {
-        managerFactory.start(event.getInitiation());
+        managerFactory.start(null, event.getInitiation());
     }
 
     @Override
