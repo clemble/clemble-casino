@@ -29,7 +29,7 @@ public class ClembleManagerFactory<C extends Configuration> implements Applicati
         LOG = LoggerFactory.getLogger("GAF - " + aspectFactoryClass[0].getSimpleName());
     }
 
-    public <R extends Event, S extends State<R>> ClembleManager<R, S> create(S state, C configuration) {
+    public <R extends Event, S extends State<R, ?>> ClembleManager<R, S> create(S state, C configuration) {
         // Step 1. Constructing GameAspects
         Collection<ClembleAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
         for (ClembleAspectFactory<?, C, State> aspectFactory : aspectFactories) {

@@ -16,7 +16,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by mavarazy on 10/9/14.
  */
-public class ClembleManager<R extends Event, T extends State<R>> {
+public class ClembleManager<R extends Event, T extends State<R, ?>> {
     final private static Logger LOG = LoggerFactory.getLogger(ClembleManager.class);
 
     final private ReentrantLock sessionLock = new ReentrantLock();

@@ -10,9 +10,11 @@ import java.util.List;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -39,6 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
+@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class MatchGameConstructionITest {
 

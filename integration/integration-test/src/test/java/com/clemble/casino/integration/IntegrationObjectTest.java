@@ -6,10 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.Date;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -17,6 +14,8 @@ import javax.crypto.SecretKey;
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAcceptedAction;
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
 import com.clemble.casino.game.lifecycle.management.*;
+import com.clemble.casino.goal.lifecycle.management.GoalContext;
+import com.clemble.casino.goal.lifecycle.management.GoalPlayerContext;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.event.action.PlayerExpectedAction;
 import com.clemble.casino.event.Event;
@@ -70,6 +69,13 @@ public class IntegrationObjectTest {
         ObjectGenerator.register(SortedSet.class, new AbstractValueGenerator<SortedSet>() {
             public SortedSet generate() {
                 return new TreeSet();
+            }
+        });
+        ObjectGenerator.register(GoalContext.class, new AbstractValueGenerator<GoalContext>() {
+            @Override
+            public GoalContext generate() {
+                List<GoalPlayerContext> playerContexts = Collections.emptyList();
+                return new GoalContext(null, playerContexts);
             }
         });
         ObjectGenerator.register(GameUnit.class, new AbstractValueGenerator<GameUnit>() {
