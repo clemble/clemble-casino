@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SelfGoalState implements GoalState {
 
     private String goalKey;
+    private String player;
     private GoalConfiguration configuration;
 
     private String status;
@@ -32,17 +33,24 @@ public class SelfGoalState implements GoalState {
     @JsonCreator
     public SelfGoalState(
         @JsonProperty("goalKey") String goalKey,
+        @JsonProperty("player") String player,
         @JsonProperty("configuration") GoalConfiguration configuration,
         @JsonProperty("context") GoalContext context,
         @JsonProperty("status") String status,
         @JsonProperty("progress") int progress,
         @JsonProperty("parts") int parts) {
         this.goalKey = goalKey;
+        this.player = player;
         this.configuration = configuration;
         this.context = context;
         this.status = status;
         this.progress = progress;
         this.parts = parts;
+    }
+
+    @Override
+    public String getPlayer() {
+        return player;
     }
 
     @Override

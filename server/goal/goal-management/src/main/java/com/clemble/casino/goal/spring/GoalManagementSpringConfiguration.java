@@ -2,6 +2,8 @@ package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GoalAspect;
+import com.clemble.casino.goal.aspect.outcome.GoalMissedOutcomeAspectFactory;
+import com.clemble.casino.goal.aspect.outcome.GoalReachedOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.time.GoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
@@ -14,6 +16,7 @@ import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.executor.EventTaskAdapter;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
@@ -94,6 +97,16 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
         ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL goal:management:event:executor - %d");
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
         return new EventTaskExecutor(goalManagementEventTaskAdapter, executorService);
+    }
+
+    @Bean
+    public GoalMissedOutcomeAspectFactory goalMissedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
+        return new GoalMissedOutcomeAspectFactory(systemNotificationService);
+    }
+
+    @Bean
+    public GoalReachedOutcomeAspectFactory goalReachedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
+        return new GoalReachedOutcomeAspectFactory(systemNotificationService);
     }
 
 }
