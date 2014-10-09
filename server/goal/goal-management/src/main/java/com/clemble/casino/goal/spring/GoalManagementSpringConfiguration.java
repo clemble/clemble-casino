@@ -2,6 +2,7 @@ package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GoalAspect;
+import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lisetener.SystemGoalStartedEventListener;
@@ -63,6 +64,11 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
         SystemGoalStartedEventListener eventListener = new SystemGoalStartedEventListener(goalManagerFactoryFacade);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
+    }
+
+    @Bean
+    public GoalRecordAspectFactory goalRecordAspectFactory(GoalRecordRepository recordRepository){
+        return new GoalRecordAspectFactory(recordRepository);
     }
 
 }
