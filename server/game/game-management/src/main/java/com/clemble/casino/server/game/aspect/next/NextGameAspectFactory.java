@@ -1,6 +1,7 @@
 package com.clemble.casino.server.game.aspect.next;
 
 import com.clemble.casino.game.lifecycle.management.GameState;
+import com.clemble.casino.server.game.action.GameManagerFactoryFacade;
 import com.clemble.casino.server.game.aspect.GenericGameAspectFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +18,9 @@ public class NextGameAspectFactory implements GenericGameAspectFactory<GameEnded
 
     final private Logger LOG = LoggerFactory.getLogger(NextGameAspectFactory.class);
 
-    final private GameManagerFactory managerFactory;
+    final private GameManagerFactoryFacade managerFactory;
 
-    public NextGameAspectFactory(GameManagerFactory managerFactory) {
+    public NextGameAspectFactory(GameManagerFactoryFacade managerFactory) {
         this.managerFactory = managerFactory;
     }
 

@@ -6,11 +6,14 @@ import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lisetener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
+import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.server.action.ClembleManagerFactory;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,6 +32,12 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public GoalStateRepository goalStateRepository(MongoRepositoryFactory repositoryFactory) {
+        return repositoryFactory.getRepository(GoalStateRepository.class);
+    }
+
+
+    @Bean
     public GoalRecordServiceController goalRecordServiceController(GoalRecordRepository recordRepository) {
         return new GoalRecordServiceController(recordRepository);
     }
@@ -39,8 +48,12 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalManagerFactoryFacade goalManagerFactoryFacade(ClembleManagerFactory<GoalConfiguration> goalManagerFactory, GoalRecordRepository recordRepository) {
-        return new GoalManagerFactoryFacade(goalManagerFactory, recordRepository);
+    public GoalManagerFactoryFacade goalManagerFactoryFacade(
+        ClembleManagerFactory<GoalConfiguration> goalManagerFactory,
+        GoalRecordRepository recordRepository,
+        GoalStateRepository goalStateRepository,
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        return new GoalManagerFactoryFacade(goalManagerFactory, recordRepository, goalStateRepository, notificationService);
     }
 
     @Bean

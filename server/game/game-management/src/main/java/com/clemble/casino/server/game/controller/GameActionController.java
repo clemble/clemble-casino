@@ -6,6 +6,7 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.server.action.ClembleManager;
+import com.clemble.casino.server.game.action.GameManagerFactoryFacade;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +21,12 @@ import com.clemble.casino.WebMapping;
 @RestController
 public class GameActionController<State extends GameState> implements GameActionService, ExternalController {
 
-    final private GameManagerFactory managerFactory;
+    final private GameManagerFactoryFacade managerFactory;
     final private GameRecordRepository recordRepository;
 
     public GameActionController(
             final GameRecordRepository recordRepository,
-            final GameManagerFactory sessionProcessor) {
+            final GameManagerFactoryFacade sessionProcessor) {
         this.managerFactory = checkNotNull(sessionProcessor);
         this.recordRepository = checkNotNull(recordRepository);
     }
