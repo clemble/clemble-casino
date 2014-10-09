@@ -5,6 +5,7 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
 import com.clemble.casino.goal.GoalAware;
 import com.clemble.casino.goal.aspect.GoalAspect;
+import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.lifecycle.record.GoalRecord;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.lifecycle.record.EventRecord;
@@ -39,8 +40,8 @@ public class GoalRecordEventAspect extends GoalAspect<Event> implements GoalAwar
         GoalRecord record = recordRepository.findOne(goalKey);
         record.getEventRecords().add(move);
         // Step 3. Specifying ended state for the event
-        if(event instanceof GameEndedEvent) {
-            // Fishy bullshit be more consistent
+        if(event instanceof GoalEndedEvent) {
+            // TODO Fishy bullshit (record is not immutable) be more consistent
             record = record.copy(RecordState.finished);
         }
         // Step 4. Serializing record

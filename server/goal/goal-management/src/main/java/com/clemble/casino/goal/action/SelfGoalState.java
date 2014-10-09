@@ -7,8 +7,10 @@ import com.clemble.casino.goal.event.action.GoalStatusUpdateAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
+import com.clemble.casino.goal.lifecycle.management.event.GoalMissedEvent;
 import com.clemble.casino.goal.lifecycle.management.event.GoalReachedEvent;
 import com.clemble.casino.goal.lifecycle.management.event.GoalStatusUpdatedEvent;
+import com.clemble.casino.lifecycle.management.event.action.surrender.SurrenderAction;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -73,6 +75,8 @@ public class SelfGoalState implements GoalState {
             } else {
                 return new GoalStatusUpdatedEvent(goalKey, statusUpdateAction.getPlayer(), status, progress);
             }
+        } else if(action instanceof SurrenderAction) {
+            return new GoalMissedEvent(goalKey);
         } else {
             throw new IllegalArgumentException();
         }
