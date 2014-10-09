@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.integration</groupId>
         <artifactId>integration</artifactId>
-        <version>0.12.1-SNAPSHOT</version>
+        <version>0.12.2-SNAPSHOT</version>
     </parent>
     <artifactId>integration-test</artifactId>
     <dependencies>
@@ -30,14 +30,6 @@
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>payment-transaction</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.server</groupId>
-            <artifactId>goal-track</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.server</groupId>
-            <artifactId>goal-judge</artifactId>
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
@@ -198,27 +190,6 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
-                                            <artifactId>goal-track</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>war</type>
-                                            <destFileName>goal-track.war</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>com.clemble.casino.server</groupId>
-                                            <artifactId>goal-judge</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>war</type>
-                                            <destFileName>goal-judge.war</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>com.clemble.casino.server</groupId>
-                                            <artifactId>goal-duty</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>war</type>
-                                            <destFileName>goal-duty.war</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>payment-bonus</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
@@ -292,18 +263,6 @@
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/payment-bonus.war</war>
                                     <contextPath>/bonus</contextPath>
-                                </contextHandler>
-                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/goal-track.war</war>
-                                    <contextPath>/goal/track</contextPath>
-                                </contextHandler>
-                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/goal-judge.war</war>
-                                    <contextPath>/goal/judge</contextPath>
-                                </contextHandler>
-                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/goal-duty.war</war>
-                                    <contextPath>/goal/duty</contextPath>
                                 </contextHandler>
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/game-configuration.war</war>

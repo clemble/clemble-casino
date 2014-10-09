@@ -21,8 +21,6 @@ import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
 import com.clemble.casino.game.lifecycle.configuration.rule.visibility.VisibilityRule;
 import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
-import com.clemble.casino.goal.spring.GoalJudgeDutySpringConfiguration;
-import com.clemble.casino.goal.spring.GoalJudgeSpringConfiguration;
 import com.clemble.casino.json.ObjectMapperUtils;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -40,7 +38,6 @@ import com.clemble.casino.server.game.configuration.repository.GameConfiguration
 import com.clemble.casino.server.game.configuration.spring.GameConfigurationSpringConfiguration;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
 import com.clemble.casino.server.game.spring.GameManagementSpringConfiguration;
-import com.clemble.casino.server.goal.spring.GoalSpringConfiguration;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.WebJsonSpringConfiguration;
@@ -95,9 +92,6 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         PlayerSocialSpringConfiguration.class,
         PaymentBonusSpringConfiguration.class,
         PaymentSpringConfiguration.class,
-        GoalSpringConfiguration.class,
-        GoalJudgeSpringConfiguration.class,
-        GoalJudgeDutySpringConfiguration.class,
         GameManagementSpringConfiguration.class,
         GameConfigurationSpringConfiguration.class,
         GameConstructionSpringConfiguration.class,

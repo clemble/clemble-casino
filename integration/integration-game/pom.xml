@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.integration</groupId>
         <artifactId>integration</artifactId>
-        <version>0.12.1-SNAPSHOT</version>
+        <version>0.12.2-SNAPSHOT</version>
     </parent>
     <artifactId>integration-game</artifactId>
     <packaging>war</packaging>

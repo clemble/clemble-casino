@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.server</groupId>
         <artifactId>server</artifactId>
-        <version>0.12.1-SNAPSHOT</version>
+        <version>0.12.2-SNAPSHOT</version>
     </parent>
     <artifactId>goal</artifactId>
     <packaging>pom</packaging>
@@ -12,9 +12,6 @@
         <module>goal-configuration</module>
         <module>goal-construction</module>
         <module>goal-management</module>
-        <module>goal-track</module>
-        <module>goal-judge</module>
-        <module>goal-duty</module>
     </modules>
     <dependencies>
         <dependency>

@@ -9,8 +9,6 @@ import javax.annotation.PostConstruct;
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
-import com.clemble.casino.goal.controller.GoalJudgeDutyServiceController;
-import com.clemble.casino.goal.controller.GoalJudgeInvitationServiceController;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperations;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
@@ -19,7 +17,6 @@ import com.clemble.casino.server.connection.controller.PlayerConnectionServiceCo
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
-import com.clemble.casino.server.goal.controller.GoalServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
@@ -113,16 +110,10 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         @Bean
         public IntegrationGoalOperationsFactory goalOperationsFactory(        GoalConfigurationServiceController configurationService,
             GoalInitiationServiceController initiationService,
-            GoalConstructionServiceController constructionService,
-            GoalServiceController goalController,
-            GoalJudgeDutyServiceController dutyServiceController,
-            GoalJudgeInvitationServiceController invitationServiceController) {
+            GoalConstructionServiceController constructionService) {
             return new IntegrationGoalOperationsFactory(configurationService,
                 initiationService,
-                constructionService,
-                goalController,
-                dutyServiceController,
-                invitationServiceController);
+                constructionService);
         }
 
         @Bean

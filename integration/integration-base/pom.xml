@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.integration</groupId>
         <artifactId>integration</artifactId>
-        <version>0.12.1-SNAPSHOT</version>
+        <version>0.12.2-SNAPSHOT</version>
     </parent>
     <artifactId>integration-base</artifactId>
     <dependencies>
@@ -25,19 +25,7 @@
 
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
-            <artifactId>goal-track</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.server</groupId>
-            <artifactId>goal-duty</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.server</groupId>
             <artifactId>payment-bonus</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.clemble.casino.server</groupId>
-            <artifactId>goal-judge</artifactId>
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>

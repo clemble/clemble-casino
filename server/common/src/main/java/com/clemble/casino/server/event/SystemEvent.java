@@ -34,12 +34,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemBetCanceledEvent.CHANNEL, value = SystemBetCanceledEvent.class),
     @JsonSubTypes.Type(name = SystemBetCompletedEvent.CHANNEL, value = SystemBetCompletedEvent.class),
     @JsonSubTypes.Type(name = SystemPlayerImageChangedEvent.CHANNEL, value = SystemPlayerImageChangedEvent.class),
-    @JsonSubTypes.Type(name = SystemGoalCreatedEvent.CHANNEL, value = SystemGoalCreatedEvent.class),
     @JsonSubTypes.Type(name = SystemGoalInitiationDueEvent.CHANNEL, value = SystemGoalInitiationDueEvent.class),
     @JsonSubTypes.Type(name = SystemGoalStartedEvent.CHANNEL, value = SystemGoalStartedEvent.class),
-    @JsonSubTypes.Type(name = SystemGoalJudgeInvitationAcceptedEvent.CHANNEL, value = SystemGoalJudgeInvitationAcceptedEvent.class),
-    @JsonSubTypes.Type(name = SystemGoalJudgeInvitationCreatedEvent.CHANNEL, value = SystemGoalJudgeInvitationCreatedEvent.class),
-    @JsonSubTypes.Type(name = SystemGoalJudgeDutyDueEvent.CHANNEL, value = SystemGoalJudgeDutyDueEvent.class)
 })
 public interface SystemEvent extends Event {
 
