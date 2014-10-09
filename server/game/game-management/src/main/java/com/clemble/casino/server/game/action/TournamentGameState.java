@@ -28,15 +28,15 @@ import com.clemble.casino.player.PlayerAwareUtils;
 /**
  * Created by mavarazy on 12/02/14.
  */
-public class TournamentGameState implements GameState<TournamentGameContext, Event> {
+public class TournamentGameState implements GameState<TournamentGameContext> {
 
     final private String TOURNAME_SEPARATOR = "_";
-    final private GameManagerFactory managerFactory;
+    final private GameManagerFactoryFacade managerFactory;
     final private TournamentGameContext context;
     final private List<TournamentLevel> levels = new ArrayList<>();
     final private TournamentGameConfiguration configuration;
 
-    public TournamentGameState(TournamentGameConfiguration configuration, TournamentGameContext context, GameManagerFactory managerFactory, List<String> players) {
+    public TournamentGameState(TournamentGameConfiguration configuration, TournamentGameContext context, GameManagerFactoryFacade managerFactory, List<String> players) {
         this.context = context;
         this.configuration = configuration;
         this.managerFactory = managerFactory;

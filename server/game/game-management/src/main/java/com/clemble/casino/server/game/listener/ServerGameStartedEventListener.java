@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.listener;
 import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCanceledEvent;
 import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCompleteEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
-import com.clemble.casino.server.game.action.GameManagerFactory;
+import com.clemble.casino.server.game.action.GameManagerFactoryFacade;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
@@ -17,11 +17,11 @@ public class ServerGameStartedEventListener implements SystemEventListener<Syste
 
     final private Logger LOG = LoggerFactory.getLogger(ServerGameStartedEventListener.class);
 
-    final private GameManagerFactory managerFactory;
+    final private GameManagerFactoryFacade managerFactory;
     final private ServerPlayerPresenceService presenceService;
     final private PlayerNotificationService notificationService;
 
-    public ServerGameStartedEventListener(GameManagerFactory managerFactory, ServerPlayerPresenceService presenceService, PlayerNotificationService notificationService) {
+    public ServerGameStartedEventListener(GameManagerFactoryFacade managerFactory, ServerPlayerPresenceService presenceService, PlayerNotificationService notificationService) {
         this.managerFactory = managerFactory;
         this.presenceService = presenceService;
         this.notificationService = notificationService;

@@ -3,20 +3,14 @@ package com.clemble.casino.server.game.spring;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.clemble.casino.game.lifecycle.management.MatchGameContext;
-import com.clemble.casino.game.lifecycle.management.RoundGameContext;
-import com.clemble.casino.game.lifecycle.management.RoundGameState;
-import com.clemble.casino.game.lifecycle.management.TournamentGameContext;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
+import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.executor.EventTaskAdapter;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.action.*;
-import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
-import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
-import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
-import com.clemble.casino.server.game.aspect.TournamentGameAspectFactory;
+import com.clemble.casino.server.game.aspect.*;
 import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
@@ -116,7 +110,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public NextGameAspectFactory nextGameAspectFactory(GameManagerFactory managerFactory) {
+        public NextGameAspectFactory nextGameAspectFactory(GameManagerFactoryFacade managerFactory) {
             return new NextGameAspectFactory(managerFactory);
         }
 
@@ -160,7 +154,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public EventTaskAdapter gameEventTaskAdapter(GameManagerFactory managerFactory, SystemNotificationService notificationService){
+    public EventTaskAdapter gameEventTaskAdapter(GameManagerFactoryFacade managerFactory, SystemNotificationService notificationService){
         return new GameEventTaskAdapter(managerFactory, notificationService);
     }
 
@@ -172,34 +166,34 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GameManagerFactory gameProcessor(
+    public GameManagerFactoryFacade gameProcessor(
         GameStateFactoryFacade stateFactory,
-        ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> roundGameManagerFactory,
-        ServerGameManagerFactory<MatchGameConfiguration, MatchGameState, MatchGameContext> matchGameManagerFactory,
-        ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameState, TournamentGameContext> tournamentGameManagerFactory,
+        ClembleManagerFactory<RoundGameConfiguration> roundGameManagerFactory,
+        ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory,
+        ClembleManagerFactory<TournamentGameConfiguration> tournamentGameManagerFactory,
         GameRecordRepository roundRecordRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        return new GameManagerFactory(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, roundRecordRepository, notificationService);
+        return new GameManagerFactoryFacade(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, roundRecordRepository, notificationService);
     }
 
     @Bean
-    public ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> roundGameManagerFactory() {
-        return new ServerGameManagerFactory<>(RoundGameAspectFactory.class);
+    public ClembleManagerFactory<RoundGameConfiguration> roundGameManagerFactory() {
+        return new ClembleManagerFactory<>(RoundGameAspectFactory.class, GenericGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameManagerFactory<MatchGameConfiguration, MatchGameState, MatchGameContext> matchGameManagerFactory() {
-        return new ServerGameManagerFactory<>(MatchGameAspectFactory.class);
+    public ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory() {
+        return new ClembleManagerFactory<>(MatchGameAspectFactory.class, GenericGameAspectFactory.class);
     }
 
     @Bean
-    public ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameState, TournamentGameContext> tournamentGameManagerFactory() {
-        return new ServerGameManagerFactory<>(TournamentGameAspectFactory.class);
+    public ClembleManagerFactory<TournamentGameConfiguration> tournamentGameManagerFactory() {
+        return new ClembleManagerFactory<>(TournamentGameAspectFactory.class, GenericGameAspectFactory.class);
     }
 
     @Bean
     public ServerGameStartedEventListener serverGameStartedEventListener(
-        GameManagerFactory managerFactory,
+        GameManagerFactoryFacade managerFactory,
         SystemNotificationServiceListener notificationServiceListener,
         ServerPlayerPresenceService presenceService,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
@@ -213,7 +207,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
         @Bean
         public GameActionController picPacPoeEngineController(
-            GameManagerFactory sessionProcessor,
+            GameManagerFactoryFacade sessionProcessor,
             GameRecordRepository recordRepository) {
             return new GameActionController(recordRepository, sessionProcessor);
         }

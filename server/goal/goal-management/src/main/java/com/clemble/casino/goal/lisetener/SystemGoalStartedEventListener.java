@@ -1,6 +1,6 @@
 package com.clemble.casino.goal.lisetener;
 
-import com.clemble.casino.goal.action.GoalManagerFactory;
+import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.server.event.goal.SystemGoalStartedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 
@@ -9,9 +9,9 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
  */
 public class SystemGoalStartedEventListener implements SystemEventListener<SystemGoalStartedEvent> {
 
-    final private GoalManagerFactory managerFactory;
+    final private GoalManagerFactoryFacade managerFactory;
 
-    public SystemGoalStartedEventListener(GoalManagerFactory managerFactory) {
+    public SystemGoalStartedEventListener(GoalManagerFactoryFacade managerFactory) {
         this.managerFactory = managerFactory;
     }
 

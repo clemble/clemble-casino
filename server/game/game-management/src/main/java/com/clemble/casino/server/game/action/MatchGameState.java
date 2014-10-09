@@ -17,6 +17,7 @@ import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
 import com.clemble.casino.player.PlayerAwareUtils;
 
+import com.clemble.casino.server.action.ClembleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.LinkedMultiValueMap;
@@ -27,15 +28,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class MatchGameState implements GameState<MatchGameContext, Event> {
+public class MatchGameState implements GameState<MatchGameContext> {
 
     final static private Logger LOG = LoggerFactory.getLogger(MatchGameState.class);
 
     final private MatchGameContext context;
     final private MatchGameConfiguration configuration;
-    final private GameManagerFactory managerFactory;
+    final private GameManagerFactoryFacade managerFactory;
 
-    public MatchGameState(MatchGameContext context, MatchGameConfiguration configuration, GameManagerFactory managerFactory) {
+    public MatchGameState(MatchGameContext context, MatchGameConfiguration configuration, GameManagerFactoryFacade managerFactory) {
         this.context = context;
         this.configuration = configuration;
         this.managerFactory = managerFactory;
@@ -88,7 +89,7 @@ public class MatchGameState implements GameState<MatchGameContext, Event> {
             InitiationState.pending,
             PlayerAwareUtils.toPlayerList(context.getPlayerContexts()),
             configuration.getConfigurations().get(gameNum));
-        GameManager<?> manager = managerFactory.start(subInitiation, context);
+        ClembleManager<GameManagementEvent, ?> manager = managerFactory.start(subInitiation, context);
         // Step 5. Sending Game Changed event
         return new MatchChangedEvent(context.getSessionKey(), context, nextSessionKey);
     }

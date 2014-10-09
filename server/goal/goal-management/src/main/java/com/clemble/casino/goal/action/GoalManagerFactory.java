@@ -1,20 +1,15 @@
 package com.clemble.casino.goal.action;
 
+import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
-import com.clemble.casino.goal.repository.GoalRecordRepository;
+import com.clemble.casino.goal.lifecycle.management.GoalState;
+import com.clemble.casino.server.action.ClembleManager;
 
 /**
- * Created by mavarazy on 9/20/14.
+ * Created by mavarazy on 10/9/14.
  */
-public class GoalManagerFactory {
+public interface GoalManagerFactory {
 
-    final private GoalRecordRepository recordRepository;
+    public ClembleManager<GoalEvent, ? extends GoalState> start(GoalInitiation initiation);
 
-    public GoalManagerFactory(GoalRecordRepository recordRepository) {
-        this.recordRepository = recordRepository;
-    }
-
-    public void start(GoalInitiation initiation) {
-        recordRepository.save(initiation.toRecord());
-    }
 }

@@ -3,6 +3,7 @@ package com.clemble.casino.server.game.aspect.notification;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.game.lifecycle.management.GameState;
+import com.clemble.casino.server.game.aspect.GenericGameAspectFactory;
 import org.springframework.core.Ordered;
 
 import com.clemble.casino.error.ClembleCasinoError;
@@ -15,7 +16,7 @@ import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
-public class PlayerNotificationRuleAspectFactory implements GameAspectFactory<GameManagementEvent, GameState<?, ?>, GameConfiguration> {
+public class PlayerNotificationRuleAspectFactory implements GenericGameAspectFactory<GameManagementEvent> {
 
     final private PlayerNotificationService notificationService;
 
@@ -24,7 +25,7 @@ public class PlayerNotificationRuleAspectFactory implements GameAspectFactory<Ga
     }
 
     @Override
-    public GameAspect<GameManagementEvent> construct(GameConfiguration configuration, GameState<?, ?> state) {
+    public GameAspect<GameManagementEvent> construct(GameConfiguration configuration, GameState state) {
         switch (configuration.getPrivacyRule()) {
             case everybody:
                 return new PublicNotificationRuleAspect(state.getContext().getSessionKey(), PlayerAwareUtils.toPlayerList(state.getContext().getPlayerContexts()), notificationService);

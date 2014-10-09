@@ -3,7 +3,7 @@ package com.clemble.casino.server.game.aspect.next;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
-import com.clemble.casino.server.game.action.GameManagerFactory;
+import com.clemble.casino.server.game.action.GameManagerFactoryFacade;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +13,9 @@ public class NextGameAspect extends GameAspect<GameEndedEvent<?>> {
     final private static Logger LOG = LoggerFactory.getLogger(NextGameAspect.class);
 
     final private GameContext<?> context;
-    final private GameManagerFactory managerFactory;
+    final private GameManagerFactoryFacade managerFactory;
 
-    public NextGameAspect(GameContext<?> context, GameManagerFactory managerFactory) {
+    public NextGameAspect(GameContext<?> context, GameManagerFactoryFacade managerFactory) {
         super(new EventTypeSelector(GameEndedEvent.class));
         this.context = context;
         this.managerFactory = managerFactory;
