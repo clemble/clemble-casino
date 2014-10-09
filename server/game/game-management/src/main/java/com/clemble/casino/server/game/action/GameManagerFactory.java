@@ -8,6 +8,7 @@ import javax.persistence.OptimisticLockException;
 
 import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
 import com.clemble.casino.game.lifecycle.management.*;
+import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.management.event.MatchStartedEvent;
 import com.clemble.casino.game.lifecycle.management.event.RoundStartedEvent;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
@@ -15,7 +16,8 @@ import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
-import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
+import com.clemble.casino.server.action.ClembleManager;
+import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import org.slf4j.Logger;
@@ -25,20 +27,20 @@ public class GameManagerFactory {
 
     final private Logger LOG = LoggerFactory.getLogger(GameManagerFactory.class);
 
-    final private ConcurrentHashMap<String, GameManager<?>> sessionToManager = new ConcurrentHashMap<>();
+    final private ConcurrentHashMap<String, ClembleManager<GameManagementEvent, ? extends GameState>> sessionToManager = new ConcurrentHashMap<>();
     
     final private GameStateFactoryFacade stateFactory;
-    final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> roundManagerFactory;
-    final private ServerGameManagerFactory<MatchGameConfiguration, MatchGameState, MatchGameContext> matchManagerFactory;
-    final private ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameState, TournamentGameContext> tournamentAspectFactory;
+    final private ClembleManagerFactory<RoundGameConfiguration> roundManagerFactory;
+    final private ClembleManagerFactory<MatchGameConfiguration> matchManagerFactory;
+    final private ClembleManagerFactory<TournamentGameConfiguration> tournamentAspectFactory;
     final private GameRecordRepository recordRepository;
     final private PlayerNotificationService notificationService;
 
     public GameManagerFactory(
             GameStateFactoryFacade stateFactory,
-            ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> roundGameManagerFactory,
-            ServerGameManagerFactory<MatchGameConfiguration, MatchGameState, MatchGameContext> matchGameManagerFactory,
-            ServerGameManagerFactory<TournamentGameConfiguration, TournamentGameState, TournamentGameContext> tournamentGameManagerFactory,
+            ClembleManagerFactory<RoundGameConfiguration> roundGameManagerFactory,
+            ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory,
+            ClembleManagerFactory<TournamentGameConfiguration> tournamentGameManagerFactory,
             GameRecordRepository recordRepository,
             PlayerNotificationService notificationService) {
         this.stateFactory = checkNotNull(stateFactory);
@@ -50,14 +52,14 @@ public class GameManagerFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public <GC extends GameContext> GameManager<GC> get(String sessionKey) {
-        GameManager<GC> gameManager = (GameManager<GC>) sessionToManager.get(sessionKey);
+    public <GC extends GameContext> ClembleManager<GameManagementEvent, ? extends GameState> get(String sessionKey) {
+        ClembleManager<GameManagementEvent, ? extends GameState> gameManager = sessionToManager.get(sessionKey);
         if(gameManager == null)
             LOG.warn("{} can't find in sessionToManager mapping {}", sessionKey, hashCode());
         return gameManager;
     }
 
-    public GameManager<?> start(GameInitiation initiation, GameContext<?> parent) {
+    public ClembleManager<GameManagementEvent, ?> start(GameInitiation initiation, GameContext<?> parent) {
         try {
             LOG.debug("{} starting", initiation.getSessionKey());
             if (initiation.getConfiguration() instanceof RoundGameConfiguration) {
@@ -73,7 +75,7 @@ public class GameManagerFactory {
         }
     }
 
-    public GameManager<RoundGameContext> round(GameInitiation initiation, GameContext<?> parent) {
+    public ClembleManager<GameManagementEvent, RoundGameState> round(GameInitiation initiation, GameContext<?> parent) {
         RoundGameConfiguration roundConfiguration = (RoundGameConfiguration) initiation.getConfiguration();
         RoundGameContext roundGameContext = RoundGameContext.fromInitiation(initiation, parent);
         // Step 1. Allocating table for game initiation
@@ -83,7 +85,7 @@ public class GameManagerFactory {
         roundRecord = recordRepository.save(roundRecord);
         LOG.debug("{} saved round record {}", initiation.getSessionKey(), hashCode());
         // Step 3. Constructing manager and saving in a session
-        GameManager<RoundGameContext> roundManager = roundManagerFactory.create(state, roundConfiguration);
+        ClembleManager<GameManagementEvent, RoundGameState> roundManager = roundManagerFactory.create(state, roundConfiguration);
         sessionToManager.put(initiation.getSessionKey(), roundManager);
         LOG.debug("{} created and stored round manager {}", initiation.getSessionKey(), hashCode());
         // Step 4. Sending round started event
@@ -94,7 +96,7 @@ public class GameManagerFactory {
     }
 
     // TODO make this internal to the system, with no available processing from outside
-    public GameManager<MatchGameContext> match(GameInitiation initiation, GameContext<?> parent) {
+    public ClembleManager<GameManagementEvent, MatchGameState> match(GameInitiation initiation, GameContext<?> parent) {
         MatchGameContext context = MatchGameContext.fromInitiation(initiation, parent);
         // Step 1. Fetching first pot configuration
         MatchGameConfiguration matchConfiguration = (MatchGameConfiguration) initiation.getConfiguration();
@@ -114,7 +116,7 @@ public class GameManagerFactory {
         // Step 3. Generating game manager
         MatchGameConfiguration configuration = (MatchGameConfiguration) initiation.getConfiguration();
         MatchGameState gameProcessor = new MatchGameState(context, configuration, this);
-        GameManager<MatchGameContext> matchGameManager = matchManagerFactory.create(gameProcessor, configuration);
+        ClembleManager<GameManagementEvent, MatchGameState> matchGameManager = matchManagerFactory.create(gameProcessor, configuration);
         sessionToManager.put(initiation.getSessionKey(), matchGameManager);
         // Step 4. Generating match started event
         MatchStartedEvent matchStartedEvent = new MatchStartedEvent(initiation.getSessionKey(), context);
@@ -124,7 +126,7 @@ public class GameManagerFactory {
         return matchGameManager;
     }
 
-    public GameManager<TournamentGameContext> tournament(GameInitiation initiation, GameContext<?> parent) {
+    public ClembleManager<GameManagementEvent, TournamentGameState> tournament(GameInitiation initiation, GameContext<?> parent) {
         return null;
     }
 

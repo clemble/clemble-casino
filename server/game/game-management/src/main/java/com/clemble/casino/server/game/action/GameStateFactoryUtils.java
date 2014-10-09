@@ -1,6 +1,5 @@
 package com.clemble.casino.server.game.action;
 
-import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
@@ -12,16 +11,16 @@ import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.lifecycle.record.EventRecord;
 import com.clemble.casino.player.PlayerAware;
-import com.clemble.casino.server.game.aspect.ServerGameManagerFactory;
+import com.clemble.casino.server.action.ClembleManagerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class GameStateFactoryUtils {
 
     final private GameStateFactoryFacade stateFactory;
-    final private ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> processorFactory;
+    final private ClembleManagerFactory<RoundGameConfiguration> processorFactory;
 
-    public GameStateFactoryUtils(ServerGameManagerFactory<RoundGameConfiguration, RoundGameState, RoundGameContext> processorFactory, GameStateFactoryFacade stateFactoryFacade) {
+    public GameStateFactoryUtils(ClembleManagerFactory<RoundGameConfiguration> processorFactory, GameStateFactoryFacade stateFactoryFacade) {
         this.stateFactory = checkNotNull(stateFactoryFacade);
         this.processorFactory = checkNotNull(processorFactory);
     }

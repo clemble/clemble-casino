@@ -5,13 +5,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.GameState;
+import com.clemble.casino.server.action.ClembleManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.management.service.GameActionService;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.game.action.GameManager;
 import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.game.GameWebMapping;
@@ -43,7 +43,7 @@ public class GameActionController<State extends GameState> implements GameAction
     @ResponseStatus(value = HttpStatus.OK)
     public GameState getState(@PathVariable("session") String sessionKey) {
         // Step 1. Fetching game manager
-        GameManager<?> gameManager = managerFactory.get(sessionKey);
+        ClembleManager<GameManagementEvent, ? extends GameState> gameManager = managerFactory.get(sessionKey);
         // Step 2. Fetching State
         return gameManager == null ? null : gameManager.getState();
     }
@@ -53,8 +53,8 @@ public class GameActionController<State extends GameState> implements GameAction
     @ResponseStatus(value = HttpStatus.OK)
     public GameContext<?> getContext(@PathVariable("session") String sessionKey) {
         // Step 1. Extracting game context
-        GameManager manager = managerFactory.get(sessionKey);
-        return manager != null ? manager.getContext() : null;
+        ClembleManager<GameManagementEvent, ? extends GameState> manager = managerFactory.get(sessionKey);
+        return manager != null ? manager.getState().getContext() : null;
     }
 
 }

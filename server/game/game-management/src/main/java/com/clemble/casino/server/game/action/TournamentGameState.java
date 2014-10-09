@@ -28,7 +28,7 @@ import com.clemble.casino.player.PlayerAwareUtils;
 /**
  * Created by mavarazy on 12/02/14.
  */
-public class TournamentGameState implements GameState<TournamentGameContext, Event> {
+public class TournamentGameState implements GameState<TournamentGameContext> {
 
     final private String TOURNAME_SEPARATOR = "_";
     final private GameManagerFactory managerFactory;

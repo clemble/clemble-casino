@@ -50,7 +50,8 @@ public class NumberState implements RoundGameState {
     }
 
     @Override
-    public GameManagementEvent process(PlayerAction action) {
+    public GameManagementEvent process(Event event) {
+        PlayerAction action = ((PlayerAction) event);
         // Step 1. Processing Select cell move
         GameManagementEvent resultEvent = null;
 
