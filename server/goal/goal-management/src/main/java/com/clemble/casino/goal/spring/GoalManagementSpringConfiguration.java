@@ -55,8 +55,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalActionServiceController goalActionServiceController(GoalManagerFactoryFacade factoryFacade) {
-        return new GoalActionServiceController(factoryFacade);
+    public GoalActionServiceController goalActionServiceController(GoalManagerFactoryFacade factoryFacade, GoalStateRepository goalStateRepository) {
+        return new GoalActionServiceController(factoryFacade, goalStateRepository);
     }
 
     @Bean
