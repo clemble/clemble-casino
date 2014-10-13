@@ -10,6 +10,8 @@ import com.clemble.casino.goal.lifecycle.management.event.GoalStartedEvent;
 import com.clemble.casino.goal.lifecycle.record.GoalRecord;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.lifecycle.configuration.rule.time.MovePlayerClock;
+import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.PlayerClock;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
@@ -46,7 +48,7 @@ public class SelfGoalManagerFactory implements GoalManagerFactory {
         // Step 2. Notifying player goal started
         notificationService.notify(initiation.getPlayer(), new GoalStartedEvent(initiation.getGoalKey()));
         // Step 3. Creating state
-        GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), new PlayerClock(0, 0));
+        GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), new PlayerClock(0, 0), MovePlayerClock.DEFAULT);
         GoalContext goalContext = new GoalContext(parent, Collections.singletonList(playerContext));
         GoalState state = new GoalState(initiation.getGoalKey(), initiation.getPlayer(), initiation.getGoal(), initiation.getConfiguration(), goalContext, "", 0, initiation.getConfiguration().getPartsRule().getParts());
         // Step 3. Saving state

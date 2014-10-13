@@ -43,8 +43,8 @@ public class GamePaymentTransactionITest {
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make a surrender by player B
-        A.perform(new SelectNumberAction(A.getPlayer(), 2));
-        B.perform(new SelectNumberAction(B.getPlayer(), 1));
+        A.perform(new SelectNumberAction(2));
+        B.perform(new SelectNumberAction(1));
         // Step 3. Synching players
         B.syncWith(A);
         // Step 4. Checking payment transaction complete

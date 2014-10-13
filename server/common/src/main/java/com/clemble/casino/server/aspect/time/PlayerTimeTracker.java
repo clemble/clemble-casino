@@ -5,11 +5,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 
 import com.clemble.casino.event.Event;
+import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.lifecycle.configuration.rule.time.PlayerClock;
 import com.clemble.casino.lifecycle.configuration.rule.time.TimeRule;
 import com.clemble.casino.player.PlayerAware;
 
-public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTracker> {
+public class PlayerTimeTracker implements PlayerAware, GameSessionAware, Comparable<PlayerTimeTracker> {
 
     /**
      * Generated
@@ -19,18 +20,25 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
     final private static long MOVE_TIMEOUT = 5_000;
 
     final private String player;
+    final private String sessionKey;
     final private TimeRule timeRule;
     final private PlayerClock playerClock;
 
-    public PlayerTimeTracker(String player, PlayerClock playerClock, TimeRule timeRule) {
+    public PlayerTimeTracker(String player, String sessionKey, PlayerClock playerClock, TimeRule timeRule) {
         this.timeRule = checkNotNull(timeRule);
         this.playerClock = playerClock;
+        this.sessionKey = sessionKey;
         this.player = player;
     }
 
     @Override
     public String getPlayer() {
         return player;
+    }
+
+    @Override
+    public String getSessionKey() {
+        return sessionKey;
     }
 
     /**
@@ -55,7 +63,7 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
 
     public void appendBreachEvent(Collection<Event> events) {
         if (timeRule.timeUntilBreach(playerClock) <= 0)
-            events.add(timeRule.getPunishment().toBreachEvent(player));
+            events.add(timeRule.getPunishment().toBreachEvent(player, sessionKey));
     }
 
     @Override

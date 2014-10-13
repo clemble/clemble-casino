@@ -6,6 +6,7 @@ import com.clemble.casino.client.goal.GoalOperations;
 import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCreatedEvent;
 import com.clemble.casino.integration.game.IntegrationAutoGameConstructionService;
 import com.clemble.casino.integration.game.IntegrationAvailabilityGameConstructionService;
+import com.clemble.casino.integration.game.IntegrationGameActionService;
 import com.clemble.casino.integration.payment.IntegrationPlayerAccountService;
 import com.clemble.casino.payment.service.PaymentTransactionOperations;
 import com.clemble.casino.payment.service.PlayerAccountService;
@@ -14,6 +15,7 @@ import com.clemble.casino.server.connection.controller.PlayerConnectionServiceCo
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
+import com.clemble.casino.server.game.controller.GameActionController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
@@ -85,7 +87,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final AvailabilityGameConstructionController availabilityConstructionService,
         final GameInitiationServiceController initiationService,
         final GameConfigurationService specificationService,
-        final GameActionService actionService,
+        final GameActionController actionService,
         final GameRecordService recordService,
         final GoalOperations goalOperations
     ) {
@@ -105,7 +107,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         this.constructionService = new IntegrationAutoGameConstructionService(player, checkNotNull(gameConstructionService));
 
         this.gameConstructors = new GameConstructionTemplate(player, constructionService, new IntegrationAvailabilityGameConstructionService(player, availabilityConstructionService), initiationService, specificationService, listenerOperations);
-        this.actionOperationsFactory = new GameActionTemplateFactory(player, listenerOperations, actionService);
+        IntegrationGameActionService iActionService = new IntegrationGameActionService(player, actionService);
+        this.actionOperationsFactory = new GameActionTemplateFactory(player, listenerOperations, iActionService);
 
         this.listenerOperations.subscribe(new EventTypeSelector(GameInitiationCreatedEvent.class), new EventListener<GameInitiationCreatedEvent>() {
             @Override

@@ -13,6 +13,6 @@ public interface ActionLatchService {
 
     ActionLatch get(String key);
 
-    ActionLatch update(String key, PlayerAction event);
+    ActionLatch update(PlayerAction<?> action);
 
 }

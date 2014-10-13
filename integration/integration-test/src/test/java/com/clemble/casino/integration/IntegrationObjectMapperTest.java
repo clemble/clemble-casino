@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationDeclinedAction;
 import com.clemble.casino.lifecycle.configuration.Configuration;
-import com.clemble.casino.lifecycle.management.event.action.bet.PlayerBetAction;
+import com.clemble.casino.lifecycle.management.event.action.bet.BetAction;
 import com.clemble.casino.lifecycle.management.event.action.surrender.GiveUpAction;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
@@ -87,13 +87,13 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
         Assert.assertNull(checkSerialization(SystemPlayerSocialGrantRegisteredEvent.class));
         Assert.assertNull(checkSerialization(PlayerInvitationDeclinedAction.class));
         Assert.assertNull(checkSerialization(RoundStartedEvent.class));
-        Assert.assertNull(checkSerialization(PlayerBetAction.class));
+        Assert.assertNull(checkSerialization(BetAction.class));
         Assert.assertNull(checkSerialization(NumberState.class));
     }
 
     @Test
     public void testGiveUpReadWrite() throws JsonParseException, JsonMappingException, IOException {
-        GiveUpAction event = new GiveUpAction(RandomStringUtils.random(5));
+        GiveUpAction event = new GiveUpAction();
         String stringEvent = objectMapper.writeValueAsString(event);
         GiveUpAction readEvent = (GiveUpAction) objectMapper.readValue(stringEvent, Event.class);
         Assert.assertEquals(event, readEvent);

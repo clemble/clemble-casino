@@ -39,7 +39,7 @@ public class NumberState implements RoundGameState {
             @JsonProperty("version") int version) {
         this.context = context;
         this.state = state;
-        this.context.getActionLatch().expectNext(context.getPlayerIterator().getPlayers(), SelectNumberAction.class);
+        this.context.getActionLatch().expectNext(context.getSessionKey(), context.getPlayerIterator().getPlayers(), SelectNumberAction.class);
 
         this.version = version;
     }
@@ -55,24 +55,24 @@ public class NumberState implements RoundGameState {
         // Step 1. Processing Select cell move
         GameManagementEvent resultEvent = null;
 
-        if (action instanceof SelectNumberAction) {
+        if (action.getAction() instanceof SelectNumberAction) {
             context.getActionLatch().put(action);
             if (context.getActionLatch().complete()) {
                 int maxBet = 0;
-                for (SelectNumberAction selectNumberEvent : context.getActionLatch().<SelectNumberAction>getActions()) {
-                    if (selectNumberEvent.getNumber() > maxBet) {
-                        maxBet = selectNumberEvent.getNumber();
+                for (PlayerAction<SelectNumberAction> selectNumberEvent : context.getActionLatch().getActions()) {
+                    if (selectNumberEvent.getAction().getNumber() > maxBet) {
+                        maxBet = selectNumberEvent.getAction().getNumber();
                         resultEvent = RoundEndedEvent.fromContext(context, this, new PlayerWonOutcome(selectNumberEvent.getPlayer()));
-                    } else if (selectNumberEvent.getNumber() == maxBet) {
+                    } else if (selectNumberEvent.getAction().getNumber() == maxBet) {
                         resultEvent = RoundEndedEvent.fromContext(context, this, new DrawOutcome());
                     }
                 }
             } else {
                 resultEvent = new GamePlayerMovedEvent(context.getSessionKey(), action.getPlayer());
             }
-        } else if (action instanceof SurrenderAction) {
+        } else if (action.getAction() instanceof SurrenderAction) {
             // Step 1. Fetching player identifier
-            String looser = ((SurrenderAction) action).getPlayer();
+            String looser = action.getPlayer();
             Collection<String> opponents = context.getPlayerIterator().whoIsOpponents(looser);
             if (opponents.size() == 0 || version == 1) {
                 // Step 2. No game started just live the table

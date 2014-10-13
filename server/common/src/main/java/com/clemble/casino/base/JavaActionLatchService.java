@@ -24,7 +24,7 @@ public class JavaActionLatchService implements ActionLatchService {
     }
 
     @Override
-    public ActionLatch update(String key, PlayerAction event) {
-        return LATCH_MAP.computeIfPresent(key, (k, v) -> v.put(event));
+    public ActionLatch update(PlayerAction<?> event) {
+        return LATCH_MAP.computeIfPresent(event.getKey(), (k, v) -> v.put(event));
     }
 }

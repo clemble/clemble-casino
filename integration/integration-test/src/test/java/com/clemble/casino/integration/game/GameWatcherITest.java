@@ -48,8 +48,8 @@ public class GameWatcherITest {
         assertTrue(A.isAlive());
         assertTrue(B.isAlive());
 
-        A.perform(new SelectNumberAction(A.getPlayer(), 2));
-        B.perform(new SelectNumberAction(B.getPlayer(), 1));
+        A.perform(new SelectNumberAction(2));
+        B.perform(new SelectNumberAction(1));
 
         A.waitForEnd();
 

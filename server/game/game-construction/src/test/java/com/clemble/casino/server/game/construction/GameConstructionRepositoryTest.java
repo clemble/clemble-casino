@@ -3,6 +3,7 @@ package com.clemble.casino.server.game.construction;
 import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.UUID;
 
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
@@ -42,7 +43,7 @@ public class GameConstructionRepositoryTest {
     public void testActionLatchSerialization() throws JsonParseException, JsonMappingException, IOException {
         String serializedLatch = null;
         try {
-            ActionLatch randomLatch = new ActionLatch().expectNext(ImmutableList.<String>of("1", "2"), PlayerInvitationAction.class);
+            ActionLatch randomLatch = new ActionLatch().expectNext("0", ImmutableList.<String>of("1", "2"), PlayerInvitationAction.class);
             serializedLatch = objectMapper.writeValueAsString(randomLatch);
             ActionLatch readLatch = objectMapper.readValue(serializedLatch, ActionLatch.class);
             Assert.assertEquals("Failed to deserialize: " + serializedLatch, readLatch, randomLatch);
@@ -57,7 +58,7 @@ public class GameConstructionRepositoryTest {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = availabilityGameRequest.toConstruction("1", UUID.randomUUID().toString());
-        construction.getResponses().expectNext("1", PlayerInvitationAction.class);
+        construction.getResponses().expectNext("0", Collections.singleton("1"), PlayerInvitationAction.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.save(construction);
         Assert.assertNotNull(construction.getResponses());
@@ -68,13 +69,13 @@ public class GameConstructionRepositoryTest {
         AvailabilityGameRequest availabilityGameRequest = new AvailabilityGameRequest(RoundGameConfiguration.DEFAULT, ImmutableList.<String> of("1", "2"), GameDeclineBehavior.invalidate);
 
         GameConstruction construction = availabilityGameRequest.toConstruction((UUID.randomUUID().toString()), (UUID.randomUUID().toString()));
-        construction.getResponses().expectNext("1", PlayerInvitationAction.class);
+        construction.getResponses().expectNext("0", Collections.singleton("1"), PlayerInvitationAction.class);
         Assert.assertNotNull(construction.getResponses());
         construction = constructionRepository.save(construction);
         Assert.assertNotNull(construction.getResponses());
 
         GameConstruction anotherConstruction = availabilityGameRequest.toConstruction((UUID.randomUUID().toString()), (UUID.randomUUID().toString()));
-        anotherConstruction.getResponses().expectNext("1", PlayerInvitationAction.class);
+        anotherConstruction.getResponses().expectNext("0", Collections.singleton("1"), PlayerInvitationAction.class);
         Assert.assertNotNull(anotherConstruction.getResponses());
         anotherConstruction = constructionRepository.save(anotherConstruction);
         Assert.assertNotNull(anotherConstruction.getResponses());

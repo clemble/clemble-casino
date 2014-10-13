@@ -8,6 +8,7 @@ import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.service.GoalActionService;
 import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.lifecycle.management.event.action.Action;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +49,7 @@ public class GoalActionServiceController implements GoalActionService {
     @Override
     @RequestMapping(method = RequestMethod.POST, value = GoalWebMapping.GOAL_ACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public GoalEvent process(String goalKey, Event action) {
+    public GoalEvent process(String goalKey, Action action) {
         return factoryFacade.get(goalKey).process(action);
     }
 

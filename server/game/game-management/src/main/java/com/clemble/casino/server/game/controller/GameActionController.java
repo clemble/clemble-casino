@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.GameState;
+import com.clemble.casino.lifecycle.management.event.action.Action;
+import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.game.action.GameManagerFactoryFacade;
 import org.springframework.http.HttpStatus;
@@ -32,9 +34,14 @@ public class GameActionController<State extends GameState> implements GameAction
     }
 
     @Override
+    public GameManagementEvent process(String sessionKey, Action action) {
+        throw new IllegalAccessError();
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = GameWebMapping.SESSIONS_ACTIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public GameManagementEvent process(@PathVariable("session") String sessionKey, @RequestBody Event action) {
+    public GameManagementEvent process(@PathVariable("session") String sessionKey, @CookieValue("player") String player, @RequestBody Action event) {
+        PlayerAction action = new PlayerAction(sessionKey, player, event);
         // Step 1. Retrieving associated table
         return managerFactory.get(sessionKey).process(action);
     }

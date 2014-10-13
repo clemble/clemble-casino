@@ -19,7 +19,7 @@ import com.clemble.casino.goal.lifecycle.management.GoalPlayerContext;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.event.action.PlayerExpectedAction;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.lifecycle.management.event.action.bet.PlayerBetAction;
+import com.clemble.casino.lifecycle.management.event.action.bet.BetAction;
 import com.clemble.casino.lifecycle.management.event.action.surrender.GiveUpAction;
 import com.clemble.casino.game.*;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
@@ -87,13 +87,13 @@ public class IntegrationObjectTest {
         register(PlayerInvitationAction.class, new AbstractValueGenerator<PlayerInvitationAction>() {
             @Override
             public PlayerInvitationAction generate() {
-            return new PlayerInvitationAcceptedAction("d", "b");
+            return new PlayerInvitationAcceptedAction();
             }
         });
         register(PlayerExpectedAction.class, new AbstractValueGenerator<PlayerExpectedAction>() {
             @Override
             public PlayerExpectedAction generate() {
-            return PlayerExpectedAction.fromClass("S", PlayerInvitationAcceptedAction.class);
+            return PlayerExpectedAction.fromClass(PlayerInvitationAcceptedAction.class);
             }
         });
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {
@@ -120,13 +120,13 @@ public class IntegrationObjectTest {
         register(Event.class, new AbstractValueGenerator<Event>() {
             @Override
             public Event generate() {
-            return new GiveUpAction(RandomStringUtils.random(5));
+            return new GiveUpAction();
             }
         });
-        register(PlayerBetAction.class, new AbstractValueGenerator<PlayerBetAction>() {
+        register(BetAction.class, new AbstractValueGenerator<BetAction>() {
             @Override
-            public PlayerBetAction generate() {
-            return new PlayerBetAction(RandomStringUtils.random(5), 100);
+            public BetAction generate() {
+            return new BetAction(100);
             }
         });
         register(PlayerAccount.class, new AbstractValueGenerator<PlayerAccount>() {

@@ -10,6 +10,7 @@ import com.clemble.casino.event.action.PlayerExpectedAction;
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAcceptedAction;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 
+import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -100,16 +101,16 @@ public class AvailabilityGameConstructionITest {
 
         RoundGamePlayer playerA = gameScenarios.round(Game.num, A, B.getPlayer());
         String sessionKey = playerA.getSessionKey();
-        PlayerAware AtoAresponse = A.gameConstructionOperations().getResponse(sessionKey, A.getPlayer());
-        PlayerAware AtoBresponse = A.gameConstructionOperations().getResponse(sessionKey, B.getPlayer());
+        PlayerAction AtoAresponse = A.gameConstructionOperations().getResponse(sessionKey, A.getPlayer());
+        PlayerAction AtoBresponse = A.gameConstructionOperations().getResponse(sessionKey, B.getPlayer());
 
-        PlayerAware BtoAresponse = B.gameConstructionOperations().getResponse(sessionKey, A.getPlayer());
-        PlayerAware BtoBresponse = B.gameConstructionOperations().getResponse(sessionKey, B.getPlayer());
+        PlayerAction BtoAresponse = B.gameConstructionOperations().getResponse(sessionKey, A.getPlayer());
+        PlayerAction BtoBresponse = B.gameConstructionOperations().getResponse(sessionKey, B.getPlayer());
 
         assertEquals(AtoAresponse, BtoAresponse);
         assertEquals(AtoBresponse, BtoBresponse);
-        assertTrue(AtoAresponse instanceof PlayerInvitationAcceptedAction);
-        assertTrue(AtoBresponse instanceof PlayerExpectedAction);
+        assertTrue(AtoAresponse.getAction() instanceof PlayerInvitationAcceptedAction);
+        assertTrue(AtoBresponse.getAction() instanceof PlayerExpectedAction);
     }
 
 

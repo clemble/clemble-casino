@@ -42,8 +42,8 @@ public class GameTimeAspect extends GameAspect<GameManagementEvent> {
 
         List<PlayerTimeTracker> playerTimeTrackers = new ArrayList<PlayerTimeTracker>();
         for (RoundGamePlayerContext playerContext : context.getPlayerContexts()) {
-            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getTotalTimeRule()));
-            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), specification.getMoveTimeRule()));
+            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), sessionKey, playerContext.getClock(), specification.getTotalTimeRule()));
+            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), sessionKey, playerContext.getClock(), specification.getMoveTimeRule()));
         }
         this.sessionTimeTracker = new PlayerTimeTask(sessionKey, playerTimeTrackers);
     }

@@ -18,6 +18,7 @@ import com.clemble.casino.server.connection.controller.PlayerConnectionServiceCo
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
+import com.clemble.casino.server.game.controller.GameActionController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
@@ -136,7 +137,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             AvailabilityGameConstructionController availabilityConstructionService,
             GameInitiationServiceController initiationService,
             @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
-            GameActionService actionService,
+            GameActionController actionService,
             GameRecordService recordService,
             IntegrationGoalOperationsFactory goalOperationsFactory) {
             ClembleCasinoRegistrationOperations registrationOperations = new IntegrationClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalOperationsFactory);

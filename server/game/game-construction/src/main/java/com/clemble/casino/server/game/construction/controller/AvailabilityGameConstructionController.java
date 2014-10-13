@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import org.springframework.http.HttpStatus;
@@ -65,11 +66,14 @@ public class AvailabilityGameConstructionController implements AvailabilityGameC
     }
 
     @Override
+    public GameConstruction reply(String sessionKey, PlayerInvitationAction response) {
+        throw new IllegalAccessError();
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = CONSTRUCTION_RESPONSES, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public GameConstruction reply(@RequestBody final PlayerInvitationAction gameRequest) {
-        // Step 1. Invoking actual matching service
-        return availabilityConstructionService.invitationResponded(gameRequest);
+    public GameConstruction reply(@PathVariable("session") String sessionKey, @CookieValue("player") String player, @RequestBody PlayerInvitationAction response) {
+        return availabilityConstructionService.reply(sessionKey, player, response);
     }
 
     @Override

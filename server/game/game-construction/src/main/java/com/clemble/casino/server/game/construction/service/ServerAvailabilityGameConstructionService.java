@@ -80,37 +80,34 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         return construction;
     }
 
-    final public GameConstruction invitationResponded(PlayerInvitationAction response) {
-        // Step 1. Sanity check
-        if (response == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse);
-        return tryReply(response);
-    }
-
-
     @Override
     public PlayerAction getReply(String sessionKey, String player) {
         return constructionRepository.findOne(sessionKey).getResponses().filterAction(player);
     }
 
     @Override
-    public GameConstruction reply(PlayerInvitationAction response) {
-        // Step 1. Sanity check
-        if (response == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse, response.getPlayer(), response.getSessionKey());
-        return tryReply(response);
+    public GameConstruction reply(String sessionKey, PlayerInvitationAction response) {
+        throw new IllegalAccessError();
     }
 
-    final private GameConstruction tryReply(PlayerInvitationAction response) {
+    public GameConstruction reply(String sessionKey, String player, PlayerInvitationAction response) {
+        // Step 1. Sanity check
+        if (response == null)
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidInvitationResponse, player, sessionKey);
+        return tryReply(sessionKey, player, response);
+    }
+
+    final private GameConstruction tryReply(String sessionKey, String player, PlayerInvitationAction response) {
+        PlayerAction action = new PlayerAction(sessionKey, player, response);
         try {
             // Step 1. Checking associated construction
-            GameConstruction construction = constructionRepository.findOne(response.getSessionKey());
+            GameConstruction construction = constructionRepository.findOne(sessionKey);
             if (construction == null)
                 throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionDoesNotExistent);
             if (construction.getState() != ConstructionState.pending)
-                throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState, response.getPlayer(), response.getSessionKey());
+                throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInvalidState, player, sessionKey);
             // Step 2. Checking if player is part of the game
-            ActionLatch responseLatch = latchService.update(response.getSessionKey(), response);
+            ActionLatch responseLatch = latchService.update(action);
             // Step 3. Notifying of applied response
             playerNotificationService.notify(responseLatch.fetchParticipants(), response);
             construction = construction.cloneWithResponses(responseLatch);
@@ -131,7 +128,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             construction = constructionRepository.save(construction);
             return construction;
         } catch (ConcurrencyFailureException concurrencyFailureException) {
-            return tryReply(response);
+            return tryReply(sessionKey, player, response);
         }
     }
 

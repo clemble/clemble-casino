@@ -44,7 +44,7 @@ public class IntegrationAvailabilityGameConstructionService implements Availabil
     }
 
     @Override
-    public GameConstruction reply(PlayerInvitationAction gameRequest) {
-        return constructionController.reply(gameRequest);
+    public GameConstruction reply(String sessionKey, PlayerInvitationAction gameRequest) {
+        return constructionController.reply(sessionKey, player, gameRequest);
     }
 }

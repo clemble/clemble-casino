@@ -5,6 +5,7 @@ import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
+import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import com.clemble.casino.lifecycle.record.EventRecord;
 import com.clemble.casino.lifecycle.record.RecordState;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
@@ -48,8 +49,8 @@ public class GameRecordOperationsITest {
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make a surrender by player B
-        A.perform(new SelectNumberAction(A.getPlayer(), 2));
-        B.perform(new SelectNumberAction(B.getPlayer(), 1));
+        A.perform(new SelectNumberAction(2));
+        B.perform(new SelectNumberAction(1));
         // Step 3. Synching players
         B.syncWith(A);
         // Step 4. Checking payment transaction complete
@@ -67,9 +68,9 @@ public class GameRecordOperationsITest {
         assertEquals(AgameRecord, BgameRecord);
         assertEquals(AgameRecord.getEventRecords().size(), 4);
         Iterator<EventRecord> moveIterator = AgameRecord.getEventRecords().iterator();
-        assertEquals(moveIterator.next().getEvent(), new SelectNumberAction(A.getPlayer(), 2));
+        assertEquals(moveIterator.next().getEvent(), new PlayerAction(A.getSessionKey(), A.getPlayer(), new SelectNumberAction(2)));
         moveIterator.next();
-        assertEquals(moveIterator.next().getEvent(), new SelectNumberAction(B.getPlayer(), 1));
+        assertEquals(moveIterator.next().getEvent(), new PlayerAction(B.getSessionKey(), B.getPlayer(), new SelectNumberAction(1)));
     }
 
     @Test

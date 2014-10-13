@@ -41,8 +41,8 @@ public class GoalTimeAspect extends GoalAspect<Event> {
 
         List<PlayerTimeTracker> playerTimeTrackers = new ArrayList<PlayerTimeTracker>();
         for (PlayerContext playerContext : context.getPlayerContexts()) {
-            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), state.getConfiguration().getTotalTimeRule()));
-            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), playerContext.getClock(), state.getConfiguration().getMoveTimeRule()));
+            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), state.getGoalKey(), playerContext.getClock(), state.getConfiguration().getTotalTimeRule()));
+            playerTimeTrackers.add(new PlayerTimeTracker(playerContext.getPlayer(), state.getGoalKey(), playerContext.getClock(), state.getConfiguration().getMoveTimeRule()));
         }
 
         this.timeTracker = new PlayerTimeTask(state.getGoalKey(), playerTimeTrackers);

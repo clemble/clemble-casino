@@ -59,7 +59,7 @@ public class ServerGameConstructionServiceTest {
         GameConstruction construction = constructionService.construct(participants.get(0), availabilityGameRequest);
 
         for (int i = 1; i < NUM_PARTICIPANTS; i++) {
-            constructionService.reply(new PlayerInvitationAcceptedAction(participants.get(i), construction.getSessionKey()));
+            constructionService.reply(construction.getSessionKey(), participants.get(i), new PlayerInvitationAcceptedAction());
         }
 
         GameConstruction finalConstructionState = constructionRepository.findOne(construction.getSessionKey());
@@ -102,9 +102,9 @@ public class ServerGameConstructionServiceTest {
         final public String player;
         final public String sessionKey;
         final public CountDownLatch endLatch;
-        final public AvailabilityGameConstructionService constructionService;
+        final public ServerAvailabilityGameConstructionService constructionService;
 
-        public GameResponce(String sessionKey, String player, CountDownLatch endLatch, AvailabilityGameConstructionService constructionService) {
+        public GameResponce(String sessionKey, String player, CountDownLatch endLatch, ServerAvailabilityGameConstructionService constructionService) {
             this.player = player;
             this.sessionKey = sessionKey;
             this.endLatch = endLatch;
@@ -115,7 +115,7 @@ public class ServerGameConstructionServiceTest {
         public GameConstruction call() {
             try {
                 Thread.sleep(RANDOM.nextInt(1000));
-                GameConstruction construct = constructionService.reply(new PlayerInvitationAcceptedAction(player, sessionKey));
+                GameConstruction construct = constructionService.reply(sessionKey, player, new PlayerInvitationAcceptedAction());
                 return construct;
             } catch (Throwable throwable) {
                 throwable.printStackTrace();

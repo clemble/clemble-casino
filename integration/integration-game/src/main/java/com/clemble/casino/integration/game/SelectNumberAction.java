@@ -12,18 +12,11 @@ public class SelectNumberAction implements PlayerGameAction {
 
     private static final long serialVersionUID = 6819390579455234704L;
 
-    final private String player;
     final private int number;
 
     @JsonCreator
-    public SelectNumberAction(@JsonProperty(PLAYER) String player, @JsonProperty("number") int number) {
-        this.player = player;
+    public SelectNumberAction(@JsonProperty("number") int number) {
         this.number = number;
-    }
-
-    @Override
-    public String getPlayer(){
-        return player;
     }
 
     public int getNumber() {
@@ -52,7 +45,7 @@ public class SelectNumberAction implements PlayerGameAction {
 
     @Override
     public String toString() {
-        return player + " > " + JSON_TYPE + " > " + number;
+        return JSON_TYPE + " > " + number;
     }
 
 

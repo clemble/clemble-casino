@@ -9,6 +9,7 @@ import com.clemble.casino.client.event.EventListener;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.game.GameActionOperations;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.lifecycle.management.event.action.Action;
 import com.clemble.casino.lifecycle.management.event.action.surrender.GiveUpAction;
 import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
@@ -59,7 +60,7 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
     }
 
     @Override
-    public void perform(Event gameAction) {
+    public void perform(Action gameAction) {
         LOG.debug("performing {}", gameAction);
         GameManagementEvent managementEvent = actionOperations.process(gameAction);
         if (managementEvent instanceof RoundEvent)
@@ -91,7 +92,7 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
     public GamePlayer giveUp() {
         // Step 1. Giving up if needed
         if (isAlive()) {
-            perform(new GiveUpAction(getPlayer()));
+            perform(new GiveUpAction());
         } else {
             LOG.debug("can't give up player is not ALIVE");
         }

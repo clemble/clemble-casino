@@ -13,6 +13,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
+import com.clemble.casino.server.game.controller.GameActionController;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
@@ -50,7 +51,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     final private AvailabilityGameConstructionController availabilityConstructionService;
     final private GameInitiationServiceController initiationService;
     final private GameConfigurationService specificationService;
-    final private GameActionService actionService;
+    final private GameActionController actionService;
     final private GameRecordService recordService;
     final private IntegrationGoalOperationsFactory goalOperationsFactory;
 
@@ -70,7 +71,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         AvailabilityGameConstructionController availabilityConstructionService,
         GameInitiationServiceController initiationService,
         GameConfigurationService specificationService,
-        GameActionService actionService,
+        GameActionController actionService,
         GameRecordService recordService,
         IntegrationGoalOperationsFactory goalOperationsFactory) {
         this.host = checkNotNull(host);
