@@ -55,7 +55,7 @@ public class PlayerTimeTracker implements PlayerAware, Comparable<PlayerTimeTrac
 
     public void appendBreachEvent(Collection<Event> events) {
         if (timeRule.timeUntilBreach(playerClock) <= 0)
-            events.add(timeRule.toTimeBreachedEvent(player));
+            events.add(timeRule.getPunishment().toBreachEvent(player));
     }
 
     @Override
