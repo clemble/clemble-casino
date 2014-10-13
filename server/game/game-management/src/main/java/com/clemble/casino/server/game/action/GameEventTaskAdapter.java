@@ -2,8 +2,8 @@ package com.clemble.casino.server.game.action;
 
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
+import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import com.clemble.casino.server.action.ClembleManager;
-import com.clemble.casino.server.aspect.time.PlayerTimeTask;
 import com.clemble.casino.server.executor.EventTask;
 import com.clemble.casino.server.executor.EventTaskAdapter;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -30,7 +30,7 @@ public class GameEventTaskAdapter implements EventTaskAdapter {
         // Step 1.1 If there is no events nothing much to do return
         if(events.isEmpty())
             return;
-        if(task instanceof PlayerTimeTask) {
+        if(task instanceof PlayerAction) {
             // Step 2.1 Fetching session key
             String sessionKey = task.getKey();
             // Step 2.1.1 Fetching manager

@@ -19,6 +19,7 @@ import com.clemble.casino.server.game.aspect.match.MatchFillAspectFactory;
 import com.clemble.casino.server.game.aspect.record.GameRecordAspectFactory;
 import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
+import com.clemble.casino.server.game.aspect.time.RoundGameTimeAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
 import com.clemble.casino.server.game.controller.GameActionController;
 import com.clemble.casino.server.game.controller.GameRecordServiceController;
@@ -36,7 +37,6 @@ import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.notification.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
-import com.clemble.casino.server.game.aspect.time.GameTimeAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -127,8 +127,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
          *
          */
         @Bean
-        public GameTimeAspectFactory gameTimeAspectFactory(@Qualifier("gameEventTaskExecutor") EventTaskExecutor gameEventTaskExecutor) {
-            return new GameTimeAspectFactory(gameEventTaskExecutor);
+        public RoundGameTimeAspectFactory gameTimeAspectFactory(@Qualifier("gameEventTaskExecutor") EventTaskExecutor gameEventTaskExecutor) {
+            return new RoundGameTimeAspectFactory(gameEventTaskExecutor);
         }
 
     }

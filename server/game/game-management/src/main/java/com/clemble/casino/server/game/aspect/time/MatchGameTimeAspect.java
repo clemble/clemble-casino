@@ -21,7 +21,7 @@ public class MatchGameTimeAspect extends GameAspect<RoundEndedEvent> {
         for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
             MatchGamePlayerContext matchPlayerContext = this.context.getPlayerContext(playerContext.getPlayer());
             // TODO Get rid of this small hack to change the match clocks
-            matchPlayerContext.getClock().start(-playerContext.getClock().getTimeSpent());
+            matchPlayerContext.getClock().deduce(playerContext.getClock().getTimeSpent());
             matchPlayerContext.getClock().stop();
         }
     }
