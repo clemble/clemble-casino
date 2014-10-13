@@ -25,10 +25,10 @@ public class PlayerTimeTracker implements PlayerAware, GameSessionAware, Compara
     final private PlayerClock playerClock;
 
     public PlayerTimeTracker(String player, String sessionKey, PlayerClock playerClock, TimeRule timeRule) {
-        this.timeRule = checkNotNull(timeRule);
-        this.playerClock = playerClock;
-        this.sessionKey = sessionKey;
         this.player = player;
+        this.timeRule = checkNotNull(timeRule);
+        this.sessionKey = sessionKey;
+        this.playerClock = playerClock;
     }
 
     @Override
@@ -45,15 +45,15 @@ public class PlayerTimeTracker implements PlayerAware, GameSessionAware, Compara
      * Marks that move is expected from the user.
      * If it was marked before, no action taken
      */
-    public void markToMove() {
-        playerClock.markToMove(MOVE_TIMEOUT);
+    public void start() {
+        playerClock.start(MOVE_TIMEOUT);
     }
 
     /**
      * Marks player, as already moved, all subsequent calls are ignored, until it's marked to move
      */
-    public void markMoved() {
-        playerClock.markMoved();
+    public void stop() {
+        playerClock.stop();
     }
 
     public long getBreachTime(){

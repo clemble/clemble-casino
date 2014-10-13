@@ -6,7 +6,6 @@ import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
-import com.clemble.casino.goal.lifecycle.management.event.GoalReachedEvent;
 import com.clemble.casino.lifecycle.management.PlayerContext;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
@@ -55,8 +54,8 @@ public class GoalTimeAspect extends GoalAspect<Event> {
         if(move instanceof GoalEndedEvent) {
             eventTaskExecutor.cancel(timeTracker);
         } else {
-            timeTracker.markMoved((PlayerAware) move);
-            timeTracker.markToMove((PlayerAware) move);
+            timeTracker.stop((PlayerAware) move);
+            timeTracker.start((PlayerAware) move);
             // Step 3. Re scheduling if needed
             if (!timeTracker.nextExecutionTime(null).equals(breachTimeBeforeMove)) {
                 eventTaskExecutor.reschedule(timeTracker);

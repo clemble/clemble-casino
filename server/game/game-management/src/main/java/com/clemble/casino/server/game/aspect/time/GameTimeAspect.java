@@ -56,13 +56,13 @@ public class GameTimeAspect extends GameAspect<GameManagementEvent> {
             eventTaskExecutor.cancel(sessionTimeTracker);
         } else {
             ActionLatch latch = context.getActionLatch();
-            if(move instanceof RoundChangedEvent){
+            if(move instanceof RoundChangedEvent) {
                 // Step 2.1. Mark all participants as moved
                 participants.forEach(sessionTimeTracker::markMoved);
                 // Step 2.2. Mark all pending participants as to move
-                latch.fetchParticipants().forEach(sessionTimeTracker::markToMove);
+                latch.fetchParticipants().forEach(sessionTimeTracker::start);
             } else if(move instanceof GamePlayerMovedEvent) {
-                sessionTimeTracker.markMoved((PlayerAware) move);
+                sessionTimeTracker.stop((PlayerAware) move);
             }
             // Step 3. Re scheduling if needed
             if (!sessionTimeTracker.nextExecutionTime(null).equals(breachTimeBeforeMove)) {

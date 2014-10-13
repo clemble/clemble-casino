@@ -29,26 +29,26 @@ public class PlayerTimeTask implements EventTask {
         return key;
     }
 
-    public void markMoved(PlayerAware move) {
+    public void stop(PlayerAware move) {
         markMoved(move.getPlayer());
     }
 
     public void markMoved(String player) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
             if (playerTimeTracker.getPlayer().equals(player)) {
-                playerTimeTracker.markMoved();
+                playerTimeTracker.stop();
             }
         }
     }
 
-    public void markToMove(PlayerAware nextMove) {
-        markToMove(nextMove.getPlayer());
+    public void start(PlayerAware nextMove) {
+        start(nextMove.getPlayer());
     }
 
-    public void markToMove(String player) {
+    public void start(String player) {
         for (PlayerTimeTracker playerTimeTracker : playerTimeTrackers) {
             if (playerTimeTracker.getPlayer().equals(player)) {
-                playerTimeTracker.markToMove();
+                playerTimeTracker.start();
             }
         }
     }
