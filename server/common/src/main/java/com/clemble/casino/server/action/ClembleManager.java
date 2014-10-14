@@ -33,6 +33,24 @@ public class ClembleManager<R extends Event, T extends State<R, ?>> {
         return state;
     }
 
+    public R start() {
+        // Step 1. Acquiring lock for the session, to exclude parallel processing
+        sessionLock.lock();
+        try {
+            LOG.debug("Starting {}", state);
+            // Step 2. Generating start event
+            R event = state.start();
+            // Step 3 After move notification
+            for (ClembleAspect listener : listenerArray)
+                listener.onEvent(event);
+            // Step 3. Returning game event
+            return event;
+        } finally {
+            sessionLock.unlock();
+        }
+
+    }
+
     public R process(Event action) {
         // Step 1. Sanity check
         if (action == null)

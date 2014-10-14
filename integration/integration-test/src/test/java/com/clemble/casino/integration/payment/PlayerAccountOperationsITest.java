@@ -109,8 +109,8 @@ public class PlayerAccountOperationsITest {
             assertTrue("Unexpected amount " + cashAbefore.getAmount() + " for " + A.getPlayer(), cashAbefore.getAmount() >= 0);
             assertTrue("Unexpected amount " + cashBbefore.getAmount() + " for " + B.getPlayer(),cashBbefore.getAmount() >= 0);
 
-            RoundGamePlayer<NumberState> AvsB = gameOperations.round(Game.num, A, B.getPlayer());
-            RoundGamePlayer<NumberState> BvsA = gameOperations.accept(AvsB.getSessionKey(), B);
+            RoundGamePlayer AvsB = gameOperations.round(Game.num, A, B.getPlayer());
+            RoundGamePlayer BvsA = gameOperations.accept(AvsB.getSessionKey(), B);
 
             AvsB.waitForStart();
             BvsA.waitForStart();

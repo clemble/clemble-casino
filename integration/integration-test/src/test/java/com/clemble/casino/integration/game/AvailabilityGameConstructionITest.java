@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.clemble.casino.event.action.PlayerExpectedAction;
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAcceptedAction;
+import com.clemble.casino.game.lifecycle.management.RoundState;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
@@ -53,7 +54,7 @@ public class AvailabilityGameConstructionITest {
 
     @Test
     public void testScenarioCreation() {
-        List<RoundGamePlayer<NumberState>> sessionPlayers = gameScenarios.round(Game.num);
+        List<RoundGamePlayer> sessionPlayers = gameScenarios.round(Game.num);
         Assert.assertTrue(sessionPlayers.get(0).isToMove());
     }
 
@@ -114,13 +115,13 @@ public class AvailabilityGameConstructionITest {
     }
 
 
-    private <State extends GameState> void assertAlive(RoundGamePlayer<State> player, boolean alive) {
+    private <State extends RoundState> void assertAlive(RoundGamePlayer player, boolean alive) {
         if ((player.isAlive() && !alive) || (!player.isAlive() && alive)) {
             String playerIdentifier = player.playerOperations().getPlayer();
             GameConstruction construction = player.playerOperations().gameConstructionOperations().getConstruct(player.getSessionKey());
             List<String> opponents = new ArrayList<String>(construction.getResponses().fetchParticipants());
             opponents.remove(playerIdentifier);
-            Assert.fail(player.getState().getVersion() + " " + playerIdentifier + " with opponents " + opponents + " expected "+ (alive ? "to be" : "not to be") + " alive in " + construction.getSessionKey());
+            Assert.fail(player.getVersion() + " " + playerIdentifier + " with opponents " + opponents + " expected "+ (alive ? "to be" : "not to be") + " alive in " + construction.getSessionKey());
         }
     }
 }

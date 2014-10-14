@@ -16,15 +16,15 @@ import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.management.event.RoundEvent;
 
-public class SimpleRoundGamePlayer<State extends RoundGameState> extends AbstractGamePlayer implements RoundGamePlayer<State> {
+public class SimpleRoundGamePlayer extends AbstractGamePlayer implements RoundGamePlayer {
 
     /**
      * Generated 05/07/13
      */
     private static final long serialVersionUID = 694894192572157764L;
 
-    final private AtomicReference<State> state = new AtomicReference<>();
-    final private GameActionOperations<State> actionOperations;
+    final private AtomicReference<RoundGameState> state = new AtomicReference<>();
+    final private GameActionOperations<RoundGameState> actionOperations;
 
     public SimpleRoundGamePlayer(final ClembleCasinoOperations player, final String sessionKey, final GameConfiguration configuration) {
         super(player, sessionKey, configuration);
@@ -32,14 +32,14 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
         this.actionOperations.subscribe(new EventTypeSelector(RoundEvent.class), new EventListener<RoundEvent>() {
             @Override
             public void onEvent(RoundEvent event) {
-                setState((State) event.getState());
+                setState(event.getState());
             }
         });
         this.setState(this.actionOperations.getState());
     }
 
     @Override
-    public State getState() {
+    public RoundGameState getState() {
         return state.get();
     }
 
@@ -64,13 +64,13 @@ public class SimpleRoundGamePlayer<State extends RoundGameState> extends Abstrac
         LOG.debug("performing {}", gameAction);
         GameManagementEvent managementEvent = actionOperations.process(gameAction);
         if (managementEvent instanceof RoundEvent)
-            setState((State) ((RoundEvent) managementEvent).getState());
+            setState(((RoundEvent) managementEvent).getState());
         for (GamePlayer player : dependents) {
             player.syncWith(this);
         }
     }
 
-    final private void setState(State newState) {
+    final private void setState(RoundGameState newState) {
         synchronized (versionLock) {
             if (newState != null) {
                 if (getState() == null || getState().getVersion() < newState.getVersion()) {

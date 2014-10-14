@@ -11,6 +11,7 @@ import com.clemble.casino.server.executor.EventTaskAdapter;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.action.*;
 import com.clemble.casino.server.game.aspect.*;
+import com.clemble.casino.server.game.aspect.next.MatchNextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
@@ -100,6 +101,11 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
+        public MatchNextGameAspectFactory matchNextGameAspectFactory(GameManagerFactoryFacade factoryFacade) {
+            return new MatchNextGameAspectFactory(factoryFacade);
+        }
+
+        @Bean
         public GamePlayerUnitAspectFactory gamePlayerUnitAspectFactory() {
             return new GamePlayerUnitAspectFactory();
         }
@@ -149,8 +155,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
 
     @Bean
-    public GameStateFactoryFacade gameStateFactoryFacade() {
-        return new GameStateFactoryFacade();
+    public RoundStateFactoryFacade gameStateFactoryFacade() {
+        return new RoundStateFactoryFacade();
     }
 
     @Bean
@@ -167,7 +173,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public GameManagerFactoryFacade gameProcessor(
-        GameStateFactoryFacade stateFactory,
+        RoundStateFactoryFacade stateFactory,
         ClembleManagerFactory<RoundGameConfiguration> roundGameManagerFactory,
         ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory,
         ClembleManagerFactory<TournamentGameConfiguration> tournamentGameManagerFactory,

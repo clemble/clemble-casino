@@ -5,6 +5,7 @@ import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.RoundGameContext;
 import com.clemble.casino.game.lifecycle.management.RoundGameState;
+import com.clemble.casino.game.lifecycle.management.RoundState;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.management.event.RoundStartedEvent;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
@@ -22,27 +23,26 @@ public class RoundManagerFactory implements GameManagerFactory {
 
     final private Logger LOG = LoggerFactory.getLogger(GameManagerFactoryFacade.class);
 
-    final private GameStateFactoryFacade stateFactory;
+    final private RoundStateFactoryFacade stateFactory;
     final private GameRecordRepository recordRepository;
-    final private PlayerNotificationService notificationService;
     final private ClembleManagerFactory<RoundGameConfiguration> roundManagerFactory;
 
     public RoundManagerFactory(
-        GameStateFactoryFacade stateFactory,
+        RoundStateFactoryFacade stateFactory,
         ClembleManagerFactory<RoundGameConfiguration> roundManagerFactory,
         GameRecordRepository recordRepository,
         PlayerNotificationService notificationService) {
         this.stateFactory = stateFactory;
         this.roundManagerFactory = roundManagerFactory;
         this.recordRepository = recordRepository;
-        this.notificationService = notificationService;
     }
 
      public ClembleManager<GameManagementEvent, RoundGameState> start(GameInitiation initiation, GameContext<?> parent) {
         RoundGameConfiguration roundConfiguration = (RoundGameConfiguration) initiation.getConfiguration();
         RoundGameContext roundGameContext = RoundGameContext.fromInitiation(initiation, parent);
         // Step 1. Allocating table for game initiation
-        RoundGameState state = stateFactory.constructState(initiation, roundGameContext);
+        RoundState roundState = stateFactory.constructState(initiation, roundGameContext);
+        RoundGameState state = new RoundGameState(roundGameContext, roundState, 0);
         // Step 2. Saving game record
         GameRecord roundRecord = initiation.toRecord();
         roundRecord = recordRepository.save(roundRecord);
@@ -50,10 +50,6 @@ public class RoundManagerFactory implements GameManagerFactory {
         // Step 3. Constructing manager and saving in a session
         ClembleManager<GameManagementEvent, RoundGameState> roundManager = roundManagerFactory.create(state, roundConfiguration);
         LOG.debug("{} created and stored round manager {}", initiation.getSessionKey(), hashCode());
-        // Step 4. Sending round started event
-        RoundStartedEvent<RoundGameState> startedEvent = new RoundStartedEvent<RoundGameState>(initiation.getSessionKey(), state);
-        notificationService.notify(initiation.getParticipants(), startedEvent);
-        LOG.debug("{} sent notification for initiation {}", initiation.getSessionKey(), hashCode());
         return roundManager;
     }
 

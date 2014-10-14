@@ -13,7 +13,7 @@ import com.clemble.casino.server.game.aspect.GameAspect;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class RoundDrawRuleAspectFactory implements RoundGameAspectFactory<RoundEndedEvent<?>> {
+public class RoundDrawRuleAspectFactory implements RoundGameAspectFactory<RoundEndedEvent> {
 
     final private SystemNotificationService systemNotificationService;
 
@@ -22,7 +22,7 @@ public class RoundDrawRuleAspectFactory implements RoundGameAspectFactory<RoundE
     }
 
     @Override
-    public GameAspect<RoundEndedEvent<?>> construct(RoundGameConfiguration configuration, RoundGameState state) {
+    public GameAspect<RoundEndedEvent> construct(RoundGameConfiguration configuration, RoundGameState state) {
         // Step 1. Checking draw rule
         if (configuration.getDrawRule() == null)
             return null;

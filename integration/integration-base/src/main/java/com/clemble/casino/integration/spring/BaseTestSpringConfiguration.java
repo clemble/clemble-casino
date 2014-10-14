@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.annotation.PostConstruct;
 
+import com.clemble.casino.game.lifecycle.management.RoundState;
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
@@ -91,8 +92,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
     }
 
     @Bean
-    public SimpleRoundGamePlayerFactory<? extends GameState> sessionPlayerFactory() {
-        return new SimpleRoundGamePlayerFactory<GameState>();
+    public SimpleRoundGamePlayerFactory sessionPlayerFactory() {
+        return new SimpleRoundGamePlayerFactory();
     }
 
     @Bean

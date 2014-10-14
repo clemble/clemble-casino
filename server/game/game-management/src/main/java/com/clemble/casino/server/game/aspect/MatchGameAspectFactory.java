@@ -2,7 +2,7 @@ package com.clemble.casino.server.game.aspect;
 
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
-import com.clemble.casino.server.game.action.MatchGameState;
+import com.clemble.casino.game.lifecycle.management.MatchGameState;
 
 public interface MatchGameAspectFactory<T extends Event> extends GameAspectFactory<T, MatchGameState, MatchGameConfiguration> {
 

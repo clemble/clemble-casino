@@ -35,7 +35,7 @@ public class MatchDrawRuleAspect extends GameAspect<MatchEndedEvent> {
     public void doEvent(MatchEndedEvent event) {
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof DrawOutcome) {
-            MatchGameContext context = event.getContext();
+            MatchGameContext context = event.getState().getContext();
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()
                     .setTransactionKey(context.getSessionKey())

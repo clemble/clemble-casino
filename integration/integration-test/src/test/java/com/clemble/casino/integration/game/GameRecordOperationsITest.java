@@ -40,12 +40,12 @@ public class GameRecordOperationsITest {
 
     @Test
     public void testRoundRecordSaving(){
-        List<RoundGamePlayer<NumberState>> sessionPlayers = gameScenarios.round(Game.num);
+        List<RoundGamePlayer> sessionPlayers = gameScenarios.round(Game.num);
         // Step 1. Preparing game session listener
         EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
-        RoundGamePlayer<NumberState> A = sessionPlayers.get(0);
+        RoundGamePlayer A = sessionPlayers.get(0);
         A.playerOperations().listenerOperations().subscribeToPaymentEvents(paymentListener);
-        RoundGamePlayer<NumberState> B = sessionPlayers.get(1);
+        RoundGamePlayer B = sessionPlayers.get(1);
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make a surrender by player B
@@ -66,8 +66,9 @@ public class GameRecordOperationsITest {
         GameRecord BgameRecord = A.playerOperations().gameRecordOperations().get(sessionKey);
         // Step 7. Checking game records are same
         assertEquals(AgameRecord, BgameRecord);
-        assertEquals(AgameRecord.getEventRecords().size(), 4);
+        assertEquals(AgameRecord.getEventRecords().size(), 5);
         Iterator<EventRecord> moveIterator = AgameRecord.getEventRecords().iterator();
+        moveIterator.next(); // First event is RoundStartedEvent
         assertEquals(moveIterator.next().getEvent(), new PlayerAction(A.getSessionKey(), A.getPlayer(), new SelectNumberAction(2)));
         moveIterator.next();
         assertEquals(moveIterator.next().getEvent(), new PlayerAction(B.getSessionKey(), B.getPlayer(), new SelectNumberAction(1)));
@@ -75,12 +76,12 @@ public class GameRecordOperationsITest {
 
     @Test
     public void testRecordStateChangesToFinished() {
-        List<RoundGamePlayer<NumberState>> sessionPlayers = gameScenarios.round(Game.num);
+        List<RoundGamePlayer> sessionPlayers = gameScenarios.round(Game.num);
         // Step 1. Preparing game session listener
         EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
-        RoundGamePlayer<NumberState> A = sessionPlayers.get(0);
+        RoundGamePlayer A = sessionPlayers.get(0);
         A.playerOperations().listenerOperations().subscribeToPaymentEvents(paymentListener);
-        RoundGamePlayer<NumberState> B = sessionPlayers.get(1);
+        RoundGamePlayer B = sessionPlayers.get(1);
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make B surrender by player B

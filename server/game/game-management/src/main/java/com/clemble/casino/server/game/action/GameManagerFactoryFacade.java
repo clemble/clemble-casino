@@ -1,7 +1,5 @@
 package com.clemble.casino.server.game.action;
 
-import static com.clemble.casino.utils.Preconditions.checkNotNull;
-
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.OptimisticLockException;
@@ -9,13 +7,9 @@ import javax.persistence.OptimisticLockException;
 import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
 import com.clemble.casino.game.lifecycle.management.*;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
-import com.clemble.casino.game.lifecycle.management.event.MatchStartedEvent;
-import com.clemble.casino.game.lifecycle.management.event.RoundStartedEvent;
-import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
-import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -34,7 +28,7 @@ public class GameManagerFactoryFacade {
     final private TournamentManagerFactory tournamentManagerFactory;
 
     public GameManagerFactoryFacade(
-        GameStateFactoryFacade stateFactory,
+        RoundStateFactoryFacade stateFactory,
         ClembleManagerFactory<RoundGameConfiguration> roundGameManagerFactory,
         ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory,
         ClembleManagerFactory<TournamentGameConfiguration> tournamentGameManagerFactory,
@@ -56,18 +50,21 @@ public class GameManagerFactoryFacade {
     public ClembleManager<GameManagementEvent, ?> start(GameInitiation initiation, GameContext<?> parent) {
         try {
             LOG.debug("{} starting", initiation.getSessionKey());
-            ClembleManager<GameManagementEvent, ? extends GameState> result;
+            ClembleManager<GameManagementEvent, ? extends GameState> manager;
             if (initiation.getConfiguration() instanceof RoundGameConfiguration) {
-                result = roundManagerFactory.start(initiation, parent);
+                manager = roundManagerFactory.start(initiation, parent);
             } else if (initiation.getConfiguration() instanceof MatchGameConfiguration) {
-                result = matchManagerFactory.start(initiation, parent);
+                manager = matchManagerFactory.start(initiation, parent);
             } else if (initiation.getConfiguration() instanceof TournamentGameConfiguration) {
-                result = tournamentManagerFactory.start(initiation, parent);
+                manager = tournamentManagerFactory.start(initiation, parent);
             } else {
                 throw new IllegalArgumentException();
             }
-            sessionToManager.put(initiation.getSessionKey(), result);
-            return result;
+            LOG.debug("{} adding new manager", initiation.getSessionKey(), manager);
+            sessionToManager.put(initiation.getSessionKey(), manager);
+            LOG.debug("{} starting  manager", initiation.getSessionKey(), manager);
+            manager.start();
+            return manager;
         } catch (OptimisticLockException lockException) {
             // TODO Be really careful with this shit
             return start(initiation, parent);

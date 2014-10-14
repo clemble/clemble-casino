@@ -20,7 +20,7 @@ import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEv
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 
-public class RoundWonByOwnedRuleAspect extends GameAspect<GameEndedEvent<?>> {
+public class RoundWonByOwnedRuleAspect extends GameAspect<GameEndedEvent> {
 
     final private Currency currency;
     final private SystemNotificationService systemNotificationService;
@@ -32,9 +32,9 @@ public class RoundWonByOwnedRuleAspect extends GameAspect<GameEndedEvent<?>> {
     }
 
     @Override
-    public void doEvent(GameEndedEvent<?> event) {
+    public void doEvent(GameEndedEvent event) {
         GameOutcome outcome = event.getOutcome();
-        GameContext<?> context = event.getContext();
+        GameContext<?> context = event.getState().getContext();
         if (outcome instanceof PlayerWonOutcome) {
             // Step 2. Generating payment transaction
             PaymentTransaction paymentTransaction = new PaymentTransaction()

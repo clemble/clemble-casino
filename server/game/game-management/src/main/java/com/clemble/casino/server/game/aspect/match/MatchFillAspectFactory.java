@@ -1,9 +1,8 @@
 package com.clemble.casino.server.game.aspect.match;
 
-import com.clemble.casino.game.lifecycle.management.MatchGameContext;
 import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
-import com.clemble.casino.server.game.action.MatchGameState;
+import com.clemble.casino.game.lifecycle.management.MatchGameState;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
 

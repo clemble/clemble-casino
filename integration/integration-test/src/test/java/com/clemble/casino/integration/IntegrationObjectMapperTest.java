@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationDeclinedAction;
+import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.lifecycle.configuration.Configuration;
 import com.clemble.casino.lifecycle.management.event.action.bet.BetAction;
 import com.clemble.casino.lifecycle.management.event.action.surrender.GiveUpAction;
@@ -83,6 +84,7 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
 
     @Test
     public void testSpecialSerialization() {
+        Assert.assertNull(checkSerialization(RoundGameState.class));
         Assert.assertNull(checkSerialization(SystemPlayerProfileRegisteredEvent.class));
         Assert.assertNull(checkSerialization(SystemPlayerSocialGrantRegisteredEvent.class));
         Assert.assertNull(checkSerialization(PlayerInvitationDeclinedAction.class));

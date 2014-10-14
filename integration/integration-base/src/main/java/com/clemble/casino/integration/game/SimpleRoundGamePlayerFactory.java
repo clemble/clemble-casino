@@ -2,11 +2,10 @@ package com.clemble.casino.integration.game;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.construction.GameConstruction;
 
-public class SimpleRoundGamePlayerFactory<State extends GameState> implements RoundGamePlayerFactory<State> {
+public class SimpleRoundGamePlayerFactory implements RoundGamePlayerFactory {
 
     /**
      * Generate 19/11/12
@@ -20,13 +19,13 @@ public class SimpleRoundGamePlayerFactory<State extends GameState> implements Ro
 
     @Override
     @SuppressWarnings("unchecked")
-    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, GameConstruction construction) {
+    public RoundGamePlayer construct(ClembleCasinoOperations player, GameConstruction construction) {
         // Step 1. Processing game session player
         return construct(player, construction.getSessionKey(), construction.getConfiguration());
     }
 
     @Override
-    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, String sessionKey) {
+    public RoundGamePlayer construct(ClembleCasinoOperations player, String sessionKey) {
         // Step 1. Fetching game construction
         GameConstruction gameConstruction = player.gameConstructionOperations().getConstruct(sessionKey);
         // Step 2. Processing to the generic constructor
@@ -34,7 +33,7 @@ public class SimpleRoundGamePlayerFactory<State extends GameState> implements Ro
     }
 
     @Override
-    public RoundGamePlayer<State> construct(ClembleCasinoOperations player, String sessionKey, GameConfiguration configuration) {
+    public RoundGamePlayer construct(ClembleCasinoOperations player, String sessionKey, GameConfiguration configuration) {
         return new SimpleRoundGamePlayer(player, sessionKey, configuration);
     }
 

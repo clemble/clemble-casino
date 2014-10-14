@@ -10,16 +10,16 @@ public interface GameScenarios extends BaseGameScenarios {
 
     public GamePlayer construct(GameConfiguration configuration, ClembleCasinoOperations player);
 
-    public <T extends RoundGamePlayer<?>> T round(Game game, ClembleCasinoOperations player);
+    public <T extends RoundGamePlayer> T round(Game game, ClembleCasinoOperations player);
 
-    public <T extends RoundGamePlayer<?>> T round(GameConfiguration configuration, ClembleCasinoOperations player);
+    public <T extends RoundGamePlayer> T round(GameConfiguration configuration, ClembleCasinoOperations player);
 
-    public <T extends RoundGamePlayer<?>> T round(Game game, ClembleCasinoOperations player, String... players);
+    public <T extends RoundGamePlayer> T round(Game game, ClembleCasinoOperations player, String... players);
 
-    public <T extends RoundGamePlayer<?>> T round(GameConfiguration configuration, ClembleCasinoOperations player, String... players);
+    public <T extends RoundGamePlayer> T round(GameConfiguration configuration, ClembleCasinoOperations player, String... players);
     
-    public <T extends RoundGamePlayer<?>> T round(String sessionKey, ClembleCasinoOperations player);
+    public <T extends RoundGamePlayer> T round(String sessionKey, ClembleCasinoOperations player);
 
-    public <T extends RoundGamePlayer<?>> T accept(String sessionKey, ClembleCasinoOperations player);
+    public <T extends RoundGamePlayer> T accept(String sessionKey, ClembleCasinoOperations player);
 
 }

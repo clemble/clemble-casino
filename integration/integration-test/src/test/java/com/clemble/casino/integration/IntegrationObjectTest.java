@@ -66,6 +66,21 @@ import com.google.common.collect.ImmutableList;
 public class IntegrationObjectTest {
 
     static {
+        ObjectGenerator.register(TournamentGameState.class, new AbstractValueGenerator<TournamentGameState>() {
+            @Override
+            public TournamentGameState generate() {
+                TournamentGameContext context = new TournamentGameContext(
+                        "",
+                        null,
+                        ObjectGenerator.generateList(TournamentGamePlayerContext.class, 10),
+                        null);
+                return new TournamentGameState(
+                        ObjectGenerator.generate(TournamentGameConfiguration.class),
+                        context,
+                        null,
+                        0);
+            }
+        });
         ObjectGenerator.register(SortedSet.class, new AbstractValueGenerator<SortedSet>() {
             public SortedSet generate() {
                 return new TreeSet();
@@ -99,8 +114,7 @@ public class IntegrationObjectTest {
         register(NumberState.class, new AbstractValueGenerator<NumberState>() {
             @Override
             public NumberState generate() {
-            GameInitiation initiation = new GameInitiation(GameSessionAware.DEFAULT_SESSION, InitiationState.pending, ImmutableList.of("A", "B"), RoundGameConfiguration.DEFAULT);
-            return new NumberState(RoundGameContext.fromInitiation(initiation, null), null, 0);
+                return new NumberState();
             }
         });
         register(RoundGameContext.class, new AbstractValueGenerator<RoundGameContext>(){
@@ -141,10 +155,10 @@ public class IntegrationObjectTest {
             return new NumberUnit(Collections.<GameUnit>emptyList());
             }
         });
-        register(GameState.class, new AbstractValueGenerator<GameState>() {
+        register(RoundState.class, new AbstractValueGenerator<RoundState>() {
             @Override
-            public GameState generate() {
-            return new NumberState(ObjectGenerator.generate(RoundGameContext.class), null, 0);
+            public RoundState generate() {
+            return new NumberState();
             }
         });
         register(PaymentTransaction.class, new AbstractValueGenerator<PaymentTransaction>() {

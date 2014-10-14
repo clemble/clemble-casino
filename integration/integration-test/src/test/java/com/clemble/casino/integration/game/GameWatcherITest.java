@@ -38,7 +38,7 @@ public class GameWatcherITest {
     public void testSimpleScenarioObservation() {
         ClembleCasinoOperations player = playerScenarios.createPlayer();
 
-        List<RoundGamePlayer<NumberState>> players = gameScenarios.round(Game.num);
+        List<RoundGamePlayer> players = gameScenarios.round(Game.num);
         RoundGamePlayer A = players.get(0);
         RoundGamePlayer B = players.get(1);
 

@@ -1,12 +1,11 @@
 package com.clemble.casino.integration.emulator;
 
-import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 
-abstract public class RoundGamePlayerActor<State extends GameState> implements GamePlayerActor<RoundGamePlayer<State>> {
+abstract public class RoundGamePlayerActor implements GamePlayerActor<RoundGamePlayer> {
 
     @Override
-    public void play(RoundGamePlayer<State> matchPlayer) {
+    public void play(RoundGamePlayer matchPlayer) {
         // Step 1. Sanity check
         matchPlayer.waitForStart(0);
         while (matchPlayer.isAlive()) {

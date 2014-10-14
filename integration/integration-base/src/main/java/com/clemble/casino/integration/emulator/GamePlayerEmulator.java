@@ -12,23 +12,22 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import javax.annotation.PreDestroy;
 
-import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.integration.game.GamePlayerFactory;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 
-public class GamePlayerEmulator<State extends GameState> {
+public class GamePlayerEmulator {
 
     final private PlayerScenarios playerOperations;
     final private GameScenarios gameScenarios;
     final private GamePlayerFactory sessionPlayerFactory;
-    final private RoundGamePlayerActor<State> actor;
+    final private RoundGamePlayerActor actor;
     final private Map<GameConfiguration, Collection<PlayerEmulator>> playerEmulators = new HashMap<GameConfiguration, Collection<PlayerEmulator>>();
 
     private ScheduledExecutorService executorService;
 
-    public GamePlayerEmulator(final PlayerScenarios playerOperations, final GameScenarios gameScenarios, final RoundGamePlayerActor<State> gameActor, final GamePlayerFactory sessionPlayerFactory) {
+    public GamePlayerEmulator(final PlayerScenarios playerOperations, final GameScenarios gameScenarios, final RoundGamePlayerActor gameActor, final GamePlayerFactory sessionPlayerFactory) {
         this.actor = checkNotNull(gameActor);
         this.gameScenarios = checkNotNull(gameScenarios);
         this.playerOperations = checkNotNull(playerOperations);

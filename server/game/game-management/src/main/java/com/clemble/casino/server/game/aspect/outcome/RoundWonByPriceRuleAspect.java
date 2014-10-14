@@ -24,7 +24,7 @@ import com.clemble.casino.money.Operation;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class RoundWonByPriceRuleAspect extends GameAspect<GameEndedEvent<?>> {
+public class RoundWonByPriceRuleAspect extends GameAspect<GameEndedEvent> {
     
     final private Logger LOG = LoggerFactory.getLogger(RoundWonByPriceRuleAspect.class);
 
@@ -38,11 +38,11 @@ public class RoundWonByPriceRuleAspect extends GameAspect<GameEndedEvent<?>> {
     }
 
     @Override
-    public void doEvent(GameEndedEvent<?> event) {
+    public void doEvent(GameEndedEvent event) {
         LOG.debug("Processing ended event {}", event);
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof PlayerWonOutcome) {
-            GameContext<?> context = event.getContext();
+            GameContext<?> context = event.getState().getContext();
             LOG.debug("Processing won outcome {}", event);
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction

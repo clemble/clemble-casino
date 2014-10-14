@@ -24,7 +24,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class RoundDrawByOwnedRuleAspect extends GameAspect<RoundEndedEvent<?>> {
+public class RoundDrawByOwnedRuleAspect extends GameAspect<RoundEndedEvent> {
 
     final private Currency currency;
     final private SystemNotificationService systemNotificationService;
@@ -36,11 +36,11 @@ public class RoundDrawByOwnedRuleAspect extends GameAspect<RoundEndedEvent<?>> {
     }
 
     @Override
-    public void doEvent(RoundEndedEvent<?> event) {
+    public void doEvent(RoundEndedEvent event) {
         // TODO Auto-generated method stub
         GameOutcome outcome = event.getOutcome();
         if (outcome instanceof DrawOutcome) {
-            GameContext<?> context = event.getContext();
+            GameContext<?> context = event.getState().getContext();
             // Step 2. Generating payment transaction
             PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(context.getSessionKey())

@@ -34,12 +34,12 @@ public class GamePaymentTransactionITest {
 
     @Test
     public void testAvailabilityConstruction(){
-        List<RoundGamePlayer<NumberState>> sessionPlayers = gameScenarios.round(Game.num);
+        List<RoundGamePlayer> sessionPlayers = gameScenarios.round(Game.num);
         // Step 1. Preparing game session listener
         EventAccumulator<PaymentEvent> paymentListener = new EventAccumulator<PaymentEvent>();
-        RoundGamePlayer<NumberState> A = sessionPlayers.get(0);
+        RoundGamePlayer A = sessionPlayers.get(0);
         A.playerOperations().listenerOperations().subscribeToPaymentEvents(paymentListener);
-        RoundGamePlayer<NumberState> B = sessionPlayers.get(1);
+        RoundGamePlayer B = sessionPlayers.get(1);
         A.waitForStart();
         B.waitForStart();
         // Step 2. Make a surrender by player B

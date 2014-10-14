@@ -5,7 +5,6 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.List;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.integration.game.GamePlayer;
@@ -21,16 +20,16 @@ public class SimpleSyncGameScenarios implements SyncGameScenarios {
     }
     
     @Override
-    public <State extends GameState> List<RoundGamePlayer<State>> round(Game game) {
-        List<RoundGamePlayer<State>> players = gameScenarios.<State>round(game);
+    public List<RoundGamePlayer> round(Game game) {
+        List<RoundGamePlayer> players = gameScenarios.round(game);
         // Step 1. Constructing players
         return unite(players);
     }
 
     @Override
-    public <State extends GameState> List<RoundGamePlayer<State>> round(GameConfiguration configuration) {
+    public List<RoundGamePlayer> round(GameConfiguration configuration) {
         // Step 1. Constructing players
-        return unite(gameScenarios.<State>round(configuration));
+        return unite(gameScenarios.round(configuration));
     }
 
     @Override

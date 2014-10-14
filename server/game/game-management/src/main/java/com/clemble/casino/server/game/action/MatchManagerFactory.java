@@ -6,6 +6,7 @@ import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
 import com.clemble.casino.game.lifecycle.management.MatchGameContext;
+import com.clemble.casino.game.lifecycle.management.MatchGameState;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.management.event.MatchStartedEvent;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
@@ -22,14 +23,14 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 public class MatchManagerFactory implements GameManagerFactory {
 
     final private GameManagerFactoryFacade managerFactory;
-    final private GameStateFactoryFacade stateFactory;
+    final private RoundStateFactoryFacade stateFactory;
     final private ClembleManagerFactory<MatchGameConfiguration> matchManagerFactory;
     final private GameRecordRepository recordRepository;
     final private PlayerNotificationService notificationService;
 
     public MatchManagerFactory(
             GameManagerFactoryFacade managerFactory,
-            GameStateFactoryFacade stateFactory,
+            RoundStateFactoryFacade stateFactory,
             ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory,
             GameRecordRepository recordRepository,
             PlayerNotificationService notificationService) {
@@ -60,13 +61,8 @@ public class MatchManagerFactory implements GameManagerFactory {
         matchGameRecord = recordRepository.save(matchGameRecord);
         // Step 3. Generating game manager
         MatchGameConfiguration configuration = (MatchGameConfiguration) initiation.getConfiguration();
-        MatchGameState gameProcessor = new MatchGameState(context, configuration, managerFactory);
+        MatchGameState gameProcessor = new MatchGameState(context, configuration, null, 0);
         ClembleManager<GameManagementEvent, MatchGameState> matchGameManager = matchManagerFactory.create(gameProcessor, configuration);
-        // Step 4. Generating match started event
-        MatchStartedEvent matchStartedEvent = new MatchStartedEvent(initiation.getSessionKey(), context);
-        notificationService.notify(initiation.getParticipants(), matchStartedEvent);
-        // Step 5. Processing match started event
-        matchGameManager.process(matchStartedEvent);
         return matchGameManager;
     }
 

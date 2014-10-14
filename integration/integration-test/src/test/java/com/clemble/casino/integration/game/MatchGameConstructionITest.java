@@ -10,12 +10,9 @@ import java.util.List;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Repeat;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -112,6 +109,6 @@ public class MatchGameConstructionITest {
         assertEquals("Amount does not match for " + AvsB.getPlayer(), mB.getAmount(), mA.add(300).getAmount());
 
         GameRecord record = AvsB.playerOperations().gameRecordOperations().get(AvsB.getSessionKey());
-        assertEquals(record.getEventRecords().size(), 6);
+        assertEquals(record.getEventRecords().size(), 5);
     }
 }

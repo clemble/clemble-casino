@@ -8,7 +8,7 @@ import com.clemble.casino.server.game.aspect.GameAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NextGameAspect extends GameAspect<GameEndedEvent<?>> {
+public class NextGameAspect extends GameAspect<GameEndedEvent> {
 
     final private static Logger LOG = LoggerFactory.getLogger(NextGameAspect.class);
 
@@ -22,7 +22,7 @@ public class NextGameAspect extends GameAspect<GameEndedEvent<?>> {
     }
 
     @Override
-    public void doEvent(GameEndedEvent<?> endedEvent) {
+    public void doEvent(GameEndedEvent endedEvent) {
         // Step 1. Fetching Parent session key
         String sessionKey = context.getParent().getSessionKey();
         LOG.debug("{} ended next {}", context.getSessionKey(), sessionKey);

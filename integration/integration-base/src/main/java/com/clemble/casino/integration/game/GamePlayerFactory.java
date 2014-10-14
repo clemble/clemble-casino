@@ -15,8 +15,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 public class GamePlayerFactory implements ApplicationListener<ContextRefreshedEvent> {
 
-    final private RoundGamePlayerFactory<?> defaultMatchPlayerFactory = new SimpleRoundGamePlayerFactory<>();
-    final private Map<Game, RoundGamePlayerFactory<?>> gameToPlayerFactory = new HashMap<>();
+    final private RoundGamePlayerFactory defaultMatchPlayerFactory = new SimpleRoundGamePlayerFactory();
+    final private Map<Game, RoundGamePlayerFactory> gameToPlayerFactory = new HashMap<>();
 
     public <P extends GamePlayer> P construct(ClembleCasinoOperations player, String sessionKey) {
         GameConstruction construction = player.gameConstructionOperations().getConstruct(sessionKey);
@@ -43,7 +43,7 @@ public class GamePlayerFactory implements ApplicationListener<ContextRefreshedEv
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        for (RoundGamePlayerFactory<?> gamePlayerFactory : event.getApplicationContext().getBeansOfType(RoundGamePlayerFactory.class).values())
+        for (RoundGamePlayerFactory gamePlayerFactory : event.getApplicationContext().getBeansOfType(RoundGamePlayerFactory.class).values())
             gameToPlayerFactory.put(gamePlayerFactory.getGame(), gamePlayerFactory);
     }
 

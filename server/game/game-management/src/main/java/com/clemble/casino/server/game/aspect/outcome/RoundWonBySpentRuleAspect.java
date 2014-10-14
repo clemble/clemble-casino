@@ -23,7 +23,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class RoundWonBySpentRuleAspect extends GameAspect<GameEndedEvent<?>> {
+public class RoundWonBySpentRuleAspect extends GameAspect<GameEndedEvent> {
 
     final private Currency currency;
     final private SystemNotificationService systemNotificationService;
@@ -35,9 +35,9 @@ public class RoundWonBySpentRuleAspect extends GameAspect<GameEndedEvent<?>> {
     }
 
     @Override
-    public void doEvent(GameEndedEvent<?> event) {
+    public void doEvent(GameEndedEvent event) {
         GameOutcome outcome = event.getOutcome();
-        GameContext<?> context = event.getContext();
+        GameContext<?> context = event.getState().getContext();
         if (outcome instanceof PlayerWonOutcome) {
             String winnerId = ((PlayerWonOutcome) outcome).getWinner();
             // Step 2. Generating payment transaction

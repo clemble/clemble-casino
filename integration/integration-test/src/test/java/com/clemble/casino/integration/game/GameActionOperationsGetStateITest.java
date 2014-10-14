@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
+import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class GameActionOperationsGetStateITest {
         RoundGameConfiguration configuration = configurations.get(0);
         GameConstruction construction = constructionOperations.constructAutomatch(configuration);
         // Step 3. Checking getState works fine
-        final GameActionOperations<NumberState> aoA = A.gameActionOperations(construction.getSessionKey());
+        final GameActionOperations<RoundGameState> aoA = A.gameActionOperations(construction.getSessionKey());
         assertNull(aoA.getState());
         // Step 4. Creating construction from B side
         B.gameConstructionOperations().constructAutomatch(configuration);

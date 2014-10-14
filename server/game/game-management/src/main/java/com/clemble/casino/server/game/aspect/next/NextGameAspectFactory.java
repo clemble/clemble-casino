@@ -14,7 +14,7 @@ import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.GameAspectFactory;
 
-public class NextGameAspectFactory implements GenericGameAspectFactory<GameEndedEvent<?>> {
+public class NextGameAspectFactory implements GenericGameAspectFactory<GameEndedEvent> {
 
     final private Logger LOG = LoggerFactory.getLogger(NextGameAspectFactory.class);
 
@@ -25,7 +25,7 @@ public class NextGameAspectFactory implements GenericGameAspectFactory<GameEnded
     }
 
     @Override
-    public GameAspect<GameEndedEvent<?>> construct(GameConfiguration configuration, GameState state) {
+    public GameAspect<GameEndedEvent> construct(GameConfiguration configuration, GameState state) {
         if (state.getContext().getParent() != null) {
             LOG.debug("{} has a parent, constructing next game aspect", state.getContext().getSessionKey());
             return new NextGameAspect(state.getContext(), managerFactory);

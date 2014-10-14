@@ -60,9 +60,9 @@ abstract public class AbstractGamePlayer implements GamePlayer {
         // Step 1. Listening for outcomes
         EventSelector endEventSelector = EventSelectors.where(new GameSessionEventSelector(sessionKey))
             .and(new EventTypeSelector(GameEndedEvent.class));
-        this.player.listenerOperations().subscribe(endEventSelector, new EventListener<GameEndedEvent<?>>() {
+        this.player.listenerOperations().subscribe(endEventSelector, new EventListener<GameEndedEvent>() {
             @Override
-            public void onEvent(GameEndedEvent<?> event) {
+            public void onEvent(GameEndedEvent event) {
                 outcome.set(event.getOutcome());
                 synchronized (versionLock) {
                     versionLock.notifyAll();

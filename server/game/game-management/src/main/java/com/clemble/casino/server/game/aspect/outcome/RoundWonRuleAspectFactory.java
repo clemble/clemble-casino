@@ -15,7 +15,7 @@ import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class RoundWonRuleAspectFactory implements RoundGameAspectFactory<GameEndedEvent<?>> {
+public class RoundWonRuleAspectFactory implements RoundGameAspectFactory<GameEndedEvent> {
 
     final private SystemNotificationService systemNotificationService;
 
@@ -24,7 +24,7 @@ public class RoundWonRuleAspectFactory implements RoundGameAspectFactory<GameEnd
     }
 
     @Override
-    public GameAspect<GameEndedEvent<?>> construct(RoundGameConfiguration configuration, RoundGameState roundState) {
+    public GameAspect<GameEndedEvent> construct(RoundGameConfiguration configuration, RoundGameState roundState) {
         // Step 1. Checking won rule specified
         if (configuration.getWonRule() == null)
             return null;

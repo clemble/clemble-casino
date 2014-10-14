@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.game.event.GameEvent;
@@ -14,16 +15,16 @@ import com.clemble.casino.game.lifecycle.management.outcome.GameOutcome;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.lifecycle.management.event.action.Action;
 
-public class GenericRoundGamePlayer<State extends GameState> implements RoundGamePlayer<State> {
+public class GenericRoundGamePlayer implements RoundGamePlayer {
 
     /**
      * Generated 05/07/13
      */
     private static final long serialVersionUID = -4604087499745502553L;
 
-    final protected RoundGamePlayer<State> actualPlayer;
+    final protected RoundGamePlayer actualPlayer;
 
-    public GenericRoundGamePlayer(RoundGamePlayer<State> delegate) {
+    public GenericRoundGamePlayer(RoundGamePlayer delegate) {
         this.actualPlayer = checkNotNull(delegate);
     }
 
@@ -48,7 +49,7 @@ public class GenericRoundGamePlayer<State extends GameState> implements RoundGam
     }
 
     @Override
-    final public State getState() {
+    final public RoundGameState getState() {
         return actualPlayer.getState();
     }
 

@@ -36,7 +36,7 @@ public class SimpleMatchGamePlayer extends AbstractGamePlayer implements MatchGa
             @Override
             public void onEvent(MatchEvent event) {
                 LOG.debug("received event {}", event);
-                setContext(event.getContext());
+                setContext(event.getState().getContext());
             }
         });
         this.setContext((MatchGameContext) player.gameActionOperations(sessionKey).getContext());

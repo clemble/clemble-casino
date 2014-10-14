@@ -6,7 +6,6 @@ import java.util.*;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
 import com.clemble.casino.game.lifecycle.construction.GameConstruction;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
@@ -28,7 +27,7 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <State extends GameState> List<RoundGamePlayer<State>> round(Game game) {
+    public List<RoundGamePlayer> round(Game game) {
         if (game == null)
             throw new IllegalArgumentException("Name must not be null");
         ClembleCasinoOperations A = playerOperations.createPlayer();
@@ -40,15 +39,15 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <State extends GameState> List<RoundGamePlayer<State>> round(GameConfiguration configuration) {
+    public List<RoundGamePlayer> round(GameConfiguration configuration) {
         if (configuration == null || configuration.getConfigurationKey() == null || configuration.getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         // Step 1. Constructing players
-        List<RoundGamePlayer<State>> constructedGames = construct(configuration);
+        List<RoundGamePlayer> constructedGames = construct(configuration);
         // Step 2. Putting player to move as first
-        Collections.sort(constructedGames, new Comparator<RoundGamePlayer<State>>() {
+        Collections.sort(constructedGames, new Comparator<RoundGamePlayer>() {
             @Override
-            public int compare(RoundGamePlayer<State> playerA, RoundGamePlayer<State> playerB) {
+            public int compare(RoundGamePlayer playerA, RoundGamePlayer playerB) {
                 return playerA.isToMove() ? -1 : playerB.isToMove() ? 1 : 0;
             }
         });
@@ -69,12 +68,12 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T round(Game game, ClembleCasinoOperations initiator) {
+    public <T extends RoundGamePlayer> T round(Game game, ClembleCasinoOperations initiator) {
         return round(GameScenariosUtils.random(initiator, game), initiator);
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T round(GameConfiguration configuration, ClembleCasinoOperations initiator) {
+    public <T extends RoundGamePlayer> T round(GameConfiguration configuration, ClembleCasinoOperations initiator) {
         if (configuration == null || configuration.getConfigurationKey() == null || configuration.getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         // Step 2. Creating availability game request
@@ -84,12 +83,12 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T round(Game game, ClembleCasinoOperations initiator, String... participants) {
+    public <T extends RoundGamePlayer> T round(Game game, ClembleCasinoOperations initiator, String... participants) {
         return round(GameScenariosUtils.random(initiator, game), initiator, participants);
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T round(GameConfiguration configuration, ClembleCasinoOperations initiator, String... participants) {
+    public <T extends RoundGamePlayer> T round(GameConfiguration configuration, ClembleCasinoOperations initiator, String... participants) {
         if (configuration == null || configuration.getConfigurationKey() == null || configuration.getGame() == null)
             throw new IllegalArgumentException("Specification is invalid");
         // Step 2. Creating availability game request
@@ -98,7 +97,7 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T accept(String sessionKey, ClembleCasinoOperations participant) {
+    public <T extends RoundGamePlayer> T accept(String sessionKey, ClembleCasinoOperations participant) {
         // Step 1. Fetching construction
         GameConstruction construction = participant.gameConstructionOperations().accept(sessionKey);
         // Step 2. Generating GameSessionPlayer
@@ -106,7 +105,7 @@ public class SimpleGameScenarios implements GameScenarios {
     }
 
     @Override
-    public <T extends RoundGamePlayer<?>> T round(String sessionKey, ClembleCasinoOperations player) {
+    public <T extends RoundGamePlayer> T round(String sessionKey, ClembleCasinoOperations player) {
         // Step 1. Generating GameSessionPlayer
         return playerFactory.construct(player, player.gameConstructionOperations().getConstruct(sessionKey));
     }

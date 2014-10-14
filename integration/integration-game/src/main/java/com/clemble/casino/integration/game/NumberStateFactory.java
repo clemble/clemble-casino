@@ -3,9 +3,9 @@ package com.clemble.casino.integration.game;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.lifecycle.management.RoundGameContext;
 import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
-import com.clemble.casino.game.lifecycle.management.GameStateFactory;
+import com.clemble.casino.game.lifecycle.management.RoundStateFactory;
 
-public class NumberStateFactory implements GameStateFactory<NumberState> {
+public class NumberStateFactory implements RoundStateFactory<NumberState> {
 
     /**
      * Generated 01/02/14
@@ -19,7 +19,9 @@ public class NumberStateFactory implements GameStateFactory<NumberState> {
 
     @Override
     public NumberState constructState(GameInitiation initiation, RoundGameContext context) {
-        return new NumberState(context, null, 0);
+        // Step 1. Setting next
+        context.getActionLatch().expectNext(context.getSessionKey(), context.getPlayerIterator().getPlayers(), SelectNumberAction.class);
+        return new NumberState();
     }
 
 }

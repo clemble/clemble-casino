@@ -34,7 +34,7 @@ public class GameTimeAspectITest {
     @Test
     @Ignore
     public void testMoveTimeout() throws Exception{
-        List<RoundGamePlayer<NumberState>> players = gameOperations.round(Game.num);
+        List<RoundGamePlayer> players = gameOperations.round(Game.num);
         RoundGamePlayer playerA = players.get(0);
         RoundGamePlayer playerB = players.get(1);
 
@@ -43,7 +43,7 @@ public class GameTimeAspectITest {
         Assert.assertEquals(players.size(), 2);
 
         playerA.perform(new SelectNumberAction(1));
-        Thread.sleep(playerA.getConfiguration().getMoveTimeRule().getLimit() + 100);
+        Thread.sleep((playerA.getState().getContext().getPlayerContext(playerA.getPlayer()).getClock().getBreachTime() - System.currentTimeMillis()) + 100);
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GamePlayGameEnded));
         playerB.perform(new SelectNumberAction(1));

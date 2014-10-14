@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.lifecycle.management.GameStateFactory;
+import com.clemble.casino.game.lifecycle.management.RoundState;
+import com.clemble.casino.game.lifecycle.management.RoundStateFactory;
 import com.clemble.casino.game.lifecycle.management.RoundGameContext;
 import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
@@ -13,16 +14,16 @@ import org.reflections.Reflections;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-public class GameStateFactoryFacade implements ApplicationListener<ContextRefreshedEvent> {
+public class RoundStateFactoryFacade implements ApplicationListener<ContextRefreshedEvent> {
 
-    final private Map<Game, GameStateFactory<?>> gameToStateFactory = new HashMap<Game, GameStateFactory<?>>();
+    final private Map<Game, RoundStateFactory<?>> gameToStateFactory = new HashMap<Game, RoundStateFactory<?>>();
 
-    public GameStateFactoryFacade(){
+    public RoundStateFactoryFacade(){
         Reflections reflections = new Reflections("com.clemble.casino");
-        Set<Class<? extends GameStateFactory>> stateFactories = reflections.getSubTypesOf(GameStateFactory.class);
-        for(Class<? extends GameStateFactory> factoryClass: stateFactories) {
+        Set<Class<? extends RoundStateFactory>> stateFactories = reflections.getSubTypesOf(RoundStateFactory.class);
+        for(Class<? extends RoundStateFactory> factoryClass: stateFactories) {
             try {
-                GameStateFactory factory = factoryClass.newInstance();
+                RoundStateFactory factory = factoryClass.newInstance();
                 gameToStateFactory.put(factory.getGame(), factory);
             } catch (InstantiationException e) {
                 e.printStackTrace();
@@ -33,13 +34,13 @@ public class GameStateFactoryFacade implements ApplicationListener<ContextRefres
     }
 
     @SuppressWarnings("unchecked")
-    public <S extends RoundGameState> S constructState(final GameInitiation initiation, final RoundGameContext context){
+    public <S extends RoundState> S constructState(final GameInitiation initiation, final RoundGameContext context){
         return (S) gameToStateFactory.get(initiation.getConfiguration().getGame()).constructState(initiation, context);
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        for(GameStateFactory<?> stateFactory : event.getApplicationContext().getBeansOfType(GameStateFactory.class).values())
+        for(RoundStateFactory<?> stateFactory : event.getApplicationContext().getBeansOfType(RoundStateFactory.class).values())
             gameToStateFactory.put(stateFactory.getGame(), stateFactory);
     }
 
