@@ -30,7 +30,12 @@ public class GoalManagerFactoryFacade {
 
     public ClembleManager<GoalEvent, ? extends GoalState> start(GoalContext parent, GoalInitiation initiation) {
         if (initiation.getPlayer().equals(initiation.getJudge())) {
-            return selfManagerFactory.start(parent, initiation);
+            // Step 1. Creating manager
+            ClembleManager<GoalEvent, ? extends GoalState> manager = selfManagerFactory.start(parent, initiation);
+            // Step 2. Starting manager
+            manager.start();
+            // Step 3. Returning created manager
+            return manager;
         }
         throw new IllegalArgumentException();
     }

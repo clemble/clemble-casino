@@ -2,8 +2,10 @@ package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GoalAspect;
+import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalMissedOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalReachedOutcomeAspectFactory;
+import com.clemble.casino.goal.aspect.persistence.GoalPersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.time.GoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
@@ -61,7 +63,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ClembleManagerFactory<GoalConfiguration> goalManagerFactory() {
-        return new ClembleManagerFactory<>(GoalAspect.class);
+        return new ClembleManagerFactory<>(GoalAspectFactory.class);
     }
 
     @Bean
@@ -90,6 +92,11 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public GoalTimeAspectFactory goalTimeAspectFactory(@Qualifier("goalManagementEventTaskExecutor") EventTaskExecutor taskExecutor){
         return new GoalTimeAspectFactory(taskExecutor);
+    }
+
+    @Bean
+    public GoalPersistenceAspectFactory goalPersistenceAspectFactory(GoalStateRepository stateRepository) {
+        return new GoalPersistenceAspectFactory(stateRepository);
     }
 
     @Bean

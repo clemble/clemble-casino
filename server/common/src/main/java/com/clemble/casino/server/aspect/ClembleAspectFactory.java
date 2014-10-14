@@ -10,6 +10,6 @@ import org.springframework.core.PriorityOrdered;
  */
 public interface ClembleAspectFactory<T extends Event, C extends Configuration, S extends State> extends PriorityOrdered {
 
-    public ClembleAspect<T> construct(C configuration, S context);
+    public ClembleAspect<T> construct(C configuration, S state);
 
 }
