@@ -7,6 +7,7 @@ import com.clemble.casino.money.Money;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,4 +61,10 @@ public class JedisPlayerAccountTemplate implements PlayerAccountTemplate {
             jedisPool.returnResource(jedis);
         }
     }
+
+    @Override
+    public void freeze(Collection<String> players, PendingOperation pendingOperation) {
+        throw new IllegalAccessError();
+    }
+
 }

@@ -73,6 +73,25 @@ public class PlayerAccountRepositoryTest {
         Assert.assertEquals(accountTemplate.findOne(player).getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 500 + summary));
     }
 
+    @Test
+    public void testFreezing() {
+        MongoPlayerAccountTemplate accountTemplate = new MongoPlayerAccountTemplate(accountRepository);
+        // Step 1. Creating player account
+        String player = RandomStringUtils.randomAlphabetic(5);
+        Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
+        List<PendingOperation> pendingOperations = Collections.emptyList();
+        PlayerAccount account = new PlayerAccount(player, money, pendingOperations, null);
+        PlayerAccount saved = accountRepository.save(account);
+        Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
+        // Step 2. Freezing some amount on the account
+        PendingOperation pendingOperation = new PendingOperation("test", Money.create(Currency.FakeMoney, 50));
+        accountTemplate.freeze(Collections.singletonList(player), pendingOperation);
+        // Step 3. Checking amount changed
+        PlayerAccount another = accountTemplate.findOne(player);
+        Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
+        Assert.assertEquals(another.getPendingOperations().iterator().next(), pendingOperation);
+    }
+
     public static class UpdateTask implements Callable<PlayerAccount> {
 
         final private String player;

@@ -10,8 +10,7 @@ import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
-import com.clemble.casino.player.event.PlayerEvent;
+import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -33,13 +32,13 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
     final private GameSessionKeyGenerator sessionKeyGenerator;
     final private GameConstructionRepository constructionRepository;
     final private PlayerNotificationService playerNotificationService;
-    final private PlayerAccountServiceContract accountService;
+    final private PlayerAccountService accountService;
     final private PendingGameInitiationService pendingInitiationService;
 
     public ServerAvailabilityGameConstructionService(
             ActionLatchService latchService,
             GameSessionKeyGenerator sessionKeyGenerator,
-            PlayerAccountServiceContract accountServerService,
+            PlayerAccountService accountServerService,
             GameConstructionRepository constructionRepository,
             PlayerNotificationService notificationService,
             PendingGameInitiationService pendingInitiationService) {

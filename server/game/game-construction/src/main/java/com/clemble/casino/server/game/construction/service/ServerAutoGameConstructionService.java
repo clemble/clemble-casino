@@ -16,7 +16,7 @@ import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
 import com.clemble.casino.game.lifecycle.construction.event.GameConstructionCompleteEvent;
 import com.clemble.casino.game.lifecycle.construction.service.AutoGameConstructionService;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
+import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.game.SystemGameReadyEvent;
@@ -47,7 +47,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
     final private GameConstructionRepository constructionRepository;
     final private SystemNotificationService notificationService;
 
-    final private PlayerAccountServiceContract accountServerService;
+    final private PlayerAccountService accountServerService;
 
     final private PlayerNotificationService playerNotificationService;
     final private PlayerLockService playerLockService;
@@ -60,7 +60,7 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
             final PlayerLockService playerLockService,
             final ServerPlayerPresenceService playerStateManager,
             final PlayerNotificationService playerNotificationService,
-            final PlayerAccountServiceContract accountServerService) {
+            final PlayerAccountService accountServerService) {
         this.playerNotificationService = playerNotificationService;
         this.sessionKeyGenerator = checkNotNull(sessionKeyGenerator);
         this.notificationService = checkNotNull(initiatorService);

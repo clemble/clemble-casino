@@ -8,6 +8,7 @@ import com.clemble.casino.server.payment.MoneyRowMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,4 +62,10 @@ public class JdbcPlayerAccountTemplate implements PlayerAccountTemplate {
     public void credit(String player, Money amount) {
         debit(player, amount.negate());
     }
+
+    @Override
+    public void freeze(Collection<String> players, PendingOperation pendingOperation) {
+        throw new IllegalAccessError();
+    }
+
 }

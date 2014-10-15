@@ -8,11 +8,11 @@ import java.util.List;
 
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Currency;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
+import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.utils.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-public class RestPlayerAccountService implements PlayerAccountServiceContract {
+public class RestPlayerAccountService implements PlayerAccountService {
 
     final private RestTemplate restTemplate;
     final private String base;
@@ -20,6 +20,11 @@ public class RestPlayerAccountService implements PlayerAccountServiceContract {
     public RestPlayerAccountService(String base, RestTemplate restTemplate) {
         this.restTemplate = checkNotNull(restTemplate);
         this.base = checkNotNull(base);
+    }
+
+    @Override
+    public PlayerAccount myAccount() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

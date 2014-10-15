@@ -2,7 +2,7 @@ package com.clemble.casino.server.spring.common;
 
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Currency;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
+import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.server.payment.RestPlayerAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,13 +35,17 @@ public class PaymentClientSpringConfiguration implements SpringConfiguration {
 
         @Autowired(required = false)
         @Qualifier("playerAccountController")
-        public PlayerAccountServiceContract playerAccountController;
+        public PlayerAccountService playerAccountController;
 
         @Bean
-        public PlayerAccountServiceContract playerAccountClient(){
+        public PlayerAccountService playerAccountClient(){
             if (playerAccountController != null)
                 return playerAccountController;
-            return new PlayerAccountServiceContract() {
+            return new PlayerAccountService() {
+                @Override
+                public PlayerAccount myAccount() {
+                    return null;
+                }
                 @Override
                 public PlayerAccount getAccount(String playerWalletId) {
                     return null;
@@ -60,10 +64,10 @@ public class PaymentClientSpringConfiguration implements SpringConfiguration {
 
         @Autowired(required = false)
         @Qualifier("playerAccountController")
-        public PlayerAccountServiceContract playerAccountController;
+        public PlayerAccountService playerAccountController;
 
         @Bean
-        public PlayerAccountServiceContract playerAccountClient(@Value("${clemble.host}") String base){
+        public PlayerAccountService playerAccountClient(@Value("${clemble.host}") String base){
             if (playerAccountController != null)
                 return playerAccountController;
             RestTemplate restTemplate = new RestTemplate();

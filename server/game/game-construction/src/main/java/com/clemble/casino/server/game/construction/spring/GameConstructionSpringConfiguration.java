@@ -2,7 +2,7 @@ package com.clemble.casino.server.game.construction.spring;
 
 import com.clemble.casino.base.ActionLatchService;
 import com.clemble.casino.base.JavaActionLatchService;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
+import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.server.executor.EventTaskAdapter;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.construction.GameInitiationEventTaskAdapter;
@@ -64,7 +64,7 @@ public class GameConstructionSpringConfiguration {
         final PlayerLockService playerLockService,
         final ServerPlayerPresenceService playerStateManager,
         final @Qualifier("playerNotificationService") PlayerNotificationService playerNotificationService,
-        @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService) {
+        @Qualifier("playerAccountClient") PlayerAccountService accountServerService) {
         return new ServerAutoGameConstructionService(sessionKeyGenerator, notificationService, constructionRepository, playerLockService, playerStateManager, playerNotificationService, accountServerService);
     }
 
@@ -77,7 +77,7 @@ public class GameConstructionSpringConfiguration {
     public ServerAvailabilityGameConstructionService serverAvailabilityGameConstructionService(
         @Qualifier("constructionActionLatchService") ActionLatchService constructionActionLatchService,
         @Qualifier("gameSessionKeyGenerator") GameSessionKeyGenerator sessionKeyGenerator,
-        @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServerService,
+        @Qualifier("playerAccountClient") PlayerAccountService accountServerService,
         GameConstructionRepository constructionRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
         PendingGameInitiationService pendingInitiationService) {

@@ -9,7 +9,7 @@ import com.clemble.casino.goal.construction.GoalKeyGenerator;
 import com.clemble.casino.goal.construction.repository.GoalConstructionRepository;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
+import com.clemble.casino.payment.service.PlayerAccountService;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,13 +22,13 @@ public class SelfGoalConstructionService implements GoalConstructionService {
     final private GoalKeyGenerator keyGenerator;
     final private ServerGoalInitiationService initiationService;
     final private GoalConstructionRepository constructionRepository;
-    final private PlayerAccountServiceContract accountService;
+    final private PlayerAccountService accountService;
 
     public SelfGoalConstructionService(
         GoalKeyGenerator keyGenerator,
         ServerGoalInitiationService initiationService,
         GoalConstructionRepository constructionRepository,
-        PlayerAccountServiceContract accountService) {
+        PlayerAccountService accountService) {
         this.keyGenerator = keyGenerator;
         this.accountService = accountService;
         this.initiationService = initiationService;

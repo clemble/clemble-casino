@@ -13,7 +13,7 @@ import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.goal.lifecycle.construction.service.SelfGoalConstructionService;
 import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalConstructionService;
 import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalInitiationService;
-import com.clemble.casino.payment.service.PlayerAccountServiceContract;
+import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.server.executor.EventTaskAdapter;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.key.RedisKeyFactory;
@@ -90,7 +90,7 @@ public class GoalConstructionSpringConfiguration {
         GoalKeyGenerator keyGenerator,
         GoalConstructionRepository constructionRepository,
         ServerGoalInitiationService initiationService,
-        @Qualifier("playerAccountClient") PlayerAccountServiceContract accountServiceContract) {
+        @Qualifier("playerAccountClient") PlayerAccountService accountServiceContract) {
         return new SelfGoalConstructionService(keyGenerator, initiationService, constructionRepository, accountServiceContract);
     }
 

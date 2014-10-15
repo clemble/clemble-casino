@@ -6,6 +6,7 @@ import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.payment.PlayerAccount;
 import org.springframework.dao.OptimisticLockingFailureException;
 
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -53,6 +54,30 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
     @Override
     public void credit(String player, Money amount) {
         debit(player, amount.negate());
+    }
+
+    @Override
+    public void freeze(Collection<String> players, PendingOperation pendingOperation) {
+        for (String player: players) {
+            tryFreezing(player, pendingOperation);
+        }
+    }
+
+    private void tryFreezing(String player, PendingOperation pendingOperation) {
+        try {
+            PlayerAccount account = accountRepository.findOne(player);
+            Money amount = pendingOperation.getAmount().negate();
+            Money playerAmount = account.getMoney(amount.getCurrency());
+            if (playerAmount == null) {
+                account.getMoney().put(amount.getCurrency(), amount);
+            } else {
+                account.getMoney().put(amount.getCurrency(), playerAmount.add(amount));
+            }
+            account.getPendingOperations().add(pendingOperation);
+            accountRepository.save(account);
+        } catch (OptimisticLockingFailureException e) {
+            tryFreezing(player, pendingOperation);
+        }
     }
 
 }
