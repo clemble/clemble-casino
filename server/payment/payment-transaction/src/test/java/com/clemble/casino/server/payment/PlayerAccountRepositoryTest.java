@@ -4,7 +4,6 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.payment.PlayerAccount;
-import com.clemble.casino.server.payment.repository.MongoPlayerAccountTemplate;
 import com.clemble.casino.server.payment.repository.PlayerAccountRepository;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
@@ -31,6 +30,9 @@ public class PlayerAccountRepositoryTest {
     @Autowired
     public PlayerAccountRepository accountRepository;
 
+    @Autowired
+    public PlayerAccountTemplate playerAccountTemplate;
+
     @Test
     public void testVersionUpdate() {
         String player = RandomStringUtils.randomAlphabetic(5);
@@ -52,8 +54,6 @@ public class PlayerAccountRepositoryTest {
 
         PlayerAccount saved = accountRepository.save(account);
 
-        MongoPlayerAccountTemplate accountTemplate = new MongoPlayerAccountTemplate(accountRepository);
-
         // Executing changes in parallel
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         int summary = 0;
@@ -62,7 +62,7 @@ public class PlayerAccountRepositoryTest {
             int amount = 1 + RANDOM.nextInt(20);
             summary += amount;
             Money debit = Money.create(Currency.FakeMoney, amount);
-            tasks.add(new UpdateTask(player, debit, accountTemplate));
+            tasks.add(new UpdateTask(player, debit, playerAccountTemplate));
         }
         List<Future<PlayerAccount>> futureTasks = executorService.invokeAll(tasks);
         for(Future<PlayerAccount> futureTask: futureTasks) {
@@ -70,12 +70,11 @@ public class PlayerAccountRepositoryTest {
         }
         executorService.shutdown();
 
-        Assert.assertEquals(accountTemplate.findOne(player).getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 500 + summary));
+        Assert.assertEquals(playerAccountTemplate.findOne(player).getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 500 + summary));
     }
 
     @Test
     public void testFreezing() {
-        MongoPlayerAccountTemplate accountTemplate = new MongoPlayerAccountTemplate(accountRepository);
         // Step 1. Creating player account
         String player = RandomStringUtils.randomAlphabetic(5);
         Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
@@ -84,10 +83,10 @@ public class PlayerAccountRepositoryTest {
         PlayerAccount saved = accountRepository.save(account);
         Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
         // Step 2. Freezing some amount on the account
-        PendingOperation pendingOperation = new PendingOperation("test", Money.create(Currency.FakeMoney, 50));
-        accountTemplate.freeze(Collections.singletonList(player), pendingOperation);
+        PendingOperation pendingOperation = new PendingOperation(player, "test", Money.create(Currency.FakeMoney, 50));
+        playerAccountTemplate.freeze(Collections.singletonList(player), "test", Money.create(Currency.FakeMoney, 50));
         // Step 3. Checking amount changed
-        PlayerAccount another = accountTemplate.findOne(player);
+        PlayerAccount another = playerAccountTemplate.findOne(player);
         Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
         Assert.assertEquals(another.getPendingOperations().iterator().next(), pendingOperation);
     }

@@ -8,7 +8,6 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.GamePlayerAccount;
 import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
-import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
 import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
 import com.clemble.casino.game.lifecycle.management.outcome.DrawOutcome;
 import com.clemble.casino.game.lifecycle.management.outcome.GameOutcome;
@@ -48,8 +47,8 @@ public class RoundDrawByOwnedRuleAspect extends GameAspect<RoundEndedEvent> {
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();
                 paymentTransaction
-                    .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))
-                    .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
+                    .addOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))
+                    .addOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
             }
             // Step 3. Processing payment transaction
             systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(paymentTransaction));

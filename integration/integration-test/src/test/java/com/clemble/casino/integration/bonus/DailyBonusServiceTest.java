@@ -51,21 +51,21 @@ public class DailyBonusServiceTest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(PaymentBonusSource.dailybonus + player)
             .setTransactionDate(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
-            .addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
-            .addPaymentOperation(new PaymentOperation(player, amount, Operation.Debit));
+            .addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
+            .addOperation(new PaymentOperation(player, amount, Operation.Debit));
         transactionRepository.save(paymentTransaction);
-        assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeyLike(player, PaymentBonusSource.dailybonus.name()).size(), 1);
+        assertEquals(transactionRepository.findByOperationsPlayerAndTransactionKeyLike(player, PaymentBonusSource.dailybonus.name()).size(), 1);
         // Step 3. Checking value in payment transaction
         dailyBonusService.onEvent(new SystemPlayerEnteredEvent(player));
         // Step 4. Checking new transaction performed
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
-                return transactionRepository.findByPaymentOperationsPlayer(player).size() ==  2;
+                return transactionRepository.findByOperationsPlayer(player).size() ==  2;
             }
         }, 5000);
-        assertEquals(transactionRepository.findByPaymentOperationsPlayer(player).size(), 2);
-        assertEquals(transactionRepository.findByPaymentOperationsPlayerAndTransactionKeyLike(player, PaymentBonusSource.dailybonus.name()).size(), 2);
+        assertEquals(transactionRepository.findByOperationsPlayer(player).size(), 2);
+        assertEquals(transactionRepository.findByOperationsPlayerAndTransactionKeyLike(player, PaymentBonusSource.dailybonus.name()).size(), 2);
     }
 
 }

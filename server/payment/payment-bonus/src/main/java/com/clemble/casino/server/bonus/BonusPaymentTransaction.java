@@ -53,8 +53,8 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
         return new PaymentTransaction().
             setTransactionKey(transactionKey).
             setTransactionDate(new Date()).
-            addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit)).
-            addPaymentOperation(new PaymentOperation(player, amount, Operation.Debit));
+                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit)).
+                addOperation(new PaymentOperation(player, amount, Operation.Debit));
 
     }
 

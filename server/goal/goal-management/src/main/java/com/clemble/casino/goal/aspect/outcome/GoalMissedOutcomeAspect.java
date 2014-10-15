@@ -36,8 +36,8 @@ public class GoalMissedOutcomeAspect extends GoalAspect<GoalMissedEvent> {
         PaymentTransaction paymentTransaction = new PaymentTransaction().
             setTransactionKey(event.getGoalKey()).
             setTransactionDate(new Date()).
-            addPaymentOperation(new PaymentOperation(player, bidTotal, Operation.Credit)).
-            addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, bidTotal, Operation.Debit));
+                addOperation(new PaymentOperation(player, bidTotal, Operation.Credit)).
+                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, bidTotal, Operation.Debit));
         // Step 2. Processing payment transaction
         systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(paymentTransaction));
     }

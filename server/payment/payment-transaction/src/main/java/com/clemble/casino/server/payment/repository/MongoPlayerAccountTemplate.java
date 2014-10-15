@@ -3,11 +3,14 @@ package com.clemble.casino.server.payment.repository;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.PendingOperation;
+import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import org.springframework.dao.OptimisticLockingFailureException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by mavarazy on 15/10/14.
@@ -15,9 +18,13 @@ import java.util.Collections;
 public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
 
     final private PlayerAccountRepository accountRepository;
+    final private PendingTransactionRepository pendingTransactionRepository;
 
-    public MongoPlayerAccountTemplate(PlayerAccountRepository accountRepository) {
+    public MongoPlayerAccountTemplate(
+        PlayerAccountRepository accountRepository,
+        PendingTransactionRepository pendingTransactionRepository) {
         this.accountRepository = accountRepository;
+        this.pendingTransactionRepository = pendingTransactionRepository;
     }
 
     @Override
@@ -41,6 +48,7 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
             }
             accountRepository.save(account);
         } catch (OptimisticLockingFailureException e) {
+            // TODO This is dangerous approach to this problem
             tryDebit(player, amount);
         } catch (NullPointerException e) {
             // TODO this leaves a control breach for random PaymentAccount creation
@@ -57,26 +65,31 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
-    public void freeze(Collection<String> players, PendingOperation pendingOperation) {
+    public PendingTransaction freeze(Collection<String> players, String transactionKey, Money amount) {
+        List<PendingOperation> pendingOperations = new ArrayList<>();
         for (String player: players) {
-            tryFreezing(player, pendingOperation);
+            pendingOperations.add(tryFreezing(player, transactionKey, amount));
         }
+        PendingTransaction pendingTransaction = new PendingTransaction(transactionKey, pendingOperations);
+        return pendingTransactionRepository.save(pendingTransaction);
     }
 
-    private void tryFreezing(String player, PendingOperation pendingOperation) {
+    private PendingOperation tryFreezing(String player, String transactionKey, Money amount) {
         try {
             PlayerAccount account = accountRepository.findOne(player);
-            Money amount = pendingOperation.getAmount().negate();
             Money playerAmount = account.getMoney(amount.getCurrency());
             if (playerAmount == null) {
-                account.getMoney().put(amount.getCurrency(), amount);
+                account.getMoney().put(amount.getCurrency(), amount.negate());
             } else {
-                account.getMoney().put(amount.getCurrency(), playerAmount.add(amount));
+                account.getMoney().put(amount.getCurrency(), playerAmount.subtract(amount));
             }
+            PendingOperation pendingOperation = new PendingOperation(player, transactionKey, amount);
             account.getPendingOperations().add(pendingOperation);
             accountRepository.save(account);
+            return pendingOperation;
         } catch (OptimisticLockingFailureException e) {
-            tryFreezing(player, pendingOperation);
+            // TODO This is dangerous approach to this problem
+            return tryFreezing(player, transactionKey, amount);
         }
     }
 

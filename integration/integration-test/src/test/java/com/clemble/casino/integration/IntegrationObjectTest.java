@@ -173,9 +173,9 @@ public class IntegrationObjectTest {
                         .setTransactionKey(RandomStringUtils.random(5))
                         .setTransactionDate(new Date())
                         .setProcessingDate(new Date())
-                        .addPaymentOperation(
+                        .addOperation(
                                 new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Credit))
-                        .addPaymentOperation(
+                        .addOperation(
                                 new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Debit));
             }
         });

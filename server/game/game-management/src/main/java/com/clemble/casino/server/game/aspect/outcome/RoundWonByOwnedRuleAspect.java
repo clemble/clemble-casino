@@ -43,8 +43,8 @@ public class RoundWonByOwnedRuleAspect extends GameAspect<GameEndedEvent> {
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();
                 paymentTransaction
-                    .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))
-                    .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
+                    .addOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))
+                    .addOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
             }
             // Step 3. Processing payment transaction
             systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(paymentTransaction));

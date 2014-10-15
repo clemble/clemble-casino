@@ -49,8 +49,8 @@ public class RoundWonBySpentRuleAspect extends GameAspect<GameEndedEvent> {
                 if (!playerContext.getPlayer().equals(winnerId)) {
                     Money spent = Money.create(currency, playerAccount.getSpent());
                     transaction
-                            .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), spent, Operation.Credit))
-                            .addPaymentOperation(new PaymentOperation(winnerId, spent, Operation.Debit));
+                            .addOperation(new PaymentOperation(playerContext.getPlayer(), spent, Operation.Credit))
+                            .addOperation(new PaymentOperation(winnerId, spent, Operation.Debit));
                 }
             }
             // Step 3. Processing payment transaction

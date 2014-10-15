@@ -1,12 +1,7 @@
 package com.clemble.casino.goal.aspect.outcome;
 
-import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.lifecycle.management.GamePlayerAccount;
-import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
 import com.clemble.casino.goal.aspect.GoalAspect;
-import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.lifecycle.management.event.GoalReachedEvent;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
@@ -40,8 +35,8 @@ public class GoalReachedOutcomeAspect extends GoalAspect<GoalReachedEvent> {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(event.getGoalKey())
             .setTransactionDate(new Date())
-            .addPaymentOperation(new PaymentOperation(player, bidTotal, Operation.Debit))
-            .addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, bidTotal, Operation.Credit));
+            .addOperation(new PaymentOperation(player, bidTotal, Operation.Debit))
+            .addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, bidTotal, Operation.Credit));
         // Step 2. Processing payment transaction
         systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(paymentTransaction));
     }

@@ -42,7 +42,7 @@ public class MatchWonRuleAspect extends GameAspect<MatchEndedEvent> {
                     .setTransactionKey(context.getSessionKey())
                     .setTransactionDate(new Date());
             // Step 3. Specifying pot transaction
-            transaction.addPaymentOperation(new PaymentOperation(winnerId, Money.create(currency, context.getPot()), Operation.Debit));
+            transaction.addOperation(new PaymentOperation(winnerId, Money.create(currency, context.getPot()), Operation.Debit));
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 // Step 3.1. Distributing spent and owned entities
                 GamePlayerAccount playerAccount = playerContext.getAccount();
@@ -50,8 +50,8 @@ public class MatchWonRuleAspect extends GameAspect<MatchEndedEvent> {
                 Money spent = Money.create(currency, playerAccount.getSpent());
                 Money owned = Money.create(currency, playerAccount.getOwned());
                 transaction
-                    .addPaymentOperation(new PaymentOperation(player, spent, Operation.Credit))
-                    .addPaymentOperation(new PaymentOperation(player, owned, Operation.Debit));
+                    .addOperation(new PaymentOperation(player, spent, Operation.Credit))
+                    .addOperation(new PaymentOperation(player, owned, Operation.Debit));
             }
             // Step 3. Processing payment transaction
             systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(transaction));

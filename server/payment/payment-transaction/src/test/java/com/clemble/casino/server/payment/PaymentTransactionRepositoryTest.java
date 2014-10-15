@@ -2,7 +2,6 @@ package com.clemble.casino.server.payment;
 
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.player.PlayerAware;
@@ -14,7 +13,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -40,12 +38,12 @@ public class PaymentTransactionRepositoryTest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(player + RandomStringUtils.randomAlphanumeric(5))
             .setTransactionDate(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
-            .addPaymentOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
-            .addPaymentOperation(new PaymentOperation(player, amount, Operation.Debit));
+            .addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
+            .addOperation(new PaymentOperation(player, amount, Operation.Debit));
         // Step 2. Saving transaction in repository
         transactionRepository.save(paymentTransaction);
         // Step 3. Retrieving saved transaction
-         List<PaymentTransaction> savedTransactions = transactionRepository.findByPaymentOperationsPlayerAndTransactionKeyLike(player, player);
+         List<PaymentTransaction> savedTransactions = transactionRepository.findByOperationsPlayerAndTransactionKeyLike(player, player);
          Assert.assertEquals(savedTransactions.size(), 1);
          Assert.assertEquals(savedTransactions.get(0), paymentTransaction);
     }

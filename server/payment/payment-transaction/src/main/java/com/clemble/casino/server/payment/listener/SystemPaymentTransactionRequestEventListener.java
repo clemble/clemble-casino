@@ -69,7 +69,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
         }
         Collection<PaymentEvent> paymentEvents = new ArrayList<PaymentEvent>();
         // Step 1. Processing payment transactions
-        for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
+        for (PaymentOperation paymentOperation : paymentTransaction.getOperations()) {
             LOG.debug("Processing {}", paymentOperation);
             if (paymentOperation.getOperation() == Operation.Credit) {
                 accountTemplate.credit(paymentOperation.getPlayer(), paymentOperation.getAmount());

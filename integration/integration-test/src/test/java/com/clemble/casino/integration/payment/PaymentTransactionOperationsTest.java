@@ -19,9 +19,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -63,10 +61,10 @@ public class PaymentTransactionOperationsTest {
             .setTransactionKey(ObjectGenerator.generate(String.class))
             .setTransactionDate(new Date())
             .setProcessingDate(new Date())
-            .addPaymentOperation(
-                new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 60), Operation.Credit))
-            .addPaymentOperation(
-                new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+            .addOperation(
+                    new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 60), Operation.Credit))
+            .addOperation(
+                    new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionDebitAndCreditNotMatched));
 
@@ -81,10 +79,10 @@ public class PaymentTransactionOperationsTest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(ObjectGenerator.generate(String.class))
                 .setTransactionDate(new Date())
-                .addPaymentOperation(
+                .addOperation(
                         new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
-                .addPaymentOperation(
-                    new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                .addOperation(
+                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
@@ -103,10 +101,10 @@ public class PaymentTransactionOperationsTest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(transactionId)
                 .setTransactionDate(new Date())
-                .addPaymentOperation(
+                .addOperation(
                         new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
-                .addPaymentOperation(
-                    new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                .addOperation(
+                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
@@ -126,10 +124,10 @@ public class PaymentTransactionOperationsTest {
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(transactionId)
-            .addPaymentOperation(
+            .addOperation(
                     new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
-            .addPaymentOperation(
-                new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+            .addOperation(
+                    new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
@@ -153,7 +151,7 @@ public class PaymentTransactionOperationsTest {
             }
         }, 5_000);
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();
-        for (PaymentOperation paymentOperation : paymentTransaction.getPaymentOperations()) {
+        for (PaymentOperation paymentOperation : paymentTransaction.getOperations()) {
             if (paymentOperation.getPlayer().equals(player.getPlayer())) {
                 associatedOperation.add(paymentOperation);
             }

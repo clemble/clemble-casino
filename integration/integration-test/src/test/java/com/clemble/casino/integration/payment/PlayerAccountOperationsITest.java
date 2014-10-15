@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
@@ -80,7 +79,7 @@ public class PlayerAccountOperationsITest {
         // Step 3. Checking registration transaction
         A.paymentOperations().myTransactions();
         PaymentTransaction transaction = A.paymentOperations().getTransaction(A.getPlayer() + MoneySource.registration);
-        Set<PaymentOperation> paymentOperations = transaction.getPaymentOperations();
+        Set<PaymentOperation> paymentOperations = transaction.getOperations();
         Money transactionAmount = paymentOperations.iterator().next().getAmount();
         // Step 4. Checking bonus transaction (Which might be delayed, because of the system event delays)
         PaymentTransaction bonusTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>(){
@@ -89,7 +88,7 @@ public class PlayerAccountOperationsITest {
                 return A.paymentOperations().myTransactions(PaymentBonusSource.dailybonus).get(0);
             }
         }, 5000);
-        paymentOperations = bonusTransaction.getPaymentOperations();
+        paymentOperations = bonusTransaction.getOperations();
         Money bonusAmmount = paymentOperations.iterator().next().getAmount();
         assertEquals(transactionAmount.add(bonusAmmount.getAmount()), A.accountService().myAccount().getMoney(Currency.FakeMoney));
     }

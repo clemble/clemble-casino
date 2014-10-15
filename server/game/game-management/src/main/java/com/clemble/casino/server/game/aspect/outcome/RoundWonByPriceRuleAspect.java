@@ -52,8 +52,8 @@ public class RoundWonByPriceRuleAspect extends GameAspect<GameEndedEvent> {
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 if (!playerContext.getPlayer().equals(winnerId)) {
                     transaction
-                        .addPaymentOperation(new PaymentOperation(playerContext.getPlayer(), price, Operation.Credit))
-                        .addPaymentOperation(new PaymentOperation(winnerId, price, Operation.Debit));
+                        .addOperation(new PaymentOperation(playerContext.getPlayer(), price, Operation.Credit))
+                        .addOperation(new PaymentOperation(winnerId, price, Operation.Debit));
                 }
             }
             // Step 3. Processing payment transaction

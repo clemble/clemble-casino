@@ -7,7 +7,6 @@ import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEv
 import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.payment.listener.SystemPlayerAccountCreationEventListener;
-import com.clemble.casino.server.payment.repository.PlayerAccountRepository;
 import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
@@ -60,8 +59,8 @@ public class PaymentTransactionServiceTest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(transactionKey)
             .setTransactionDate(new Date())
-            .addPaymentOperation(new PaymentOperation(playerFrom, amount, Operation.Credit))
-            .addPaymentOperation(new PaymentOperation(playerTo, amount, Operation.Debit));
+            .addOperation(new PaymentOperation(playerFrom, amount, Operation.Credit))
+            .addOperation(new PaymentOperation(playerTo, amount, Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 

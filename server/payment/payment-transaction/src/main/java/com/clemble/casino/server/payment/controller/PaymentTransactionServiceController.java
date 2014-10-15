@@ -27,13 +27,13 @@ public class PaymentTransactionServiceController implements PaymentTransactionSe
     @ResponseStatus(value = HttpStatus.OK)
     public List<PaymentTransaction> myTransactions(@CookieValue("player") String player) {
         // Step 1. Sending transactions
-        return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
+        return paymentTransactionRepository.findByOperationsPlayer(player);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_TRANSACTIONS_BY_SOURCE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public List<PaymentTransaction> myTransactions(@CookieValue("player") String player, @PathVariable("source") String source) {
-        return paymentTransactionRepository.findByPaymentOperationsPlayerAndTransactionKeyLike(player, source);
+        return paymentTransactionRepository.findByOperationsPlayerAndTransactionKeyLike(player, source);
     }
 
 
@@ -57,7 +57,7 @@ public class PaymentTransactionServiceController implements PaymentTransactionSe
         @PathVariable("player") String player
     ) {
         // Step 1. Sending transactions
-        return paymentTransactionRepository.findByPaymentOperationsPlayer(player);
+        return paymentTransactionRepository.findByOperationsPlayer(player);
     }
 
 }

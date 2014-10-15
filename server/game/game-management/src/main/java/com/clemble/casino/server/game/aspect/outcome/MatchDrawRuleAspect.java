@@ -48,8 +48,8 @@ public class MatchDrawRuleAspect extends GameAspect<MatchEndedEvent> {
                 Money spent = Money.create(currency, playerAccount.getSpent());
                 Money owned = Money.create(currency, playerAccount.getOwned());
                 transaction
-                    .addPaymentOperation(new PaymentOperation(player, spent, Operation.Credit))
-                    .addPaymentOperation(new PaymentOperation(player, owned, Operation.Debit));
+                    .addOperation(new PaymentOperation(player, spent, Operation.Credit))
+                    .addOperation(new PaymentOperation(player, owned, Operation.Debit));
             }
             // Step 3. Processing payment transaction
             systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(transaction));
