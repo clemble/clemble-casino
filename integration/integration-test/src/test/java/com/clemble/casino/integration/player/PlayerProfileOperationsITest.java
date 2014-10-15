@@ -111,11 +111,9 @@ public class PlayerProfileOperationsITest {
         // Step 3. Updating created player with new Profile value
         PlayerProfile newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
-        newProfile.setVersion(0);
         // Step 4. Checking saved profile, replaced the old one
         PlayerProfile savedProfile = player.profileOperations().updateProfile(newProfile);
 
-        newProfile.setVersion(savedProfile.getVersion());
         Assert.assertEquals(savedProfile, newProfile);
 
         Assert.assertEquals(newProfile, player.profileOperations().myProfile());
@@ -124,11 +122,9 @@ public class PlayerProfileOperationsITest {
         // Step 5. Repeating steps from 3 to 4 with another new Profile
         newProfile = randomProfile();
         newProfile.setPlayer(player.getPlayer());
-        newProfile.setVersion(savedProfile.getVersion());
 
         savedProfile = playerProfileOperations.updateProfile(newProfile);
 
-        newProfile.setVersion(savedProfile.getVersion());
         Assert.assertEquals(savedProfile, newProfile);
 
         Assert.assertEquals(newProfile, player.profileOperations().myProfile());

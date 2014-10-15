@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.convert.support.GenericConversionService;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 
@@ -15,6 +16,7 @@ import java.net.UnknownHostException;
 /**
  * Created by mavarazy on 8/26/14.
  */
+@EnableMongoAuditing
 @Import(PropertiesSpringConfiguration.class)
 public class MongoSpringConfiguration implements SpringConfiguration {
 

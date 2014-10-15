@@ -43,7 +43,6 @@ public class PlayerProfileRepositoryTest {
     public void testSave() {
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class);
         playerProfile.setBirthDate(new Date(0));
-        playerProfile.setVersion(0);
         playerProfile.setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedProfile = playerProfileRepository.save(playerProfile);
         assertEquals(savedProfile.getPlayer(), playerProfile.getPlayer());

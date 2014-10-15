@@ -28,6 +28,7 @@ import com.clemble.casino.game.lifecycle.management.unit.Chip;
 import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
 
 import com.clemble.casino.lifecycle.configuration.rule.ConfigurationRule;
+import com.clemble.casino.payment.PendingOperation;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Ignore;
@@ -146,7 +147,11 @@ public class IntegrationObjectTest {
         register(PlayerAccount.class, new AbstractValueGenerator<PlayerAccount>() {
             @Override
             public PlayerAccount generate() {
-            return new PlayerAccount(RandomStringUtils.random(5), ImmutableMap.of(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500)));
+            return new PlayerAccount(
+                RandomStringUtils.random(5),
+                ImmutableMap.of(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500)),
+                Collections.<PendingOperation>emptyList(),
+                null);
             }
         });
         register(GameUnit.class, new AbstractValueGenerator<GameUnit>() {

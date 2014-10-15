@@ -3,7 +3,8 @@ package com.clemble.casino.server.payment.spring;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.payment.account.BasicServerPlayerAccountService;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
-import com.clemble.casino.server.payment.repository.JedisPlayerAccountTemplate;
+import com.clemble.casino.server.payment.listener.SystemPlayerAccountCreationEventListener;
+import com.clemble.casino.server.payment.repository.*;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
@@ -15,8 +16,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.server.payment.account.ServerPlayerAccountService;
-import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
-import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
@@ -40,8 +39,13 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerAccountTemplate playerAccountTemplate(JedisPool jedisPool) {
-        return new JedisPlayerAccountTemplate(jedisPool);
+    public PlayerAccountRepository playerAccountRepository(MongoRepositoryFactory repositoryFactory){
+        return repositoryFactory.getRepository(PlayerAccountRepository.class);
+    }
+
+    @Bean
+    public PlayerAccountTemplate playerAccountTemplate(PlayerAccountRepository accountRepository) {
+        return new MongoPlayerAccountTemplate(accountRepository);
     }
 
     @Bean
@@ -57,6 +61,15 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
             SystemNotificationServiceListener notificationServiceListener,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         SystemPaymentTransactionRequestEventListener eventListener = new SystemPaymentTransactionRequestEventListener(paymentTransactionRepository, accountTemplate, notificationService, validationService);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
+    @Bean
+    public SystemPlayerAccountCreationEventListener systemPlayerAccountCreationEventListener(
+            PlayerAccountRepository accountRepository,
+            SystemNotificationServiceListener notificationServiceListener) {
+        SystemPlayerAccountCreationEventListener eventListener = new SystemPlayerAccountCreationEventListener(accountRepository);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }

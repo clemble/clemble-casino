@@ -1,11 +1,13 @@
 package com.clemble.casino.server.payment.repository;
 
+import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ public class JedisPlayerAccountTemplate implements PlayerAccountTemplate {
         } finally {
             jedisPool.returnResource(jedis);
         }
-        return new PlayerAccount(player, cash);
+        return new PlayerAccount(player, cash, Collections.<PendingOperation>emptyList(), 0);
     }
 
     @Override

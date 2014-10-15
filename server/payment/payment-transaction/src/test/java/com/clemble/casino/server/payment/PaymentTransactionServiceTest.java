@@ -4,7 +4,10 @@ import java.util.Date;
 import java.util.Random;
 
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
+import com.clemble.casino.server.payment.listener.SystemPlayerAccountCreationEventListener;
+import com.clemble.casino.server.payment.repository.PlayerAccountRepository;
 import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,6 +31,9 @@ public class PaymentTransactionServiceTest {
     final private Random RANDOM = new Random();
 
     @Autowired
+    public SystemPlayerAccountCreationEventListener accountCreator;
+
+    @Autowired
     public PlayerAccountTemplate accountTemplate;
 
     @Autowired
@@ -38,6 +44,9 @@ public class PaymentTransactionServiceTest {
 
     @Before
     public void initialize() {
+        accountCreator.onEvent(new SystemPlayerCreatedEvent(playerFrom));
+        accountCreator.onEvent(new SystemPlayerCreatedEvent(playerTo));
+
         accountTemplate.debit(playerFrom, Money.create(Currency.FakeMoney, 100));
         accountTemplate.debit(playerTo, Money.create(Currency.FakeMoney, 50));
     }
