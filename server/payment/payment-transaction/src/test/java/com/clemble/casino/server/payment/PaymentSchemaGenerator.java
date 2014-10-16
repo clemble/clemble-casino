@@ -4,6 +4,7 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaExport.Type;
 import org.hibernate.tool.hbm2ddl.Target;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.clemble.casino.payment.PaymentTransaction;
@@ -12,6 +13,7 @@ import com.clemble.casino.payment.PlayerAccount;
 public class PaymentSchemaGenerator {
 
     @Test
+    @Ignore
     public void generateSchemaMySQL() {
         org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
 
@@ -29,6 +31,7 @@ public class PaymentSchemaGenerator {
     }
 
     @Test
+    @Ignore
     public void generateSchemaH2() {
         org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
 

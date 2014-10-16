@@ -64,10 +64,9 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         notificationService.send(initiation.getPlayer(), new GoalInitiationCreatedEvent(initiation.getGoalKey()));
         // Step 4. Freezing amount for a player
         LOG.debug("Freezing amount for a player {}", initiation.getPlayer());
-        PaymentOperation operation = new PaymentOperation(initiation.getPlayer(), initiation.getConfiguration().getBid().getAmount(), Operation.Debit);
+        PaymentOperation operation = new PaymentOperation(initiation.getPlayer(), initiation.getConfiguration().getBid().getAmount(), Operation.Credit);
         SystemEvent freezeRequest = new SystemPaymentFreezeRequestEvent(new PendingTransaction(initiation.getGoalKey(), Collections.singletonList(operation), null));
         systemNotificationService.send(freezeRequest);
-
         // Step 4. Scheduling Cancel task
         taskExecutor.schedule(new GoalInitiationExpirationTask(initiation.getGoalKey(), initiation.getStartDate()));
     }

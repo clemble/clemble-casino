@@ -1,5 +1,7 @@
 package com.clemble.casino.server.payment.repository;
 
+import com.clemble.casino.money.Operation;
+import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
@@ -44,20 +46,16 @@ public class JedisPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
+    public PlayerAccount process(String transactionKey, PaymentOperation operation) {
+        Money amount = operation.getOperation() == Operation.Debit ? operation.getAmount() : operation.getAmount().negate();
+        debit(operation.getPlayer(), transactionKey, amount);
+        return findOne(operation.getPlayer());
+    }
+
     public void debit(String player, String transactionKey, Money amount) {
         Jedis jedis = jedisPool.getResource();
         try {
             jedis.incrBy(player + amount.getCurrency(), amount.getAmount());
-        } finally {
-            jedisPool.returnResource(jedis);
-        }
-    }
-
-    @Override
-    public void credit(String player, String transactionKey, Money amount) {
-        Jedis jedis = jedisPool.getResource();
-        try {
-            jedis.decrBy(player + amount.getCurrency(), amount.getAmount());
         } finally {
             jedisPool.returnResource(jedis);
         }

@@ -31,37 +31,34 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
-    public void debit(String player, String transactionKey, Money amount) {
-        tryDebit(player, transactionKey, amount);
+    public PlayerAccount process(String transactionKey, PaymentOperation operation) {
+        return tryProcess(transactionKey, operation);
     }
 
-    private void tryDebit(String player, String transactionKey, Money amount) {
+    private PlayerAccount tryProcess(String transactionKey, PaymentOperation operation) {
         try {
+            String player = operation.getPlayer();
             PlayerAccount account = accountRepository.findOne(player);
             // Step 1. Fetching pendingOperation
             // TODO Check case multiple bets for the same operation
             PendingOperation pendingOperation = null;
-            for(PendingOperation operation: account.getPendingOperations()) {
-                if (transactionKey.equals(operation.getTransactionKey()))
-                    pendingOperation = operation;
+            for(PendingOperation pOperation: account.getPendingOperations()) {
+                if (transactionKey.equals(pOperation.getTransactionKey()))
+                    pendingOperation = pOperation;
             }
             account.getPendingOperations().remove(pendingOperation);
             // Step 2. Performing actual debit operation
+            Money amount = operation.toDebit().getAmount();
             Money debit = account.getMoney(amount.getCurrency());
-            if (debit == null) {
-                account.getMoney().put(amount.getCurrency(), amount);
-            } else {
-                Money change = pendingOperation.getAmount().add(amount);
-                account.getMoney().put(amount.getCurrency(), debit.add(change));
-            }
-            accountRepository.save(account);
+            account.getMoney().put(amount.getCurrency(), amount.add(debit));
+            return accountRepository.save(account);
         } catch (OptimisticLockingFailureException e) {
             // TODO This is dangerous approach to this problem
-            tryDebit(player, transactionKey, amount);
+            return tryProcess(transactionKey, operation);
         } catch (NullPointerException e) {
             // TODO this leaves a control breach for random PaymentAccount creation
-            tryCreate(player);
-            tryDebit(player, transactionKey, amount);
+            tryCreate(operation.getPlayer());
+            return tryProcess(transactionKey, operation);
         }
     }
 
@@ -73,22 +70,41 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
             // Step 2. Adding new account to repository
             accountRepository.save(newAccount);
         } catch (Throwable throwable) {
-
+            throwable.printStackTrace();
         }
-    }
-
-    @Override
-    public void credit(String player, String transactionKey, Money amount) {
-        debit(player, transactionKey, amount.negate());
     }
 
     @Override
     public PendingTransaction freeze(PendingTransaction pendingTransaction) {
         for (PaymentOperation operation: pendingTransaction.getOperations()) {
-            tryFreezingAccount(pendingTransaction.getTransactionKey(), operation);
+            // Step 1. Changing PlayerAccount
+            tryFreezing(pendingTransaction.getTransactionKey(), operation);
+            // Step 2. Adding to PendingTransactions list
             tryAddingToPending(pendingTransaction.getTransactionKey(), operation);
         }
         return pendingTransactionRepository.findOne(pendingTransaction.getTransactionKey());
+    }
+
+    private PlayerAccount tryFreezing(String transactionKey, PaymentOperation operation) {
+        try {
+            String player = operation.getPlayer();
+            PlayerAccount account = accountRepository.findOne(player);
+            // Step 1. Fetching pendingOperation
+            // TODO Check case multiple bets for the same operation
+            account.getPendingOperations().add(PendingOperation.fromOperation(transactionKey, operation));
+            // Step 2. Performing actual debit operation
+            Money amount = operation.toDebit().getAmount();
+            Money debit = account.getMoney(amount.getCurrency());
+            account.getMoney().put(amount.getCurrency(), amount.add(debit));
+            return accountRepository.save(account);
+        } catch (OptimisticLockingFailureException e) {
+            // TODO This is dangerous approach to this problem
+            return tryFreezing(transactionKey, operation);
+        } catch (NullPointerException e) {
+            // TODO this leaves a control breach for random PaymentAccount creation
+            tryCreate(operation.getPlayer());
+            return tryFreezing(transactionKey, operation);
+        }
     }
 
     private PendingTransaction tryAddingToPending(String transactionKey, PaymentOperation operation) {
@@ -106,26 +122,8 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
         } catch (OptimisticLockingFailureException e) {
             // TODO This is dangerous approach to this problem
             return tryAddingToPending(transactionKey, operation);
-        }
-    }
-
-    private PendingOperation tryFreezingAccount(String transactionKey, PaymentOperation operation) {
-        try {
-            Money amount = operation.getAmount();
-            PlayerAccount account = accountRepository.findOne(operation.getPlayer());
-            Money playerAmount = account.getMoney(amount.getCurrency());
-            if (playerAmount == null) {
-                account.getMoney().put(amount.getCurrency(), amount.negate());
-            } else {
-                account.getMoney().put(amount.getCurrency(), playerAmount.subtract(amount));
-            }
-            PendingOperation pendingOperation = PendingOperation.fromOperation(transactionKey, operation);
-            account.getPendingOperations().add(pendingOperation);
-            accountRepository.save(account);
-            return pendingOperation;
-        } catch (OptimisticLockingFailureException e) {
-            // TODO This is dangerous approach to this problem
-            return tryFreezingAccount(transactionKey, operation);
+        } catch (NullPointerException e) {
+            return tryAddingToPending(transactionKey, operation);
         }
     }
 

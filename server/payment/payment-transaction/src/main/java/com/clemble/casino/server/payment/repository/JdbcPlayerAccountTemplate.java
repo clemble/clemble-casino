@@ -1,5 +1,7 @@
 package com.clemble.casino.server.payment.repository;
 
+import com.clemble.casino.money.Operation;
+import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
@@ -40,8 +42,14 @@ public class JdbcPlayerAccountTemplate implements PlayerAccountTemplate {
         return new PlayerAccount(player, cash, Collections.<PendingOperation>emptyList(), 0);
     }
 
-    // TODO this is really bad solution switch to Actors model
     @Override
+    public PlayerAccount process(String transactionKey, PaymentOperation operation) {
+        Money amount = operation.getOperation() == Operation.Debit ? operation.getAmount() : operation.getAmount().negate();
+        debit(operation.getPlayer(), transactionKey, amount);
+        return findOne(operation.getPlayer());
+    }
+
+    // TODO this is really bad solution switch to Actors model
     public void debit(String player, String transactionKey, Money amount) {
         int linesUpdated = 0;
         do {
@@ -57,11 +65,6 @@ public class JdbcPlayerAccountTemplate implements PlayerAccountTemplate {
                 }
             }
         } while(linesUpdated == 0);
-    }
-
-    @Override
-    public void credit(String player, String transactionKey, Money amount) {
-        debit(player, transactionKey, amount.negate());
     }
 
     @Override

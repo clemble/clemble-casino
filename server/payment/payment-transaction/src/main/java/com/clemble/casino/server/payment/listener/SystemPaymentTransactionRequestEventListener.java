@@ -76,13 +76,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
         // Step 1. Processing payment transactions
         for (PaymentOperation paymentOperation : paymentTransaction.getOperations()) {
             LOG.debug("Processing {}", paymentOperation);
-            if (paymentOperation.getOperation() == Operation.Credit) {
-                accountTemplate.credit(paymentOperation.getPlayer(), paymentTransaction.getTransactionKey(), paymentOperation.getAmount());
-            } else if (paymentOperation.getOperation() == Operation.Debit) {
-                accountTemplate.debit(paymentOperation.getPlayer(), paymentTransaction.getTransactionKey(), paymentOperation.getAmount());
-            } else {
-                throw ClembleCasinoException.withKey(ClembleCasinoError.PaymentTransactionInvalid, paymentTransaction.getTransactionKey());
-            }
+            accountTemplate.process(paymentTransaction.getTransactionKey(), paymentOperation);
             paymentEvents.add(new PaymentCompleteEvent(paymentTransaction.getTransactionKey(), paymentOperation));
         }
         // Step 3. Saving account transaction

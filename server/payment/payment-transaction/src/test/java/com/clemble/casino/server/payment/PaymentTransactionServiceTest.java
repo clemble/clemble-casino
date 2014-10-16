@@ -46,8 +46,8 @@ public class PaymentTransactionServiceTest {
         accountCreator.onEvent(new SystemPlayerCreatedEvent(playerFrom));
         accountCreator.onEvent(new SystemPlayerCreatedEvent(playerTo));
 
-        accountTemplate.debit(playerFrom, playerFrom + ":registration", Money.create(Currency.FakeMoney, 100));
-        accountTemplate.debit(playerTo, playerTo + ":registration", Money.create(Currency.FakeMoney, 50));
+        accountTemplate.process(playerFrom + ":registration", new PaymentOperation(playerFrom, Money.create(Currency.FakeMoney, 100), Operation.Debit));
+        accountTemplate.process(playerTo + ":registration", new PaymentOperation(playerTo, Money.create(Currency.FakeMoney, 100), Operation.Debit));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class PaymentTransactionServiceTest {
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
-        Assert.assertEquals(accountTemplate.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 50 + amount.getAmount());
+        Assert.assertEquals(accountTemplate.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 100 + amount.getAmount());
         Assert.assertEquals(accountTemplate.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - amount.getAmount());
     }
 

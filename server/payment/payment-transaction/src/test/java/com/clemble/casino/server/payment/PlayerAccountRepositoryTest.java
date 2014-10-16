@@ -87,30 +87,80 @@ public class PlayerAccountRepositoryTest {
         PlayerAccount saved = accountRepository.save(account);
         Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
         // Step 2. Freezing some amount on the account
-        PendingOperation pendingOperation = new PendingOperation(transactionKey, player, Money.create(Currency.FakeMoney, 50));
-        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singletonList(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Debit)), null));
+        PendingOperation pendingOperation = new PendingOperation(transactionKey, player, Money.create(Currency.FakeMoney, 50), Operation.Credit);
+        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singletonList(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
         // Step 3. Checking amount changed
         PlayerAccount another = playerAccountTemplate.findOne(player);
         Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
         Assert.assertEquals(another.getPendingOperations().iterator().next(), pendingOperation);
     }
 
+    @Test
+    public void testDebitAfterFreezing() {
+        // Step 1. Creating player account
+        String transactionKey = RandomStringUtils.randomAlphabetic(5);
+        String player = RandomStringUtils.randomAlphabetic(5);
+        Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
+        List<PendingOperation> pendingOperations = Collections.emptyList();
+        PlayerAccount account = new PlayerAccount(player, money, pendingOperations, null);
+        PlayerAccount saved = accountRepository.save(account);
+        Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
+        // Step 2. Freezing some amount on the account
+        PendingOperation pendingOperation = new PendingOperation(transactionKey, player, Money.create(Currency.FakeMoney, 50), Operation.Credit);
+        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singletonList(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
+        // Step 3. Checking amount changed
+        PlayerAccount another = playerAccountTemplate.findOne(player);
+        Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
+        Assert.assertEquals(another.getPendingOperations().iterator().next(), pendingOperation);
+        // Step 4. Processing Debit for this operation
+        playerAccountTemplate.process(transactionKey, new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Debit));
+        PlayerAccount afterProcessing = playerAccountTemplate.findOne(player);
+        // Step 5. Checking final amount return to the original
+        Assert.assertEquals(afterProcessing.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 500));
+        Assert.assertEquals(afterProcessing.getPendingOperations().iterator().hasNext(), false);
+    }
+
+    @Test
+    public void testCreditAfterFreezing() {
+        // Step 1. Creating player account
+        String transactionKey = RandomStringUtils.randomAlphabetic(5);
+        String player = RandomStringUtils.randomAlphabetic(5);
+        Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
+        List<PendingOperation> pendingOperations = Collections.emptyList();
+        PlayerAccount account = new PlayerAccount(player, money, pendingOperations, null);
+        PlayerAccount saved = accountRepository.save(account);
+        Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
+        // Step 2. Freezing some amount on the account
+        PendingOperation pendingOperation = new PendingOperation(transactionKey, player, Money.create(Currency.FakeMoney, 50), Operation.Credit);
+        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singletonList(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
+        // Step 3. Checking amount changed
+        PlayerAccount another = playerAccountTemplate.findOne(player);
+        Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
+        Assert.assertEquals(another.getPendingOperations().iterator().next(), pendingOperation);
+        // Step 4. Processing Debit for this operation
+        playerAccountTemplate.process(transactionKey, new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit));
+        PlayerAccount afterProcessing = playerAccountTemplate.findOne(player);
+        // Step 5. Checking final amount return to the original
+        Assert.assertEquals(afterProcessing.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 400));
+        Assert.assertEquals(afterProcessing.getPendingOperations().iterator().hasNext(), false);
+    }
+
     public static class UpdateTask implements Callable<PlayerAccount> {
 
-        final private String player;
-        final private Money debit;
+        final private PaymentOperation operation;
         final private PlayerAccountTemplate accountTemplate;
 
         public UpdateTask(String player, Money debit, PlayerAccountTemplate accountTemplate) {
-            this.player = player;
-            this.debit = debit;
+            this.operation = new PaymentOperation(player, debit, Operation.Debit);
             this.accountTemplate = accountTemplate;
         }
 
         @Override
         public PlayerAccount call() {
-            accountTemplate.debit(player, RandomStringUtils.randomAlphabetic(10), debit);
-            return accountTemplate.findOne(player);
+            // Step 1. Processing account operation
+            accountTemplate.process(RandomStringUtils.randomAlphabetic(10), operation);
+            // Step 2. Returning player account
+            return accountTemplate.findOne(operation.getPlayer());
         }
     }
 }

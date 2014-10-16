@@ -41,14 +41,14 @@ public class RoundDrawByOwnedRuleAspect extends GameAspect<RoundEndedEvent> {
         if (outcome instanceof DrawOutcome) {
             GameContext<?> context = event.getState().getContext();
             // Step 2. Generating payment transaction
-            PaymentTransaction paymentTransaction = new PaymentTransaction()
-                .setTransactionKey(context.getSessionKey())
-                .setTransactionDate(new Date());
+            PaymentTransaction paymentTransaction = new PaymentTransaction().
+                setTransactionKey(context.getSessionKey()).
+                setTransactionDate(new Date());
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 GamePlayerAccount playerAccount = playerContext.getAccount();
-                paymentTransaction
-                    .addOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit))
-                    .addOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
+                paymentTransaction.
+                    addOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getOwned()), Operation.Debit)).
+                    addOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
             }
             // Step 3. Processing payment transaction
             systemNotificationService.send(new SystemPaymentTransactionRequestEvent(paymentTransaction));
