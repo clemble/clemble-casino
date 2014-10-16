@@ -7,6 +7,6 @@ import com.clemble.casino.server.event.SystemEvent;
 // Redis does not provide durable notifications
 public interface SystemNotificationService extends NotificationService {
 
-    public void notify(SystemEvent event);
+    public void send(SystemEvent event);
 
 }

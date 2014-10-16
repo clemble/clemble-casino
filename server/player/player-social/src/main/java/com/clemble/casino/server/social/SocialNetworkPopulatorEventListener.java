@@ -40,7 +40,7 @@ public class SocialNetworkPopulatorEventListener implements SystemEventListener<
         // Step 3. Fetching PlayerSocialNetwork and existing connections
         Collection<ConnectionKey> connectionKeys = socialAdapter.fetchConnections(connection.getApi());
         // Step 7. Finding difference
-        notificationService.notify(new SystemPlayerConnectionsFetchedEvent(event.getPlayer(), event.getConnection(), connectionKeys));
+        notificationService.send(new SystemPlayerConnectionsFetchedEvent(event.getPlayer(), event.getConnection(), connectionKeys));
     }
 
     @Override

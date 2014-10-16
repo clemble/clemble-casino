@@ -102,7 +102,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         // Step 4. Registration done through separate registration service
         PlayerToken token = register(registrationRequest, player);
         // Step 5. Notifying system of new user
-        notificationService.notify(new SystemPlayerProfileRegisteredEvent(player, normalizedProfile));
+        notificationService.send(new SystemPlayerProfileRegisteredEvent(player, normalizedProfile));
         // Step 6. All done returning response
         return token;
     }
@@ -141,7 +141,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(player);
         playerCredentials = playerCredentialRepository.save(playerCredentials);
         String imageRedirect = GravatarService.toRedirect(playerCredentials.getEmail());
-        notificationService.notify(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));
+        notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));
         // Step 2. Specifying player type
         // TODO move to registration listener playerProfile.setType(PlayerType.free);
         // Step 3. Create new token

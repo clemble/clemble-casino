@@ -74,7 +74,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         construction = constructionRepository.save(construction);
         latchService.save(construction.getSessionKey(), construction.getResponses());
         // Step 4. Sending invitation to opponents
-        playerNotificationService.notify(request.getParticipants(), new GameConstructionPlayerInvitedEvent(construction.getSessionKey(), request));
+        playerNotificationService.send(request.getParticipants(), new GameConstructionPlayerInvitedEvent(construction.getSessionKey(), request));
         // Step 5. Returning constructed construction
         return construction;
     }
@@ -108,19 +108,19 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             // Step 2. Checking if player is part of the game
             ActionLatch responseLatch = latchService.update(action);
             // Step 3. Notifying of applied response
-            playerNotificationService.notify(responseLatch.fetchParticipants(), response);
+            playerNotificationService.send(responseLatch.fetchParticipants(), response);
             construction = construction.cloneWithResponses(responseLatch);
             // Step 4. Checking if latch is full
             if (response instanceof PlayerInvitationDeclinedAction) {
                 construction = construction.cloneWithState(ConstructionState.canceled);
                 // Step 4.1. In case declined send game canceled notification
-                playerNotificationService.notify(construction.getParticipants(), new GameConstructionCanceledEvent(construction.getSessionKey()));
+                playerNotificationService.send(construction.getParticipants(), new GameConstructionCanceledEvent(construction.getSessionKey()));
             } else if (responseLatch.complete()) {
                 GameInitiation initiation = construction.toInitiation();
                 // Step 5. Updating state
                 construction = construction.cloneWithState(ConstructionState.constructed);
                 // Step 6. Notifying Participants
-                playerNotificationService.notify(initiation.getParticipants(), new GameConstructionCompleteEvent(construction.getSessionKey()));
+                playerNotificationService.send(initiation.getParticipants(), new GameConstructionCompleteEvent(construction.getSessionKey()));
                 // Step 7. Moving to the next step
                 pendingInitiationService.add(initiation);
             }

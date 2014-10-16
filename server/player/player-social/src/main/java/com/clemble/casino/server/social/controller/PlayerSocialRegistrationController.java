@@ -48,7 +48,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
         // Step 2. Creating appropriate PlayerProfile
         PlayerToken token =  playerTokenFactory.create(playerProfile.getPlayer(), socialRegistrationRequest.getConsumerDetails());
         // Step 5. Notifying system of new user
-        notificationService.notify(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
+        notificationService.send(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
         // Step 6. All done continue
         return token;
     }
@@ -63,7 +63,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
         // Step 2. Creating appropriate PlayerProfile
         PlayerToken token =  playerTokenFactory.create(playerProfile.getPlayer(), grantRegistrationRequest.getConsumerDetails());
         // Step 5. Notifying system of new user
-        notificationService.notify(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
+        notificationService.send(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
         // Step 6. All done continue
         return token;
     }

@@ -25,7 +25,7 @@ public class JedisSystemNotificationService implements SystemNotificationService
     }
 
     @Override
-    public void notify(SystemEvent event) {
+    public void send(SystemEvent event) {
         // Step 1. Fetching jedis connection
         Jedis jedis = jedisPool.getResource();
         try {

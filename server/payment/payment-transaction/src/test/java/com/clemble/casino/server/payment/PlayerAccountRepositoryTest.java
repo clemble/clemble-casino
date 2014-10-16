@@ -2,7 +2,10 @@ package com.clemble.casino.server.payment;
 
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
+import com.clemble.casino.money.Operation;
+import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PendingOperation;
+import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.server.payment.repository.PlayerAccountRepository;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
@@ -76,6 +79,7 @@ public class PlayerAccountRepositoryTest {
     @Test
     public void testFreezing() {
         // Step 1. Creating player account
+        String transactionKey = RandomStringUtils.randomAlphabetic(5);
         String player = RandomStringUtils.randomAlphabetic(5);
         Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
         List<PendingOperation> pendingOperations = Collections.emptyList();
@@ -83,8 +87,8 @@ public class PlayerAccountRepositoryTest {
         PlayerAccount saved = accountRepository.save(account);
         Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
         // Step 2. Freezing some amount on the account
-        PendingOperation pendingOperation = new PendingOperation(player, "test", Money.create(Currency.FakeMoney, 50));
-        playerAccountTemplate.freeze(Collections.singletonList(player), "test", Money.create(Currency.FakeMoney, 50));
+        PendingOperation pendingOperation = new PendingOperation(transactionKey, player, Money.create(Currency.FakeMoney, 50));
+        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singletonList(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Debit)), null));
         // Step 3. Checking amount changed
         PlayerAccount another = playerAccountTemplate.findOne(player);
         Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));

@@ -38,6 +38,6 @@ public class GoalReachedOutcomeAspect extends GoalAspect<GoalReachedEvent> {
             .addOperation(new PaymentOperation(player, bidTotal, Operation.Debit))
             .addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, bidTotal, Operation.Credit));
         // Step 2. Processing payment transaction
-        systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(paymentTransaction));
+        systemNotificationService.send(new SystemPaymentTransactionRequestEvent(paymentTransaction));
     }
 }

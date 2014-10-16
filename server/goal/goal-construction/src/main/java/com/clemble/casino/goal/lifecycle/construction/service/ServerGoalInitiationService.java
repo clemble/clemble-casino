@@ -8,13 +8,19 @@ import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.construction.GoalInitiationExpirationTask;
 import com.clemble.casino.goal.lifecycle.initiation.event.GoalInitiationCreatedEvent;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
-import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
+import com.clemble.casino.money.Operation;
+import com.clemble.casino.payment.PaymentOperation;
+import com.clemble.casino.payment.PendingTransaction;
+import com.clemble.casino.server.event.SystemEvent;
+import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
 import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by mavarazy on 9/13/14.
@@ -25,11 +31,17 @@ public class ServerGoalInitiationService implements GoalInitiationService {
 
     final private GoalInitiationRepository initiationRepository;
     final private PlayerNotificationService notificationService;
+    final private SystemNotificationService systemNotificationService;
     final private EventTaskExecutor taskExecutor;
 
-    public ServerGoalInitiationService(GoalInitiationRepository initiationRepository, PlayerNotificationService notificationService, EventTaskExecutor taskExecutor) {
+    public ServerGoalInitiationService(
+        GoalInitiationRepository initiationRepository,
+        PlayerNotificationService notificationService,
+        EventTaskExecutor taskExecutor,
+        SystemNotificationService systemNotificationService) {
         this.initiationRepository = initiationRepository;
         this.notificationService = notificationService;
+        this.systemNotificationService = systemNotificationService;
         this.taskExecutor = taskExecutor;
     }
 
@@ -49,13 +61,15 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         initiationRepository.save(initiation);
         // Step 3. Sending notification to the players, that they need to confirm
         LOG.debug("Notifying player {}", initiation);
-        notificationService.notify(initiation.getPlayer(), new GoalInitiationCreatedEvent(initiation.getGoalKey()));
+        notificationService.send(initiation.getPlayer(), new GoalInitiationCreatedEvent(initiation.getGoalKey()));
+        // Step 4. Freezing amount for a player
+        LOG.debug("Freezing amount for a player {}", initiation.getPlayer());
+        PaymentOperation operation = new PaymentOperation(initiation.getPlayer(), initiation.getConfiguration().getBid().getAmount(), Operation.Debit);
+        SystemEvent freezeRequest = new SystemPaymentFreezeRequestEvent(new PendingTransaction(initiation.getGoalKey(), Collections.singletonList(operation), null));
+        systemNotificationService.send(freezeRequest);
+
         // Step 4. Scheduling Cancel task
         taskExecutor.schedule(new GoalInitiationExpirationTask(initiation.getGoalKey(), initiation.getStartDate()));
-    }
-
-    public void initiate(SystemGoalInitiationDueEvent dueEvent) {
-
     }
 
     @Override

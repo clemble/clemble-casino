@@ -52,10 +52,10 @@ public class ServerProfileSocialRegistrationService implements ServerService {
         PlayerProfile playerProfile = adapter.fetchPlayerProfile(socialConnection.getConnection());
         playerProfile.setPlayer(socialConnection.getPlayer());
         // Step 2. Notifying of added social connection
-        notificationService.notify(new SystemPlayerSocialAddedEvent(socialConnection.getPlayer(), socialConnection.getConnection().getKey()));
+        notificationService.send(new SystemPlayerSocialAddedEvent(socialConnection.getPlayer(), socialConnection.getConnection().getKey()));
         Pair<String, String> imageUrl = adapter.toImageUrl(socialConnection.getConnection());
         if (imageUrl != null)
-            notificationService.notify(new SystemPlayerImageChangedEvent(socialConnection.getPlayer(), imageUrl.getLeft(), imageUrl.getRight()));
+            notificationService.send(new SystemPlayerImageChangedEvent(socialConnection.getPlayer(), imageUrl.getLeft(), imageUrl.getRight()));
         // Step 3. Returning social connection
         return playerProfile;
     }

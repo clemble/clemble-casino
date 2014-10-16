@@ -24,7 +24,7 @@ public class PrivateNotificationRuleAspect extends GameAspect<GameManagementEven
     @Override
     public void doEvent(GameManagementEvent event) {
         // Step 1. Sending only to participants
-        notificationService.notify(participants, event);
+        notificationService.send(participants, event);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.clemble.casino.integration.payment;
 
+import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.payment.service.PlayerAccountService;
@@ -35,4 +36,5 @@ public class IntegrationPlayerAccountService implements PlayerAccountService {
     public List<String> canAfford(Collection<String> players, Currency currency, Long amount) {
         return accountService.canAfford(players, currency, amount);
     }
+
 }

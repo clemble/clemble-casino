@@ -83,7 +83,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
         // Step 3. Saving account transaction
         PaymentTransaction transaction = paymentTransactionRepository.save(paymentTransaction);
         // Step 4. Sending PaymentEvent notification
-        notificationService.notify(paymentEvents);
+        notificationService.send(paymentEvents);
         return transaction;
     }
 

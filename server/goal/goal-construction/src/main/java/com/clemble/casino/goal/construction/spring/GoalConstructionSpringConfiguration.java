@@ -81,8 +81,9 @@ public class GoalConstructionSpringConfiguration {
     public ServerGoalInitiationService serverGoalInitiationService(
         GoalInitiationRepository initiationRepository,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
-        @Qualifier("goalInitiationEventTaskExecutor") EventTaskExecutor taskExecutor){
-        return new ServerGoalInitiationService(initiationRepository, notificationService, taskExecutor);
+        @Qualifier("goalInitiationEventTaskExecutor") EventTaskExecutor taskExecutor,
+        SystemNotificationService systemNotificationService){
+        return new ServerGoalInitiationService(initiationRepository, notificationService, taskExecutor, systemNotificationService);
     }
 
     @Bean

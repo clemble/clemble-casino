@@ -53,7 +53,7 @@ public class PlayerConnectionNetworkPopulateListener implements SystemEventListe
             connectionService.save(new PlayerConnections(playerConnections.getPlayer(), owned, connected));
             // Step 6. For all discovered connections send notification
             for (ConnectionKey discovered : discoveredConnections)
-                notificationService.notify(new SystemPlayerDiscoveredConnectionEvent(event.getPlayer(), discovered.getProviderUserId()));
+                notificationService.send(new SystemPlayerDiscoveredConnectionEvent(event.getPlayer(), discovered.getProviderUserId()));
         }
     }
 

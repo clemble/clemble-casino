@@ -52,7 +52,7 @@ public class MatchDrawRuleAspect extends GameAspect<MatchEndedEvent> {
                     .addOperation(new PaymentOperation(player, owned, Operation.Debit));
             }
             // Step 3. Processing payment transaction
-            systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(transaction));
+            systemNotificationService.send(new SystemPaymentTransactionRequestEvent(transaction));
         }
     }
 

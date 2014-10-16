@@ -24,7 +24,7 @@ public class PlayerProfileCreationEventListener implements SystemEventListener<S
         // Step 1. Saving player profile
         profileRepository.save(event.getPlayerProfile());
         // Step 2. Sending notification to outside world
-        notificationService.notify(new SystemPlayerCreatedEvent(event.getPlayer()));
+        notificationService.send(new SystemPlayerCreatedEvent(event.getPlayer()));
     }
 
     @Override

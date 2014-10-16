@@ -121,8 +121,8 @@ public class ServerAutoGameConstructionService implements AutoGameConstructionSe
                 // Step 3.3 If number rule satisfied process further
                 if (pendingConstruction.getParticipants().size() >= pendingConstruction.getConfiguration().getNumberRule().getMinPlayers()) {
                     GameInitiation initiation = new GameInitiation(pendingConstruction.getSessionKey(), InitiationState.pending, pendingConstruction.getParticipants(), pendingConstruction.getConfiguration());
-                    playerNotificationService.notify(pendingConstruction.getParticipants(), new GameConstructionCompleteEvent(pendingConstruction.getSessionKey()));
-                    notificationService.notify(new SystemGameReadyEvent(initiation));
+                    playerNotificationService.send(pendingConstruction.getParticipants(), new GameConstructionCompleteEvent(pendingConstruction.getSessionKey()));
+                    notificationService.send(new SystemGameReadyEvent(initiation));
                     for (String participant : initiation.getParticipants())
                         playerConstructions.remove(participant);
                 } else {

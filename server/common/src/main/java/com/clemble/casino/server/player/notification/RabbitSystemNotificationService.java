@@ -38,7 +38,7 @@ public class RabbitSystemNotificationService implements SystemNotificationServic
     }
 
     @Override
-    public void notify(SystemEvent event) {
+    public void send(SystemEvent event) {
         LOG.debug("Notifying {} of {}", event.getChannel(), event);
         rabbitTemplate.convertAndSend(event.getChannel(), event);
     }

@@ -142,7 +142,7 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     @Override
     public Date markAvailable(String player) {
         // Step 1. Notifying player entered event
-        systemNotificationService.notify(new SystemPlayerEnteredEvent(player));
+        systemNotificationService.send(new SystemPlayerEnteredEvent(player));
         // Step 2. Generating expiration date
         return markOnline(player);
     }
@@ -165,9 +165,9 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
 
     private void notifyStateChange(final PlayerPresence newPresence) {
         // Step 1. Notifying through native Redis mechanisms
-        systemNotificationService.notify(new SystemPlayerPresenceChangedEvent(newPresence));
+        systemNotificationService.send(new SystemPlayerPresenceChangedEvent(newPresence));
         // Step 2. Notifying through native Rabbit mechanisms
-        presenceNotification.notify(newPresence.getPlayer(), new PlayerPresenceChangedEvent(newPresence));
+        presenceNotification.send(newPresence.getPlayer(), new PlayerPresenceChangedEvent(newPresence));
     }
 
 }

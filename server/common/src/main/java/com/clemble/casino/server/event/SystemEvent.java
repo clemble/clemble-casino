@@ -8,6 +8,7 @@ import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.event.game.SystemGameReadyEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
 import com.clemble.casino.server.event.goal.*;
+import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.event.player.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemGameReadyEvent.CHANNEL, value = SystemGameReadyEvent.class),
     @JsonSubTypes.Type(name = SystemGameInitiationDueEvent.CHANNEL, value = SystemGameInitiationDueEvent.class),
     @JsonSubTypes.Type(name = SystemPaymentTransactionRequestEvent.CHANNEL, value = SystemPaymentTransactionRequestEvent.class),
+    @JsonSubTypes.Type(name = SystemPaymentFreezeRequestEvent.CHANNEL, value = SystemPaymentFreezeRequestEvent.class),
     @JsonSubTypes.Type(name = SystemBetCanceledEvent.CHANNEL, value = SystemBetCanceledEvent.class),
     @JsonSubTypes.Type(name = SystemBetCompletedEvent.CHANNEL, value = SystemBetCompletedEvent.class),
     @JsonSubTypes.Type(name = SystemPlayerImageChangedEvent.CHANNEL, value = SystemPlayerImageChangedEvent.class),

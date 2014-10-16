@@ -39,7 +39,7 @@ public class GoalMissedOutcomeAspect extends GoalAspect<GoalMissedEvent> {
                 addOperation(new PaymentOperation(player, bidTotal, Operation.Credit)).
                 addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, bidTotal, Operation.Debit));
         // Step 2. Processing payment transaction
-        systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(paymentTransaction));
+        systemNotificationService.send(new SystemPaymentTransactionRequestEvent(paymentTransaction));
     }
 
 }

@@ -73,7 +73,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         sessionToInitiation.put(sessionKey, new ImmutablePair<GameInitiation, Set<String>>(initiation, new ConcurrentSkipListSet<String>()));
         // Step 3. Sending notification to the players, that they need to confirm
         LOG.debug("Notifying participants {}", initiation);
-        notificationService.notify(initiation.getParticipants(), new GameInitiationCreatedEvent(initiation));
+        notificationService.send(initiation.getParticipants(), new GameInitiationCreatedEvent(initiation));
         // Step 4. Scheduling Cancel task
         taskExecutor.schedule(new GameInitiationExpirationTask(sessionKey, new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(CANCEL_TIMEOUT_SECONDS))));
     }
@@ -88,7 +88,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
             Set<String> confirmations = initiationToConfirmed.getValue();
             GameInitiation initiation = initiationToConfirmed.getKey();
             LOG.warn("Failed to initiate game {}", initiation);
-            notificationService.notify(initiation.getParticipants(), new GameInitiationCanceledEvent(sessionKey, initiation, confirmations));
+            notificationService.send(initiation.getParticipants(), new GameInitiationCanceledEvent(sessionKey, initiation, confirmations));
             Collection<String> offlinePlayers = initiation.getParticipants();
             offlinePlayers.removeAll(confirmations);
             LOG.warn("Mark silent players as offline {}", offlinePlayers);
@@ -120,13 +120,13 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         }
         synchronized (confirmations) {
             confirmations.add(player);
-            notificationService.notify(initiation.getParticipants(), new GameInitiationConfirmedEvent(sessionKey, initiation, player));
+            notificationService.send(initiation.getParticipants(), new GameInitiationConfirmedEvent(sessionKey, initiation, player));
             // Step 3. Checking everybody confirmed
             if (confirmations.size() == initiation.getParticipants().size()) {
                 sessionToInitiation.remove(sessionKey);
                 if (presenceService.areAvailable(initiation.getParticipants())) {
                     LOG.trace("{} all players available trigger game", sessionKey);
-                    systemNotificationService.notify(new SystemGameStartedEvent(sessionKey, initiation));
+                    systemNotificationService.send(new SystemGameStartedEvent(sessionKey, initiation));
                 } else {
                     // TODO remove session from the lists
                     LOG.trace("{} not all player available", sessionKey);

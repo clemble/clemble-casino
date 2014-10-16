@@ -69,7 +69,7 @@ public class PlayerSessionServiceController implements PlayerSessionServiceContr
         if (playerSession.expired())
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerSessionClosed, player, sessionId);
         // Step 2. Notifying all listeners of the state change
-        notificationService.notify(new SystemPlayerLeftEvent(player));
+        notificationService.send(new SystemPlayerLeftEvent(player));
         // Step 3. Marking player state as ended
         playerSession.markExpired();// TODO generalize session handling
         // Step 4. Saving marked session

@@ -6,6 +6,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.List;
 
+import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.payment.service.PlayerAccountService;
@@ -41,4 +42,5 @@ public class RestPlayerAccountService implements PlayerAccountService {
         // Step 2. Sending and receiving response
         return CollectionUtils.immutableList(restTemplate.getForObject(url, String[].class));
     }
+
 }

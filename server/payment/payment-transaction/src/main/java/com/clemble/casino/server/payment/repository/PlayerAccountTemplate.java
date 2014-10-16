@@ -1,6 +1,5 @@
 package com.clemble.casino.server.payment.repository;
 
-import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Money;
@@ -16,5 +15,6 @@ public interface PlayerAccountTemplate {
 
     public void credit(String player, Money amount);
 
-    public PendingTransaction freeze(Collection<String> players, String transactionKey, Money amount);
+    public PendingTransaction freeze(PendingTransaction transaction);
+
 }

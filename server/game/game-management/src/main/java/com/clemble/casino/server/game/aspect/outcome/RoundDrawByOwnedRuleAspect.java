@@ -51,7 +51,7 @@ public class RoundDrawByOwnedRuleAspect extends GameAspect<RoundEndedEvent> {
                     .addOperation(new PaymentOperation(playerContext.getPlayer(), Money.create(currency, playerAccount.getSpent()), Operation.Credit));
             }
             // Step 3. Processing payment transaction
-            systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(paymentTransaction));
+            systemNotificationService.send(new SystemPaymentTransactionRequestEvent(paymentTransaction));
         }
     }
 

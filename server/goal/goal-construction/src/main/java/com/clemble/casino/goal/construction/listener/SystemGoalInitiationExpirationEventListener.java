@@ -30,7 +30,7 @@ public class SystemGoalInitiationExpirationEventListener implements SystemEventL
         // Step 1.2 Saving new initiation
         initiationRepository.save(initiation);
         // Step 2. Notifying of goal started event, for manager processing
-        notificationService.notify(new SystemGoalStartedEvent(initiation.getGoalKey(), initiation));
+        notificationService.send(new SystemGoalStartedEvent(initiation.getGoalKey(), initiation));
     }
 
     @Override

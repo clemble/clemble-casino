@@ -2,15 +2,13 @@ package com.clemble.casino.server.payment.repository;
 
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
+import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import org.springframework.dao.OptimisticLockingFailureException;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by mavarazy on 15/10/14.
@@ -75,31 +73,49 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
-    public PendingTransaction freeze(Collection<String> players, String transactionKey, Money amount) {
-        List<PendingOperation> pendingOperations = new ArrayList<>();
-        for (String player: players) {
-            pendingOperations.add(tryFreezing(player, transactionKey, amount));
+    public PendingTransaction freeze(PendingTransaction pendingTransaction) {
+        for (PaymentOperation operation: pendingTransaction.getOperations()) {
+            tryFreezingAccount(pendingTransaction.getTransactionKey(), operation);
+            tryAddingToPending(pendingTransaction.getTransactionKey(), operation);
         }
-        PendingTransaction pendingTransaction = new PendingTransaction(transactionKey, pendingOperations);
-        return pendingTransactionRepository.save(pendingTransaction);
+        return pendingTransactionRepository.findOne(pendingTransaction.getTransactionKey());
     }
 
-    private PendingOperation tryFreezing(String player, String transactionKey, Money amount) {
+    private PendingTransaction tryAddingToPending(String transactionKey, PaymentOperation operation) {
         try {
-            PlayerAccount account = accountRepository.findOne(player);
+            // Step 1. Creating or reading PendingTransaction
+            PendingTransaction transaction = pendingTransactionRepository.findOne(transactionKey);
+            if (transaction == null) {
+                pendingTransactionRepository.save(new PendingTransaction(transactionKey, Collections.emptyList(), null));
+                transaction = pendingTransactionRepository.findOne(transactionKey);
+            }
+            // Step 2. Updating PendingTransaction
+            transaction.getOperations().add(operation);
+            // Step 3. Saving updated PendingTransaction
+            return pendingTransactionRepository.save(transaction);
+        } catch (OptimisticLockingFailureException e) {
+            // TODO This is dangerous approach to this problem
+            return tryAddingToPending(transactionKey, operation);
+        }
+    }
+
+    private PendingOperation tryFreezingAccount(String transactionKey, PaymentOperation operation) {
+        try {
+            Money amount = operation.getAmount();
+            PlayerAccount account = accountRepository.findOne(operation.getPlayer());
             Money playerAmount = account.getMoney(amount.getCurrency());
             if (playerAmount == null) {
                 account.getMoney().put(amount.getCurrency(), amount.negate());
             } else {
                 account.getMoney().put(amount.getCurrency(), playerAmount.subtract(amount));
             }
-            PendingOperation pendingOperation = new PendingOperation(player, transactionKey, amount);
+            PendingOperation pendingOperation = PendingOperation.fromOperation(transactionKey, operation);
             account.getPendingOperations().add(pendingOperation);
             accountRepository.save(account);
             return pendingOperation;
         } catch (OptimisticLockingFailureException e) {
             // TODO This is dangerous approach to this problem
-            return tryFreezing(player, transactionKey, amount);
+            return tryFreezingAccount(transactionKey, operation);
         }
     }
 

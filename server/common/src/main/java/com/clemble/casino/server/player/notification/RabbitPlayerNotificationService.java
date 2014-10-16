@@ -61,7 +61,7 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     }
 
     @Override
-    public <T extends Event> boolean notify(final Collection<String> players, final T event) {
+    public <T extends Event> boolean send(final Collection<String> players, final T event) {
         LOG.trace("Sending {} to {}", event, players);
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
@@ -73,24 +73,24 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     }
 
     @Override
-    public <T extends Event> boolean notify(final String player, final Collection<T> events) {
+    public <T extends Event> boolean send(final String player, final Collection<T> events) {
         boolean fullSuccess = true;
         for (T event : events)
-            fullSuccess = notify(player, event) & fullSuccess;
+            fullSuccess = send(player, event) & fullSuccess;
         return fullSuccess;
     }
 
     @Override
-    public <T extends Event> boolean notify(final Collection<String> players, final Collection<? extends T> events) {
+    public <T extends Event> boolean send(final Collection<String> players, final Collection<? extends T> events) {
         // Step 1. Notifying each event one after another
         boolean fullSuccess = true;
         for (T event : events)
-            fullSuccess = notify(players, event) & fullSuccess;
+            fullSuccess = send(players, event) & fullSuccess;
         return fullSuccess;
     }
 
     @Override
-    public <T extends Event> boolean notify(String player, T event) {
+    public <T extends Event> boolean send(String player, T event) {
         LOG.trace("Sending {} to {}", event, player);
         // Step 1. Creating message to send
         Message message = messageConverter.toMessage(event, null);
@@ -110,31 +110,31 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     }
 
     @Override
-    public <T extends PlayerAware & Event> boolean notify(Collection<T> events) {
+    public <T extends PlayerAware & Event> boolean send(Collection<T> events) {
         // Step 1. Sanity check
         if (events == null || events.size() == 0)
             return true;
         // Step 2. Checking values in Event
         boolean notifiedAll = true;
         for (T event : events) {
-            notifiedAll = notify(event) & notifiedAll;
+            notifiedAll = send(event) & notifiedAll;
         }
         return notifiedAll;
     }
 
     @Override
-    public <T extends PlayerAware & Event> boolean notify(T event) {
-        return event != null ? notify(event.getPlayer(), event) : true;
+    public <T extends PlayerAware & Event> boolean send(T event) {
+        return event != null ? send(event.getPlayer(), event) : true;
     }
 
     @Override
-    public <T extends Event> boolean notifyAll(Collection<? extends PlayerAware> players, T event) {
-        return notify(PlayerAwareUtils.toPlayerList(players), event);
+    public <T extends Event> boolean sendAll(Collection<? extends PlayerAware> players, T event) {
+        return send(PlayerAwareUtils.toPlayerList(players), event);
     }
 
     @Override
-    public <T extends Event> boolean notifyAll(Collection<? extends PlayerAware> players, Collection<? extends T> events) {
-        return notify(PlayerAwareUtils.toPlayerList(players), events);
+    public <T extends Event> boolean sendAll(Collection<? extends PlayerAware> players, Collection<? extends T> events) {
+        return send(PlayerAwareUtils.toPlayerList(players), events);
     }
 
 }

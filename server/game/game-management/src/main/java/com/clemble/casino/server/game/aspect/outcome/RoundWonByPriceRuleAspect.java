@@ -57,7 +57,7 @@ public class RoundWonByPriceRuleAspect extends GameAspect<GameEndedEvent> {
                 }
             }
             // Step 3. Processing payment transaction
-            systemNotificationService.notify(new SystemPaymentTransactionRequestEvent(transaction));
+            systemNotificationService.send(new SystemPaymentTransactionRequestEvent(transaction));
         }
     }
 

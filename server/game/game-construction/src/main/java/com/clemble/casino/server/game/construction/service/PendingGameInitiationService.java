@@ -47,7 +47,7 @@ public class PendingGameInitiationService {
             // Step 1. Saving new PendingGameInitiation
             initiationRepository.save(new PendingGameInitiation(initiation, pendingPlayers));
         } else {
-            notificationService.notify(new SystemGameReadyEvent(initiation));
+            notificationService.send(new SystemGameReadyEvent(initiation));
         }
     }
 

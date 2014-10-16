@@ -64,7 +64,7 @@ public class JedisPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
-    public PendingTransaction freeze(Collection<String> players, String transactionKey, Money amount) {
+    public PendingTransaction freeze(PendingTransaction pendingTransaction) {
         throw new IllegalAccessError();
     }
 

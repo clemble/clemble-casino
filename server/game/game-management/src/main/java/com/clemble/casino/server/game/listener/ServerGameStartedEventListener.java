@@ -32,13 +32,13 @@ public class ServerGameStartedEventListener implements SystemEventListener<Syste
         LOG.debug("{} started event received", event.getSessionKey());
         if(presenceService.markPlaying(event.getInitiation().getParticipants(), event.getInitiation().getSessionKey())) {
             LOG.debug("{} able to mark all players playing", event.getSessionKey());
-            notificationService.notify(event.getInitiation().getParticipants(), new GameInitiationCompleteEvent(event.getSessionKey(), event.getInitiation()));
+            notificationService.send(event.getInitiation().getParticipants(), new GameInitiationCompleteEvent(event.getSessionKey(), event.getInitiation()));
             // Case 1. Starting game in managerFactory
             managerFactory.start(event.getInitiation(), null);
         } else {
             LOG.debug("{} failed to mark all players as playing", event.getSessionKey());
             // Case 2. Canceling game initiation
-            notificationService.notify(event.getInitiation().getParticipants(), new GameInitiationCanceledEvent(event.getSessionKey(), event.getInitiation(), event.getInitiation().getParticipants()));
+            notificationService.send(event.getInitiation().getParticipants(), new GameInitiationCanceledEvent(event.getSessionKey(), event.getInitiation(), event.getInitiation().getParticipants()));
         }
     }
 

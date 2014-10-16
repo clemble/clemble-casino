@@ -28,7 +28,7 @@ public class GameInitiationEventTaskAdapter implements EventTaskAdapter {
             return;
         if(task instanceof GameInitiationExpirationTask) {
             // Step 2.2 Processing initiation expiration
-            events.forEach(event -> notificationService.notify((SystemEvent) event));
+            events.forEach(event -> notificationService.send((SystemEvent) event));
         } else {
             throw new IllegalAccessError();
         }

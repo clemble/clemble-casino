@@ -163,7 +163,7 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
             }
         });
         LOG.debug("{} update to {}, notified {} listeners", newPresence.getPlayer(), newPresence.getPresence(), numUpdatedClients);
-        presenceNotification.notify(newPresence.getPlayer(), new PlayerPresenceChangedEvent(newPresence));
+        presenceNotification.send(newPresence.getPlayer(), new PlayerPresenceChangedEvent(newPresence));
     }
 
 }

@@ -84,7 +84,7 @@ public class SocialConnectionDataAdapter {
             String player = usersConnectionRepository.findUserIdsWithConnection(connection).iterator().next();
             socialConnection = new SocialConnection(player, connection);
             // Step 5. Sending request to update user connections
-            systemNotificationService.notify(new SystemPlayerSocialAddedEvent(player, connection.getKey()));
+            systemNotificationService.send(new SystemPlayerSocialAddedEvent(player, connection.getKey()));
         } else {
             throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCriticalError);
         }
@@ -109,7 +109,7 @@ public class SocialConnectionDataAdapter {
         // Step 4. Adding connection to player connection repository
         usersConnectionRepository.createConnectionRepository(player).addConnection(connection);
         // Step 5. Sending request to update user connections
-        systemNotificationService.notify(new SystemPlayerSocialAddedEvent(player, connection.getKey()));
+        systemNotificationService.send(new SystemPlayerSocialAddedEvent(player, connection.getKey()));
         // Step 6. Returning original social connection data
         return socialConnectionData;
     }

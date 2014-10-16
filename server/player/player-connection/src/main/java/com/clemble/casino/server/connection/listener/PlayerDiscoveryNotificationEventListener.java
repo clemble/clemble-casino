@@ -18,9 +18,9 @@ public class PlayerDiscoveryNotificationEventListener implements SystemEventList
     @Override
     public void onEvent(SystemPlayerDiscoveredConnectionEvent event) {
         // Step 1. Notifying original
-        notificationService.notify(new PlayerDiscoveredConnectionEvent(event.getPlayer(), event.getDiscovered()));
+        notificationService.send(new PlayerDiscoveredConnectionEvent(event.getPlayer(), event.getDiscovered()));
         // Step 1. Notifying discovered player
-        notificationService.notify(new PlayerDiscoveredConnectionEvent(event.getDiscovered(), event.getPlayer()));
+        notificationService.send(new PlayerDiscoveredConnectionEvent(event.getDiscovered(), event.getPlayer()));
     }
 
     @Override
