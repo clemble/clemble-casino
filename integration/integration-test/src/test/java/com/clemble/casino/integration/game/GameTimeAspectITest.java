@@ -3,7 +3,7 @@ package com.clemble.casino.integration.game;
 import java.util.List;
 
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.integration.util.ClembleCasinoExceptionMatcherFactory;
+import com.clemble.casino.test.util.ClembleCasinoExceptionMatcherFactory;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;

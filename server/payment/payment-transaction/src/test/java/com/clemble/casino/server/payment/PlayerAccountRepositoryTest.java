@@ -88,7 +88,7 @@ public class PlayerAccountRepositoryTest {
         Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
         // Step 2. Freezing some amount on the account
         PendingOperation pendingOperation = new PendingOperation(transactionKey, player, Money.create(Currency.FakeMoney, 50), Operation.Credit);
-        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singletonList(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
+        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
         // Step 3. Checking amount changed
         PlayerAccount another = playerAccountTemplate.findOne(player);
         Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
@@ -107,7 +107,7 @@ public class PlayerAccountRepositoryTest {
         Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
         // Step 2. Freezing some amount on the account
         PendingOperation pendingOperation = new PendingOperation(transactionKey, player, Money.create(Currency.FakeMoney, 50), Operation.Credit);
-        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singletonList(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
+        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
         // Step 3. Checking amount changed
         PlayerAccount another = playerAccountTemplate.findOne(player);
         Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
@@ -132,7 +132,7 @@ public class PlayerAccountRepositoryTest {
         Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
         // Step 2. Freezing some amount on the account
         PendingOperation pendingOperation = new PendingOperation(transactionKey, player, Money.create(Currency.FakeMoney, 50), Operation.Credit);
-        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singletonList(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
+        playerAccountTemplate.freeze(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
         // Step 3. Checking amount changed
         PlayerAccount another = playerAccountTemplate.findOne(player);
         Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));

@@ -1,5 +1,6 @@
 package com.clemble.casino.server.error;
 
+import com.clemble.casino.error.ClembleCasinoServerException;
 import org.springframework.dao.DataAccessException;
 
 import com.clemble.casino.error.ClembleCasinoException;

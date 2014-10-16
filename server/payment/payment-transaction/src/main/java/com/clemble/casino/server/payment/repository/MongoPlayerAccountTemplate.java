@@ -112,7 +112,7 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
             // Step 1. Creating or reading PendingTransaction
             PendingTransaction transaction = pendingTransactionRepository.findOne(transactionKey);
             if (transaction == null) {
-                pendingTransactionRepository.save(new PendingTransaction(transactionKey, Collections.emptyList(), null));
+                pendingTransactionRepository.save(new PendingTransaction(transactionKey, Collections.emptySet(), null));
                 transaction = pendingTransactionRepository.findOne(transactionKey);
             }
             // Step 2. Updating PendingTransaction

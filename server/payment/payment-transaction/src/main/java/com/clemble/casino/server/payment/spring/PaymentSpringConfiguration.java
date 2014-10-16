@@ -80,8 +80,9 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     @Bean
     public SystemPaymentFreezeRequestEventListener systemPaymentFreezeRequestEventListener(
         PlayerAccountTemplate accountTemplate,
+        ClembleCasinoValidationService validationService,
         SystemNotificationServiceListener notificationServiceListener) {
-        SystemPaymentFreezeRequestEventListener eventListener = new SystemPaymentFreezeRequestEventListener(accountTemplate);
+        SystemPaymentFreezeRequestEventListener eventListener = new SystemPaymentFreezeRequestEventListener(accountTemplate, validationService);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }
