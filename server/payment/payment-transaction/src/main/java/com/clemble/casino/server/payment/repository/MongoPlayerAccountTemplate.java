@@ -52,10 +52,20 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
             tryDebit(player, amount);
         } catch (NullPointerException e) {
             // TODO this leaves a control breach for random PaymentAccount creation
+            tryCreate(player);
+            tryDebit(player, amount);
+        }
+    }
+
+    private void tryCreate(String player) {
+        try {
+            // TODO this leaves a control breach for random PaymentAccount creation
             // Step 1. Creating new account
             PlayerAccount newAccount = new PlayerAccount(player, Collections.<Currency, Money>emptyMap(), Collections.<PendingOperation>emptyList(), null);
             // Step 2. Adding new account to repository
             accountRepository.save(newAccount);
+        } catch (Throwable throwable) {
+
         }
     }
 
