@@ -22,7 +22,7 @@ public class GoalMissedOutcomeAspectFactory implements GoalAspectFactory<GoalMis
 
     @Override
     public ClembleAspect<GoalMissedEvent> construct(GoalConfiguration configuration, GoalState context) {
-        return new GoalMissedOutcomeAspect(context.getPlayer(), configuration.getBid().total(), systemNotificationService);
+        return new GoalMissedOutcomeAspect(context.getPlayer(), configuration.getBid().getAmount(), systemNotificationService);
     }
 
     @Override

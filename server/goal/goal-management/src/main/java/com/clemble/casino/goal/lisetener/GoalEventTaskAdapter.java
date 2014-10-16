@@ -23,20 +23,22 @@ public class GoalEventTaskAdapter implements EventTaskAdapter {
 
     @Override
     public void process(EventTask task) {
-                // Step 1. Processing task
+        // Step 1. Processing task
         Collection<? extends Event> events = task.execute();
         // Step 1.1 If there is no events nothing much to do return
         if(events.isEmpty())
             return;
-        if(task instanceof PlayerAction) {
-            // Step 2.1 Fetching session key
-            String sessionKey = task.getKey();
-            // Step 2.1.1 Fetching manager
-            ClembleManager<GoalEvent, ?> manager = managerFactory.get(sessionKey);
-            // Step 2.1.2 Going event by event and processing
-            events.forEach(event -> manager.process(event));
-        } else {
-            throw new IllegalAccessError();
+        for(Event event: events) {
+            if (event instanceof PlayerAction) {
+                // Step 2.1 Fetching session key
+                String sessionKey = task.getKey();
+                // Step 2.1.1 Fetching manager
+                ClembleManager<GoalEvent, ?> manager = managerFactory.get(sessionKey);
+                // Step 2.1.2 Going event by event and processing
+                manager.process(event);
+            } else {
+                throw new IllegalAccessError();
+            }
         }
     }
 

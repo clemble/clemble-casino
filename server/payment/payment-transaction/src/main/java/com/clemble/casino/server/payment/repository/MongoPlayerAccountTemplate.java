@@ -40,18 +40,19 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
             PlayerAccount account = accountRepository.findOne(player);
             // Step 1. Fetching pendingOperation
             // TODO Check case multiple bets for the same operation
-            PendingOperation pendingOperaion = null;
+            PendingOperation pendingOperation = null;
             for(PendingOperation operation: account.getPendingOperations()) {
                 if (transactionKey.equals(operation.getTransactionKey()))
-                    pendingOperaion = operation;
+                    pendingOperation = operation;
             }
-            account.getPendingOperations().remove(pendingOperaion);
+            account.getPendingOperations().remove(pendingOperation);
             // Step 2. Performing actual debit operation
             Money debit = account.getMoney(amount.getCurrency());
             if (debit == null) {
                 account.getMoney().put(amount.getCurrency(), amount);
             } else {
-                account.getMoney().put(amount.getCurrency(), debit.add(amount));
+                Money change = pendingOperation.getAmount().add(amount);
+                account.getMoney().put(amount.getCurrency(), debit.add(change));
             }
             accountRepository.save(account);
         } catch (OptimisticLockingFailureException e) {

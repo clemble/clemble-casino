@@ -24,7 +24,7 @@ public class GoalMissedOutcomeAspect extends GoalAspect<GoalMissedEvent> {
     final private SystemNotificationService systemNotificationService;
 
     public GoalMissedOutcomeAspect(String player, Money bidTotal, SystemNotificationService systemNotificationService) {
-        super(new EventTypeSelector(GoalReachedEvent.class));
+        super(new EventTypeSelector(GoalMissedEvent.class));
         this.player = player;
         this.bidTotal = bidTotal;
         this.systemNotificationService = systemNotificationService;
