@@ -14,6 +14,7 @@ import javax.crypto.SecretKey;
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAcceptedAction;
 import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
 import com.clemble.casino.game.lifecycle.management.*;
+import com.clemble.casino.lifecycle.management.outcome.Outcome;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
 import com.clemble.casino.goal.lifecycle.management.GoalPlayerContext;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
@@ -38,7 +39,6 @@ import com.clemble.casino.VersionAware;
 import com.clemble.casino.game.lifecycle.construction.AutomaticGameRequest;
 import com.clemble.casino.game.lifecycle.construction.GameConstruction;
 import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
-import com.clemble.casino.game.lifecycle.management.outcome.GameOutcome;
 import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.bet.UnlimitedBetRule;
@@ -268,7 +268,7 @@ public class IntegrationObjectTest {
         register(MatchGameContext.class, new AbstractValueGenerator<MatchGameContext>() {
             @Override
             public MatchGameContext generate() {
-                return new MatchGameContext(GameSessionAware.DEFAULT_SESSION, null, Collections.<MatchGamePlayerContext>emptyList(), null, 0, Collections.<GameOutcome>emptyList());
+                return new MatchGameContext(GameSessionAware.DEFAULT_SESSION, null, Collections.<MatchGamePlayerContext>emptyList(), null, 0, Collections.<Outcome>emptyList());
             }
         });
         register(TournamentGameContext.class, new AbstractValueGenerator<TournamentGameContext>() {

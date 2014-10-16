@@ -8,10 +8,9 @@ import java.util.List;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.game.lifecycle.management.RoundGameState;
+import com.clemble.casino.lifecycle.management.outcome.Outcome;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
-import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.game.event.GameEvent;
-import com.clemble.casino.game.lifecycle.management.outcome.GameOutcome;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.lifecycle.management.event.action.Action;
 
@@ -130,7 +129,7 @@ public class GenericRoundGamePlayer implements RoundGamePlayer {
     }
 
     @Override
-    public GameOutcome getOutcome() {
+    public Outcome getOutcome() {
         return actualPlayer.getOutcome();
     }
 

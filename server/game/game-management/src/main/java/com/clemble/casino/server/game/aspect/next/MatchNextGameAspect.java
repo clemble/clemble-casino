@@ -24,7 +24,7 @@ public class MatchNextGameAspect extends GameAspect<MatchEvent> {
     }
 
     @Override
-    public void doEvent(MatchEvent event) {
+    protected void doEvent(MatchEvent event) {
         if (event instanceof MatchChangedEvent) {
             managerFactory.start(((MatchChangedEvent) event).getNextInitiation(), event.getState().getContext());
         } else if(event instanceof MatchStartedEvent) {

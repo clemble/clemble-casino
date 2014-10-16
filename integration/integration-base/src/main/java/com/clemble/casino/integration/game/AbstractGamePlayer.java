@@ -15,11 +15,11 @@ import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.GameSessionEventSelector;
+import com.clemble.casino.lifecycle.management.outcome.Outcome;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.game.lifecycle.construction.GameConstruction;
 import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
 import com.clemble.casino.game.event.GameEvent;
-import com.clemble.casino.game.lifecycle.management.outcome.GameOutcome;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.integration.event.EventAccumulator;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     final private EventAccumulator<GameEvent> eventAccumulator;
 
     final protected AtomicBoolean keepAlive = new AtomicBoolean(true);
-    final private AtomicReference<GameOutcome> outcome = new AtomicReference<>();
+    final private AtomicReference<Outcome> outcome = new AtomicReference<>();
     
 
     public AbstractGamePlayer(final ClembleCasinoOperations player, final GameConstruction construction) {
@@ -203,7 +203,7 @@ abstract public class AbstractGamePlayer implements GamePlayer {
     }
 
     @Override
-    final public GameOutcome getOutcome() {
+    final public Outcome getOutcome() {
         return outcome.get();
     }
 

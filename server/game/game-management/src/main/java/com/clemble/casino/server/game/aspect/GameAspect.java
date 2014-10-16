@@ -10,6 +10,4 @@ abstract public class GameAspect<T extends Event> extends ClembleAspect<T> {
         super(selector);
     }
 
-    abstract public void doEvent(T event);
-
 }

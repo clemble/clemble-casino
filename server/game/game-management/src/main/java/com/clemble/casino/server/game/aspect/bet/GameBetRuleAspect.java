@@ -22,7 +22,7 @@ public class GameBetRuleAspect extends GameAspect<PlayerAction<BetAction>> {
     }
 
     @Override
-    public void doEvent(PlayerAction<BetAction> bet) {
+    protected void doEvent(PlayerAction<BetAction> bet) {
         BetAction betAction = bet.getAction();
         // Step 1. Checking bet is valid, according to the account
         if (!betRule.isValid(betAction))

@@ -35,7 +35,7 @@ public class GoalTimeAspect extends GoalAspect<Event> {
     }
 
     @Override
-    public void doEvent(Event move) {
+    protected void doEvent(Event move) {
         // Step 1. To check if we need rescheduling, first calculate time before
         if(move instanceof GoalEndedEvent) {
             playerToTask.values().forEach(task -> {

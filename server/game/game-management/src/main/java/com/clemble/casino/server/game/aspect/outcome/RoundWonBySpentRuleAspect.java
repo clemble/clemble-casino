@@ -4,13 +4,16 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Date;
 
+import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.client.event.OutcomeTypeSelector;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.GamePlayerAccount;
 import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
 import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
-import com.clemble.casino.game.lifecycle.management.outcome.GameOutcome;
-import com.clemble.casino.game.lifecycle.management.outcome.PlayerWonOutcome;
+import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
+import com.clemble.casino.lifecycle.management.outcome.Outcome;
+import com.clemble.casino.lifecycle.management.outcome.PlayerWonOutcome;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.money.Currency;
@@ -29,17 +32,19 @@ public class RoundWonBySpentRuleAspect extends GameAspect<GameEndedEvent> {
     final private SystemNotificationService systemNotificationService;
 
     public RoundWonBySpentRuleAspect(Currency currency, SystemNotificationService systemNotificationService) {
-        super(new EventTypeSelector(GameEndedEvent.class));
+        super(EventSelectors.
+            where(new EventTypeSelector(RoundEndedEvent.class)).
+            and(new OutcomeTypeSelector<PlayerWonOutcome>(PlayerWonOutcome.class)));
         this.currency = currency;
         this.systemNotificationService = checkNotNull(systemNotificationService);
     }
 
     @Override
-    public void doEvent(GameEndedEvent event) {
-        GameOutcome outcome = event.getOutcome();
+    protected void doEvent(GameEndedEvent event) {
+        Outcome outcome = event.getOutcome();
         GameContext<?> context = event.getState().getContext();
         if (outcome instanceof PlayerWonOutcome) {
-            String winnerId = ((PlayerWonOutcome) outcome).getWinner();
+            String winnerId = ((PlayerWonOutcome) outcome).getPlayer();
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()
                     .setTransactionKey(context.getSessionKey())

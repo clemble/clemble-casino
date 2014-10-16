@@ -19,7 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.game.Game;
-import com.clemble.casino.game.lifecycle.management.outcome.PlayerWonOutcome;
+import com.clemble.casino.lifecycle.management.outcome.PlayerWonOutcome;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 
@@ -57,7 +57,7 @@ public class GameWatcherITest {
         assertFalse(A.isAlive());
 
         PlayerWonOutcome wonOutcome = (PlayerWonOutcome) B.getOutcome();
-        assertEquals(wonOutcome.getWinner(), A.playerOperations().getPlayer());
+        assertEquals(wonOutcome.getPlayer(), A.playerOperations().getPlayer());
 
         assertTrue(watcherListener.toList().size() > 0);
 

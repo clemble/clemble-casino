@@ -32,7 +32,7 @@ public class GameRecordEventAspect extends GameAspect<Event> implements GameSess
     }
 
     @Override
-    public void doEvent(Event event) {
+    protected void doEvent(Event event) {
         // Step 1. Constructing event record
         EventRecord move = new EventRecord(event, new Date());
         // Step 2. Saving event record

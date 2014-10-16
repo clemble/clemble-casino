@@ -17,7 +17,7 @@ public class MatchGameSecurityAspect extends GameAspect<Event> {
     }
 
     @Override
-    public void doEvent(Event event) {
+    protected void doEvent(Event event) {
         if (event instanceof MatchEvent)
             return;
         // Step 1. Going through the events

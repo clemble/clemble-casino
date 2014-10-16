@@ -29,7 +29,7 @@ public class PublicNotificationRuleAspect extends GameAspect<GameManagementEvent
     }
 
     @Override
-    public void doEvent(GameManagementEvent event) {
+    protected void doEvent(GameManagementEvent event) {
         // Step 1. Making public notification
         boolean tableNotified = notificationService.send(tableChannel, event);
         // Step 2. Sending to exact participants

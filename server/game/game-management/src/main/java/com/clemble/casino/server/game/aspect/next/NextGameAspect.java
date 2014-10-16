@@ -22,7 +22,7 @@ public class NextGameAspect extends GameAspect<GameEndedEvent> {
     }
 
     @Override
-    public void doEvent(GameEndedEvent endedEvent) {
+    protected void doEvent(GameEndedEvent endedEvent) {
         // Step 1. Fetching Parent session key
         String sessionKey = context.getParent().getSessionKey();
         LOG.debug("{} ended next {}", context.getSessionKey(), sessionKey);

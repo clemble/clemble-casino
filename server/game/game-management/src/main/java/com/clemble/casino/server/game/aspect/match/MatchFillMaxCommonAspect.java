@@ -17,7 +17,7 @@ public class MatchFillMaxCommonAspect extends GameAspect<RoundEndedEvent> {
     }
 
     @Override
-    public void doEvent(RoundEndedEvent event) {
+    protected void doEvent(RoundEndedEvent event) {
         // Step 1. Calculating max common
         long maxCommon = Integer.MAX_VALUE;
         for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts())

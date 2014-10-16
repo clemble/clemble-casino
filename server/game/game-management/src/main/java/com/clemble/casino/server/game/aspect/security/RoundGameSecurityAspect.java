@@ -28,7 +28,7 @@ public class RoundGameSecurityAspect<T extends Event & PlayerAware> extends Game
     }
 
     @Override
-    public void doEvent(T event) {
+    protected void doEvent(T event) {
         String player = event.getPlayer();
         // Step 1. Checking player is one of participants
         if (!participants.contains(player))

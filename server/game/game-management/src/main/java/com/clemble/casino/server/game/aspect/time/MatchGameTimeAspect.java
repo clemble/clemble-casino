@@ -17,7 +17,7 @@ public class MatchGameTimeAspect extends GameAspect<RoundEndedEvent> {
     }
 
     @Override
-    public void doEvent(RoundEndedEvent event) {
+    protected void doEvent(RoundEndedEvent event) {
         for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
             MatchGamePlayerContext matchPlayerContext = this.context.getPlayerContext(playerContext.getPlayer());
             // TODO Get rid of this small hack to change the match clocks

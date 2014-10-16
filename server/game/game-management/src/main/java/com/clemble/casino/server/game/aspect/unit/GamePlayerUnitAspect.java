@@ -23,7 +23,7 @@ public class GamePlayerUnitAspect extends GameAspect<PlayerAction<UseGameUnitAct
     }
 
     @Override
-    public void doEvent(PlayerAction<UseGameUnitAction> event) {
+    protected void doEvent(PlayerAction<UseGameUnitAction> event) {
         UseGameUnitAction action = event.getAction();
         if (!context.getPlayerContext(event.getPlayer()).getUnits().contains(action.getUnit()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GamePlayUnitMissing, event.getPlayer());

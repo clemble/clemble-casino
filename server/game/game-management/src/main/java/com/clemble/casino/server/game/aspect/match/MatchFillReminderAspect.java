@@ -17,7 +17,7 @@ public class MatchFillReminderAspect extends GameAspect<RoundEndedEvent> {
     }
 
     @Override
-    public void doEvent(RoundEndedEvent event) {
+    protected void doEvent(RoundEndedEvent event) {
         // Step 1. Filling pot with the reminder
         for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
             GamePlayerAccount playerMatchAccount = playerContext.getAccount();

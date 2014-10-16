@@ -1,10 +1,9 @@
 package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
-import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
-import com.clemble.casino.goal.aspect.outcome.GoalMissedOutcomeAspectFactory;
-import com.clemble.casino.goal.aspect.outcome.GoalReachedOutcomeAspectFactory;
+import com.clemble.casino.goal.aspect.outcome.GoalLostOutcomeAspectFactory;
+import com.clemble.casino.goal.aspect.outcome.GoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.GoalPersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.time.GoalTimeAspectFactory;
@@ -112,13 +111,13 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalMissedOutcomeAspectFactory goalMissedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
-        return new GoalMissedOutcomeAspectFactory(systemNotificationService);
+    public GoalLostOutcomeAspectFactory goalMissedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
+        return new GoalLostOutcomeAspectFactory(systemNotificationService);
     }
 
     @Bean
-    public GoalReachedOutcomeAspectFactory goalReachedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
-        return new GoalReachedOutcomeAspectFactory(systemNotificationService);
+    public GoalWonOutcomeAspectFactory goalReachedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
+        return new GoalWonOutcomeAspectFactory(systemNotificationService);
     }
 
 }

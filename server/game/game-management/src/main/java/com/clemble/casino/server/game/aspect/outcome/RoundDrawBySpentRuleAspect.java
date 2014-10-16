@@ -1,8 +1,11 @@
 package com.clemble.casino.server.game.aspect.outcome;
 
+import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.client.event.OutcomeTypeSelector;
 import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
 import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
+import com.clemble.casino.lifecycle.management.outcome.DrawOutcome;
 import com.clemble.casino.server.game.aspect.GameAspect;
 
 public class RoundDrawBySpentRuleAspect extends GameAspect<RoundEndedEvent> {
@@ -10,11 +13,13 @@ public class RoundDrawBySpentRuleAspect extends GameAspect<RoundEndedEvent> {
     final public static RoundDrawBySpentRuleAspect INSTANCE = new RoundDrawBySpentRuleAspect();
 
     public RoundDrawBySpentRuleAspect() {
-        super(new EventTypeSelector(RoundEndedEvent.class));
+        super(EventSelectors.
+            where(new EventTypeSelector(RoundEndedEvent.class)).
+            and(new OutcomeTypeSelector<DrawOutcome>(DrawOutcome.class)));
     }
 
     @Override
-    public void doEvent(RoundEndedEvent event) {
+    protected void doEvent(RoundEndedEvent event) {
         // Do nothing, nothing is expected from the client
     }
 

@@ -21,7 +21,7 @@ public class GoalStatePersistenceAspect extends GoalAspect<GoalEvent>{
     }
 
     @Override
-    public void doEvent(GoalEvent event) {
+    protected void doEvent(GoalEvent event) {
         stateRepository.save(state);
     }
 }

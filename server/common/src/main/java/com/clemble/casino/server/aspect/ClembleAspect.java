@@ -21,7 +21,7 @@ abstract public class ClembleAspect<T extends Event> implements EventListener<T>
             doEvent(event);
     }
 
-    abstract public void doEvent(T event);
+    abstract protected void doEvent(T event);
 
     final public EventSelector getSelector(){
         return selector;

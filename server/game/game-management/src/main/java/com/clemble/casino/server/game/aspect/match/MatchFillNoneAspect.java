@@ -17,7 +17,7 @@ public class MatchFillNoneAspect extends GameAspect<RoundEndedEvent> {
     }
 
     @Override
-    public void doEvent(RoundEndedEvent event) {
+    protected void doEvent(RoundEndedEvent event) {
         // Step 1. Making adjustment to the player accounts in pot
         for (GamePlayerContext playerContext : event.getState().getContext().getPlayerContexts()) {
             GamePlayerAccount playerMatchAccount = playerContext.getAccount();

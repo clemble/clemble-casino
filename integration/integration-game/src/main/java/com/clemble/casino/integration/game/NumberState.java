@@ -8,9 +8,9 @@ import com.clemble.casino.game.lifecycle.management.RoundState;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.management.event.GamePlayerMovedEvent;
 import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
-import com.clemble.casino.game.lifecycle.management.outcome.DrawOutcome;
-import com.clemble.casino.game.lifecycle.management.outcome.NoOutcome;
-import com.clemble.casino.game.lifecycle.management.outcome.PlayerWonOutcome;
+import com.clemble.casino.lifecycle.management.outcome.DrawOutcome;
+import com.clemble.casino.lifecycle.management.outcome.NoOutcome;
+import com.clemble.casino.lifecycle.management.outcome.PlayerWonOutcome;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import com.clemble.casino.lifecycle.management.event.action.surrender.SurrenderAction;
 

@@ -17,7 +17,7 @@ public class GameEndPresenceAspect extends GameAspect<RoundEndedEvent> {
     }
 
     @Override
-    public void doEvent(RoundEndedEvent event) {
+    protected void doEvent(RoundEndedEvent event) {
         for (String player : event.getState().getContext().getPlayerIterator().getPlayers())
             presenceService.markOnline(player);
     }

@@ -43,7 +43,7 @@ public class RoundGameTimeAspect extends GameAspect<GameManagementEvent> {
     }
 
     @Override
-    public void doEvent(GameManagementEvent move) {
+    protected void doEvent(GameManagementEvent move) {
         // Step 1. Stopping all events
         if(move instanceof RoundEndedEvent || move instanceof RoundChangedEvent) {
             playerToTask.values().forEach(task -> {
