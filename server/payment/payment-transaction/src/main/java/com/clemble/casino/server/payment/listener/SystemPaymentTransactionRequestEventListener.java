@@ -5,11 +5,13 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
+import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.payment.repository.PendingTransactionRepository;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
@@ -32,16 +34,19 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
     final private Logger LOG = LoggerFactory.getLogger(SystemPaymentTransactionRequestEventListener.class);
 
     final private PlayerAccountTemplate accountTemplate;
+    final private PendingTransactionRepository pendingTransactionRepository;
     final private PlayerNotificationService notificationService;
     final private ClembleCasinoValidationService validationService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
     public SystemPaymentTransactionRequestEventListener(
         PaymentTransactionRepository paymentTransactionRepository,
+        PendingTransactionRepository pendingTransactionRepository,
         PlayerAccountTemplate accountTemplate,
         PlayerNotificationService notificationService,
         ClembleCasinoValidationService validationService) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
+        this.pendingTransactionRepository = checkNotNull(pendingTransactionRepository);
         this.accountTemplate = checkNotNull(accountTemplate);
         this.notificationService = checkNotNull(notificationService);
         this.validationService = validationService;
@@ -72,9 +77,9 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
         for (PaymentOperation paymentOperation : paymentTransaction.getOperations()) {
             LOG.debug("Processing {}", paymentOperation);
             if (paymentOperation.getOperation() == Operation.Credit) {
-                accountTemplate.credit(paymentOperation.getPlayer(), paymentOperation.getAmount());
+                accountTemplate.credit(paymentOperation.getPlayer(), paymentTransaction.getTransactionKey(), paymentOperation.getAmount());
             } else if (paymentOperation.getOperation() == Operation.Debit) {
-                accountTemplate.debit(paymentOperation.getPlayer(), paymentOperation.getAmount());
+                accountTemplate.debit(paymentOperation.getPlayer(), paymentTransaction.getTransactionKey(), paymentOperation.getAmount());
             } else {
                 throw ClembleCasinoException.withKey(ClembleCasinoError.PaymentTransactionInvalid, paymentTransaction.getTransactionKey());
             }
@@ -84,6 +89,9 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
         PaymentTransaction transaction = paymentTransactionRepository.save(paymentTransaction);
         // Step 4. Sending PaymentEvent notification
         notificationService.send(paymentEvents);
+        // Step 5. Removing pending transaction
+        // TODO Add transaction verification
+        pendingTransactionRepository.delete(paymentTransaction.getTransactionKey());
         return transaction;
     }
 

@@ -42,7 +42,7 @@ public class JdbcPlayerAccountTemplate implements PlayerAccountTemplate {
 
     // TODO this is really bad solution switch to Actors model
     @Override
-    public void debit(String player, Money amount) {
+    public void debit(String player, String transactionKey, Money amount) {
         int linesUpdated = 0;
         do {
             try {
@@ -60,8 +60,8 @@ public class JdbcPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
-    public void credit(String player, Money amount) {
-        debit(player, amount.negate());
+    public void credit(String player, String transactionKey, Money amount) {
+        debit(player, transactionKey, amount.negate());
     }
 
     @Override

@@ -109,7 +109,7 @@ public class PlayerAccountRepositoryTest {
 
         @Override
         public PlayerAccount call() {
-            accountTemplate.debit(player, debit);
+            accountTemplate.debit(player, RandomStringUtils.randomAlphabetic(10), debit);
             return accountTemplate.findOne(player);
         }
     }

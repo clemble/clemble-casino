@@ -11,9 +11,9 @@ public interface PlayerAccountTemplate {
     public PlayerAccount findOne(String player);
 
     // TODO this is really bad solution switch to Actors model
-    public void debit(String player, Money amount);
+    public void debit(String player, String transactionKey, Money amount);
 
-    public void credit(String player, Money amount);
+    public void credit(String player, String transactionKey, Money amount);
 
     public PendingTransaction freeze(PendingTransaction transaction);
 

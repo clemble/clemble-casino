@@ -31,13 +31,22 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
-    public void debit(String player, Money amount) {
-        tryDebit(player, amount);
+    public void debit(String player, String transactionKey, Money amount) {
+        tryDebit(player, transactionKey, amount);
     }
 
-    private void tryDebit(String player, Money amount) {
+    private void tryDebit(String player, String transactionKey, Money amount) {
         try {
             PlayerAccount account = accountRepository.findOne(player);
+            // Step 1. Fetching pendingOperation
+            // TODO Check case multiple bets for the same operation
+            PendingOperation pendingOperaion = null;
+            for(PendingOperation operation: account.getPendingOperations()) {
+                if (transactionKey.equals(operation.getTransactionKey()))
+                    pendingOperaion = operation;
+            }
+            account.getPendingOperations().remove(pendingOperaion);
+            // Step 2. Performing actual debit operation
             Money debit = account.getMoney(amount.getCurrency());
             if (debit == null) {
                 account.getMoney().put(amount.getCurrency(), amount);
@@ -47,11 +56,11 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
             accountRepository.save(account);
         } catch (OptimisticLockingFailureException e) {
             // TODO This is dangerous approach to this problem
-            tryDebit(player, amount);
+            tryDebit(player, transactionKey, amount);
         } catch (NullPointerException e) {
             // TODO this leaves a control breach for random PaymentAccount creation
             tryCreate(player);
-            tryDebit(player, amount);
+            tryDebit(player, transactionKey, amount);
         }
     }
 
@@ -68,8 +77,8 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
-    public void credit(String player, Money amount) {
-        debit(player, amount.negate());
+    public void credit(String player, String transactionKey, Money amount) {
+        debit(player, transactionKey, amount.negate());
     }
 
     @Override

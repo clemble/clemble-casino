@@ -46,8 +46,8 @@ public class PaymentTransactionServiceTest {
         accountCreator.onEvent(new SystemPlayerCreatedEvent(playerFrom));
         accountCreator.onEvent(new SystemPlayerCreatedEvent(playerTo));
 
-        accountTemplate.debit(playerFrom, Money.create(Currency.FakeMoney, 100));
-        accountTemplate.debit(playerTo, Money.create(Currency.FakeMoney, 50));
+        accountTemplate.debit(playerFrom, playerFrom + ":registration", Money.create(Currency.FakeMoney, 100));
+        accountTemplate.debit(playerTo, playerTo + ":registration", Money.create(Currency.FakeMoney, 50));
     }
 
     @Test

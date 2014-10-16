@@ -40,8 +40,8 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             LimitedBetRule.create(5, 50),
             new JudgeRule("me", JudgeType.self),
             new GoalPartsRule(1),
-            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
-            new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
+            new MoveTimeRule(TimeUnit.MINUTES.toMillis(1), LooseBreachPunishment.getInstance()),
+            new TotalTimeRule(TimeUnit.MINUTES.toMillis(2), LooseBreachPunishment.getInstance()),
             PrivacyRule.players
         ),
         new GoalConfiguration(

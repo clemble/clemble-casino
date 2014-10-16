@@ -44,7 +44,7 @@ public class JedisPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
-    public void debit(String player, Money amount) {
+    public void debit(String player, String transactionKey, Money amount) {
         Jedis jedis = jedisPool.getResource();
         try {
             jedis.incrBy(player + amount.getCurrency(), amount.getAmount());
@@ -54,7 +54,7 @@ public class JedisPlayerAccountTemplate implements PlayerAccountTemplate {
     }
 
     @Override
-    public void credit(String player, Money amount) {
+    public void credit(String player, String transactionKey, Money amount) {
         Jedis jedis = jedisPool.getResource();
         try {
             jedis.decrBy(player + amount.getCurrency(), amount.getAmount());

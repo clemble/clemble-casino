@@ -2,6 +2,7 @@ package com.clemble.casino.server.payment.spring;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.payment.account.BasicServerPlayerAccountService;
+import com.clemble.casino.server.payment.listener.SystemPaymentFreezeRequestEventListener;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.payment.listener.SystemPlayerAccountCreationEventListener;
 import com.clemble.casino.server.payment.repository.*;
@@ -61,11 +62,26 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     @Bean
     public SystemPaymentTransactionRequestEventListener paymentTransactionRequestEventListener(
             PaymentTransactionRepository paymentTransactionRepository,
+            PendingTransactionRepository pendingTransactionRepository,
             PlayerAccountTemplate accountTemplate,
             ClembleCasinoValidationService validationService,
             SystemNotificationServiceListener notificationServiceListener,
             @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
-        SystemPaymentTransactionRequestEventListener eventListener = new SystemPaymentTransactionRequestEventListener(paymentTransactionRepository, accountTemplate, notificationService, validationService);
+        SystemPaymentTransactionRequestEventListener eventListener = new SystemPaymentTransactionRequestEventListener(
+            paymentTransactionRepository,
+            pendingTransactionRepository,
+            accountTemplate,
+            notificationService,
+            validationService);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
+    @Bean
+    public SystemPaymentFreezeRequestEventListener systemPaymentFreezeRequestEventListener(
+        PlayerAccountTemplate accountTemplate,
+        SystemNotificationServiceListener notificationServiceListener) {
+        SystemPaymentFreezeRequestEventListener eventListener = new SystemPaymentFreezeRequestEventListener(accountTemplate);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }
