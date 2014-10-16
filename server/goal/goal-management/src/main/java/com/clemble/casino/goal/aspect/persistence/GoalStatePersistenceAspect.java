@@ -4,6 +4,7 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
+import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 
 /**
@@ -22,6 +23,9 @@ public class GoalStatePersistenceAspect extends GoalAspect<GoalEvent>{
 
     @Override
     protected void doEvent(GoalEvent event) {
-        stateRepository.save(state);
+        if(event instanceof GoalEndedEvent)
+            stateRepository.delete(event.getGoalKey());
+        else
+            stateRepository.save(state);
     }
 }

@@ -58,6 +58,8 @@ public class SelfGoalManagerFactory implements GoalManagerFactory {
     public ClembleManager<GoalEvent, ? extends GoalState> get(String goalKey) {
         // Step 1. Fetching current goal state
         GoalState state = stateRepository.findOne(goalKey);
+        if (state == null)
+            return null;
         // Step 2. Creating appropriate goal manager
         return managerFactory.create(state, state.getConfiguration());
     }

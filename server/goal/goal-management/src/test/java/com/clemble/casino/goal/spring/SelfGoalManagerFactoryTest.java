@@ -107,6 +107,12 @@ public class SelfGoalManagerFactoryTest {
                 return false;
             }
         }, 30_000);
+        AsyncCompletionUtils.check(new Check() {
+            @Override
+            public boolean check() {
+                return managerFactory.get(goalKey) == null;
+            }
+        }, 1_000);
     }
 
 }
