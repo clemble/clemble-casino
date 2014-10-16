@@ -89,8 +89,8 @@ public class PlayerAccountOperationsITest {
             }
         }, 5000);
         paymentOperations = bonusTransaction.getOperations();
-        Money bonusAmmount = paymentOperations.iterator().next().getAmount();
-        assertEquals(transactionAmount.add(bonusAmmount.getAmount()), A.accountService().myAccount().getMoney(Currency.FakeMoney));
+        Money bonusAmount = paymentOperations.iterator().next().getAmount();
+        assertEquals(transactionAmount.add(bonusAmount.getAmount()), A.accountService().myAccount().getMoney(Currency.FakeMoney));
     }
 
     @Test

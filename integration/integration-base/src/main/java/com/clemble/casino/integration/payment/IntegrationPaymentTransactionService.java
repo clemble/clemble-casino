@@ -24,7 +24,7 @@ public class IntegrationPaymentTransactionService implements PaymentTransactionS
 
     @Override
     public List<PaymentTransaction> myTransactions() {
-        return paymentTransactionService.myTransactionsBySource(player);
+        return paymentTransactionService.myTransactions(player);
     }
 
     @Override
