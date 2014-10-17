@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
+import static com.clemble.casino.goal.GoalWebMapping.GOAL_INITIATION;
 import static com.clemble.casino.goal.GoalWebMapping.GOAL_INITIATION_PENDING;
 import static com.clemble.casino.WebMapping.PRODUCES;
 
@@ -32,6 +33,13 @@ public class GoalInitiationServiceController implements GoalInitiationService {
     @ResponseStatus(value = HttpStatus.OK)
     public Collection<GoalInitiation> getPending(@CookieValue("player") String player) {
         return initiationService.getPending(player);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, value = GOAL_INITIATION, produces = PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public GoalInitiation get(@PathVariable("goalKey") String goalKey) {
+        return initiationService.get(goalKey);
     }
 
 }

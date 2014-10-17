@@ -39,6 +39,12 @@ public class GameInitiationServiceController implements GameInitiationService, E
         return initiationService.getPending(player);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = INITIATION, produces = PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public GameInitiation get(@PathVariable("sessionKey") String goalKey) {
+        return initiationService.get(goalKey);
+    }
+
 
     @RequestMapping(method = RequestMethod.POST, value = INITIATION_READY, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)

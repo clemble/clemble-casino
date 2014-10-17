@@ -145,4 +145,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         return pendingInitiationService.getPending(player);
     }
 
+    public GameInitiation get(String key) {
+        return pendingInitiationService.get(key);
+    }
 }

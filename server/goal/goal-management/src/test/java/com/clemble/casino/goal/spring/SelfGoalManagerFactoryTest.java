@@ -6,6 +6,7 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
 import com.clemble.casino.goal.lifecycle.configuration.rule.parts.GoalPartsRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
@@ -56,7 +57,8 @@ public class SelfGoalManagerFactoryTest {
         new GoalPartsRule(1),
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
-        PrivacyRule.players
+        PrivacyRule.players,
+        new GoalStartRule(1)
     );
 
     @Test
@@ -99,7 +101,7 @@ public class SelfGoalManagerFactoryTest {
             @Override
             public boolean check() {
                 Set<EventRecord> events = recordRepository.findOne(goalKey).getEventRecords();
-                for(EventRecord record: events) {
+                for (EventRecord record : events) {
                     if (record.getEvent() instanceof GoalEndedEvent) {
                         return true;
                     }

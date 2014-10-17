@@ -24,4 +24,9 @@ public class IntegrationGoalInitiationService implements GoalInitiationService {
         return initiationService.getPending(player);
     }
 
+    @Override
+    public GoalInitiation get(String key) {
+        return initiationService.get(key);
+    }
+
 }

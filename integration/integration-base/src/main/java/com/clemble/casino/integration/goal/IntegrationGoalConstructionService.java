@@ -22,7 +22,7 @@ public class IntegrationGoalConstructionService implements GoalConstructionServi
 
     @Override
     public GoalConstruction construct(GoalConstructionRequest request) {
-        return constructionService.construct(request);
+        return constructionService.construct(player, request);
     }
 
     @Override

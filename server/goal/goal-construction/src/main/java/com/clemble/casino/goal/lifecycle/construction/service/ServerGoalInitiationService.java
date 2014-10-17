@@ -91,4 +91,9 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         return initiationRepository.findByPlayerAndState(player, InitiationState.pending);
     }
 
+    @Override
+    public GoalInitiation get(String key) {
+        return initiationRepository.findOne(key);
+    }
+
 }

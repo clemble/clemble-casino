@@ -4,6 +4,7 @@ import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.parts.GoalPartsRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
 import com.clemble.casino.money.Currency;
@@ -42,7 +43,8 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new GoalPartsRule(1),
             new MoveTimeRule(TimeUnit.MINUTES.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.MINUTES.toMillis(2), LooseBreachPunishment.getInstance()),
-            PrivacyRule.players
+            PrivacyRule.players,
+            new GoalStartRule(60000)
         ),
         new GoalConfiguration(
             "advanced",
@@ -52,7 +54,8 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new GoalPartsRule(1),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
-            PrivacyRule.players
+            PrivacyRule.players,
+            new GoalStartRule(60000)
         )
     );
 

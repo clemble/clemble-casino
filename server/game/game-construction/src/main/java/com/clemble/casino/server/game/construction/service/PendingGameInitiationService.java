@@ -55,13 +55,16 @@ public class PendingGameInitiationService {
         // Step 1. Fetching data from pending player
         Collection<GameInitiation> initiations = new ArrayList<>();
         for (PendingGameInitiation initiation : playerRepository.findPending(player))
-            initiations.add(toInitiation(initiation));
+            initiations.add(initiation.toInitiation());
         // Step 2. Returning pending initiations
         return initiations;
     }
 
-    public GameInitiation toInitiation(PendingGameInitiation initiation) {
-        GameConfiguration configuration = initiation.getConfiguration();
-        return new GameInitiation(initiation.getSessionKey(), InitiationState.pending, PlayerAwareUtils.toPlayerList(initiation.getParticipants()), configuration);
+    public GameInitiation get(String key) {
+        PendingGameInitiation initiation = initiationRepository.findBySessionKey(key);
+        if (initiation != null)
+            return initiation.toInitiation();
+        return null;
     }
+
 }
