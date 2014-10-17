@@ -11,6 +11,7 @@ import com.clemble.casino.goal.configuration.controller.GoalConfigurationService
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
+import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperations;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
@@ -114,11 +115,13 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         public IntegrationGoalOperationsFactory goalOperationsFactory(        GoalConfigurationServiceController configurationService,
             GoalInitiationServiceController initiationService,
             GoalConstructionServiceController constructionService,
-            GoalActionServiceController actionServiceController) {
+            GoalActionServiceController actionServiceController,
+            GoalRecordServiceController recordServiceController) {
             return new IntegrationGoalOperationsFactory(configurationService,
                 initiationService,
                 constructionService,
-                actionServiceController);
+                actionServiceController,
+                recordServiceController);
         }
 
         @Bean

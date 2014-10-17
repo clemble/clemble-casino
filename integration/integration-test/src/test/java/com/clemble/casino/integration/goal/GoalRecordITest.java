@@ -9,7 +9,6 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.parts.GoalPartsRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
-import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
