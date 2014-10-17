@@ -13,6 +13,6 @@ public interface GameRecordRepository extends MongoRepository<GameRecord, String
 
     List<GameRecord> findByPlayers(String player);
 
-    List<GameRecord> findByPlayerAndState(String player, RecordState state);
+    List<GameRecord> findByPlayersInAndState(List<String> player, RecordState state);
 
 }

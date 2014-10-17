@@ -13,6 +13,7 @@ import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.game.GameWebMapping;
 import com.clemble.casino.WebMapping;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -43,7 +44,7 @@ public class GameRecordServiceController implements GameRecordService, ExternalC
     @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.MY_RECORDS_STATE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public List<GameRecord> myRecordsWithState(@CookieValue("player") String player, @PathVariable("state") RecordState state) {
-        return recordRepository.findByPlayerAndState(player, state);
+        return recordRepository.findByPlayersInAndState(Collections.singletonList(player), state);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class GameRecordEventAspect extends GameAspect<Event> implements GameSess
         record.getEventRecords().add(move);
         // Step 3. Specifying ended state for the event
         if(event instanceof GameEndedEvent)
-            record = record.copy(RecordState.finished);
+            record = record.copy(RecordState.finished, ((GameEndedEvent) event).getOutcome());
         // Step 4. Serializing record
         recordRepository.save(record);
     }

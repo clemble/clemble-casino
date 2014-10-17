@@ -42,7 +42,7 @@ public class GoalRecordEventAspect extends GoalAspect<Event> implements GoalAwar
         // Step 3. Specifying ended state for the event
         if(event instanceof GoalEndedEvent) {
             // TODO Fishy bullshit (record is not immutable) be more consistent
-            record = record.copy(RecordState.finished);
+            record = record.copy(RecordState.finished, ((GoalEndedEvent) event).getOutcome());
         }
         // Step 4. Serializing record
         recordRepository.save(record);
