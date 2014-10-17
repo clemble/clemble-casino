@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
-import com.clemble.casino.game.lifecycle.management.service.GameActionService;
 import com.clemble.casino.game.lifecycle.configuration.service.GameConfigurationService;
 import com.clemble.casino.game.lifecycle.record.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
@@ -13,7 +12,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
-import com.clemble.casino.server.game.controller.GameActionController;
+import com.clemble.casino.server.game.controller.GameActionServiceController;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
@@ -51,7 +50,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     final private AvailabilityGameConstructionController availabilityConstructionService;
     final private GameInitiationServiceController initiationService;
     final private GameConfigurationService specificationService;
-    final private GameActionController actionService;
+    final private GameActionServiceController actionService;
     final private GameRecordService recordService;
     final private IntegrationGoalOperationsFactory goalOperationsFactory;
 
@@ -71,7 +70,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         AvailabilityGameConstructionController availabilityConstructionService,
         GameInitiationServiceController initiationService,
         GameConfigurationService specificationService,
-        GameActionController actionService,
+        GameActionServiceController actionService,
         GameRecordService recordService,
         IntegrationGoalOperationsFactory goalOperationsFactory) {
         this.host = checkNotNull(host);

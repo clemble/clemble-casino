@@ -22,7 +22,7 @@ import com.clemble.casino.server.game.aspect.security.MatchGameSecurityAspectFac
 import com.clemble.casino.server.game.aspect.security.RoundGameSecurityAspectFactory;
 import com.clemble.casino.server.game.aspect.time.RoundGameTimeAspectFactory;
 import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
-import com.clemble.casino.server.game.controller.GameActionController;
+import com.clemble.casino.server.game.controller.GameActionServiceController;
 import com.clemble.casino.server.game.controller.GameRecordServiceController;
 import com.clemble.casino.server.game.listener.ServerGameStartedEventListener;
 import com.clemble.casino.server.game.repository.*;
@@ -212,10 +212,10 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     public static class GameManagementControllerSpringConfiguration implements SpringConfiguration {
 
         @Bean
-        public GameActionController picPacPoeEngineController(
+        public GameActionServiceController picPacPoeEngineController(
             GameManagerFactoryFacade sessionProcessor,
             GameRecordRepository recordRepository) {
-            return new GameActionController(recordRepository, sessionProcessor);
+            return new GameActionServiceController(recordRepository, sessionProcessor);
         }
 
         @Bean

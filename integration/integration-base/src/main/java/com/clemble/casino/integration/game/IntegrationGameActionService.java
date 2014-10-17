@@ -5,7 +5,7 @@ import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.management.service.GameActionService;
 import com.clemble.casino.lifecycle.management.event.action.Action;
-import com.clemble.casino.server.game.controller.GameActionController;
+import com.clemble.casino.server.game.controller.GameActionServiceController;
 
 /**
  * Created by mavarazy on 13/10/14.
@@ -13,9 +13,9 @@ import com.clemble.casino.server.game.controller.GameActionController;
 public class IntegrationGameActionService implements GameActionService{
 
     final private String player;
-    final private GameActionController controller;
+    final private GameActionServiceController controller;
 
-    public IntegrationGameActionService(String player, GameActionController controller) {
+    public IntegrationGameActionService(String player, GameActionServiceController controller) {
         this.player = player;
         this.controller = controller;
     }

@@ -2,7 +2,6 @@ package com.clemble.casino.server.game.controller;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.event.Event;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.lifecycle.management.event.action.Action;
@@ -15,18 +14,17 @@ import org.springframework.web.bind.annotation.*;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.management.service.GameActionService;
 import com.clemble.casino.server.ExternalController;
-import com.clemble.casino.server.game.action.GameManagerFactory;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import com.clemble.casino.game.GameWebMapping;
 import com.clemble.casino.WebMapping;
 
 @RestController
-public class GameActionController<State extends GameState> implements GameActionService, ExternalController {
+public class GameActionServiceController<State extends GameState> implements GameActionService, ExternalController {
 
     final private GameManagerFactoryFacade managerFactory;
     final private GameRecordRepository recordRepository;
 
-    public GameActionController(
+    public GameActionServiceController(
             final GameRecordRepository recordRepository,
             final GameManagerFactoryFacade sessionProcessor) {
         this.managerFactory = checkNotNull(sessionProcessor);

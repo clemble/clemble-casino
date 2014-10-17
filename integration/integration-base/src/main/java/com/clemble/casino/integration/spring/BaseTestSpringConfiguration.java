@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.annotation.PostConstruct;
 
-import com.clemble.casino.game.lifecycle.management.RoundState;
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
@@ -20,7 +19,7 @@ import com.clemble.casino.server.connection.controller.PlayerConnectionServiceCo
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
-import com.clemble.casino.server.game.controller.GameActionController;
+import com.clemble.casino.server.game.controller.GameActionServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
@@ -36,8 +35,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
-import com.clemble.casino.game.lifecycle.management.GameState;
-import com.clemble.casino.game.lifecycle.management.service.GameActionService;
 import com.clemble.casino.game.lifecycle.configuration.service.GameConfigurationService;
 import com.clemble.casino.game.lifecycle.record.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
@@ -141,7 +138,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             AvailabilityGameConstructionController availabilityConstructionService,
             GameInitiationServiceController initiationService,
             @Qualifier("gameConfigurationController") GameConfigurationService specificationService,
-            GameActionController actionService,
+            GameActionServiceController actionService,
             GameRecordService recordService,
             IntegrationGoalOperationsFactory goalOperationsFactory) {
             ClembleCasinoRegistrationOperations registrationOperations = new IntegrationClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalOperationsFactory);

@@ -21,7 +21,7 @@ public class IntegrationGoalOperations implements GoalOperations {
     final private GoalConstructionService constructionService;
     final private GoalRecordService recordService;
     final private GoalInitiationService initiationService;
-    final private GoalActionServiceController actionService;
+    final private GoalActionService actionService;
 
     public IntegrationGoalOperations(String player,
         GoalConfigurationServiceController configurationService,
@@ -33,7 +33,7 @@ public class IntegrationGoalOperations implements GoalOperations {
         this.configurationService = new IntegrationGoalConfigurationService(player, configurationService);
         this.initiationService = new IntegrationGoalInitiationService(player, initiationService);
         this.constructionService = new IntegrationGoalConstructionService(player, constructionService);
-        this.actionService = actionService;
+        this.actionService = new IntegrationGoalActionService(player, actionService);
     }
 
     @Override
