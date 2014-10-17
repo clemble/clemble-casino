@@ -5,6 +5,7 @@ import com.clemble.casino.goal.lifecycle.record.GoalRecord;
 import com.clemble.casino.goal.lifecycle.record.service.GoalRecordService;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.WebMapping;
+import com.clemble.casino.lifecycle.record.RecordState;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +28,22 @@ public class GoalRecordServiceController implements GoalRecordService {
         throw new IllegalAccessError();
     }
 
+
     @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.MY_RECORDS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public List<GoalRecord> myRecords(@CookieValue("player") String player) {
         return recordRepository.findByPlayer(player);
+    }
+
+    @Override
+    public List<GoalRecord> myRecordsWithState(RecordState state) {
+        throw new IllegalAccessError();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.MY_RECORDS_STATE, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<GoalRecord> myRecordsWithState(@CookieValue("player") String player, @PathVariable("state") RecordState state) {
+        return recordRepository.findByPlayerAndState(player, state);
     }
 
     @Override

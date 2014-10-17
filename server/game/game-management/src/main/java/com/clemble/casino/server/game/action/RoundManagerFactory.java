@@ -42,7 +42,7 @@ public class RoundManagerFactory implements GameManagerFactory {
         RoundGameContext roundGameContext = RoundGameContext.fromInitiation(initiation, parent);
         // Step 1. Allocating table for game initiation
         RoundState roundState = stateFactory.constructState(initiation, roundGameContext);
-        RoundGameState state = new RoundGameState(roundGameContext, roundState, 0);
+        RoundGameState state = new RoundGameState(roundConfiguration, roundGameContext, roundState, 0);
         // Step 2. Saving game record
         GameRecord roundRecord = initiation.toRecord();
         roundRecord = recordRepository.save(roundRecord);

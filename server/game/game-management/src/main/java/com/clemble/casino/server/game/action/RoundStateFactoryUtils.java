@@ -35,7 +35,7 @@ public class RoundStateFactoryUtils {
         GameInitiation initiation = new GameInitiation(record.getSessionKey(), InitiationState.pending, record.getPlayers(), record.getConfiguration());
         // TODO define politics for restart, all time track is lost here
         RoundGameContext context = RoundGameContext.fromInitiation(initiation, null);
-        RoundGameState restoredState = new RoundGameState(context, stateFactory.constructState(initiation, context), 0);
+        RoundGameState restoredState = new RoundGameState((RoundGameConfiguration) record.getConfiguration(), context, stateFactory.constructState(initiation, context), 0);
         // Step 2.1 To prevent population of original session with duplicated events
         for (EventRecord eventRecord : record.getEventRecords()) {
             if(!(eventRecord.getEvent() instanceof GameManagementEvent))

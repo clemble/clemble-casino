@@ -9,6 +9,7 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.parts.GoalPartsRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
+import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
@@ -17,6 +18,7 @@ import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
+import com.clemble.casino.lifecycle.record.EventRecord;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
@@ -28,6 +30,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -60,14 +63,26 @@ public class GoalRecordITest {
         // Step 2. Creating GoalRequest
         GoalConstructionRequest goalRequest = new GoalConstructionRequest(CONFIGURATION, "Simple test");
         final GoalConstruction construction = A.goalOperations().constructionService().construct(goalRequest);
+        final String goalKey = construction.getGoalKey();
         // Step 3. Checking construction
         AsyncCompletionUtils.check(new Check(){
             @Override
             public boolean check() {
-                return A.goalOperations().initiationService().get(construction.getGoalKey()).getState() == InitiationState.initiated;
+                return A.goalOperations().initiationService().get(goalKey).getState() == InitiationState.initiated;
             }
         }, 30_000);
         // Step 4. Checking value
+        AsyncCompletionUtils.check(new Check(){
+            @Override
+            public boolean check() {
+                Collection<EventRecord> events = A.goalOperations().recordService().get(goalKey).getEventRecords();
+                for(EventRecord event: events) {
+                    if (event.getEvent() instanceof GoalEndedEvent)
+                        return true;
+                }
+                return false;
+            }
+        }, 30_000);
     }
 
 }

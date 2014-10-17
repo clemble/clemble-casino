@@ -2,6 +2,7 @@ package com.clemble.casino.server.game.controller;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.lifecycle.record.RecordState;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,17 @@ public class GameRecordServiceController implements GameRecordService, ExternalC
     @ResponseStatus(value = HttpStatus.OK)
     public List<GameRecord> myRecords(@CookieValue("player") String player) {
         return recordRepository.findByPlayers(player);
+    }
+
+    @Override
+    public List<GameRecord> myRecordsWithState(RecordState state) {
+        throw new IllegalAccessError();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = GameWebMapping.MY_RECORDS_STATE, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<GameRecord> myRecordsWithState(@CookieValue("player") String player, @PathVariable("state") RecordState state) {
+        return recordRepository.findByPlayerAndState(player, state);
     }
 
     @Override
