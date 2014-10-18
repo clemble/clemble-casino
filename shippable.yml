@@ -1,24 +1,38 @@
 language: java
 jdk:
     - oraclejdk8
+env:
+  global:
+    # AWS_ACCESS_KEY_ID
+    - secure: JJcW5jsdzeF5LwuZWXoCdXINYeZS2hBkflGwYshVsMtodYkN3UeoAug17w90UE1VvoAXdALeklLWa0TVngw68wVGZuO5ZxjCRyPnNhqjYGlToiS2NI/Iv8fVGg9f3zdKp5OtUYytKml60mIbluVgeaBekDArfjGv3R5rV7Ykmc1f++jYuiu4rfGKVswr1OIqvtXEe8a+gOKUZ8gAdSH9iDf8JTf/DMrLPMpVXMxkeAAbvcgVTNI2SMjO5TSVeTnBHOYU3kebAVa8aVcsmyqsu9OaamgmuxBeFc9lSWmW/5brfZIYLIawaiD2t5wWRz+cbNhP2uuBH4vbsYP7rI/bGA==
+    # AWS_SECRET_ACCESS_KEY
+    - secure: LS/X2viomQ6NRRpniUmJF2T9MuHt0laBsj4PYooZ7pQfalXr0DqdMUU3IRaOKD6+pb5v1KfkiQi/ZmmQkPbSSJeBjqQgQmy3eT1ItH4o+d5Mcp3bNJqUvR1CxCU5lEDKHt0qLCFThjz9ZrisDo0WYNMcnPT7XCAah26lCXxYbKZn3mMFdFa0L4s+p2L2hFACeJfvo+MOPZRDJehz7JU48FdtIP/UyDFdBkao4OYNlolChSw3vyPmbBTX4Xi0hMCXRnuOGYBHpNQzVOgCp8bsLpTsMoqiAGB87st2xphn8wN+reIP+dpW4C3UmWilZWySJn9FKEhcMfvOL0MuvxlUow==
+
 services:
     - mongodb
     - redis
     - rabbitmq
     - neo4j
-install:
-  - sudo apt-get install python-pip
-  - sudo pip install awscli
-env:
-  global:
-    - secure: TDeG4a2Nzt04Wc4JM5HKVAIZvk7wUwh3MblIavaU+3bj6uS8QskmAKVGmVDLw1XHB+PzXlDLGmYr9rZo+fbTNiQ8OypAiWvwD/tvd+KbkBXBYiit/nXbt+CtziRKbEuctdWjCBcTJ/prW31iylf4At1fdE8FzSA6mpFEWtzl00ARZ4uS8MpdIMKepXw9bz/ytywhhzR7Ua4VQPjAxjrnn829jbXPFi5rgIIPeHtlhFcsWd0Q0WXmhDdl8RUCICZ/bP0yxneZ7iMlVY2pss3M7sDORJUFpUFeL3PDTXUGyX6eEiT9dSfxgkxcYW5UR9/h5voxnMOSIjpPKFy6mlIuKQ==
-    - secure: SBmubE4FiLXZI/aaBqnFjlLYNyUPsCfgn383090r+hbuMGN+4tCifRnTr7vKEPgHBpa072CcdvfqIAJN07dsIaP1sj+nqHOyIwqT1d5tkq6qeLe/gZHeQSIqQo2NGSW2Ywy3HPU8Vi4MABtTCJlbBLwi/wvNjqxQzC+golvYi7bNri1LI+KFQe0kRs8m36AJf7dfhjk/+pwEzZSOQyFPqjvPvl1V3+L2fVXUjw2Xv6V/S6lK+5V/ex2jGqG/FIfYrEjo2VKQ9rNjq4BuBYu8avJofToXxELaRm+s+hknHDDVxyFgaPFs0LSja+RzU//TWGNKw0vlUqhSLOOoCctB+A==
-    - secure: UNx8QKhwGwjpFGj5qJtuh4Ds4ErO7azIvXGDMvvu/W8lVoFZZ+8e0NxzNrCQfZuUqM+gshMcy2MlzyFtu0ZiTZHcUH4Oj5e5ifXMLacoINErj+303xvFaDjO5kVGBDZ9gMjBQ6UcCGBwTB16M+zSYIOH/gyBiUgkcfxfX325ctO5l0kmiULL2iba5gPff4yrUtnwaa7/FkX2P5MLolsGEJURFW3xEcaC6lQRK90N7aqptNham0kdgIPuH6xj3RgKMQeYW1RHeGWwZrY7JhsHy6V4Rz3cHZZM7OwgB9L/emii4/Low7aTYNnsS1zUgupzaRetd7G4Du5pbwq6O81JcA==
-    - secure: MQrdtV90hr3phOX6sL2kN2XpRRtuSaNYI0F7SOxCDZtA9J1r8Vo0TWW6AXtdY7pTBqmAsOul2MABO6Q1c9eMbzq998o+LR785neHaIIs2yMMVFucjfYgsDTkZ+mcGltQp9t416nLu+qha630BFe6kV/Jt6ZLPhGbFyf/hgZaWKn60E4Lxx9dP/qhm7Qr9Uy2k2HKhRU/C21pFV/hOt70vhOtWni+c8WhGdHAjSffjdOJwvsT35kGh1rM5/MAKOwZd+mUfGepmr+o3vVWW9aG3iytmQ4uR4HuovZkBHitS2WT3iqQCiiV0IXc1Aawrk+P09DZDmY2E+B64vn8gtsbRg==
+
 before_script:
-    - mkdir -p ~/clemble/config
-    - mkdir -p ~/clemble-casino/shippable/testresults
-    - cp ./config/*.properties ~/clemble/config/
-#after_success:
-#    - mvn clean cobertura:cobertura coveralls:cobertura
-#    - aws s3 cp ./server/player/player-web/target/player-web-0.9.0-SNAPSHOT.war s3://clemble/player/player-web-0.9.0-SNAPSHOT.war
+  - mkdir -p ~/clemble/config
+  - mkdir -p ~/clemble-casino/shippable/testresults
+  - cp ./config/*.properties ~/clemble/config/
+
+after_success:
+  - virtualenv ve && source ve/bin/activate && pip install awscli
+
+  - aws s3 cp ./server/player/player-registration/target/player-registration-0.12.2-SNAPSHOT.war s3://clemble/production/api/player/player-registration.war
+  - aws s3 cp ./server/player/player-social/target/player-registration-0.12.2-SNAPSHOT.war s3://clemble/production/api/player/player-social.war
+  - aws s3 cp ./server/player/player-presence/target/player-presence-0.12.2-SNAPSHOT.war s3://clemble/production/api/player/player-presence.war
+  - aws s3 cp ./server/player/player-profile/target/player-profile-0.12.2-SNAPSHOT.war s3://clemble/production/api/player/player-profile.war
+  - aws s3 cp ./server/player/player-connection/target/player-connection-0.12.2-SNAPSHOT.war s3://clemble/production/api/player/player-connection.war
+
+  - aws s3 cp ./server/payment/payment-transaction/target/payment-transaction-0.12.2-SNAPSHOT.war s3://clemble/production/api/payment/payment-transaction.war
+  - aws s3 cp ./server/payment/payment-bonus/target/payment-bonus-0.12.2-SNAPSHOT.war s3://clemble/production/api/payment/payment-bonus.war
+
+  - aws s3 cp ./server/goal/goal-configuration/target/goal-configuration-0.12.2-SNAPSHOT.war s3://clemble/production/api/goal/goal-configuration.war
+  - aws s3 cp ./server/goal/goal-construction/target/goal-construction-0.12.2-SNAPSHOT.war s3://clemble/production/api/goal/goal-construction.war
+  - aws s3 cp ./server/goal/goal-management/target/goal-management-0.12.2-SNAPSHOT.war s3://clemble/production/api/goal/goal-management.war
+
+
