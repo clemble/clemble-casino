@@ -20,7 +20,25 @@ before_script:
   - cp ./config/*.properties ~/clemble/config/
 
 after_success:
+  - mkdir -p deployment/
+  - cp ./server/player/player-registration/target/player-registration-0.12.2-SNAPSHOT.war deployment/player#registration.war
+  - cp ./server/player/player-social/target/player-social-0.12.2-SNAPSHOT.war  deployment/player#social.war
+  - cp ./server/player/player-presence/target/player-presence-0.12.2-SNAPSHOT.war deployment/player#presence.war
+  - cp ./server/player/player-profile/target/player-profile-0.12.2-SNAPSHOT.war deployment/player#profile.war
+  #- cp ./server/player/player-connection/target/player-connection-0.12.2-SNAPSHOT.war deployment/player#connection.war
+
+  - cp ./server/payment/payment-transaction/target/payment-transaction-0.12.2-SNAPSHOT.war deployment/payment.war
+  - cp ./server/payment/payment-bonus/target/payment-bonus-0.12.2-SNAPSHOT.war deployment/bonus.war
+
+  - cp ./server/goal/goal-configuration/target/goal-configuration-0.12.2-SNAPSHOT.war deployment/goal#configuration.war
+  - cp ./server/goal/goal-construction/target/goal-construction-0.12.2-SNAPSHOT.war deployment/goal#construction.war
+  - cp ./server/goal/goal-management/target/goal-management-0.12.2-SNAPSHOT.war deployment/goal#management.war
+
+  - cd deployment/ && tar -czvf ../clemble-api.tar.gz . && cd ..
+
   - virtualenv ve && source ve/bin/activate && pip install awscli
+
+  - aws s3 cp ./clemble-api.tar.gz s3://clemble/production/clemble-api.tar.gz
 
   - aws s3 cp ./server/player/player-registration/target/player-registration-0.12.2-SNAPSHOT.war s3://clemble/production/api/player/player-registration.war
   - aws s3 cp ./server/player/player-social/target/player-social-0.12.2-SNAPSHOT.war s3://clemble/production/api/player/player-social.war
