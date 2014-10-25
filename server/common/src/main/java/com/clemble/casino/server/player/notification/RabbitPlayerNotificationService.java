@@ -30,6 +30,8 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
         public RabbitTemplate load(String server) throws Exception {
             CachingConnectionFactory connectionFactory = new CachingConnectionFactory(server);
             connectionFactory.setExecutor(executorService);
+            connectionFactory.setUsername(user);
+            connectionFactory.setPassword(password);
             RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
             rabbitTemplate.setMessageConverter(messageConverter);
             rabbitTemplate.setExchange("amq.topic");
@@ -43,16 +45,22 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     final private String postfix;
     final private MessageConverter messageConverter;
     final private String host;
+    final private String user;
+    final private String password;
 
     final private ExecutorService executorService;
 
     public RabbitPlayerNotificationService(
         final String postfix,
         final MessageConverter messageConverter,
-        final String host) {
+        final String host,
+        final String user,
+        final String password) {
         this.postfix = checkNotNull(postfix);
         this.messageConverter = checkNotNull(messageConverter);
         this.host = host;
+        this.user = user;
+        this.password = password;
 
         ThreadFactory notificationThreadFactory = new ThreadFactoryBuilder()
             .setNameFormat("CL playerNotification with '" + postfix + "' %d")

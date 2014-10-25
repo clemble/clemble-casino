@@ -21,12 +21,14 @@ public class RabbitSystemNotificationService implements SystemNotificationServic
 
     final private RabbitTemplate rabbitTemplate;
 
-    public RabbitSystemNotificationService(String server, MessageConverter messageConverter) {
+    public RabbitSystemNotificationService(String server, String user, String password, MessageConverter messageConverter) {
         // Step 1. Configuring executor service
         ThreadFactory notificationThreadFactory = new ThreadFactoryBuilder().setNameFormat("CL systemNotification %d").build();
         ExecutorService executorService = Executors.newFixedThreadPool(1, notificationThreadFactory);
         // Step 2. Creating caching connection factory
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory(server);
+        connectionFactory.setUsername(user);
+        connectionFactory.setPassword(password);
         connectionFactory.setExecutor(executorService);
         // Step 3. Creating rabbit template
         this.rabbitTemplate = new RabbitTemplate(connectionFactory);

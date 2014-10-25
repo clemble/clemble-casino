@@ -20,9 +20,11 @@ public class SystemNotificationSpringConfiguration implements SpringConfiguratio
 
     @Bean
     public SystemNotificationService systemNotificationService(
+        @Value("${clemble.service.notification.user}") String user,
+        @Value("${clemble.service.notification.password}") String password,
         @Value("${clemble.service.notification.host}") String host,
         Jackson2JsonMessageConverter jsonMessageConverter) throws IOException {
-        return new RabbitSystemNotificationService(host, jsonMessageConverter);
+        return new RabbitSystemNotificationService(host, user, password, jsonMessageConverter);
     }
 
     @Bean(destroyMethod = "close")
