@@ -1,5 +1,7 @@
 package com.clemble.casino.server.spring.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Import({ JsonSpringConfiguration.class })
 public class RabbitSpringConfiguration implements SpringConfiguration {
 
+    final private static Logger LOG = LoggerFactory.getLogger(SpringConfiguration.class);
+
     @Bean
     public Jackson2JsonMessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         Jackson2JsonMessageConverter jsonMessageConverter = new Jackson2JsonMessageConverter();
@@ -28,6 +32,7 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
             @Value("${clemble.service.notification.password}") String password,
             @Value("${clemble.service.notification.host}") String host,
             Jackson2JsonMessageConverter jsonMessageConverter) {
+        LOG.debug("Connecting player NotificationService with {0}", user);
         return new RabbitPlayerNotificationService(PLAYER_CHANNEL_POSTFIX, jsonMessageConverter, host, user, password);
     }
 
@@ -37,6 +42,7 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
             @Value("${clemble.service.notification.password}") String password,
             @Value("${clemble.service.notification.host}") String host,
             Jackson2JsonMessageConverter jsonMessageConverter) {
+        LOG.debug("Connecting player presence NotificationService with {0}", user);
         return new RabbitPlayerNotificationService(PRESENCE_CHANNEL_POSTFIX, jsonMessageConverter, host, user, password);
     }
 

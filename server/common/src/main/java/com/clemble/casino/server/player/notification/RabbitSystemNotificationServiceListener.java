@@ -26,20 +26,24 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
 
     final private Logger LOG = LoggerFactory.getLogger(getClass());
 
-    final private String notificationConfiguration;
+    final private String host;
+    final private String user;
+    final private String password;
     final private ObjectMapper objectMapper;
 
     final private Map<SystemEventListener<?>, RabbitStartupTask<?>> listenerToTask = new HashMap<SystemEventListener<?>, RabbitSystemNotificationServiceListener.RabbitStartupTask<?>>();
 
-    public RabbitSystemNotificationServiceListener(String notificationConfiguration, ObjectMapper objectMapper) {
-        this.notificationConfiguration = checkNotNull(notificationConfiguration);
+    public RabbitSystemNotificationServiceListener(String host, String user, String password, ObjectMapper objectMapper) {
+        this.host = checkNotNull(host);
+        this.user = checkNotNull(user);
+        this.password = checkNotNull(password);
         this.objectMapper = checkNotNull(objectMapper);
     }
 
     @Override
     public void subscribe(SystemEventListener<? extends SystemEvent> eventListener) {
         // Step 1. Creating RabbitStartupTask
-        RabbitStartupTask<?> startupTask = listenerToTask.put(eventListener, new RabbitStartupTask<>(notificationConfiguration, objectMapper, eventListener));
+        RabbitStartupTask<?> startupTask = listenerToTask.put(eventListener, new RabbitStartupTask<>(host, user, password, objectMapper, eventListener));
         if(startupTask != null)
             System.exit(1);
     }
@@ -68,7 +72,9 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
 
         final private Logger LOG;
 
-        final private String configurations;
+        final private String host;
+        final private String user;
+        final private String password;
         final private ObjectMapper objectMapper;
         final private ScheduledExecutorService executor;
         final private SystemEventListener<T> eventListener;
@@ -76,9 +82,11 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         final AtomicBoolean keepClosed = new AtomicBoolean(false);
         final private AtomicReference<Connection> rabbitConnection = new AtomicReference<>(null);
 
-        public RabbitStartupTask(String configuration, ObjectMapper objectMapper, SystemEventListener<T> eventListener) {
+        public RabbitStartupTask(String host, String user, String password, ObjectMapper objectMapper, SystemEventListener<T> eventListener) {
             this.LOG = LoggerFactory.getLogger(eventListener.getClass());
-            this.configurations = checkNotNull(configuration);
+            this.host = checkNotNull(host);
+            this.user = checkNotNull(user);
+            this.password = checkNotNull(password);
             this.objectMapper = checkNotNull(objectMapper);
             this.eventListener = checkNotNull(eventListener);
 
@@ -90,12 +98,12 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         @Override
         public void run() {
             try {
-                synchronized (configurations) {
+                synchronized (host) {
                     // Step 1. Generalizing connection factory
                     ConnectionFactory factory = new ConnectionFactory();
-                    factory.setUsername("guest");
-                    factory.setPassword("guest");
-                    factory.setHost(configurations);
+                    factory.setUsername(user);
+                    factory.setPassword(password);
+                    factory.setHost(host);
                     factory.setPort(5672);
                     LOG.debug("Created connection factory");
                     // Step 2. Creating connection
