@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PlayerManualRegistrationController implements PlayerManualRegistrationService, ExternalController {
     // !!!TODO need a safe restoration process for all Registrations not only for login!!!
 
+    final private PlayerTokenUtils tokenUtils;
     final private PlayerKeyGenerator playerKeyGenerator;
     final private PlayerTokenFactory playerTokenFactory;
     final private PlayerCredentialRepository playerCredentialRepository;
@@ -40,12 +41,15 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
 
-    public PlayerManualRegistrationController(final PlayerKeyGenerator playerKeyGenerator,
-                                              final PlayerTokenFactory playerTokenFactory,
-                                              final PlayerCredentialRepository playerCredentialRepository,
-                                              final ClembleConsumerDetailsService playerIdentityRepository,
-                                              final ClembleCasinoValidationService validationService,
-                                              final SystemNotificationService notificationService) {
+    public PlayerManualRegistrationController(
+        final PlayerTokenUtils tokenUtils,
+        final PlayerKeyGenerator playerKeyGenerator,
+        final PlayerTokenFactory playerTokenFactory,
+        final PlayerCredentialRepository playerCredentialRepository,
+        final ClembleConsumerDetailsService playerIdentityRepository,
+        final ClembleCasinoValidationService validationService,
+        final SystemNotificationService notificationService) {
+        this.tokenUtils = checkNotNull(tokenUtils);
         this.playerKeyGenerator = checkNotNull(playerKeyGenerator);
         this.playerTokenFactory = checkNotNull(playerTokenFactory);
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
@@ -73,7 +77,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public PlayerToken httpLogin(@RequestBody PlayerLoginRequest loginRequest, HttpServletResponse response) {
-        return PlayerTokenUtils.updateResponse(login(loginRequest), response);
+        return tokenUtils.updateResponse(login(loginRequest), response);
     }
 
     @Override
@@ -110,7 +114,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public PlayerToken httpCreatePlayer(@RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
-        return PlayerTokenUtils.updateResponse(createPlayer(registrationRequest), response);
+        return tokenUtils.updateResponse(createPlayer(registrationRequest), response);
     }
 
     private PlayerToken restoreUser(PlayerLoginRequest loginRequest) {

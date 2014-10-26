@@ -24,9 +24,11 @@ public class PlayerBaseRegistrationController implements PlayerBaseRegistrationS
 
     final private ClembleConsumerDetails DEFAULT_DETAILS = new ClembleConsumerDetails("DEFAULT", "web", null, null,null);
 
+    final private PlayerTokenUtils tokenUtils;
     final private PlayerManualRegistrationService manualRegistrationService;
 
-    public PlayerBaseRegistrationController(PlayerManualRegistrationService manualRegistrationService) {
+    public PlayerBaseRegistrationController(PlayerTokenUtils tokenUtils, PlayerManualRegistrationService manualRegistrationService) {
+        this.tokenUtils = tokenUtils;
         this.manualRegistrationService = manualRegistrationService;
     }
 
@@ -39,7 +41,7 @@ public class PlayerBaseRegistrationController implements PlayerBaseRegistrationS
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_BASIC_LOGIN, produces = WebMapping.PRODUCES)
     public PlayerToken httpLogin(@RequestBody PlayerCredential credentials, HttpServletResponse response) {
         PlayerToken token = login(credentials);
-        return PlayerTokenUtils.updateResponse(token, response);
+        return tokenUtils.updateResponse(token, response);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class PlayerBaseRegistrationController implements PlayerBaseRegistrationS
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_BASIC_PROFILE, produces = WebMapping.PRODUCES)
     public PlayerToken httpRegister(@RequestBody PlayerBaseRegistrationRequest registrationRequest, HttpServletResponse response) {
         PlayerToken token = register(registrationRequest);
-        return PlayerTokenUtils.updateResponse(token, response);
+        return tokenUtils.updateResponse(token, response);
     }
 
 }

@@ -10,6 +10,7 @@ import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.registration.repository.PlayerCredentialRepository;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.security.SimpleClembleConsumerDetailsService;
+import com.clemble.casino.server.security.PlayerTokenUtils;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
@@ -18,6 +19,7 @@ import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.registration.controller.PlayerBaseRegistrationController;
 import com.clemble.casino.server.registration.controller.PlayerManualRegistrationController;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -49,18 +51,29 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerManualRegistrationController playerRegistrationController(
+            PlayerTokenUtils tokenUtils,
             @Qualifier("playerKeyGenerator") PlayerKeyGenerator playerKeyGenerator,
             PlayerCredentialRepository playerCredentialRepository,
             ClembleConsumerDetailsService clembleConsumerDetailsService,
             ClembleCasinoValidationService clembleValidationService,
             PlayerTokenFactory playerTokenFactory,
             SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
-        return new PlayerManualRegistrationController(playerKeyGenerator, playerTokenFactory, playerCredentialRepository,
+        return new PlayerManualRegistrationController(tokenUtils, playerKeyGenerator, playerTokenFactory, playerCredentialRepository,
                 clembleConsumerDetailsService, clembleValidationService, systemNotificationService);
     }
 
     @Bean
-    public PlayerBaseRegistrationController playerBaseRegistrationController(@Qualifier("playerRegistrationController") PlayerManualRegistrationService manualRegistrationService) {
-        return new PlayerBaseRegistrationController(manualRegistrationService);
+    public PlayerBaseRegistrationController playerBaseRegistrationController(
+        PlayerTokenUtils tokenUtils,
+        @Qualifier("playerRegistrationController") PlayerManualRegistrationService manualRegistrationService) {
+        return new PlayerBaseRegistrationController(tokenUtils, manualRegistrationService);
+    }
+
+    @Bean
+    public PlayerTokenUtils tokenUtils(
+        @Value("${clemble.registration.token.host}") String host,
+        @Value("${clemble.registration.token.maxAge}") int maxAge
+    ){
+        return new PlayerTokenUtils(host, maxAge);
     }
 }
