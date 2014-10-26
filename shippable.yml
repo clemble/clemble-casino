@@ -3,6 +3,7 @@ jdk:
     - oraclejdk8
 env:
   global:
+    - AWS_DEFAULT_REGION=us-east-1 AWS_STACK=fa8a954a-fc24-41bb-8c16-45b345934386
     # AWS_ACCESS_KEY_ID
     - secure: JJcW5jsdzeF5LwuZWXoCdXINYeZS2hBkflGwYshVsMtodYkN3UeoAug17w90UE1VvoAXdALeklLWa0TVngw68wVGZuO5ZxjCRyPnNhqjYGlToiS2NI/Iv8fVGg9f3zdKp5OtUYytKml60mIbluVgeaBekDArfjGv3R5rV7Ykmc1f++jYuiu4rfGKVswr1OIqvtXEe8a+gOKUZ8gAdSH9iDf8JTf/DMrLPMpVXMxkeAAbvcgVTNI2SMjO5TSVeTnBHOYU3kebAVa8aVcsmyqsu9OaamgmuxBeFc9lSWmW/5brfZIYLIawaiD2t5wWRz+cbNhP2uuBH4vbsYP7rI/bGA==
     # AWS_SECRET_ACCESS_KEY
