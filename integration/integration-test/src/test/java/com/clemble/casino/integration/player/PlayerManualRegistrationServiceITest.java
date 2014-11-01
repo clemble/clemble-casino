@@ -30,9 +30,9 @@ public class PlayerManualRegistrationServiceITest {
     @Test
     public void createAndLogin(){
         // Step 1. Generating player credential & profile
-        PlayerCredential credential = new PlayerCredential()
-            .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
-            .setPassword(RandomStringUtils.random(10));
+        PlayerCredential credential = new PlayerCredential(
+            RandomStringUtils.randomAlphabetic(10) + "@gmail.com",
+            RandomStringUtils.random(10));
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class)
                 .setBirthDate(new Date(0))
                 .setSocialConnections(null);
@@ -51,9 +51,9 @@ public class PlayerManualRegistrationServiceITest {
     public void createWithoutNick(){
         String nick = RandomStringUtils.randomAlphabetic(10);
         // Step 1. Generating player credential & profile
-        PlayerCredential credential = new PlayerCredential()
-            .setEmail(nick + "@gmail.com")
-            .setPassword(RandomStringUtils.random(10));
+        PlayerCredential credential = new PlayerCredential(
+            nick + "@gmail.com",
+            RandomStringUtils.random(10));
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class)
                 .setNickName(null)
                 .setBirthDate(new Date(0))

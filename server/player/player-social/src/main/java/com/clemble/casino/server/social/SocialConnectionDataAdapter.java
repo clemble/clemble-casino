@@ -17,8 +17,10 @@ import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.server.event.player.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.google.common.collect.ImmutableSet;
+import org.springframework.social.connect.web.SignInAdapter;
+import org.springframework.web.context.request.NativeWebRequest;
 
-public class SocialConnectionDataAdapter {
+public class SocialConnectionDataAdapter implements SignInAdapter {
 
     final private ConnectionFactoryLocator connectionFactoryLocator;
     final private UsersConnectionRepository usersConnectionRepository;
@@ -34,6 +36,11 @@ public class SocialConnectionDataAdapter {
         this.usersConnectionRepository = checkNotNull(usersConnectionRepository);
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
         this.systemNotificationService = checkNotNull(systemNotificationService);
+    }
+
+    @Override
+    public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
+        return register(connection.createData()).getPlayer();
     }
 
     public SocialConnection register(SocialAccessGrant accessGrant) {

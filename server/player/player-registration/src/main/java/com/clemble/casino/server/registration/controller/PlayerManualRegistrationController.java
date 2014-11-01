@@ -7,6 +7,7 @@ import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
+import com.clemble.casino.server.registration.ServerPlayerCredential;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.service.GravatarService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
@@ -25,7 +26,7 @@ import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.security.PlayerTokenFactory;
-import com.clemble.casino.server.registration.repository.PlayerCredentialRepository;
+import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
 import com.clemble.casino.WebMapping;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +39,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     final private PlayerTokenUtils tokenUtils;
     final private PlayerKeyGenerator playerKeyGenerator;
     final private PlayerTokenFactory playerTokenFactory;
-    final private PlayerCredentialRepository playerCredentialRepository;
+    final private ServerPlayerCredentialRepository playerCredentialRepository;
     final private SystemNotificationService notificationService;
     final private ClembleCasinoValidationService validationService;
     final private ClembleConsumerDetailsService consumerDetailsService;
@@ -48,7 +49,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         final PlayerTokenUtils tokenUtils,
         final PlayerKeyGenerator playerKeyGenerator,
         final PlayerTokenFactory playerTokenFactory,
-        final PlayerCredentialRepository playerCredentialRepository,
+        final ServerPlayerCredentialRepository playerCredentialRepository,
         final ClembleConsumerDetailsService playerIdentityRepository,
         final ClembleCasinoValidationService validationService,
         final SystemNotificationService notificationService) {
@@ -66,12 +67,12 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     public PlayerToken login(PlayerLoginRequest loginRequest) {
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
         // Step 1. Fetch saved player credentials
-        PlayerCredential fetchedCredentials = playerCredentialRepository.findByEmail(playerCredentials.getEmail());
+        ServerPlayerCredential fetchedCredentials = playerCredentialRepository.findByEmail(playerCredentials.getEmail());
         // Step 2. If there is no such credentials, than user is unregistered
         if (fetchedCredentials == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
         // Step 3. Compare passwords
-        if (!passwordEncoder.matches(playerCredentials.getPassword(), fetchedCredentials.getPassword()))
+        if (!passwordEncoder.matches(playerCredentials.getPassword(), fetchedCredentials.getHash()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
         // Step 4. Everything is fine, return Identity
         consumerDetailsService.save(loginRequest.getConsumerDetails());
@@ -87,11 +88,11 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     @Override
     public PlayerToken createPlayer(final PlayerRegistrationRequest registrationRequest) {
         // Step 1. Validating input data prior to any actions
-        PlayerToken playerIdentity = restoreUser(registrationRequest);
-        if (playerIdentity != null)
-            return playerIdentity;
         validationService.validate(registrationRequest.getPlayerCredential());
         validationService.validate(registrationRequest.getPlayerProfile());
+        // Step 1.1 Checking user not already exists
+        if (null != playerCredentialRepository.findByEmail(registrationRequest.getPlayerCredential().getEmail()))
+            return login(registrationRequest);
         // Step 2. Creating appropriate PlayerProfile
         String player = playerKeyGenerator.generate();
         // Step 3. Adding initial fields to PlayerProfile
@@ -120,34 +121,17 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         return tokenUtils.updateResponse(createPlayer(registrationRequest), response);
     }
 
-    private PlayerToken restoreUser(PlayerLoginRequest loginRequest) {
-        // Step 1. Checking request is valid
-        validationService.validate(loginRequest);
-        // Step 2. Checking this is a new user or an old one
-        PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
-        // Step 3. Fetch associated player credentials
-        PlayerCredential fetchedCredentials = playerCredentialRepository.findByEmail(playerCredentials.getEmail());
-        // Step 2. If there is such credentials, than user already registered
-        if (fetchedCredentials != null) {
-            // Step 2.1 If the password is the same, just return identity to the user
-            if (passwordEncoder.matches(playerCredentials.getPassword(), fetchedCredentials.getPassword())) {
-                return playerTokenFactory.create(fetchedCredentials.getPlayer(), loginRequest.getConsumerDetails());
-            } else {
-                // Step 2.2 If password does not match this is an error
-                throw ClembleCasinoException.fromError(ClembleCasinoError.EmailAlreadyRegistered);
-            }
-        }
-        return null;
-    }
-
     public PlayerToken register(final PlayerLoginRequest loginRequest, final String player) {
         validationService.validate(loginRequest);
         validationService.validate(loginRequest.getPlayerCredential());
         // Step 1. Create new credentials
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
-        playerCredentials.setPlayer(player);
-        playerCredentials.setPassword(passwordEncoder.encode(loginRequest.getPlayerCredential().getPassword()));
-        playerCredentials = playerCredentialRepository.save(playerCredentials);
+        ServerPlayerCredential serverPlayerCredential = new ServerPlayerCredential(
+            player,
+            playerCredentials.getEmail(),
+            passwordEncoder.encode(loginRequest.getPlayerCredential().getPassword())
+        );
+        serverPlayerCredential = playerCredentialRepository.save(serverPlayerCredential);
         // Step 2. Generating default image redirect
         String imageRedirect = GravatarService.toRedirect(playerCredentials.getEmail());
         notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));

@@ -62,7 +62,7 @@ public class PlayerOperationsITest {
                 setGender(PlayerGender.M).
                 setNickName("mavarazy");
 
-        PlayerCredential playerCredential = new PlayerCredential().setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com").setPassword("23443545");
+        PlayerCredential playerCredential = new PlayerCredential(RandomStringUtils.randomAlphabetic(10) + "@gmail.com", "23443545");
         ClembleConsumerDetails consumerDetails = ObjectGenerator.generate(ClembleConsumerDetails.class);
 
         PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(consumerDetails, playerCredential, profile);

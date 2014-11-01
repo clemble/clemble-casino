@@ -1,18 +1,12 @@
 package com.clemble.casino.server.registration.security;
 
-import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.PlayerBaseRegistrationRequest;
 import com.clemble.casino.registration.PlayerCredential;
-import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.registration.PlayerToken;
-import com.clemble.casino.security.ClembleConsumerDetails;
 import com.clemble.casino.server.registration.controller.PlayerBaseRegistrationController;
-import com.clemble.casino.server.registration.controller.PlayerManualRegistrationController;
-import com.clemble.casino.server.registration.repository.PlayerCredentialRepository;
-import com.clemble.casino.server.registration.spring.OAuthSpringConfiguration;
+import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
 import com.clemble.casino.server.registration.spring.RegistrationSpringConfiguration;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +25,7 @@ public class PlayerCredentialsTest {
     public PlayerBaseRegistrationController registrationController;
 
     @Autowired
-    public PlayerCredentialRepository credentialRepository;
+    public ServerPlayerCredentialRepository credentialRepository;
 
     @Test
     public void testPasswordHashed() {

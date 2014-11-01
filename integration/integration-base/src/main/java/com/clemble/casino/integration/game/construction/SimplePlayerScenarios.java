@@ -35,9 +35,9 @@ public class SimplePlayerScenarios implements PlayerScenarios {
 
     @Override
     public ClembleCasinoOperations createPlayer() {
-        PlayerCredential credential = new PlayerCredential()
-                .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
-                .setPassword(RandomStringUtils.randomAlphanumeric(10));
+        PlayerCredential credential = new PlayerCredential(
+            RandomStringUtils.randomAlphabetic(10) + "@gmail.com",
+            RandomStringUtils.randomAlphanumeric(10));
         PlayerProfile playerProfile = new PlayerProfile()
                 .setFirstName(RandomStringUtils.randomAlphabetic(10))
                 .setLastName(RandomStringUtils.randomAlphabetic(10))
@@ -47,26 +47,26 @@ public class SimplePlayerScenarios implements PlayerScenarios {
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerProfile playerProfile) {
-        PlayerCredential credential = new PlayerCredential()
-            .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
-            .setPassword( RandomStringUtils.randomAlphanumeric(10));
+        PlayerCredential credential = new PlayerCredential(
+            RandomStringUtils.randomAlphabetic(10) + "@gmail.com",
+            RandomStringUtils.randomAlphanumeric(10));
         return createPlayer(credential, playerProfile);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(SocialConnectionData socialConnectionData) {
-        PlayerCredential credential = new PlayerCredential()
-                .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
-                .setPassword(RandomStringUtils.randomAlphanumeric(10));
+        PlayerCredential credential = new PlayerCredential(
+            RandomStringUtils.randomAlphabetic(10) + "@gmail.com",
+            RandomStringUtils.randomAlphanumeric(10));
         return createSocialPlayer(credential, socialConnectionData);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(SocialAccessGrant socialConnectionData) {
         // Step 1. Generating random PlayerCredentials
-        PlayerCredential credential = new PlayerCredential()
-                .setEmail(RandomStringUtils.randomAlphabetic(10) + "@gmail.com")
-                .setPassword(RandomStringUtils.randomAlphanumeric(10));
+        PlayerCredential credential = new PlayerCredential(
+            RandomStringUtils.randomAlphabetic(10) + "@gmail.com",
+            RandomStringUtils.randomAlphanumeric(10));
         // Step 2. Create SocialPlayer profile
         return createSocialPlayer(credential, socialConnectionData);
     }

@@ -6,8 +6,9 @@ import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.server.key.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
+import com.clemble.casino.server.registration.ServerPlayerCredential;
 import com.clemble.casino.server.security.PlayerTokenFactory;
-import com.clemble.casino.server.registration.repository.PlayerCredentialRepository;
+import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.security.SimpleClembleConsumerDetailsService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
@@ -37,13 +38,13 @@ import java.security.NoSuchAlgorithmException;
 public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public PlayerKeyGenerator playerKeyGenerator(PlayerCredentialRepository credentialRepository) {
-        return new PlayerKeyGenerator(new SafeKeyFactory<PlayerCredential>(10, credentialRepository));
+    public PlayerKeyGenerator playerKeyGenerator(ServerPlayerCredentialRepository credentialRepository) {
+        return new PlayerKeyGenerator(new SafeKeyFactory<ServerPlayerCredential>(10, credentialRepository));
     }
 
     @Bean
-    public PlayerCredentialRepository playerCredentialRepository(MongoRepositoryFactory mongoRepositoryFactory) {
-        return mongoRepositoryFactory.getRepository(PlayerCredentialRepository.class);
+    public ServerPlayerCredentialRepository playerCredentialRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+        return mongoRepositoryFactory.getRepository(ServerPlayerCredentialRepository.class);
     }
 
     @Bean
@@ -61,7 +62,7 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
         PasswordEncoder passwordEncoder,
         PlayerTokenUtils tokenUtils,
         @Qualifier("playerKeyGenerator") PlayerKeyGenerator playerKeyGenerator,
-        PlayerCredentialRepository playerCredentialRepository,
+        ServerPlayerCredentialRepository playerCredentialRepository,
         ClembleConsumerDetailsService clembleConsumerDetailsService,
         ClembleCasinoValidationService clembleValidationService,
         PlayerTokenFactory playerTokenFactory,

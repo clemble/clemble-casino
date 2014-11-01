@@ -31,33 +31,32 @@ public class PlayerRegistrationValidationITest {
     @Test
     public void testInvalidEmail() {
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.EmailInvalid));
-        playerScenarios.createPlayer(new PlayerCredential().setEmail(ObjectGenerator.generate(String.class) + "test_gmail.com").setPassword("aVsdsvdee!"), ObjectGenerator.generate(PlayerProfile.class));
+        playerScenarios.createPlayer(new PlayerCredential(ObjectGenerator.generate(String.class) + "test_gmail.com", "aVsdsvdee!"), ObjectGenerator.generate(PlayerProfile.class));
     }
 
     @Test
     public void testInvalidPasswordTooShort() {
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PasswordTooShort));
-        playerScenarios.createPlayer(new PlayerCredential().setEmail("test@gmail.com").setPassword("a"), ObjectGenerator.generate(PlayerProfile.class));
+        playerScenarios.createPlayer(new PlayerCredential("test@gmail.com", "a"), ObjectGenerator.generate(PlayerProfile.class));
     }
 
     @Test
     public void testInvalidPasswordTooLong() {
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PasswordTooLong));
         playerScenarios.createPlayer(
-                new PlayerCredential().setEmail("test@gmail.com").setPassword(
-                        "12345678901234567890123456789012345678901234567890123456789012345678901234567890"), ObjectGenerator.generate(PlayerProfile.class));
+                new PlayerCredential("test@gmail.com", "12345678901234567890123456789012345678901234567890123456789012345678901234567890"), ObjectGenerator.generate(PlayerProfile.class));
     }
 
     @Test
     public void testInvalidPasswordTooWeak() {
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PasswordTooWeak, ClembleCasinoError.PasswordTooShort));
-        playerScenarios.createPlayer(new PlayerCredential().setEmail("test@gmail.com").setPassword("123456"), ObjectGenerator.generate(PlayerProfile.class));
+        playerScenarios.createPlayer(new PlayerCredential("test@gmail.com", "123456"), ObjectGenerator.generate(PlayerProfile.class));
     }
 
     @Test
     public void testInvalidPasswordMissing() {
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PasswordMissingCode, ClembleCasinoError.PasswordTooWeak));
-        playerScenarios.createPlayer(new PlayerCredential().setEmail("test@gmail.com"), ObjectGenerator.generate(PlayerProfile.class));
+        playerScenarios.createPlayer(new PlayerCredential("test@gmail.com", null), ObjectGenerator.generate(PlayerProfile.class));
     }
 
 }

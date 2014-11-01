@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
+import org.springframework.social.connect.web.ProviderSignInController;
+import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
@@ -135,6 +138,14 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 //        JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
 //        repository.setConnectionSignUp(connectionSignUp);
         return repository;
+    }
+
+    @Bean
+    public ProviderSignInController providerSignInController(
+        ConnectionFactoryLocator factoryLocator,
+        UsersConnectionRepository usersConnectionRepository,
+        SignInAdapter signInAdapter){
+        return new ProviderSignInController(factoryLocator, usersConnectionRepository, signInAdapter);
     }
 
 }
