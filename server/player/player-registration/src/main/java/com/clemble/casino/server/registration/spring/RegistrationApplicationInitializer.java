@@ -14,7 +14,7 @@ import javax.servlet.ServletRegistration;
 public class RegistrationApplicationInitializer extends AbstractWebApplicationInitializer {
 
     public RegistrationApplicationInitializer() {
-        super(RegistrationWebSpringConfiguration.class);
+        super(RegistrationSpringConfiguration.class);
     }
 
 }

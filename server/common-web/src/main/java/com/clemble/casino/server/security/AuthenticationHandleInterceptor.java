@@ -1,5 +1,7 @@
 package com.clemble.casino.server.security;
 
+import com.clemble.casino.registration.RegistrationWebMapping;
+import com.clemble.casino.social.SocialWebMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,7 +22,13 @@ public class AuthenticationHandleInterceptor implements HandlerInterceptor {
             for(Cookie cookie: request.getCookies())
                 if(cookie.getName().equals("player"))
                     return true;
-        // Step 2. Sending 401 Response
+        // Step 2. Checking this is not one of registration URL's
+        String uri = request.getRequestURI();
+        if (uri.startsWith(RegistrationWebMapping.REGISTRATION_BASE) ||
+            uri.startsWith(SocialWebMapping.SOCIAL_REGISTRATION_BASE) ||
+            uri.startsWith(SocialWebMapping.SOCIAL_SIGN_IN_BASE))
+            return true;
+        // Step 3. Sending 401 Response
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.flushBuffer();
         return false;

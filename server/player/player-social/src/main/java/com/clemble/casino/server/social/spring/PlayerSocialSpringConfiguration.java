@@ -141,6 +141,7 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    // If changing don't forget to change AuthenticationHandleInterceptor to filter out request for signin
     public ProviderSignInController providerSignInController(
         ConnectionFactoryLocator factoryLocator,
         UsersConnectionRepository usersConnectionRepository,
