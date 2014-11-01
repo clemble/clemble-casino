@@ -11,6 +11,7 @@ import com.clemble.casino.server.registration.security.ClembleConsumerDetailsSer
 import com.clemble.casino.server.registration.service.GravatarService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PlayerManualRegistrationController implements PlayerManualRegistrationService, ExternalController {
     // !!!TODO need a safe restoration process for all Registrations not only for login!!!
 
+    final private PasswordEncoder passwordEncoder;
     final private PlayerTokenUtils tokenUtils;
     final private PlayerKeyGenerator playerKeyGenerator;
     final private PlayerTokenFactory playerTokenFactory;
@@ -42,6 +44,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     final private ClembleConsumerDetailsService consumerDetailsService;
 
     public PlayerManualRegistrationController(
+        final PasswordEncoder passwordEncoder,
         final PlayerTokenUtils tokenUtils,
         final PlayerKeyGenerator playerKeyGenerator,
         final PlayerTokenFactory playerTokenFactory,
@@ -52,6 +55,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         this.tokenUtils = checkNotNull(tokenUtils);
         this.playerKeyGenerator = checkNotNull(playerKeyGenerator);
         this.playerTokenFactory = checkNotNull(playerTokenFactory);
+        this.passwordEncoder = passwordEncoder;
         this.playerCredentialRepository = checkNotNull(playerCredentialRepository);
         this.consumerDetailsService = checkNotNull(playerIdentityRepository);
         this.validationService = checkNotNull(validationService);
@@ -67,7 +71,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         if (fetchedCredentials == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
         // Step 3. Compare passwords
-        if (!fetchedCredentials.getPassword().equals(playerCredentials.getPassword()))
+        if (!passwordEncoder.matches(playerCredentials.getPassword(), fetchedCredentials.getPassword()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
         // Step 4. Everything is fine, return Identity
         consumerDetailsService.save(loginRequest.getConsumerDetails());
@@ -88,7 +92,6 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
             return playerIdentity;
         validationService.validate(registrationRequest.getPlayerCredential());
         validationService.validate(registrationRequest.getPlayerProfile());
-        validationService.validate(registrationRequest.getConsumerDetails());
         // Step 2. Creating appropriate PlayerProfile
         String player = playerKeyGenerator.generate();
         // Step 3. Adding initial fields to PlayerProfile
@@ -127,7 +130,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         // Step 2. If there is such credentials, than user already registered
         if (fetchedCredentials != null) {
             // Step 2.1 If the password is the same, just return identity to the user
-            if (playerCredentials.getPassword().equals(fetchedCredentials.getPassword())) {
+            if (passwordEncoder.matches(playerCredentials.getPassword(), fetchedCredentials.getPassword())) {
                 return playerTokenFactory.create(fetchedCredentials.getPlayer(), loginRequest.getConsumerDetails());
             } else {
                 // Step 2.2 If password does not match this is an error
@@ -140,13 +143,15 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     public PlayerToken register(final PlayerLoginRequest loginRequest, final String player) {
         validationService.validate(loginRequest);
         validationService.validate(loginRequest.getPlayerCredential());
-        validationService.validate(loginRequest.getConsumerDetails());
         // Step 1. Create new credentials
-        PlayerCredential playerCredentials = loginRequest.getPlayerCredential().setPlayer(player);
+        PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
+        playerCredentials.setPlayer(player);
+        playerCredentials.setPassword(passwordEncoder.encode(loginRequest.getPlayerCredential().getPassword()));
         playerCredentials = playerCredentialRepository.save(playerCredentials);
+        // Step 2. Generating default image redirect
         String imageRedirect = GravatarService.toRedirect(playerCredentials.getEmail());
         notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));
-        // Step 2. Specifying player type
+        // Step 2.1 Specifying player type
         // TODO move to registration listener playerProfile.setType(PlayerType.free);
         // Step 3. Create new token
         PlayerToken playerToken = playerTokenFactory.create(player, loginRequest.getConsumerDetails());

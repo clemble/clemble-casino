@@ -24,6 +24,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -50,15 +52,21 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public PlayerManualRegistrationController playerRegistrationController(
-            PlayerTokenUtils tokenUtils,
-            @Qualifier("playerKeyGenerator") PlayerKeyGenerator playerKeyGenerator,
-            PlayerCredentialRepository playerCredentialRepository,
-            ClembleConsumerDetailsService clembleConsumerDetailsService,
-            ClembleCasinoValidationService clembleValidationService,
-            PlayerTokenFactory playerTokenFactory,
-            SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
-        return new PlayerManualRegistrationController(tokenUtils, playerKeyGenerator, playerTokenFactory, playerCredentialRepository,
+        PasswordEncoder passwordEncoder,
+        PlayerTokenUtils tokenUtils,
+        @Qualifier("playerKeyGenerator") PlayerKeyGenerator playerKeyGenerator,
+        PlayerCredentialRepository playerCredentialRepository,
+        ClembleConsumerDetailsService clembleConsumerDetailsService,
+        ClembleCasinoValidationService clembleValidationService,
+        PlayerTokenFactory playerTokenFactory,
+        SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
+        return new PlayerManualRegistrationController(passwordEncoder, tokenUtils, playerKeyGenerator, playerTokenFactory, playerCredentialRepository,
                 clembleConsumerDetailsService, clembleValidationService, systemNotificationService);
     }
 
