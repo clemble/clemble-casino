@@ -6,6 +6,7 @@ import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.social.controller.PlayerSocialRegistrationController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,8 +33,10 @@ import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
 import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 
+import javax.annotation.PostConstruct;
+
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, PlayerTokenSpringConfiguration.class})
+@Import(value = { CommonSpringConfiguration.class, PlayerTokenSpringConfiguration.class, PlayerSocialSpringConfiguration.SocialTunerSpringConfigurion.class})
 public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -148,8 +151,23 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         UsersConnectionRepository usersConnectionRepository,
         SignInAdapter signInAdapter){
         ProviderSignInController signInController = new ProviderSignInController(factoryLocator, usersConnectionRepository, signInAdapter);
-        signInController.setApplicationUrl("http://api" + host);
         return signInController;
+    }
+
+    @Configuration
+    public static class SocialTunerSpringConfigurion implements SpringConfiguration {
+
+        @Value("${clemble.registration.token.host}")
+        public String host;
+
+        @Autowired
+        public ProviderSignInController signInController;
+
+        @PostConstruct
+        public void initialize() {
+            signInController.setApplicationUrl("http://api" + host);
+        }
+
     }
 
 }
