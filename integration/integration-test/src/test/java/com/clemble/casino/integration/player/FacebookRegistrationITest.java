@@ -41,8 +41,8 @@ import com.jayway.facebooktestjavaapi.testuser.FacebookTestUserAccount;
 import com.jayway.facebooktestjavaapi.testuser.FacebookTestUserStore;
 import com.jayway.facebooktestjavaapi.testuser.impl.HttpClientFacebookTestUserStore;
 
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
+@Ignore
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class FacebookRegistrationITest {

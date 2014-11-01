@@ -9,6 +9,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.WebMapping;
 import org.springframework.social.connect.ConnectionKey;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +35,9 @@ public class PlayerConnectionNetworkPopulateListener implements SystemEventListe
     public void onEvent(SystemPlayerConnectionsFetchedEvent event) {
         // Step 1. Finding appropriate PlayerConnections
         PlayerConnections playerConnections = connectionService.getConnections(event.getPlayer());
+        if (playerConnections == null) {
+            playerConnections = connectionService.save(new PlayerConnections(event.getPlayer(), Collections.emptySet(), Collections.emptySet()));
+        }
         // Step 2. Adding owned Connections
         Set<ConnectionKey> owned = new HashSet<>(playerConnections.getOwned());
         owned.add(event.getConnection());

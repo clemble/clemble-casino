@@ -49,7 +49,7 @@ public class ServerProfileSocialRegistrationService implements ServerService {
     private PlayerProfile fetchPlayerProfile(SocialConnection socialConnection) {
         // Step 1. Fetching player profile
         SocialConnectionAdapter adapter = socialAdapterRegistry.getSocialAdapter(socialConnection.getConnection().getKey().getProviderId());
-        PlayerProfile playerProfile = adapter.fetchPlayerProfile(socialConnection.getConnection());
+        PlayerProfile playerProfile = adapter.fetchPlayerProfile(socialConnection.getConnection().getApi());
         playerProfile.setPlayer(socialConnection.getPlayer());
         // Step 2. Notifying of added social connection
         notificationService.send(new SystemPlayerSocialAddedEvent(socialConnection.getPlayer(), socialConnection.getConnection().getKey()));

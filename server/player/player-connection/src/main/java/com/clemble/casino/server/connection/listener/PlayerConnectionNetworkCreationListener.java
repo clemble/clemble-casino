@@ -22,6 +22,9 @@ public class PlayerConnectionNetworkCreationListener implements SystemEventListe
 
     @Override
     public void onEvent(SystemPlayerCreatedEvent event) {
+        // Step 0. Check Connection was not yet created
+        if (socialNetworkRepository.getConnections(event.getPlayer()) != null)
+            return;
         // Step 1. Generating player connections
         PlayerConnections connections = new PlayerConnections(event.getPlayer(), new HashSet<ConnectionKey>(), new HashSet<ConnectionKey>());
         // Step 2. Saving connections
