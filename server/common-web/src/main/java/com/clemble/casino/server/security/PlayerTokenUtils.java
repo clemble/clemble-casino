@@ -4,6 +4,8 @@ import com.clemble.casino.registration.PlayerToken;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,12 +22,15 @@ public class PlayerTokenUtils {
     }
 
     public void updateResponse(String player, HttpServletResponse response) {
-        Cookie cookie = new Cookie("player", player);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        // TODO figure out a better way
-        cookie.setDomain(domain);
-        cookie.setMaxAge(maxAge);
-        response.addCookie(cookie);
+        try {
+            Cookie cookie = new Cookie("player", URLEncoder.encode(player, "UTF-8"));
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setDomain(domain);
+            cookie.setMaxAge(maxAge);
+            response.addCookie(cookie);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
