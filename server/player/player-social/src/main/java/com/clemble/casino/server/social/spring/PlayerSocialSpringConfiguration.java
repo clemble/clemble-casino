@@ -1,7 +1,8 @@
 package com.clemble.casino.server.social.spring;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
-import com.clemble.casino.server.social.ServerProfileSocialRegistrationService;
+import com.clemble.casino.server.security.PlayerTokenUtils;
+import com.clemble.casino.server.social.*;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
@@ -24,10 +25,6 @@ import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
-import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
-import com.clemble.casino.server.social.SocialConnectionDataAdapter;
-import com.clemble.casino.server.social.SocialNetworkPopulatorEventListener;
-import com.clemble.casino.server.social.PlayerSocialKeyGenerator;
 import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
 import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
@@ -144,6 +141,14 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public SocialSignInAdapter socialSignInAdapter(
+        @Value("${clemble.registration.token.host}") String host,
+        PlayerTokenUtils tokenUtils,
+        SocialConnectionDataAdapter connectionDataAdapter){
+        return new SocialSignInAdapter("http://" + host.substring(1), tokenUtils, connectionDataAdapter);
+    }
+
+    @Bean
     // If changing don't forget to change AuthenticationHandleInterceptor to filter out request for signin
     public ProviderSignInController providerSignInController(
         @Value("${clemble.registration.token.host}") String host,
@@ -152,6 +157,14 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         SignInAdapter signInAdapter){
         ProviderSignInController signInController = new ProviderSignInController(factoryLocator, usersConnectionRepository, signInAdapter);
         return signInController;
+    }
+
+    @Bean
+    public PlayerTokenUtils tokenUtils(
+        @Value("${clemble.registration.token.host}") String host,
+        @Value("${clemble.registration.token.maxAge}") int maxAge
+    ){
+        return new PlayerTokenUtils(host, maxAge);
     }
 
     @Configuration

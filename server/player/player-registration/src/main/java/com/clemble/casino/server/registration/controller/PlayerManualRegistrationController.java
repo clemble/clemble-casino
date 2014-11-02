@@ -82,7 +82,9 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public PlayerToken httpLogin(@RequestBody PlayerLoginRequest loginRequest, HttpServletResponse response) {
-        return tokenUtils.updateResponse(login(loginRequest), response);
+        PlayerToken token = login(loginRequest);
+        tokenUtils.updateResponse(token.getPlayer(), response);
+        return token;
     }
 
     @Override
@@ -118,7 +120,9 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public PlayerToken httpCreatePlayer(@RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
-        return tokenUtils.updateResponse(createPlayer(registrationRequest), response);
+        PlayerToken token = createPlayer(registrationRequest);
+        tokenUtils.updateResponse(createPlayer(registrationRequest).getPlayer(), response);
+        return token;
     }
 
     public PlayerToken register(final PlayerLoginRequest loginRequest, final String player) {

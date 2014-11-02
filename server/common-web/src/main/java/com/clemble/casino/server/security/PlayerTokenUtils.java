@@ -19,14 +19,13 @@ public class PlayerTokenUtils {
         this.maxAge = maxAge;
     }
 
-    public PlayerToken updateResponse(PlayerToken token, HttpServletResponse response) {
-        Cookie cookie = new Cookie("player", token.getPlayer());
+    public void updateResponse(String player, HttpServletResponse response) {
+        Cookie cookie = new Cookie("player", player);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         // TODO figure out a better way
         cookie.setDomain(domain);
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
-        return token;
     }
 }

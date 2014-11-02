@@ -20,7 +20,9 @@ import com.google.common.collect.ImmutableSet;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
 
-public class SocialConnectionDataAdapter implements SignInAdapter {
+import javax.servlet.http.HttpServletResponse;
+
+public class SocialConnectionDataAdapter {
 
     final private ConnectionFactoryLocator connectionFactoryLocator;
     final private UsersConnectionRepository usersConnectionRepository;
@@ -36,11 +38,6 @@ public class SocialConnectionDataAdapter implements SignInAdapter {
         this.usersConnectionRepository = checkNotNull(usersConnectionRepository);
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
         this.systemNotificationService = checkNotNull(systemNotificationService);
-    }
-
-    @Override
-    public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
-        return register(connection.createData()).getPlayer();
     }
 
     public SocialConnection register(SocialAccessGrant accessGrant) {
@@ -63,7 +60,7 @@ public class SocialConnectionDataAdapter implements SignInAdapter {
         return register(connectionData);
     }
 
-    private SocialConnection register(ConnectionData connectionData) {
+    public SocialConnection register(ConnectionData connectionData) {
         SocialConnection socialConnection = null;
         // Step 1. Checking if user already exists
         Set<String> existingUsers = usersConnectionRepository.findUserIdsConnectedTo(connectionData.getProviderId(), ImmutableSet.<String> of(connectionData.getProviderUserId()));

@@ -41,7 +41,8 @@ public class PlayerBaseRegistrationController implements PlayerBaseRegistrationS
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_BASIC_LOGIN, produces = WebMapping.PRODUCES)
     public PlayerToken httpLogin(@RequestBody PlayerCredential credentials, HttpServletResponse response) {
         PlayerToken token = login(credentials);
-        return tokenUtils.updateResponse(token, response);
+        tokenUtils.updateResponse(token.getPlayer(), response);
+        return token;
     }
 
     @Override
@@ -52,7 +53,8 @@ public class PlayerBaseRegistrationController implements PlayerBaseRegistrationS
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_BASIC_PROFILE, produces = WebMapping.PRODUCES)
     public PlayerToken httpRegister(@RequestBody PlayerBaseRegistrationRequest registrationRequest, HttpServletResponse response) {
         PlayerToken token = register(registrationRequest);
-        return tokenUtils.updateResponse(token, response);
+        tokenUtils.updateResponse(token.getPlayer(), response);
+        return token;
     }
 
 }
