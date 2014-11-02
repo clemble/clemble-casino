@@ -17,7 +17,7 @@ import com.clemble.casino.player.service.PlayerSessionServiceContract;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.presence.repository.PlayerSessionRepository;
 
-@Controller
+@RestController
 public class PlayerSessionServiceController implements PlayerSessionServiceContract, ExternalController {
 
     final private PlayerSessionRepository sessionRepository;
@@ -35,8 +35,7 @@ public class PlayerSessionServiceController implements PlayerSessionServiceContr
 
     @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody
-    PlayerSession create(@CookieValue("player") String playerId) {
+    public PlayerSession create(@CookieValue("player") String playerId) {
         // Step 1. Generated player session
         PlayerSession playerSession = new PlayerSession().setPlayer(playerId);
         // Step 2. Providing result as a Session data
@@ -48,8 +47,7 @@ public class PlayerSessionServiceController implements PlayerSessionServiceContr
 
     @RequestMapping(method = RequestMethod.POST, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public @ResponseBody
-    PlayerSession refreshPlayerSession(@CookieValue("player") String playerId, @PathVariable("sessionId") String sessionId) {
+    public PlayerSession refreshPlayerSession(@CookieValue("player") String playerId, @PathVariable("sessionId") String sessionId) {
         // Step 1. Fetching session
         PlayerSession playerSession = getPlayerSession(playerId, sessionId);
         // Step 2. Sanity check
@@ -63,7 +61,7 @@ public class PlayerSessionServiceController implements PlayerSessionServiceContr
 
     @RequestMapping(method = RequestMethod.DELETE, value = PRESENCE_SESSIONS_PLAYER_SESSION)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody void endPlayerSession(@CookieValue("player") String player, @PathVariable("sessionId") String sessionId) {
+    public void endPlayerSession(@CookieValue("player") String player, @PathVariable("sessionId") String sessionId) {
         // Step 1. Fetching player session
         PlayerSession playerSession = getPlayerSession(player, sessionId);
         if (playerSession.expired())
@@ -78,8 +76,7 @@ public class PlayerSessionServiceController implements PlayerSessionServiceContr
 
     @RequestMapping(method = RequestMethod.GET, value = PRESENCE_SESSIONS_PLAYER_SESSION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody
-    PlayerSession getPlayerSession(@CookieValue("player") String playerId, @PathVariable("sessionId") String sessionId) {
+    public PlayerSession getPlayerSession(@CookieValue("player") String playerId, @PathVariable("sessionId") String sessionId) {
         // Step 2. Reading specific session
         PlayerSession playerSession = sessionRepository.findOne(sessionId);
         if (!playerSession.getPlayer().equals(playerId))
