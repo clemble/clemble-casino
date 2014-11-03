@@ -6,6 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import com.clemble.casino.integration.game.RoundGamePlayer;
+import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
 import com.clemble.casino.payment.event.PaymentBonusEvent;
@@ -99,6 +100,18 @@ public class PlayerAccountOperationsITest {
         final ClembleCasinoOperations A = playerOperations.createPlayer();
         final ClembleCasinoOperations B = playerOperations.createPlayer();
 
+        AsyncCompletionUtils.equals(new Get<Money>() {
+            @Override
+            public Money get() {
+                return A.accountService().myAccount().getMoney(Currency.FakeMoney);
+            }
+        }, new Get<Money>() {
+            @Override
+            public Money get() {
+                return B.accountService().myAccount().getMoney(Currency.FakeMoney);
+            }
+        });
+
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GameConstructionInsufficientMoney));
 
         do {
@@ -114,18 +127,31 @@ public class PlayerAccountOperationsITest {
             AvsB.waitForStart();
             BvsA.waitForStart();
 
-            AvsB.giveUp();
+            AvsB.perform(new SelectNumberAction(3));
+            BvsA.perform(new SelectNumberAction(4));
 
-            AsyncCompletionUtils.check(new Check(){
+            BvsA.syncWith(AvsB);
+
+            assertFalse(BvsA.isAlive());
+            assertFalse(AvsB.isAlive());
+
+            final Money price = AvsB.getConfiguration().getPrice();
+
+            AsyncCompletionUtils.equals(new Get<Money>() {
                 @Override
-                public boolean check() {
-                    return cashAbefore.add(-50).equals(A.accountService().myAccount().getMoney(Currency.FakeMoney));
+                public Money get() {
+                    return cashAbefore.add(price.negate());
                 }
-            }, 5_000);
+            }, new Get<Money>() {
+                @Override
+                public Money get() {
+                    return A.accountService().myAccount().getMoney(Currency.FakeMoney);
+                }
+            });
             AsyncCompletionUtils.check(new Check(){
                 @Override
                 public boolean check() {
-                    return cashBbefore.add(+50).equals(B.accountService().myAccount().getMoney(Currency.FakeMoney));
+                    return cashBbefore.add(price).equals(B.accountService().myAccount().getMoney(Currency.FakeMoney));
                 }
             }, 5_000);
         } while (true);

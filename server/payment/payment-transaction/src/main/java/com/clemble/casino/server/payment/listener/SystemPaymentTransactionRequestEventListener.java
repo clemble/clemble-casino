@@ -57,12 +57,14 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onEvent(SystemPaymentTransactionRequestEvent event) {
         PaymentTransaction paymentTransaction = event.getTransaction();
+        LOG.debug("{} start", paymentTransaction.getTransactionKey());
         // Step 1. Sanity check
         if (paymentTransaction == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionEmpty, PlayerAware.DEFAULT_PLAYER, event.getTransaction().getTransactionKey());
         // Step 2. Processing payment transactions
         validationService.validate(paymentTransaction);
         processTransaction(paymentTransaction);
+        LOG.debug("{} finish", paymentTransaction.getTransactionKey());
     }
 
     private PaymentTransaction processTransaction(PaymentTransaction paymentTransaction) {

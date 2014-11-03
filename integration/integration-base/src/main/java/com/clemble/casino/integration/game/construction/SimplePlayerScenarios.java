@@ -121,13 +121,13 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             public boolean check() {
                 return player.paymentOperations().getTransaction(registrationTransaction) != null;
             }
-        }, 15_000, 1_000);
+        }, 15_000);
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
                 return player.paymentOperations().myTransactions(PaymentBonusSource.dailybonus).size() > 0;
             }
-        }, 15_000, 1_000);
+        }, 15_000);
         // Step 3. Getting PaymentTransaction
         AsyncCompletionUtils.get(new Get<PlayerProfile>() {
             @Override
@@ -141,7 +141,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             public PlayerConnections get() {
                 return player.connectionOperations().myConnections();
             }
-        }, 15_000, 1_000);
+        }, 15_000);
         return player;
     }
 }
