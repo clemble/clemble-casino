@@ -37,7 +37,6 @@ import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent
 import com.clemble.casino.server.event.player.SystemPlayerSocialGrantRegisteredEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.common.collect.ImmutableList;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -228,7 +227,7 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
             GiveUpRule.all,
             new MoveTimeRule(2000, LooseBreachPunishment.getInstance()),
             new TotalTimeRule(4000, LooseBreachPunishment.getInstance()),
-            PrivacyRule.everybody,
+            PrivacyRule.world,
             PlayerNumberRule.two,
             VisibilityRule.visible,
             DrawRule.owned,
@@ -243,7 +242,7 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
             Game.pot,
             "pot",
             Money.create(Currency.FakeMoney, 200),
-            PrivacyRule.everybody,
+            PrivacyRule.world,
             PlayerNumberRule.two,
             MatchFillRule.none,
             new MoveTimeRule(50000, LooseBreachPunishment.getInstance()),

@@ -52,7 +52,7 @@ public class GoalRecordITest {
         new GoalPartsRule(1),
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
-        PrivacyRule.players,
+        PrivacyRule.me,
         new GoalStartRule(1)
     );
 

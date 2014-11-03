@@ -247,7 +247,7 @@ public class IntegrationObjectTest {
         register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
             @Override
             public TournamentGameConfiguration generate() {
-                return new TournamentGameConfiguration(Game.pic, "AAA", new Money(Currency.FakeMoney, 50), PrivacyRule.players, PlayerNumberRule.two, RoundGameConfiguration.DEFAULT, null, null, null, null, null);
+                return new TournamentGameConfiguration(Game.pic, "AAA", new Money(Currency.FakeMoney, 50), PrivacyRule.me, PlayerNumberRule.two, RoundGameConfiguration.DEFAULT, null, null, null, null, null);
             }
         });
 

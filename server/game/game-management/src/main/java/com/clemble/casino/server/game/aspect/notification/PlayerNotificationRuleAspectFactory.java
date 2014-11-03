@@ -8,12 +8,10 @@ import org.springframework.core.Ordered;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.game.aspect.GameAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
 public class PlayerNotificationRuleAspectFactory implements GenericGameAspectFactory<GameManagementEvent> {
@@ -27,9 +25,9 @@ public class PlayerNotificationRuleAspectFactory implements GenericGameAspectFac
     @Override
     public GameAspect<GameManagementEvent> construct(GameConfiguration configuration, GameState state) {
         switch (configuration.getPrivacyRule()) {
-            case everybody:
+            case world:
                 return new PublicNotificationRuleAspect(state.getContext().getSessionKey(), PlayerAwareUtils.toPlayerList(state.getContext().getPlayerContexts()), notificationService);
-            case players:
+            case me:
                 return new PrivateNotificationRuleAspect(PlayerAwareUtils.toPlayerList(state.getContext().getPlayerContexts()), notificationService);
             default:
                 throw ClembleCasinoException.withKey(ClembleCasinoError.GameSpecificationInvalid, state.getContext().getSessionKey());
