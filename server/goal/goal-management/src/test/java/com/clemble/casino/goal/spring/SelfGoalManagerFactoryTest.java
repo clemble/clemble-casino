@@ -21,7 +21,6 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -57,7 +56,7 @@ public class SelfGoalManagerFactoryTest {
         new GoalPartsRule(1),
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
-        PrivacyRule.players,
+        PrivacyRule.me,
         new GoalStartRule(1)
     );
 

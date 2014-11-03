@@ -7,6 +7,7 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.parts.GoalPartsRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
+import com.clemble.casino.lifecycle.configuration.rule.bet.ForbiddenBetRule;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
@@ -36,25 +37,25 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
     // TODO replace with SMART configurations
     final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
         new GoalConfiguration(
-            "basic",
+            "solo",
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
-            LimitedBetRule.create(5, 50),
+            ForbiddenBetRule.INSTANCE,
             new JudgeRule("me", JudgeType.self),
             new GoalPartsRule(1),
-            new MoveTimeRule(TimeUnit.MINUTES.toMillis(10), LooseBreachPunishment.getInstance()),
-            new TotalTimeRule(TimeUnit.MINUTES.toMillis(20), LooseBreachPunishment.getInstance()),
-            PrivacyRule.players,
+            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
+            new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
+            PrivacyRule.me,
             new GoalStartRule(60000)
         ),
         new GoalConfiguration(
-            "advanced",
-            new Bid(Money.create(Currency.FakeMoney, 5000), Money.create(Currency.FakeMoney, 5000)),
+            "team",
+            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
             LimitedBetRule.create(5, 50),
             new JudgeRule("me", JudgeType.self),
             new GoalPartsRule(1),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
-            PrivacyRule.players,
+            PrivacyRule.world,
             new GoalStartRule(60000)
         )
     );

@@ -60,7 +60,7 @@ public class MatchGameConstructionITest {
         configurations.add(configuration);
         configurations.add(configuration);
 
-        MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(Game.pot, "pot", Money.create(Currency.FakeMoney, 200), PrivacyRule.everybody, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, LooseBreachPunishment.getInstance()), new TotalTimeRule(500000, LooseBreachPunishment.getInstance()), WonRule.owned, DrawRule.owned, configurations, null);
+        MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(Game.pot, "pot", Money.create(Currency.FakeMoney, 200), PrivacyRule.world, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, LooseBreachPunishment.getInstance()), new TotalTimeRule(500000, LooseBreachPunishment.getInstance()), WonRule.owned, DrawRule.owned, configurations, null);
 
         System.out.println(objectMapper.writeValueAsString(matchConfiguration));
     }
