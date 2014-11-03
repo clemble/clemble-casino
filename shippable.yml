@@ -21,4 +21,4 @@ before_script:
   - cp ./config/*.properties ~/clemble/config/
 
 after_success:
-   - if [ "$BRANCH" == "master" ]; then ./scripts/deploy.sh; fi
+   - if [ "$BRANCH" == "master" ]; then ./schippable/deploy.sh; fi
