@@ -37,7 +37,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
     // TODO replace with SMART configurations
     final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
         new GoalConfiguration(
-            "solo",
+            "Solo",
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
             ForbiddenBetRule.INSTANCE,
             new JudgeRule("me", JudgeType.self),
@@ -48,8 +48,19 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new GoalStartRule(60000)
         ),
         new GoalConfiguration(
-            "team",
+            "Friends",
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
+            LimitedBetRule.create(5, 50),
+            new JudgeRule("me", JudgeType.self),
+            new GoalPartsRule(1),
+            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
+            new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
+            PrivacyRule.friends,
+            new GoalStartRule(60000)
+        ),
+        new GoalConfiguration(
+            "World",
+            new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
             LimitedBetRule.create(5, 50),
             new JudgeRule("me", JudgeType.self),
             new GoalPartsRule(1),
