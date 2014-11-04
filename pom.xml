@@ -38,7 +38,7 @@
         <spring-data-common.version>1.9.0.RELEASE</spring-data-common.version>
         <spring-data-jpa.version>1.7.0.RELEASE</spring-data-jpa.version>
         <spring-data-rest.version>1.0.0.RELEASE</spring-data-rest.version>
-        <spring-data-couchbase.version>1.2.0.RELEASE</spring-data-couchbase.version>
+        <spring-data-couchbase.version>1.2.1.RELEASE</spring-data-couchbase.version>
         <spring-data-redis.version>1.4.0.RELEASE</spring-data-redis.version>
         <sprind-data-neo4j.version>3.2.0.RELEASE</sprind-data-neo4j.version>
         <redis.clients.version>2.6.0</redis.clients.version>
@@ -114,13 +114,6 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-
-        <repository>
-            <id>mavarazy.gihub.io</id>
-            <name>Personal Repo</name>
-            <url>https://github.com/mavarazy/maven/releases/</url>
-        </repository>
-
         <repository>
             <id>spring.social.google</id>
             <name>Spring Social Google</name>
