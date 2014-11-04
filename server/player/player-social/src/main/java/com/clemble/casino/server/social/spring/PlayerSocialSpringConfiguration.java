@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionSignUp;
@@ -134,22 +135,17 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public MongoConnectionTransformers mongoConnectionTransformers(ConnectionFactoryRegistry connectionFactoryLocator) {
+        return new MongoConnectionTransformers(connectionFactoryLocator, Encryptors.noOpText());
+    }
+
+    @Bean
     public UsersConnectionRepository usersConnectionRepository(
 //            @Qualifier("dataSource") DataSource dataSource,
             MongoOperations mongoOperations,
+            MongoConnectionTransformers connectionTransformers,
             ConnectionSignUp connectionSignUp,
             ConnectionFactoryRegistry connectionFactoryLocator) {
-        MongoConnectionTransformers connectionTransformers = new MongoConnectionTransformers(connectionFactoryLocator, new TextEncryptor() {
-            @Override
-            public String encrypt(String text) {
-                return text;
-            }
-
-            @Override
-            public String decrypt(String encryptedText) {
-                return encryptedText;
-            }
-        });
         MongoUsersConnectionRepository repository = new MongoUsersConnectionRepository(mongoOperations, connectionFactoryLocator, connectionTransformers);
 //        InMemoryUsersConnectionRepository repository = new InMemoryUsersConnectionRepository(connectionFactoryLocator);
 //        JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
