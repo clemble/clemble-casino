@@ -116,6 +116,12 @@
         </repository>
 
         <repository>
+            <id>mavarazy.gihub.io</id>
+            <name>Personal Repo</name>
+            <url>https://github.com/mavarazy/maven/releases/</url>
+        </repository>
+
+        <repository>
             <id>spring.social.google</id>
             <name>Spring Social Google</name>
             <url>https://github.com/GabiAxel/maven/raw/master/</url>

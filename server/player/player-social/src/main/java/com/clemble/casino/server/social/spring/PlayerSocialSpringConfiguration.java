@@ -7,11 +7,16 @@ import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.social.controller.PlayerSocialRegistrationController;
+import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
+import org.eluder.spring.social.mongodb.MongoConnectionTransformers;
+import org.eluder.spring.social.mongodb.MongoUsersConnectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -33,7 +38,7 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import javax.annotation.PostConstruct;
 
 @Configuration
-@Import(value = { CommonSpringConfiguration.class, PlayerTokenSpringConfiguration.class, PlayerSocialSpringConfiguration.SocialTunerSpringConfigurion.class})
+@Import(value = { CommonSpringConfiguration.class, PlayerTokenSpringConfiguration.class, PlayerSocialSpringConfiguration.SocialTunerSpringConfigurion.class, MongoSpringConfiguration.class})
 public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -131,12 +136,24 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     @Bean
     public UsersConnectionRepository usersConnectionRepository(
 //            @Qualifier("dataSource") DataSource dataSource,
+            MongoOperations mongoOperations,
             ConnectionSignUp connectionSignUp,
             ConnectionFactoryRegistry connectionFactoryLocator) {
-        InMemoryUsersConnectionRepository repository = new InMemoryUsersConnectionRepository(connectionFactoryLocator);
-        repository.setConnectionSignUp(connectionSignUp);
+        MongoConnectionTransformers connectionTransformers = new MongoConnectionTransformers(connectionFactoryLocator, new TextEncryptor() {
+            @Override
+            public String encrypt(String text) {
+                return text;
+            }
+
+            @Override
+            public String decrypt(String encryptedText) {
+                return encryptedText;
+            }
+        });
+        MongoUsersConnectionRepository repository = new MongoUsersConnectionRepository(mongoOperations, connectionFactoryLocator, connectionTransformers);
+//        InMemoryUsersConnectionRepository repository = new InMemoryUsersConnectionRepository(connectionFactoryLocator);
 //        JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
-//        repository.setConnectionSignUp(connectionSignUp);
+        repository.setConnectionSignUp(connectionSignUp);
         return repository;
     }
 
