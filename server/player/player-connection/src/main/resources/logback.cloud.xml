@@ -28,7 +28,7 @@
             <!-- remote port to log to -->
            <port>40619</port>
            <!-- program name to log as -->
-           <ident>clemble-api</ident>
+           <ident>player-connection</ident>
         </syslogConfig>
     </appender>
 

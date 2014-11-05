@@ -17,11 +17,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.connect.web.SignInAdapter;
@@ -113,18 +111,9 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ServerProfileSocialRegistrationService serverProfileSocialRegistrationService(
-        final ClembleCasinoValidationService validationService,
-        final SocialConnectionAdapterRegistry socialAdapterRegistry,
-        final SystemNotificationService notificationService,
-        final SocialConnectionDataAdapter socialConnectionDataAdapter) {
-        return new ServerProfileSocialRegistrationService(validationService, socialAdapterRegistry, notificationService, socialConnectionDataAdapter);
-    }
-
-    @Bean
     public PlayerSocialRegistrationController playerSocialRegistrationController(
         final PlayerTokenFactory playerTokenFactory,
-        final ServerProfileSocialRegistrationService registrationService,
+        final SocialConnectionDataAdapter registrationService,
         final ClembleCasinoValidationService validationService,
         final SystemNotificationService notificationService) {
         return new PlayerSocialRegistrationController(

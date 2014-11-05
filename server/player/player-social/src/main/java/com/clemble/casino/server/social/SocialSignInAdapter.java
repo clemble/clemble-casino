@@ -1,5 +1,7 @@
 package com.clemble.casino.server.social;
 
+import com.clemble.casino.player.PlayerPresence;
+import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
@@ -28,9 +30,9 @@ public class SocialSignInAdapter implements SignInAdapter {
         // Step 1. Fetching connection data
         ConnectionData connectionData = connection.createData();
         // Step 2. Creating internal social connection
-        SocialConnection socialConnection =  connectionDataAdapter.register(connectionData);
+        String player =  connectionDataAdapter.register(connectionData);
         // Step 3. Adding player Cookie to response
-        tokenUtils.updateResponse(socialConnection.getPlayer(), (HttpServletResponse) request.getNativeResponse());
+        tokenUtils.updateResponse(player, (HttpServletResponse) request.getNativeResponse());
         // Step 4. Redirecting to url
         return host;
     }

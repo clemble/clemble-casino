@@ -5,8 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.service.PlayerSocialRegistrationService;
-import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
-import com.clemble.casino.server.social.ServerProfileSocialRegistrationService;
+import com.clemble.casino.server.social.SocialConnectionDataAdapter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +23,12 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
 
     final private PlayerTokenFactory playerTokenFactory;
     final private SystemNotificationService notificationService;
-    final private ServerProfileSocialRegistrationService registrationService;
+    final private SocialConnectionDataAdapter registrationService;
     final private ClembleCasinoValidationService validationService;
 
     public PlayerSocialRegistrationController(
         final PlayerTokenFactory playerTokenFactory,
-        final ServerProfileSocialRegistrationService registrationService,
+        final SocialConnectionDataAdapter registrationService,
         final ClembleCasinoValidationService validationService,
         final SystemNotificationService notificationService) {
         this.playerTokenFactory = checkNotNull(playerTokenFactory);
@@ -44,12 +43,10 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
     public PlayerToken createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
         validationService.validate(socialRegistrationRequest.getSocialConnectionData());
         // Step 1. Checking if this user already exists
-        PlayerProfile playerProfile = registrationService.create(socialRegistrationRequest.getSocialConnectionData());
+        String player = registrationService.register(socialRegistrationRequest.getSocialConnectionData());
         // Step 2. Creating appropriate PlayerProfile
-        PlayerToken token =  playerTokenFactory.create(playerProfile.getPlayer(), socialRegistrationRequest.getConsumerDetails());
-        // Step 5. Notifying system of new user
-        notificationService.send(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
-        // Step 6. All done continue
+        PlayerToken token =  playerTokenFactory.create(player, socialRegistrationRequest.getConsumerDetails());
+        // Step 3. All done continue
         return token;
     }
 
@@ -59,12 +56,10 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
     public PlayerToken createSocialGrantPlayer(@RequestBody PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
         validationService.validate(grantRegistrationRequest.getAccessGrant());
         // Step 1. Checking if this user already exists
-        PlayerProfile playerProfile = registrationService.create(grantRegistrationRequest.getAccessGrant());
+        String player = registrationService.register(grantRegistrationRequest.getAccessGrant());
         // Step 2. Creating appropriate PlayerProfile
-        PlayerToken token =  playerTokenFactory.create(playerProfile.getPlayer(), grantRegistrationRequest.getConsumerDetails());
-        // Step 5. Notifying system of new user
-        notificationService.send(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
-        // Step 6. All done continue
+        PlayerToken token =  playerTokenFactory.create(player, grantRegistrationRequest.getConsumerDetails());
+        // Step 3. All done continue
         return token;
     }
 

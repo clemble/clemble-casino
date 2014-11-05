@@ -4,6 +4,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Set;
 
+import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
+import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionFactoryLocator;
@@ -40,7 +44,7 @@ public class SocialConnectionDataAdapter {
         this.systemNotificationService = checkNotNull(systemNotificationService);
     }
 
-    public SocialConnection register(SocialAccessGrant accessGrant) {
+    public String register(SocialAccessGrant accessGrant) {
         // Step 1. Sanity check
         if (accessGrant == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
@@ -50,7 +54,7 @@ public class SocialConnectionDataAdapter {
         return register(connectionData);
     }
 
-    public SocialConnection register(SocialConnectionData socialConnectionData) {
+    public String register(SocialConnectionData socialConnectionData) {
         // Step 1. Sanity check
         if (socialConnectionData == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
@@ -60,7 +64,7 @@ public class SocialConnectionDataAdapter {
         return register(connectionData);
     }
 
-    public SocialConnection register(ConnectionData connectionData) {
+    public String register(ConnectionData connectionData) {
         SocialConnection socialConnection = null;
         // Step 1. Checking if user already exists
         Set<String> existingUsers = usersConnectionRepository.findUserIdsConnectedTo(connectionData.getProviderId(), ImmutableSet.<String> of(connectionData.getProviderUserId()));
@@ -75,6 +79,7 @@ public class SocialConnectionDataAdapter {
                 socialConnection = new SocialConnection(player, connection);
                 ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(player);
                 connectionRepository.updateConnection(connection);
+                return existingUsers.iterator().next();
             } else {
                 throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
             }
@@ -87,12 +92,22 @@ public class SocialConnectionDataAdapter {
             // Check that this logic remains intact
             String player = usersConnectionRepository.findUserIdsWithConnection(connection).iterator().next();
             socialConnection = new SocialConnection(player, connection);
-            // Step 5. Sending request to update user connections
-            systemNotificationService.send(new SystemPlayerSocialAddedEvent(player, connection.getKey()));
         } else {
             throw ClembleCasinoException.fromError(ClembleCasinoError.ServerCriticalError);
         }
-        return socialConnection;
+        // Step 5. Fetching player profile
+        SocialConnectionAdapter adapter = socialAdapterRegistry.getSocialAdapter(socialConnection.getConnection().getKey().getProviderId());
+        PlayerProfile playerProfile = adapter.fetchPlayerProfile(socialConnection.getConnection().getApi());
+        playerProfile.setPlayer(socialConnection.getPlayer());
+        // Step 6. Notifying of added social connection
+        systemNotificationService.send(new SystemPlayerSocialAddedEvent(socialConnection.getPlayer(), socialConnection.getConnection().getKey()));
+        Pair<String, String> imageUrl = adapter.toImageUrl(socialConnection.getConnection());
+        if (imageUrl != null)
+            systemNotificationService.send(new SystemPlayerImageChangedEvent(socialConnection.getPlayer(), imageUrl.getLeft(), imageUrl.getRight()));
+        // Step 8. Sending notification for registered social profile
+        systemNotificationService.send(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
+        // Step 9. Returning player profile
+        return socialConnection.getPlayer();
     }
 
     public SocialConnectionData add(String player, SocialConnectionData socialConnectionData) {
