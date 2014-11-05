@@ -9,6 +9,11 @@
     <artifactId>common</artifactId>
     <dependencies>
         <dependency>
+            <groupId>com.papertrailapp</groupId>
+            <artifactId>logback-syslog4j</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.clemble.casino.client</groupId>
             <artifactId>client-common</artifactId>
         </dependency>

@@ -54,6 +54,7 @@
         <spring.social.google.version>1.1.0.M4</spring.social.google.version>
         <!-- Generic dependencies -->
         <logback.version>1.1.2</logback.version>
+        <logback-syslog4j.version>1.0.0</logback-syslog4j.version>
         <jackson.version>2.4.3</jackson.version>
         <!-- Test dependencies -->
         <com.clemble.test.version>0.1.4-SNAPSHOT</com.clemble.test.version>
@@ -634,6 +635,11 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.papertrailapp</groupId>
+                <artifactId>logback-syslog4j</artifactId>
+                <version>${logback-syslog4j.version}</version>
             </dependency>
 
             <!-- Android dependencies -->
