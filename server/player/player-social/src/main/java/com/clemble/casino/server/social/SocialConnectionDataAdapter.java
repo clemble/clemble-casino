@@ -73,11 +73,13 @@ public class SocialConnectionDataAdapter {
         LOG.debug("register search for existing users {}", connectionData);
         Set<String> existingUsers = usersConnectionRepository.findUserIdsConnectedTo(connectionData.getProviderId(), ImmutableSet.<String> of(connectionData.getProviderUserId()));
         LOG.debug("register fetched {}", existingUsers);
-        if (existingUsers.size() > 1)
+        if (existingUsers.size() != 1)
             throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
+        // This is for signIn through spring - key generated prior to processing, by the time it reaches
+        // here user could already exist
         if (existingUsers.size() == 1) {
             String player = existingUsers.iterator().next();
-            LOG.debug("register {} already exists {}, verifying connection", player, connectionData);
+            LOG.debug("register {} verifying connection", player, connectionData);
             // Step 2. Creating connection appropriate for the provided data
             Connection<?> connection = connectionFactoryLocator.getConnectionFactory(connectionData.getProviderId()).createConnection(connectionData);
             // Step 5. Checking if the provided connection was valid
@@ -88,7 +90,6 @@ public class SocialConnectionDataAdapter {
                 // Step 6. Retrieving associated user identifiers
                 ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(player);
                 connectionRepository.updateConnection(connection);
-                return player;
             } else {
                 LOG.error("register {} test FAILED for {}, throwing exception", player, connection.getKey());
                 throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
