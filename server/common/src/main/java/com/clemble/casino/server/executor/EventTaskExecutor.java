@@ -31,7 +31,7 @@ public class EventTaskExecutor {
         // Step 1. Canceling existing task
         cancel(eventTask);
         // Step 2. Calculating start delay for the next execution
-        long startDelay = Math.max(0, eventTask.nextExecutionTime(null).getTime() - System.currentTimeMillis());
+        long startDelay = Math.max(0, eventTask.nextExecutionTime().getTime() - System.currentTimeMillis());
         LOG.debug("{} startDelay {}", eventTask, startDelay);
         // Step 3. Saving mapping for reprocessing
         ScheduledFuture<?> nextExecution = scheduledExecutorService.schedule(new EventTaskWrapper(eventTask), startDelay, TimeUnit.MILLISECONDS);

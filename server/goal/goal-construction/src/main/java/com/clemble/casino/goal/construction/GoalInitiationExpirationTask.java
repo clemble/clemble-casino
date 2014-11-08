@@ -35,7 +35,7 @@ public class GoalInitiationExpirationTask implements EventTask {
     }
 
     @Override
-    public Date nextExecutionTime(TriggerContext triggerContext) {
+    public Date nextExecutionTime() {
         return startDate;
     }
 

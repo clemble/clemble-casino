@@ -32,7 +32,7 @@ public class GameInitiationExpirationTask implements EventTask {
     }
 
     @Override
-    public Date nextExecutionTime(TriggerContext triggerContext) {
+    public Date nextExecutionTime() {
         return expirationTime;
     }
 

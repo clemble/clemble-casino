@@ -8,11 +8,16 @@ public interface SystemEventListener<T extends SystemEvent>{
 
     public void onEvent(T event);
 
+
+    /**
+     * Returns name of the channel, this listener is associated with
+     * @return name of the channel
+     */
     public String getChannel();
 
     /**
      * Naming convension for the Queue is the name of the Channel > + name of the component
-     * @return
+     * @return name of the Queue
      */
     public String getQueueName();
 

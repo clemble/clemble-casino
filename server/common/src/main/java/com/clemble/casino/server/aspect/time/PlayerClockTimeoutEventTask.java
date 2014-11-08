@@ -90,7 +90,7 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
     }
 
     @Override
-    public Date nextExecutionTime(TriggerContext triggerContext) {
+    public Date nextExecutionTime() {
         return new Date(clock.getBreachTime());
     }
 

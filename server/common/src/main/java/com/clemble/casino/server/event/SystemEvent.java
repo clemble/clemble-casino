@@ -11,6 +11,8 @@ import com.clemble.casino.server.event.goal.*;
 import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.event.player.*;
+import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
+import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -38,6 +40,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemPlayerImageChangedEvent.CHANNEL, value = SystemPlayerImageChangedEvent.class),
     @JsonSubTypes.Type(name = SystemGoalInitiationDueEvent.CHANNEL, value = SystemGoalInitiationDueEvent.class),
     @JsonSubTypes.Type(name = SystemGoalStartedEvent.CHANNEL, value = SystemGoalStartedEvent.class),
+    @JsonSubTypes.Type(name = SystemAddJobScheduleEvent.CHANNEL, value = SystemAddJobScheduleEvent.class),
+    @JsonSubTypes.Type(name = SystemRemoveJobScheduleEvent.CHANNEL, value = SystemRemoveJobScheduleEvent.class),
 })
 public interface SystemEvent extends Event {
 
