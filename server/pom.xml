@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino</groupId>
         <artifactId>parent</artifactId>
-        <version>0.12.2-SNAPSHOT</version>
+        <version>0.12.3-SNAPSHOT</version>
     </parent>
     <groupId>com.clemble.casino.server</groupId>
     <artifactId>server</artifactId>
@@ -17,6 +17,7 @@
         <module>player</module>
         <module>goal</module>
         <module>game</module>
+        <module>schedule</module>
     </modules>
     <dependencies>
         <dependency>

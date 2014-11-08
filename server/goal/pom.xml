@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.server</groupId>
         <artifactId>server</artifactId>
-        <version>0.12.2-SNAPSHOT</version>
+        <version>0.12.3-SNAPSHOT</version>
     </parent>
     <artifactId>goal</artifactId>
     <packaging>pom</packaging>
