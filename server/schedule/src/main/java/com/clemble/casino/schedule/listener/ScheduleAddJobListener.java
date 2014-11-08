@@ -13,6 +13,8 @@ import static org.quartz.JobBuilder.*;
 import static org.quartz.TriggerBuilder.*;
 import static org.quartz.SimpleScheduleBuilder.*;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
  * Created by mavarazy on 11/8/14.
  */
@@ -26,8 +28,8 @@ public class ScheduleAddJobListener implements SystemEventListener<SystemAddJobS
     final private ObjectMapper objectMapper;
 
     public ScheduleAddJobListener(ObjectMapper objectMapper, Scheduler scheduler) {
-        this.scheduler = scheduler;
-        this.objectMapper = objectMapper;
+        this.scheduler = checkNotNull(scheduler);
+        this.objectMapper = checkNotNull(objectMapper);
     }
 
     @Override

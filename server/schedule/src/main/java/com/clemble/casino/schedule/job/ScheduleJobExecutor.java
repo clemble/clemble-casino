@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
  * Created by mavarazy on 11/8/14.
  */
@@ -25,8 +27,8 @@ public class ScheduleJobExecutor implements Job {
     final private ObjectMapper objectMapper;
 
     public ScheduleJobExecutor(ObjectMapper objectMapper, SystemNotificationService notificationService) {
-        this.objectMapper = objectMapper;
-        this.notificationService = notificationService;
+        this.objectMapper = checkNotNull(objectMapper);
+        this.notificationService = checkNotNull(notificationService);
     }
 
     @Override

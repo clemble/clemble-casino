@@ -8,6 +8,8 @@ import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
  * Created by mavarazy on 11/8/14.
  */
@@ -17,7 +19,7 @@ public class ScheduleRemoveJobListener implements SystemEventListener<SystemRemo
     final private Scheduler scheduler;
 
     public ScheduleRemoveJobListener(Scheduler scheduler) {
-        this.scheduler = scheduler;
+        this.scheduler = checkNotNull(scheduler);
     }
 
     @Override

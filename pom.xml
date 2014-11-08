@@ -161,6 +161,12 @@
 
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
+                <artifactId>schedule</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>game</artifactId>
                 <version>${project.version}</version>
             </dependency>
