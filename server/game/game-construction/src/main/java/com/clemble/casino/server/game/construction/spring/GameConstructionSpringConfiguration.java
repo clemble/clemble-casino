@@ -3,9 +3,6 @@ package com.clemble.casino.server.game.construction.spring;
 import com.clemble.casino.base.ActionLatchService;
 import com.clemble.casino.base.JavaActionLatchService;
 import com.clemble.casino.payment.service.PlayerAccountService;
-import com.clemble.casino.server.executor.EventTaskAdapter;
-import com.clemble.casino.server.executor.EventTaskExecutor;
-import com.clemble.casino.server.game.construction.GameInitiationEventTaskAdapter;
 import com.clemble.casino.server.game.construction.GameSessionKeyGenerator;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
 import com.clemble.casino.server.game.construction.listener.ServerGameInitiationDueEventListener;
@@ -28,16 +25,12 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.spring.common.*;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import redis.clients.jedis.JedisPool;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Created by mavarazy on 8/31/14.
@@ -143,9 +136,8 @@ public class GameConstructionSpringConfiguration {
         PendingGameInitiationService processor,
         ServerPlayerPresenceService presenceService,
         @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
-        SystemNotificationService systemNotificationService,
-        @Qualifier("gameInitiationEventTaskExecutor") EventTaskExecutor taskExecutor) {
-        return new ServerGameInitiationService(processor, presenceService, notificationService, systemNotificationService, taskExecutor);
+        SystemNotificationService systemNotificationService) {
+        return new ServerGameInitiationService(processor, presenceService, notificationService, systemNotificationService);
     }
 
     @Bean
@@ -164,18 +156,6 @@ public class GameConstructionSpringConfiguration {
         ServerGameInitiationDueEventListener eventListener = new ServerGameInitiationDueEventListener(serverGameInitiationService);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
-    }
-
-    @Bean
-    public EventTaskAdapter gameInitiationEventTaskAdapter(SystemNotificationService notificationService){
-        return new GameInitiationEventTaskAdapter(notificationService);
-    }
-
-    @Bean
-    public EventTaskExecutor gameInitiationEventTaskExecutor(@Qualifier("gameInitiationEventTaskAdapter") EventTaskAdapter gameInitiationEventTaskAdapter) {
-        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL game:initiation:event:executor - %d");
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
-        return new EventTaskExecutor(gameInitiationEventTaskAdapter, executorService);
     }
 
     @Configuration

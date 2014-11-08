@@ -22,4 +22,5 @@ public class ScheduleJobExecutorFactory implements JobFactory {
         // This factory is supposed to use only singleton scheduler
         return jobExecutor;
     }
+
 }

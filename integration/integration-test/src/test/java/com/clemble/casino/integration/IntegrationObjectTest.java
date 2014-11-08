@@ -30,6 +30,8 @@ import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
 
 import com.clemble.casino.lifecycle.configuration.rule.ConfigurationRule;
 import com.clemble.casino.payment.PendingOperation;
+import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
+import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Ignore;
@@ -67,6 +69,13 @@ import com.google.common.collect.ImmutableList;
 public class IntegrationObjectTest {
 
     static {
+        ObjectGenerator.register(SystemAddJobScheduleEvent.class, new AbstractValueGenerator<SystemAddJobScheduleEvent>() {
+            @Override
+            public SystemAddJobScheduleEvent generate() {
+                return new SystemAddJobScheduleEvent(RandomStringUtils.random(5), RandomStringUtils.random(5), new SystemGameInitiationDueEvent("a"), new Date());
+            }
+        });
+
         ObjectGenerator.register(TournamentGameState.class, new AbstractValueGenerator<TournamentGameState>() {
             @Override
             public TournamentGameState generate() {

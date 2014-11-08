@@ -11,9 +11,9 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCreatedEvent;
+import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
-import com.clemble.casino.server.executor.EventTaskExecutor;
-import com.clemble.casino.server.game.construction.GameInitiationExpirationTask;
+import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,6 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
 
     final private PendingGameInitiationService pendingInitiationService;
     final private ServerPlayerPresenceService presenceService;
-    final private EventTaskExecutor taskExecutor;
     final private SystemNotificationService systemNotificationService;
     final private PlayerNotificationService notificationService;
 
@@ -47,13 +46,11 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         PendingGameInitiationService pendingInitiationService,
         ServerPlayerPresenceService presenceService,
         PlayerNotificationService notificationService,
-        SystemNotificationService systemNotificationService,
-        EventTaskExecutor taskExecutor) {
+        SystemNotificationService systemNotificationService) {
         this.presenceService = checkNotNull(presenceService);
         this.systemNotificationService = checkNotNull(systemNotificationService);
         this.pendingInitiationService = checkNotNull(pendingInitiationService);
         this.notificationService = checkNotNull(notificationService);
-        this.taskExecutor = checkNotNull(taskExecutor);
     }
 
     public void start(GameInitiation initiation) {
@@ -75,7 +72,12 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
         LOG.debug("Notifying participants {}", initiation);
         notificationService.send(initiation.getParticipants(), new GameInitiationCreatedEvent(initiation));
         // Step 4. Scheduling Cancel task
-        taskExecutor.schedule(new GameInitiationExpirationTask(sessionKey, new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(CANCEL_TIMEOUT_SECONDS))));
+        SystemAddJobScheduleEvent scheduleEvent = new SystemAddJobScheduleEvent(
+            initiation.getSessionKey(),
+            "initiation",
+            new SystemGameInitiationDueEvent(initiation.getSessionKey()),
+            new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(CANCEL_TIMEOUT_SECONDS)));
+        systemNotificationService.send(scheduleEvent);
     }
 
     public void expire(String sessionKey) {

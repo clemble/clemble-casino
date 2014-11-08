@@ -43,4 +43,5 @@ public class ScheduleRemoveJobListener implements SystemEventListener<SystemRemo
     public String getQueueName() {
         return SystemRemoveJobScheduleEvent.CHANNEL + " > schedule:remove";
     }
+
 }

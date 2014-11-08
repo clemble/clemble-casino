@@ -57,12 +57,13 @@ public class ScheduleSpringConfiguration implements SpringConfiguration {
         return new ScheduleJobExecutorFactory(jobExecutor);
     }
 
-    @Bean
+    @Bean(destroyMethod = "shutdown")
     public Scheduler scheduler(ScheduleJobExecutorFactory jobExecutorFactory) throws SchedulerException {
         StdSchedulerFactory schedulerFactory = new StdSchedulerFactory();
         schedulerFactory.initialize(getClass().getResourceAsStream("/quartz.properties"));
         Scheduler scheduler = schedulerFactory.getScheduler();
         scheduler.setJobFactory(jobExecutorFactory);
+        scheduler.start();
         return scheduler;
     }
 

@@ -25,6 +25,10 @@
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
+            <artifactId>schedule</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
             <artifactId>payment-bonus</artifactId>
         </dependency>
         <dependency>

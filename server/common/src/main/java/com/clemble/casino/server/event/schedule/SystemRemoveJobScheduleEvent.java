@@ -1,5 +1,8 @@
 package com.clemble.casino.server.event.schedule;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by mavarazy on 11/8/14.
  */
@@ -10,7 +13,8 @@ public class SystemRemoveJobScheduleEvent implements SystemScheduleEvent {
     final private String group;
     final private String key;
 
-    public SystemRemoveJobScheduleEvent(String group, String key) {
+    @JsonCreator
+    public SystemRemoveJobScheduleEvent(@JsonProperty("group") String group, @JsonProperty("key") String key) {
         this.group = group;
         this.key = key;
     }
