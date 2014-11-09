@@ -1,6 +1,8 @@
 package com.clemble.casino.server.event.goal;
 
 import com.clemble.casino.server.event.SystemEvent;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by mavarazy on 11/8/14.
@@ -11,7 +13,8 @@ public class SystemGoalTimeoutEvent implements SystemGoalEvent {
 
     final private String goalKey;
 
-    public SystemGoalTimeoutEvent(String goalKey) {
+    @JsonCreator
+    public SystemGoalTimeoutEvent(@JsonProperty(GOAL_KEY) String goalKey) {
         this.goalKey = goalKey;
     }
 

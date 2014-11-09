@@ -9,7 +9,7 @@ import com.clemble.casino.lifecycle.configuration.rule.time.PlayerClock;
 import com.clemble.casino.lifecycle.management.PlayerContext;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import com.clemble.casino.server.action.ClembleManager;
-import com.clemble.casino.server.event.game.SystemGameTimeoutEvent;
+import com.clemble.casino.server.event.goal.SystemGoalTimeoutEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.Map.Entry;
 /**
  * Created by mavarazy on 11/8/14.
  */
-public class SystemGoalTimeoutEventListener implements SystemEventListener<SystemGameTimeoutEvent> {
+public class SystemGoalTimeoutEventListener implements SystemEventListener<SystemGoalTimeoutEvent> {
 
     final private GoalManagerFactoryFacade managerFactory;
 
@@ -34,9 +34,9 @@ public class SystemGoalTimeoutEventListener implements SystemEventListener<Syste
     }
 
     @Override
-    public void onEvent(SystemGameTimeoutEvent event) {
+    public void onEvent(SystemGoalTimeoutEvent event) {
         // Step 1. Fetching related GameState
-        ClembleManager<GoalEvent, GoalState> manager = managerFactory.get(event.getSessionKey());
+        ClembleManager<GoalEvent, GoalState> manager = managerFactory.get(event.getGoalKey());
         // Step 2. Extracting game context
         GoalContext context = manager.getState().getContext();
         // Step 3. Processing all breach events
@@ -46,7 +46,7 @@ public class SystemGoalTimeoutEventListener implements SystemEventListener<Syste
             PlayerClock clock = playerContext.getClock();
             if (clock.wasBreached()) {
                 // Step 3.2. Generating player action
-                PlayerAction action = new PlayerAction(event.getSessionKey(), playerContext.getPlayer(), clock.getPunishment().toBreachEvent());
+                PlayerAction action = new PlayerAction(event.getGoalKey(), playerContext.getPlayer(), clock.getPunishment().toBreachEvent());
                 // Step 3.3. Adding new entry to Actions
                 actions.add(new ImmutablePair<>(clock.getBreachTime(), action));
             }
@@ -64,11 +64,11 @@ public class SystemGoalTimeoutEventListener implements SystemEventListener<Syste
 
     @Override
     public String getChannel() {
-        return SystemGameTimeoutEvent.CHANNEL;
+        return SystemGoalTimeoutEvent.CHANNEL;
     }
 
     @Override
     public String getQueueName() {
-        return SystemGameTimeoutEvent.CHANNEL + " > game:management";
+        return SystemGoalTimeoutEvent.CHANNEL + " > game:management";
     }
 }

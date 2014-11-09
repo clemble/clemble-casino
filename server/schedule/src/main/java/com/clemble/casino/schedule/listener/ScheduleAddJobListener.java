@@ -41,6 +41,7 @@ public class ScheduleAddJobListener implements SystemEventListener<SystemAddJobS
             LOG.error("Failed to generate event " + event, e);
             return;
         }
+        JobKey jobKey = new JobKey(event.getKey(), event.getGroup());
         // Step 1. Building job details
         JobDetail jobDetail = newJob(ScheduleJobExecutor.class).
             usingJobData(EVENT_KEY, sourceEvent).
@@ -53,6 +54,7 @@ public class ScheduleAddJobListener implements SystemEventListener<SystemAddJobS
             build();
         // Step 3. Actually adding job to Scheduler
         try {
+            scheduler.deleteJob(jobKey);
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
             LOG.error("Failed to add event " + event, e);

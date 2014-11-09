@@ -46,7 +46,6 @@ public class GoalTimeAspect extends GoalAspect<Event> {
             });
         } else {
             playerToTask.values().forEach(task -> {
-                task.stop();
                 task.start();
             });
         }
