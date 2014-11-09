@@ -27,11 +27,11 @@ abstract public class ServerPlayerConnectionService implements PlayerConnectionS
     abstract public Set<ConnectionKey> myOwnedConnections(String me);
 
     @Override
-    final public Set<ConnectionKey> myConnectedConnections() {
+    final public Set<String> myConnectedConnections() {
         throw new IllegalAccessError();
     }
 
-    abstract public Set<ConnectionKey> myConnectedConnections(String me);
+    abstract public Set<String> myConnectedConnections(String me);
 
     abstract public PlayerConnections save(PlayerConnections connections);
 

@@ -33,7 +33,7 @@ public class MongoPlayerConnectionsService extends ServerPlayerConnectionService
     }
 
     @Override
-    public Set<ConnectionKey> myConnectedConnections(String me) {
+    public Set<String> myConnectedConnections(String me) {
         return connectionsRepository.findOne(me).getConnected();
     }
 
@@ -58,7 +58,7 @@ public class MongoPlayerConnectionsService extends ServerPlayerConnectionService
     }
 
     @Override
-    public Set<ConnectionKey> getConnectedConnection(String player) {
+    public Set<String> getConnectedConnection(String player) {
         return connectionsRepository.findOne(player).getConnected();
     }
 

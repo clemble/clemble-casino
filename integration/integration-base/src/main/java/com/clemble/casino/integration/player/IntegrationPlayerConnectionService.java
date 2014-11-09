@@ -36,7 +36,7 @@ public class IntegrationPlayerConnectionService implements PlayerConnectionServi
     }
 
     @Override
-    public Set<ConnectionKey> myConnectedConnections() {
+    public Set<String> myConnectedConnections() {
         return connectionService.myConnectedConnections(player);
     }
 
@@ -51,7 +51,7 @@ public class IntegrationPlayerConnectionService implements PlayerConnectionServi
     }
 
     @Override
-    public Set<ConnectionKey> getConnectedConnection(String player) {
+    public Set<String> getConnectedConnection(String player) {
         return connectionService.getConnectedConnection(player);
     }
 

@@ -26,7 +26,7 @@ public class PlayerConnectionNetworkCreationListener implements SystemEventListe
         if (socialNetworkRepository.getConnections(event.getPlayer()) != null)
             return;
         // Step 1. Generating player connections
-        PlayerConnections connections = new PlayerConnections(event.getPlayer(), new HashSet<ConnectionKey>(), new HashSet<ConnectionKey>());
+        PlayerConnections connections = new PlayerConnections(event.getPlayer(), new HashSet<ConnectionKey>(), new HashSet<String>());
         // Step 2. Saving connections
         socialNetworkRepository.save(connections);
     }

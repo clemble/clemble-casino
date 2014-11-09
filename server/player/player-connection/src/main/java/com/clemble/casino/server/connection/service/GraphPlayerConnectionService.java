@@ -32,7 +32,7 @@ public class GraphPlayerConnectionService extends ServerPlayerConnectionService 
     }
 
     @Override
-    public Set<ConnectionKey> myConnectedConnections(String me) {
+    public Set<String> myConnectedConnections(String me) {
         return connectionsRepository.findByPlayer(me).toPlayerConnections().getConnected();
     }
 
@@ -79,7 +79,7 @@ public class GraphPlayerConnectionService extends ServerPlayerConnectionService 
     }
 
     @Override
-    public Set<ConnectionKey> getConnectedConnection(String player) {
+    public Set<String> getConnectedConnection(String player) {
         return connectionsRepository.findByPlayer(player).toPlayerConnections().getConnected();
     }
 

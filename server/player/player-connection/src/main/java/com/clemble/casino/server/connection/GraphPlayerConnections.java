@@ -38,14 +38,16 @@ public class GraphPlayerConnections implements PlayerAware {
     public GraphPlayerConnections() {
     }
 
-    public GraphPlayerConnections(PlayerConnections connections) {
-        this.player = connections.getPlayer();
+    public GraphPlayerConnections(PlayerConnections playerConnections) {
+        this.player = playerConnections.getPlayer();
+
         this.owns = new HashSet<>();
-        for(ConnectionKey ownedKey: connections.getOwned())
-            owns.add(new GraphConnectionKey(ownedKey));
+        playerConnections.getOwned().
+            forEach(ownedKey -> owns.add(new GraphConnectionKey(ownedKey)));
+
         this.connections = new HashSet<>();
-        for(ConnectionKey connectionKey: connections.getConnected())
-            this.connections.add(new GraphConnectionKey(connectionKey));
+        playerConnections.getConnected().
+            forEach(connectionKey -> this.connections.add(new GraphConnectionKey(connectionKey)));
     }
 
     public GraphPlayerConnections(String player) {
@@ -113,9 +115,9 @@ public class GraphPlayerConnections implements PlayerAware {
         for(GraphConnectionKey connection: owns)
             ownedKeys.add(connection.toConnectionKey());
         // Step 2. Converting connections to keys
-        Set<ConnectionKey> connectedKeys = new HashSet<>();
+        Set<String> connectedKeys = new HashSet<>();
         for(GraphConnectionKey connection: connections)
-            connectedKeys.add(connection.toConnectionKey());
+            connectedKeys.add(connection.getConnectionKey());
         // Step 3. Creating player connections
         return new PlayerConnections(player, ownedKeys, connectedKeys);
     }

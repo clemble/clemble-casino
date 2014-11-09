@@ -45,13 +45,13 @@ public class PlayerConnectionServiceController implements PlayerConnectionServic
     }
 
     @Override
-    public Set<ConnectionKey> myConnectedConnections() {
+    public Set<String> myConnectedConnections() {
         throw new IllegalAccessError();
     }
 
     @RequestMapping(value = MY_CONNECTED_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public Set<ConnectionKey> myConnectedConnections(String me) {
+    public Set<String> myConnectedConnections(String me) {
         return connectionService.myConnectedConnections(me);
     }
 
@@ -65,14 +65,14 @@ public class PlayerConnectionServiceController implements PlayerConnectionServic
     @Override
     @RequestMapping(value = PLAYER_OWNED_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public Set<ConnectionKey> getOwnedConnections(String player) {
+    public Set<ConnectionKey> getOwnedConnections(@PathVariable("player") String player) {
         return connectionService.getOwnedConnections(player);
     }
 
     @Override
     @RequestMapping(value = PLAYER_CONNECTION_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public Set<ConnectionKey> getConnectedConnection(String player) {
+    public Set<String> getConnectedConnection(@PathVariable("player") String player) {
         return connectionService.getConnectedConnection(player);
     }
 

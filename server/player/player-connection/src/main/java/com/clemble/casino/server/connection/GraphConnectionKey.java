@@ -19,6 +19,10 @@ public class GraphConnectionKey {
     public GraphConnectionKey() {
     }
 
+    public GraphConnectionKey(String connectionKey) {
+        this.connectionKey = connectionKey;
+    }
+
     public GraphConnectionKey(ConnectionKey connectionKey) {
        this.connectionKey = ClembleSocialUtils.toString(connectionKey);
     }

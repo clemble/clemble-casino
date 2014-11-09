@@ -42,22 +42,23 @@ public class PlayerConnectionNetworkPopulateListener implements SystemEventListe
         Set<ConnectionKey> owned = new HashSet<>(playerConnections.getOwned());
         owned.add(event.getConnection());
         // Step 3. Adding connected connections
-        Set<ConnectionKey> connected =  new HashSet<>(playerConnections.getConnected());
-        connected.addAll(event.getConnections());
+        Set<String> connected =  new HashSet<>(playerConnections.getConnected());
         // Step 4. Checking for new connections
-        Set<ConnectionKey> discoveredConnections = new HashSet<>();
-        for(PlayerConnections player: connectionService.getOwners(event.getConnections()))
-            discoveredConnections.add(new ConnectionKey(WebMapping.PROVIDER_ID, player.getPlayer()));
+        Set<String> discoveredConnections = new HashSet<>();
+        for(PlayerConnections player: connectionService.getOwners(event.getConnections())) {
+            discoveredConnections.add(player.getPlayer());
+        }
         // Step 4.1. Removing all already connected
         discoveredConnections.removeAll(connected);
         // Step 4.2. Merging to already connected
         connected.addAll(discoveredConnections);
         // Step 5. Saving new connections
-        if(owned.size() != playerConnections.getOwned().size() || connected.size() != playerConnections.getConnected().size()) {
+        if(!discoveredConnections.isEmpty()) {
             connectionService.save(new PlayerConnections(playerConnections.getPlayer(), owned, connected));
             // Step 6. For all discovered connections send notification
-            for (ConnectionKey discovered : discoveredConnections)
-                notificationService.send(new SystemPlayerDiscoveredConnectionEvent(event.getPlayer(), discovered.getProviderUserId()));
+            for (String discovered : discoveredConnections) {
+                notificationService.send(new SystemPlayerDiscoveredConnectionEvent(event.getPlayer(), discovered));
+            }
         }
     }
 
