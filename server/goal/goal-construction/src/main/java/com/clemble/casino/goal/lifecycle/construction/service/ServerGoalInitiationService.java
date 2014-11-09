@@ -16,7 +16,6 @@ import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
-import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.google.common.collect.ImmutableSet;

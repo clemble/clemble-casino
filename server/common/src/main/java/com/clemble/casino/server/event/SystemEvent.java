@@ -3,10 +3,7 @@ package com.clemble.casino.server.event;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.server.event.bet.SystemBetCanceledEvent;
 import com.clemble.casino.server.event.bet.SystemBetCompletedEvent;
-import com.clemble.casino.server.event.game.SystemGameEndedEvent;
-import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
-import com.clemble.casino.server.event.game.SystemGameReadyEvent;
-import com.clemble.casino.server.event.game.SystemGameStartedEvent;
+import com.clemble.casino.server.event.game.*;
 import com.clemble.casino.server.event.goal.*;
 import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
@@ -32,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemGameStartedEvent.CHANNEL, value = SystemGameStartedEvent.class),
     @JsonSubTypes.Type(name = SystemGameEndedEvent.CHANNEL, value = SystemGameEndedEvent.class),
     @JsonSubTypes.Type(name = SystemGameReadyEvent.CHANNEL, value = SystemGameReadyEvent.class),
+    @JsonSubTypes.Type(name = SystemGameTimeoutEvent.CHANNEL, value = SystemGameTimeoutEvent.class),
     @JsonSubTypes.Type(name = SystemGameInitiationDueEvent.CHANNEL, value = SystemGameInitiationDueEvent.class),
     @JsonSubTypes.Type(name = SystemPaymentTransactionRequestEvent.CHANNEL, value = SystemPaymentTransactionRequestEvent.class),
     @JsonSubTypes.Type(name = SystemPaymentFreezeRequestEvent.CHANNEL, value = SystemPaymentFreezeRequestEvent.class),
@@ -40,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemPlayerImageChangedEvent.CHANNEL, value = SystemPlayerImageChangedEvent.class),
     @JsonSubTypes.Type(name = SystemGoalInitiationDueEvent.CHANNEL, value = SystemGoalInitiationDueEvent.class),
     @JsonSubTypes.Type(name = SystemGoalStartedEvent.CHANNEL, value = SystemGoalStartedEvent.class),
+    @JsonSubTypes.Type(name = SystemGoalTimeoutEvent.CHANNEL, value = SystemGoalTimeoutEvent.class),
     @JsonSubTypes.Type(name = SystemAddJobScheduleEvent.CHANNEL, value = SystemAddJobScheduleEvent.class),
     @JsonSubTypes.Type(name = SystemRemoveJobScheduleEvent.CHANNEL, value = SystemRemoveJobScheduleEvent.class),
 })

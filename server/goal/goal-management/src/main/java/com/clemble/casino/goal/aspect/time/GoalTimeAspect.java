@@ -6,7 +6,8 @@ import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.server.aspect.time.PlayerClockTimeoutEventTask;
-import com.clemble.casino.server.executor.EventTaskExecutor;
+import com.clemble.casino.server.event.goal.SystemGoalTimeoutEvent;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class GoalTimeAspect extends GoalAspect<Event> {
 
     public GoalTimeAspect(
             GoalState state,
-            EventTaskExecutor eventTaskExecutor) {
+            SystemNotificationService systemNotificationService) {
         super(new EventTypeSelector(Event.class));
 
         state.getContext().getPlayerContexts().forEach(playerContext -> {
@@ -29,7 +30,9 @@ public class GoalTimeAspect extends GoalAspect<Event> {
                 playerContext.getPlayer(),
                 playerContext.getClock(),
                 state.getConfiguration().getMoveTimeRule(),
-                state.getConfiguration().getTotalTimeRule(), eventTaskExecutor);
+                state.getConfiguration().getTotalTimeRule(),
+                systemNotificationService,
+                (goalKey) -> new SystemGoalTimeoutEvent(goalKey));
             playerToTask.put(playerContext.getPlayer(), timeoutEventTask);
         });
     }

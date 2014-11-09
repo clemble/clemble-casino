@@ -1,14 +1,10 @@
 package com.clemble.casino.server.game.spring;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
 import com.clemble.casino.server.action.ClembleManagerFactory;
-import com.clemble.casino.server.executor.EventTaskAdapter;
-import com.clemble.casino.server.executor.EventTaskExecutor;
 import com.clemble.casino.server.game.action.*;
 import com.clemble.casino.server.game.aspect.*;
 import com.clemble.casino.server.game.aspect.next.MatchNextGameAspectFactory;
@@ -25,6 +21,7 @@ import com.clemble.casino.server.game.aspect.unit.GamePlayerUnitAspectFactory;
 import com.clemble.casino.server.game.controller.GameActionServiceController;
 import com.clemble.casino.server.game.controller.GameRecordServiceController;
 import com.clemble.casino.server.game.listener.ServerGameStartedEventListener;
+import com.clemble.casino.server.game.listener.SystemGameTimeoutEventListener;
 import com.clemble.casino.server.game.repository.*;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
@@ -133,8 +130,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
          *
          */
         @Bean
-        public RoundGameTimeAspectFactory gameTimeAspectFactory(@Qualifier("gameEventTaskExecutor") EventTaskExecutor gameEventTaskExecutor) {
-            return new RoundGameTimeAspectFactory(gameEventTaskExecutor);
+        public RoundGameTimeAspectFactory gameTimeAspectFactory(SystemNotificationService systemNotificationService) {
+            return new RoundGameTimeAspectFactory(systemNotificationService);
         }
 
     }
@@ -157,18 +154,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public RoundStateFactoryFacade gameStateFactoryFacade() {
         return new RoundStateFactoryFacade();
-    }
-
-    @Bean
-    public EventTaskAdapter gameEventTaskAdapter(GameManagerFactoryFacade managerFactory, SystemNotificationService notificationService){
-        return new GameEventTaskAdapter(managerFactory, notificationService);
-    }
-
-    @Bean
-    public EventTaskExecutor gameEventTaskExecutor(@Qualifier("gameEventTaskAdapter") EventTaskAdapter gameEventTaskAdapter) {
-        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL game:event:executor - %d");
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
-        return new EventTaskExecutor(gameEventTaskAdapter, executorService);
     }
 
     @Bean
@@ -207,6 +192,16 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }
+
+    @Bean
+    public SystemGameTimeoutEventListener gameTimeoutEventListener(
+        GameManagerFactoryFacade managerFactory,
+        SystemNotificationServiceListener notificationServiceListener) {
+        SystemGameTimeoutEventListener eventListener = new SystemGameTimeoutEventListener(managerFactory);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
 
     @Configuration
     public static class GameManagementControllerSpringConfiguration implements SpringConfiguration {

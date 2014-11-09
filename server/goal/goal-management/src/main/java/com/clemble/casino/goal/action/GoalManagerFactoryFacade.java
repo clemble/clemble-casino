@@ -16,7 +16,6 @@ import com.clemble.casino.server.player.notification.PlayerNotificationService;
  */
 public class GoalManagerFactoryFacade {
 
-    final private GoalRecordRepository recordRepository;
     final private SelfGoalManagerFactory selfManagerFactory;
 
     public GoalManagerFactoryFacade(
@@ -24,7 +23,6 @@ public class GoalManagerFactoryFacade {
         GoalRecordRepository recordRepository,
         GoalStateRepository stateRepository,
         PlayerNotificationService notificationService) {
-        this.recordRepository = recordRepository;
         this.selfManagerFactory = new SelfGoalManagerFactory(managerFactory, recordRepository, stateRepository, notificationService);
     }
 
@@ -40,7 +38,7 @@ public class GoalManagerFactoryFacade {
         throw new IllegalArgumentException();
     }
 
-    public ClembleManager<GoalEvent, ? extends GoalState> get(String goalKey) {
+    public ClembleManager<GoalEvent, GoalState> get(String goalKey) {
         return selfManagerFactory.get(goalKey);
     }
 

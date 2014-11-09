@@ -10,20 +10,18 @@ import com.clemble.casino.goal.aspect.time.GoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lisetener.GoalEventTaskAdapter;
-import com.clemble.casino.goal.lisetener.SystemGoalStartedEventListener;
+import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
+import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.server.action.ClembleManagerFactory;
-import com.clemble.casino.server.executor.EventTaskAdapter;
-import com.clemble.casino.server.executor.EventTaskExecutor;
+import com.clemble.casino.server.event.goal.SystemGoalTimeoutEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -84,30 +82,27 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public SystemGoalTimeoutEventListener systemGoalTimeoutEventListener(
+        SystemNotificationServiceListener notificationServiceListener,
+        GoalManagerFactoryFacade goalManagerFactoryFacade) {
+        SystemGoalTimeoutEventListener eventListener = new SystemGoalTimeoutEventListener(goalManagerFactoryFacade);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
+    @Bean
     public GoalRecordAspectFactory goalRecordAspectFactory(GoalRecordRepository recordRepository){
         return new GoalRecordAspectFactory(recordRepository);
     }
 
     @Bean
-    public GoalTimeAspectFactory goalTimeAspectFactory(@Qualifier("goalManagementEventTaskExecutor") EventTaskExecutor taskExecutor){
-        return new GoalTimeAspectFactory(taskExecutor);
+    public GoalTimeAspectFactory goalTimeAspectFactory(SystemNotificationService systemNotificationService){
+        return new GoalTimeAspectFactory(systemNotificationService);
     }
 
     @Bean
     public GoalStatePersistenceAspectFactory goalPersistenceAspectFactory(GoalStateRepository stateRepository) {
         return new GoalStatePersistenceAspectFactory(stateRepository);
-    }
-
-    @Bean
-    public EventTaskAdapter goalManagementEventTaskAdapter(GoalManagerFactoryFacade managerFactoryFacade){
-        return new GoalEventTaskAdapter(managerFactoryFacade);
-    }
-
-    @Bean
-    public EventTaskExecutor goalManagementEventTaskExecutor(@Qualifier("goalManagementEventTaskAdapter") EventTaskAdapter goalManagementEventTaskAdapter) {
-        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder().setNameFormat("CL goal:management:event:executor - %d");
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5, threadFactoryBuilder.build());
-        return new EventTaskExecutor(goalManagementEventTaskAdapter, executorService);
     }
 
     @Bean

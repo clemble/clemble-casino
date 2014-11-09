@@ -1,4 +1,4 @@
-package com.clemble.casino.goal.lisetener;
+package com.clemble.casino.goal.listener;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.server.event.goal.SystemGoalStartedEvent;

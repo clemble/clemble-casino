@@ -1,25 +1,23 @@
 package com.clemble.casino.server.aspect.time;
 
-import com.clemble.casino.event.Event;
 import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.PlayerClock;
 import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
-import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import com.clemble.casino.player.PlayerAware;
-import com.clemble.casino.server.executor.EventTask;
-import com.clemble.casino.server.executor.EventTaskExecutor;
-import org.springframework.scheduling.TriggerContext;
+import com.clemble.casino.server.event.SystemEvent;
+import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
+import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
+import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by mavarazy on 13/10/14.
  */
-public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<PlayerClockTimeoutEventTask>, EventTask {
+public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<PlayerClockTimeoutEventTask> {
 
     /**
      * Generated
@@ -33,7 +31,9 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
     final private PlayerClock clock;
     final private MoveTimeRule moveRule;
     final private TotalTimeRule totalRule;
-    final private EventTaskExecutor taskExecutor;
+
+    final Function<String, SystemEvent> eventFactory;
+    final private SystemNotificationService notificationService;
 
     public PlayerClockTimeoutEventTask(
             String sessionKey,
@@ -41,23 +41,20 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
             PlayerClock playerClock,
             MoveTimeRule moveRule,
             TotalTimeRule totalRule,
-            EventTaskExecutor taskExecutor) {
+            SystemNotificationService notificationService,
+            Function<String, SystemEvent> eventFactory) {
         this.clock = checkNotNull(playerClock);
         this.player = player;
         this.sessionKey = checkNotNull(sessionKey);
         this.moveRule = checkNotNull(moveRule);
         this.totalRule = checkNotNull(totalRule);
-        this.taskExecutor = checkNotNull(taskExecutor);
+        this.notificationService = checkNotNull(notificationService);
+        this.eventFactory = eventFactory;
     }
 
     @Override
     public String getPlayer() {
         return player;
-    }
-
-    @Override
-    public String getKey() {
-        return sessionKey;
     }
 
     /**
@@ -73,7 +70,13 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
         } else {
             clock.start(moveStart, moveBreachTime, totalRule.getPunishment());
         }
-        taskExecutor.schedule(this);
+
+        SystemAddJobScheduleEvent addJobScheduleEvent = new SystemAddJobScheduleEvent(
+            sessionKey,
+            player,
+            eventFactory.apply(sessionKey),
+            new Date(clock.getBreachTime()));
+        this.notificationService.send(addJobScheduleEvent);
     }
 
     /**
@@ -81,17 +84,9 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
      */
     public void stop() {
         clock.stop();
-        taskExecutor.cancel(this);
-    }
 
-    @Override
-    public Collection<? extends Event> execute() {
-        return Collections.singleton(new PlayerAction(sessionKey, player, clock.getPunishment().toBreachEvent()));
-    }
-
-    @Override
-    public Date nextExecutionTime() {
-        return new Date(clock.getBreachTime());
+        SystemRemoveJobScheduleEvent removeJobScheduleEvent = new SystemRemoveJobScheduleEvent(sessionKey, player);
+        this.notificationService.send(removeJobScheduleEvent);
     }
 
     @Override

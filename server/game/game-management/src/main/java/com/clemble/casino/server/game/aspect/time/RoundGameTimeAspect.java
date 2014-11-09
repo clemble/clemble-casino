@@ -15,20 +15,19 @@ import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.aspect.time.PlayerClockTimeoutEventTask;
-import com.clemble.casino.server.executor.EventTaskExecutor;
+import com.clemble.casino.server.event.game.SystemGameTimeoutEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 public class RoundGameTimeAspect extends GameAspect<GameManagementEvent> {
 
     final private Map<String, PlayerClockTimeoutEventTask> playerToTask = new HashMap<>();
-    final private EventTaskExecutor eventTaskExecutor;
 
     public RoundGameTimeAspect(
             RoundGameConfiguration configuration,
             RoundGameContext context,
-            EventTaskExecutor eventTaskExecutor) {
+            SystemNotificationService systemNotificationService) {
         super(new EventTypeSelector(GameManagementEvent.class));
-        this.eventTaskExecutor = checkNotNull(eventTaskExecutor);
 
         context.getPlayerContexts().forEach(playerContext -> {
             playerToTask.put(playerContext.getPlayer(),
@@ -38,7 +37,8 @@ public class RoundGameTimeAspect extends GameAspect<GameManagementEvent> {
                     playerContext.getClock(),
                     configuration.getMoveTimeRule(),
                     configuration.getTotalTimeRule(),
-                    eventTaskExecutor));
+                    systemNotificationService,
+                    (sessionKey) -> new SystemGameTimeoutEvent(sessionKey)));
         });
     }
 
