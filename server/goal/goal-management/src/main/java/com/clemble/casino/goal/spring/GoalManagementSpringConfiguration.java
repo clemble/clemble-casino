@@ -14,12 +14,14 @@ import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.event.goal.SystemGoalTimeoutEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
+import com.clemble.casino.server.spring.common.ConnectionClientSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,7 +37,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * Created by mavarazy on 9/12/14.
  */
 @Configuration
-@Import({CommonSpringConfiguration.class, MongoSpringConfiguration.class})
+@Import({CommonSpringConfiguration.class, MongoSpringConfiguration.class, ConnectionClientSpringConfiguration.class})
 public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -54,8 +56,11 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalActionServiceController goalActionServiceController(GoalManagerFactoryFacade factoryFacade, GoalStateRepository goalStateRepository) {
-        return new GoalActionServiceController(factoryFacade, goalStateRepository);
+    public GoalActionServiceController goalActionServiceController(
+        GoalManagerFactoryFacade factoryFacade,
+        GoalStateRepository goalStateRepository,
+        @Qualifier("playerConnectionClient") PlayerConnectionService playerConnectionClient) {
+        return new GoalActionServiceController(factoryFacade, goalStateRepository, playerConnectionClient);
     }
 
     @Bean
