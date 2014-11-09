@@ -62,7 +62,7 @@ public class GoalActionServiceController implements GoalActionService {
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.GOAL_STATE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public GoalState getState(String goalKey) {
+    public GoalState getState(@PathVariable("goalKey") String goalKey) {
         return factoryFacade.get(goalKey).getState();
     }
 
