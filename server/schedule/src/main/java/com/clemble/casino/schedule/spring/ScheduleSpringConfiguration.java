@@ -19,6 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
+
+import java.util.Arrays;
 
 /**
  * Created by mavarazy on 11/8/14.
@@ -26,6 +29,9 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({ CommonSpringConfiguration.class })
 public class ScheduleSpringConfiguration implements SpringConfiguration {
+
+    @Autowired
+    public Environment env;
 
     @Bean
     public ScheduleJobExecutor jobExecutor(ObjectMapper objectMapper, SystemNotificationService notificationService){
@@ -57,10 +63,16 @@ public class ScheduleSpringConfiguration implements SpringConfiguration {
         return new ScheduleJobExecutorFactory(jobExecutor);
     }
 
+
+
     @Bean(destroyMethod = "shutdown")
     public Scheduler scheduler(ScheduleJobExecutorFactory jobExecutorFactory) throws SchedulerException {
         StdSchedulerFactory schedulerFactory = new StdSchedulerFactory();
-        schedulerFactory.initialize(getClass().getResourceAsStream("/quartz.properties"));
+        if (Arrays.asList(env.getActiveProfiles()).contains("cloud")) {
+            schedulerFactory.initialize(getClass().getResourceAsStream("/quartz.cloud.properties"));
+        } else {
+            schedulerFactory.initialize(getClass().getResourceAsStream("/quartz.properties"));
+        }
         Scheduler scheduler = schedulerFactory.getScheduler();
         scheduler.setJobFactory(jobExecutorFactory);
         scheduler.start();
