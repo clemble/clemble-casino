@@ -234,6 +234,27 @@
                                             <type>war</type>
                                             <destFileName>schedule.war</destFileName>
                                         </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>goal-construction</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                            <destFileName>goal-construction.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>goal-configuration</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                            <destFileName>goal-configuration.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>goal-management</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                            <destFileName>goal-management.war</destFileName>
+                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
@@ -247,10 +268,16 @@
                             <reload>manual</reload>
                             <jvmArgs>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArgs>
                             <contextHandlers>
+                                <!-- Payment related services -->
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/payment.war</war>
                                     <contextPath>/payment</contextPath>
                                 </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/payment-bonus.war</war>
+                                    <contextPath>/bonus</contextPath>
+                                </contextHandler>
+                                <!-- Player related services -->
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/player-social.war</war>
                                     <contextPath>/social</contextPath>
@@ -271,14 +298,7 @@
                                     <war>${project.build.directory}/wars-to-be-tested/player-profile.war</war>
                                     <contextPath>/profile</contextPath>
                                 </contextHandler>
-                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/payment-bonus.war</war>
-                                    <contextPath>/bonus</contextPath>
-                                </contextHandler>
-                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/schedule.war</war>
-                                    <contextPath>/schedule</contextPath>
-                                </contextHandler>
+                                <!-- Game related services -->
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/game-configuration.war</war>
                                     <contextPath>/game/configuration</contextPath>
@@ -290,6 +310,24 @@
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/integration-game.war</war>
                                     <contextPath>/game/management</contextPath>
+                                </contextHandler>
+                                <!-- Goal related services -->
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/goal-configuration.war</war>
+                                    <contextPath>/configuration</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/goal-construction.war</war>
+                                    <contextPath>/construction</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/goal-management.war</war>
+                                    <contextPath>/management</contextPath>
+                                </contextHandler>
+                                <!-- Common services -->
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/schedule.war</war>
+                                    <contextPath>/schedule</contextPath>
                                 </contextHandler>
                             </contextHandlers>
                             <systemProperties>
