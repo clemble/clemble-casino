@@ -80,7 +80,7 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         final private SystemEventListener<T> eventListener;
 
         final AtomicBoolean keepClosed = new AtomicBoolean(false);
-        final private AtomicReference<Connection> rabbitConnection = new AtomicReference<>(null);
+        final private AtomicReference<Connection> rabbitConnection = new AtomicReference<Connection>(null);
 
         public RabbitStartupTask(String host, String user, String password, ObjectMapper objectMapper, SystemEventListener<T> eventListener) {
             this.LOG = LoggerFactory.getLogger(eventListener.getClass());
@@ -136,13 +136,20 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
         }
 
         public void close() {
+            // Step 1. Specifying close flag
+            boolean previous = keepClosed.getAndSet(true);
+            if(previous) {
+                LOG.error("Re closing, ignore request");
+                return;
+            }
+            // Step 2. Closing rabbit connection
             LOG.debug("closing");
             try {
-                keepClosed.set(true);
                 if(rabbitConnection.get() != null) {
                     Connection connection = rabbitConnection.get();
-                    if(connection.isOpen())
+                    if(connection.isOpen()) {
                         connection.close();
+                    }
                 } else {
                     LOG.error("Failed to start {} {}", eventListener.getQueueName(), eventListener.getChannel());
                 }
@@ -151,6 +158,9 @@ public class RabbitSystemNotificationServiceListener implements SystemNotificati
                 LOG.error("Exception source {}", exception.getReference());
             } catch (IOException ioException) {
                 LOG.error("Failure to close IOException", ioException);
+            } finally {
+                // Step 3. Closing executor service (To prevent closing with some random exception exit)
+                this.executor.shutdown();
             }
         }
 

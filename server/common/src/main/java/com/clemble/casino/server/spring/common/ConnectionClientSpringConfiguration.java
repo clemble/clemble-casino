@@ -2,7 +2,7 @@ package com.clemble.casino.server.spring.common;
 
 import com.clemble.casino.player.PlayerConnections;
 import com.clemble.casino.player.service.PlayerConnectionService;
-import com.clemble.casino.server.connection.RESTPlayerConnectionService;
+import com.clemble.casino.server.connection.RestPlayerConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,7 +88,7 @@ public class ConnectionClientSpringConfiguration implements SpringConfiguration{
                     return execution.execute(request, body);
                 }
             });
-            return new RESTPlayerConnectionService(base, restTemplate);
+            return new RestPlayerConnectionService(base, restTemplate);
         }
     }
 
