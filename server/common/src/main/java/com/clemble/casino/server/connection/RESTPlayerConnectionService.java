@@ -20,6 +20,7 @@ public class RestPlayerConnectionService implements PlayerConnectionService {
     final private String host;
     final private RestTemplate restTemplate;
 
+
     public RestPlayerConnectionService(String host, RestTemplate restTemplate) {
         this.host = Preconditions.checkNotNull(host);
         this.restTemplate = Preconditions.checkNotNull(restTemplate);
