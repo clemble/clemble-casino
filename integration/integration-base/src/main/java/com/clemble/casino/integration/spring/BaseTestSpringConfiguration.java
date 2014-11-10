@@ -129,7 +129,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             PlayerFacadeRegistrationService registrationService,
             PlayerProfileServiceController profileOperations,
             PlayerImageServiceController imageService,
-            PlayerConnectionServiceController connectionService,
+            @Qualifier("playerConnectionController") PlayerConnectionServiceController connectionService,
             PlayerSessionServiceController sessionOperations,
             @Qualifier("playerAccountController") PlayerAccountServiceController accountOperations,
             PaymentTransactionServiceController paymentTransactionService,
