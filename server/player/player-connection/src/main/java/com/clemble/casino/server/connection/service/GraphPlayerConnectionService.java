@@ -1,6 +1,10 @@
 package com.clemble.casino.server.connection.service;
 
+import com.clemble.casino.player.ConnectionRequest;
 import com.clemble.casino.player.PlayerConnections;
+import com.clemble.casino.player.event.PlayerInvitationAcceptedAction;
+import com.clemble.casino.player.event.PlayerInvitationAction;
+import com.clemble.casino.player.event.PlayerInvitationDeclinedAction;
 import com.clemble.casino.server.connection.GraphConnectionKey;
 import com.clemble.casino.server.connection.GraphPlayerConnections;
 import com.clemble.casino.server.connection.repository.GraphPlayerConnectionsRepository;
@@ -53,6 +57,17 @@ public class GraphPlayerConnectionService extends ServerPlayerConnectionService 
     }
 
     @Override
+    public ConnectionRequest connect(String player, String requester) {
+        // Step 1. Generating connection request
+        ConnectionRequest connectionRequest = new ConnectionRequest(requester);
+        // Step 2. Checking player connections
+        GraphPlayerConnections playerConnections = connectionsRepository.findByPlayer(player).addConnectionRequest(connectionRequest);
+        connectionsRepository.save(playerConnections);
+        // Step 3. Returning ConnectionRequest
+        return connectionRequest;
+    }
+
+    @Override
     public PlayerConnections getConnections(String player) {
         // Step 1. Generating result collection
         List<ConnectionKey> connectionKeys = new ArrayList<>();
@@ -81,6 +96,19 @@ public class GraphPlayerConnectionService extends ServerPlayerConnectionService 
     @Override
     public Set<String> getConnectedConnection(String player) {
         return connectionsRepository.findByPlayer(player).toPlayerConnections().getConnected();
+    }
+
+    @Override
+    public ConnectionRequest reply(String player, String requester, PlayerInvitationAction response) {
+        ConnectionRequest connectionRequest = new ConnectionRequest(requester);
+        GraphPlayerConnections playerConnections = connectionsRepository.findByPlayer(player);
+        boolean containedRequest = playerConnections.getConnectionRequests().remove(connectionRequest);
+        if (containedRequest) {
+            if (response instanceof PlayerInvitationAcceptedAction) {
+                playerConnections.addConnection(new ConnectionKey(WebMapping.PROVIDER_ID, requester));
+            }
+        }
+        return connectionRequest;
     }
 
 }

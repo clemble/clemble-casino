@@ -1,6 +1,8 @@
 package com.clemble.casino.server.spring.common;
 
+import com.clemble.casino.player.ConnectionRequest;
 import com.clemble.casino.player.PlayerConnections;
+import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.connection.RESTPlayerConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,14 @@ public class ConnectionClientSpringConfiguration implements SpringConfiguration{
                 }
                 @Override
                 public Set<String> getConnectedConnection(String player) {
+                    throw new UnsupportedOperationException();
+                }
+                @Override
+                public ConnectionRequest connect(String player) {
+                    throw new UnsupportedOperationException();
+                }
+                @Override
+                public ConnectionRequest reply(String player, PlayerInvitationAction response) {
                     throw new UnsupportedOperationException();
                 }
                 @Override

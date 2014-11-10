@@ -2,7 +2,9 @@ package com.clemble.casino.server.connection.controller;
 
 import java.util.Set;
 
+import com.clemble.casino.player.ConnectionRequest;
 import com.clemble.casino.player.PlayerConnections;
+import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.connection.service.ServerPlayerConnectionService;
 import org.springframework.http.HttpStatus;
@@ -74,6 +76,22 @@ public class PlayerConnectionServiceController implements PlayerConnectionServic
     @ResponseStatus(value = HttpStatus.OK)
     public Set<String> getConnectedConnection(@PathVariable("player") String player) {
         return connectionService.getConnectedConnection(player);
+    }
+
+    @Override
+    public ConnectionRequest connect(String player) {
+        throw new IllegalAccessError();
+    }
+
+    @RequestMapping(value = PLAYER_CONNECTION_CONNECTIONS, method = RequestMethod.POST, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public ConnectionRequest connect(@PathVariable("player") String player, @CookieValue("player") String requester) {
+        return connectionService.connect(player, requester);
+    }
+
+    @Override
+    public ConnectionRequest reply(String player, PlayerInvitationAction response) {
+        return connectionService.reply(player, response);
     }
 
 }

@@ -1,6 +1,10 @@
 package com.clemble.casino.server.connection.service;
 
+import com.clemble.casino.WebMapping;
+import com.clemble.casino.player.ConnectionRequest;
 import com.clemble.casino.player.PlayerConnections;
+import com.clemble.casino.player.event.PlayerInvitationAcceptedAction;
+import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.server.connection.GraphConnectionKey;
 import com.clemble.casino.server.connection.GraphPlayerConnections;
 import com.clemble.casino.server.connection.repository.MongoPlayerConnectionsRepository;
@@ -45,6 +49,27 @@ public class MongoPlayerConnectionsService extends ServerPlayerConnectionService
     @Override
     public Iterable<PlayerConnections> getOwners(Collection<ConnectionKey> connections) {
         return connectionsRepository.findByOwnedIn(connections);
+    }
+
+    @Override
+    public ConnectionRequest connect(String player, String request) {
+        ConnectionRequest newConnectionRequest = new ConnectionRequest(request);
+        PlayerConnections connections = connectionsRepository.findOne(player);
+        connections.getConnectionRequests().add(newConnectionRequest);
+        return newConnectionRequest;
+    }
+
+    @Override
+    public ConnectionRequest reply(String player, String requester, PlayerInvitationAction response) {
+        ConnectionRequest connectionRequest = new ConnectionRequest(requester);
+        PlayerConnections playerConnections = connectionsRepository.findOne(player);
+        boolean containedRequest = playerConnections.getConnectionRequests().remove(connectionRequest);
+        if (containedRequest) {
+            if (response instanceof PlayerInvitationAcceptedAction) {
+                playerConnections.getConnected().add(requester);
+            }
+        }
+        return connectionRequest;
     }
 
     @Override

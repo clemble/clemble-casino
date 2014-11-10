@@ -1,6 +1,8 @@
 package com.clemble.casino.server.connection;
 
+import com.clemble.casino.player.ConnectionRequest;
 import com.clemble.casino.player.PlayerConnections;
+import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.utils.CollectionUtils;
 import com.google.common.base.Preconditions;
@@ -49,6 +51,16 @@ public class RESTPlayerConnectionService implements PlayerConnectionService {
         String playerUri = toConnectionUrl(PLAYER_CONNECTION_CONNECTIONS).replace("{player}", player).replace("{host}", host);
         // Step 3. Requesting through RestTemplate
         return CollectionUtils.immutableSet(restTemplate.getForObject(playerUri, String[].class));
+    }
+
+    @Override
+    public ConnectionRequest connect(String player) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ConnectionRequest reply(String player, PlayerInvitationAction response) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

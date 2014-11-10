@@ -5,7 +5,9 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Set;
 
+import com.clemble.casino.player.ConnectionRequest;
 import com.clemble.casino.player.PlayerConnections;
+import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import org.springframework.social.connect.ConnectionKey;
@@ -53,6 +55,16 @@ public class IntegrationPlayerConnectionService implements PlayerConnectionServi
     @Override
     public Set<String> getConnectedConnection(String player) {
         return connectionService.getConnectedConnection(player);
+    }
+
+    @Override
+    public ConnectionRequest connect(String player) {
+        return connectionService.connect(player);
+    }
+
+    @Override
+    public ConnectionRequest reply(String player, PlayerInvitationAction response) {
+        return null;
     }
 
 }
