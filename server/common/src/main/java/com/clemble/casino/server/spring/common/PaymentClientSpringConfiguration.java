@@ -3,7 +3,7 @@ package com.clemble.casino.server.spring.common;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.payment.service.PlayerAccountService;
-import com.clemble.casino.server.payment.RestPlayerAccountService;
+import com.clemble.casino.server.payment.RESTPlayerAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,7 +78,7 @@ public class PaymentClientSpringConfiguration implements SpringConfiguration {
                     return execution.execute(request, body);
                 }
             });
-            return new RestPlayerAccountService(base, restTemplate);
+            return new RESTPlayerAccountService(base, restTemplate);
         }
     }
 

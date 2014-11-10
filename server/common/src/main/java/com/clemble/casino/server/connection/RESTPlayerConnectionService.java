@@ -15,12 +15,12 @@ import static com.clemble.casino.player.PlayerWebMapping.*;
 /**
  * Created by mavarazy on 11/9/14.
  */
-public class RestPlayerConnectionService implements PlayerConnectionService {
+public class RESTPlayerConnectionService implements PlayerConnectionService {
 
     final private String host;
     final private RestTemplate restTemplate;
 
-    public RestPlayerConnectionService(String host, RestTemplate restTemplate) {
+    public RESTPlayerConnectionService(String host, RestTemplate restTemplate) {
         this.host = Preconditions.checkNotNull(host);
         this.restTemplate = Preconditions.checkNotNull(restTemplate);
     }

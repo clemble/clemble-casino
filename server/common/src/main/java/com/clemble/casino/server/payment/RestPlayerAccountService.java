@@ -13,12 +13,12 @@ import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.utils.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-public class RestPlayerAccountService implements PlayerAccountService {
+public class RESTPlayerAccountService implements PlayerAccountService {
 
     final private RestTemplate restTemplate;
     final private String base;
 
-    public RestPlayerAccountService(String base, RestTemplate restTemplate) {
+    public RESTPlayerAccountService(String base, RestTemplate restTemplate) {
         this.restTemplate = checkNotNull(restTemplate);
         this.base = checkNotNull(base);
     }
