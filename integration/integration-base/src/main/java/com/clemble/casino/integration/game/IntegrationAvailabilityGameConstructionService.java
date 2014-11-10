@@ -2,10 +2,9 @@ package com.clemble.casino.integration.game;
 
 import com.clemble.casino.game.lifecycle.construction.AvailabilityGameRequest;
 import com.clemble.casino.game.lifecycle.construction.GameConstruction;
-import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
+import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.game.lifecycle.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
-import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 
 import java.util.Collection;

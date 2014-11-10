@@ -36,7 +36,11 @@ public class PlayerConnectionNetworkPopulateListener implements SystemEventListe
         // Step 1. Finding appropriate PlayerConnections
         PlayerConnections playerConnections = connectionService.getConnections(event.getPlayer());
         if (playerConnections == null) {
-            playerConnections = connectionService.save(new PlayerConnections(event.getPlayer(), Collections.emptySet(), Collections.emptySet()));
+            playerConnections = connectionService.save(new PlayerConnections(
+                event.getPlayer(),
+                Collections.emptySet(),
+                Collections.emptySet(),
+                Collections.emptySet()));
         }
         // Step 2. Adding owned Connections
         Set<ConnectionKey> owned = new HashSet<>(playerConnections.getOwned());
@@ -54,7 +58,11 @@ public class PlayerConnectionNetworkPopulateListener implements SystemEventListe
         connected.addAll(discoveredConnections);
         // Step 5. Saving new connections
         if(!discoveredConnections.isEmpty()) {
-            connectionService.save(new PlayerConnections(playerConnections.getPlayer(), owned, connected));
+            connectionService.save(new PlayerConnections(
+                playerConnections.getPlayer(),
+                owned,
+                connected,
+                playerConnections.getConnectionRequests()));
             // Step 6. For all discovered connections send notification
             for (String discovered : discoveredConnections) {
                 notificationService.send(new SystemPlayerDiscoveredConnectionEvent(event.getPlayer(), discovered));

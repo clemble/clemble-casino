@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.UUID;
 
-import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
+import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;

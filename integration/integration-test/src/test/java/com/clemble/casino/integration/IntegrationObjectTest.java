@@ -11,8 +11,8 @@ import java.util.*;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAcceptedAction;
-import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
+import com.clemble.casino.player.event.PlayerInvitationAcceptedAction;
+import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.game.lifecycle.management.*;
 import com.clemble.casino.lifecycle.management.outcome.Outcome;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;

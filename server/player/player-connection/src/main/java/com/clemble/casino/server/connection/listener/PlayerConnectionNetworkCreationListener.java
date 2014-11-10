@@ -1,5 +1,6 @@
 package com.clemble.casino.server.connection.listener;
 
+import com.clemble.casino.player.ConnectionRequest;
 import com.clemble.casino.player.PlayerConnections;
 import com.clemble.casino.server.connection.service.ServerPlayerConnectionService;
 import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
@@ -26,7 +27,7 @@ public class PlayerConnectionNetworkCreationListener implements SystemEventListe
         if (socialNetworkRepository.getConnections(event.getPlayer()) != null)
             return;
         // Step 1. Generating player connections
-        PlayerConnections connections = new PlayerConnections(event.getPlayer(), new HashSet<ConnectionKey>(), new HashSet<String>());
+        PlayerConnections connections = new PlayerConnections(event.getPlayer(), new HashSet<ConnectionKey>(), new HashSet<String>(), new HashSet<ConnectionRequest>());
         // Step 2. Saving connections
         socialNetworkRepository.save(connections);
     }

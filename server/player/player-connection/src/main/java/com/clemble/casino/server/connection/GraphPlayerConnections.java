@@ -1,6 +1,7 @@
 package com.clemble.casino.server.connection;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -119,7 +120,7 @@ public class GraphPlayerConnections implements PlayerAware {
         for(GraphConnectionKey connection: connections)
             connectedKeys.add(connection.getConnectionKey());
         // Step 3. Creating player connections
-        return new PlayerConnections(player, ownedKeys, connectedKeys);
+        return new PlayerConnections(player, ownedKeys, connectedKeys, Collections.emptySet());
     }
 
     @Override

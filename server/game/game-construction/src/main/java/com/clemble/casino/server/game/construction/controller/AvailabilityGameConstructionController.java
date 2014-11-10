@@ -4,10 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
-import com.clemble.casino.game.lifecycle.construction.event.PlayerInvitationAction;
+import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
-import com.clemble.casino.player.PlayerAware;
-import com.clemble.casino.player.event.PlayerEvent;
 import com.clemble.casino.server.game.construction.repository.GameConstructionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
