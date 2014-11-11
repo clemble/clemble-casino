@@ -14,12 +14,12 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 /**
  * Created by mavarazy on 7/4/14.
  */
-public class PlayerConnectionNetworkPopulateListener implements SystemEventListener<SystemPlayerConnectionsFetchedEvent> {
+public class PlayerGraphPopulatorListener implements SystemEventListener<SystemPlayerConnectionsFetchedEvent> {
 
     final private PlayerGraphService connectionService;
     final private SystemNotificationService notificationService;
 
-    public PlayerConnectionNetworkPopulateListener(
+    public PlayerGraphPopulatorListener(
         PlayerGraphService connectionService,
         SystemNotificationService notificationService) {
         this.connectionService = checkNotNull(connectionService);

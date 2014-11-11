@@ -2,8 +2,10 @@ package com.clemble.casino.server.connection.spring;
 
 import com.clemble.casino.server.connection.MongoPlayerGraph;
 import com.clemble.casino.server.connection.NeoPlayerGraph;
+import com.clemble.casino.server.connection.ServerFriendInvitation;
 import com.clemble.casino.server.connection.repository.NeoPlayerGraphRepository;
 import com.clemble.casino.server.connection.repository.MongoPlayerGraphRepository;
+import com.clemble.casino.server.connection.repository.PlayerFriendInvitationRepository;
 import com.clemble.casino.server.connection.service.PlayerGraphService;
 import com.clemble.casino.server.connection.service.SimplePlayerGraphService;
 import com.clemble.casino.server.spring.common.BasicNeo4JSpringConfiguration;
@@ -48,6 +50,11 @@ public class ServerPlayerConnectionsSpringConfiguration {
         @Bean
         public MongoPlayerGraphRepository mongoPlayerConnectionsRepository(MongoRepositoryFactory mongoRepositoryFactory) {
             return mongoRepositoryFactory.getRepository(MongoPlayerGraphRepository.class);
+        }
+
+        @Bean
+        public PlayerFriendInvitationRepository playerFriendInvitationRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+            return mongoRepositoryFactory.getRepository(PlayerFriendInvitationRepository.class);
         }
 
         @Bean

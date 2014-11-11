@@ -7,21 +7,21 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
 /**
  * Created by mavarazy on 7/4/14.
  */
-public class PlayerConnectionNetworkCreationListener implements SystemEventListener<SystemPlayerCreatedEvent>{
+public class PlayerGraphCreationListener implements SystemEventListener<SystemPlayerCreatedEvent>{
 
-    final private PlayerGraphService socialNetworkRepository;
+    final private PlayerGraphService graphService;
 
-    public PlayerConnectionNetworkCreationListener(PlayerGraphService socialNetworkRepository) {
-        this.socialNetworkRepository = socialNetworkRepository;
+    public PlayerGraphCreationListener(PlayerGraphService socialNetworkRepository) {
+        this.graphService = socialNetworkRepository;
     }
 
     @Override
     public void onEvent(SystemPlayerCreatedEvent event) {
         // Step 0. Check Connection was not yet created
-        if (socialNetworkRepository.getConnections(event.getPlayer()) != null)
+        if (graphService.getConnections(event.getPlayer()) != null)
             return;
         // Step 1. Saving connections
-        socialNetworkRepository.create(event.getPlayer());
+        graphService.create(event.getPlayer());
     }
 
     @Override

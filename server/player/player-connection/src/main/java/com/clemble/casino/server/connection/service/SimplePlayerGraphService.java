@@ -30,7 +30,10 @@ public class SimplePlayerGraphService<T extends PlayerGraph, ID extends Serializ
 
     @Override
     public Set<String> getConnections(String me) {
-        return graphRepository.findByPlayer(me).fetchConnections();
+        // Step 1. Fetch player graph
+        T playerGraph = graphRepository.findByPlayer(me);
+        // Step 2. Return related connections
+        return playerGraph != null ? playerGraph.fetchConnections() : null;
     }
 
     @Override
