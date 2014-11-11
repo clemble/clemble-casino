@@ -1,15 +1,12 @@
 package com.clemble.casino.server.connection.listener;
 
-import com.clemble.casino.player.PlayerConnections;
-import com.clemble.casino.server.connection.service.ServerPlayerConnectionService;
+import com.clemble.casino.server.connection.service.PlayerGraphService;
 import com.clemble.casino.server.event.player.SystemPlayerConnectionsFetchedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import org.springframework.social.connect.ConnectionKey;
+import com.google.common.collect.Sets;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
@@ -19,11 +16,11 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
  */
 public class PlayerConnectionNetworkPopulateListener implements SystemEventListener<SystemPlayerConnectionsFetchedEvent> {
 
-    final private ServerPlayerConnectionService connectionService;
+    final private PlayerGraphService connectionService;
     final private SystemNotificationService notificationService;
 
     public PlayerConnectionNetworkPopulateListener(
-        ServerPlayerConnectionService connectionService,
+        PlayerGraphService connectionService,
         SystemNotificationService notificationService) {
         this.connectionService = checkNotNull(connectionService);
         this.notificationService = checkNotNull(notificationService);
@@ -33,39 +30,18 @@ public class PlayerConnectionNetworkPopulateListener implements SystemEventListe
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void onEvent(SystemPlayerConnectionsFetchedEvent event) {
         // Step 1. Finding appropriate PlayerConnections
-        PlayerConnections playerConnections = connectionService.getServerConnection(event.getPlayer());
-        if (playerConnections == null) {
-            playerConnections = connectionService.save(new PlayerConnections(
-                event.getPlayer(),
-                Collections.emptySet(),
-                Collections.emptySet(),
-                Collections.emptySet()));
-        }
-        // Step 2. Adding owned Connections
-        Set<ConnectionKey> owned = new HashSet<>(playerConnections.getOwned());
-        owned.add(event.getConnection());
+        connectionService.addOwned(event.getPlayer(), event.getConnection());
         // Step 3. Adding connected connections
-        Set<String> connected =  new HashSet<>(playerConnections.getConnected());
+        Set<String> connected =  connectionService.getConnections(event.getPlayer());
         // Step 4. Checking for new connections
-        Set<String> discoveredConnections = new HashSet<>();
-        for(PlayerConnections player: connectionService.getOwners(event.getConnections())) {
-            discoveredConnections.add(player.getPlayer());
-        }
+        Set<String> discoveredConnections = Sets.newHashSet(connectionService.getOwners(event.getConnections()));
         // Step 4.1. Removing all already connected
         discoveredConnections.removeAll(connected);
-        // Step 4.2. Merging to already connected
-        connected.addAll(discoveredConnections);
         // Step 5. Saving new connections
-        if(!discoveredConnections.isEmpty()) {
-            connectionService.save(new PlayerConnections(
-                playerConnections.getPlayer(),
-                owned,
-                connected,
-                playerConnections.getFriendRequests()));
+        for(String discovered : discoveredConnections) {
+            connectionService.connect(event.getPlayer(), discovered);
             // Step 6. For all discovered connections send notification
-            for (String discovered : discoveredConnections) {
-                notificationService.send(new SystemPlayerDiscoveredConnectionEvent(event.getPlayer(), discovered));
-            }
+            notificationService.send(new SystemPlayerDiscoveredConnectionEvent(event.getPlayer(), discovered));
         }
     }
 

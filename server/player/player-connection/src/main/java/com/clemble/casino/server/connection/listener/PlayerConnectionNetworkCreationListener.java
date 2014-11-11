@@ -1,22 +1,17 @@
 package com.clemble.casino.server.connection.listener;
 
-import com.clemble.casino.player.FriendInvitation;
-import com.clemble.casino.player.PlayerConnections;
-import com.clemble.casino.server.connection.service.ServerPlayerConnectionService;
+import com.clemble.casino.server.connection.service.PlayerGraphService;
 import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
-import org.springframework.social.connect.ConnectionKey;
-
-import java.util.HashSet;
 
 /**
  * Created by mavarazy on 7/4/14.
  */
 public class PlayerConnectionNetworkCreationListener implements SystemEventListener<SystemPlayerCreatedEvent>{
 
-    final private ServerPlayerConnectionService socialNetworkRepository;
+    final private PlayerGraphService socialNetworkRepository;
 
-    public PlayerConnectionNetworkCreationListener(ServerPlayerConnectionService socialNetworkRepository) {
+    public PlayerConnectionNetworkCreationListener(PlayerGraphService socialNetworkRepository) {
         this.socialNetworkRepository = socialNetworkRepository;
     }
 
@@ -25,10 +20,8 @@ public class PlayerConnectionNetworkCreationListener implements SystemEventListe
         // Step 0. Check Connection was not yet created
         if (socialNetworkRepository.getConnections(event.getPlayer()) != null)
             return;
-        // Step 1. Generating player connections
-        PlayerConnections connections = new PlayerConnections(event.getPlayer(), new HashSet<ConnectionKey>(), new HashSet<String>(), new HashSet<FriendInvitation>());
-        // Step 2. Saving connections
-        socialNetworkRepository.save(connections);
+        // Step 1. Saving connections
+        socialNetworkRepository.create(event.getPlayer());
     }
 
     @Override

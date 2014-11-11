@@ -4,12 +4,8 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Set;
 
-import com.clemble.casino.player.FriendInvitation;
-import com.clemble.casino.player.PlayerConnections;
-import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
-import org.springframework.social.connect.ConnectionKey;
 
 public class IntegrationPlayerConnectionService implements PlayerConnectionService {
 

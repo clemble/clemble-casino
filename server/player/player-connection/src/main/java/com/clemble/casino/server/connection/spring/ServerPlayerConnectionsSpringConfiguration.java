@@ -1,9 +1,11 @@
 package com.clemble.casino.server.connection.spring;
 
-import com.clemble.casino.server.connection.repository.GraphPlayerConnectionsRepository;
-import com.clemble.casino.server.connection.repository.MongoPlayerConnectionsRepository;
-import com.clemble.casino.server.connection.service.GraphPlayerConnectionService;
-import com.clemble.casino.server.connection.service.MongoPlayerConnectionsService;
+import com.clemble.casino.server.connection.MongoPlayerGraph;
+import com.clemble.casino.server.connection.NeoPlayerGraph;
+import com.clemble.casino.server.connection.repository.NeoPlayerGraphRepository;
+import com.clemble.casino.server.connection.repository.MongoPlayerGraphRepository;
+import com.clemble.casino.server.connection.service.PlayerGraphService;
+import com.clemble.casino.server.connection.service.SimplePlayerGraphService;
 import com.clemble.casino.server.spring.common.BasicNeo4JSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -11,6 +13,8 @@ import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.repository.GraphRepository;
+
+import java.util.Collections;
 
 /**
  * Created by mavarazy on 8/12/14.
@@ -31,8 +35,8 @@ public class ServerPlayerConnectionsSpringConfiguration {
         }
 
         @Bean
-        public GraphPlayerConnectionService connectionService(GraphPlayerConnectionsRepository connectionRepository) {
-            return new GraphPlayerConnectionService(connectionRepository);
+        public SimplePlayerGraphService connectionService(NeoPlayerGraphRepository connectionRepository) {
+            return new SimplePlayerGraphService<NeoPlayerGraph, Long>((player) -> new NeoPlayerGraph(player),connectionRepository);
         }
 
     }
@@ -42,13 +46,13 @@ public class ServerPlayerConnectionsSpringConfiguration {
     public static class MongoPlayerConnectionsSpringConfiguration implements SpringConfiguration {
 
         @Bean
-        public MongoPlayerConnectionsRepository mongoPlayerConnectionsRepository(MongoRepositoryFactory mongoRepositoryFactory) {
-            return mongoRepositoryFactory.getRepository(MongoPlayerConnectionsRepository.class);
+        public MongoPlayerGraphRepository mongoPlayerConnectionsRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+            return mongoRepositoryFactory.getRepository(MongoPlayerGraphRepository.class);
         }
 
         @Bean
-        public MongoPlayerConnectionsService playerConnectionsService(MongoPlayerConnectionsRepository mongoPlayerConnectionsRepository) {
-            return new MongoPlayerConnectionsService(mongoPlayerConnectionsRepository);
+        public PlayerGraphService playerGraphService(MongoPlayerGraphRepository mongoPlayerConnectionsRepository) {
+            return new SimplePlayerGraphService<MongoPlayerGraph, String>((player) -> new MongoPlayerGraph(player, Collections.emptySet(), Collections.emptySet()), mongoPlayerConnectionsRepository);
         }
 
     }

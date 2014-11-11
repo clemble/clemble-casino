@@ -1,8 +1,5 @@
 package com.clemble.casino.server.spring.common;
 
-import com.clemble.casino.player.FriendInvitation;
-import com.clemble.casino.player.PlayerConnections;
-import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.connection.RESTPlayerConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +13,6 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.social.connect.ConnectionKey;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;

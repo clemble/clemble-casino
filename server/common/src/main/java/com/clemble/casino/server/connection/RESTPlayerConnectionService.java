@@ -26,7 +26,7 @@ public class RESTPlayerConnectionService implements PlayerConnectionService {
     @Override
     public Set<String> getConnections(String player) {
         // Step 1. Fetching player connections
-        String playerUri = toConnectionUrl(PLAYER_CONNECTION_CONNECTIONS).replace("{player}", player).replace("{host}", host);
+        String playerUri = toConnectionUrl(PLAYER_CONNECTIONS).replace("{player}", player).replace("{host}", host);
         // Step 3. Requesting through RestTemplate
         return CollectionUtils.immutableSet(restTemplate.getForObject(playerUri, String[].class));
     }

@@ -1,4 +1,4 @@
-package com.clemble.casino.player;
+package com.clemble.casino.server.connection;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +7,7 @@ import org.springframework.social.connect.ConnectionKey;
 
 import java.util.Set;
 
-public class PlayerConnections implements PlayerAware {
+public class MongoPlayerGraph implements PlayerGraph {
 
     /**
      * Generated 18/12/13
@@ -17,19 +17,16 @@ public class PlayerConnections implements PlayerAware {
     @Id
     final private String player;
     final private Set<ConnectionKey> owned;
-    final private Set<String> connected;
-    final private Set<FriendInvitation> friendRequests;
+    final private Set<String> connections;
 
     @JsonCreator
-    public PlayerConnections(
+    public MongoPlayerGraph(
         @JsonProperty(PLAYER) String player,
         @JsonProperty("owned") Set<ConnectionKey> owned,
-        @JsonProperty("connected") Set<String> connected,
-        @JsonProperty("connectionRequests") Set<FriendInvitation> friendRequests) {
+        @JsonProperty("connections") Set<String> connections) {
         this.player = player;
         this.owned = owned;
-        this.connected = connected;
-        this.friendRequests = friendRequests;
+        this.connections = connections;
     }
 
     @Override
@@ -37,16 +34,26 @@ public class PlayerConnections implements PlayerAware {
         return player;
     }
 
-    public Set<FriendInvitation> getFriendRequests() {
-        return friendRequests;
-    }
-
     public Set<ConnectionKey> getOwned(){
         return owned;
     }
 
-    public Set<String> getConnected() {
-        return connected;
+    public void addOwned(ConnectionKey key) {
+        this.owned.add(key);
+    }
+
+    @Override
+    public void addConnection(String player) {
+        this.connections.add(player);
+    }
+
+    @Override
+    public Set<String> fetchConnections() {
+        return connections;
+    }
+
+    public Set<String> getConnections() {
+        return connections;
     }
 
     @Override
@@ -54,9 +61,9 @@ public class PlayerConnections implements PlayerAware {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PlayerConnections that = (PlayerConnections) o;
+        MongoPlayerGraph that = (MongoPlayerGraph) o;
 
-        if (!connected.equals(that.connected)) return false;
+        if (!connections.equals(that.connections)) return false;
         if (!owned.equals(that.owned)) return false;
         if (!player.equals(that.player)) return false;
 
@@ -67,7 +74,7 @@ public class PlayerConnections implements PlayerAware {
     public int hashCode() {
         int result = player.hashCode();
         result = 31 * result + owned.hashCode();
-        result = 31 * result + connected.hashCode();
+        result = 31 * result + connections.hashCode();
         return result;
     }
 }

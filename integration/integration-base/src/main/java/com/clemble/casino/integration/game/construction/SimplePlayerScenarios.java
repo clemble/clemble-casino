@@ -2,14 +2,12 @@ package com.clemble.casino.integration.game.construction;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.PaymentBonusSource;
-import com.clemble.casino.player.PlayerConnections;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import com.clemble.test.concurrent.Get;
@@ -24,7 +22,6 @@ import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
-import org.springframework.social.connect.ConnectionKey;
 
 public class SimplePlayerScenarios implements PlayerScenarios {
 
