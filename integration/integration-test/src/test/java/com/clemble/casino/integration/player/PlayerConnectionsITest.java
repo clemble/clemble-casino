@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Created by mavarazy on 7/31/14.
@@ -29,10 +30,9 @@ public class PlayerConnectionsITest {
     @Test
     public void testEmptyConnections() {
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
-        final PlayerConnections aConnections = A.connectionOperations().myConnections();
+        final Set<String> aConnections = A.connectionOperations().myConnections();
         Assert.assertNotNull(aConnections);
-        Assert.assertEquals(aConnections.getOwned().size(), 0);
-        Assert.assertEquals(aConnections.getConnected().size(), 0);
+        Assert.assertEquals(aConnections.size(), 0);
     }
 
 }

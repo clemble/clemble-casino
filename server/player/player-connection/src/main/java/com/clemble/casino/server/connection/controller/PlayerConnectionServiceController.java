@@ -2,17 +2,13 @@ package com.clemble.casino.server.connection.controller;
 
 import java.util.Set;
 
-import com.clemble.casino.player.ConnectionRequest;
-import com.clemble.casino.player.PlayerConnections;
-import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.connection.service.ServerPlayerConnectionService;
 import org.springframework.http.HttpStatus;
-import org.springframework.social.connect.ConnectionKey;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.WebMapping;
-import static com.clemble.casino.player.PlayerWebMapping.*;
+import static com.clemble.casino.player.PlayerConnectionWebMapping.*;
 
 @RestController
 public class PlayerConnectionServiceController implements PlayerConnectionService {
@@ -24,74 +20,21 @@ public class PlayerConnectionServiceController implements PlayerConnectionServic
     }
 
     @Override
-    public PlayerConnections myConnections() {
+    public Set<String> myConnections() {
         throw new IllegalAccessError();
     }
 
     @RequestMapping(value = MY_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public PlayerConnections myConnections(@CookieValue("player") String player) {
-        return connectionService.myConnections(player);
-    }
-
-    @Override
-    public Set<ConnectionKey> myOwnedConnections(){
-        throw new IllegalAccessError();
-    }
-
-
-    @RequestMapping(value = MY_OWNED_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<ConnectionKey> myOwnedConnections(String me) {
-        return connectionService.myOwnedConnections(me);
-    }
-
-    @Override
-    public Set<String> myConnectedConnections() {
-        throw new IllegalAccessError();
-    }
-
-    @RequestMapping(value = MY_CONNECTED_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<String> myConnectedConnections(String me) {
-        return connectionService.myConnectedConnections(me);
+    public Set<String> myConnections(@CookieValue("player") String player) {
+        return connectionService.getConnections(player);
     }
 
     @Override
     @RequestMapping(value = PLAYER_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public PlayerConnections getConnections(@PathVariable("player") String player) {
+    public Set<String> getConnections(@PathVariable("player") String player) {
         return connectionService.getConnections(player);
-    }
-
-    @Override
-    @RequestMapping(value = PLAYER_OWNED_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<ConnectionKey> getOwnedConnections(@PathVariable("player") String player) {
-        return connectionService.getOwnedConnections(player);
-    }
-
-    @Override
-    @RequestMapping(value = PLAYER_CONNECTION_CONNECTIONS, method = RequestMethod.GET, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<String> getConnectedConnection(@PathVariable("player") String player) {
-        return connectionService.getConnectedConnection(player);
-    }
-
-    @Override
-    public ConnectionRequest connect(String player) {
-        throw new IllegalAccessError();
-    }
-
-    @RequestMapping(value = PLAYER_CONNECTION_CONNECTIONS, method = RequestMethod.POST, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public ConnectionRequest connect(@PathVariable("player") String player, @CookieValue("player") String requester) {
-        return connectionService.connect(player, requester);
-    }
-
-    @Override
-    public ConnectionRequest reply(String player, PlayerInvitationAction response) {
-        return connectionService.reply(player, response);
     }
 
 }

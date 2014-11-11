@@ -70,7 +70,7 @@ public class GoalActionServiceController implements GoalActionService {
     @ResponseStatus(value = HttpStatus.OK)
     public List<GoalState> getConnectionsTimeLine(@PathVariable("player") String player) {
         // Step 1. Fetching connections
-        Set<String> connections = connectionService.getConnectedConnection(player);
+        Set<String> connections = connectionService.getConnections(player);
         // Step 2. Querying for active connections state
         return stateRepository.findByPlayerIn(connections);
     }

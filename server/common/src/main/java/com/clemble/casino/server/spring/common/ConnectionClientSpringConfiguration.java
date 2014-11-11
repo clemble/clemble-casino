@@ -1,6 +1,6 @@
 package com.clemble.casino.server.spring.common;
 
-import com.clemble.casino.player.ConnectionRequest;
+import com.clemble.casino.player.FriendInvitation;
 import com.clemble.casino.player.PlayerConnections;
 import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.player.service.PlayerConnectionService;
@@ -20,6 +20,7 @@ import org.springframework.social.connect.ConnectionKey;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -43,36 +44,12 @@ public class ConnectionClientSpringConfiguration implements SpringConfiguration{
                 return playerConnectionController;
             return new PlayerConnectionService() {
                 @Override
-                public PlayerConnections getConnections(String player) {
-                    throw new UnsupportedOperationException();
+                public Set<String> getConnections(String player) {
+                    return Collections.emptySet();
                 }
                 @Override
-                public Set<ConnectionKey> getOwnedConnections(String player) {
-                    throw new UnsupportedOperationException();
-                }
-                @Override
-                public Set<String> getConnectedConnection(String player) {
-                    throw new UnsupportedOperationException();
-                }
-                @Override
-                public ConnectionRequest connect(String player) {
-                    throw new UnsupportedOperationException();
-                }
-                @Override
-                public ConnectionRequest reply(String player, PlayerInvitationAction response) {
-                    throw new UnsupportedOperationException();
-                }
-                @Override
-                public PlayerConnections myConnections() {
-                    throw new UnsupportedOperationException();
-                }
-                @Override
-                public Set<ConnectionKey> myOwnedConnections() {
-                    throw new UnsupportedOperationException();
-                }
-                @Override
-                public Set<String> myConnectedConnections() {
-                    throw new UnsupportedOperationException();
+                public Set<String> myConnections() {
+                    return Collections.emptySet();
                 }
             };
         }

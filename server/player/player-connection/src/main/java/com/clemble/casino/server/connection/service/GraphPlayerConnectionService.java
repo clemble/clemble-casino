@@ -1,10 +1,9 @@
 package com.clemble.casino.server.connection.service;
 
-import com.clemble.casino.player.ConnectionRequest;
+import com.clemble.casino.player.FriendInvitation;
 import com.clemble.casino.player.PlayerConnections;
 import com.clemble.casino.player.event.PlayerInvitationAcceptedAction;
 import com.clemble.casino.player.event.PlayerInvitationAction;
-import com.clemble.casino.player.event.PlayerInvitationDeclinedAction;
 import com.clemble.casino.server.connection.GraphConnectionKey;
 import com.clemble.casino.server.connection.GraphPlayerConnections;
 import com.clemble.casino.server.connection.repository.GraphPlayerConnectionsRepository;
@@ -17,7 +16,7 @@ import java.util.*;
 /**
  * Created by mavarazy on 8/12/14.
  */
-public class GraphPlayerConnectionService extends ServerPlayerConnectionService {
+public class GraphPlayerConnectionService implements ServerPlayerConnectionService {
 
     final private GraphPlayerConnectionsRepository connectionsRepository;
 
@@ -26,23 +25,23 @@ public class GraphPlayerConnectionService extends ServerPlayerConnectionService 
     }
 
     @Override
-    public PlayerConnections myConnections(String player) {
-        return connectionsRepository.findByPlayer(player).toPlayerConnections();
+    public Set<String> myConnections() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public Set<ConnectionKey> myOwnedConnections(String me) {
-        return connectionsRepository.findByPlayer(me).toPlayerConnections().getOwned();
-    }
-
-    @Override
-    public Set<String> myConnectedConnections(String me) {
+    public Set<String> getConnections(String me) {
         return connectionsRepository.findByPlayer(me).toPlayerConnections().getConnected();
     }
 
     @Override
     public PlayerConnections save(PlayerConnections connections) {
         return connectionsRepository.save(new GraphPlayerConnections(connections)).toPlayerConnections();
+    }
+
+    @Override
+    public PlayerConnections getServerConnection(String player) {
+        return connectionsRepository.findByPlayer(player).toPlayerConnections();
     }
 
     @Override
@@ -54,61 +53,6 @@ public class GraphPlayerConnectionService extends ServerPlayerConnectionService 
                 discoveredConnections.add(connection.toPlayerConnections());
         }
         return discoveredConnections;
-    }
-
-    @Override
-    public ConnectionRequest connect(String player, String requester) {
-        // Step 1. Generating connection request
-        ConnectionRequest connectionRequest = new ConnectionRequest(requester);
-        // Step 2. Checking player connections
-        GraphPlayerConnections playerConnections = connectionsRepository.findByPlayer(player).addConnectionRequest(connectionRequest);
-        connectionsRepository.save(playerConnections);
-        // Step 3. Returning ConnectionRequest
-        return connectionRequest;
-    }
-
-    @Override
-    public PlayerConnections getConnections(String player) {
-        // Step 1. Generating result collection
-        List<ConnectionKey> connectionKeys = new ArrayList<>();
-        GraphPlayerConnections playerConnections = connectionsRepository.findByPlayer(player);;
-        for(GraphConnectionKey connection: playerConnections.getConnections())
-            connectionKeys.add(ClembleSocialUtils.fromString(connection.getConnectionKey()));
-        // Step 2. Going through existing connections
-        Iterator<GraphPlayerConnections> relatedConnections = connectionsRepository.findRelations(player).iterator();
-        while (relatedConnections.hasNext()) {
-            GraphPlayerConnections relatedConnection = relatedConnections.next();
-            // Step 2.1. Removing owned connections
-            for(GraphConnectionKey connection: relatedConnection.getOwns())
-                connectionKeys.remove(ClembleSocialUtils.fromString(connection.getConnectionKey()));
-            // Step 2.2. Adding internal connection
-            connectionKeys.add(new ConnectionKey(WebMapping.PROVIDER_ID, relatedConnection.getPlayer()));
-        }
-        // Step 3. Checking values
-        return connectionsRepository.findByPlayer(player).toPlayerConnections();
-    }
-
-    @Override
-    public Set<ConnectionKey> getOwnedConnections(String player) {
-        return connectionsRepository.findByPlayer(player).toPlayerConnections().getOwned();
-    }
-
-    @Override
-    public Set<String> getConnectedConnection(String player) {
-        return connectionsRepository.findByPlayer(player).toPlayerConnections().getConnected();
-    }
-
-    @Override
-    public ConnectionRequest reply(String player, String requester, PlayerInvitationAction response) {
-        ConnectionRequest connectionRequest = new ConnectionRequest(requester);
-        GraphPlayerConnections playerConnections = connectionsRepository.findByPlayer(player);
-        boolean containedRequest = playerConnections.getConnectionRequests().remove(connectionRequest);
-        if (containedRequest) {
-            if (response instanceof PlayerInvitationAcceptedAction) {
-                playerConnections.addConnection(new ConnectionKey(WebMapping.PROVIDER_ID, requester));
-            }
-        }
-        return connectionRequest;
     }
 
 }

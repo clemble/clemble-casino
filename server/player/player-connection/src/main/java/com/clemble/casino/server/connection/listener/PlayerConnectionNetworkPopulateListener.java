@@ -6,7 +6,6 @@ import com.clemble.casino.server.event.player.SystemPlayerConnectionsFetchedEven
 import com.clemble.casino.server.event.player.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import com.clemble.casino.WebMapping;
 import org.springframework.social.connect.ConnectionKey;
 
 import java.util.Collections;
@@ -34,7 +33,7 @@ public class PlayerConnectionNetworkPopulateListener implements SystemEventListe
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void onEvent(SystemPlayerConnectionsFetchedEvent event) {
         // Step 1. Finding appropriate PlayerConnections
-        PlayerConnections playerConnections = connectionService.getConnections(event.getPlayer());
+        PlayerConnections playerConnections = connectionService.getServerConnection(event.getPlayer());
         if (playerConnections == null) {
             playerConnections = connectionService.save(new PlayerConnections(
                 event.getPlayer(),
@@ -62,7 +61,7 @@ public class PlayerConnectionNetworkPopulateListener implements SystemEventListe
                 playerConnections.getPlayer(),
                 owned,
                 connected,
-                playerConnections.getConnectionRequests()));
+                playerConnections.getFriendRequests()));
             // Step 6. For all discovered connections send notification
             for (String discovered : discoveredConnections) {
                 notificationService.send(new SystemPlayerDiscoveredConnectionEvent(event.getPlayer(), discovered));

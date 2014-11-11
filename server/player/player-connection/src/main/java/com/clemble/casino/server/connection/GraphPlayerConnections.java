@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.clemble.casino.player.ConnectionRequest;
+import com.clemble.casino.player.FriendInvitation;
 import com.clemble.casino.player.PlayerConnections;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.GraphId;
@@ -16,7 +16,6 @@ import org.springframework.data.neo4j.support.index.IndexType;
 import org.springframework.social.connect.ConnectionKey;
 
 import com.clemble.casino.player.PlayerAware;
-import sun.net.ConnectionResetException;
 
 @NodeEntity
 public class GraphPlayerConnections implements PlayerAware {
@@ -38,7 +37,7 @@ public class GraphPlayerConnections implements PlayerAware {
     @RelatedTo(type = "CONNECTED", direction = Direction.OUTGOING)
     private Set<GraphConnectionKey> connections = new HashSet<GraphConnectionKey>();
 
-    private Set<ConnectionRequest> connectionRequests = new HashSet<ConnectionRequest>();
+    private Set<FriendInvitation> friendRequests = new HashSet<FriendInvitation>();
 
     public GraphPlayerConnections() {
     }
@@ -110,12 +109,12 @@ public class GraphPlayerConnections implements PlayerAware {
         return this;
     }
 
-    public Set<ConnectionRequest> getConnectionRequests() {
-        return connectionRequests;
+    public Set<FriendInvitation> getFriendRequests() {
+        return friendRequests;
     }
 
-    public GraphPlayerConnections addConnectionRequest(ConnectionRequest connectionRequest) {
-        this.connectionRequests.add(connectionRequest);
+    public GraphPlayerConnections addConnectionRequest(FriendInvitation friendRequest) {
+        this.friendRequests.add(friendRequest);
         return this;
     }
 

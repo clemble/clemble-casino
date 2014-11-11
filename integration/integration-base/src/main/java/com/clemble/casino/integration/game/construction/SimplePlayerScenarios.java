@@ -3,6 +3,7 @@ package com.clemble.casino.integration.game.construction;
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.clemble.casino.integration.event.EventAccumulator;
@@ -136,9 +137,9 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             }
         }, 5_000);
         // Step 4. Getting PlayerConnection
-        AsyncCompletionUtils.get(new Get<PlayerConnections>() {
+        AsyncCompletionUtils.get(new Get<Set<String>>() {
             @Override
-            public PlayerConnections get() {
+            public Set<String> get() {
                 return player.connectionOperations().myConnections();
             }
         }, 15_000);
