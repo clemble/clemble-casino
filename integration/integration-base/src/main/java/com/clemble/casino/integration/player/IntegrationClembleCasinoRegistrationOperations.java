@@ -9,6 +9,7 @@ import com.clemble.casino.game.lifecycle.record.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
@@ -41,6 +42,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     final private PlayerProfileServiceController profileOperations;
     final private PlayerImageServiceController imageService;
     final private PlayerConnectionServiceController connectionService;
+    final private PlayerFriendInvitationServiceController invitationService;
     final private PlayerPresenceServiceController presenceService;
     final private PlayerSessionServiceController sessionOperations;
     final private PlayerAccountServiceController paymentService;
@@ -62,6 +64,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         PlayerProfileServiceController profileOperations,
         PlayerImageServiceController imageService,
         PlayerConnectionServiceController connectionService,
+        PlayerFriendInvitationServiceController invitationService,
         PlayerSessionServiceController sessionOperations,
         PlayerAccountServiceController accountOperations,
         PaymentTransactionServiceController paymentTransactionService,
@@ -81,6 +84,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         this.profileOperations = checkNotNull(profileOperations);
         this.imageService = checkNotNull(imageService);
         this.connectionService = checkNotNull(connectionService);
+        this.invitationService = checkNotNull(invitationService);
         this.availabilityConstructionService = checkNotNull(availabilityConstructionService);
         this.paymentService = checkNotNull(accountOperations);
         this.paymentTransactionService = checkNotNull(paymentTransactionService);
@@ -134,6 +138,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
             profileOperations,
             imageService,
             connectionService,
+            invitationService,
             sessionOperations,
             paymentService,
             paymentTransactionService,

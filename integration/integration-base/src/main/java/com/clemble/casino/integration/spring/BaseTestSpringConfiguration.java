@@ -16,6 +16,7 @@ import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistratio
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
+import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
@@ -130,6 +131,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             PlayerProfileServiceController profileOperations,
             PlayerImageServiceController imageService,
             @Qualifier("playerConnectionController") PlayerConnectionServiceController connectionService,
+            PlayerFriendInvitationServiceController invitationService,
             PlayerSessionServiceController sessionOperations,
             @Qualifier("playerAccountController") PlayerAccountServiceController accountOperations,
             PaymentTransactionServiceController paymentTransactionService,
@@ -141,7 +143,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             GameActionServiceController actionService,
             GameRecordService recordService,
             IntegrationGoalOperationsFactory goalOperationsFactory) {
-            ClembleCasinoRegistrationOperations registrationOperations = new IntegrationClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalOperationsFactory);
+            ClembleCasinoRegistrationOperations registrationOperations = new IntegrationClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, invitationService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalOperationsFactory);
             return new IntegrationClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }
