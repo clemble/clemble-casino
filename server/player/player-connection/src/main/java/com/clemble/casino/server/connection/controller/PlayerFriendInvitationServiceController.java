@@ -68,7 +68,8 @@ public class PlayerFriendInvitationServiceController implements PlayerFriendInvi
     @ResponseStatus(CREATED)
     public Invitation reply(@CookieValue("player") String me, @PathVariable("player") String player, @RequestBody boolean accept) {
         // Step 1. Checking invitation exists
-        ServerFriendInvitation invitation = invitationRepository.findOne(ServerFriendInvitation.toKey(me, player));
+        // Key is actually player - me, since player is the sender
+        ServerFriendInvitation invitation = invitationRepository.findOne(ServerFriendInvitation.toKey(player, me));
         if (invitation == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PlayerNoInvitation);
         // Step 2. Removing invitation
