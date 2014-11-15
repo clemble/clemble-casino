@@ -32,7 +32,7 @@ public class PlayerFriendInvitationITest {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 2. Requesting A to connect to B
-        A.friendInvitationService().invite(B.getPlayer());
+        A.friendInvitationService().invite(new Invitation(B.getPlayer()));
         // Step 3. Checking B received invitation
         List<Invitation> pending = B.friendInvitationService().myInvitations();
         Assert.assertFalse(pending.isEmpty());
@@ -45,7 +45,7 @@ public class PlayerFriendInvitationITest {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 2. Requesting A to connect to B
-        A.friendInvitationService().invite(B.getPlayer());
+        A.friendInvitationService().invite(new Invitation(B.getPlayer()));
         // Step 3. Checking B received invitation
         List<Invitation> pending = B.friendInvitationService().myInvitations();
         Assert.assertFalse(pending.isEmpty());
@@ -63,7 +63,7 @@ public class PlayerFriendInvitationITest {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         ClembleCasinoOperations B = playerScenarios.createPlayer();
         // Step 2. Requesting A to connect to B
-        A.friendInvitationService().invite(B.getPlayer());
+        A.friendInvitationService().invite(new Invitation(B.getPlayer()));
         // Step 3. Checking B received invitation
         List<Invitation> pending = B.friendInvitationService().myInvitations();
         Assert.assertFalse(pending.isEmpty());
@@ -74,4 +74,19 @@ public class PlayerFriendInvitationITest {
         Assert.assertEquals(B.connectionOperations().myConnections().isEmpty(), true);
         Assert.assertEquals(A.connectionOperations().myConnections().isEmpty(), true);
     }
+
+    @Test
+    public void testInvitationCompensate() {
+        // Step 1. Creating player
+        ClembleCasinoOperations A = playerScenarios.createPlayer();
+        ClembleCasinoOperations B = playerScenarios.createPlayer();
+        // Step 2. Requesting A to connect to B
+        A.friendInvitationService().invite(new Invitation(B.getPlayer()));
+        // Step 3. Requesting B to connect to A
+        B.friendInvitationService().invite(new Invitation(A.getPlayer()));
+        // Step 4.1 Checking both players now connected
+        Assert.assertEquals(B.connectionOperations().myConnections(), ImmutableSet.of(A.getPlayer()));
+        Assert.assertEquals(A.connectionOperations().myConnections(), ImmutableSet.of(B.getPlayer()));
+    }
+
 }

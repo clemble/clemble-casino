@@ -49,14 +49,14 @@ public class PlayerFriendInvitationServiceController implements PlayerFriendInvi
     }
 
     @Override
-    public Invitation invite(String player) {
+    public Invitation invite(Invitation player) {
         throw new UnsupportedOperationException();
     }
 
     @RequestMapping(method = POST, value = MY_INVITATIONS)
     @ResponseStatus(CREATED)
     public Invitation invite(@CookieValue("player") String me, @RequestBody Invitation invitation) {
-        if (invitationRepository.findByReceiverAndSender(invitation.getPlayer(), me).isEmpty()) {
+        if (invitationRepository.findByReceiverAndSender(me, invitation.getPlayer()).isEmpty()) {
             // Case 1. If there is no pending invitation from receiver, add new invitation
             return invitationRepository.save(new ServerFriendInvitation(null, me, invitation.getPlayer())).toInvitation();
         } else {

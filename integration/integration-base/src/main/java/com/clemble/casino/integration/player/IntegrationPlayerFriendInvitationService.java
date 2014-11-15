@@ -25,7 +25,7 @@ public class IntegrationPlayerFriendInvitationService implements PlayerFriendInv
     }
 
     @Override
-    public Invitation invite(String player) {
+    public Invitation invite(Invitation player) {
         return invitationService.invite(me, player);
     }
 
