@@ -25,7 +25,7 @@ public class PlayerTokenUtils {
         try {
             Cookie cookie = new Cookie("player", URLEncoder.encode(player, "UTF-8"));
             cookie.setPath("/");
-            cookie.setHttpOnly(true);
+//            cookie.setHttpOnly(true);
             cookie.setDomain(domain);
             cookie.setMaxAge(maxAge);
             response.addCookie(cookie);
