@@ -55,8 +55,14 @@ public class PlayerFriendInvitationServiceController implements PlayerFriendInvi
 
     @RequestMapping(method = POST, value = MY_INVITATIONS)
     @ResponseStatus(CREATED)
-    public Invitation invite(@CookieValue("player") String me, @RequestBody String player) {
-        return invitationRepository.save(new ServerFriendInvitation(null, me, player)).toInvitation();
+    public Invitation invite(@CookieValue("player") String me, @RequestBody Invitation invitation) {
+        if (invitationRepository.findByReceiverAndSender(invitation.getPlayer(), me).isEmpty()) {
+            // Case 1. If there is no pending invitation from receiver, add new invitation
+            return invitationRepository.save(new ServerFriendInvitation(null, me, invitation.getPlayer())).toInvitation();
+        } else {
+            // Case 2. If there is a pending invitation, just reply positive
+            return reply(me, invitation.getPlayer(), true);
+        }
     }
 
     @Override

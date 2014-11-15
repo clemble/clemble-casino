@@ -12,4 +12,6 @@ public interface PlayerFriendInvitationRepository extends MongoRepository<Server
 
     List<ServerFriendInvitation> findByReceiver(String player);
 
+    List<ServerFriendInvitation> findByReceiverAndSender(String receiver, String sender);
+
 }
