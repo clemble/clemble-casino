@@ -1,19 +1,19 @@
-package com.clemble.casino.server.game.aspect.notification;
+package com.clemble.casino.server.aspect.notification;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import java.util.Collection;
 
+import com.clemble.casino.event.ManagementEvent;
 import com.clemble.casino.game.GameWebMapping;
-import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.aspect.ClembleAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 
-public class PublicNotificationRuleAspect extends GameAspect<GameManagementEvent> {
+public class PublicNotificationRuleAspect extends ClembleAspect<ManagementEvent> {
 
     final private Logger LOG = LoggerFactory.getLogger(PublicNotificationRuleAspect.class);
 
@@ -22,14 +22,14 @@ public class PublicNotificationRuleAspect extends GameAspect<GameManagementEvent
     final private PlayerNotificationService notificationService;
 
     public PublicNotificationRuleAspect(String sessionKey, Collection<String> participants, PlayerNotificationService notificationService) {
-        super(new EventTypeSelector(GameManagementEvent.class));
+        super(new EventTypeSelector(ManagementEvent.class));
         this.tableChannel = GameWebMapping.toTable(sessionKey);
         this.participants = checkNotNull(participants);
         this.notificationService = checkNotNull(notificationService);
     }
 
     @Override
-    protected void doEvent(GameManagementEvent event) {
+    protected void doEvent(ManagementEvent event) {
         // Step 1. Making public notification
         boolean tableNotified = notificationService.send(tableChannel, event);
         // Step 2. Sending to exact participants

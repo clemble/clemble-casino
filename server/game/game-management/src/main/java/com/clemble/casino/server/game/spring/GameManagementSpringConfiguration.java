@@ -4,7 +4,9 @@ package com.clemble.casino.server.game.spring;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
+import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.server.action.ClembleManagerFactory;
+import com.clemble.casino.server.aspect.GenericClembleAspectFactory;
 import com.clemble.casino.server.game.action.*;
 import com.clemble.casino.server.game.aspect.*;
 import com.clemble.casino.server.game.aspect.next.MatchNextGameAspectFactory;
@@ -32,12 +34,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
-import com.clemble.casino.server.game.aspect.notification.PlayerNotificationRuleAspectFactory;
+import com.clemble.casino.server.aspect.notification.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 
 @Configuration
@@ -94,7 +95,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
         @Bean
         public PlayerNotificationRuleAspectFactory gameNotificationManagementAspectFactory(PlayerNotificationService playerNotificationService) {
-            return new PlayerNotificationRuleAspectFactory(playerNotificationService);
+            return new PlayerNotificationRuleAspectFactory<GameState>(playerNotificationService, (g) -> g.getContext().getSessionKey());
         }
 
         @Bean
@@ -169,17 +170,17 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ClembleManagerFactory<RoundGameConfiguration> roundGameManagerFactory() {
-        return new ClembleManagerFactory<>(RoundGameAspectFactory.class, GenericGameAspectFactory.class);
+        return new ClembleManagerFactory<>(RoundGameAspectFactory.class, GenericGameAspectFactory.class, GenericClembleAspectFactory.class);
     }
 
     @Bean
     public ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory() {
-        return new ClembleManagerFactory<>(MatchGameAspectFactory.class, GenericGameAspectFactory.class);
+        return new ClembleManagerFactory<>(MatchGameAspectFactory.class, GenericGameAspectFactory.class, GenericClembleAspectFactory.class);
     }
 
     @Bean
     public ClembleManagerFactory<TournamentGameConfiguration> tournamentGameManagerFactory() {
-        return new ClembleManagerFactory<>(TournamentGameAspectFactory.class, GenericGameAspectFactory.class);
+        return new ClembleManagerFactory<>(TournamentGameAspectFactory.class, GenericGameAspectFactory.class, GenericClembleAspectFactory.class);
     }
 
     @Bean

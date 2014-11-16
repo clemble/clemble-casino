@@ -26,7 +26,7 @@ public class ClembleManagerFactory<C extends Configuration> implements Applicati
 
     public ClembleManagerFactory(Class<?>... aspectFactoryClass) {
         this.aspectFactoryClasses = aspectFactoryClass;
-        LOG = LoggerFactory.getLogger("GAF - " + aspectFactoryClass[0].getSimpleName());
+        LOG = LoggerFactory.getLogger("CMF - " + aspectFactoryClass[0].getSimpleName());
     }
 
     public <R extends Event, S extends State<R, ?>> ClembleManager<R, S> create(S state, C configuration) {
