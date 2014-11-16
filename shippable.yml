@@ -20,8 +20,8 @@ before_script:
   - mkdir -p ~/clemble-casino/shippable/testresults
   - cp ./config/*.properties ~/clemble/config/
 
-build_image:
-  clemble/clemble-all:shippable
+#build_image:
+#  clemble/clemble-all:shippable
 
 after_success:
   - virtualenv ve && source ve/bin/activate && pip install awscli
