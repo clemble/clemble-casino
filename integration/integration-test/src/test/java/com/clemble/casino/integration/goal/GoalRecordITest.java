@@ -6,7 +6,6 @@ import com.clemble.casino.goal.event.action.GoalStatusUpdateAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
-import com.clemble.casino.goal.lifecycle.configuration.rule.parts.GoalPartsRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
@@ -23,7 +22,6 @@ import com.clemble.casino.lifecycle.management.outcome.PlayerWonOutcome;
 import com.clemble.casino.lifecycle.record.EventRecord;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import org.junit.Assert;
@@ -51,7 +49,6 @@ public class GoalRecordITest {
         new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
         LimitedBetRule.create(5, 50),
         new JudgeRule("me", JudgeType.self),
-        new GoalPartsRule(1),
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
@@ -113,7 +110,7 @@ public class GoalRecordITest {
             }
         }, 30_000);
         // Step 5. Performing simple action
-        A.goalOperations().actionService().process(goalKey, new GoalStatusUpdateAction("Win bitch", CONFIGURATION.getPartsRule().getParts()));
+        A.goalOperations().actionService().process(goalKey, new GoalStatusUpdateAction("Win bitch"));
         // Step 6. Waiting for goal to completes
         AsyncCompletionUtils.check(new Check(){
             @Override

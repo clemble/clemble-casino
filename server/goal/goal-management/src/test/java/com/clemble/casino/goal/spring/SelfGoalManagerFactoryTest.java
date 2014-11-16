@@ -5,7 +5,6 @@ import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
-import com.clemble.casino.goal.lifecycle.configuration.rule.parts.GoalPartsRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
@@ -54,7 +53,6 @@ public class SelfGoalManagerFactoryTest {
         new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
         LimitedBetRule.create(5, 50),
         new JudgeRule("me", JudgeType.self),
-        new GoalPartsRule(1),
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
