@@ -44,6 +44,12 @@ public class GoalConstructionRepositoryTest {
                 return FixedBetRule.create(10);
             }
         });
+        ObjectGenerator.register(LimitedBetRule.class, new AbstractValueGenerator<LimitedBetRule>() {
+            @Override
+            public LimitedBetRule generate() {
+                return LimitedBetRule.create(1, 10);
+            }
+        });
         // Step 1. Generating random construction
         GoalConstruction construction = ObjectGenerator.generate(GoalConstruction.class);
         // Step 3. Checking saved matches original

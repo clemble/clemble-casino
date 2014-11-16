@@ -28,7 +28,7 @@
         <!-- Quartz dependencies -->
         <quartz-redis-jobstore.version>0.1.3</quartz-redis-jobstore.version>
         <!-- Dependencies for ORM -->
-        <mysql.connector.version>5.1.33</mysql.connector.version>
+        <mysql.connector.version>5.1.34</mysql.connector.version>
         <c3p0.version>0.9.1.2</c3p0.version>
         <hibernate.version>4.3.7.Final</hibernate.version>
         <!-- Spring dependencies -->
@@ -65,7 +65,7 @@
         <weberknecht.version>0.1.1</weberknecht.version>
         <gozirra-client.version>0.4.1</gozirra-client.version>
         <async-http-client.version>1.8.14</async-http-client.version>
-        <httpclient.version>4.3.5</httpclient.version>
+        <httpclient.version>4.3.6</httpclient.version>
         <!-- Plugin dependencies -->
         <maven.failsafe.plugin.version>2.14.1</maven.failsafe.plugin.version>
         <maven.compile.plugin.version>3.1</maven.compile.plugin.version>
@@ -81,7 +81,7 @@
         <reflections.version>0.9.9</reflections.version>
         <!-- Android dependency versions -->
         <validation-api.version>1.1.0.Final</validation-api.version>
-        <robolectric.version>2.3</robolectric.version>
+        <robolectric.version>2.4</robolectric.version>
         <spring.android.version>1.0.1.RELEASE</spring.android.version>
         <roboguice.version>3.0</roboguice.version>
         <jsr305.version>3.0.0</jsr305.version>
