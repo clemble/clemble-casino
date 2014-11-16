@@ -130,7 +130,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public GamePlayerNotificationRuleAspectFactory gamePlayerNotificationRuleAspectFactory(PlayerNotificationService notificationService) {
+        public GamePlayerNotificationRuleAspectFactory gamePlayerNotificationRuleAspectFactory(@Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
             return new GamePlayerNotificationRuleAspectFactory(notificationService);
         }
 

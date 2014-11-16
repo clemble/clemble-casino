@@ -118,7 +118,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalPlayerNotificationAspectFactory goalPlayerNotificationAspectFactory(PlayerNotificationService notificationService) {
+    public GoalPlayerNotificationAspectFactory goalPlayerNotificationAspectFactory(
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
         return new GoalPlayerNotificationAspectFactory(notificationService);
     }
 
