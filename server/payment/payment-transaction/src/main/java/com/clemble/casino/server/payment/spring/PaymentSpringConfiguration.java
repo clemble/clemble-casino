@@ -50,8 +50,11 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerAccountTemplate playerAccountTemplate(PlayerAccountRepository accountRepository, PendingTransactionRepository pendingTransactionRepository) {
-        return new MongoPlayerAccountTemplate(accountRepository, pendingTransactionRepository);
+    public PlayerAccountTemplate playerAccountTemplate(
+        PlayerAccountRepository accountRepository,
+        PendingTransactionRepository pendingTransactionRepository,
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        return new MongoPlayerAccountTemplate(accountRepository, pendingTransactionRepository, notificationService);
     }
 
     @Bean

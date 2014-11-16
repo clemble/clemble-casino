@@ -42,9 +42,7 @@ public class SelfGoalManagerFactory implements GoalManagerFactory {
     public ClembleManager<GoalEvent, ? extends GoalState> start(GoalContext parent, GoalInitiation initiation) {
         // Step 1. Saving record
         GoalRecord record = recordRepository.save(initiation.toRecord());
-        // Step 2. Notifying player goal started
-        notificationService.send(initiation.getPlayer(), new GoalStartedEvent(initiation.getGoalKey()));
-        // Step 3. Creating state
+        // Step 2. Creating state
         GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), new PlayerClock(0, 0, 0, null));
         GoalContext goalContext = new GoalContext(parent, Collections.singletonList(playerContext));
         GoalState state = new GoalState(initiation.getGoalKey(), initiation.getPlayer(), initiation.getGoal(), initiation.getConfiguration(), goalContext, "", 0, initiation.getConfiguration().getPartsRule().getParts());

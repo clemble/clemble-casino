@@ -6,8 +6,13 @@ import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
+import com.clemble.casino.payment.event.PaymentEvent;
+import com.clemble.casino.payment.event.PaymentFreezeEvent;
+import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import org.springframework.dao.OptimisticLockingFailureException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -16,12 +21,15 @@ import java.util.Collections;
 public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
 
     final private PlayerAccountRepository accountRepository;
+    final private PlayerNotificationService notificationService;
     final private PendingTransactionRepository pendingTransactionRepository;
 
     public MongoPlayerAccountTemplate(
         PlayerAccountRepository accountRepository,
-        PendingTransactionRepository pendingTransactionRepository) {
+        PendingTransactionRepository pendingTransactionRepository,
+        PlayerNotificationService notificationService) {
         this.accountRepository = accountRepository;
+        this.notificationService = notificationService;
         this.pendingTransactionRepository = pendingTransactionRepository;
     }
 
@@ -76,12 +84,19 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
 
     @Override
     public PendingTransaction freeze(PendingTransaction pendingTransaction) {
+        // All payment freeze events accumulated in a collection
+        Collection<PaymentEvent> events = new ArrayList<>();
         for (PaymentOperation operation: pendingTransaction.getOperations()) {
             // Step 1. Changing PlayerAccount
             tryFreezing(pendingTransaction.getTransactionKey(), operation);
             // Step 2. Adding to PendingTransactions list
             tryAddingToPending(pendingTransaction.getTransactionKey(), operation);
+            // Step 3. Adding new Payment Event to events
+            events.add(new PaymentFreezeEvent(operation.getPlayer(), pendingTransaction.getTransactionKey(), operation.getAmount()));
         }
+        // Step 4. Sending freeze notification
+        notificationService.send(events);
+        // Step 5. Returning created transaction
         return pendingTransactionRepository.findOne(pendingTransaction.getTransactionKey());
     }
 
