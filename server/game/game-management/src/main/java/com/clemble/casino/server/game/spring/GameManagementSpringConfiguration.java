@@ -4,7 +4,6 @@ package com.clemble.casino.server.game.spring;
 import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
-import com.clemble.casino.game.lifecycle.management.GameState;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.aspect.GenericClembleAspectFactory;
 import com.clemble.casino.server.game.action.*;
@@ -34,7 +33,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
-import com.clemble.casino.server.aspect.notification.PlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -44,6 +42,7 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 @Configuration
 @Import(value = {
     CommonSpringConfiguration.class,
+    CommonManagementSpringConfiguration.class,
     GameManagementSpringConfiguration.GameMongoSpringConfiguration.class,
     GameManagementSpringConfiguration.GameAspectSpringConfiguration.class,
     GameManagementSpringConfiguration.GameManagementControllerSpringConfiguration.class,
@@ -91,11 +90,6 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Bean
         public GameEndPresenceAspectFactory gamePresenceAspectFactory(ServerPlayerPresenceService presenceService) {
             return new GameEndPresenceAspectFactory(presenceService);
-        }
-
-        @Bean
-        public PlayerNotificationRuleAspectFactory gameNotificationManagementAspectFactory(PlayerNotificationService playerNotificationService) {
-            return new PlayerNotificationRuleAspectFactory<GameState>(playerNotificationService, (g) -> g.getContext().getSessionKey());
         }
 
         @Bean

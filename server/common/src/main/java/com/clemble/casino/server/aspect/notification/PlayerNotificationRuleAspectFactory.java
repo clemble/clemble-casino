@@ -6,7 +6,6 @@ import com.clemble.casino.event.ManagementEvent;
 import com.clemble.casino.lifecycle.configuration.Configuration;
 import com.clemble.casino.lifecycle.management.State;
 import com.clemble.casino.server.aspect.ClembleAspect;
-import com.clemble.casino.server.aspect.ClembleAspectFactory;
 import com.clemble.casino.server.aspect.GenericClembleAspectFactory;
 import org.springframework.core.Ordered;
 
@@ -19,13 +18,9 @@ import java.util.function.Function;
 
 public class PlayerNotificationRuleAspectFactory<S extends State> implements GenericClembleAspectFactory<ManagementEvent, Configuration, S> {
 
-    final private Function<S, String> stateToKey;
     final private PlayerNotificationService notificationService;
 
-    public PlayerNotificationRuleAspectFactory(
-        PlayerNotificationService notificationService,
-        Function<S, String> stateToKey) {
-        this.stateToKey = checkNotNull(stateToKey);
+    public PlayerNotificationRuleAspectFactory(PlayerNotificationService notificationService) {
         this.notificationService = checkNotNull(notificationService);
     }
 
@@ -33,11 +28,11 @@ public class PlayerNotificationRuleAspectFactory<S extends State> implements Gen
     public ClembleAspect<ManagementEvent> construct(Configuration configuration, S state) {
         switch (configuration.getPrivacyRule()) {
             case world:
-                return new PublicNotificationRuleAspect(stateToKey.apply(state), PlayerAwareUtils.toPlayerList(state.getContext().getPlayerContexts()), notificationService);
+                return new PublicNotificationRuleAspect(state.toKey(), PlayerAwareUtils.toPlayerList(state.getContext().getPlayerContexts()), notificationService);
             case me:
                 return new PrivateNotificationRuleAspect(PlayerAwareUtils.toPlayerList(state.getContext().getPlayerContexts()), notificationService);
             default:
-                throw ClembleCasinoException.withKey(ClembleCasinoError.GameSpecificationInvalid, stateToKey.apply(state));
+                throw ClembleCasinoException.withKey(ClembleCasinoError.GameSpecificationInvalid, state.toKey());
         }
     }
 
