@@ -12,14 +12,14 @@ import java.util.Collections;
 /**
  * Created by mavarazy on 11/16/14.
  */
-public class GoalPlayerPrivateNotificationService extends GoalAspect<GoalManagementEvent> {
+public class GoalPlayerNotificationAspect extends GoalAspect<GoalManagementEvent> {
 
     final private Collection<String> participants;
     final private PlayerNotificationService notificationService;
 
-    public GoalPlayerPrivateNotificationService(GoalState state, PlayerNotificationService notificationService){
+    public GoalPlayerNotificationAspect(Collection<String> participants, PlayerNotificationService notificationService){
         super(new EventTypeSelector(GoalManagementEvent.class));
-        this.participants = Collections.singleton(state.getPlayer());
+        this.participants = participants;
         this.notificationService = notificationService;
     }
 
