@@ -2,6 +2,7 @@ package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
+import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalLostOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.GoalStatePersistenceAspectFactory;
@@ -10,15 +11,12 @@ import com.clemble.casino.goal.aspect.time.GoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.action.ClembleManagerFactory;
-import com.clemble.casino.server.aspect.notification.PlayerNotificationRuleAspectFactory;
-import com.clemble.casino.server.event.goal.SystemGoalTimeoutEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
@@ -29,16 +27,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
 /**
  * Created by mavarazy on 9/12/14.
  */
 @Configuration
 @Import({
     CommonSpringConfiguration.class,
-    CommonManagementSpringConfiguration.class,
     MongoSpringConfiguration.class,
     ConnectionClientSpringConfiguration.class})
 public class GoalManagementSpringConfiguration implements SpringConfiguration {
@@ -121,6 +115,11 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public GoalWonOutcomeAspectFactory goalReachedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
         return new GoalWonOutcomeAspectFactory(systemNotificationService);
+    }
+
+    @Bean
+    public GoalPlayerNotificationAspectFactory goalPlayerNotificationAspectFactory(PlayerNotificationService notificationService) {
+        return new GoalPlayerNotificationAspectFactory(notificationService);
     }
 
 }

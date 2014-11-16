@@ -9,6 +9,7 @@ import com.clemble.casino.server.aspect.GenericClembleAspectFactory;
 import com.clemble.casino.server.game.action.*;
 import com.clemble.casino.server.game.aspect.*;
 import com.clemble.casino.server.game.aspect.next.MatchNextGameAspectFactory;
+import com.clemble.casino.server.game.aspect.notification.GamePlayerNotificationRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchDrawRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.MatchWonRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.outcome.RoundDrawRuleAspectFactory;
@@ -42,7 +43,6 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 @Configuration
 @Import(value = {
     CommonSpringConfiguration.class,
-    CommonManagementSpringConfiguration.class,
     GameManagementSpringConfiguration.GameMongoSpringConfiguration.class,
     GameManagementSpringConfiguration.GameAspectSpringConfiguration.class,
     GameManagementSpringConfiguration.GameManagementControllerSpringConfiguration.class,
@@ -127,6 +127,11 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         @Bean
         public RoundGameTimeAspectFactory gameTimeAspectFactory(SystemNotificationService systemNotificationService) {
             return new RoundGameTimeAspectFactory(systemNotificationService);
+        }
+
+        @Bean
+        public GamePlayerNotificationRuleAspectFactory gamePlayerNotificationRuleAspectFactory(PlayerNotificationService notificationService) {
+            return new GamePlayerNotificationRuleAspectFactory(notificationService);
         }
 
     }

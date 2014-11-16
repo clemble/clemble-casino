@@ -9,6 +9,7 @@ import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,8 @@ public class GoalConstructionRepositoryTest {
     @Autowired
     public GoalConstructionRepository constructionRepository;
 
-    @Test
-    public void simpleCRUDtest() {
+    @Before
+    public void initialize() {
         ObjectGenerator.register(BetRule.class, new AbstractValueGenerator<BetRule>() {
             @Override
             public BetRule generate() {
@@ -50,6 +51,10 @@ public class GoalConstructionRepositoryTest {
                 return LimitedBetRule.create(1, 10);
             }
         });
+    }
+
+    @Test
+    public void simpleCRUDtest() {
         // Step 1. Generating random construction
         GoalConstruction construction = ObjectGenerator.generate(GoalConstruction.class);
         // Step 3. Checking saved matches original
