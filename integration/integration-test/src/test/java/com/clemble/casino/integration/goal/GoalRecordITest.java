@@ -2,6 +2,7 @@ package com.clemble.casino.integration.goal;
 
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.goal.event.action.GoalReachedAction;
 import com.clemble.casino.goal.event.action.GoalStatusUpdateAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
@@ -110,7 +111,7 @@ public class GoalRecordITest {
             }
         }, 30_000);
         // Step 5. Performing simple action
-        A.goalOperations().actionService().process(goalKey, new GoalStatusUpdateAction("Win bitch"));
+        A.goalOperations().actionService().process(goalKey, new GoalReachedAction("Win bitch"));
         // Step 6. Waiting for goal to completes
         AsyncCompletionUtils.check(new Check(){
             @Override
