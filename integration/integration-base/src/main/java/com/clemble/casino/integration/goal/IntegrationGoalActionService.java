@@ -32,16 +32,6 @@ public class IntegrationGoalActionService implements GoalActionService {
     }
 
     @Override
-    public List<GoalState> myConnectionsTimeLine() {
-        return actionService.myConnectionsTimeLine();
-    }
-
-    @Override
-    public List<GoalState> getConnectionsTimeLine(String player) {
-        return actionService.getConnectionsTimeLine(player);
-    }
-
-    @Override
     public GoalEvent process(String goalKey, Action action) {
         return actionService.process(goalKey, player, action);
     }

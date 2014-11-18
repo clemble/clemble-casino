@@ -1,7 +1,6 @@
 package com.clemble.casino.goal.controller;
 
 import com.clemble.casino.WebMapping;
-import com.clemble.casino.event.Event;
 import com.clemble.casino.goal.GoalWebMapping;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.event.GoalEvent;
@@ -25,15 +24,12 @@ public class GoalActionServiceController implements GoalActionService {
 
     final private GoalManagerFactoryFacade factoryFacade;
     final private GoalStateRepository stateRepository;
-    final private PlayerConnectionService connectionService;
 
     public GoalActionServiceController(
         GoalManagerFactoryFacade factoryFacade,
-        GoalStateRepository stateRepository,
-        PlayerConnectionService connectionService) {
+        GoalStateRepository stateRepository) {
         this.factoryFacade = factoryFacade;
         this.stateRepository = stateRepository;
-        this.connectionService = connectionService;
     }
 
     @Override
@@ -52,27 +48,6 @@ public class GoalActionServiceController implements GoalActionService {
     @ResponseStatus(value = HttpStatus.OK)
     public List<GoalState> getActive(@PathVariable("player") String player) {
         return stateRepository.findByPlayer(player);
-    }
-
-    @Override
-    public List<GoalState> myConnectionsTimeLine() {
-        throw new UnsupportedOperationException();
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.MY_CONNECTIONS_TIMELINE, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<GoalState> myConnectionsTimeLine(@CookieValue("player") String player) {
-        return getConnectionsTimeLine(player);
-    }
-
-    @Override
-    @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.PLAYER_CONNECTIONS_TIMELINE, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<GoalState> getConnectionsTimeLine(@PathVariable("player") String player) {
-        // Step 1. Fetching connections
-        Set<String> connections = connectionService.getConnections(player);
-        // Step 2. Querying for active connections state
-        return stateRepository.findByPlayerIn(connections);
     }
 
     @Override

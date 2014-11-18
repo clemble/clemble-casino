@@ -10,6 +10,7 @@ import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.time.GoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
+import com.clemble.casino.goal.controller.GoalTimelineServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
@@ -55,9 +56,16 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public GoalActionServiceController goalActionServiceController(
         GoalManagerFactoryFacade factoryFacade,
+        GoalStateRepository goalStateRepository) {
+        return new GoalActionServiceController(factoryFacade, goalStateRepository);
+    }
+
+    @Bean
+    public GoalTimelineServiceController timelineServiceController(
         GoalStateRepository goalStateRepository,
-        @Qualifier("playerConnectionClient") PlayerConnectionService playerConnectionClient) {
-        return new GoalActionServiceController(factoryFacade, goalStateRepository, playerConnectionClient);
+        @Qualifier("playerConnectionClient") PlayerConnectionService playerConnectionClient
+    ) {
+        return new GoalTimelineServiceController(goalStateRepository, playerConnectionClient);
     }
 
     @Bean
