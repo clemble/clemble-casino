@@ -5,6 +5,7 @@ import com.clemble.casino.goal.GoalWebMapping;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.initiation.service.FriendInitiationService;
+import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.Set;
 /**
  * Created by mavarazy on 11/19/14.
  */
+@RestController
 public class FriendInitiationServiceController implements FriendInitiationService {
 
     final private GoalInitiationRepository initiationRepository;
@@ -63,7 +65,7 @@ public class FriendInitiationServiceController implements FriendInitiationServic
         // Step 1. Fetching connections
         Set<String> connections = connectionService.getConnections(player);
         // Step 2. Querying for active connections state
-        return initiationRepository.findByPlayerIn(connections);
+        return initiationRepository.findByPlayerInAndState(connections, InitiationState.pending);
     }
 
 }
