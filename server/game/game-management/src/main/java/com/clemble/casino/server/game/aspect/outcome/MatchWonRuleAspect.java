@@ -19,9 +19,10 @@ import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.MatchGameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 
-public class MatchWonRuleAspect extends GameAspect<MatchEndedEvent> {
+public class MatchWonRuleAspect extends MatchGameAspect<MatchEndedEvent> {
 
     final private Currency currency;
     final private SystemNotificationService systemNotificationService;

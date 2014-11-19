@@ -6,8 +6,9 @@ import com.clemble.casino.game.lifecycle.management.MatchGameContext;
 import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
 import com.clemble.casino.game.lifecycle.management.event.MatchEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.MatchGameAspect;
 
-public class MatchGameSecurityAspect extends GameAspect<Event> {
+public class MatchGameSecurityAspect extends MatchGameAspect<Event> {
 
     final private MatchGameContext context;
     

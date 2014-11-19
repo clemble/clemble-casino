@@ -12,8 +12,9 @@ import com.clemble.casino.game.lifecycle.management.event.GamePlayerMovedEvent;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.RoundGameAspect;
 
-public class RoundGameSecurityAspect<T extends Event & PlayerAware> extends GameAspect<T> {
+public class RoundGameSecurityAspect<T extends Event & PlayerAware> extends RoundGameAspect<T> {
 
     final private RoundGameContext context;
     final private Collection<String> participants;

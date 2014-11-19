@@ -6,13 +6,14 @@ import com.clemble.casino.game.lifecycle.management.event.MatchEvent;
 import com.clemble.casino.game.lifecycle.management.event.MatchStartedEvent;
 import com.clemble.casino.server.game.action.GameManagerFactoryFacade;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.MatchGameAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Created by mavarazy on 14/10/14.
  */
-public class MatchNextGameAspect extends GameAspect<MatchEvent> {
+public class MatchNextGameAspect extends MatchGameAspect<MatchEvent> {
 
     final private Logger LOG = LoggerFactory.getLogger(MatchNextGameAspect.class);
 

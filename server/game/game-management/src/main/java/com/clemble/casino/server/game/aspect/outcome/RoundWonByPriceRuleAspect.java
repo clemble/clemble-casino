@@ -10,6 +10,7 @@ import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
 import com.clemble.casino.lifecycle.management.outcome.Outcome;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.RoundGameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ import com.clemble.casino.money.Operation;
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class RoundWonByPriceRuleAspect extends GameAspect<GameEndedEvent> {
+public class RoundWonByPriceRuleAspect extends RoundGameAspect<GameEndedEvent> {
     
     final private Logger LOG = LoggerFactory.getLogger(RoundWonByPriceRuleAspect.class);
 

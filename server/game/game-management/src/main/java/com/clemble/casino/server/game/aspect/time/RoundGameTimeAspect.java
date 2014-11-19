@@ -17,9 +17,10 @@ import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.aspect.time.PlayerClockTimeoutEventTask;
 import com.clemble.casino.server.event.game.SystemGameTimeoutEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.RoundGameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 
-public class RoundGameTimeAspect extends GameAspect<GameManagementEvent> {
+public class RoundGameTimeAspect extends RoundGameAspect<GameManagementEvent> {
 
     final private Map<String, PlayerClockTimeoutEventTask> playerToTask = new HashMap<>();
 

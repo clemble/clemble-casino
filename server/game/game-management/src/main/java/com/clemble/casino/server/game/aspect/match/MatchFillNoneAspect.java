@@ -6,8 +6,9 @@ import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
 import com.clemble.casino.game.lifecycle.management.MatchGameContext;
 import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.MatchGameAspect;
 
-public class MatchFillNoneAspect extends GameAspect<RoundEndedEvent> {
+public class MatchFillNoneAspect extends MatchGameAspect<RoundEndedEvent> {
 
     final private MatchGameContext context;
 

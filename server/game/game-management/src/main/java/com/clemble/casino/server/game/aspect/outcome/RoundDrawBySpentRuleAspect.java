@@ -7,8 +7,9 @@ import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
 import com.clemble.casino.game.lifecycle.management.event.RoundEndedEvent;
 import com.clemble.casino.lifecycle.management.outcome.DrawOutcome;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.RoundGameAspect;
 
-public class RoundDrawBySpentRuleAspect extends GameAspect<RoundEndedEvent> {
+public class RoundDrawBySpentRuleAspect extends RoundGameAspect<RoundEndedEvent> {
 
     final public static RoundDrawBySpentRuleAspect INSTANCE = new RoundDrawBySpentRuleAspect();
 

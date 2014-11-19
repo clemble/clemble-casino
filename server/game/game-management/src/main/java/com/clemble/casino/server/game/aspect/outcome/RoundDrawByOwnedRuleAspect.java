@@ -21,12 +21,13 @@ import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
+import com.clemble.casino.server.game.aspect.RoundGameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 /**
  * Created by mavarazy on 23/12/13.
  */
-public class RoundDrawByOwnedRuleAspect extends GameAspect<RoundEndedEvent> {
+public class RoundDrawByOwnedRuleAspect extends RoundGameAspect<RoundEndedEvent> {
 
     final private Currency currency;
     final private SystemNotificationService systemNotificationService;
