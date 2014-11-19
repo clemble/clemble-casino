@@ -1,6 +1,7 @@
 package com.clemble.casino.goal.construction.spring;
 
 import com.clemble.casino.goal.construction.GoalKeyGenerator;
+import com.clemble.casino.goal.construction.controller.FriendInitiationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.construction.listener.SystemGoalInitiationExpirationEventListener;
@@ -10,14 +11,12 @@ import com.clemble.casino.goal.lifecycle.construction.service.SelfGoalConstructi
 import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalConstructionService;
 import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalInitiationService;
 import com.clemble.casino.payment.service.PlayerAccountService;
+import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.key.RedisKeyFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
-import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
-import com.clemble.casino.server.spring.common.PaymentClientSpringConfiguration;
-import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
+import com.clemble.casino.server.spring.common.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +31,7 @@ import redis.clients.jedis.JedisPool;
 @Import({
     CommonSpringConfiguration.class,
     PaymentClientSpringConfiguration.class,
+    ConnectionClientSpringConfiguration.class,
     MongoSpringConfiguration.class,
     RedisSpringConfiguration.class})
 public class GoalConstructionSpringConfiguration {
@@ -59,6 +59,13 @@ public class GoalConstructionSpringConfiguration {
     @Bean
     public GoalInitiationServiceController goalInitiationServiceController(ServerGoalInitiationService initiationService) {
         return new GoalInitiationServiceController(initiationService);
+    }
+
+    @Bean
+    public FriendInitiationServiceController friendInitiationServiceController(
+        GoalInitiationRepository initiationRepository,
+        @Qualifier("playerConnectionClient") PlayerConnectionService connectionService) {
+        return new FriendInitiationServiceController(initiationRepository, connectionService);
     }
 
     @Bean

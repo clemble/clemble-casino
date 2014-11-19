@@ -7,11 +7,12 @@ import java.security.NoSuchAlgorithmException;
 import javax.annotation.PostConstruct;
 
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
+import com.clemble.casino.goal.construction.controller.FriendInitiationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
-import com.clemble.casino.goal.controller.GoalTimelineServiceController;
+import com.clemble.casino.goal.controller.FriendGoalServiceController;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperations;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
@@ -111,14 +112,17 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
         }
 
         @Bean
-        public IntegrationGoalOperationsFactory goalOperationsFactory(        GoalConfigurationServiceController configurationService,
+        public IntegrationGoalOperationsFactory goalOperationsFactory(
+            GoalConfigurationServiceController configurationService,
             GoalInitiationServiceController initiationService,
+            FriendInitiationServiceController friendInitiationService,
             GoalConstructionServiceController constructionService,
             GoalActionServiceController actionServiceController,
-            GoalTimelineServiceController timelineServiceController,
+            FriendGoalServiceController timelineServiceController,
             GoalRecordServiceController recordServiceController) {
             return new IntegrationGoalOperationsFactory(configurationService,
                 initiationService,
+                friendInitiationService,
                 constructionService,
                 timelineServiceController,
                 actionServiceController,
