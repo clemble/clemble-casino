@@ -2,11 +2,14 @@ package com.clemble.casino.server.player.notification;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
+import com.clemble.casino.player.service.PlayerConnectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -48,6 +51,7 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
     final private String user;
     final private String password;
 
+    final private PlayerConnectionService connectionService;
     final private ExecutorService executorService;
 
     public RabbitPlayerNotificationService(
@@ -55,12 +59,14 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
         final MessageConverter messageConverter,
         final String host,
         final String user,
-        final String password) {
+        final String password,
+        final PlayerConnectionService connectionService) {
         this.postfix = checkNotNull(postfix);
         this.messageConverter = checkNotNull(messageConverter);
         this.host = host;
         this.user = user;
         this.password = password;
+        this.connectionService = connectionService;
 
         ThreadFactory notificationThreadFactory = new ThreadFactoryBuilder()
             .setNameFormat("CL playerNotification with '" + postfix + "' %d")
@@ -86,6 +92,25 @@ public class RabbitPlayerNotificationService implements PlayerNotificationServic
         for (T event : events)
             fullSuccess = send(player, event) & fullSuccess;
         return fullSuccess;
+    }
+
+    @Override
+    public <T extends PlayerAware & Event> boolean sendToAll(T event) {
+        String player = event.getPlayer();
+        Collection<String> connections = new ArrayList<>(connectionService.getConnections(player));
+        connections.add(player);
+        return send(connections, event);
+    }
+
+    public <T extends PlayerAware & Event> boolean send(PrivacyRule privacyRule, T event) {
+        switch (privacyRule) {
+            case friends:
+            case world:
+                return sendToAll(event);
+            case me:
+            default:
+                return send(event);
+        }
     }
 
     @Override

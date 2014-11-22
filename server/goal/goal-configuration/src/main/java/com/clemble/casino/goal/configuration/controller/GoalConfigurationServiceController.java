@@ -42,7 +42,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
-            new GoalStartRule(300000)
+            new GoalStartRule(30000)
         ),
         new GoalConfiguration(
             "Friends",
@@ -52,7 +52,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.friends,
-            new GoalStartRule(300000)
+            new GoalStartRule(30000)
         ),
         new GoalConfiguration(
             "World",
@@ -62,7 +62,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.world,
-            new GoalStartRule(300000)
+            new GoalStartRule(30000)
         )
     );
 

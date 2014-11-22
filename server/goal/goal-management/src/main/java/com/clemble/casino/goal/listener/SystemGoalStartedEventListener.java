@@ -25,7 +25,7 @@ public class SystemGoalStartedEventListener implements SystemEventListener<Syste
     @Override
     public void onEvent(SystemGoalStartedEvent event) {
         // Step 1. Send notification to player
-        notificationService.send(event.getInitiation().getPlayer(), new GoalInitiationCompleteEvent(event.getGoalKey()));
+        notificationService.send(event.getInitiation().getConfiguration().getPrivacyRule(), new GoalInitiationCompleteEvent(event.getInitiation().getPlayer(), event.getGoalKey()));
         // Step 2. Start manager for the goal
         managerFactory.start(null, event.getInitiation());
     }
