@@ -6,12 +6,9 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
-import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBetRule;
-import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBidRule;
-import com.clemble.casino.lifecycle.configuration.rule.bet.ForbiddenBetRule;
+import com.clemble.casino.lifecycle.configuration.rule.bet.*;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
@@ -45,27 +42,27 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
-            new GoalStartRule(60000)
+            new GoalStartRule(300000)
         ),
         new GoalConfiguration(
             "Friends",
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
-            FixedBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
+            MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
             new JudgeRule("me", JudgeType.self),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.friends,
-            new GoalStartRule(60000)
+            new GoalStartRule(300000)
         ),
         new GoalConfiguration(
             "World",
             new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
-            FixedBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 5))),
+            MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),
             new JudgeRule("me", JudgeType.self),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.world,
-            new GoalStartRule(60000)
+            new GoalStartRule(300000)
         )
     );
 
