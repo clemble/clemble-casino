@@ -19,6 +19,7 @@ import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.lifecycle.record.EventRecord;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
+import com.clemble.casino.payment.Bank;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -69,7 +70,7 @@ public class SelfGoalManagerFactoryTest {
         GoalInitiation initiation = new GoalInitiation(
             goalKey,
             InitiationState.initiated,
-            new ArrayList<PlayerBid>(),
+            Bank.create(player, configuration.getBid()),
             player,
             "Create goal state",
             player,
@@ -90,7 +91,7 @@ public class SelfGoalManagerFactoryTest {
         GoalInitiation initiation = new GoalInitiation(
                 goalKey,
                 InitiationState.initiated,
-                new ArrayList<PlayerBid>(),
+                Bank.create(player, configuration.getBid()),
                 player,
                 "Create goal state",
                 player,

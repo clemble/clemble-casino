@@ -44,7 +44,7 @@ public class SelfGoalManagerFactory implements GoalManagerFactory {
         // Step 2. Creating state
         GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), new PlayerClock(0, 0, 0, null));
         GoalContext goalContext = new GoalContext(parent, Collections.singletonList(playerContext));
-        GoalState state = new GoalState(initiation.getGoalKey(), initiation.getPlayer(), record.getBids(), initiation.getGoal(), initiation.getConfiguration(), goalContext, "Go for it");
+        GoalState state = new GoalState(initiation.getGoalKey(), initiation.getPlayer(), record.getBank(), initiation.getGoal(), initiation.getConfiguration(), goalContext, "Go for it");
         // Step 3. Saving state
         stateRepository.save(state);
         // Step 4. Creating manager factory

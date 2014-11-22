@@ -25,13 +25,8 @@ public class GoalLostOutcomeAspectFactory implements GoalAspectFactory<GoalEnded
 
     @Override
     public ClembleAspect<GoalEndedEvent> construct(GoalConfiguration configuration, GoalState context) {
-                // Step 1. Generating player bids
-        Collection<PlayerBid> playerBids = new ArrayList<PlayerBid>();
-        // Step 2. Checking player bids
-        Collection<PlayerBid> bids = new ArrayList<PlayerBid>(context.getBids());
-        bids.add(new PlayerBid(context.getPlayer(), context.getConfiguration().getBid()));
-        // Step 3. Checking player bid
-        return new GoalLostOutcomeAspect(bids, systemNotificationService);
+        // Step 1. Checking player bid
+        return new GoalLostOutcomeAspect(context.getBank().getBids(), systemNotificationService);
     }
 
     @Override

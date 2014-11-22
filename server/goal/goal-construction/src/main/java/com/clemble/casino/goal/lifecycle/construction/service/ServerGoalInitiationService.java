@@ -101,7 +101,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         // Step 1. Fetching goal initiation
         GoalInitiation initiation = initiationRepository.findOne(goalKey);
         // Step 2. Processing GoalInitiaiton
-        initiation.getBids().add(playerBid);
+        initiation.getBank().add(playerBid);
         // Step 3. Saving updated GoalInitiation
         initiationRepository.save(initiation);
         // Step 4. Returning initiation
