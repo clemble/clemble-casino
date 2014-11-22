@@ -34,8 +34,8 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 @Configuration
 @Import({
     CommonSpringConfiguration.class,
-    MongoSpringConfiguration.class,
-    ConnectionClientSpringConfiguration.class})
+    MongoSpringConfiguration.class
+})
 public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean

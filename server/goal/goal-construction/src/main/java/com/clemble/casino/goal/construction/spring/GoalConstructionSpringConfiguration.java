@@ -31,7 +31,6 @@ import redis.clients.jedis.JedisPool;
 @Import({
     CommonSpringConfiguration.class,
     PaymentClientSpringConfiguration.class,
-    ConnectionClientSpringConfiguration.class,
     MongoSpringConfiguration.class,
     RedisSpringConfiguration.class})
 public class GoalConstructionSpringConfiguration {

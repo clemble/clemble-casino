@@ -1,6 +1,7 @@
 package com.clemble.casino.server.spring.common;
 
 import com.clemble.casino.player.service.PlayerConnectionService;
+import com.clemble.casino.server.connection.PlayerConnectionServiceWrapper;
 import com.clemble.casino.server.connection.RESTPlayerConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,7 +38,7 @@ public class ConnectionClientSpringConfiguration implements SpringConfiguration{
         @Bean
         public PlayerConnectionService playerConnectionClient(){
             if (playerConnectionController != null)
-                return playerConnectionController;
+                return new PlayerConnectionServiceWrapper(playerConnectionController);
             return new PlayerConnectionService() {
                 @Override
                 public Set<String> getConnections(String player) {
@@ -62,7 +63,7 @@ public class ConnectionClientSpringConfiguration implements SpringConfiguration{
         @Bean
         public PlayerConnectionService playerConnectionClient(@Value("${clemble.host}") String base){
             if (playerConnectionController != null)
-                return playerConnectionController;
+                return new PlayerConnectionServiceWrapper(playerConnectionController);
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getInterceptors().add(new ClientHttpRequestInterceptor() {
                 @Override
