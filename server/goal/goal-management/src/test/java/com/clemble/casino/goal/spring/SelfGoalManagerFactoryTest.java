@@ -1,6 +1,7 @@
 package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.bet.Bid;
+import com.clemble.casino.bet.PlayerBid;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
@@ -30,6 +31,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -67,6 +69,7 @@ public class SelfGoalManagerFactoryTest {
         GoalInitiation initiation = new GoalInitiation(
             goalKey,
             InitiationState.initiated,
+            new ArrayList<PlayerBid>(),
             player,
             "Create goal state",
             player,
@@ -87,6 +90,7 @@ public class SelfGoalManagerFactoryTest {
         GoalInitiation initiation = new GoalInitiation(
                 goalKey,
                 InitiationState.initiated,
+                new ArrayList<PlayerBid>(),
                 player,
                 "Create goal state",
                 player,

@@ -7,6 +7,7 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
 import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBetRule;
+import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBidRule;
 import com.clemble.casino.lifecycle.configuration.rule.bet.ForbiddenBetRule;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -49,7 +50,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
         new GoalConfiguration(
             "Friends",
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
-            FixedBetRule.create(50),
+            FixedBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
             new JudgeRule("me", JudgeType.self),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
@@ -59,7 +60,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
         new GoalConfiguration(
             "World",
             new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
-            FixedBetRule.create(75),
+            FixedBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 5))),
             new JudgeRule("me", JudgeType.self),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),

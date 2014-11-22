@@ -1,5 +1,7 @@
 package com.clemble.casino.goal.lifecycle.construction.service;
 
+import com.clemble.casino.bet.Bid;
+import com.clemble.casino.bet.PlayerBid;
 import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
@@ -88,6 +90,22 @@ public class ServerGoalInitiationService implements GoalInitiationService {
     @Override
     public GoalInitiation get(String key) {
         return initiationRepository.findOne(key);
+    }
+
+    @Override
+    public GoalInitiation bid(String goalKey, Bid bid) {
+        throw new UnsupportedOperationException();
+    }
+
+    public GoalInitiation bid(String goalKey, PlayerBid playerBid) {
+        // Step 1. Fetching goal initiation
+        GoalInitiation initiation = initiationRepository.findOne(goalKey);
+        // Step 2. Processing GoalInitiaiton
+        initiation.getBids().add(playerBid);
+        // Step 3. Saving updated GoalInitiation
+        initiationRepository.save(initiation);
+        // Step 4. Returning initiation
+        return initiation;
     }
 
 }
