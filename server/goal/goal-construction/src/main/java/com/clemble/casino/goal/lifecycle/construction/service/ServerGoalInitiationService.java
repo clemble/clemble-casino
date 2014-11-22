@@ -102,6 +102,15 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         GoalInitiation initiation = initiationRepository.findOne(goalKey);
         // Step 2. Processing GoalInitiaiton
         initiation.getBank().add(playerBid);
+        // Step 3. Freezing amount on account
+        // TODO add check can afford
+        Money amount = playerBid.getBid().getAmount();
+        Set<PaymentOperation> operations = ImmutableSet.<PaymentOperation>of(
+            new PaymentOperation(playerBid.getPlayer(), amount, Operation.Credit),
+            new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Debit)
+        );
+        SystemEvent freezeRequest = new SystemPaymentFreezeRequestEvent(new PendingTransaction(initiation.getGoalKey(), operations, null));
+        systemNotificationService.send(freezeRequest);
         // Step 3. Saving updated GoalInitiation
         initiationRepository.save(initiation);
         // Step 4. Returning initiation
