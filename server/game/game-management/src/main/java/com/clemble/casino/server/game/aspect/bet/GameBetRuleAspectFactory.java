@@ -8,7 +8,7 @@ import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.RoundGameAspectFactory;
 
-public class BetRuleAspectFactory implements RoundGameAspectFactory<PlayerAction<BetAction>> {
+public class GameBetRuleAspectFactory implements RoundGameAspectFactory<PlayerAction<BetAction>> {
 
     @Override
     public GameAspect<PlayerAction<BetAction>> construct(RoundGameConfiguration configuration, RoundGameState roundState) {
@@ -17,7 +17,7 @@ public class BetRuleAspectFactory implements RoundGameAspectFactory<PlayerAction
 
     @Override
     public int getOrder() {
-        return HIGHEST_PRECEDENCE;
+        return HIGHEST_PRECEDENCE + 9;
     }
 
 }

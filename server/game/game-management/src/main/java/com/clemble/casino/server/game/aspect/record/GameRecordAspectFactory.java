@@ -28,6 +28,6 @@ public class GameRecordAspectFactory implements GenericGameAspectFactory<Event> 
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return Ordered.LOWEST_PRECEDENCE - 5;
     }
 }

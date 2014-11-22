@@ -36,7 +36,7 @@ public class NextGameAspectFactory implements GenericGameAspectFactory<GameEnded
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return LOWEST_PRECEDENCE - 6;
     }
 
 }

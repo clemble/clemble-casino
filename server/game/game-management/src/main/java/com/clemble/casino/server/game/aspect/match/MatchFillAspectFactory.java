@@ -25,7 +25,7 @@ public class MatchFillAspectFactory implements MatchGameAspectFactory<RoundEnded
 
     @Override
     public int getOrder() {
-        return 0;
+        return LOWEST_PRECEDENCE - 8;
     }
 
 }

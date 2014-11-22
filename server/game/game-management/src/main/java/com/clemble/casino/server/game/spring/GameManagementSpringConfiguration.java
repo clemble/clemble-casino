@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.clemble.casino.server.game.aspect.bet.BetRuleAspectFactory;
+import com.clemble.casino.server.game.aspect.bet.GameBetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
@@ -52,8 +52,8 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
 
     public static class GameAspectSpringConfiguration implements SpringConfiguration {
         @Bean
-        public BetRuleAspectFactory gameBetAspectFactory() {
-            return new BetRuleAspectFactory();
+        public GameBetRuleAspectFactory gameBetAspectFactory() {
+            return new GameBetRuleAspectFactory();
         }
 
         @Bean

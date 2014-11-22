@@ -5,6 +5,7 @@ import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.management.MatchGameState;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.MatchGameAspectFactory;
+import org.springframework.core.Ordered;
 
 public class MatchGameTimeAspectFactory implements MatchGameAspectFactory<RoundEndedEvent> {
 
@@ -15,7 +16,7 @@ public class MatchGameTimeAspectFactory implements MatchGameAspectFactory<RoundE
 
     @Override
     public int getOrder() {
-        return 1;
+        return HIGHEST_PRECEDENCE;
     }
 
 }

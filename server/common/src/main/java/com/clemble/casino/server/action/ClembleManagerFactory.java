@@ -70,6 +70,8 @@ public class ClembleManagerFactory<C extends Configuration> implements Applicati
             aspectIdentifiers.add(aspectFactory.getOrder());
         }
         if(aspectIdentifiers.size() != aspectFactories.size()) {
+            for(ClembleAspectFactory aspectFactory: aspectFactories)
+                LOG.error("{} - {}", aspectFactory.getOrder(), aspectFactory);
             throw new IllegalArgumentException("Aspect factory order overlaps, which should never happen");
         }
     }

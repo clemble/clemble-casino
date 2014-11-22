@@ -24,7 +24,7 @@ public class RoundGameTimeAspectFactory implements RoundGameAspectFactory<GameMa
 
     @Override
     public int getOrder(){
-        return Ordered.HIGHEST_PRECEDENCE;
+        return HIGHEST_PRECEDENCE;
     }
 
 }

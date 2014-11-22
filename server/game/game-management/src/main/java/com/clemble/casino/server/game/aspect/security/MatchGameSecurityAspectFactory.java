@@ -17,7 +17,7 @@ public class MatchGameSecurityAspectFactory implements MatchGameAspectFactory<Ev
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        return Ordered.HIGHEST_PRECEDENCE + 2;
     }
 
 }

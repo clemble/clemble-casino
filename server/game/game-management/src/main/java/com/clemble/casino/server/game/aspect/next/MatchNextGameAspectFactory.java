@@ -32,7 +32,7 @@ public class MatchNextGameAspectFactory implements MatchGameAspectFactory<MatchE
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        return LOWEST_PRECEDENCE - 7;
     }
 
 }

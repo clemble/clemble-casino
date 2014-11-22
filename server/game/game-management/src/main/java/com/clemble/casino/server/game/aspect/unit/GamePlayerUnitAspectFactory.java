@@ -21,7 +21,7 @@ public class GamePlayerUnitAspectFactory implements GenericGameAspectFactory<Pla
 
     @Override
     public int getOrder() {
-        return 0;
+        return HIGHEST_PRECEDENCE + 1;
     }
 
 }
