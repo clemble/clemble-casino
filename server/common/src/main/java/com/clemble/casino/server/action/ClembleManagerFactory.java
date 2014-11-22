@@ -49,16 +49,29 @@ public class ClembleManagerFactory<C extends Configuration> implements Applicati
     }
 
     private Object check(Object bean) {
-        //LOG.debug("Processing {}", bean);
+        // Step 1. Checking bean is applicable
         for (Class<?> aspectFactoryClass: aspectFactoryClasses) {
             if (aspectFactoryClass.isAssignableFrom(bean.getClass())) {
+                ClembleAspectFactory<?, C, State> aspectFactory = (ClembleAspectFactory<?, C, State>) bean;
                 // Step 1. Checking that bean is assignable to the basic class
-                aspectFactories.add((ClembleAspectFactory<?, C, State>) bean);
-                LOG.debug("Adding aspect {}", bean);
+                aspectFactories.add(aspectFactory);
+                LOG.debug("Adding aspect {} {}", aspectFactory.getOrder(), aspectFactory);
+                Collections.sort(aspectFactories, OrderComparator.INSTANCE);
+                checkOrder();
             }
         }
-        Collections.sort(aspectFactories, OrderComparator.INSTANCE);
+        // Step 3. Returning processed bean
         return bean;
+    }
+
+    private void checkOrder() {
+        HashSet<Integer> aspectIdentifiers = new HashSet<>();
+        for(ClembleAspectFactory aspectFactory: aspectFactories) {
+            aspectIdentifiers.add(aspectFactory.getOrder());
+        }
+        if(aspectIdentifiers.size() != aspectFactories.size()) {
+            throw new IllegalArgumentException("Aspect factory order overlaps, which should never happen");
+        }
     }
 
 }

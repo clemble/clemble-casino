@@ -26,6 +26,6 @@ public class GoalStatePersistenceAspectFactory implements GoalAspectFactory<Goal
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return Ordered.LOWEST_PRECEDENCE - 4;
     }
 }

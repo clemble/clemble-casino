@@ -49,6 +49,6 @@ public class GoalPlayerNotificationAspectFactory implements GoalAspectFactory<Go
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE - 1;
+        return Ordered.LOWEST_PRECEDENCE;
     }
 }

@@ -31,7 +31,7 @@ public class GoalWonOutcomeAspectFactory implements GoalAspectFactory<GoalEndedE
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE - 2;
+        return Ordered.HIGHEST_PRECEDENCE + 1;
     }
 
 }

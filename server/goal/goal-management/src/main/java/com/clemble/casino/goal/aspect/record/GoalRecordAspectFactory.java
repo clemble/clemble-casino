@@ -26,6 +26,6 @@ public class GoalRecordAspectFactory implements GoalAspectFactory<Event> {
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return Ordered.LOWEST_PRECEDENCE - 3;
     }
 }
