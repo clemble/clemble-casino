@@ -88,7 +88,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         GoalInitiation initiation = initiationRepository.findOne(key);
         if(initiation == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalNotExists);
-        if(initiation.getPlayer().equals(player))
+        if(!initiation.getPlayer().equals(player))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalNotOwnedByPlayer);
         // Step 2. Sending notification to start service in the same way as usual flow
         systemNotificationService.send(new SystemGoalInitiationDueEvent(initiation.getGoalKey()));
