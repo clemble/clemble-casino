@@ -79,6 +79,24 @@ public class ServerGoalInitiationService implements GoalInitiationService {
     }
 
     @Override
+    public GoalInitiation confirm(String key) {
+        throw new UnsupportedOperationException();
+    }
+
+    public GoalInitiation confirm(String player, String key) {
+        // Step 1. Fetching goal and checking everything is fine
+        GoalInitiation initiation = initiationRepository.findOne(key);
+        if(initiation == null)
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalNotExists);
+        if(initiation.getPlayer().equals(player))
+            throw ClembleCasinoException.fromError(ClembleCasinoError.GoalNotOwnedByPlayer);
+        // Step 2. Sending notification to start service in the same way as usual flow
+        systemNotificationService.send(new SystemGoalInitiationDueEvent(initiation.getGoalKey()));
+        // Step 3. Returning original flow
+        return initiation;
+    }
+
+    @Override
     public Collection<GoalInitiation> getPending() {
         throw new UnsupportedOperationException();
     }

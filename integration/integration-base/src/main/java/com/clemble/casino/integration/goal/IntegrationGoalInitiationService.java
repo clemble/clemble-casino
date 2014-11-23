@@ -31,8 +31,13 @@ public class IntegrationGoalInitiationService implements GoalInitiationService {
     }
 
     @Override
+    public GoalInitiation confirm(String key) {
+        return initiationService.confirm(player, key);
+    }
+
+    @Override
     public GoalInitiation bid(String goalKey, Bid bid) {
-        return initiationService.bid(goalKey, player, bid);
+        return initiationService.bid(player, goalKey, bid);
     }
 
 }

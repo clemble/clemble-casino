@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-import static com.clemble.casino.goal.GoalWebMapping.GOAL_INITIATION;
-import static com.clemble.casino.goal.GoalWebMapping.MY_GOAL_INITIATION;
-import static com.clemble.casino.goal.GoalWebMapping.GOAL_INITIATION_BID;
 import static com.clemble.casino.WebMapping.PRODUCES;
+import static com.clemble.casino.goal.GoalWebMapping.*;
 
 /**
  * Created by mavarazy on 9/13/14.
@@ -46,13 +44,24 @@ public class GoalInitiationServiceController implements GoalInitiationService {
     }
 
     @Override
+    public GoalInitiation confirm(String key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = GOAL_INITIATION_CONFIRM, produces = PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public GoalInitiation confirm(@CookieValue("player") String player, @PathVariable("goalKey") String goalKey) {
+        return initiationService.confirm(player, goalKey);
+    }
+
+    @Override
     public GoalInitiation bid(String goalKey, Bid bid) {
         throw new UnsupportedOperationException();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = GOAL_INITIATION_BID, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public GoalInitiation bid(@PathVariable("goalKey") String goalKey, @CookieValue("player") String player, @RequestBody Bid bid) {
+    public GoalInitiation bid(@CookieValue("player") String player, @PathVariable("goalKey") String goalKey, @RequestBody Bid bid) {
         // Step 1. Generating player bid
         PlayerBid playerBid = new PlayerBid(player, bid);
         // Step 2. Processing player bid
