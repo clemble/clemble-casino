@@ -102,8 +102,10 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalRecordAspectFactory goalRecordAspectFactory(GoalRecordRepository recordRepository){
-        return new GoalRecordAspectFactory(recordRepository);
+    public GoalRecordAspectFactory goalRecordAspectFactory(
+        GoalRecordRepository recordRepository,
+        @Qualifier("playerNotificationService") PlayerNotificationService notificationService){
+        return new GoalRecordAspectFactory(recordRepository, notificationService);
     }
 
     @Bean
