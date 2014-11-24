@@ -24,6 +24,9 @@ public class SystemGoalStartedEventListener implements SystemEventListener<Syste
 
     @Override
     public void onEvent(SystemGoalStartedEvent event) {
+        // Step 0. Checking goal key was not prior created
+        if (managerFactory.get(event.getGoalKey()) != null)
+            return;
         // Step 1. Send notification to player
         notificationService.send(event.getInitiation().getConfiguration().getPrivacyRule(), GoalInitiationCompleteEvent.create(event.getInitiation()));
         // Step 2. Start manager for the goal

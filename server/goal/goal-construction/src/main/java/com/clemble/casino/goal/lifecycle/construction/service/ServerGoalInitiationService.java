@@ -19,6 +19,7 @@ import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
+import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
 import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.google.common.collect.ImmutableSet;
@@ -92,6 +93,9 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         if(!initiation.getPlayer().equals(player))
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalNotOwnedByPlayer);
         // Step 2. Sending notification to start service in the same way as usual flow
+        // Step 2.1. Removing scheduled notification
+        systemNotificationService.send(new SystemRemoveJobScheduleEvent(initiation.getGoalKey(), "initiation"));
+        // Step 2.2. Checking initiation is due
         systemNotificationService.send(new SystemGoalInitiationDueEvent(initiation.getGoalKey()));
         // Step 3. Returning original flow
         return initiation;
