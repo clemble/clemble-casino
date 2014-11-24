@@ -45,7 +45,7 @@ public class GoalWonOutcomeAspect
     protected void doEvent(GoalEndedEvent event) {
         // Step 1. Generating payment transaction
         PaymentTransaction paymentTransaction = new PaymentTransaction()
-            .setTransactionKey(event.getGoalKey())
+            .setTransactionKey(event.getBody().getGoalKey())
             .setTransactionDate(new Date());
         // Step 2. Processing payment transaction
         for(PlayerBid playerBid: bids) {

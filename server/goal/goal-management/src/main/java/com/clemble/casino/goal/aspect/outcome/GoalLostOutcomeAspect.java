@@ -47,7 +47,7 @@ public class GoalLostOutcomeAspect
         // Step 1. Generating payment transaction
         // Account already balanced need to remove pending operation
         PaymentTransaction paymentTransaction = new PaymentTransaction().
-            setTransactionKey(event.getGoalKey()).
+            setTransactionKey(event.getBody().getGoalKey()).
             setTransactionDate(new Date());
         // Step 3. Generating bid transaction
         for(PlayerBid playerBid: bids) {
