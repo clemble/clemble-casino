@@ -5,6 +5,9 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
+import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
+import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.aspect.time.PlayerClockTimeoutEventTask;
 import com.clemble.casino.server.event.goal.SystemGoalTimeoutEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -40,7 +43,11 @@ public class GoalTimeAspect extends GoalAspect<Event> {
     @Override
     protected void doEvent(Event move) {
         // Step 1. To check if we need rescheduling, first calculate time before
-        if(move instanceof GoalEndedEvent) {
+        if (move instanceof PlayerAction) {
+            playerToTask.values().forEach(task -> {
+                task.stop();
+            });
+        } else if(move instanceof GoalEndedEvent) {
             playerToTask.values().forEach(task -> {
                 task.stop();
             });
