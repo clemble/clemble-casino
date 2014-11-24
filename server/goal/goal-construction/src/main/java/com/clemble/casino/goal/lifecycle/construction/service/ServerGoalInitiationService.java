@@ -2,6 +2,7 @@ package com.clemble.casino.goal.lifecycle.construction.service;
 
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.bet.PlayerBid;
+import com.clemble.casino.goal.lifecycle.initiation.event.GoalInitiationChangedEvent;
 import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
@@ -131,6 +132,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         systemNotificationService.send(freezeRequest);
         // Step 3. Saving updated GoalInitiation
         initiationRepository.save(initiation);
+        notificationService.send(initiation.getConfiguration().getPrivacyRule(), GoalInitiationChangedEvent.create(initiation));
         // Step 4. Returning initiation
         return initiation;
     }
