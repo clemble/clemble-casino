@@ -53,7 +53,7 @@
         <spring.social.linkedin.version>1.0.1.RELEASE</spring.social.linkedin.version>
         <spring.social.facebook.version>1.1.1.RELEASE</spring.social.facebook.version>
         <spring.social.twitter.version>1.1.0.RELEASE</spring.social.twitter.version>
-        <spring.social.vkontakte.version>1.1.0.RELEASE</spring.social.vkontakte.version>
+        <spring.social.vkontakte.version>1.1.1.BUILD-SNAPSHOT</spring.social.vkontakte.version>
         <spring.social.google.version>1.1.0.M4</spring.social.google.version>
         <!-- Generic dependencies -->
         <logback.version>1.1.2</logback.version>
@@ -110,6 +110,11 @@
             <id>spring-snapshot</id>
             <name>Spring Maven SNAPSHOT Repository</name>
             <url>http://repo.spring.io/libs-snapshot</url>
+        </repository>
+        <repository>
+            <id>mavarazy-github</id>
+            <name>Spring Maven SNAPSHOT Repository</name>
+            <url>http://mavarazy.github.io/maven/releases</url>
         </repository>
         <repository>
             <id>spring-snapshots</id>

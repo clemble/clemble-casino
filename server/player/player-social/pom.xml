@@ -37,6 +37,10 @@
             <artifactId>spring-social-linkedin</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-vkontakte</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>

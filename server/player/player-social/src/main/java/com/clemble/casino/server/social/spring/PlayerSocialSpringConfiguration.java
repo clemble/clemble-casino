@@ -4,6 +4,7 @@ import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import com.clemble.casino.server.social.*;
 import com.clemble.casino.server.security.PlayerTokenFactory;
+import com.clemble.casino.server.social.adapter.VKontakteSocialAdapter;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.social.controller.PlayerSocialRegistrationController;
@@ -33,6 +34,7 @@ import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
 import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
 import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
+import org.springframework.social.vkontakte.connect.VKontakteConnectionFactory;
 
 import javax.annotation.PostConstruct;
 
@@ -54,17 +56,22 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
             SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
             FacebookConnectionFactory facebookConnectionFactory,
             LinkedInConnectionFactory linkedInConnectionFactory,
-            TwitterConnectionFactory twitterConnectionFactory) {
+            TwitterConnectionFactory twitterConnectionFactory,
+            VKontakteConnectionFactory vKontakteConnectionFactory) {
         ConnectionFactoryRegistry connectionFactoryRegistry = new ConnectionFactoryRegistry();
-        // Step 1. Registering FB
+        // Step 1.1 Registering FB
         connectionFactoryRegistry.addConnectionFactory(facebookConnectionFactory);
         socialConnectionAdapterRegistry.register(new FacebookSocialAdapter(facebookConnectionFactory));
-        // Step 2. Registering Twitter
+        // Step 1.2. Registering Twitter
         connectionFactoryRegistry.addConnectionFactory(twitterConnectionFactory);
         socialConnectionAdapterRegistry.register(new TwitterSocialAdapter(twitterConnectionFactory));
-        // Step 3. Registering LinkedIn
+        // Step 1.3. Register VK
+        connectionFactoryRegistry.addConnectionFactory(vKontakteConnectionFactory);
+        socialConnectionAdapterRegistry.register(new VKontakteSocialAdapter(vKontakteConnectionFactory));
+        // Step 1.4 Registering LinkedIn
         connectionFactoryRegistry.addConnectionFactory(linkedInConnectionFactory);
         socialConnectionAdapterRegistry.register(new LinkedInSocialAdapter(linkedInConnectionFactory));
+        // Step 2. Returning connection registry
         return connectionFactoryRegistry;
     }
 
@@ -98,6 +105,13 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         @Value("${clemble.social.linkedin.key}") String key,
         @Value("${clemble.social.linkedin.secret}") String secret) {
         return new LinkedInConnectionFactory(key, secret);
+    }
+
+    @Bean
+    public VKontakteConnectionFactory vKontakteConnectionFactory(
+        @Value("${clemble.social.vkontakte.key}") String key,
+        @Value("${clemble.social.vkontakte.secret}") String secret) {
+        return new VKontakteConnectionFactory(key, secret);
     }
 
     @Bean
