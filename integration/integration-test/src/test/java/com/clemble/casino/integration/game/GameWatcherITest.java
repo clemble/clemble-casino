@@ -13,6 +13,7 @@ import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -52,6 +53,7 @@ public class GameWatcherITest {
         B.perform(new SelectNumberAction(1));
 
         A.waitForEnd();
+        B.syncWith(A);
 
         assertFalse(B.isAlive());
         assertFalse(A.isAlive());
