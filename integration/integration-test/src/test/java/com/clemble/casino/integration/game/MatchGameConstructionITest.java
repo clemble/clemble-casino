@@ -9,10 +9,16 @@ import java.util.List;
 
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
+import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
+import com.clemble.test.concurrent.AsyncCompletionUtils;
+import com.clemble.test.concurrent.Check;
+import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -80,8 +86,12 @@ public class MatchGameConstructionITest {
     public void testActiveSession() {
         List<MatchGamePlayer> potPlayers = gameScenarios.match();
         // Step 1. Constructing game session player
-        MatchGamePlayer AvsB = potPlayers.get(0);
-        MatchGamePlayer BvsA = potPlayers.get(1);
+        final MatchGamePlayer AvsB = potPlayers.get(0);
+        final MatchGamePlayer BvsA = potPlayers.get(1);
+
+        // Game is calculated with win for each game + pot rule aggregated
+        // So not all money can be spent in a game
+
         AvsB.waitForStart();
         // Step 2. Checking pot get to live
         // Step 2.1. Giving up 2 games at a row
@@ -103,10 +113,24 @@ public class MatchGameConstructionITest {
         PaymentTransaction transaction = BvsA.playerOperations().paymentOperations().getTransaction(AvsB.getSessionKey());
         assertNotNull(transaction);
 
+        // Processing is async, so payment might complete only after certain delay
+        boolean check = CheckUtils.check((test) -> {
+            Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
+            Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
+
+            long mBAmount = mB.getAmount();
+            long expectedAmount = mA.add(300).getAmount();
+
+            return mBAmount == expectedAmount;
+        });
+        assertTrue(check);
+
         Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
         Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
 
-        assertEquals("Amount does not match for " + AvsB.getPlayer(), mB.getAmount(), mA.add(300).getAmount());
+        long mBAmount = mB.getAmount();
+        long expectedAmount = mA.add(300).getAmount();
+        assertEquals("Amount does not match for " + AvsB.getPlayer(), mBAmount, expectedAmount);
 
         GameRecord record = AvsB.playerOperations().gameRecordOperations().get(AvsB.getSessionKey());
         assertEquals(record.getEventRecords().size(), 5);

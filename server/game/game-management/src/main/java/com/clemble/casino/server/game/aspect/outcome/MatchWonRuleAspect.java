@@ -21,8 +21,12 @@ import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEv
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.MatchGameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MatchWonRuleAspect extends MatchGameAspect<MatchEndedEvent> {
+
+    final private Logger LOG = LoggerFactory.getLogger(MatchWonRuleAspect.class);
 
     final private Currency currency;
     final private SystemNotificationService systemNotificationService;
@@ -37,6 +41,7 @@ public class MatchWonRuleAspect extends MatchGameAspect<MatchEndedEvent> {
 
     @Override
     protected void doEvent(MatchEndedEvent event) {
+        LOG.debug("Processing {}", event);
         MatchGameContext context = event.getState().getContext();
         String winnerId = ((PlayerWonOutcome) event.getOutcome()).getPlayer();
         // Step 2. Generating payment transaction
