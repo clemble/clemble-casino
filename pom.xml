@@ -58,6 +58,7 @@
         <!-- Generic dependencies -->
         <logback.version>1.1.2</logback.version>
         <loggly.version>0.1.2</loggly.version>
+        <logentries.version>1.1.27</logentries.version>
         <logback-syslog4j.version>1.0.0</logback-syslog4j.version>
         <jackson.version>2.4.3</jackson.version>
         <!-- Test dependencies -->
@@ -674,7 +675,11 @@
                 <artifactId>logback-syslog4j</artifactId>
                 <version>${logback-syslog4j.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.logentries</groupId>
+                <artifactId>logentries-appender</artifactId>
+                <version>${logentries.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.logback-extensions</groupId>
                 <artifactId>logback-ext-loggly</artifactId>

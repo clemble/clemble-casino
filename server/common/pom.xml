@@ -12,6 +12,10 @@
             <groupId>com.papertrailapp</groupId>
             <artifactId>logback-syslog4j</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.logentries</groupId>
+            <artifactId>logentries-appender</artifactId>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>org.logback-extensions</groupId>-->
             <!--<artifactId>logback-ext-loggly</artifactId>-->

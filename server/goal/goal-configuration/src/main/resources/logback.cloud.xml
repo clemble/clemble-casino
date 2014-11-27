@@ -32,24 +32,19 @@
         </syslogConfig>
     </appender>
 
-     <!--<appender name="loggly" class="ch.qos.logback.ext.loggly.LogglyAppender">-->
-        <!--<endpointUrl>http://logs-01.loggly.com/inputs/fe27a35c-06d0-4f16-a556-be4e6c6a3b8c/tag/logback</endpointUrl>-->
-        <!--<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">-->
-           <!--<layout class="ch.qos.logback.contrib.json.classic.JsonLayout">-->
-                 <!--<jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">-->
-                      <!--&lt;!&ndash; prettyPrint is probably ok in dev, but usually not ideal in production: &ndash;&gt;-->
-                      <!--<prettyPrint>false</prettyPrint>-->
-                 <!--</jsonFormatter>-->
-                 <!--<context>goal-configuration</context>-->
-                 <!--<timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSS'000Z'</timestampFormat>-->
-                 <!--<timestampFormatTimezoneId>UTC</timestampFormatTimezoneId>-->
-                 <!--<appendLineSeparator>true</appendLineSeparator>-->
-            <!--</layout>-->
-        <!--</encoder>-->
-    <!--</appender>-->
+    <appender name="LE" class="com.logentries.logback.LogentriesAppender">
+        <Debug>False</Debug>
+        <Token>274a52ba-e313-4a8b-bccb-1b6565f77bdc</Token>
+        <Ssl>False</Ssl>
+        <facility>USER</facility>
+        <logID>goal-configuration</logID>
+        <layout>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </layout>
+    </appender>
 
     <root level="DEBUG">
-        <!--<appender-ref ref="loggly" />-->
+        <appender-ref ref="LE" />
         <appender-ref ref="FILE" />
         <appender-ref ref="SYSLOG-UDP" />
     </root>
