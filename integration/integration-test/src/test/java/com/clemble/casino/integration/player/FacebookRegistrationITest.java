@@ -43,6 +43,7 @@ import com.jayway.facebooktestjavaapi.testuser.impl.HttpClientFacebookTestUserSt
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
+@Ignore
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class FacebookRegistrationITest {
 
