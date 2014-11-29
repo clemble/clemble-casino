@@ -25,7 +25,16 @@ public class CheckUtils {
                 e.printStackTrace();
             }
         }
-
         return false;
+    }
+
+    public static <T> boolean checkNotNull(Function<Integer, T> f) {
+        return check((i) -> {
+            try {
+                return f.apply(i) != null;
+            } catch (Throwable throwable) {
+                return false;
+            }
+        });
     }
 }

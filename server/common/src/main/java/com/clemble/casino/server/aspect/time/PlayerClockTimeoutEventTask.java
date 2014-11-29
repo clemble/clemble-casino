@@ -65,11 +65,7 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
         long moveStart = System.currentTimeMillis() + MOVE_TIMEOUT;
         long moveBreachTime = moveStart + moveRule.getLimit();
         long totalBreachTime = moveStart + totalRule.getLimit() - clock.getTimeSpent();
-        if (moveBreachTime > totalBreachTime) {
-            clock.start(moveStart, totalBreachTime, totalRule.getPunishment());
-        } else {
-            clock.start(moveStart, moveBreachTime, moveRule.getPunishment());
-        }
+        clock.start(moveStart, Math.min(moveBreachTime, totalBreachTime), totalBreachTime, totalRule.getPunishment());
 
         SystemAddJobScheduleEvent addJobScheduleEvent = new SystemAddJobScheduleEvent(
             sessionKey,

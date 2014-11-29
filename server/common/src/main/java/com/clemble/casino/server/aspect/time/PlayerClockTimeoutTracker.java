@@ -65,11 +65,8 @@ public class PlayerClockTimeoutTracker implements PlayerAware, Comparable<Player
         long moveStart = System.currentTimeMillis() + MOVE_TIMEOUT;
         long moveBreachTime = moveStart + moveRule.getLimit();
         long totalBreachTime = moveStart + totalRule.getLimit() - clock.getTimeSpent();
-        if (moveBreachTime > totalBreachTime) {
-            clock.start(moveStart, totalBreachTime, totalRule.getPunishment());
-        } else {
-            clock.start(moveStart, moveBreachTime, totalRule.getPunishment());
-        }
+
+        clock.start(moveStart, Math.min(totalBreachTime, moveBreachTime), totalBreachTime, totalRule.getPunishment());
 
         SystemAddJobScheduleEvent addJobScheduleEvent = new SystemAddJobScheduleEvent(
             sessionKey,
