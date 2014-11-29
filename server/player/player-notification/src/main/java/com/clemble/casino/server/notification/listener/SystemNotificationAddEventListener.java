@@ -61,7 +61,7 @@ public class SystemNotificationAddEventListener implements SystemEventListener<S
 
     @Override
     public String getChannel() {
-        return SystemPlayerDiscoveredConnectionEvent.CHANNEL;
+        return SystemNotificationAddEvent.CHANNEL;
     }
 
     @Override
