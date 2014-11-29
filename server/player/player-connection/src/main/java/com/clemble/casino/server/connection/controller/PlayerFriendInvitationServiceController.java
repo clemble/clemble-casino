@@ -3,10 +3,13 @@ package com.clemble.casino.server.connection.controller;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.Invitation;
+import com.clemble.casino.player.event.PlayerConnectedEvent;
 import com.clemble.casino.player.service.PlayerFriendInvitationService;
+import com.clemble.casino.player.service.PlayerNotificationService;
 import com.clemble.casino.server.connection.ServerFriendInvitation;
 import com.clemble.casino.server.connection.repository.PlayerFriendInvitationRepository;
 import com.clemble.casino.server.connection.service.PlayerGraphService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.*;
@@ -22,13 +25,16 @@ import java.util.stream.Collectors;
 @RestController
 public class PlayerFriendInvitationServiceController implements PlayerFriendInvitationService {
 
+    final private ServerNotificationService notificationService;
     final private PlayerFriendInvitationRepository invitationRepository;
     final private PlayerGraphService connectionService;
 
     public PlayerFriendInvitationServiceController(
         PlayerFriendInvitationRepository invitationRepository,
+        ServerNotificationService notificationService,
         PlayerGraphService connectionService){
         this.invitationRepository = invitationRepository;
+        this.notificationService = notificationService;
         this.connectionService = connectionService;
     }
 
@@ -82,7 +88,12 @@ public class PlayerFriendInvitationServiceController implements PlayerFriendInvi
         invitationRepository.delete(invitation.getInvitation());
         // Step 3. If it's an accept add connection
         if(accept) {
+            // Step 3.1 It's connection
             connectionService.connect(me, player);
+            // Step 3.2 Sending notifications to me
+            notificationService.send(new PlayerConnectedEvent(me, player));
+            // Step 3.3 Sending notification to player
+            notificationService.send(new PlayerConnectedEvent(player, me));
         }
         return invitation.toInvitation();
     }

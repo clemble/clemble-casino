@@ -47,8 +47,11 @@ public class PlayerConnectionSpringConfiguration {
     }
 
     @Bean
-    public PlayerFriendInvitationServiceController playerFriendInvitationServiceController(PlayerGraphService graphService, PlayerFriendInvitationRepository invitationRepository) {
-        return new PlayerFriendInvitationServiceController(invitationRepository, graphService);
+    public PlayerFriendInvitationServiceController playerFriendInvitationServiceController(
+        PlayerGraphService graphService,
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService,
+        PlayerFriendInvitationRepository invitationRepository) {
+        return new PlayerFriendInvitationServiceController(invitationRepository, notificationService, graphService);
     }
 
 }

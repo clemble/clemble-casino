@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface PlayerNotificationRepository extends MongoRepository<ServerPlayerNotification, String>{
 
-    public List<ServerPlayerNotification> findByPlayer(String player);
+    public List<ServerPlayerNotification> findByPlayerOrderByCreatedDesc(String player);
 
 }
