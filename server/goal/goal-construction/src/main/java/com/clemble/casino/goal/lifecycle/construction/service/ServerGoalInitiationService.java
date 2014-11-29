@@ -136,7 +136,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         systemNotificationService.send(freezeRequest);
         // Step 3. Saving updated GoalInitiation
         initiationRepository.save(initiation);
-        notificationService.send(initiation.getConfiguration().getPrivacyRule(), GoalInitiationChangedEvent.create(initiation));
+        notificationService.send(initiation.getConfiguration().getPrivacyRule(), GoalInitiationChangedEvent.create(playerBid, initiation));
         // Step 4. Returning initiation
         return initiation;
     }
