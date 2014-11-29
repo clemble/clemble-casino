@@ -15,6 +15,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.Arrays;
+
 /**
  * Created by mavarazy on 11/29/14.
  */
@@ -31,9 +33,9 @@ public class PaymentNotificationTest {
         // Step 1. Create A player
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 2. Check notification appeared
-        CheckUtils.check((i) -> A.notificationService().myNotifications().size() >= 1);
+        CheckUtils.check((i) -> A.notificationService().myNotifications().length >= 1);
         // Step 3. Checking registration bonus
-        boolean containsRegistrationBonus = A.notificationService().myNotifications().stream().anyMatch((notification) -> {
+        boolean containsRegistrationBonus = Arrays.asList(A.notificationService().myNotifications()).stream().anyMatch((notification) -> {
             return (notification instanceof PaymentBonusNotification && ((PaymentBonusNotification) notification).getBonusSource() == PaymentBonusSource.registration);
         });
         Assert.assertTrue(containsRegistrationBonus);

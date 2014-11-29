@@ -26,15 +26,19 @@ public class PlayerNotificationServiceController implements PlayerNotificationSe
     }
 
     @Override
-    public List<PlayerNotification> myNotifications() {
+    public PlayerNotification[] myNotifications() {
         throw new UnsupportedOperationException();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PlayerNotificationWebMapping.MY_NOTIFICATIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<PlayerNotification> myNotifications(@CookieValue("player") String player) {
+    public PlayerNotification[] myNotifications(@CookieValue("player") String player) {
         List<ServerPlayerNotification> serverPlayerNotifications = notificationRepository.findByPlayer(player);
-        return serverPlayerNotifications.stream().map((sn) -> sn.getNotification()).collect(Collectors.toList());
+        PlayerNotification[] notifications = new PlayerNotification[serverPlayerNotifications.size()];
+        for(int i = 0; i < notifications.length; i++) {
+            notifications[i] = serverPlayerNotifications.get(i).getNotification();
+        }
+        return notifications;
     }
 
 }

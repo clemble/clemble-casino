@@ -21,7 +21,7 @@ public class IntegrationPlayerNotificationService implements PlayerNotificationS
 
 
     @Override
-    public List<PlayerNotification> myNotifications() {
+    public PlayerNotification[] myNotifications() {
         return notificationService.myNotifications(player);
     }
 }
