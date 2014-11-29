@@ -12,13 +12,13 @@ import org.springframework.core.Ordered;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.PlayerAwareUtils;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 public class GamePlayerNotificationRuleAspectFactory implements GenericGameAspectFactory<GameManagementEvent> {
 
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
 
-    public GamePlayerNotificationRuleAspectFactory(PlayerNotificationService notificationService) {
+    public GamePlayerNotificationRuleAspectFactory(ServerNotificationService notificationService) {
         this.notificationService = checkNotNull(notificationService);
     }
 

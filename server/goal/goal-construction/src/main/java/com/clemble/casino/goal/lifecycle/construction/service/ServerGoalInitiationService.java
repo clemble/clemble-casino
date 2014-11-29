@@ -20,7 +20,7 @@ import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.google.common.collect.ImmutableSet;
 import org.slf4j.Logger;
@@ -37,12 +37,12 @@ public class ServerGoalInitiationService implements GoalInitiationService {
     final private Logger LOG = LoggerFactory.getLogger(ServerGoalInitiationService.class);
 
     final private GoalInitiationRepository initiationRepository;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
     final private SystemNotificationService systemNotificationService;
 
     public ServerGoalInitiationService(
         GoalInitiationRepository initiationRepository,
-        PlayerNotificationService notificationService,
+        ServerNotificationService notificationService,
         SystemNotificationService systemNotificationService) {
         this.initiationRepository = initiationRepository;
         this.notificationService = notificationService;

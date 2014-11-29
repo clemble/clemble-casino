@@ -12,7 +12,7 @@ import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.lifecycle.configuration.rule.time.PlayerClock;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 import java.util.Collections;
 
@@ -23,14 +23,14 @@ public class SelfGoalManagerFactory implements GoalManagerFactory {
 
     final private GoalRecordRepository recordRepository;
     final private GoalStateRepository stateRepository;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
     final private ClembleManagerFactory<GoalConfiguration> managerFactory;
 
     public SelfGoalManagerFactory(
         ClembleManagerFactory<GoalConfiguration> managerFactory,
         GoalRecordRepository recordRepository,
         GoalStateRepository stateRepository,
-        PlayerNotificationService notificationService) {
+        ServerNotificationService notificationService) {
         this.managerFactory = managerFactory;
         this.recordRepository = recordRepository;
         this.stateRepository = stateRepository;

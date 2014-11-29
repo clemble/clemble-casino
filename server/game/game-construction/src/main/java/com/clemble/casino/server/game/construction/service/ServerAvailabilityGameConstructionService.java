@@ -25,14 +25,14 @@ import com.clemble.casino.game.lifecycle.construction.GameConstruction;
 import com.clemble.casino.game.lifecycle.initiation.GameInitiation;
 import com.clemble.casino.game.lifecycle.construction.service.AvailabilityGameConstructionService;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 public class ServerAvailabilityGameConstructionService implements AvailabilityGameConstructionService {
 
     final private ActionLatchService latchService;
     final private GameSessionKeyGenerator sessionKeyGenerator;
     final private GameConstructionRepository constructionRepository;
-    final private PlayerNotificationService playerNotificationService;
+    final private ServerNotificationService serverNotificationService;
     final private PlayerAccountService accountService;
     final private PendingGameInitiationService pendingInitiationService;
 
@@ -41,13 +41,13 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             GameSessionKeyGenerator sessionKeyGenerator,
             PlayerAccountService accountServerService,
             GameConstructionRepository constructionRepository,
-            PlayerNotificationService notificationService,
+            ServerNotificationService notificationService,
             PendingGameInitiationService pendingInitiationService) {
         this.latchService = latchService;
         this.sessionKeyGenerator = checkNotNull(sessionKeyGenerator);
         this.accountService = checkNotNull(accountServerService);
         this.constructionRepository = checkNotNull(constructionRepository);
-        this.playerNotificationService = checkNotNull(notificationService);
+        this.serverNotificationService = checkNotNull(notificationService);
         this.pendingInitiationService = checkNotNull(pendingInitiationService);
     }
 
@@ -75,7 +75,7 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
         construction = constructionRepository.save(construction);
         latchService.save(construction.getSessionKey(), construction.getResponses());
         // Step 4. Sending invitation to opponents
-        playerNotificationService.send(request.getParticipants(), new GameConstructionPlayerInvitedEvent(construction.getSessionKey(), request));
+        serverNotificationService.send(request.getParticipants(), new GameConstructionPlayerInvitedEvent(construction.getSessionKey(), request));
         // Step 5. Returning constructed construction
         return construction;
     }
@@ -109,19 +109,19 @@ public class ServerAvailabilityGameConstructionService implements AvailabilityGa
             // Step 2. Checking if player is part of the game
             ActionLatch responseLatch = latchService.update(action);
             // Step 3. Notifying of applied response
-            playerNotificationService.send(responseLatch.fetchParticipants(), response);
+            serverNotificationService.send(responseLatch.fetchParticipants(), response);
             construction = construction.cloneWithResponses(responseLatch);
             // Step 4. Checking if latch is full
             if (response instanceof PlayerInvitationDeclinedAction) {
                 construction = construction.cloneWithState(ConstructionState.canceled);
                 // Step 4.1. In case declined send game canceled notification
-                playerNotificationService.send(construction.getParticipants(), new GameConstructionCanceledEvent(construction.getSessionKey()));
+                serverNotificationService.send(construction.getParticipants(), new GameConstructionCanceledEvent(construction.getSessionKey()));
             } else if (responseLatch.complete()) {
                 GameInitiation initiation = construction.toInitiation();
                 // Step 5. Updating state
                 construction = construction.cloneWithState(ConstructionState.constructed);
                 // Step 6. Notifying Participants
-                playerNotificationService.send(initiation.getParticipants(), new GameConstructionCompleteEvent(construction.getSessionKey()));
+                serverNotificationService.send(initiation.getParticipants(), new GameConstructionCompleteEvent(construction.getSessionKey()));
                 // Step 7. Moving to the next step
                 pendingInitiationService.add(initiation);
             }

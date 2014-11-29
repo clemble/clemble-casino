@@ -7,14 +7,14 @@ import java.util.Collection;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.server.game.aspect.GameAspect;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 public class GamePrivateNotificationRuleAspect extends GameAspect<GameManagementEvent> {
 
     final private Collection<String> participants;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
 
-    public GamePrivateNotificationRuleAspect(Collection<String> participants, PlayerNotificationService notificationService) {
+    public GamePrivateNotificationRuleAspect(Collection<String> participants, ServerNotificationService notificationService) {
         super(new EventTypeSelector(GameManagementEvent.class));
         this.participants = checkNotNull(participants);
         this.notificationService = checkNotNull(notificationService);

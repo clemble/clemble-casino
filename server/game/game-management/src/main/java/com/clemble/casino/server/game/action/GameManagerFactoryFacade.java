@@ -12,7 +12,7 @@ import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class GameManagerFactoryFacade {
         ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory,
         ClembleManagerFactory<TournamentGameConfiguration> tournamentGameManagerFactory,
         GameRecordRepository recordRepository,
-        PlayerNotificationService notificationService) {
+        ServerNotificationService notificationService) {
         this.roundManagerFactory = new RoundManagerFactory(stateFactory, roundGameManagerFactory, recordRepository, notificationService);
         this.matchManagerFactory = new MatchManagerFactory(this, stateFactory, matchGameManagerFactory, recordRepository, notificationService);
         this.tournamentManagerFactory = new TournamentManagerFactory();

@@ -2,12 +2,10 @@ package com.clemble.casino.goal.aspect.notification;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.goal.aspect.GoalAspect;
-import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Created by mavarazy on 11/16/14.
@@ -15,9 +13,9 @@ import java.util.Collections;
 public class GoalPlayerNotificationAspect extends GoalAspect<GoalManagementEvent> {
 
     final private Collection<String> participants;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
 
-    public GoalPlayerNotificationAspect(Collection<String> participants, PlayerNotificationService notificationService){
+    public GoalPlayerNotificationAspect(Collection<String> participants, ServerNotificationService notificationService){
         super(new EventTypeSelector(GoalManagementEvent.class));
         this.participants = participants;
         this.notificationService = notificationService;

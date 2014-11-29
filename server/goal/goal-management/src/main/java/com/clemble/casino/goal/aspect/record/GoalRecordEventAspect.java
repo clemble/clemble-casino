@@ -2,7 +2,6 @@ package com.clemble.casino.goal.aspect.record;
 
 import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.event.Event;
-import com.clemble.casino.game.lifecycle.management.event.GameEndedEvent;
 import com.clemble.casino.goal.GoalAware;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
@@ -11,7 +10,7 @@ import com.clemble.casino.goal.lifecycle.record.event.GoalRecordCreatedEvent;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.lifecycle.record.EventRecord;
 import com.clemble.casino.lifecycle.record.RecordState;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 import java.util.Date;
 
@@ -22,12 +21,12 @@ public class GoalRecordEventAspect extends GoalAspect<Event> implements GoalAwar
 
     final private String goalKey;
     final private GoalRecordRepository recordRepository;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
 
     public GoalRecordEventAspect(
         String goalKey,
         GoalRecordRepository recordRepository,
-        PlayerNotificationService notificationService) {
+        ServerNotificationService notificationService) {
         super(EventSelector.TRUE);
         this.goalKey = goalKey;
         this.notificationService = notificationService;

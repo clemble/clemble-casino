@@ -4,14 +4,14 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
 import com.clemble.casino.player.event.PlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.event.player.SystemPlayerDiscoveredConnectionEvent;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 
 public class PlayerDiscoveryNotificationEventListener implements SystemEventListener<SystemPlayerDiscoveredConnectionEvent>{
 
-    final PlayerNotificationService notificationService;
+    final ServerNotificationService notificationService;
 
-    public PlayerDiscoveryNotificationEventListener(PlayerNotificationService notificationService) {
+    public PlayerDiscoveryNotificationEventListener(ServerNotificationService notificationService) {
         this.notificationService = checkNotNull(notificationService);
     }
 

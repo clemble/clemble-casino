@@ -8,7 +8,7 @@ import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.payment.event.PaymentFreezeEvent;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import org.springframework.dao.OptimisticLockingFailureException;
 
 import java.util.ArrayList;
@@ -21,13 +21,13 @@ import java.util.Collections;
 public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
 
     final private PlayerAccountRepository accountRepository;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
     final private PendingTransactionRepository pendingTransactionRepository;
 
     public MongoPlayerAccountTemplate(
         PlayerAccountRepository accountRepository,
         PendingTransactionRepository pendingTransactionRepository,
-        PlayerNotificationService notificationService) {
+        ServerNotificationService notificationService) {
         this.accountRepository = accountRepository;
         this.notificationService = notificationService;
         this.pendingTransactionRepository = pendingTransactionRepository;

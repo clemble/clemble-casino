@@ -7,13 +7,11 @@ import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.NotificationService;
 
-public interface PlayerNotificationService extends NotificationService {
+public interface ServerNotificationService extends NotificationService {
 
     public <T extends PlayerAware & Event> boolean send(T event);
 
     public <T extends PlayerAware & Event> boolean send(Collection<T> events);
-
-    public <T extends PlayerAware & Event> boolean sendToAll(T event);
 
     public <T extends PlayerAware & Event> boolean send(PrivacyRule privacyRule, T event);
 
@@ -24,9 +22,5 @@ public interface PlayerNotificationService extends NotificationService {
     public <T extends Event> boolean send(final Collection<String> players, final T event);
 
     public <T extends Event> boolean send(final Collection<String> players, final Collection<? extends T> event);
-
-    public <T extends Event> boolean sendAll(final Collection<? extends PlayerAware> players, final T event);
-
-    public <T extends Event> boolean sendAll(final Collection<? extends PlayerAware> players, final Collection<? extends T> event);
 
 }

@@ -1,7 +1,5 @@
 package com.clemble.casino.server.event.game;
 
-import com.clemble.casino.server.event.SystemEvent;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

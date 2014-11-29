@@ -24,7 +24,7 @@ import com.clemble.casino.player.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.event.player.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.event.player.SystemPlayerPresenceChangedEvent;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 public class JedisServerPlayerPresenceService implements ServerPlayerPresenceService {
 
@@ -35,9 +35,9 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     final private String UPDATE_SCRIPT;
     final private JedisPool jedisPool;
     final private SystemNotificationService systemNotificationService;
-    final private PlayerNotificationService presenceNotification;
+    final private ServerNotificationService presenceNotification;
 
-    public JedisServerPlayerPresenceService(JedisPool jedisPool, PlayerNotificationService presenceNotification,
+    public JedisServerPlayerPresenceService(JedisPool jedisPool, ServerNotificationService presenceNotification,
             SystemNotificationService systemNotificationService) {
         this.jedisPool = checkNotNull(jedisPool);
         this.presenceNotification = checkNotNull(presenceNotification);

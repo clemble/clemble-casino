@@ -20,7 +20,7 @@ import com.clemble.casino.server.game.construction.repository.PendingPlayerRepos
 import com.clemble.casino.server.game.construction.service.ServerGameInitiationService;
 import com.clemble.casino.server.key.RedisKeyFactory;
 import com.clemble.casino.server.player.lock.PlayerLockService;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
@@ -56,9 +56,9 @@ public class GameConstructionSpringConfiguration {
         final GameConstructionRepository constructionRepository,
         final PlayerLockService playerLockService,
         final ServerPlayerPresenceService playerStateManager,
-        final @Qualifier("playerNotificationService") PlayerNotificationService playerNotificationService,
+        final @Qualifier("playerNotificationService") ServerNotificationService serverNotificationService,
         @Qualifier("playerAccountClient") PlayerAccountService accountServerService) {
-        return new ServerAutoGameConstructionService(sessionKeyGenerator, notificationService, constructionRepository, playerLockService, playerStateManager, playerNotificationService, accountServerService);
+        return new ServerAutoGameConstructionService(sessionKeyGenerator, notificationService, constructionRepository, playerLockService, playerStateManager, serverNotificationService, accountServerService);
     }
 
         @Bean
@@ -72,7 +72,7 @@ public class GameConstructionSpringConfiguration {
         @Qualifier("gameSessionKeyGenerator") GameSessionKeyGenerator sessionKeyGenerator,
         @Qualifier("playerAccountClient") PlayerAccountService accountServerService,
         GameConstructionRepository constructionRepository,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService,
         PendingGameInitiationService pendingInitiationService) {
         return new ServerAvailabilityGameConstructionService(constructionActionLatchService, sessionKeyGenerator, accountServerService, constructionRepository, notificationService, pendingInitiationService);
     }
@@ -135,7 +135,7 @@ public class GameConstructionSpringConfiguration {
     public ServerGameInitiationService serverGameInitiationActivator(
         PendingGameInitiationService processor,
         ServerPlayerPresenceService presenceService,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService,
         SystemNotificationService systemNotificationService) {
         return new ServerGameInitiationService(processor, presenceService, notificationService, systemNotificationService);
     }

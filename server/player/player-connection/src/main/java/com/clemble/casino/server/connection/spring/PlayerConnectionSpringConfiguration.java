@@ -6,7 +6,7 @@ import com.clemble.casino.server.connection.listener.PlayerGraphCreationListener
 import com.clemble.casino.server.connection.listener.PlayerGraphPopulatorListener;
 import com.clemble.casino.server.connection.repository.PlayerFriendInvitationRepository;
 import com.clemble.casino.server.connection.service.PlayerGraphService;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
@@ -34,7 +34,7 @@ public class PlayerConnectionSpringConfiguration {
 
     @Bean
     public PlayerDiscoveryNotificationEventListener playerDiscoveryNotifierEventListener(
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService,
         SystemNotificationServiceListener notificationServiceListener) {
         PlayerDiscoveryNotificationEventListener discoveryNotifierEventListener = new PlayerDiscoveryNotificationEventListener(notificationService);
         notificationServiceListener.subscribe(discoveryNotifierEventListener);

@@ -8,7 +8,7 @@ import com.clemble.casino.server.bonus.listener.DiscoveryBonusEventListener;
 import com.clemble.casino.server.bonus.listener.RegistrationBonusEventListener;
 import com.clemble.casino.server.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.bonus.policy.NoBonusPolicy;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
@@ -29,7 +29,7 @@ public class PaymentBonusSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public BonusService bonusService(
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService,
         SystemNotificationService systemNotificationService,
         BonusPolicy bonusPolicy) {
         return new BonusService(bonusPolicy, notificationService, systemNotificationService);

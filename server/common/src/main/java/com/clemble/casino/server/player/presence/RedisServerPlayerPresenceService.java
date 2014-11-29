@@ -6,7 +6,7 @@ import com.clemble.casino.game.GameSessionAware;
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.player.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +27,10 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     final private long EXPIRATION_TIME = TimeUnit.MINUTES.toMillis(20);
 
     final private StringRedisTemplate redisTemplate;
-    final private PlayerNotificationService presenceNotification;
+    final private ServerNotificationService presenceNotification;
 
     public RedisServerPlayerPresenceService(StringRedisTemplate redisTemplate, RedisMessageListenerContainer listenerContainer,
-            PlayerNotificationService presenceNotification) {
+            ServerNotificationService presenceNotification) {
         this.redisTemplate = checkNotNull(redisTemplate);
         this.presenceNotification = checkNotNull(presenceNotification);
     }

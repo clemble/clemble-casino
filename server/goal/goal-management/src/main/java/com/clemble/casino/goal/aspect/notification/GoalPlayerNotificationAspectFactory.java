@@ -6,13 +6,11 @@ import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.aspect.ClembleAspect;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import org.springframework.core.Ordered;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 
 /**
  * Created by mavarazy on 11/16/14.
@@ -20,9 +18,9 @@ import java.util.HashSet;
 public class GoalPlayerNotificationAspectFactory implements GoalAspectFactory<GoalManagementEvent> {
 
     final private PlayerConnectionService connectionService;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
 
-    public GoalPlayerNotificationAspectFactory(PlayerConnectionService connectionService, PlayerNotificationService notificationService) {
+    public GoalPlayerNotificationAspectFactory(PlayerConnectionService connectionService, ServerNotificationService notificationService) {
         this.connectionService = connectionService;
         this.notificationService = notificationService;
     }

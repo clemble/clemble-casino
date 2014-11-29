@@ -6,7 +6,7 @@ import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import org.springframework.core.Ordered;
 
 /**
@@ -15,9 +15,9 @@ import org.springframework.core.Ordered;
 public class GoalRecordAspectFactory implements GoalAspectFactory<Event> {
 
     final private GoalRecordRepository recordRepository;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
 
-    public GoalRecordAspectFactory(GoalRecordRepository recordRepository, PlayerNotificationService notificationService) {
+    public GoalRecordAspectFactory(GoalRecordRepository recordRepository, ServerNotificationService notificationService) {
         this.recordRepository = recordRepository;
         this.notificationService = notificationService;
     }

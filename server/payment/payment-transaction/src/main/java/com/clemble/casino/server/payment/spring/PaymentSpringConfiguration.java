@@ -6,7 +6,7 @@ import com.clemble.casino.server.payment.listener.SystemPaymentFreezeRequestEven
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.payment.listener.SystemPlayerAccountCreationEventListener;
 import com.clemble.casino.server.payment.repository.*;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
@@ -53,7 +53,7 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     public PlayerAccountTemplate playerAccountTemplate(
         PlayerAccountRepository accountRepository,
         PendingTransactionRepository pendingTransactionRepository,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
         return new MongoPlayerAccountTemplate(accountRepository, pendingTransactionRepository, notificationService);
     }
 
@@ -69,7 +69,7 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
             PlayerAccountTemplate accountTemplate,
             ClembleCasinoValidationService validationService,
             SystemNotificationServiceListener notificationServiceListener,
-            @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+            @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
         SystemPaymentTransactionRequestEventListener eventListener = new SystemPaymentTransactionRequestEventListener(
             paymentTransactionRepository,
             pendingTransactionRepository,

@@ -8,12 +8,11 @@ import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
 import com.clemble.casino.game.lifecycle.management.MatchGameContext;
 import com.clemble.casino.game.lifecycle.management.MatchGameState;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
-import com.clemble.casino.game.lifecycle.management.event.MatchStartedEvent;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
@@ -26,14 +25,14 @@ public class MatchManagerFactory implements GameManagerFactory {
     final private RoundStateFactoryFacade stateFactory;
     final private ClembleManagerFactory<MatchGameConfiguration> matchManagerFactory;
     final private GameRecordRepository recordRepository;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
 
     public MatchManagerFactory(
             GameManagerFactoryFacade managerFactory,
             RoundStateFactoryFacade stateFactory,
             ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory,
             GameRecordRepository recordRepository,
-            PlayerNotificationService notificationService) {
+            ServerNotificationService notificationService) {
         this.managerFactory = checkNotNull(managerFactory);
         this.stateFactory = checkNotNull(stateFactory);
         this.recordRepository = checkNotNull(recordRepository);

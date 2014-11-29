@@ -1,6 +1,6 @@
 package com.clemble.casino.server.spring.common;
 
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.presence.JedisServerPlayerPresenceService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -18,7 +18,7 @@ import redis.clients.jedis.JedisPool;
 public class PresenceServiceSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public ServerPlayerPresenceService playerPresenceServerService(JedisPool jedisPool, PlayerNotificationService playerPresenceNotificationService, SystemNotificationService systemNotificationService) {
+    public ServerPlayerPresenceService playerPresenceServerService(JedisPool jedisPool, ServerNotificationService playerPresenceNotificationService, SystemNotificationService systemNotificationService) {
         return new JedisServerPlayerPresenceService(jedisPool, playerPresenceNotificationService, systemNotificationService);
     }
 

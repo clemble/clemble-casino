@@ -18,7 +18,7 @@ import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.action.ClembleManagerFactory;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.*;
@@ -78,13 +78,13 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
         ClembleManagerFactory<GoalConfiguration> goalManagerFactory,
         GoalRecordRepository recordRepository,
         GoalStateRepository goalStateRepository,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
         return new GoalManagerFactoryFacade(goalManagerFactory, recordRepository, goalStateRepository, notificationService);
     }
 
     @Bean
     public SystemGoalStartedEventListener systemGoalStartedEventListener(
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService,
         SystemNotificationServiceListener notificationServiceListener,
         GoalManagerFactoryFacade goalManagerFactoryFacade) {
         SystemGoalStartedEventListener eventListener = new SystemGoalStartedEventListener(notificationService, goalManagerFactoryFacade);
@@ -104,7 +104,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public GoalRecordAspectFactory goalRecordAspectFactory(
         GoalRecordRepository recordRepository,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService){
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService){
         return new GoalRecordAspectFactory(recordRepository, notificationService);
     }
 
@@ -131,7 +131,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public GoalPlayerNotificationAspectFactory goalPlayerNotificationAspectFactory(
         @Qualifier("playerConnectionClient") PlayerConnectionService playerConnectionClient,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
         return new GoalPlayerNotificationAspectFactory(playerConnectionClient, notificationService);
     }
 

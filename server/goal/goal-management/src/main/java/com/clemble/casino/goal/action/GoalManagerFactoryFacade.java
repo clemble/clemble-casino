@@ -9,7 +9,7 @@ import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 /**
  * Created by mavarazy on 9/20/14.
@@ -22,7 +22,7 @@ public class GoalManagerFactoryFacade {
         ClembleManagerFactory<GoalConfiguration> managerFactory,
         GoalRecordRepository recordRepository,
         GoalStateRepository stateRepository,
-        PlayerNotificationService notificationService) {
+        ServerNotificationService notificationService) {
         this.selfManagerFactory = new SelfGoalManagerFactory(managerFactory, recordRepository, stateRepository, notificationService);
     }
 

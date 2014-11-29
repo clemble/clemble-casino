@@ -1,10 +1,9 @@
 package com.clemble.casino.goal.listener;
 
-import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCompleteEvent;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.lifecycle.initiation.event.GoalInitiationCompleteEvent;
 import com.clemble.casino.server.event.goal.SystemGoalStartedEvent;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 
 /**
@@ -12,11 +11,11 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
  */
 public class SystemGoalStartedEventListener implements SystemEventListener<SystemGoalStartedEvent> {
 
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
     final private GoalManagerFactoryFacade managerFactory;
 
     public SystemGoalStartedEventListener(
-        PlayerNotificationService notificationService,
+        ServerNotificationService notificationService,
         GoalManagerFactoryFacade managerFactory) {
         this.managerFactory = managerFactory;
         this.notificationService = notificationService;

@@ -10,19 +10,19 @@ import org.slf4j.LoggerFactory;
 
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.server.bonus.policy.BonusPolicy;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 
 public class BonusService {
 
     final private static Logger LOG = LoggerFactory.getLogger(DailyBonusEventListener.class);
 
     final private BonusPolicy bonusPolicy;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
     final private SystemNotificationService systemNotificationService;
 
     public BonusService(
             BonusPolicy bonusPolicy,
-            PlayerNotificationService notificationService,
+            ServerNotificationService notificationService,
             SystemNotificationService systemNotificationService) {
         this.bonusPolicy = checkNotNull(bonusPolicy);
         this.notificationService = checkNotNull(notificationService);

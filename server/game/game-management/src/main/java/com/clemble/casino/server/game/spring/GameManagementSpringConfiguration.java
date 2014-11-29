@@ -36,7 +36,7 @@ import org.springframework.context.annotation.Import;
 import com.clemble.casino.server.game.aspect.bet.GameBetRuleAspectFactory;
 import com.clemble.casino.server.game.aspect.next.NextGameAspectFactory;
 import com.clemble.casino.server.game.aspect.presence.GameEndPresenceAspectFactory;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 
@@ -130,7 +130,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public GamePlayerNotificationRuleAspectFactory gamePlayerNotificationRuleAspectFactory(@Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        public GamePlayerNotificationRuleAspectFactory gamePlayerNotificationRuleAspectFactory(@Qualifier("playerNotificationService") ServerNotificationService notificationService) {
             return new GamePlayerNotificationRuleAspectFactory(notificationService);
         }
 
@@ -163,7 +163,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         ClembleManagerFactory<MatchGameConfiguration> matchGameManagerFactory,
         ClembleManagerFactory<TournamentGameConfiguration> tournamentGameManagerFactory,
         GameRecordRepository roundRecordRepository,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
         return new GameManagerFactoryFacade(stateFactory, roundGameManagerFactory, matchGameManagerFactory, tournamentGameManagerFactory, roundRecordRepository, notificationService);
     }
 
@@ -187,7 +187,7 @@ public class GameManagementSpringConfiguration implements SpringConfiguration {
         GameManagerFactoryFacade managerFactory,
         SystemNotificationServiceListener notificationServiceListener,
         ServerPlayerPresenceService presenceService,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService) {
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
         ServerGameStartedEventListener eventListener = new ServerGameStartedEventListener(managerFactory, presenceService, notificationService);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;

@@ -5,14 +5,12 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
-import com.clemble.casino.money.Operation;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.payment.repository.PendingTransactionRepository;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
 import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
@@ -35,7 +33,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
 
     final private PlayerAccountTemplate accountTemplate;
     final private PendingTransactionRepository pendingTransactionRepository;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
     final private ClembleCasinoValidationService validationService;
     final private PaymentTransactionRepository paymentTransactionRepository;
 
@@ -43,7 +41,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
         PaymentTransactionRepository paymentTransactionRepository,
         PendingTransactionRepository pendingTransactionRepository,
         PlayerAccountTemplate accountTemplate,
-        PlayerNotificationService notificationService,
+        ServerNotificationService notificationService,
         ClembleCasinoValidationService validationService) {
         this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
         this.pendingTransactionRepository = checkNotNull(pendingTransactionRepository);

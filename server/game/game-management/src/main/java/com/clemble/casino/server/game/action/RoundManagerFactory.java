@@ -7,12 +7,11 @@ import com.clemble.casino.game.lifecycle.management.RoundGameContext;
 import com.clemble.casino.game.lifecycle.management.RoundGameState;
 import com.clemble.casino.game.lifecycle.management.RoundState;
 import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
-import com.clemble.casino.game.lifecycle.management.event.RoundStartedEvent;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +30,7 @@ public class RoundManagerFactory implements GameManagerFactory {
         RoundStateFactoryFacade stateFactory,
         ClembleManagerFactory<RoundGameConfiguration> roundManagerFactory,
         GameRecordRepository recordRepository,
-        PlayerNotificationService notificationService) {
+        ServerNotificationService notificationService) {
         this.stateFactory = stateFactory;
         this.roundManagerFactory = roundManagerFactory;
         this.recordRepository = recordRepository;

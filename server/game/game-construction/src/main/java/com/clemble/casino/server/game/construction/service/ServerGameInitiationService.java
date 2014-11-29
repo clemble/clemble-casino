@@ -26,7 +26,7 @@ import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCanceled
 import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationConfirmedEvent;
 import com.clemble.casino.game.lifecycle.initiation.service.GameInitiationService;
 import com.clemble.casino.server.ServerService;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 
 public class ServerGameInitiationService implements GameInitiationService, ServerService {
@@ -40,12 +40,12 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
     final private PendingGameInitiationService pendingInitiationService;
     final private ServerPlayerPresenceService presenceService;
     final private SystemNotificationService systemNotificationService;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
 
     public ServerGameInitiationService(
         PendingGameInitiationService pendingInitiationService,
         ServerPlayerPresenceService presenceService,
-        PlayerNotificationService notificationService,
+        ServerNotificationService notificationService,
         SystemNotificationService systemNotificationService) {
         this.presenceService = checkNotNull(presenceService);
         this.systemNotificationService = checkNotNull(systemNotificationService);

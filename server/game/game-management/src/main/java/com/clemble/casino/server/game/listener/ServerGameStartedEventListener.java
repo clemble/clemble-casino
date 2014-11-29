@@ -4,7 +4,7 @@ import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCanceled
 import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCompleteEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
 import com.clemble.casino.server.game.action.GameManagerFactoryFacade;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.presence.ServerPlayerPresenceService;
 import org.slf4j.Logger;
@@ -19,9 +19,9 @@ public class ServerGameStartedEventListener implements SystemEventListener<Syste
 
     final private GameManagerFactoryFacade managerFactory;
     final private ServerPlayerPresenceService presenceService;
-    final private PlayerNotificationService notificationService;
+    final private ServerNotificationService notificationService;
 
-    public ServerGameStartedEventListener(GameManagerFactoryFacade managerFactory, ServerPlayerPresenceService presenceService, PlayerNotificationService notificationService) {
+    public ServerGameStartedEventListener(GameManagerFactoryFacade managerFactory, ServerPlayerPresenceService presenceService, ServerNotificationService notificationService) {
         this.managerFactory = managerFactory;
         this.presenceService = presenceService;
         this.notificationService = notificationService;

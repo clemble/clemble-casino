@@ -13,7 +13,7 @@ import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalInitiati
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.key.RedisKeyFactory;
-import com.clemble.casino.server.player.notification.PlayerNotificationService;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.*;
@@ -75,7 +75,7 @@ public class GoalConstructionSpringConfiguration {
     @Bean
     public ServerGoalInitiationService serverGoalInitiationService(
         GoalInitiationRepository initiationRepository,
-        @Qualifier("playerNotificationService") PlayerNotificationService notificationService,
+        @Qualifier("playerNotificationService") ServerNotificationService notificationService,
         SystemNotificationService systemNotificationService){
         return new ServerGoalInitiationService(initiationRepository, notificationService, systemNotificationService);
     }
