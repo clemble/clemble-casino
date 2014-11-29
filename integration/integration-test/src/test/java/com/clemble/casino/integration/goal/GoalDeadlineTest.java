@@ -28,7 +28,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 public class GoalDeadlineTest {
 
     @Autowired
-    PlayerScenarios playerScenarios;
+    public PlayerScenarios playerScenarios;
 
     @Test
     public void testDeadlineNotZero(){
