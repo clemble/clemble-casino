@@ -1,5 +1,6 @@
 package com.clemble.casino.server.notification.spring;
 
+import com.clemble.casino.server.notification.controller.PlayerNotificationServiceController;
 import com.clemble.casino.server.notification.repository.PlayerNotificationRepository;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -18,6 +19,11 @@ public class PlayerNotificationSpringConfiguration implements SpringConfiguratio
     @Bean
     public PlayerNotificationRepository playerNotificationRepository(MongoRepositoryFactory repositoryFactory) {
         return repositoryFactory.getRepository(PlayerNotificationRepository.class);
+    }
+
+    @Bean
+    public PlayerNotificationServiceController playerNotificationServiceController(PlayerNotificationRepository notificationRepository) {
+        return new PlayerNotificationServiceController(notificationRepository);
     }
 
 }

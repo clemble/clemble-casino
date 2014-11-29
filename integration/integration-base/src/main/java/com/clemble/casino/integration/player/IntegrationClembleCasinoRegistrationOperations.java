@@ -33,6 +33,7 @@ import com.clemble.casino.server.profile.controller.PlayerImageServiceController
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.clemble.casino.server.notification.controller.PlayerNotificationServiceController;
 
 public class IntegrationClembleCasinoRegistrationOperations implements ClembleCasinoRegistrationOperations {
 
@@ -55,6 +56,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     final private GameActionServiceController actionService;
     final private GameRecordService recordService;
     final private IntegrationGoalOperationsFactory goalOperationsFactory;
+    final private PlayerNotificationServiceController notificaitonServiceController;
 
     public IntegrationClembleCasinoRegistrationOperations(
         String host,
@@ -75,7 +77,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         GameConfigurationService specificationService,
         GameActionServiceController actionService,
         GameRecordService recordService,
-        IntegrationGoalOperationsFactory goalOperationsFactory) {
+        IntegrationGoalOperationsFactory goalOperationsFactory,
+        PlayerNotificationServiceController notificationServiceController) {
         this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
@@ -95,6 +98,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         this.actionService = checkNotNull(actionService);
         this.recordService = checkNotNull(recordService);
         this.goalOperationsFactory = checkNotNull(goalOperationsFactory);
+        this.notificaitonServiceController = checkNotNull(notificationServiceController);
     }
 
     @Override
@@ -150,7 +154,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
             specificationService,
             actionService,
             recordService,
-            goalOperationsFactory.construct(playerIdentity.getPlayer())
+            goalOperationsFactory.construct(playerIdentity.getPlayer()),
+            notificaitonServiceController
         );
     }
 

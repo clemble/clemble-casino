@@ -40,6 +40,7 @@ import com.clemble.casino.server.game.configuration.repository.GameConfiguration
 import com.clemble.casino.server.game.configuration.spring.GameConfigurationSpringConfiguration;
 import com.clemble.casino.server.game.construction.spring.GameConstructionSpringConfiguration;
 import com.clemble.casino.server.game.spring.GameManagementSpringConfiguration;
+import com.clemble.casino.server.notification.spring.PlayerNotificationSpringConfiguration;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.WebJsonSpringConfiguration;
@@ -94,6 +95,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         PlayerSocialSpringConfiguration.class,
         PaymentBonusSpringConfiguration.class,
         PaymentSpringConfiguration.class,
+        PlayerNotificationSpringConfiguration.class,
         GameManagementSpringConfiguration.class,
         GameConfigurationSpringConfiguration.class,
         GameConstructionSpringConfiguration.class,

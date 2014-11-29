@@ -23,7 +23,7 @@
         </dependency>
     </dependencies>
 
-    <artifactId>player-notifications</artifactId>
+    <artifactId>player-notification</artifactId>
 
     <build>
         <plugins>

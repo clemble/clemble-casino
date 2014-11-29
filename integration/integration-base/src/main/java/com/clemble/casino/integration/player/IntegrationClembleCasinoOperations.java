@@ -17,6 +17,7 @@ import com.clemble.casino.server.game.construction.controller.AutoGameConstructi
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
 import com.clemble.casino.server.game.controller.GameActionServiceController;
+import com.clemble.casino.server.notification.controller.PlayerNotificationServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
@@ -63,6 +64,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     final private PlayerImageService imageOperations;
     final private PlayerConnectionService connectionOperations;
     final private PlayerFriendInvitationService friendInvitationService;
+    final private PlayerNotificationService notificationService;
     final private PlayerSessionService playerSessionOperations;
     final private PlayerAccountService accountService;
     final private PaymentTransactionOperations paymentTransactionOperations;
@@ -91,7 +93,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final GameConfigurationService specificationService,
         final GameActionServiceController actionService,
         final GameRecordService recordService,
-        final GoalOperations goalOperations
+        final GoalOperations goalOperations,
+        final PlayerNotificationServiceController notificationServiceController
     ) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new IntegrationPlayerSessionService(player, sessionOperations);
@@ -101,6 +104,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         this.playerPresenceOperations = new IntegrationPlayerPresenceTemplate(player, playerPresenceService);
 
         this.profileOperations = new IntegrationPlayerProfileService(player, playerProfileService);
+        this.notificationService = new IntegrationPlayerNotificationService(player, notificationServiceController);
         this.imageOperations = new IntegrationPlayerImageService(player, imageService);
         this.connectionOperations = new IntegrationPlayerConnectionService(player, playerConnectionService);
         this.friendInvitationService = new IntegrationPlayerFriendInvitationService(player, invitationService);
@@ -149,6 +153,11 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     @Override
     public PlayerFriendInvitationService friendInvitationService() {
         return friendInvitationService;
+    }
+
+    @Override
+    public PlayerNotificationService notificationService() {
+        return notificationService;
     }
 
     @Override
