@@ -6,6 +6,7 @@ import com.clemble.casino.server.bonus.BonusService;
 import com.clemble.casino.server.bonus.listener.DailyBonusEventListener;
 import com.clemble.casino.server.bonus.listener.DiscoveryBonusEventListener;
 import com.clemble.casino.server.bonus.listener.RegistrationBonusEventListener;
+import com.clemble.casino.server.bonus.listener.SocialAddedBonusEventListener;
 import com.clemble.casino.server.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.bonus.policy.NoBonusPolicy;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
@@ -72,6 +73,19 @@ public class PaymentBonusSpringConfiguration implements SpringConfiguration {
         RegistrationBonusEventListener registrationBonusService = new RegistrationBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(registrationBonusService);
         return registrationBonusService;
+    }
+
+    @Bean
+    @DependsOn("bonusService")
+    public SocialAddedBonusEventListener socialAddedBonusEventListener(
+            BonusService bonusService,
+            SystemNotificationServiceListener notificationServiceListener,
+            @Value("${clemble.bonus.social.currency}") Currency discoveryCurrency,
+            @Value("${clemble.bonus.social.amount}") int discoveryBonus) {
+        Money bonus = new Money(discoveryCurrency, discoveryBonus);
+        SocialAddedBonusEventListener discoveryBonusService = new SocialAddedBonusEventListener(bonus, bonusService);
+        notificationServiceListener.subscribe(discoveryBonusService);
+        return discoveryBonusService;
     }
 
     @Bean
