@@ -17,6 +17,9 @@ public abstract class SocialConnectionAdapter<A> {
 
     final private String providerId;
 
+    // TODO forbid email related to the social to be recreated as a separate user
+    // For example FB account A has email abc@cba.com, don't allow to create user with email abc@cba.com
+
     protected SocialConnectionAdapter(final String provider) {
         this.providerId = checkNotNull(provider);
     }

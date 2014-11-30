@@ -4,7 +4,7 @@ import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import com.clemble.casino.server.social.*;
 import com.clemble.casino.server.security.PlayerTokenFactory;
-import com.clemble.casino.server.social.adapter.VKontakteSocialAdapter;
+import com.clemble.casino.server.social.adapter.*;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.social.controller.PlayerSocialRegistrationController;
@@ -25,14 +25,12 @@ import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
+import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
-import com.clemble.casino.server.social.adapter.FacebookSocialAdapter;
-import com.clemble.casino.server.social.adapter.LinkedInSocialAdapter;
-import com.clemble.casino.server.social.adapter.TwitterSocialAdapter;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.springframework.social.vkontakte.connect.VKontakteConnectionFactory;
 
@@ -55,6 +53,7 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     public ConnectionFactoryRegistry connectionFactoryLocator(
             SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
             FacebookConnectionFactory facebookConnectionFactory,
+            GoogleConnectionFactory googleConnectionFactory,
             LinkedInConnectionFactory linkedInConnectionFactory,
             TwitterConnectionFactory twitterConnectionFactory,
             VKontakteConnectionFactory vKontakteConnectionFactory) {
@@ -71,6 +70,9 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         // Step 1.4 Registering LinkedIn
         connectionFactoryRegistry.addConnectionFactory(linkedInConnectionFactory);
         socialConnectionAdapterRegistry.register(new LinkedInSocialAdapter(linkedInConnectionFactory));
+        // Step 1.5 Registering Google
+        connectionFactoryRegistry.addConnectionFactory(googleConnectionFactory);
+        socialConnectionAdapterRegistry.register(new GoogleSocialAdapter(googleConnectionFactory));
         // Step 2. Returning connection registry
         return connectionFactoryRegistry;
     }
@@ -112,6 +114,13 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         @Value("${clemble.social.vkontakte.key}") String key,
         @Value("${clemble.social.vkontakte.secret}") String secret) {
         return new VKontakteConnectionFactory(key, secret);
+    }
+
+    @Bean
+    public GoogleConnectionFactory googleConnectionFactory(
+        @Value("${clemble.social.google.key}") String key,
+        @Value("${clemble.social.google.secret}") String secret) {
+        return new GoogleConnectionFactory(key, secret);
     }
 
     @Bean
