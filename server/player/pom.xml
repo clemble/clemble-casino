@@ -15,6 +15,7 @@
         <module>player-presence</module>
         <module>player-social</module>
         <module>player-notification</module>
+        <module>player-feed</module>
     </modules>
 
     <dependencies>

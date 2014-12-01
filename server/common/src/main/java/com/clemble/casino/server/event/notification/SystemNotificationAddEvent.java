@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Created by mavarazy on 11/29/14.
  */
-public class SystemNotificationAddEvent implements SystemNotificationEvent, PlayerNotificationAware, PrivacyRuleAware {
+public class SystemNotificationAddEvent implements SystemNotificationEvent, PrivacyRuleAware {
 
     final public static String CHANNEL = "sys:notification:add";
 

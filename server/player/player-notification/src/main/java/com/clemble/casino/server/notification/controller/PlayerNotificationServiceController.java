@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by mavarazy on 11/29/14.
@@ -31,12 +32,12 @@ public class PlayerNotificationServiceController implements PlayerNotificationSe
     @RequestMapping(method = RequestMethod.GET, value = PlayerNotificationWebMapping.MY_NOTIFICATIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public PlayerNotification[] myNotifications(@CookieValue("player") String player) {
-        List<ServerPlayerNotification> serverPlayerNotifications = notificationRepository.findByPlayerOrderByCreatedDesc(player);
-        PlayerNotification[] notifications = new PlayerNotification[serverPlayerNotifications.size()];
-        for(int i = 0; i < notifications.length; i++) {
-            notifications[i] = serverPlayerNotifications.get(i).getNotification();
-        }
-        return notifications;
+        return notificationRepository.
+            findByPlayerOrderByCreatedDesc(player).
+            stream().
+            map(spn -> spn.getNotification()).
+            collect(Collectors.toList()).
+            toArray(new PlayerNotification[0]);
     }
 
 }

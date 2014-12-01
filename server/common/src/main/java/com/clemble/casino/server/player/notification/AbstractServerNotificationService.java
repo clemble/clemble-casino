@@ -5,7 +5,9 @@ import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.notification.PlayerNotificationConvertible;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.service.PlayerNotificationService;
+import com.clemble.casino.post.PlayerPostConvertible;
 import com.clemble.casino.server.event.notification.SystemNotificationAddEvent;
+import com.clemble.casino.server.event.post.SystemPostAddEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,8 +46,13 @@ abstract class AbstractServerNotificationService implements ServerNotificationSe
 
     final public <T extends PlayerAware & Event> boolean send(PrivacyRule privacyRule, T event) {
         boolean sendResult = doSend(event.getPlayer(), event);
-        if(event instanceof PlayerNotificationConvertible) {
+        // Check 1. Event is convertible to notification
+        if (event instanceof PlayerNotificationConvertible) {
             systemNotificationService.send(new SystemNotificationAddEvent(privacyRule, ((PlayerNotificationConvertible) event).toNotification()));
+        }
+        // Check 2. Event is convertible to post
+        if (event instanceof PlayerPostConvertible) {
+            systemNotificationService.send(new SystemPostAddEvent(((PlayerPostConvertible) event).toPost()));
         }
         return sendResult;
     }
