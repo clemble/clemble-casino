@@ -26,9 +26,9 @@ public class SystemNotificationSpringConfiguration implements SpringConfiguratio
 
     @Bean
     public SystemNotificationService systemNotificationService(
-        @Value("${clemble.service.notification.user}") String user,
-        @Value("${clemble.service.notification.password}") String password,
-        @Value("${clemble.service.notification.host}") String host,
+        @Value("${clemble.service.notification.system.user}") String user,
+        @Value("${clemble.service.notification.system.password}") String password,
+        @Value("${clemble.service.notification.system.host}") String host,
         Jackson2JsonMessageConverter jsonMessageConverter) throws IOException {
         LOG.debug("Connecting player NotificationService with {0}", user);
         return new RabbitSystemNotificationService(host, user, password, jsonMessageConverter);
@@ -36,9 +36,9 @@ public class SystemNotificationSpringConfiguration implements SpringConfiguratio
 
     @Bean(destroyMethod = "close")
     public SystemNotificationServiceListener presenceListenerService(ObjectMapper mapper,
-        @Value("${clemble.service.notification.user}") String user,
-        @Value("${clemble.service.notification.password}") String password,
-        @Value("${clemble.service.notification.host}") String host) {
+        @Value("${clemble.service.notification.system.user}") String user,
+        @Value("${clemble.service.notification.system.password}") String password,
+        @Value("${clemble.service.notification.system.host}") String host) {
         LOG.debug("Connecting player NotificationService with {0}", user);
         return new RabbitSystemNotificationServiceListener(host, user, password, mapper);
     }

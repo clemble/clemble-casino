@@ -29,9 +29,9 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ServerNotificationService playerNotificationService(
-            @Value("${clemble.service.notification.user}") String user,
-            @Value("${clemble.service.notification.password}") String password,
-            @Value("${clemble.service.notification.host}") String host,
+            @Value("${clemble.service.notification.player.user}") String user,
+            @Value("${clemble.service.notification.player.password}") String password,
+            @Value("${clemble.service.notification.player.host}") String host,
             Jackson2JsonMessageConverter jsonMessageConverter,
             SystemNotificationService systemNotificationService) {
         LOG.debug("Connecting player NotificationService with {0}", user);
@@ -40,9 +40,9 @@ public class RabbitSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ServerNotificationService playerPresenceNotificationService(
-            @Value("${clemble.service.notification.user}") String user,
-            @Value("${clemble.service.notification.password}") String password,
-            @Value("${clemble.service.notification.host}") String host,
+            @Value("${clemble.service.notification.player.user}") String user,
+            @Value("${clemble.service.notification.player.password}") String password,
+            @Value("${clemble.service.notification.player.host}") String host,
             Jackson2JsonMessageConverter jsonMessageConverter,
             SystemNotificationService systemNotificationService) {
         LOG.debug("Connecting player presence NotificationService with {0}", user);
