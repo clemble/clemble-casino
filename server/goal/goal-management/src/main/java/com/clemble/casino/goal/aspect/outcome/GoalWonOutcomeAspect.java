@@ -5,6 +5,7 @@ import com.clemble.casino.bet.PlayerBidAware;
 import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.OutcomeTypeSelector;
+import com.clemble.casino.goal.GoalPaymentSource;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.lifecycle.management.outcome.PlayerWonOutcome;
@@ -46,7 +47,8 @@ public class GoalWonOutcomeAspect
         // Step 1. Generating payment transaction
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(event.getBody().getGoalKey())
-            .setTransactionDate(new Date());
+            .setTransactionDate(new Date())
+            .setSource(new GoalPaymentSource(event.getBody().getGoalKey(), event.getOutcome()));
         // Step 2. Processing payment transaction
         for(PlayerBid playerBid: bids) {
             paymentTransaction.

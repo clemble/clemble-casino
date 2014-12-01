@@ -7,6 +7,7 @@ import java.util.Date;
 import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.OutcomeTypeSelector;
+import com.clemble.casino.game.GamePaymentSource;
 import com.clemble.casino.game.lifecycle.management.GameContext;
 import com.clemble.casino.game.lifecycle.management.GamePlayerAccount;
 import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
@@ -41,9 +42,10 @@ public class RoundWonByOwnedRuleAspect extends RoundGameAspect<GameEndedEvent> {
     protected void doEvent(GameEndedEvent event) {
         GameContext<?> context = event.getState().getContext();
         // Step 2. Generating payment transaction
-        PaymentTransaction paymentTransaction = new PaymentTransaction()
-            .setTransactionKey(context.getSessionKey())
-            .setTransactionDate(new Date());
+        PaymentTransaction paymentTransaction = new PaymentTransaction().
+            setTransactionKey(context.getSessionKey()).
+            setTransactionDate(new Date()).
+            setSource(new GamePaymentSource(context.getSessionKey(), event.getOutcome()));
         for (GamePlayerContext playerContext : context.getPlayerContexts()) {
             GamePlayerAccount playerAccount = playerContext.getAccount();
             paymentTransaction

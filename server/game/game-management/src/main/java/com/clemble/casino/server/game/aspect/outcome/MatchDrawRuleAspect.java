@@ -7,6 +7,7 @@ import java.util.Date;
 import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.OutcomeTypeSelector;
+import com.clemble.casino.game.GamePaymentSource;
 import com.clemble.casino.game.lifecycle.management.GamePlayerAccount;
 import com.clemble.casino.game.lifecycle.management.GamePlayerContext;
 import com.clemble.casino.game.lifecycle.management.MatchGameContext;
@@ -42,7 +43,8 @@ public class MatchDrawRuleAspect extends MatchGameAspect<MatchEndedEvent> {
         // Step 2. Generating payment transaction
         PaymentTransaction transaction = new PaymentTransaction()
                 .setTransactionKey(context.getSessionKey())
-                .setTransactionDate(new Date());
+                .setTransactionDate(new Date())
+                .setSource(new GamePaymentSource(context.getSessionKey(), event.getOutcome()));
         // Step 3. Specifying pot transaction
         for (GamePlayerContext playerContext : context.getPlayerContexts()) {
             // Step 3.1. Distributing spent and owned entities
