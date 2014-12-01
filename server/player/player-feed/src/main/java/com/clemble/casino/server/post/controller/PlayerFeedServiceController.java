@@ -7,10 +7,7 @@ import com.clemble.casino.player.service.PlayerFeedService;
 import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.server.post.repository.PlayerPostRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -18,6 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Created by mavarazy on 11/30/14.
  */
+@RestController
 public class PlayerFeedServiceController implements PlayerFeedService {
 
     final private PlayerPostRepository postRepository;
