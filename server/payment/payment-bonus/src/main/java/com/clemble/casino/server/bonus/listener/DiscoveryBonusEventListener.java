@@ -39,6 +39,10 @@ public class DiscoveryBonusEventListener implements BonusEventListener<SystemPla
         String transactionKey = KEY_GENERATOR.generate(event.getPlayer(), event.getDiscovered());
         // Step 3. Processing bonus in transaction system
         bonusService.process(new BonusPaymentTransaction(event.getPlayer(), transactionKey, SOURCE, amount));
+        // Step 4. Adding discovered connection
+        String discoveredTransactionKey = KEY_GENERATOR.generate(event.getDiscovered(), event.getPlayer());
+        // Step 5. Processing bonus in transaction system
+        bonusService.process(new BonusPaymentTransaction(event.getDiscovered(), discoveredTransactionKey, SOURCE, amount));
     }
 
     @Override
