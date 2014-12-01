@@ -201,6 +201,11 @@
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
+                <artifactId>player-feed</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
                 <artifactId>player-connection</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -20,6 +20,7 @@ import com.clemble.casino.server.game.controller.GameActionServiceController;
 import com.clemble.casino.server.notification.controller.PlayerNotificationServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
+import com.clemble.casino.server.post.controller.PlayerFeedServiceController;
 import com.clemble.casino.server.presence.controller.PlayerPresenceServiceController;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
@@ -64,6 +65,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     final private PlayerImageService imageOperations;
     final private PlayerConnectionService connectionOperations;
     final private PlayerFriendInvitationService friendInvitationService;
+    final private PlayerFeedService feedService;
     final private PlayerNotificationService notificationService;
     final private PlayerSessionService playerSessionOperations;
     final private PlayerAccountService accountService;
@@ -94,7 +96,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final GameActionServiceController actionService,
         final GameRecordService recordService,
         final GoalOperations goalOperations,
-        final PlayerNotificationServiceController notificationServiceController
+        final PlayerNotificationServiceController notificationServiceController,
+        final PlayerFeedServiceController feedServiceController
     ) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new IntegrationPlayerSessionService(player, sessionOperations);
@@ -112,6 +115,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         this.accountService = new IntegrationPlayerAccountService(player, accountServiceController);
 
         this.constructionService = new IntegrationAutoGameConstructionService(player, checkNotNull(gameConstructionService));
+        this.feedService = new IntegrationPlayerFeedService(player, checkNotNull(feedServiceController));
 
         this.gameConstructors = new GameConstructionTemplate(player, constructionService, new IntegrationAvailabilityGameConstructionService(player, availabilityConstructionService), initiationService, specificationService, listenerOperations);
         IntegrationGameActionService iActionService = new IntegrationGameActionService(player, actionService);
@@ -158,6 +162,11 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     @Override
     public PlayerNotificationService notificationService() {
         return notificationService;
+    }
+
+    @Override
+    public PlayerFeedService feedService() {
+        return feedService;
     }
 
     @Override

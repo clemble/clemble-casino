@@ -14,6 +14,7 @@ import com.clemble.casino.server.game.construction.controller.AutoGameConstructi
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
 import com.clemble.casino.server.game.controller.GameActionServiceController;
+import com.clemble.casino.server.post.controller.PlayerFeedServiceController;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
@@ -56,7 +57,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     final private GameActionServiceController actionService;
     final private GameRecordService recordService;
     final private IntegrationGoalOperationsFactory goalOperationsFactory;
-    final private PlayerNotificationServiceController notificaitonServiceController;
+    final private PlayerNotificationServiceController notificationServiceController;
+    final private PlayerFeedServiceController feedServiceController;
 
     public IntegrationClembleCasinoRegistrationOperations(
         String host,
@@ -78,7 +80,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         GameActionServiceController actionService,
         GameRecordService recordService,
         IntegrationGoalOperationsFactory goalOperationsFactory,
-        PlayerNotificationServiceController notificationServiceController) {
+        PlayerNotificationServiceController notificationServiceController,
+        PlayerFeedServiceController feedServiceController) {
         this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
@@ -98,7 +101,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         this.actionService = checkNotNull(actionService);
         this.recordService = checkNotNull(recordService);
         this.goalOperationsFactory = checkNotNull(goalOperationsFactory);
-        this.notificaitonServiceController = checkNotNull(notificationServiceController);
+        this.notificationServiceController = checkNotNull(notificationServiceController);
+        this.feedServiceController = feedServiceController;
     }
 
     @Override
@@ -155,7 +159,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
             actionService,
             recordService,
             goalOperationsFactory.construct(playerIdentity.getPlayer()),
-            notificaitonServiceController
+            notificationServiceController,
+            feedServiceController
         );
     }
 
