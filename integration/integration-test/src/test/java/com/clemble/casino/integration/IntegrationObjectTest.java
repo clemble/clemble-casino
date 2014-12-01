@@ -12,8 +12,10 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import com.clemble.casino.bet.Bid;
+import com.clemble.casino.goal.post.GoalCreatedPost;
 import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBidRule;
 import com.clemble.casino.notification.PlayerNotification;
+import com.clemble.casino.payment.*;
 import com.clemble.casino.player.event.PlayerInvitationAcceptedAction;
 import com.clemble.casino.player.event.PlayerInvitationAction;
 import com.clemble.casino.game.lifecycle.management.*;
@@ -32,10 +34,11 @@ import com.clemble.casino.game.lifecycle.management.unit.Chip;
 import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
 
 import com.clemble.casino.lifecycle.configuration.rule.ConfigurationRule;
-import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.player.notification.PlayerConnectedNotification;
+import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Ignore;
@@ -54,9 +57,6 @@ import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
 import com.clemble.casino.integration.game.NumberState;
 import com.clemble.casino.integration.game.NumberUnit;
-import com.clemble.casino.payment.PaymentOperation;
-import com.clemble.casino.payment.PaymentTransaction;
-import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
@@ -77,6 +77,19 @@ public class IntegrationObjectTest {
             @Override
             public SystemAddJobScheduleEvent generate() {
                 return new SystemAddJobScheduleEvent(RandomStringUtils.random(5), RandomStringUtils.random(5), new SystemGameInitiationDueEvent("a"), new Date());
+            }
+        });
+        ObjectGenerator.register(PlayerPost.class, new AbstractValueGenerator<PlayerPost>() {
+            @Override
+            public PlayerPost generate() {
+                return new GoalCreatedPost(
+                    "",
+                    "",
+                    new Bank(Collections.emptyList(), new Bid(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
+                    "",
+                    new Date(),
+                    0
+                );
             }
         });
         ObjectGenerator.register(PlayerNotification.class, new AbstractValueGenerator<PlayerNotification>() {

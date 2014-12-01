@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface PlayerPostRepository extends MongoRepository<ServerPlayerPost, String> {
 
-    List<ServerPlayerPost> findByPlayerInOrderByCreated(Collection<String> players);
+    List<ServerPlayerPost> findByPlayerInOrderByCreatedDesc(Collection<String> players);
 
 }

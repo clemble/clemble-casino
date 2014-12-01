@@ -5,6 +5,7 @@ import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.post.PlayerPostAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
@@ -13,6 +14,7 @@ import java.util.Date;
  */
 public class ServerPlayerPost implements PlayerPostAware, PlayerAware {
 
+    @Id
     final private String key;
     final private String player;
     final private PlayerPost post;

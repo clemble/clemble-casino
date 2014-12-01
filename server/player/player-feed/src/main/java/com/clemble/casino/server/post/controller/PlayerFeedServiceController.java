@@ -41,7 +41,7 @@ public class PlayerFeedServiceController implements PlayerFeedService {
         connections.add(player);
         // Step 2. Fetching player connections
         return postRepository.
-            findByPlayerInOrderByCreated(connections).
+            findByPlayerInOrderByCreatedDesc(connections).
             stream().
             map(sps -> sps.getPost()).
             collect(Collectors.toList()).toArray(new PlayerPost[0]);
