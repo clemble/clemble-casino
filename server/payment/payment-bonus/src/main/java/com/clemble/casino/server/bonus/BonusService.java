@@ -17,15 +17,12 @@ public class BonusService {
     final private static Logger LOG = LoggerFactory.getLogger(DailyBonusEventListener.class);
 
     final private BonusPolicy bonusPolicy;
-    final private ServerNotificationService notificationService;
     final private SystemNotificationService systemNotificationService;
 
     public BonusService(
             BonusPolicy bonusPolicy,
-            ServerNotificationService notificationService,
             SystemNotificationService systemNotificationService) {
         this.bonusPolicy = checkNotNull(bonusPolicy);
-        this.notificationService = checkNotNull(notificationService);
         this.systemNotificationService = checkNotNull(systemNotificationService);
     }
 
@@ -40,8 +37,6 @@ public class BonusService {
         if(bonusPolicy.eligible(transaction)) {
             // Step 4. Sending bonus notification to system
             systemNotificationService.send(new SystemPaymentTransactionRequestEvent(transaction));
-            // Step 5. Sending bonus notification to player
-            notificationService.send(bonus.toEvent());
         }
         LOG.debug("Finished processing {}", bonus);
     }

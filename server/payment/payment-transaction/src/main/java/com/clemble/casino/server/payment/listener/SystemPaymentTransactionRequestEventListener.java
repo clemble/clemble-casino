@@ -77,7 +77,7 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
         for (PaymentOperation paymentOperation : paymentTransaction.getOperations()) {
             LOG.debug("Processing {}", paymentOperation);
             accountTemplate.process(paymentTransaction.getTransactionKey(), paymentOperation);
-            paymentEvents.add(new PaymentCompleteEvent(paymentTransaction.getTransactionKey(), paymentOperation));
+            paymentEvents.add(new PaymentCompleteEvent(paymentTransaction.getTransactionKey(), paymentOperation, paymentTransaction.getSource()));
         }
         // Step 3. Saving account transaction
         PaymentTransaction transaction = paymentTransactionRepository.save(paymentTransaction);

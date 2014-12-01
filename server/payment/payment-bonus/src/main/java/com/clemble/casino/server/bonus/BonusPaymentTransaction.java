@@ -2,15 +2,12 @@ package com.clemble.casino.server.bonus;
 
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.payment.*;
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
-import com.clemble.casino.payment.bonus.PaymentBonusSourceAware;
-import com.clemble.casino.payment.event.PaymentBonusEvent;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.player.PlayerAware;
 
 import java.util.Date;
 
-public class BonusPaymentTransaction implements PlayerAware, AmountAware, PaymentBonusSourceAware, PaymentTransactionConvertible {
+public class BonusPaymentTransaction implements PlayerAware, AmountAware, PaymentSourceAware, PaymentTransactionConvertible {
 
     /**
      * Generated 08/01/14
@@ -19,12 +16,12 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
 
     final private String transactionKey;
     final private String player;
-    final private PaymentBonusSource bonusSource;
+    final private PaymentSource source;
     final private Money amount;
 
-    public BonusPaymentTransaction(String player, String transactionKey, PaymentBonusSource bonusSource, Money amount) {
-        this.bonusSource = bonusSource;
-        this.transactionKey = transactionKey;
+    public BonusPaymentTransaction(String player, PaymentSource source, Money amount) {
+        this.source = source;
+        this.transactionKey = source.toTransactionKey(player);
         this.player = player;
         this.amount = amount;
     }
@@ -40,8 +37,8 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
     }
 
     @Override
-    public PaymentBonusSource getBonusSource() {
-        return bonusSource;
+    public PaymentSource getSource() {
+        return source;
     }
 
     @Override
@@ -53,13 +50,9 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
         return new PaymentTransaction().
             setTransactionKey(transactionKey).
             setTransactionDate(new Date()).
-                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit)).
-                addOperation(new PaymentOperation(player, amount, Operation.Debit));
-
-    }
-
-    public PaymentBonusEvent toEvent(){
-        return new PaymentBonusEvent(player, amount, bonusSource, transactionKey);
+            addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit)).
+            addOperation(new PaymentOperation(player, amount, Operation.Debit)).
+            setSource(source);
     }
 
     @Override
@@ -67,7 +60,7 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
         final int prime = 31;
         int result = 1;
         result = prime * result + ((amount == null) ? 0 : amount.hashCode());
-        result = prime * result + ((bonusSource == null) ? 0 : bonusSource.hashCode());
+        result = prime * result + ((source == null) ? 0 : source.hashCode());
         result = prime * result + ((player == null) ? 0 : player.hashCode());
         return result;
     }
@@ -86,7 +79,7 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
                 return false;
         } else if (!amount.equals(other.amount))
             return false;
-        if (bonusSource != other.bonusSource)
+        if (source != other.source)
             return false;
         if (player == null) {
             if (other.player != null)
@@ -98,7 +91,7 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
 
     @Override
     public String toString() {
-        return "bonusTransaction:" + player + ":" + bonusSource + ":" + amount;
+        return "bonusTransaction:" + player + ":" + source + ":" + amount;
     }
 
 }

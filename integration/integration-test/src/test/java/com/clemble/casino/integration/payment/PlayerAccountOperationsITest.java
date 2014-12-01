@@ -8,8 +8,9 @@ import java.util.concurrent.BlockingQueue;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.money.MoneySource;
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
-import com.clemble.casino.payment.event.PaymentBonusEvent;
+import com.clemble.casino.payment.bonus.BonusSource;
+import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
+import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.test.concurrent.Get;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -60,10 +61,10 @@ public class PlayerAccountOperationsITest {
         // Step 1. Creating random player A
         final ClembleCasinoOperations A = playerOperations.createPlayer();
         // Step 1.1 Registering bonus event listener, and waiting
-        final BlockingQueue<PaymentBonusEvent> bonusLatch = new ArrayBlockingQueue<>(2);
-        A.listenerOperations().subscribe(new EventTypeSelector(PaymentBonusEvent.class), new EventListener<PaymentBonusEvent>() {
+        final BlockingQueue<PaymentEvent> bonusLatch = new ArrayBlockingQueue<>(2);
+        A.listenerOperations().subscribe(new EventTypeSelector(PaymentEvent.class), new EventListener<PaymentEvent>() {
             @Override
-            public void onEvent(PaymentBonusEvent event) {
+            public void onEvent(PaymentEvent event) {
                 bonusLatch.add(event);
             }
         });
@@ -79,14 +80,15 @@ public class PlayerAccountOperationsITest {
         assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
         // Step 3. Checking registration transaction
         A.paymentOperations().myTransactions();
-        PaymentTransaction transaction = A.paymentOperations().getTransaction(A.getPlayer() + MoneySource.registration);
+        String transactionKey = RegistrationBonusPaymentSource.INSTANCE.toTransactionKey(A.getPlayer());
+        PaymentTransaction transaction = A.paymentOperations().getTransaction(transactionKey);
         Set<PaymentOperation> paymentOperations = transaction.getOperations();
         Money transactionAmount = paymentOperations.iterator().next().getAmount();
         // Step 4. Checking bonus transaction (Which might be delayed, because of the system event delays)
         PaymentTransaction bonusTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>(){
             @Override
             public PaymentTransaction get() {
-                return A.paymentOperations().myTransactions(PaymentBonusSource.dailybonus).get(0);
+                return A.paymentOperations().myTransactions(BonusSource.dailybonus).get(0);
             }
         }, 5000);
         paymentOperations = bonusTransaction.getOperations();

@@ -5,8 +5,11 @@ import static com.clemble.casino.utils.Preconditions.checkNotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
+
+import com.clemble.casino.payment.PaymentSource;
+import com.clemble.casino.payment.bonus.BonusSource;
 import com.clemble.casino.money.Money;
+import com.clemble.casino.payment.bonus.DailyBonusPaymentSource;
 import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.event.player.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
@@ -14,18 +17,7 @@ import com.clemble.casino.server.bonus.BonusService;
 
 public class DailyBonusEventListener implements BonusEventListener<SystemPlayerEnteredEvent> {
 
-    final private static PaymentBonusSource SOURCE = PaymentBonusSource.dailybonus;
-    final private static DailyBonusKeyGenerator KEY_GENERATOR = new DailyBonusKeyGenerator();
-
-    public static class DailyBonusKeyGenerator implements KeyGenerator {
-
-        final private static DateFormat DATE_FORMAT = new SimpleDateFormat("ddmmyy");
-
-        public String generate(String player) {
-            return player + SOURCE + DATE_FORMAT.format(new Date());
-        }
-
-    }
+    final private static BonusSource SOURCE = BonusSource.dailybonus;
 
     final private Money amount;
     final private BonusService bonusService;
@@ -41,9 +33,10 @@ public class DailyBonusEventListener implements BonusEventListener<SystemPlayerE
         if (event == null)
             return;
         // Step 2. Generating unique bonus marker for the day
-        String transactionKey = KEY_GENERATOR.generate(event.getPlayer());
+        DailyBonusPaymentSource paymentSource = new DailyBonusPaymentSource(new Date());
+        String transactionKey = paymentSource.toTransactionKey(event.getPlayer());
         // Step 3. Processing bonus in bonusService 
-        bonusService.process(new BonusPaymentTransaction(event.getPlayer(), transactionKey, SOURCE, amount));
+        bonusService.process(new BonusPaymentTransaction(event.getPlayer(), paymentSource, amount));
     }
 
     @Override

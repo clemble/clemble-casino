@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import com.clemble.casino.money.MoneySource;
+import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
@@ -147,7 +148,8 @@ public class PaymentTransactionOperationsTest {
         PaymentTransaction paymentTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>() {
             @Override
             public PaymentTransaction get() {
-                return player.paymentOperations().getTransaction(player.getPlayer() + MoneySource.registration);
+                String transactionKey = RegistrationBonusPaymentSource.INSTANCE.toTransactionKey(player.getPlayer());
+                return player.paymentOperations().getTransaction(transactionKey);
             }
         }, 5_000);
         Collection<PaymentOperation> associatedOperation = new ArrayList<>();

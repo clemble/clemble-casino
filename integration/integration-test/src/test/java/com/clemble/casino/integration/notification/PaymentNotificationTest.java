@@ -4,9 +4,9 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.utils.CheckUtils;
-import com.clemble.casino.notification.PlayerNotification;
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
-import com.clemble.casino.payment.notification.PaymentBonusNotification;
+import com.clemble.casino.payment.bonus.BonusSource;
+import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
+import com.clemble.casino.payment.notification.PaymentNotification;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +36,7 @@ public class PaymentNotificationTest {
         CheckUtils.check((i) -> A.notificationService().myNotifications().length >= 1);
         // Step 3. Checking registration bonus
         boolean containsRegistrationBonus = Arrays.asList(A.notificationService().myNotifications()).stream().anyMatch((notification) -> {
-            return (notification instanceof PaymentBonusNotification && ((PaymentBonusNotification) notification).getBonusSource() == PaymentBonusSource.registration);
+            return (notification instanceof PaymentNotification && ((PaymentNotification) notification).getSource() instanceof RegistrationBonusPaymentSource);
         });
         Assert.assertTrue(containsRegistrationBonus);
     }

@@ -2,8 +2,9 @@ package com.clemble.casino.server.bonus.listener;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.payment.bonus.PaymentBonusSource;
+import com.clemble.casino.payment.bonus.BonusSource;
 import com.clemble.casino.money.Money;
+import com.clemble.casino.payment.bonus.DiscoveryBonusPaymentSource;
 import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.event.player.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
@@ -11,16 +12,7 @@ import com.clemble.casino.server.bonus.BonusService;
 
 public class DiscoveryBonusEventListener implements BonusEventListener<SystemPlayerDiscoveredConnectionEvent> {
 
-    final private static PaymentBonusSource SOURCE = PaymentBonusSource.discovery;
-    final private static DiscoveryBonusKeyGenerator KEY_GENERATOR = new DiscoveryBonusKeyGenerator();
-
-    final private static class DiscoveryBonusKeyGenerator implements KeyGenerator {
-
-        public String generate(String player, String discovered){
-            return player + SOURCE + discovered;
-        }
-
-    }
+    final private static BonusSource SOURCE = BonusSource.discovery;
 
     final private Money amount;
     final private BonusService bonusService;
@@ -36,13 +28,13 @@ public class DiscoveryBonusEventListener implements BonusEventListener<SystemPla
         if (event == null)
             return;
         // Step 2. Generating unique bonus for discovery event
-        String transactionKey = KEY_GENERATOR.generate(event.getPlayer(), event.getDiscovered());
+        DiscoveryBonusPaymentSource paymentSource = new DiscoveryBonusPaymentSource(event.getDiscovered());
         // Step 3. Processing bonus in transaction system
-        bonusService.process(new BonusPaymentTransaction(event.getPlayer(), transactionKey, SOURCE, amount));
+        bonusService.process(new BonusPaymentTransaction(event.getPlayer(), paymentSource, amount));
         // Step 4. Adding discovered connection
-        String discoveredTransactionKey = KEY_GENERATOR.generate(event.getDiscovered(), event.getPlayer());
+        DiscoveryBonusPaymentSource discoveredPaymentSource = new DiscoveryBonusPaymentSource(event.getPlayer());
         // Step 5. Processing bonus in transaction system
-        bonusService.process(new BonusPaymentTransaction(event.getDiscovered(), discoveredTransactionKey, SOURCE, amount));
+        bonusService.process(new BonusPaymentTransaction(event.getDiscovered(), discoveredPaymentSource, amount));
     }
 
     @Override
@@ -52,7 +44,7 @@ public class DiscoveryBonusEventListener implements BonusEventListener<SystemPla
 
     @Override
     public String getQueueName() {
-        return SystemPlayerDiscoveredConnectionEvent.CHANNEL + " > payment:bonus:autodiscovery";
+        return SystemPlayerDiscoveredConnectionEvent.CHANNEL + " > payment:bonus:discovery";
     }
 
 }

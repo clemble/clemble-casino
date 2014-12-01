@@ -30,10 +30,9 @@ public class PaymentBonusSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public BonusService bonusService(
-        @Qualifier("playerNotificationService") ServerNotificationService notificationService,
         SystemNotificationService systemNotificationService,
         BonusPolicy bonusPolicy) {
-        return new BonusService(bonusPolicy, notificationService, systemNotificationService);
+        return new BonusService(bonusPolicy, systemNotificationService);
     }
 
     @Bean
