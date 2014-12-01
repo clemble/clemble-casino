@@ -1,6 +1,5 @@
 package com.clemble.casino.server.post.repository;
 
-import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.server.post.ServerPlayerPost;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

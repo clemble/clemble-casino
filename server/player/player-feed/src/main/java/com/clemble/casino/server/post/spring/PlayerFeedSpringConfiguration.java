@@ -21,7 +21,7 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
  */
 @Configuration
 @Import(value = {CommonSpringConfiguration.class, MongoSpringConfiguration.class, ConnectionClientSpringConfiguration.class })
-public class PlayerPostSpringConfiguration implements SpringConfiguration {
+public class PlayerFeedSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerPostRepository playerPostRepository(MongoRepositoryFactory repositoryFactory) {
@@ -36,7 +36,7 @@ public class PlayerPostSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public SystemPostAddEventListener systemNotificationServiceListener(
+    public SystemPostAddEventListener systemPostAddEventListener(
         @Qualifier("playerNotificationService") ServerNotificationService notificationService,
         PlayerPostRepository postRepository,
         @Qualifier("playerConnectionClient") PlayerConnectionService connectionService,

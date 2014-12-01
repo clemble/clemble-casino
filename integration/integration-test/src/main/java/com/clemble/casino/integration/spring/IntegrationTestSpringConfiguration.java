@@ -43,6 +43,7 @@ import com.clemble.casino.server.game.spring.GameManagementSpringConfiguration;
 import com.clemble.casino.server.notification.spring.PlayerNotificationSpringConfiguration;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
+import com.clemble.casino.server.post.spring.PlayerFeedSpringConfiguration;
 import com.clemble.casino.server.spring.WebJsonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import com.clemble.casino.server.bonus.spring.PaymentBonusSpringConfiguration;
@@ -103,6 +104,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         GoalConfigurationSpringConfiguration.class,
         GoalManagementSpringConfiguration.class,
         WebJsonSpringConfiguration.class,
+        PlayerFeedSpringConfiguration.class,
         ScheduleSpringConfiguration.class// For testing MappingJackson2HttpMessageConverter
     })
     public static class LocalTestConfiguration {
