@@ -9,6 +9,7 @@ import com.clemble.casino.server.post.repository.PlayerPostRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class PlayerFeedServiceController implements PlayerFeedService {
     @ResponseStatus(value = HttpStatus.OK)
     public PlayerPost[] myFeed(@CookieValue("player") String player) {
         // Step 1. Searching for connections
-        Collection<String> connections = connectionService.getConnections(player);
+        Collection<String> connections = new ArrayList<String>(connectionService.getConnections(player));
         connections.add(player);
         // Step 2. Fetching player connections
         return postRepository.

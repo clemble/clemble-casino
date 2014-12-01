@@ -9,6 +9,7 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.post.ServerPlayerPost;
 import com.clemble.casino.server.post.repository.PlayerPostRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -38,7 +39,7 @@ public class SystemPostAddEventListener implements SystemEventListener<SystemPos
         // Step 1. Saving post
         postRepository.save(new ServerPlayerPost(key, post.getPlayer(), post, new Date()));
         // Step 2. Collecting interested parties
-        Collection<String> players = connectionService.getConnections(post.getPlayer());
+        Collection<String> players = new ArrayList<String>(connectionService.getConnections(post.getPlayer()));
         players.add(post.getPlayer());
         // Step 3. Sending notifications to all
         notificationService.send(players, post);
