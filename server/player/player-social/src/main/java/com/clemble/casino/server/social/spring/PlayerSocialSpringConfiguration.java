@@ -9,19 +9,20 @@ import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.social.controller.PlayerSocialRegistrationController;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
+import org.apache.http.HttpRequest;
 import org.eluder.spring.social.mongodb.MongoConnectionTransformers;
 import org.eluder.spring.social.mongodb.MongoUsersConnectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
+import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
@@ -35,6 +36,8 @@ import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.springframework.social.vkontakte.connect.VKontakteConnectionFactory;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @Import(value = { CommonSpringConfiguration.class, PlayerTokenSpringConfiguration.class, PlayerSocialSpringConfiguration.SocialTunerSpringConfigurion.class, MongoSpringConfiguration.class})
@@ -182,6 +185,28 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         SignInAdapter signInAdapter){
         ProviderSignInController signInController = new ProviderSignInController(factoryLocator, usersConnectionRepository, signInAdapter);
         return signInController;
+    }
+
+    @Bean
+    @Scope(value="request", proxyMode= ScopedProxyMode.INTERFACES)
+    public ConnectionRepository connectionRepository(UsersConnectionRepository connectionRepository, HttpServletRequest request) {
+        // Step 1. Fetching player TODO update when you'll be handling security
+        String player = null;
+        if(request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("player")) {
+                    player = cookie.getValue();
+                }
+            }
+        }
+        // Step 2. Getting connection repository
+        return connectionRepository.createConnectionRepository(player);
+    }
+
+
+    @Bean
+    public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator, ConnectionRepository connectionRepository){
+        return new ConnectController(connectionFactoryLocator, connectionRepository);
     }
 
     @Bean
