@@ -205,8 +205,13 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
 
     @Bean
-    public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator, ConnectionRepository connectionRepository){
-        return new ConnectController(connectionFactoryLocator, connectionRepository);
+    public ConnectController connectController(
+        ConnectionFactoryLocator connectionFactoryLocator,
+        ConnectionRepository connectionRepository,
+        @Value("${clemble.registration.token.host}") String host){
+        ConnectController connectController = new ConnectController(connectionFactoryLocator, connectionRepository);
+        connectController.setApplicationUrl("http://" + host.substring(1));
+        return connectController;
     }
 
     @Bean
