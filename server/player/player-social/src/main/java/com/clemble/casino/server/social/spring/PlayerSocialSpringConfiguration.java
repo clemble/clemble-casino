@@ -244,7 +244,7 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @PostConstruct
     public void configureConnectController(){
-        connectController.setApplicationUrl("http://" + host.substring(1));
+        connectController.setApplicationUrl("http://api." + host.substring(1) + "/social/connect");
     }
 
 }
