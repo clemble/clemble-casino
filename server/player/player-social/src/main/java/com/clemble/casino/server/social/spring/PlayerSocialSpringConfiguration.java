@@ -179,7 +179,6 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     @Bean
     // If changing don't forget to change AuthenticationHandleInterceptor to filter out request for signin
     public ProviderSignInController providerSignInController(
-        @Value("${clemble.registration.token.host}") String host,
         ConnectionFactoryLocator factoryLocator,
         UsersConnectionRepository usersConnectionRepository,
         SignInAdapter signInAdapter){
@@ -210,7 +209,6 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         ConnectionRepository connectionRepository,
         @Value("${clemble.registration.token.host}") String host){
         ConnectController connectController = new ConnectController(connectionFactoryLocator, connectionRepository);
-        connectController.setApplicationUrl("http://" + host.substring(1));
         return connectController;
     }
 
@@ -236,6 +234,17 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
             signInController.setApplicationUrl("http://api" + host + "/social");
         }
 
+    }
+
+    @Autowired
+    public ConnectController connectController;
+
+    @Value("${clemble.registration.token.host}")
+    public String host;
+
+    @PostConstruct
+    public void configureConnectController(){
+        connectController.setApplicationUrl("http://" + host.substring(1));
     }
 
 }
