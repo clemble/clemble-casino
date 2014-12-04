@@ -24,12 +24,7 @@ public class PlayerSocialKeyGenerator implements ConnectionSignUp, KeyGenerator 
             throw new IllegalArgumentException("No Connection defined.");
         // Step 2. Retrieving SocialAdapter for the Connection
         ConnectionKey connectionKey = connection.getKey();
-        if (NumberUtils.isDigits(connectionKey.getProviderUserId())) {
-            byte[] bytes = ByteBuffer.allocate(8).putLong(Long.parseLong(connectionKey.getProviderUserId())).array();
-            return connectionKey.getProviderId() + Base64Utils.encodeToString(bytes);
-        } else {
-            return connectionKey.getProviderId() + connectionKey.getProviderUserId();
-        }
+        return connectionKey.getProviderId() + "!" + connectionKey.getProviderUserId();
     }
 
 }
