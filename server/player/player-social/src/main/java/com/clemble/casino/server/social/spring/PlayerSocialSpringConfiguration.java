@@ -229,22 +229,16 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         @Autowired
         public ProviderSignInController signInController;
 
+        @Autowired
+        public ConnectController connectController;
+
         @PostConstruct
         public void initialize() {
-            signInController.setApplicationUrl("http://api" + host + "/social");
+            String url = "http://api" + host + "/social";
+            signInController.setApplicationUrl(url);
+            connectController.setApplicationUrl(url);
         }
 
-    }
-
-    @Autowired
-    public ConnectController connectController;
-
-    @Value("${clemble.registration.token.host}")
-    public String host;
-
-    @PostConstruct
-    public void configureConnectController(){
-        connectController.setApplicationUrl("http://api." + host.substring(1) + "/social/connect");
     }
 
 }
