@@ -119,8 +119,6 @@ public class SocialConnectionDataAdapter {
             notificationService.send(new SystemPlayerImageChangedEvent(player, imageUrl.getLeft(), imageUrl.getRight()));
         }
         LOG.error("register {} notifying social added to update connections", player, imageUrl.getLeft());
-        // Step 8. Sending notification for registered social profile
-        notificationService.send(new SystemPlayerSocialAddedEvent(player, connection.getKey()));
         // Step 9. Returning player profile
         LOG.error("register {} returning", player);
         return player;
@@ -143,9 +141,7 @@ public class SocialConnectionDataAdapter {
         }
         // Step 4. Adding connection to player connection repository
         usersConnectionRepository.createConnectionRepository(player).addConnection(connection);
-        // Step 5. Sending request to update user connections
-        notificationService.send(new SystemPlayerSocialAddedEvent(player, connection.getKey()));
-        // Step 6. Returning original social connection data
+        // Step 5. Returning original social connection data
         return socialConnectionData;
     }
 }

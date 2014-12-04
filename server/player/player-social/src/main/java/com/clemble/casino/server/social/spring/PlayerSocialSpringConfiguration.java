@@ -5,11 +5,12 @@ import com.clemble.casino.server.security.PlayerTokenUtils;
 import com.clemble.casino.server.social.*;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.social.adapter.*;
+import com.clemble.casino.server.social.connection.ClembleUsersConnectionRepository;
+import com.clemble.casino.server.social.listener.SocialNetworkPopulatorEventListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.social.controller.PlayerSocialRegistrationController;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
-import org.apache.http.HttpRequest;
 import org.eluder.spring.social.mongodb.MongoConnectionTransformers;
 import org.eluder.spring.social.mongodb.MongoUsersConnectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,16 +157,14 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public UsersConnectionRepository usersConnectionRepository(
-//            @Qualifier("dataSource") DataSource dataSource,
             MongoOperations mongoOperations,
             MongoConnectionTransformers connectionTransformers,
             ConnectionSignUp connectionSignUp,
-            ConnectionFactoryRegistry connectionFactoryLocator) {
+            ConnectionFactoryRegistry connectionFactoryLocator,
+            SystemNotificationService systemNotificationService) {
         MongoUsersConnectionRepository repository = new MongoUsersConnectionRepository(mongoOperations, connectionFactoryLocator, connectionTransformers);
-//        InMemoryUsersConnectionRepository repository = new InMemoryUsersConnectionRepository(connectionFactoryLocator);
-//        JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
         repository.setConnectionSignUp(connectionSignUp);
-        return repository;
+        return new ClembleUsersConnectionRepository(repository, systemNotificationService);
     }
 
     @Bean
