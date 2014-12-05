@@ -35,6 +35,8 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.springframework.social.vkontakte.connect.VKontakteConnectionFactory;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.Cookie;
@@ -207,7 +209,14 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         ConnectionFactoryLocator connectionFactoryLocator,
         ConnectionRepository connectionRepository,
         @Value("${clemble.registration.token.host}") String host){
-        ConnectController connectController = new ConnectController(connectionFactoryLocator, connectionRepository);
+        final String redirect = "http://" + host.substring(1);
+        ConnectController connectController = new ConnectController(connectionFactoryLocator, connectionRepository){
+
+            protected RedirectView connectionStatusRedirect(String providerId, NativeWebRequest request) {
+                return new RedirectView(redirect, true);
+            }
+
+        };
         return connectController;
     }
 

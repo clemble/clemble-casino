@@ -1,10 +1,15 @@
 package com.clemble.casino.server.social.connection;
 
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Set;
 
