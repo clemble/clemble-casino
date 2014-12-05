@@ -216,7 +216,7 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
                 return new RedirectView(redirect, true);
             }
 
-        };
+        }
         return connectController;
     }
 

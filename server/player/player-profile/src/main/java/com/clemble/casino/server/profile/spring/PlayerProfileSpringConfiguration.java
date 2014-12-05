@@ -4,6 +4,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.profile.listener.PlayerImageChangedEventListener;
 import com.clemble.casino.server.profile.listener.PlayerProfileCreationEventListener;
+import com.clemble.casino.server.profile.listener.PlayerProfileSocialAddedEventListener;
 import com.clemble.casino.server.profile.repository.MongoPlayerProfileRepository;
 import com.clemble.casino.server.profile.repository.PlayerImageRedirectRepository;
 import com.clemble.casino.server.profile.repository.PlayerProfileRepository;
@@ -36,6 +37,13 @@ public class PlayerProfileSpringConfiguration implements SpringConfiguration {
         PlayerImageChangedEventListener imageChangedEventListener = new PlayerImageChangedEventListener(imageRedirectRepository);
         serviceListener.subscribe(imageChangedEventListener);
         return imageChangedEventListener;
+    }
+
+    @Bean
+    public PlayerProfileSocialAddedEventListener playerProfileSocialAddedEventListener(PlayerProfileRepository profileRepository, SystemNotificationServiceListener serviceListener) {
+        PlayerProfileSocialAddedEventListener socialAddedEventListener = new PlayerProfileSocialAddedEventListener(profileRepository);
+        serviceListener.subscribe(socialAddedEventListener);
+        return socialAddedEventListener;
     }
 
     @Bean
