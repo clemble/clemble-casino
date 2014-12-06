@@ -60,6 +60,10 @@ public class VKontakteSocialAdapter extends SocialConnectionAdapter<VKontakte>{
     }
 
     @Override
+    public void notify(Connection<VKontakte> connection, String notification) {
+    }
+
+    @Override
     public Pair<String, String> toImageUrl(Connection<VKontakte> connectionKey) {
         // Step 1. Fetching profile
         VKontakteProfile profile = connectionKey.getApi().usersOperations().getUser();

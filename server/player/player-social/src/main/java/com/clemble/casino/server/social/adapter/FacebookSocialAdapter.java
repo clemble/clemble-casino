@@ -63,6 +63,10 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
     }
 
     @Override
+    public void notify(Connection<Facebook> connection, String notification) {
+    }
+
+    @Override
     public Pair<String, String> toImageUrl(Connection<Facebook> connectionKey) {
         String primaryImage = "http://graph.facebook.com/" + connectionKey.getKey().getProviderUserId() + "/picture";
         String smallImage = primaryImage + "?redirect=1&height=48&type=small&width=48";

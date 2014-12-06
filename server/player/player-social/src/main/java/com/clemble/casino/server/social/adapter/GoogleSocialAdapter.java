@@ -45,6 +45,10 @@ public class GoogleSocialAdapter extends SocialConnectionAdapter<Google>{
     }
 
     @Override
+    public void notify(Connection<Google> connection, String notification) {
+    }
+
+    @Override
     public Collection<ConnectionKey> fetchConnections(Google api) {
         return Collections.emptyList();
     }

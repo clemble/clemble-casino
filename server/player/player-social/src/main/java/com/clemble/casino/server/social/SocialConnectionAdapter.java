@@ -38,6 +38,8 @@ public abstract class SocialConnectionAdapter<A> {
 
     abstract public ConnectionData toConnectionData(SocialConnectionData connectionData);
 
+    abstract public void notify(Connection<A> connection, String notification);
+
     public ConnectionKey toConnectionKey(String id) {
         return new ConnectionKey(providerId, id);
     }
