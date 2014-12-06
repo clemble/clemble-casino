@@ -1,10 +1,13 @@
 package com.clemble.casino.server.email.spring;
 
+import com.clemble.casino.server.email.PlayerEmail;
 import com.clemble.casino.server.email.listener.SystemEmailAddedEventListener;
 import com.clemble.casino.server.email.repository.PlayerEmailRepository;
 import com.clemble.casino.server.email.service.MandrillPlayerEmailService;
 import com.clemble.casino.server.email.service.PlayerEmailService;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
+import com.clemble.casino.server.event.email.SystemEmailVerifiedEvent;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
@@ -38,8 +41,10 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
     @Bean
     public SystemEmailAddedEventListener systemEmailAddedEventListener(
         PlayerEmailRepository emailRepository,
+        PlayerEmailService playerEmailService,
+        SystemNotificationService systemNotificationService,
         SystemNotificationServiceListener notificationServiceListener) {
-        SystemEmailAddedEventListener emailAddedEventListener = new SystemEmailAddedEventListener(emailRepository);
+        SystemEmailAddedEventListener emailAddedEventListener = new SystemEmailAddedEventListener(playerEmailService, emailRepository, systemNotificationService);
         notificationServiceListener.subscribe(emailAddedEventListener);
         return emailAddedEventListener;
     }
@@ -49,10 +54,11 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
     public static class Default implements SpringConfiguration {
 
         @Bean
-        public PlayerEmailService playerEmailService() {
+        public PlayerEmailService playerEmailService(final SystemNotificationService notificationService) {
             return new PlayerEmailService() {
                 @Override
-                public void requestVerification(String email) {
+                public void requestVerification(PlayerEmail email) {
+                    notificationService.send(new SystemEmailVerifiedEvent(email.getPlayer()));
                 }
             };
         }

@@ -2,22 +2,15 @@ package com.clemble.casino.server.bonus.listener;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.clemble.casino.payment.PaymentSource;
-import com.clemble.casino.payment.bonus.BonusSource;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.bonus.DailyBonusPaymentSource;
-import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.event.player.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
 import com.clemble.casino.server.bonus.BonusService;
 
 public class DailyBonusEventListener implements BonusEventListener<SystemPlayerEnteredEvent> {
-
-    final private static BonusSource SOURCE = BonusSource.dailybonus;
 
     final private Money amount;
     final private BonusService bonusService;

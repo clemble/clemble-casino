@@ -2,17 +2,13 @@ package com.clemble.casino.server.bonus.listener;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.payment.bonus.BonusSource;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.bonus.DiscoveryBonusPaymentSource;
-import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.event.player.SystemPlayerDiscoveredConnectionEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
 import com.clemble.casino.server.bonus.BonusService;
 
 public class DiscoveryBonusEventListener implements BonusEventListener<SystemPlayerDiscoveredConnectionEvent> {
-
-    final private static BonusSource SOURCE = BonusSource.discovery;
 
     final private Money amount;
     final private BonusService bonusService;

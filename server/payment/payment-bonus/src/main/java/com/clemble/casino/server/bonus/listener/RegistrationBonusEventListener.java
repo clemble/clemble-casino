@@ -2,9 +2,7 @@ package com.clemble.casino.server.bonus.listener;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import com.clemble.casino.payment.bonus.BonusSource;
 import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
-import com.clemble.casino.server.KeyGenerator;
 import com.clemble.casino.server.bonus.BonusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +12,8 @@ import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
 
 public class RegistrationBonusEventListener implements BonusEventListener<SystemPlayerCreatedEvent> {
-    
-    final private static Logger LOG = LoggerFactory.getLogger(RegistrationBonusEventListener.class);
 
-    final private static BonusSource SOURCE = BonusSource.registration;
+    final private static Logger LOG = LoggerFactory.getLogger(RegistrationBonusEventListener.class);
 
     final private Money bonusAmount;
     final private BonusService bonusService;

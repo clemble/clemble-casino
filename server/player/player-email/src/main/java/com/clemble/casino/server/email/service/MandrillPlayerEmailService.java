@@ -1,5 +1,6 @@
 package com.clemble.casino.server.email.service;
 
+import com.clemble.casino.server.email.PlayerEmail;
 import com.google.common.collect.ImmutableList;
 import com.microtripit.mandrillapp.lutung.MandrillApi;
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
@@ -19,8 +20,9 @@ public class MandrillPlayerEmailService implements PlayerEmailService {
     public MandrillPlayerEmailService(MandrillApi mandrillApi) {
         this.mandrillApi = mandrillApi;
     }
+
     @Override
-    public void requestVerification(String email) {
+    public void requestVerification(PlayerEmail email) {
         // Step 1. Creating message
         MandrillMessage message = new MandrillMessage();
         message.setSubject("Please verify your email address");
@@ -30,7 +32,7 @@ public class MandrillPlayerEmailService implements PlayerEmailService {
         message.setFromName("Clemble Notification");
         // Step 2. Adding recipient
         Recipient recipient = new Recipient();
-        recipient.setEmail(email);
+        recipient.setEmail(email.getEmail());
         message.setTo(ImmutableList.of(recipient));
         // Step 3. Add verification tag
         message.setPreserveRecipients(true);

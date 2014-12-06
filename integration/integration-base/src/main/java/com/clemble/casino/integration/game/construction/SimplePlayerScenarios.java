@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.clemble.casino.integration.event.EventAccumulator;
-import com.clemble.casino.money.MoneySource;
-import com.clemble.casino.payment.bonus.BonusSource;
 import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
@@ -124,7 +122,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
-                return player.paymentOperations().myTransactions(BonusSource.dailybonus).size() > 0;
+                return player.paymentOperations().myTransactionsBySource("dailybonus").size() > 0;
             }
         }, 15_000);
         // Step 3. Getting PaymentTransaction

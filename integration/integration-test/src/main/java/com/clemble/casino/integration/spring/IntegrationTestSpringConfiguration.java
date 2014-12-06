@@ -35,6 +35,7 @@ import com.clemble.casino.registration.PlayerSocialRegistrationRequest;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.schedule.spring.ScheduleSpringConfiguration;
+import com.clemble.casino.server.email.spring.PlayerEmailSpringConfiguration;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.game.configuration.repository.GameConfigurationRepository;
 import com.clemble.casino.server.game.configuration.spring.GameConfigurationSpringConfiguration;
@@ -104,6 +105,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         GoalConfigurationSpringConfiguration.class,
         GoalManagementSpringConfiguration.class,
         WebJsonSpringConfiguration.class,
+        PlayerEmailSpringConfiguration.class,
         PlayerFeedSpringConfiguration.class,
         ScheduleSpringConfiguration.class// For testing MappingJackson2HttpMessageConverter
     })

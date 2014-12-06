@@ -23,7 +23,7 @@ public class TestSimpleEmailVerification {
 
     @Test
     public void test() {
-        playerEmailService.requestVerification("mavarazy@gmail.com");
+        playerEmailService.requestVerification(new PlayerEmail("A", "mavarazy@gmail.com"));
     }
 
 }

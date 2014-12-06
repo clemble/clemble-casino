@@ -3,10 +3,7 @@ package com.clemble.casino.server.bonus.spring;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.bonus.BonusService;
-import com.clemble.casino.server.bonus.listener.DailyBonusEventListener;
-import com.clemble.casino.server.bonus.listener.DiscoveryBonusEventListener;
-import com.clemble.casino.server.bonus.listener.RegistrationBonusEventListener;
-import com.clemble.casino.server.bonus.listener.SocialAddedBonusEventListener;
+import com.clemble.casino.server.bonus.listener.*;
 import com.clemble.casino.server.bonus.policy.BonusPolicy;
 import com.clemble.casino.server.bonus.policy.NoBonusPolicy;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
@@ -72,6 +69,19 @@ public class PaymentBonusSpringConfiguration implements SpringConfiguration {
         RegistrationBonusEventListener registrationBonusService = new RegistrationBonusEventListener(bonus, bonusService);
         notificationServiceListener.subscribe(registrationBonusService);
         return registrationBonusService;
+    }
+
+    @Bean
+    @DependsOn("bonusService")
+    public EmailVerifiedEventListener emailVerifiedEventListener(
+            BonusService bonusService,
+            SystemNotificationServiceListener notificationServiceListener,
+            @Value("${clemble.bonus.email.currency}") Currency emailCurrency,
+            @Value("${clemble.bonus.email.amount}") int emailBonus) {
+        Money bonus = new Money(emailCurrency, emailBonus);
+        EmailVerifiedEventListener emailVerifiedEventListener = new EmailVerifiedEventListener(bonus, bonusService);
+        notificationServiceListener.subscribe(emailVerifiedEventListener);
+        return emailVerifiedEventListener;
     }
 
     @Bean

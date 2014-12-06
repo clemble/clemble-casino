@@ -8,7 +8,6 @@ import java.util.concurrent.BlockingQueue;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.money.MoneySource;
-import com.clemble.casino.payment.bonus.BonusSource;
 import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.test.concurrent.Get;
@@ -84,16 +83,26 @@ public class PlayerAccountOperationsITest {
         PaymentTransaction transaction = A.paymentOperations().getTransaction(transactionKey);
         Set<PaymentOperation> paymentOperations = transaction.getOperations();
         Money transactionAmount = paymentOperations.iterator().next().getAmount();
-        // Step 4. Checking bonus transaction (Which might be delayed, because of the system event delays)
-        PaymentTransaction bonusTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>(){
+        // Step 4.1 Checking daily bonus transaction (Which might be delayed, because of the system event delays)
+        PaymentTransaction dailyBonusTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>(){
             @Override
             public PaymentTransaction get() {
-                return A.paymentOperations().myTransactions(BonusSource.dailybonus).get(0);
+                return A.paymentOperations().myTransactionsBySource("dailybonus").get(0);
             }
         }, 5000);
-        paymentOperations = bonusTransaction.getOperations();
-        Money bonusAmount = paymentOperations.iterator().next().getAmount();
-        assertEquals(transactionAmount.add(bonusAmount.getAmount()), A.accountService().myAccount().getMoney(Currency.FakeMoney));
+        paymentOperations = dailyBonusTransaction.getOperations();
+        Money dailyBonusAmount = paymentOperations.iterator().next().getAmount();
+        // Step 4.2 Checking email bonus transaction (Which might be delayed, because of the system event delays)
+        PaymentTransaction emailBonusTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>(){
+            @Override
+            public PaymentTransaction get() {
+                return A.paymentOperations().myTransactionsBySource("email").get(0);
+            }
+        }, 5000);
+        paymentOperations = emailBonusTransaction.getOperations();
+        Money emailBonusAmount = paymentOperations.iterator().next().getAmount();
+        // Step 5. Checking matches
+        assertEquals(transactionAmount.add(dailyBonusAmount.getAmount()).add(emailBonusAmount.getAmount()), A.accountService().myAccount().getMoney(Currency.FakeMoney));
     }
 
     @Test
