@@ -18,6 +18,7 @@ import org.springframework.social.vkontakte.connect.VKontakteConnectionFactory;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -61,6 +62,12 @@ public class VKontakteSocialAdapter extends SocialConnectionAdapter<VKontakte>{
 
     @Override
     public void notify(Connection<VKontakte> connection, String notification) {
+        // Step 1. Fetching connection key
+        ConnectionKey connectionKey = connection.getKey();
+        // Step 2. Fetching API
+        VKontakte vKontakte = connection.getApi();
+        // Step 3. Sending notification
+        vKontakte.secureOperations().sendNotification(Collections.singletonList(connectionKey.getProviderUserId()), notification);
     }
 
     @Override

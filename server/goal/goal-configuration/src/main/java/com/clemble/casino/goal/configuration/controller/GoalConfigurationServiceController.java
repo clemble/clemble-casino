@@ -2,6 +2,7 @@ package com.clemble.casino.goal.configuration.controller;
 
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.rule.due.GoalDueRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
@@ -42,6 +43,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
+            new GoalDueRule("facebook"),
             new GoalStartRule(30000)
         ),
         new GoalConfiguration(
@@ -52,6 +54,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.friends,
+            new GoalDueRule("vkontakte"),
             new GoalStartRule(TimeUnit.DAYS.toMillis(1))
         ),
         new GoalConfiguration(
@@ -62,6 +65,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.world,
+            new GoalDueRule("google"),
             new GoalStartRule(TimeUnit.DAYS.toMillis(3))
         )
     );

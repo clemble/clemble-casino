@@ -17,8 +17,8 @@ public class SystemSocialNotificationRequestEvent implements SystemSocialEvent {
     @JsonCreator
     public SystemSocialNotificationRequestEvent(
         @JsonProperty("player") String player,
-        @JsonProperty("notification") String notification,
-        @JsonProperty("providerId") String providerId) {
+        @JsonProperty("providerId") String providerId,
+        @JsonProperty("notification") String notification) {
         this.player = player;
         this.providerId = providerId;
         this.notification = notification;
