@@ -55,6 +55,7 @@
         <spring.social.twitter.version>1.1.0.RELEASE</spring.social.twitter.version>
         <spring.social.vkontakte.version>1.1.1.BUILD-SNAPSHOT</spring.social.vkontakte.version>
         <spring.social.google.version>1.0.0.RELEASE</spring.social.google.version>
+        <google.calendar.api.version>v3-rev109-1.19.0</google.calendar.api.version>
         <!-- Generic dependencies -->
         <logback.version>1.1.2</logback.version>
         <loggly.version>0.1.2</loggly.version>
@@ -192,6 +193,11 @@
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
                 <artifactId>player-social</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
+                <artifactId>player-email</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -487,6 +493,11 @@
                 <groupId>org.springframework.social</groupId>
                 <artifactId>spring-social-google</artifactId>
                 <version>${spring.social.google.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.apis</groupId>
+                <artifactId>google-api-services-calendar</artifactId>
+                <version>${google.calendar.api.version}</version>
             </dependency>
 
 

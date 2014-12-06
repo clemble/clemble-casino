@@ -24,12 +24,16 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
 
     final private FacebookConnectionFactory facebookConnectionFactory;
 
-    public FacebookSocialAdapter(FacebookConnectionFactory facebookConnectionFactory) {
+    public FacebookSocialAdapter(
+        FacebookConnectionFactory facebookConnectionFactory
+    ) {
         super("facebook");
         this.facebookConnectionFactory = checkNotNull(facebookConnectionFactory);
     }
@@ -60,10 +64,6 @@ public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
             .setBirthDate(readDate(facebookProfile.getBirthday()))
             .setGender(PlayerGender.parse(facebookProfile.getGender()))
             .setNickName(facebookProfile.getUsername());
-    }
-
-    @Override
-    public void notify(Connection<Facebook> connection, String notification) {
     }
 
     @Override

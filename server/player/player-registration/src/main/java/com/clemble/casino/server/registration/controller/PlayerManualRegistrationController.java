@@ -4,6 +4,7 @@ import static com.clemble.casino.registration.RegistrationWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
+import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
@@ -113,6 +114,8 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         PlayerToken token = register(registrationRequest, player);
         // Step 5. Notifying system of new user
         notificationService.send(new SystemPlayerProfileRegisteredEvent(player, normalizedProfile));
+        // Step 5.1. Creating email added event
+        notificationService.send(new SystemEmailAddedEvent(player, registrationRequest.getPlayerCredential().getEmail(), false));
         // Step 6. All done returning response
         return token;
     }

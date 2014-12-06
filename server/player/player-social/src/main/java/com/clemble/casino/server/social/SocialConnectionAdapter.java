@@ -3,6 +3,7 @@ package com.clemble.casino.server.social;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionKey;
@@ -37,8 +38,6 @@ public abstract class SocialConnectionAdapter<A> {
     abstract public ConnectionData toConnectionData(SocialAccessGrant accessGrant);
 
     abstract public ConnectionData toConnectionData(SocialConnectionData connectionData);
-
-    abstract public void notify(Connection<A> connection, String notification);
 
     public ConnectionKey toConnectionKey(String id) {
         return new ConnectionKey(providerId, id);

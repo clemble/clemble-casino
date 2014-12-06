@@ -7,7 +7,6 @@ import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.social.adapter.*;
 import com.clemble.casino.server.social.connection.ClembleUsersConnectionRepository;
 import com.clemble.casino.server.social.listener.SocialNetworkPopulatorEventListener;
-import com.clemble.casino.server.social.listener.SocialNotificationEventListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.social.controller.PlayerSocialRegistrationController;
@@ -93,16 +92,6 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         SocialNetworkPopulatorEventListener networkPopulator = new SocialNetworkPopulatorEventListener(socialAdapterRegistry, usersConnectionRepository, notificationService);
         serviceListener.subscribe(networkPopulator);
         return networkPopulator;
-    }
-
-    @Bean
-    public SocialNotificationEventListener socialNotificationEventListener(
-            SocialConnectionAdapterRegistry socialAdapterRegistry,
-            UsersConnectionRepository usersConnectionRepository,
-            SystemNotificationServiceListener serviceListener) {
-        SocialNotificationEventListener notificationService = new SocialNotificationEventListener(usersConnectionRepository, socialAdapterRegistry);
-        serviceListener.subscribe(notificationService);
-        return notificationService;
     }
 
     @Bean

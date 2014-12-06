@@ -3,6 +3,7 @@ package com.clemble.casino.server.event;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.server.event.bet.SystemBetCanceledEvent;
 import com.clemble.casino.server.event.bet.SystemBetCompletedEvent;
+import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.event.game.*;
 import com.clemble.casino.server.event.goal.*;
 import com.clemble.casino.server.event.notification.SystemNotificationAddEvent;
@@ -12,7 +13,6 @@ import com.clemble.casino.server.event.player.*;
 import com.clemble.casino.server.event.post.SystemPostAddEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
-import com.clemble.casino.server.event.social.SystemSocialNotificationRequestEvent;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -46,7 +46,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemRemoveJobScheduleEvent.CHANNEL, value = SystemRemoveJobScheduleEvent.class),
     @JsonSubTypes.Type(name = SystemNotificationAddEvent.CHANNEL, value = SystemNotificationAddEvent.class),
     @JsonSubTypes.Type(name = SystemPostAddEvent.CHANNEL, value = SystemPostAddEvent.class),
-    @JsonSubTypes.Type(name = SystemSocialNotificationRequestEvent.CHANNEL, value = SystemSocialNotificationRequestEvent.class)
+    @JsonSubTypes.Type(name = SystemEmailAddedEvent.CHANNEL, value = SystemEmailAddedEvent.class)
 })
 public interface SystemEvent extends Event {
 

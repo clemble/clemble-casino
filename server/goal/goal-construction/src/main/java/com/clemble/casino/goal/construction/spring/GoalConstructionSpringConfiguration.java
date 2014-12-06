@@ -4,7 +4,7 @@ import com.clemble.casino.goal.construction.GoalKeyGenerator;
 import com.clemble.casino.goal.construction.controller.FriendInitiationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
-import com.clemble.casino.goal.construction.listener.SystemGoalInitiationExpirationEventListener;
+import com.clemble.casino.goal.construction.listener.SystemGoalInitiationDueEventListener;
 import com.clemble.casino.goal.construction.repository.GoalConstructionRepository;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.goal.lifecycle.construction.service.SelfGoalConstructionService;
@@ -90,11 +90,11 @@ public class GoalConstructionSpringConfiguration {
     }
 
     @Bean
-    public SystemGoalInitiationExpirationEventListener systemGoalInitiationExpirationEventListener(
+    public SystemGoalInitiationDueEventListener systemGoalInitiationExpirationEventListener(
         SystemNotificationServiceListener notificationServiceListener,
         SystemNotificationService notificationService,
         GoalInitiationRepository initiationRepository) {
-        SystemGoalInitiationExpirationEventListener eventListener = new SystemGoalInitiationExpirationEventListener(notificationService, initiationRepository);
+        SystemGoalInitiationDueEventListener eventListener = new SystemGoalInitiationDueEventListener(notificationService, initiationRepository);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }

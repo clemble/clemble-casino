@@ -43,10 +43,6 @@ public class TwitterSocialAdapter extends SocialConnectionAdapter<Twitter>{
     }
 
     @Override
-    public void notify(Connection<Twitter> connection, String notification) {
-    }
-
-    @Override
     public Pair<String, String> toImageUrl(Connection<Twitter> connection) {
         String primaryImage = connection.getApi().userOperations().getUserProfile().getProfileImageUrl();
         String smallImage = primaryImage + "?size=normal";

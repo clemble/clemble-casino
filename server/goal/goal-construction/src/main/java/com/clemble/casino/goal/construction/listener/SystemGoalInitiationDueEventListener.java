@@ -5,20 +5,18 @@ import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
 import com.clemble.casino.server.event.goal.SystemGoalStartedEvent;
-import com.clemble.casino.server.event.notification.SystemNotificationEvent;
-import com.clemble.casino.server.event.social.SystemSocialNotificationRequestEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 /**
  * Created by mavarazy on 9/19/14.
  */
-public class SystemGoalInitiationExpirationEventListener implements SystemEventListener<SystemGoalInitiationDueEvent>{
+public class SystemGoalInitiationDueEventListener implements SystemEventListener<SystemGoalInitiationDueEvent>{
 
     final private GoalInitiationRepository initiationRepository;
     final private SystemNotificationService notificationService;
 
-    public SystemGoalInitiationExpirationEventListener(SystemNotificationService notificationService, GoalInitiationRepository initiationRepository) {
+    public SystemGoalInitiationDueEventListener(SystemNotificationService notificationService, GoalInitiationRepository initiationRepository) {
         this.notificationService = notificationService;
         this.initiationRepository = initiationRepository;
     }
@@ -33,8 +31,6 @@ public class SystemGoalInitiationExpirationEventListener implements SystemEventL
         initiationRepository.save(initiation);
         // Step 2. Notifying of goal started event, for manager processing
         notificationService.send(new SystemGoalStartedEvent(initiation.getGoalKey(), initiation));
-        // TODO removes
-        notificationService.send(new SystemSocialNotificationRequestEvent(initiation.getPlayer(), initiation.getConfiguration().getDueRule().getProviderId(), "Game started"));
     }
 
     @Override

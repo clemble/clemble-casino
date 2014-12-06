@@ -57,6 +57,10 @@
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
+            <artifactId>player-email</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
             <artifactId>game-configuration</artifactId>
         </dependency>
         <dependency>
@@ -194,6 +198,13 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>player-email</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>war</type>
+                                            <destFileName>player-email.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>player-notification</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
@@ -295,6 +306,10 @@
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/player-social.war</war>
                                     <contextPath>/social</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/player-email.war</war>
+                                    <contextPath>/email</contextPath>
                                 </contextHandler>
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/player-notification.war</war>

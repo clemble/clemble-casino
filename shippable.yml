@@ -35,6 +35,7 @@ after_success:
   - aws s3 cp ./server/player/player-connection/target/player-connection-0.12.3-SNAPSHOT.war      s3://clemble/production/api/player/connection.war
   - aws s3 cp ./server/player/player-notification/target/player-notification-0.12.3-SNAPSHOT.war  s3://clemble/production/api/player/notification.war
   - aws s3 cp ./server/player/player-feed/target/player-feed-0.12.3-SNAPSHOT.war                  s3://clemble/production/api/player/feed.war
+  - aws s3 cp ./server/player/player-email/target/player-email-0.12.3-SNAPSHOT.war                s3://clemble/production/api/player/email.war
 
   - aws s3 cp ./server/payment/payment-transaction/target/payment-transaction-0.12.3-SNAPSHOT.war s3://clemble/production/api/payment/payment.war
   - aws s3 cp ./server/payment/payment-bonus/target/payment-bonus-0.12.3-SNAPSHOT.war             s3://clemble/production/api/payment/bonus.war
