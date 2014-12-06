@@ -31,6 +31,8 @@ public abstract class SocialConnectionAdapter<A> {
 
     abstract public PlayerProfile fetchPlayerProfile(A api);
 
+    abstract public String getEmail(A api);
+
     abstract public Collection<ConnectionKey> fetchConnections(A api);
 
     abstract public Pair<String, String> toImageUrl(Connection<A> connectionKey);

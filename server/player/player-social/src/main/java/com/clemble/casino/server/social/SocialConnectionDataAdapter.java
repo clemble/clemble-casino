@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Set;
 
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
 import org.apache.commons.lang3.tuple.Pair;
@@ -108,10 +109,16 @@ public class SocialConnectionDataAdapter {
         LOG.error("register {} created with connection {}", player, connection.getKey());
         // Step 5. Fetching player profile
         SocialConnectionAdapter adapter = socialAdapterRegistry.getSocialAdapter(connection.getKey().getProviderId());
-        PlayerProfile playerProfile = adapter.fetchPlayerProfile(connection.getApi());
+        Object api = connection.getApi();
+        PlayerProfile playerProfile = adapter.fetchPlayerProfile(api);
         playerProfile.setPlayer(player);
         LOG.error("register {} created player profile {}", player, playerProfile);
         notificationService.send(new SystemPlayerProfileRegisteredEvent(playerProfile.getPlayer(), playerProfile));
+        // Step 5.1 Sending email notification
+        String email = adapter.getEmail(api);
+        if (email != null) {
+            notificationService.send(new SystemEmailAddedEvent(player, email, true));
+        }
         // Step 6. Notifying of added social connection
         Pair<String, String> imageUrl = adapter.toImageUrl(connection);
         LOG.error("register {} updating player picture", player, imageUrl.getLeft());

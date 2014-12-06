@@ -45,6 +45,11 @@ public class GoogleSocialAdapter extends SocialConnectionAdapter<Google>{
     }
 
     @Override
+    public String getEmail(Google api) {
+        return api.plusOperations().getGoogleProfile().getAccountEmail();
+    }
+
+    @Override
     public Collection<ConnectionKey> fetchConnections(Google api) {
         return Collections.emptyList();
     }

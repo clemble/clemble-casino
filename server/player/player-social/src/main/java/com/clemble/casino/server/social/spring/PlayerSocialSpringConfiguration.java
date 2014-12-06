@@ -173,8 +173,9 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     public SocialSignInAdapter socialSignInAdapter(
         @Value("${clemble.registration.token.host}") String host,
         PlayerTokenUtils tokenUtils,
-        SocialConnectionDataAdapter connectionDataAdapter){
-        return new SocialSignInAdapter("http://" + host.substring(1), tokenUtils, connectionDataAdapter);
+        SocialConnectionDataAdapter connectionDataAdapter,
+        SystemNotificationService systemNotificationService){
+        return new SocialSignInAdapter("http://" + host.substring(1), tokenUtils, connectionDataAdapter, systemNotificationService);
     }
 
     @Bean

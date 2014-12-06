@@ -49,6 +49,10 @@ public class VKontakteSocialAdapter extends SocialConnectionAdapter<VKontakte>{
             .setGender(PlayerGender.parse(profile.getGender()));
     }
 
+    public String getEmail(VKontakte api) {
+        return null;
+    }
+
     @Override
     public Collection<ConnectionKey> fetchConnections(VKontakte api) {
         Collection<ConnectionKey> connections = api.

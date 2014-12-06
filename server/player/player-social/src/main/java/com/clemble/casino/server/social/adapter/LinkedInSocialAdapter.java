@@ -49,6 +49,11 @@ public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
     }
 
     @Override
+    public String getEmail(LinkedIn api) {
+        return api.profileOperations().getUserProfile().getEmailAddress();
+    }
+
+    @Override
     public Pair<String, String> toImageUrl(Connection<LinkedIn> connection) {
         String primaryImage = connection.getApi().profileOperations().getUserProfileFull().getProfilePictureUrl();
         String smallImage = primaryImage;
