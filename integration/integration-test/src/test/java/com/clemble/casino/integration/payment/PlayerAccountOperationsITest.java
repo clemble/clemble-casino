@@ -70,7 +70,7 @@ public class PlayerAccountOperationsITest {
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
-                return A.paymentOperations().myTransactions().size() == 2;
+                return A.paymentOperations().myTransactions().size() == 3;
             }
         }, 10_000);
         // Step 2. Fetching account and precondition
