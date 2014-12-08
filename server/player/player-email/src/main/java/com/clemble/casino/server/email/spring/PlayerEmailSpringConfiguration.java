@@ -1,11 +1,12 @@
 package com.clemble.casino.server.email.spring;
 
 import com.clemble.casino.server.email.PlayerEmail;
+import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
 import com.clemble.casino.server.email.listener.SystemEmailAddedEventListener;
 import com.clemble.casino.server.email.repository.PlayerEmailRepository;
-import com.clemble.casino.server.email.service.MandrillPlayerEmailService;
-import com.clemble.casino.server.email.service.PlayerEmailService;
-import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
+import com.clemble.casino.server.email.service.MandrillEmailSender;
+import com.clemble.casino.server.email.service.ServerEmailSender;
+import com.clemble.casino.server.email.service.ServerPlayerEmailService;
 import com.clemble.casino.server.event.email.SystemEmailVerifiedEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
@@ -23,6 +24,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 import java.io.IOException;
 
@@ -40,13 +43,26 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public SystemEmailAddedEventListener systemEmailAddedEventListener(
-        PlayerEmailRepository emailRepository,
-        PlayerEmailService playerEmailService,
-        SystemNotificationService systemNotificationService,
+        ServerPlayerEmailService serverPlayerEmailService,
         SystemNotificationServiceListener notificationServiceListener) {
-        SystemEmailAddedEventListener emailAddedEventListener = new SystemEmailAddedEventListener(playerEmailService, emailRepository, systemNotificationService);
+        SystemEmailAddedEventListener emailAddedEventListener = new SystemEmailAddedEventListener(serverPlayerEmailService);
         notificationServiceListener.subscribe(emailAddedEventListener);
         return emailAddedEventListener;
+    }
+
+    @Bean
+    public PlayerEmailServiceController playerEmailServiceController(ServerPlayerEmailService playerEmailService){
+        return new PlayerEmailServiceController(playerEmailService);
+    }
+
+    @Bean
+    public ServerPlayerEmailService playerEmailService(
+        @Value("${clemble.registration.token.host}") String host,
+        TextEncryptor textEncryptor,
+        ServerEmailSender emailService,
+        PlayerEmailRepository emailRepository,
+        SystemNotificationService systemNotificationService)  {
+        return new ServerPlayerEmailService(host, textEncryptor, emailService, emailRepository, systemNotificationService);
     }
 
     @Configuration
@@ -54,13 +70,17 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
     public static class Default implements SpringConfiguration {
 
         @Bean
-        public PlayerEmailService playerEmailService(final SystemNotificationService notificationService) {
-            return new PlayerEmailService() {
+        public ServerEmailSender serverEmailSender() {
+            return new ServerEmailSender() {
                 @Override
-                public void requestVerification(PlayerEmail email) {
-                    notificationService.send(new SystemEmailVerifiedEvent(email.getPlayer()));
+                public void sendVerification(String email, String url) {
                 }
             };
+        }
+
+        @Bean
+        public TextEncryptor textEncryptor() {
+            return Encryptors.noOpText();
         }
 
     }
@@ -68,6 +88,11 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
     @Configuration
     @Profile(SpringConfiguration.CLOUD)
     public static class Cloud implements SpringConfiguration {
+
+        @Bean
+        public TextEncryptor textEncryptor() {
+            return Encryptors.queryableText("Bv3tzRyRkQSUVR4Gq5fgUStq", "KRQL9Xq8JcgEKcjyCG9XX8R6");
+        }
 
         @Bean
         public MandrillApi mandrillApi(@Value("${clemble.email.mandrill.key}") String apiKey) throws IOException, MandrillApiError {
@@ -81,8 +106,8 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
         }
 
         @Bean
-        public MandrillPlayerEmailService mandrillPlayerEmailService(MandrillApi mandrillApi) {
-            return new MandrillPlayerEmailService(mandrillApi);
+        public MandrillEmailSender mandrillPlayerEmailService(MandrillApi mandrillApi) {
+            return new MandrillEmailSender(mandrillApi);
         }
 
     }

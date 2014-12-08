@@ -2,7 +2,7 @@ package com.clemble.casino.server.email.listener;
 
 import com.clemble.casino.server.email.PlayerEmail;
 import com.clemble.casino.server.email.repository.PlayerEmailRepository;
-import com.clemble.casino.server.email.service.PlayerEmailService;
+import com.clemble.casino.server.email.service.ServerPlayerEmailService;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.event.email.SystemEmailVerifiedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
@@ -13,29 +13,16 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
  */
 public class SystemEmailAddedEventListener implements SystemEventListener<SystemEmailAddedEvent> {
 
-    final private PlayerEmailRepository emailRepository;
-    final private PlayerEmailService playerEmailService;
-    final private SystemNotificationService systemNotificationService;
+    final private ServerPlayerEmailService serverPlayerEmailService;
 
-    public SystemEmailAddedEventListener(PlayerEmailService playerEmailService, PlayerEmailRepository emailRepository, SystemNotificationService systemNotificationService) {
-        this.emailRepository = emailRepository;
-        this.playerEmailService = playerEmailService;
-        this.systemNotificationService = systemNotificationService;
+    public SystemEmailAddedEventListener(ServerPlayerEmailService serverPlayerEmailService) {
+        this.serverPlayerEmailService = serverPlayerEmailService;
     }
 
     @Override
     public void onEvent(SystemEmailAddedEvent event) {
-        if (emailRepository.findOne(event.getPlayer()) == null) {
-            // Step 1. Creating player email
-            PlayerEmail playerEmail = new PlayerEmail(event.getPlayer(), event.getEmail());
-            // Step 2. Saving player email
-            if (event.getVerified()) {
-                systemNotificationService.send(new SystemEmailVerifiedEvent(event.getPlayer()));
-            } else {
-                playerEmailService.requestVerification(playerEmail);
-            }
-            emailRepository.save(playerEmail);
-        }
+        // Step 1. Appending player email
+        serverPlayerEmailService.add(event.getPlayer(), event.getEmail(), event.getVerified());
     }
 
     @Override

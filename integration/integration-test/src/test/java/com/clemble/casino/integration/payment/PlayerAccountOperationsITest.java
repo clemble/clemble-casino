@@ -70,7 +70,7 @@ public class PlayerAccountOperationsITest {
         AsyncCompletionUtils.check(new Check() {
             @Override
             public boolean check() {
-                return A.paymentOperations().myTransactions().size() == 3;
+                return A.paymentOperations().myTransactions().size() == 2;
             }
         }, 10_000);
         // Step 2. Fetching account and precondition
@@ -93,16 +93,8 @@ public class PlayerAccountOperationsITest {
         paymentOperations = dailyBonusTransaction.getOperations();
         Money dailyBonusAmount = paymentOperations.iterator().next().getAmount();
         // Step 4.2 Checking email bonus transaction (Which might be delayed, because of the system event delays)
-        PaymentTransaction emailBonusTransaction = AsyncCompletionUtils.get(new Get<PaymentTransaction>(){
-            @Override
-            public PaymentTransaction get() {
-                return A.paymentOperations().myTransactionsBySource("email").get(0);
-            }
-        }, 5000);
-        paymentOperations = emailBonusTransaction.getOperations();
-        Money emailBonusAmount = paymentOperations.iterator().next().getAmount();
         // Step 5. Checking matches
-        assertEquals(transactionAmount.add(dailyBonusAmount.getAmount()).add(emailBonusAmount.getAmount()), A.accountService().myAccount().getMoney(Currency.FakeMoney));
+        assertEquals(transactionAmount.add(dailyBonusAmount.getAmount()), A.accountService().myAccount().getMoney(Currency.FakeMoney));
     }
 
     @Test

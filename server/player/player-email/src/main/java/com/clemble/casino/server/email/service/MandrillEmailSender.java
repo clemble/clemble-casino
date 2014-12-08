@@ -1,6 +1,5 @@
 package com.clemble.casino.server.email.service;
 
-import com.clemble.casino.server.email.PlayerEmail;
 import com.google.common.collect.ImmutableList;
 import com.microtripit.mandrillapp.lutung.MandrillApi;
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
@@ -13,26 +12,26 @@ import java.io.IOException;
 /**
  * Created by mavarazy on 12/6/14.
  */
-public class MandrillPlayerEmailService implements PlayerEmailService {
+public class MandrillEmailSender implements ServerEmailSender {
 
     final private MandrillApi mandrillApi;
 
-    public MandrillPlayerEmailService(MandrillApi mandrillApi) {
+    public MandrillEmailSender(MandrillApi mandrillApi) {
         this.mandrillApi = mandrillApi;
     }
 
     @Override
-    public void requestVerification(PlayerEmail email) {
+    public void sendVerification(String email, String url) {
         // Step 1. Creating message
         MandrillMessage message = new MandrillMessage();
         message.setSubject("Please verify your email address");
-        message.setHtml("<h1>Hi pal!</h1><br />Really, I'm just saying hi!");
+        message.setHtml("<h1>Hi pal!</h1><br/> Checking email verification does work " + url + "!");
         message.setAutoText(true);
         message.setFromEmail("notification@clemble.com");
         message.setFromName("Clemble Notification");
         // Step 2. Adding recipient
         Recipient recipient = new Recipient();
-        recipient.setEmail(email.getEmail());
+        recipient.setEmail(url);
         message.setTo(ImmutableList.of(recipient));
         // Step 3. Add verification tag
         message.setPreserveRecipients(true);
@@ -46,4 +45,5 @@ public class MandrillPlayerEmailService implements PlayerEmailService {
             e.printStackTrace();
         }
     }
+
 }
