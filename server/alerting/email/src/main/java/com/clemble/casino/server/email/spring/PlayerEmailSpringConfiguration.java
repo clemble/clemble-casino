@@ -88,8 +88,11 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
     public static class Cloud implements SpringConfiguration {
 
         @Bean
-        public TextEncryptor textEncryptor() {
-            return Encryptors.queryableText("Bv3tzRyRkQSUVR4Gq5fgUStq", "KRQL9Xq8JcgEKcjyCG9XX8R6");
+        public TextEncryptor textEncryptor(
+            @Value("${clemble.email.encryptor.password}") String password,
+            @Value("${clemble.email.encryptor.salt}") String salt
+        ) {
+            return Encryptors.queryableText(password, salt);
         }
 
         @Bean

@@ -135,8 +135,8 @@ public class PlayerAccountOperationsITest {
 
             BvsA.syncWith(AvsB);
 
-// TODO figure this out            assertFalse(BvsA.isAlive());
-// TODO figure this out           assertFalse(AvsB.isAlive());
+//            assertFalse(BvsA.isAlive());
+//            assertFalse(AvsB.isAlive());
 
             final Money price = AvsB.getConfiguration().getPrice();
 

@@ -21,7 +21,10 @@ import java.net.UnknownHostException;
 public class MongoSpringConfiguration implements SpringConfiguration {
 
     @Bean
-    public MongoTemplate mongoTemplate(@Value("${clemble.db.mongo.host}") String host, @Value("${clemble.db.mongo.port}") int port, @Value("${clemble.db.mongo.name}") String name) throws UnknownHostException {
+    public MongoTemplate mongoTemplate(
+        @Value("${clemble.db.mongo.host}") String host,
+        @Value("${clemble.db.mongo.port}") int port,
+        @Value("${clemble.db.mongo.name}") String name) throws UnknownHostException {
         MongoClient mongoClient = new MongoClient(host, port);
         MongoTemplate template = new MongoTemplate(mongoClient, name);
 

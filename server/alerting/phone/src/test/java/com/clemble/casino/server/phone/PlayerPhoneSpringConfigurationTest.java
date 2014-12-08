@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Created by mavarazy on 12/8/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@Ignore
 @ContextConfiguration(classes = PlayerPhoneSpringConfiguration.class)
 public class PlayerPhoneSpringConfigurationTest {
 
