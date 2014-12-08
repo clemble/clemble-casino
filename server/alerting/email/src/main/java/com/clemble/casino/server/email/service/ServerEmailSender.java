@@ -5,6 +5,8 @@ package com.clemble.casino.server.email.service;
  */
 public interface ServerEmailSender {
 
+    void send(String email, String text);
+
     public void sendVerification(String email, String url);
 
 }

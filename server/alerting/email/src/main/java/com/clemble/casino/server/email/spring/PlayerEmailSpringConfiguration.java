@@ -2,6 +2,7 @@ package com.clemble.casino.server.email.spring;
 
 import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
 import com.clemble.casino.server.email.listener.SystemEmailAddedEventListener;
+import com.clemble.casino.server.email.listener.SystemEmailSendRequestEventListener;
 import com.clemble.casino.server.email.repository.PlayerEmailRepository;
 import com.clemble.casino.server.email.service.MandrillEmailSender;
 import com.clemble.casino.server.email.service.ServerEmailSender;
@@ -49,6 +50,16 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public SystemEmailSendRequestEventListener systemEmailSendRequestEventListener(
+        ServerEmailSender emailSender,
+        PlayerEmailRepository emailRepository,
+        SystemNotificationServiceListener notificationServiceListener) {
+        SystemEmailSendRequestEventListener emailAddedEventListener = new SystemEmailSendRequestEventListener(emailSender, emailRepository);
+        notificationServiceListener.subscribe(emailAddedEventListener);
+        return emailAddedEventListener;
+    }
+
+    @Bean
     public PlayerEmailServiceController playerEmailServiceController(ServerPlayerEmailService playerEmailService){
         return new PlayerEmailServiceController(playerEmailService);
     }
@@ -70,6 +81,10 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
         @Bean
         public ServerEmailSender serverEmailSender() {
             return new ServerEmailSender() {
+                @Override
+                public void send(String email, String text) {
+                }
+
                 @Override
                 public void sendVerification(String email, String url) {
                 }
