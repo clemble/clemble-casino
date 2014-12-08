@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.integration</groupId>
         <artifactId>integration</artifactId>
-        <version>0.12.3-SNAPSHOT</version>
+        <version>0.14.0-SNAPSHOT</version>
     </parent>
     <artifactId>integration-test</artifactId>
     <dependencies>
@@ -57,7 +57,7 @@
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
-            <artifactId>player-email</artifactId>
+            <artifactId>email</artifactId>
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
@@ -198,17 +198,17 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
-                                            <artifactId>player-email</artifactId>
+                                            <artifactId>email</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
-                                            <destFileName>player-email.war</destFileName>
+                                            <destFileName>email.war</destFileName>
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
-                                            <artifactId>player-notification</artifactId>
+                                            <artifactId>notification</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
-                                            <destFileName>player-notification.war</destFileName>
+                                            <destFileName>notification.war</destFileName>
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
@@ -308,11 +308,11 @@
                                     <contextPath>/social</contextPath>
                                 </contextHandler>
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/player-email.war</war>
+                                    <war>${project.build.directory}/wars-to-be-tested/email.war</war>
                                     <contextPath>/email</contextPath>
                                 </contextHandler>
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-                                    <war>${project.build.directory}/wars-to-be-tested/player-notification.war</war>
+                                    <war>${project.build.directory}/wars-to-be-tested/notification.war</war>
                                     <contextPath>/notification</contextPath>
                                 </contextHandler>
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">

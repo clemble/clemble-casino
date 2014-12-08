@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.clemble.casino</groupId>
     <artifactId>parent</artifactId>
-    <version>0.12.3-SNAPSHOT</version>
+    <version>0.14.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>public</module>
@@ -200,12 +200,17 @@
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
-                <artifactId>player-email</artifactId>
+                <artifactId>email</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino.server</groupId>
-                <artifactId>player-notification</artifactId>
+                <artifactId>notification</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino.server</groupId>
+                <artifactId>phone</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

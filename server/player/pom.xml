@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.server</groupId>
         <artifactId>server</artifactId>
-        <version>0.12.3-SNAPSHOT</version>
+        <version>0.14.0-SNAPSHOT</version>
     </parent>
     <artifactId>player</artifactId>
     <packaging>pom</packaging>
@@ -14,10 +14,7 @@
         <module>player-connection</module>
         <module>player-presence</module>
         <module>player-social</module>
-        <module>player-notification</module>
         <module>player-feed</module>
-        <module>player-email</module>
-        <module>player-phone</module>
     </modules>
 
     <dependencies>

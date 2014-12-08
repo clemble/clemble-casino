@@ -4,8 +4,6 @@ import com.clemble.casino.notification.PlayerNotification;
 import com.clemble.casino.player.service.PlayerNotificationService;
 import com.clemble.casino.server.notification.controller.PlayerNotificationServiceController;
 
-import java.util.List;
-
 /**
  * Created by mavarazy on 11/29/14.
  */

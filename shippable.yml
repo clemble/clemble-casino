@@ -28,23 +28,25 @@ after_success:
 
   -  aws s3 rm s3://clemble/production/api --recursive
 
-  - aws s3 cp ./server/player/player-registration/target/player-registration-0.12.3-SNAPSHOT.war  s3://clemble/production/api/player/registration.war
-  - aws s3 cp ./server/player/player-social/target/player-social-0.12.3-SNAPSHOT.war              s3://clemble/production/api/player/social.war
-  - aws s3 cp ./server/player/player-presence/target/player-presence-0.12.3-SNAPSHOT.war          s3://clemble/production/api/player/presence.war
-  - aws s3 cp ./server/player/player-profile/target/player-profile-0.12.3-SNAPSHOT.war            s3://clemble/production/api/player/profile.war
-  - aws s3 cp ./server/player/player-connection/target/player-connection-0.12.3-SNAPSHOT.war      s3://clemble/production/api/player/connection.war
-  - aws s3 cp ./server/player/player-notification/target/player-notification-0.12.3-SNAPSHOT.war  s3://clemble/production/api/player/notification.war
-  - aws s3 cp ./server/player/player-feed/target/player-feed-0.12.3-SNAPSHOT.war                  s3://clemble/production/api/player/feed.war
-  - aws s3 cp ./server/player/player-email/target/player-email-0.12.3-SNAPSHOT.war                s3://clemble/production/api/player/email.war
+  - aws s3 cp ./server/player/player-registration/target/player-registration-0.14.0-SNAPSHOT.war  s3://clemble/production/api/player/registration.war
+  - aws s3 cp ./server/player/player-social/target/player-social-0.14.0-SNAPSHOT.war              s3://clemble/production/api/player/social.war
+  - aws s3 cp ./server/player/player-presence/target/player-presence-0.14.0-SNAPSHOT.war          s3://clemble/production/api/player/presence.war
+  - aws s3 cp ./server/player/player-profile/target/player-profile-0.14.0-SNAPSHOT.war            s3://clemble/production/api/player/profile.war
+  - aws s3 cp ./server/player/player-connection/target/player-connection-0.14.0-SNAPSHOT.war      s3://clemble/production/api/player/connection.war
+  - aws s3 cp ./server/player/player-feed/target/player-feed-0.14.0-SNAPSHOT.war                  s3://clemble/production/api/player/feed.war
 
-  - aws s3 cp ./server/payment/payment-transaction/target/payment-transaction-0.12.3-SNAPSHOT.war s3://clemble/production/api/payment/payment.war
-  - aws s3 cp ./server/payment/payment-bonus/target/payment-bonus-0.12.3-SNAPSHOT.war             s3://clemble/production/api/payment/bonus.war
+  - aws s3 cp ./server/alerting/notification/target/notification-0.14.0-SNAPSHOT.war              s3://clemble/production/api/alerting/notification.war
+  - aws s3 cp ./server/alerting/email/target/email-0.14.0-SNAPSHOT.war                            s3://clemble/production/api/alerting/email.war
+  - aws s3 cp ./server/alerting/phone/target/phone-0.14.0-SNAPSHOT.war                            s3://clemble/production/api/alerting/phone.war
 
-  - aws s3 cp ./server/goal/goal-configuration/target/goal-configuration-0.12.3-SNAPSHOT.war      s3://clemble/production/api/goal/configuration.war
-  - aws s3 cp ./server/goal/goal-construction/target/goal-construction-0.12.3-SNAPSHOT.war        s3://clemble/production/api/goal/construction.war
-  - aws s3 cp ./server/goal/goal-management/target/goal-management-0.12.3-SNAPSHOT.war            s3://clemble/production/api/goal/management.war
+  - aws s3 cp ./server/payment/payment-transaction/target/payment-transaction-0.14.0-SNAPSHOT.war s3://clemble/production/api/payment/payment.war
+  - aws s3 cp ./server/payment/payment-bonus/target/payment-bonus-0.14.0-SNAPSHOT.war             s3://clemble/production/api/payment/bonus.war
 
-  - aws s3 cp ./server/schedule/target/schedule-0.12.3-SNAPSHOT.war                               s3://clemble/production/api/schedule.war
+  - aws s3 cp ./server/goal/goal-configuration/target/goal-configuration-0.14.0-SNAPSHOT.war      s3://clemble/production/api/goal/configuration.war
+  - aws s3 cp ./server/goal/goal-construction/target/goal-construction-0.14.0-SNAPSHOT.war        s3://clemble/production/api/goal/construction.war
+  - aws s3 cp ./server/goal/goal-management/target/goal-management-0.14.0-SNAPSHOT.war            s3://clemble/production/api/goal/management.war
+
+  - aws s3 cp ./server/schedule/target/schedule-0.14.0-SNAPSHOT.war                               s3://clemble/production/api/schedule.war
 
   # Deploying apps
   # bonus
@@ -62,10 +64,11 @@ after_success:
   - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 6277fac9-fd01-4102-b604-e0fa810a6819 --command '{"Name":"deploy"}'
   # player social
   - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 7ff88b06-2c03-4793-abc1-57b7ac8ed087 --command '{"Name":"deploy"}'
-  # player notification
-  - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 135471cc-c492-4625-aea4-0503f36754ec --command '{"Name":"deploy"}'
   # player feed
   - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 7a315009-e771-4513-8e59-4cd9d80178a8 --command '{"Name":"deploy"}'
+
+  # alerting notification
+  - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 135471cc-c492-4625-aea4-0503f36754ec --command '{"Name":"deploy"}'
 
   # goal goal configuration
   - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 74fcbb1d-5a54-4841-a7e8-518cd58b03d0 --command '{"Name":"deploy"}'
