@@ -10,6 +10,7 @@ import com.clemble.casino.server.event.goal.*;
 import com.clemble.casino.server.event.notification.SystemNotificationAddEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
+import com.clemble.casino.server.event.phone.SystemPhoneVerifiedEvent;
 import com.clemble.casino.server.event.player.*;
 import com.clemble.casino.server.event.post.SystemPostAddEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
@@ -48,7 +49,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemNotificationAddEvent.CHANNEL, value = SystemNotificationAddEvent.class),
     @JsonSubTypes.Type(name = SystemPostAddEvent.CHANNEL, value = SystemPostAddEvent.class),
     @JsonSubTypes.Type(name = SystemEmailAddedEvent.CHANNEL, value = SystemEmailAddedEvent.class),
-    @JsonSubTypes.Type(name = SystemEmailVerifiedEvent.CHANNEL, value = SystemEmailVerifiedEvent.class)
+    @JsonSubTypes.Type(name = SystemEmailVerifiedEvent.CHANNEL, value = SystemEmailVerifiedEvent.class),
+    @JsonSubTypes.Type(name = SystemPhoneVerifiedEvent.CHANNEL, value = SystemPhoneVerifiedEvent.class)
 })
 public interface SystemEvent extends Event {
 

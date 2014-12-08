@@ -86,6 +86,19 @@ public class PaymentBonusSpringConfiguration implements SpringConfiguration {
 
     @Bean
     @DependsOn("bonusService")
+    public PhoneVerifiedEventListener phoneVerifiedEventListener(
+            BonusService bonusService,
+            SystemNotificationServiceListener notificationServiceListener,
+            @Value("${clemble.bonus.phone.currency}") Currency phoneCurrency,
+            @Value("${clemble.bonus.phone.amount}") int phoneBonus) {
+        Money bonus = new Money(phoneCurrency, phoneBonus);
+        PhoneVerifiedEventListener phoneVerifiedEventListener = new PhoneVerifiedEventListener(bonus, bonusService);
+        notificationServiceListener.subscribe(phoneVerifiedEventListener);
+        return phoneVerifiedEventListener;
+    }
+
+    @Bean
+    @DependsOn("bonusService")
     public SocialAddedBonusEventListener socialAddedBonusEventListener(
             BonusService bonusService,
             SystemNotificationServiceListener notificationServiceListener,
