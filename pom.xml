@@ -45,6 +45,8 @@
         <spring-data-redis.version>1.4.1.RELEASE</spring-data-redis.version>
         <sprind-data-neo4j.version>3.2.1.RELEASE</sprind-data-neo4j.version>
         <redis.clients.version>2.6.0</redis.clients.version>
+        <aws.java-sdk.version>1.9.9</aws.java-sdk.version>
+        <twilio.version>3.4.5</twilio.version>
         <!-- NoSQL dependencies -->
         <lettuce.version>2.3.3</lettuce.version>
         <lutung.version>0.0.5</lutung.version>
@@ -451,6 +453,23 @@
                 <artifactId>spring-data-mongodb</artifactId>
                 <version>${spring-data-mongo.version}</version>
             </dependency>
+
+            <!-- Notification library dependencies -->
+
+            <!-- SMS Notification library dependencies -->
+
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk</artifactId>
+                <version>${aws.java-sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.twilio.sdk</groupId>
+                <artifactId>twilio-java-sdk</artifactId>
+                <version>${twilio.version}</version>
+            </dependency>
+
+            <!-- Email Notification library dependencies -->
 
             <dependency>
                 <groupId>com.mandrillapp.wrapper.lutung</groupId>

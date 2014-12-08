@@ -17,6 +17,7 @@
         <module>player-notification</module>
         <module>player-feed</module>
         <module>player-email</module>
+        <module>player-phone</module>
     </modules>
 
     <dependencies>
