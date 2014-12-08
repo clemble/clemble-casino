@@ -1,12 +1,14 @@
 package com.clemble.casino.server.phone.spring;
 
 import com.clemble.casino.server.phone.controller.PlayerPhoneServiceController;
+import com.clemble.casino.server.phone.listener.SystemPhoneSMSRequestEventListener;
 import com.clemble.casino.server.phone.repository.PendingPlayerPhoneRepository;
 import com.clemble.casino.server.phone.repository.PlayerPhoneRepository;
 import com.clemble.casino.server.phone.service.PhoneCodeGenerator;
 import com.clemble.casino.server.phone.service.ServerPlayerPhoneService;
 import com.clemble.casino.server.phone.service.ServerSMSSender;
 import com.clemble.casino.server.phone.service.TwilioSMSSender;
+import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
@@ -47,6 +49,16 @@ public class PlayerPhoneSpringConfiguration implements SpringConfiguration {
         PlayerPhoneRepository phoneRepository,
         PendingPlayerPhoneRepository pendingPlayerPhoneRepository) {
         return new ServerPlayerPhoneService(phoneCodeGenerator, serverSMSSender, phoneRepository, pendingPlayerPhoneRepository);
+    }
+
+    @Bean
+    public SystemPhoneSMSRequestEventListener systemPhoneSMSRequestEventListener(
+        ServerSMSSender smsSender,
+        PlayerPhoneRepository phoneRepository,
+        SystemNotificationServiceListener notificationServiceListener) {
+        SystemPhoneSMSRequestEventListener smsSendEventListener = new SystemPhoneSMSRequestEventListener(smsSender, phoneRepository);
+        notificationServiceListener.subscribe(smsSendEventListener);
+        return smsSendEventListener;
     }
 
     @Configuration
