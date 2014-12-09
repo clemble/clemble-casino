@@ -1,8 +1,9 @@
 package com.clemble.casino.server.phone.service;
 
+import com.clemble.casino.player.PlayerPhone;
 import com.clemble.casino.player.service.PlayerPhoneService;
 import com.clemble.casino.server.phone.PendingPlayerPhone;
-import com.clemble.casino.server.phone.PlayerPhone;
+import com.clemble.casino.server.phone.ServerPlayerPhone;
 import com.clemble.casino.server.phone.repository.PendingPlayerPhoneRepository;
 import com.clemble.casino.server.phone.repository.PlayerPhoneRepository;
 
@@ -24,7 +25,7 @@ public class ServerPlayerPhoneService implements PlayerPhoneService {
     }
 
     @Override
-    public boolean add(String phone) {
+    public boolean add(PlayerPhone phone) {
         throw new UnsupportedOperationException();
     }
 
@@ -62,9 +63,9 @@ public class ServerPlayerPhoneService implements PlayerPhoneService {
         if(!pendingPlayerPhone.getCode().equals(code))
             return false;
         // Step 2. Adding player phone
-        PlayerPhone playerPhone = new PlayerPhone(pendingPlayerPhone.getPlayer(), pendingPlayerPhone.getPhone());
+        ServerPlayerPhone serverPlayerPhone = new ServerPlayerPhone(pendingPlayerPhone.getPlayer(), pendingPlayerPhone.getPhone());
         // Step 3. Saving player phone
-        phoneRepository.save(playerPhone);
+        phoneRepository.save(serverPlayerPhone);
         // Step 4. Returning true
         return true;
     }

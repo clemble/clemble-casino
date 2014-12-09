@@ -1,9 +1,8 @@
 package com.clemble.casino.server.phone.listener;
 
 import com.clemble.casino.server.event.phone.SystemPhoneSMSSendRequestEvent;
-import com.clemble.casino.server.phone.PlayerPhone;
+import com.clemble.casino.server.phone.ServerPlayerPhone;
 import com.clemble.casino.server.phone.repository.PlayerPhoneRepository;
-import com.clemble.casino.server.phone.service.ServerPlayerPhoneService;
 import com.clemble.casino.server.phone.service.ServerSMSSender;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 
@@ -23,7 +22,7 @@ public class SystemPhoneSMSRequestEventListener implements SystemEventListener<S
     @Override
     public void onEvent(SystemPhoneSMSSendRequestEvent event) {
         // Step 1. Fetching phone
-        PlayerPhone phone = phoneRepository.findOne(event.getPlayer());
+        ServerPlayerPhone phone = phoneRepository.findOne(event.getPlayer());
         // Step 2. Sending SMS
         smsSender.send(phone.getPhone(), event.getText());
     }

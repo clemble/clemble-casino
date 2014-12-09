@@ -1,5 +1,6 @@
 package com.clemble.casino.server.phone.controller;
 
+import com.clemble.casino.player.PlayerPhone;
 import com.clemble.casino.player.PlayerPhoneWebMapping;
 import com.clemble.casino.player.service.PlayerPhoneService;
 import com.clemble.casino.server.phone.service.ServerPlayerPhoneService;
@@ -18,13 +19,13 @@ public class PlayerPhoneServiceController implements PlayerPhoneService {
     }
 
     @Override
-    public boolean add(String phone) {
+    public boolean add(PlayerPhone phone) {
         throw new UnsupportedOperationException();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = PlayerPhoneWebMapping.MY)
-    public boolean add(@CookieValue("player") String me, @RequestBody String phone) {
-        return playerPhoneService.add(me, phone);
+    public boolean add(@CookieValue("player") String me, @RequestBody PlayerPhone phone) {
+        return playerPhoneService.add(me, phone.getPhone());
     }
 
     @Override

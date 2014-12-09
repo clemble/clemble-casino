@@ -8,14 +8,14 @@ import org.springframework.data.annotation.Id;
 /**
  * Created by mavarazy on 12/8/14.
  */
-public class PlayerPhone implements PlayerAware {
+public class ServerPlayerPhone implements PlayerAware {
 
     @Id
     final private String player;
     final private String phone;
 
     @JsonCreator
-    public PlayerPhone(@JsonProperty(PLAYER) String player, @JsonProperty("phone") String phone) {
+    public ServerPlayerPhone(@JsonProperty(PLAYER) String player, @JsonProperty("phone") String phone) {
         this.player = player;
         this.phone = phone;
     }
@@ -39,7 +39,7 @@ public class PlayerPhone implements PlayerAware {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PlayerPhone that = (PlayerPhone) o;
+        ServerPlayerPhone that = (ServerPlayerPhone) o;
 
         if (!phone.equals(that.phone)) return false;
         if (!player.equals(that.player)) return false;
