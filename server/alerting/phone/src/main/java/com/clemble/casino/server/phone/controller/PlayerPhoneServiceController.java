@@ -1,6 +1,7 @@
 package com.clemble.casino.server.phone.controller;
 
 import com.clemble.casino.player.PlayerPhone;
+import com.clemble.casino.player.PlayerPhoneVerification;
 import com.clemble.casino.player.PlayerPhoneWebMapping;
 import com.clemble.casino.player.service.PlayerPhoneService;
 import com.clemble.casino.server.phone.service.ServerPlayerPhoneService;
@@ -39,13 +40,13 @@ public class PlayerPhoneServiceController implements PlayerPhoneService {
     }
 
     @Override
-    public boolean verify(String code) {
+    public boolean verify(PlayerPhoneVerification code) {
         throw new UnsupportedOperationException();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = PlayerPhoneWebMapping.VERIFY)
-    public boolean verify(@CookieValue("player") String me, @PathVariable("verificationCode")String code) {
-        return playerPhoneService.verify(me, code);
+    @RequestMapping(method = RequestMethod.POST, value = PlayerPhoneWebMapping.MY_VERIFY)
+    public boolean verify(@CookieValue("player") String me, @RequestBody PlayerPhoneVerification code) {
+        return playerPhoneService.verify(me, code.getCode());
     }
 
 }

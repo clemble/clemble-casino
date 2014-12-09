@@ -8,6 +8,7 @@ import com.clemble.casino.server.phone.service.PhoneCodeGenerator;
 import com.clemble.casino.server.phone.service.ServerPlayerPhoneService;
 import com.clemble.casino.server.phone.service.ServerSMSSender;
 import com.clemble.casino.server.phone.service.TwilioSMSSender;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
@@ -47,8 +48,9 @@ public class PlayerPhoneSpringConfiguration implements SpringConfiguration {
         PhoneCodeGenerator phoneCodeGenerator,
         ServerSMSSender serverSMSSender,
         PlayerPhoneRepository phoneRepository,
-        PendingPlayerPhoneRepository pendingPlayerPhoneRepository) {
-        return new ServerPlayerPhoneService(phoneCodeGenerator, serverSMSSender, phoneRepository, pendingPlayerPhoneRepository);
+        PendingPlayerPhoneRepository pendingPlayerPhoneRepository,
+        SystemNotificationService systemNotificationService) {
+        return new ServerPlayerPhoneService(phoneCodeGenerator, serverSMSSender, phoneRepository, pendingPlayerPhoneRepository, systemNotificationService);
     }
 
     @Bean

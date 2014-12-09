@@ -1,11 +1,14 @@
 package com.clemble.casino.server.phone.service;
 
 import com.clemble.casino.player.PlayerPhone;
+import com.clemble.casino.player.PlayerPhoneVerification;
 import com.clemble.casino.player.service.PlayerPhoneService;
+import com.clemble.casino.server.event.phone.SystemPhoneVerifiedEvent;
 import com.clemble.casino.server.phone.PendingPlayerPhone;
 import com.clemble.casino.server.phone.ServerPlayerPhone;
 import com.clemble.casino.server.phone.repository.PendingPlayerPhoneRepository;
 import com.clemble.casino.server.phone.repository.PlayerPhoneRepository;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 /**
  * Created by mavarazy on 12/8/14.
@@ -15,13 +18,20 @@ public class ServerPlayerPhoneService implements PlayerPhoneService {
     final private PhoneCodeGenerator codeGenerator;
     final private ServerSMSSender serverSMSSender;
     final private PlayerPhoneRepository phoneRepository;
+    final private SystemNotificationService systemNotificationService;
     final private PendingPlayerPhoneRepository pendingPlayerPhoneRepository;
 
-    public ServerPlayerPhoneService(PhoneCodeGenerator codeGenerator, ServerSMSSender serverSMSSender, PlayerPhoneRepository phoneRepository, PendingPlayerPhoneRepository pendingPlayerPhoneRepository) {
+    public ServerPlayerPhoneService(
+        PhoneCodeGenerator codeGenerator,
+        ServerSMSSender serverSMSSender,
+        PlayerPhoneRepository phoneRepository,
+        PendingPlayerPhoneRepository pendingPlayerPhoneRepository,
+        SystemNotificationService systemNotificationService) {
         this.codeGenerator = codeGenerator;
         this.serverSMSSender = serverSMSSender;
         this.phoneRepository = phoneRepository;
         this.pendingPlayerPhoneRepository = pendingPlayerPhoneRepository;
+        this.systemNotificationService = systemNotificationService;
     }
 
     @Override
@@ -53,7 +63,7 @@ public class ServerPlayerPhoneService implements PlayerPhoneService {
     }
 
     @Override
-    public boolean verify(String code) {
+    public boolean verify(PlayerPhoneVerification code) {
         throw new UnsupportedOperationException();
     }
 
@@ -66,6 +76,8 @@ public class ServerPlayerPhoneService implements PlayerPhoneService {
         ServerPlayerPhone serverPlayerPhone = new ServerPlayerPhone(pendingPlayerPhone.getPlayer(), pendingPlayerPhone.getPhone());
         // Step 3. Saving player phone
         phoneRepository.save(serverPlayerPhone);
+        // Step 3.1 Sending phone verification event
+        systemNotificationService.send(new SystemPhoneVerifiedEvent(me));
         // Step 4. Returning true
         return true;
     }
