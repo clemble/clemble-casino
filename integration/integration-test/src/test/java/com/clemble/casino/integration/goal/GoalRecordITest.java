@@ -8,6 +8,8 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.due.GoalDueRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
+import com.clemble.casino.goal.lifecycle.configuration.rule.remind.EmailReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.remind.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.remind.RemindRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
@@ -56,7 +58,8 @@ public class GoalRecordITest {
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
         new GoalDueRule("facebook"),
-        new RemindRule(TimeUnit.HOURS.toMillis(4), TimeUnit.HOURS.toMillis(2)),
+        new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
+        new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
         new GoalStartRule(1)
     );
 
