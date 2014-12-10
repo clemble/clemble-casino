@@ -60,8 +60,10 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerEmailServiceController playerEmailServiceController(ServerPlayerEmailService playerEmailService){
-        return new PlayerEmailServiceController(playerEmailService);
+    public PlayerEmailServiceController playerEmailServiceController(
+        @Value("${clemble.registration.token.host}") String host,
+        ServerPlayerEmailService playerEmailService){
+        return new PlayerEmailServiceController("http://" + host.substring(1), playerEmailService);
     }
 
     @Bean

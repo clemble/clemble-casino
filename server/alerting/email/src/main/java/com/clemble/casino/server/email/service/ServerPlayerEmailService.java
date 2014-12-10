@@ -44,7 +44,7 @@ public class ServerPlayerEmailService implements PlayerEmailService {
         }
         // Step 3. Generating url
         // WARNING do not change the order, this order is in order to keep no limit on player ids
-        String url = host + textEncryptor.encrypt(email + ENCRYPT_SEPARATOR + player);
+        String url = host + "verify?code=" + textEncryptor.encrypt(email + ENCRYPT_SEPARATOR + player);
         // Step 4. Sending verification email
         emailService.sendVerification(email, url);
         // Step 5. Returning url
