@@ -2,9 +2,7 @@ package com.clemble.casino.server.profile.spring;
 
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
-import com.clemble.casino.server.profile.listener.PlayerImageChangedEventListener;
-import com.clemble.casino.server.profile.listener.PlayerProfileCreationEventListener;
-import com.clemble.casino.server.profile.listener.PlayerProfileSocialAddedEventListener;
+import com.clemble.casino.server.profile.listener.*;
 import com.clemble.casino.server.profile.repository.MongoPlayerProfileRepository;
 import com.clemble.casino.server.profile.repository.PlayerImageRedirectRepository;
 import com.clemble.casino.server.profile.repository.PlayerProfileRepository;
@@ -44,6 +42,20 @@ public class PlayerProfileSpringConfiguration implements SpringConfiguration {
         PlayerProfileSocialAddedEventListener socialAddedEventListener = new PlayerProfileSocialAddedEventListener(profileRepository);
         serviceListener.subscribe(socialAddedEventListener);
         return socialAddedEventListener;
+    }
+
+    @Bean
+    public PlayerProfilePhoneVerifiedEventListener playerProfilePhoneVerifiedEventListener(PlayerProfileRepository profileRepository, SystemNotificationServiceListener serviceListener) {
+        PlayerProfilePhoneVerifiedEventListener phoneVerifiedEventListener = new PlayerProfilePhoneVerifiedEventListener(profileRepository);
+        serviceListener.subscribe(phoneVerifiedEventListener);
+        return phoneVerifiedEventListener;
+    }
+
+    @Bean
+    public PlayerProfileEmailVerifiedEventListener playerProfileEmailVerifiedEventListener(PlayerProfileRepository profileRepository, SystemNotificationServiceListener serviceListener) {
+        PlayerProfileEmailVerifiedEventListener emailVerifiedEventListener = new PlayerProfileEmailVerifiedEventListener(profileRepository);
+        serviceListener.subscribe(emailVerifiedEventListener);
+        return emailVerifiedEventListener;
     }
 
     @Bean
