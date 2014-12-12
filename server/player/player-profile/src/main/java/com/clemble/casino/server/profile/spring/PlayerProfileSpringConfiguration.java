@@ -1,5 +1,6 @@
 package com.clemble.casino.server.profile.spring;
 
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.profile.listener.*;
@@ -11,6 +12,7 @@ import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -38,22 +40,31 @@ public class PlayerProfileSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerProfileSocialAddedEventListener playerProfileSocialAddedEventListener(PlayerProfileRepository profileRepository, SystemNotificationServiceListener serviceListener) {
-        PlayerProfileSocialAddedEventListener socialAddedEventListener = new PlayerProfileSocialAddedEventListener(profileRepository);
+    public PlayerProfileSocialAddedEventListener playerProfileSocialAddedEventListener(
+        PlayerProfileRepository profileRepository,
+        @Qualifier("playerNotificationService")  ServerNotificationService notificationService,
+        SystemNotificationServiceListener serviceListener) {
+        PlayerProfileSocialAddedEventListener socialAddedEventListener = new PlayerProfileSocialAddedEventListener(profileRepository, notificationService);
         serviceListener.subscribe(socialAddedEventListener);
         return socialAddedEventListener;
     }
 
     @Bean
-    public PlayerProfilePhoneVerifiedEventListener playerProfilePhoneVerifiedEventListener(PlayerProfileRepository profileRepository, SystemNotificationServiceListener serviceListener) {
-        PlayerProfilePhoneVerifiedEventListener phoneVerifiedEventListener = new PlayerProfilePhoneVerifiedEventListener(profileRepository);
+    public PlayerProfilePhoneVerifiedEventListener playerProfilePhoneVerifiedEventListener(
+        PlayerProfileRepository profileRepository,
+        @Qualifier("playerNotificationService")  ServerNotificationService notificationService,
+        SystemNotificationServiceListener serviceListener) {
+        PlayerProfilePhoneVerifiedEventListener phoneVerifiedEventListener = new PlayerProfilePhoneVerifiedEventListener(profileRepository, notificationService);
         serviceListener.subscribe(phoneVerifiedEventListener);
         return phoneVerifiedEventListener;
     }
 
     @Bean
-    public PlayerProfileEmailVerifiedEventListener playerProfileEmailVerifiedEventListener(PlayerProfileRepository profileRepository, SystemNotificationServiceListener serviceListener) {
-        PlayerProfileEmailVerifiedEventListener emailVerifiedEventListener = new PlayerProfileEmailVerifiedEventListener(profileRepository);
+    public PlayerProfileEmailVerifiedEventListener playerProfileEmailVerifiedEventListener(
+        PlayerProfileRepository profileRepository,
+        @Qualifier("playerNotificationService")  ServerNotificationService notificationService,
+        SystemNotificationServiceListener serviceListener) {
+        PlayerProfileEmailVerifiedEventListener emailVerifiedEventListener = new PlayerProfileEmailVerifiedEventListener(profileRepository, notificationService);
         serviceListener.subscribe(emailVerifiedEventListener);
         return emailVerifiedEventListener;
     }

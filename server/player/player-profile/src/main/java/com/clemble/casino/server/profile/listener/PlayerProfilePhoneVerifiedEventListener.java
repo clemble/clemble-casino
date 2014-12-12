@@ -1,8 +1,10 @@
 package com.clemble.casino.server.profile.listener;
 
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.player.event.PlayerProfileChangedEvent;
 import com.clemble.casino.server.event.email.SystemEmailVerifiedEvent;
 import com.clemble.casino.server.event.phone.SystemPhoneVerifiedEvent;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.profile.repository.PlayerProfileRepository;
 import org.springframework.social.connect.ConnectionKey;
@@ -13,9 +15,14 @@ import org.springframework.social.connect.ConnectionKey;
 public class PlayerProfilePhoneVerifiedEventListener implements SystemEventListener<SystemPhoneVerifiedEvent> {
 
     final private PlayerProfileRepository profileRepository;
+    final private ServerNotificationService notificationService;
 
-    public PlayerProfilePhoneVerifiedEventListener(PlayerProfileRepository profileRepository) {
+    public PlayerProfilePhoneVerifiedEventListener(
+        PlayerProfileRepository profileRepository,
+        ServerNotificationService notificationService
+    ) {
         this.profileRepository = profileRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -26,6 +33,8 @@ public class PlayerProfilePhoneVerifiedEventListener implements SystemEventListe
         profile.addSocialConnection(new ConnectionKey("phone", "verified"));
         // Step 3. Saving updated player profile
         profileRepository.save(profile);
+        // Step 4. Sending profile changed event
+        notificationService.send(new PlayerProfileChangedEvent(profile.getPlayer(), profile));
     }
 
     @Override
