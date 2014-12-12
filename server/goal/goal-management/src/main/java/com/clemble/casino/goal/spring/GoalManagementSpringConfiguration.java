@@ -8,6 +8,7 @@ import com.clemble.casino.goal.aspect.outcome.GoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.GoalStatePersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.EmailReminderRuleAspectFactory;
+import com.clemble.casino.goal.aspect.reminder.PhoneReminderRuleAspectFactory;
 import com.clemble.casino.goal.aspect.time.GoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
@@ -18,6 +19,7 @@ import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.goal.service.EmailReminderService;
+import com.clemble.casino.goal.service.PhoneReminderService;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
@@ -63,13 +65,23 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public EmailReminderService emailReminderService(SystemNotificationService systemNotificationService) {
+        return new EmailReminderService(systemNotificationService);
+    }
+
+    @Bean
     public EmailReminderRuleAspectFactory emailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
         return new EmailReminderRuleAspectFactory(emailReminderService);
     }
 
     @Bean
-    public EmailReminderService emailReminderService(SystemNotificationService systemNotificationService) {
-        return new EmailReminderService(systemNotificationService);
+    public PhoneReminderService phoneReminderService(SystemNotificationService systemNotificationService) {
+        return new PhoneReminderService(systemNotificationService);
+    }
+
+    @Bean
+    public PhoneReminderRuleAspectFactory phoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
+        return new PhoneReminderRuleAspectFactory(reminderService);
     }
 
     @Bean

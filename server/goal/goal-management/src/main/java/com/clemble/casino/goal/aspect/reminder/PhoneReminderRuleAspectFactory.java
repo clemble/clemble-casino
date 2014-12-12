@@ -2,10 +2,10 @@ package com.clemble.casino.goal.aspect.reminder;
 
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
-import com.clemble.casino.goal.service.EmailReminderService;
+import com.clemble.casino.goal.service.PhoneReminderService;
 import com.clemble.casino.server.aspect.ClembleAspect;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -17,28 +17,28 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by mavarazy on 12/12/14.
  */
-public class EmailReminderRuleAspectFactory implements GoalAspectFactory<GoalManagementEvent>{
+public class PhoneReminderRuleAspectFactory implements GoalAspectFactory<GoalManagementEvent> {
 
-    final private EmailReminderService emailReminderService;
-    final private LoadingCache<EmailReminderRule, EmailReminderRuleAspect> CACHE = CacheBuilder.
+    final private PhoneReminderService reminderService;
+    final private LoadingCache<PhoneReminderRule, PhoneReminderRuleAspect> CACHE = CacheBuilder.
         newBuilder().
         build(
-            new CacheLoader<EmailReminderRule, EmailReminderRuleAspect>() {
+            new CacheLoader<PhoneReminderRule, PhoneReminderRuleAspect>() {
                 @Override
-                public EmailReminderRuleAspect load(EmailReminderRule reminderRule) {
-                    return new EmailReminderRuleAspect(reminderRule, emailReminderService);
+                public PhoneReminderRuleAspect load(PhoneReminderRule reminderRule) {
+                    return new PhoneReminderRuleAspect(reminderRule, reminderService);
                 }
             }
         );
 
-    public EmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
-        this.emailReminderService = emailReminderService;
+    public PhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
+        this.reminderService = reminderService;
     }
 
     @Override
     public ClembleAspect<GoalManagementEvent> construct(GoalConfiguration configuration, GoalState state) {
         try {
-            return CACHE.get(configuration.getEmailReminderRule());
+            return CACHE.get(configuration.getPhoneReminderRule());
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
@@ -46,6 +46,8 @@ public class EmailReminderRuleAspectFactory implements GoalAspectFactory<GoalMan
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE + 4;
+        return Ordered.HIGHEST_PRECEDENCE + 3;
     }
+
 }
+
