@@ -1,15 +1,13 @@
 package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.bet.Bid;
-import com.clemble.casino.bet.PlayerBid;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.due.GoalDueRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
-import com.clemble.casino.goal.lifecycle.configuration.rule.remind.EmailReminderRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.remind.PhoneReminderRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.remind.RemindRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
@@ -36,7 +34,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;

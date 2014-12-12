@@ -27,7 +27,7 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
     final private static long MOVE_TIMEOUT = 5_000;
 
     final private String player;
-    final private String sessionKey;
+    final private String key;
     final private PlayerClock clock;
     final private MoveTimeRule moveRule;
     final private TotalTimeRule totalRule;
@@ -36,7 +36,7 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
     final private SystemNotificationService notificationService;
 
     public PlayerClockTimeoutEventTask(
-            String sessionKey,
+            String key,
             String player,
             PlayerClock playerClock,
             MoveTimeRule moveRule,
@@ -45,7 +45,7 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
             Function<String, SystemEvent> eventFactory) {
         this.clock = checkNotNull(playerClock);
         this.player = player;
-        this.sessionKey = checkNotNull(sessionKey);
+        this.key = checkNotNull(key);
         this.moveRule = checkNotNull(moveRule);
         this.totalRule = checkNotNull(totalRule);
         this.notificationService = checkNotNull(notificationService);
@@ -68,9 +68,9 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
         clock.start(moveStart, Math.min(moveBreachTime, totalBreachTime), totalBreachTime, totalRule.getPunishment());
 
         SystemAddJobScheduleEvent addJobScheduleEvent = new SystemAddJobScheduleEvent(
-            sessionKey,
+            key,
             player,
-            eventFactory.apply(sessionKey),
+            eventFactory.apply(key),
             new Date(clock.getBreachTime()));
         this.notificationService.send(addJobScheduleEvent);
     }
@@ -81,7 +81,7 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
     public void stop() {
         clock.stop();
 
-        SystemRemoveJobScheduleEvent removeJobScheduleEvent = new SystemRemoveJobScheduleEvent(sessionKey, player);
+        SystemRemoveJobScheduleEvent removeJobScheduleEvent = new SystemRemoveJobScheduleEvent(key, player);
         this.notificationService.send(removeJobScheduleEvent);
     }
 

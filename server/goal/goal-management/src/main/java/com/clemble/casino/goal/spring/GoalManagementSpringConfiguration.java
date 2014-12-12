@@ -7,6 +7,7 @@ import com.clemble.casino.goal.aspect.outcome.GoalLostOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.GoalStatePersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
+import com.clemble.casino.goal.aspect.reminder.EmailReminderRuleAspectFactory;
 import com.clemble.casino.goal.aspect.time.GoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
@@ -16,6 +17,7 @@ import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.goal.service.EmailReminderService;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
@@ -58,6 +60,16 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
         GoalManagerFactoryFacade factoryFacade,
         GoalStateRepository goalStateRepository) {
         return new GoalActionServiceController(factoryFacade, goalStateRepository);
+    }
+
+    @Bean
+    public EmailReminderRuleAspectFactory emailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
+        return new EmailReminderRuleAspectFactory(emailReminderService);
+    }
+
+    @Bean
+    public EmailReminderService emailReminderService(SystemNotificationService systemNotificationService) {
+        return new EmailReminderService(systemNotificationService);
     }
 
     @Bean
