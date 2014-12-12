@@ -68,7 +68,9 @@ after_success:
   - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 7a315009-e771-4513-8e59-4cd9d80178a8 --command '{"Name":"deploy"}'
 
   # alerting notification
-  - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 135471cc-c492-4625-aea4-0503f36754ec --command '{"Name":"deploy"}'
+  - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 31f3488e-5f84-4a4c-8584-7c46967072cf --command '{"Name":"deploy"}'
+  # alerting email
+  - aws opsworks create-deployment --stack-id $AWS_STACK --app-id b249adb7-691e-43db-bad7-139ad44c1707 --command '{"Name":"deploy"}'
 
   # goal goal configuration
   - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 74fcbb1d-5a54-4841-a7e8-518cd58b03d0 --command '{"Name":"deploy"}'
