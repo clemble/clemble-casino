@@ -4,6 +4,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.Invitation;
 import com.clemble.casino.player.event.PlayerConnectedEvent;
+import com.clemble.casino.player.event.PlayerInvitedConnectionEvent;
 import com.clemble.casino.player.service.PlayerFriendInvitationService;
 import com.clemble.casino.player.service.PlayerNotificationService;
 import com.clemble.casino.server.connection.ServerFriendInvitation;
@@ -64,7 +65,11 @@ public class PlayerFriendInvitationServiceController implements PlayerFriendInvi
     public Invitation invite(@CookieValue("player") String me, @RequestBody Invitation invitation) {
         if (invitationRepository.findByReceiverAndSender(me, invitation.getPlayer()).isEmpty()) {
             // Case 1. If there is no pending invitation from receiver, add new invitation
-            return invitationRepository.save(new ServerFriendInvitation(null, me, invitation.getPlayer())).toInvitation();
+            ServerFriendInvitation savedInvitation = invitationRepository.save(new ServerFriendInvitation(null, me, invitation.getPlayer()));
+            // Send notification
+            notificationService.send(new PlayerInvitedConnectionEvent(invitation.getPlayer(), me));
+            // Sending player invitation
+            return savedInvitation.toInvitation();
         } else {
             // Case 2. If there is a pending invitation, just reply positive
             return reply(me, invitation.getPlayer(), true);

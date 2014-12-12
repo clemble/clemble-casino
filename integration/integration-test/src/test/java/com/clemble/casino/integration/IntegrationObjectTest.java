@@ -97,7 +97,7 @@ public class IntegrationObjectTest {
         ObjectGenerator.register(PlayerNotification.class, new AbstractValueGenerator<PlayerNotification>() {
             @Override
             public PlayerNotification generate() {
-                return new PlayerConnectedNotification("A", "B");
+                return new PlayerConnectedNotification("A:B", "A", "B", new Date());
             }
         });
         ObjectGenerator.register(FixedBidRule.class, new AbstractValueGenerator<FixedBidRule>() {
