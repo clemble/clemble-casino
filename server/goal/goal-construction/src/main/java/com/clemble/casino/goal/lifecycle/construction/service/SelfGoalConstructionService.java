@@ -1,5 +1,6 @@
 package com.clemble.casino.goal.lifecycle.construction.service;
 
+import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
@@ -42,10 +43,13 @@ public class SelfGoalConstructionService implements GoalConstructionService {
 
 
     public GoalConstruction construct(String player, GoalConstructionRequest request) {
-        // Step 1. Checking this is appropriate request for this service
-        if(request.getConfiguration().getJudgeRule().getType() != JudgeType.self)
+        // TODO remove when done
+        if (!(request.getConfiguration() instanceof ShortGoalConfiguration))
             throw new IllegalArgumentException();
-        if(request.getGoal() == null || request.getGoal().isEmpty())
+        // Step 1. Checking this is appropriate request for this service
+        if (((ShortGoalConfiguration) request.getConfiguration()).getJudgeRule().getType() != JudgeType.self)
+            throw new IllegalArgumentException();
+        if (request.getGoal() == null || request.getGoal().isEmpty())
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalIsEmpty, player);
         // Step 1.1. Checking there is enough money to complete it
         Money price = request.getConfiguration().getBid().getAmount();

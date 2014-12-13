@@ -2,6 +2,7 @@ package com.clemble.casino.goal.configuration.controller;
 
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.due.GoalDueRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
@@ -37,7 +38,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
 
     // TODO replace with SMART configurations
     final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
-        new GoalConfiguration(
+        new ShortGoalConfiguration(
             "Solo",
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
             ForbiddenBetRule.INSTANCE,
@@ -50,7 +51,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
             new GoalStartRule(30000)
         ),
-        new GoalConfiguration(
+        new ShortGoalConfiguration(
             "Friends",
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
             MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
@@ -63,7 +64,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
             new GoalStartRule(TimeUnit.DAYS.toMillis(1))
         ),
-        new GoalConfiguration(
+        new ShortGoalConfiguration(
             "World",
             new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
             MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),
