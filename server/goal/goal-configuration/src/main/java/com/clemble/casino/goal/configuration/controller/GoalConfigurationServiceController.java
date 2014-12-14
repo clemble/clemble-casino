@@ -4,12 +4,10 @@ import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.due.GoalDueRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
-import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
 import com.clemble.casino.lifecycle.configuration.rule.bet.*;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -42,7 +40,6 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             "Solo",
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
             ForbiddenBetRule.INSTANCE,
-            new JudgeRule("me", JudgeType.self),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
@@ -55,7 +52,6 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             "Friends",
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
             MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
-            new JudgeRule("me", JudgeType.self),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.friends,
@@ -68,7 +64,6 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             "World",
             new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
             MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),
-            new JudgeRule("me", JudgeType.self),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.world,

@@ -8,7 +8,6 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.construction.GoalKeyGenerator;
 import com.clemble.casino.goal.construction.repository.GoalConstructionRepository;
-import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.service.PlayerAccountService;
 
@@ -47,8 +46,6 @@ public class SelfGoalConstructionService implements GoalConstructionService {
         if (!(request.getConfiguration() instanceof ShortGoalConfiguration))
             throw new IllegalArgumentException();
         // Step 1. Checking this is appropriate request for this service
-        if (((ShortGoalConfiguration) request.getConfiguration()).getJudgeRule().getType() != JudgeType.self)
-            throw new IllegalArgumentException();
         if (request.getGoal() == null || request.getGoal().isEmpty())
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalIsEmpty, player);
         // Step 1.1. Checking there is enough money to complete it

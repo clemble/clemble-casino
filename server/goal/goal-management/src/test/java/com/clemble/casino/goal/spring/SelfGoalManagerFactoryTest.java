@@ -5,8 +5,6 @@ import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.due.GoalDueRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.judge.JudgeType;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
@@ -57,7 +55,6 @@ public class SelfGoalManagerFactoryTest {
         "basic",
         new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
         LimitedBetRule.create(5, 50),
-        new JudgeRule("me", JudgeType.self),
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
@@ -78,7 +75,6 @@ public class SelfGoalManagerFactoryTest {
             Bank.create(player, configuration.getBid()),
             player,
             "Create goal state",
-            player,
             configuration,
             new Date());
         // Step 2. Starting initiation
@@ -99,7 +95,6 @@ public class SelfGoalManagerFactoryTest {
                 Bank.create(player, configuration.getBid()),
                 player,
                 "Create goal state",
-                player,
                 configuration,
                 new Date());
         // Step 2. Starting initiation
