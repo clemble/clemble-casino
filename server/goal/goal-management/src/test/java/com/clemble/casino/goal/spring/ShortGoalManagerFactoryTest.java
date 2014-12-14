@@ -6,7 +6,6 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
@@ -58,8 +57,7 @@ public class ShortGoalManagerFactoryTest {
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
         new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-        new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
-        new GoalStartRule(1)
+        new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
     );
 
     @Test

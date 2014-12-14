@@ -7,7 +7,6 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
@@ -34,6 +33,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -52,8 +52,7 @@ public class GoalRecordITest {
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
         new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-        new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
-        new GoalStartRule(1)
+        new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
     );
 
     @Autowired
@@ -64,7 +63,7 @@ public class GoalRecordITest {
         // Step 1. Creating player
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 2. Creating GoalRequest
-        GoalConstructionRequest goalRequest = new GoalConstructionRequest(CONFIGURATION, "Simple test");
+        GoalConstructionRequest goalRequest = new GoalConstructionRequest(CONFIGURATION, "Simple test", new Date());
         final GoalConstruction construction = A.goalOperations().constructionService().construct(goalRequest);
         final String goalKey = construction.getGoalKey();
         // Step 3. Checking construction
@@ -93,7 +92,7 @@ public class GoalRecordITest {
         // Step 1. Creating player
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 2. Creating GoalRequest
-        GoalConstructionRequest goalRequest = new GoalConstructionRequest(CONFIGURATION, "Simple test");
+        GoalConstructionRequest goalRequest = new GoalConstructionRequest(CONFIGURATION, "Simple test", new Date());
         final GoalConstruction construction = A.goalOperations().constructionService().construct(goalRequest);
         final String goalKey = construction.getGoalKey();
         // Step 3. Checking construction

@@ -5,7 +5,6 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.lifecycle.configuration.rule.bet.*;
 import com.clemble.casino.money.Currency;
@@ -42,8 +41,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new GoalStartRule(30000)
+            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
         ),
         new ShortGoalConfiguration(
             "Friends",
@@ -53,8 +51,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.friends,
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new GoalStartRule(TimeUnit.DAYS.toMillis(1))
+            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
         ),
         new ShortGoalConfiguration(
             "World",
@@ -64,8 +61,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.world,
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new GoalStartRule(TimeUnit.DAYS.toMillis(3))
+            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
         )
     };
 
