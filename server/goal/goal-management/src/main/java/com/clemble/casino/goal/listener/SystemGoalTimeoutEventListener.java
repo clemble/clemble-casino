@@ -36,7 +36,7 @@ public class SystemGoalTimeoutEventListener implements SystemEventListener<Syste
     @Override
     public void onEvent(SystemGoalTimeoutEvent event) {
         // Step 1. Fetching related GameState
-        ClembleManager<GoalEvent, GoalState> manager = managerFactory.get(event.getGoalKey());
+        ClembleManager<GoalEvent, ? extends GoalState> manager = managerFactory.get(event.getGoalKey());
         // Step 2. Extracting game context
         GoalContext context = manager.getState().getContext();
         // Step 3. Processing all breach events

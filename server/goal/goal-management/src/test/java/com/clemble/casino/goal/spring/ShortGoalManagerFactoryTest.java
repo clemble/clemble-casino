@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { GoalManagementSpringConfiguration.class })
-public class SelfGoalManagerFactoryTest {
+public class ShortGoalManagerFactoryTest {
 
     @Autowired
     public GoalManagerFactoryFacade managerFactory;

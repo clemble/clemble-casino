@@ -21,15 +21,15 @@ import java.util.Collections;
 /**
  * Created by mavarazy on 10/9/14.
  */
-public class SelfGoalManagerFactory implements GoalManagerFactory {
+public class ShortGoalManagerFactory implements GoalManagerFactory {
 
     final private GoalRecordRepository recordRepository;
     final private GoalStateRepository stateRepository;
     final private ServerNotificationService notificationService;
-    final private ClembleManagerFactory<GoalConfiguration> managerFactory;
+    final private ClembleManagerFactory<ShortGoalConfiguration> managerFactory;
 
-    public SelfGoalManagerFactory(
-        ClembleManagerFactory<GoalConfiguration> managerFactory,
+    public ShortGoalManagerFactory(
+        ClembleManagerFactory<ShortGoalConfiguration> managerFactory,
         GoalRecordRepository recordRepository,
         GoalStateRepository stateRepository,
         ServerNotificationService notificationService) {
@@ -40,30 +40,21 @@ public class SelfGoalManagerFactory implements GoalManagerFactory {
     }
 
     @Override
-    public ClembleManager<GoalEvent, ? extends GoalState> start(GoalContext parent, GoalInitiation initiation) {
+    public ClembleManager<GoalEvent, ? extends GoalState> start(GoalInitiation initiation, GoalContext parent) {
+        ShortGoalConfiguration goalConfiguration = (ShortGoalConfiguration) initiation.getConfiguration();
         // Step 1. Saving record
         GoalRecord record = recordRepository.save(initiation.toRecord());
         // Step 2. Creating state
         GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), PlayerClock.create(record.getConfiguration()));
         GoalContext goalContext = new GoalContext(parent, Collections.singletonList(playerContext));
-        GoalState state;
-        if (initiation.getConfiguration() instanceof ShortGoalConfiguration) {
-            state = new ShortGoalState(initiation.getGoalKey(), initiation.getPlayer(), record.getBank(), initiation.getGoal(), (ShortGoalConfiguration) initiation.getConfiguration(), goalContext, "Go for it");
-        } else {
-            throw new IllegalArgumentException();
-        }
+        ShortGoalState state = new ShortGoalState(initiation.getGoalKey(), initiation.getPlayer(), record.getBank(), initiation.getGoal(), (ShortGoalConfiguration) initiation.getConfiguration(), goalContext, "Go for it");
         // Step 3. Saving state
         stateRepository.save(state);
         // Step 4. Creating manager factory
-        return managerFactory.create(state, state.getConfiguration());
+        return create(state);
     }
 
-    public ClembleManager<GoalEvent, GoalState> get(String goalKey) {
-        // Step 1. Fetching current goal state
-        GoalState state = stateRepository.findOne(goalKey);
-        if (state == null)
-            return null;
-        // Step 2. Creating appropriate goal manager
+    public ClembleManager<GoalEvent, ? extends GoalState> create(ShortGoalState state) {
         return managerFactory.create(state, state.getConfiguration());
     }
 

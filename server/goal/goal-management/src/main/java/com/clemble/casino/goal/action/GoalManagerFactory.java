@@ -11,6 +11,6 @@ import com.clemble.casino.server.action.ClembleManager;
  */
 public interface GoalManagerFactory {
 
-    public ClembleManager<GoalEvent, ? extends GoalState> start(GoalContext parent, GoalInitiation initiation);
+    public ClembleManager<GoalEvent, ? extends GoalState> start(GoalInitiation initiation, GoalContext parent);
 
 }
