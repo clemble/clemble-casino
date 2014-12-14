@@ -4,7 +4,9 @@ import com.clemble.casino.event.Event;
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
+import com.clemble.casino.goal.lifecycle.management.ShortGoalState;
 import com.clemble.casino.server.aspect.ClembleAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.core.Ordered;
@@ -21,7 +23,7 @@ public class ShortGoalTimeAspectFactory implements ShortGoalAspectFactory<Event>
     }
 
     @Override
-    public ClembleAspect<Event> construct(GoalConfiguration configuration, GoalState state) {
+    public ClembleAspect<Event> construct(ShortGoalConfiguration configuration, ShortGoalState state) {
         return new ShortGoalTimeAspect(state, systemNotificationService);
     }
 

@@ -6,15 +6,13 @@ import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.service.GoalActionService;
-import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.goal.repository.ShortGoalStateRepository;
 import com.clemble.casino.lifecycle.management.event.action.Action;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
-import com.clemble.casino.player.service.PlayerConnectionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by mavarazy on 10/9/14.
@@ -23,11 +21,11 @@ import java.util.Set;
 public class GoalActionServiceController implements GoalActionService {
 
     final private GoalManagerFactoryFacade factoryFacade;
-    final private GoalStateRepository stateRepository;
+    final private ShortGoalStateRepository stateRepository;
 
     public GoalActionServiceController(
         GoalManagerFactoryFacade factoryFacade,
-        GoalStateRepository stateRepository) {
+        ShortGoalStateRepository stateRepository) {
         this.factoryFacade = factoryFacade;
         this.stateRepository = stateRepository;
     }
@@ -40,14 +38,14 @@ public class GoalActionServiceController implements GoalActionService {
     @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.MY_ACTIVE_GOALS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public List<GoalState> myActive(@CookieValue("player") String player) {
-        return stateRepository.findByPlayer(player);
+        return (List<GoalState>)(List<?>) stateRepository.findByPlayer(player);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.PLAYER_ACTIVE_GOALS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public List<GoalState> getActive(@PathVariable("player") String player) {
-        return stateRepository.findByPlayer(player);
+        return (List<GoalState>)(List<?>) stateRepository.findByPlayer(player);
     }
 
     @Override

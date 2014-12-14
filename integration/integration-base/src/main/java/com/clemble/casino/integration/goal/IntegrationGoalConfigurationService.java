@@ -3,6 +3,7 @@ package com.clemble.casino.integration.goal;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
+import com.clemble.casino.utils.CollectionUtils;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public class IntegrationGoalConfigurationService implements GoalConfigurationSer
 
     @Override
     public List<GoalConfiguration> getConfigurations() {
-        return configurationService.getConfigurations();
+        return CollectionUtils.immutableList(configurationService.getConfigurationsArray());
     }
 }

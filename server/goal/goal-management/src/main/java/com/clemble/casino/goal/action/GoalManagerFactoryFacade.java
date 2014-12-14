@@ -1,9 +1,6 @@
 package com.clemble.casino.goal.action;
 
-import com.clemble.casino.game.lifecycle.management.GameState;
-import com.clemble.casino.game.lifecycle.management.event.GameManagementEvent;
 import com.clemble.casino.goal.event.GoalEvent;
-import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.LongGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
@@ -11,26 +8,24 @@ import com.clemble.casino.goal.lifecycle.management.GoalContext;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.ShortGoalState;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
-import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.goal.repository.ShortGoalStateRepository;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by mavarazy on 9/20/14.
  */
 public class GoalManagerFactoryFacade {
 
-    final private GoalStateRepository stateRepository;
+    final private ShortGoalStateRepository stateRepository;
     final private ShortGoalManagerFactory shortGoalManagerFactory;
 
     public GoalManagerFactoryFacade(
         ClembleManagerFactory<ShortGoalConfiguration> shortGoalManagerFactory,
         ClembleManagerFactory<LongGoalConfiguration> longGoalManagerFactory,
         GoalRecordRepository recordRepository,
-        GoalStateRepository stateRepository,
+        ShortGoalStateRepository stateRepository,
         ServerNotificationService notificationService) {
         this.stateRepository = stateRepository;
         this.shortGoalManagerFactory = new ShortGoalManagerFactory(shortGoalManagerFactory, recordRepository, stateRepository, notificationService);
@@ -49,9 +44,8 @@ public class GoalManagerFactoryFacade {
         GoalState state = stateRepository.findOne(goalKey);
         if (state instanceof ShortGoalState) {
             return shortGoalManagerFactory.create((ShortGoalState) state);
-        } else {
-            throw new IllegalArgumentException();
         }
+        return null;
     }
 
 }

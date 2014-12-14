@@ -3,7 +3,9 @@ package com.clemble.casino.goal.aspect.outcome;
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
+import com.clemble.casino.goal.lifecycle.management.ShortGoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.server.aspect.ClembleAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -21,7 +23,7 @@ public class ShortGoalLostOutcomeAspectFactory implements ShortGoalAspectFactory
     }
 
     @Override
-    public ClembleAspect<GoalEndedEvent> construct(GoalConfiguration configuration, GoalState context) {
+    public ClembleAspect<GoalEndedEvent> construct(ShortGoalConfiguration configuration, ShortGoalState context) {
         // Step 1. Checking player bid
         return new ShortGoalLostOutcomeAspect(context.getBank().getBids(), systemNotificationService);
     }

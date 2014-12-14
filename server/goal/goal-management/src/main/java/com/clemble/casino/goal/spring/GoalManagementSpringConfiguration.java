@@ -2,13 +2,12 @@ package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
-import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.aspect.LongGoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
 import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.ShortGoalLostOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.ShortGoalWonOutcomeAspectFactory;
-import com.clemble.casino.goal.aspect.persistence.GoalStatePersistenceAspectFactory;
+import com.clemble.casino.goal.aspect.persistence.ShortGoalStatePersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.EmailReminderRuleAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.PhoneReminderRuleAspectFactory;
@@ -16,13 +15,12 @@ import com.clemble.casino.goal.aspect.time.ShortGoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.controller.FriendGoalServiceController;
-import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.LongGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
-import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.goal.repository.ShortGoalStateRepository;
 import com.clemble.casino.goal.service.EmailReminderService;
 import com.clemble.casino.goal.service.PhoneReminderService;
 import com.clemble.casino.player.service.PlayerConnectionService;
@@ -35,6 +33,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 
 /**
@@ -53,8 +52,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalStateRepository goalStateRepository(MongoRepositoryFactory repositoryFactory) {
-        return repositoryFactory.getRepository(GoalStateRepository.class);
+    public ShortGoalStateRepository goalStateRepository(MongoRepositoryFactory repositoryFactory) {
+        return repositoryFactory.getRepository(ShortGoalStateRepository.class);
     }
 
     @Bean
@@ -65,8 +64,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public GoalActionServiceController goalActionServiceController(
         GoalManagerFactoryFacade factoryFacade,
-        GoalStateRepository goalStateRepository) {
-        return new GoalActionServiceController(factoryFacade, goalStateRepository);
+        ShortGoalStateRepository shortGoalStateRepository) {
+        return new GoalActionServiceController(factoryFacade, shortGoalStateRepository);
     }
 
     @Bean
@@ -91,10 +90,10 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public FriendGoalServiceController timelineServiceController(
-        GoalStateRepository goalStateRepository,
+        ShortGoalStateRepository shortGoalStateRepository,
         @Qualifier("playerConnectionClient") PlayerConnectionService playerConnectionClient
     ) {
-        return new FriendGoalServiceController(goalStateRepository, playerConnectionClient);
+        return new FriendGoalServiceController(shortGoalStateRepository, playerConnectionClient);
     }
 
     @Bean
@@ -112,9 +111,9 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
         @Qualifier("shortGoalManagerFactory") ClembleManagerFactory<ShortGoalConfiguration> shortGoalManagerFactory,
         @Qualifier("longGoalManagerFactory") ClembleManagerFactory<LongGoalConfiguration> longGoalManagerFactory,
         GoalRecordRepository recordRepository,
-        GoalStateRepository goalStateRepository,
+        ShortGoalStateRepository shortGoalStateRepository,
         @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
-        return new GoalManagerFactoryFacade(shortGoalManagerFactory, longGoalManagerFactory, recordRepository, goalStateRepository, notificationService);
+        return new GoalManagerFactoryFacade(shortGoalManagerFactory, longGoalManagerFactory, recordRepository, shortGoalStateRepository, notificationService);
     }
 
     @Bean
@@ -149,8 +148,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalStatePersistenceAspectFactory goalPersistenceAspectFactory(GoalStateRepository stateRepository) {
-        return new GoalStatePersistenceAspectFactory(stateRepository);
+    public ShortGoalStatePersistenceAspectFactory goalPersistenceAspectFactory(ShortGoalStateRepository stateRepository) {
+        return new ShortGoalStatePersistenceAspectFactory(stateRepository);
     }
 
     @Bean

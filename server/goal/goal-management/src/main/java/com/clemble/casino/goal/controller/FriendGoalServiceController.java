@@ -4,7 +4,7 @@ import com.clemble.casino.WebMapping;
 import com.clemble.casino.goal.GoalWebMapping;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.service.FriendGoalService;
-import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.goal.repository.ShortGoalStateRepository;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +18,11 @@ import java.util.Set;
 @RestController
 public class FriendGoalServiceController implements FriendGoalService {
 
-    final private GoalStateRepository stateRepository;
+    final private ShortGoalStateRepository stateRepository;
     final private PlayerConnectionService connectionService;
 
     public FriendGoalServiceController(
-        GoalStateRepository stateRepository,
+        ShortGoalStateRepository stateRepository,
         PlayerConnectionService connectionService) {
         this.stateRepository = stateRepository;
         this.connectionService = connectionService;
@@ -64,7 +64,7 @@ public class FriendGoalServiceController implements FriendGoalService {
         // Step 1. Fetching connections
         Set<String> connections = connectionService.getConnections(player);
         // Step 2. Querying for active connections state
-        return stateRepository.findByPlayerIn(connections);
+        return (List<GoalState>)(List<?>) stateRepository.findByPlayerIn(connections);
     }
 
 }

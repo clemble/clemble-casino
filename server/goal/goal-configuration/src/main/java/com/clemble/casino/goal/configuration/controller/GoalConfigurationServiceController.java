@@ -35,7 +35,7 @@ import static com.clemble.casino.WebMapping.PRODUCES;
 public class GoalConfigurationServiceController<T extends GoalConfiguration> implements GoalConfigurationService<T> {
 
     // TODO replace with SMART configurations
-    final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
+    final private static GoalConfiguration[] DEFAULT_CONFIGURATIONS = new GoalConfiguration[]{
         new ShortGoalConfiguration(
             "Solo",
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
@@ -72,12 +72,17 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
             new GoalStartRule(TimeUnit.DAYS.toMillis(3))
         )
-    );
+    };
+
+    public List<T> getConfigurations() {
+        throw new UnsupportedOperationException();
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
-    public List<T> getConfigurations() {
-        return (List<T>) DEFAULT_CONFIGURATIONS;
+    public GoalConfiguration[] getConfigurationsArray(){
+        // This is done to work around ObjectMapper limits (It serializes type with array, but not with List of inherited type)
+        return DEFAULT_CONFIGURATIONS;
     }
 
 }
