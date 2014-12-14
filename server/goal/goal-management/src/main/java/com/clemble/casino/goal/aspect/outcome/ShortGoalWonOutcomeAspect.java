@@ -8,8 +8,7 @@ import com.clemble.casino.client.event.OutcomeTypeSelector;
 import com.clemble.casino.goal.GoalPaymentSource;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
-import com.clemble.casino.lifecycle.management.outcome.PlayerLostOutcome;
-import com.clemble.casino.money.Money;
+import com.clemble.casino.lifecycle.management.outcome.PlayerWonOutcome;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
@@ -23,18 +22,18 @@ import java.util.Date;
 /**
  * Created by mavarazy on 10/9/14.
  */
-public class GoalLostOutcomeAspect
+public class ShortGoalWonOutcomeAspect
     extends GoalAspect<GoalEndedEvent>
     implements PlayerBidAware {
 
     final private Collection<PlayerBid> bids;
     final private SystemNotificationService systemNotificationService;
 
-    public GoalLostOutcomeAspect(Collection<PlayerBid> bids, SystemNotificationService systemNotificationService) {
+    public ShortGoalWonOutcomeAspect(Collection<PlayerBid> playerBids, SystemNotificationService systemNotificationService) {
         super(EventSelectors.
-            where(new EventTypeSelector(GoalEndedEvent.class)).
-            and(new OutcomeTypeSelector(PlayerLostOutcome.class)));
-        this.bids = bids;
+                where(new EventTypeSelector(GoalEndedEvent.class)).
+                and(new OutcomeTypeSelector(PlayerWonOutcome.class)));
+        this.bids = playerBids;
         this.systemNotificationService = systemNotificationService;
     }
 
@@ -46,20 +45,17 @@ public class GoalLostOutcomeAspect
     @Override
     protected void doEvent(GoalEndedEvent event) {
         // Step 1. Generating payment transaction
-        // Account already balanced need to remove pending operation
-        PaymentTransaction paymentTransaction = new PaymentTransaction().
-            setTransactionKey(event.getBody().getGoalKey()).
-            setTransactionDate(new Date()).
-            setSource(new GoalPaymentSource(event.getBody().getGoalKey(), event.getOutcome()));
-        // Step 3. Generating bid transaction
+        PaymentTransaction paymentTransaction = new PaymentTransaction()
+            .setTransactionKey(event.getBody().getGoalKey())
+            .setTransactionDate(new Date())
+            .setSource(new GoalPaymentSource(event.getBody().getGoalKey(), event.getOutcome()));
+        // Step 2. Processing payment transaction
         for(PlayerBid playerBid: bids) {
             paymentTransaction.
-                addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBid().total(), Operation.Credit)).
-                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBid().total(), Operation.Debit));
+                addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBid().total(), Operation.Debit)).
+                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBid().total(), Operation.Credit));
         }
-        // Step 2. Processing payment transaction
+        // Step 3. Checking value
         systemNotificationService.send(new SystemPaymentTransactionRequestEvent(paymentTransaction));
     }
-
 }
-

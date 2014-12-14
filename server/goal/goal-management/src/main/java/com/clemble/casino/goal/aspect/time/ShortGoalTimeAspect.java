@@ -3,6 +3,7 @@ package com.clemble.casino.goal.aspect.time;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.goal.aspect.GoalAspect;
+import com.clemble.casino.goal.aspect.ShortGoalAspect;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
@@ -18,13 +19,13 @@ import java.util.Map;
 /**
  * Created by mavarazy on 10/9/14.
  */
-public class GoalTimeAspect extends GoalAspect<Event> {
+public class ShortGoalTimeAspect extends ShortGoalAspect<Event> {
 
     final private Map<String, PlayerClockTimeoutEventTask> playerToTask = new HashMap<>();
 
-    public GoalTimeAspect(
-            GoalState state,
-            SystemNotificationService systemNotificationService) {
+    public ShortGoalTimeAspect(
+        GoalState state,
+        SystemNotificationService systemNotificationService) {
         super(new EventTypeSelector(Event.class));
 
         state.getContext().getPlayerContexts().forEach(playerContext -> {

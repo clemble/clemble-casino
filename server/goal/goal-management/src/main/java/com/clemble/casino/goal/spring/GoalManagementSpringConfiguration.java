@@ -1,15 +1,17 @@
 package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
+import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
+import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
 import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
-import com.clemble.casino.goal.aspect.outcome.GoalLostOutcomeAspectFactory;
-import com.clemble.casino.goal.aspect.outcome.GoalWonOutcomeAspectFactory;
+import com.clemble.casino.goal.aspect.outcome.ShortGoalLostOutcomeAspectFactory;
+import com.clemble.casino.goal.aspect.outcome.ShortGoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.GoalStatePersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.EmailReminderRuleAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.PhoneReminderRuleAspectFactory;
-import com.clemble.casino.goal.aspect.time.GoalTimeAspectFactory;
+import com.clemble.casino.goal.aspect.time.ShortGoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.controller.FriendGoalServiceController;
@@ -94,7 +96,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ClembleManagerFactory<GoalConfiguration> goalManagerFactory() {
-        return new ClembleManagerFactory<>(GoalAspectFactory.class);
+        return new ClembleManagerFactory<>(GenericGoalAspectFactory.class, ShortGoalAspectFactory.class);
     }
 
     @Bean
@@ -133,8 +135,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalTimeAspectFactory goalTimeAspectFactory(SystemNotificationService systemNotificationService){
-        return new GoalTimeAspectFactory(systemNotificationService);
+    public ShortGoalTimeAspectFactory goalTimeAspectFactory(SystemNotificationService systemNotificationService){
+        return new ShortGoalTimeAspectFactory(systemNotificationService);
     }
 
     @Bean
@@ -143,13 +145,13 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalLostOutcomeAspectFactory goalMissedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
-        return new GoalLostOutcomeAspectFactory(systemNotificationService);
+    public ShortGoalLostOutcomeAspectFactory goalMissedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
+        return new ShortGoalLostOutcomeAspectFactory(systemNotificationService);
     }
 
     @Bean
-    public GoalWonOutcomeAspectFactory goalReachedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
-        return new GoalWonOutcomeAspectFactory(systemNotificationService);
+    public ShortGoalWonOutcomeAspectFactory goalReachedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
+        return new ShortGoalWonOutcomeAspectFactory(systemNotificationService);
     }
 
     @Bean

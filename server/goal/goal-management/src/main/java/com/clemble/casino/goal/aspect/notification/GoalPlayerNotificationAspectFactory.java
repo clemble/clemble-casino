@@ -1,5 +1,6 @@
 package com.clemble.casino.goal.aspect.notification;
 
+import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
@@ -16,7 +17,7 @@ import java.util.Collection;
 /**
  * Created by mavarazy on 11/16/14.
  */
-public class GoalPlayerNotificationAspectFactory implements GoalAspectFactory<GoalManagementEvent> {
+public class GoalPlayerNotificationAspectFactory implements GenericGoalAspectFactory<GoalManagementEvent> {
 
     final private ServerNotificationService notificationService;
 

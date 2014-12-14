@@ -1,6 +1,7 @@
 package com.clemble.casino.goal.aspect.record;
 
 import com.clemble.casino.event.Event;
+import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
@@ -12,7 +13,7 @@ import org.springframework.core.Ordered;
 /**
  * Created by mavarazy on 10/03/14.
  */
-public class GoalRecordAspectFactory implements GoalAspectFactory<Event> {
+public class GoalRecordAspectFactory implements GenericGoalAspectFactory<Event> {
 
     final private GoalRecordRepository recordRepository;
     final private ServerNotificationService notificationService;

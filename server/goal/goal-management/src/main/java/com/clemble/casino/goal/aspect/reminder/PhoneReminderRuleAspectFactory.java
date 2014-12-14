@@ -1,5 +1,6 @@
 package com.clemble.casino.goal.aspect.reminder;
 
+import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
@@ -17,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by mavarazy on 12/12/14.
  */
-public class PhoneReminderRuleAspectFactory implements GoalAspectFactory<GoalManagementEvent> {
+public class PhoneReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalManagementEvent> {
 
     final private PhoneReminderService reminderService;
     final private LoadingCache<PhoneReminderRule, PhoneReminderRuleAspect> CACHE = CacheBuilder.
