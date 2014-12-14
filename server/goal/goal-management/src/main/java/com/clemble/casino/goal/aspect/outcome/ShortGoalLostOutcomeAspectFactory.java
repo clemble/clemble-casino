@@ -1,10 +1,7 @@
 package com.clemble.casino.goal.aspect.outcome;
 
-import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
-import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
-import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.ShortGoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.server.aspect.ClembleAspect;

@@ -3,7 +3,6 @@ package com.clemble.casino.goal.configuration.controller;
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.rule.due.GoalDueRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.start.GoalStartRule;
@@ -15,7 +14,6 @@ import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishm
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
-import com.google.common.collect.ImmutableList;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +41,6 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
-            new GoalDueRule("facebook"),
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
             new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
             new GoalStartRule(30000)
@@ -55,7 +52,6 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.friends,
-            new GoalDueRule("vkontakte"),
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
             new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
             new GoalStartRule(TimeUnit.DAYS.toMillis(1))
@@ -67,7 +63,6 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.world,
-            new GoalDueRule("google"),
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
             new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
             new GoalStartRule(TimeUnit.DAYS.toMillis(3))
