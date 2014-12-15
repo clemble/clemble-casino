@@ -20,6 +20,7 @@ import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.Bank;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -56,7 +57,8 @@ public class ShortGoalManagerFactoryTest {
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
         new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-        new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+        new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
+        ImmutableList.of()
     );
 
     @Test

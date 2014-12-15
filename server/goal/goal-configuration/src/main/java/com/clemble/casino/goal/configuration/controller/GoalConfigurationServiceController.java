@@ -1,6 +1,7 @@
 package com.clemble.casino.goal.configuration.controller;
 
 import com.clemble.casino.bet.Bid;
+import com.clemble.casino.goal.lifecycle.configuration.ChallengeConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
@@ -33,7 +34,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
 
     // TODO replace with SMART configurations
     final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
-         new GoalConfiguration(
+        new GoalConfiguration(
             "Solo",
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
             ForbiddenBetRule.INSTANCE,
@@ -41,7 +42,13 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
+            ImmutableList.of(new ChallengeConfiguration(
+                new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
+                MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
+                new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance())
+                )
+            )
         ),
         new GoalConfiguration(
             "Friends",
@@ -51,7 +58,13 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.friends,
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
+            ImmutableList.of(new ChallengeConfiguration(
+                new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
+                MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
+                new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance())
+                )
+            )
         ),
         new GoalConfiguration(
             "World",
@@ -61,9 +74,14 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.world,
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
+            ImmutableList.of(new ChallengeConfiguration(
+                new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
+                MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),
+                new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance())
+            )
         )
-    );
+    ));
 
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
