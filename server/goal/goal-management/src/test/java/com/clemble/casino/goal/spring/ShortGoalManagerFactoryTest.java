@@ -3,7 +3,6 @@ package com.clemble.casino.goal.spring;
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
@@ -49,7 +48,7 @@ public class ShortGoalManagerFactoryTest {
     @Autowired
     public GoalRecordRepository recordRepository;
 
-    final private GoalConfiguration configuration = new ShortGoalConfiguration(
+    final private GoalConfiguration configuration = new GoalConfiguration(
         "basic",
         new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
         LimitedBetRule.create(5, 50),

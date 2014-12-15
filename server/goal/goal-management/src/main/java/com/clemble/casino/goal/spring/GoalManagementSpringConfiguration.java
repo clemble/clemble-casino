@@ -2,7 +2,6 @@ package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
-import com.clemble.casino.goal.aspect.LongGoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
 import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.ShortGoalLostOutcomeAspectFactory;
@@ -15,8 +14,7 @@ import com.clemble.casino.goal.aspect.time.ShortGoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.controller.FriendGoalServiceController;
-import com.clemble.casino.goal.lifecycle.configuration.LongGoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
@@ -96,23 +94,17 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ClembleManagerFactory<ShortGoalConfiguration> shortGoalManagerFactory() {
+    public ClembleManagerFactory<GoalConfiguration> shortGoalManagerFactory() {
         return new ClembleManagerFactory<>(GenericGoalAspectFactory.class, ShortGoalAspectFactory.class);
     }
 
     @Bean
-    public ClembleManagerFactory<LongGoalConfiguration> longGoalManagerFactory() {
-        return new ClembleManagerFactory<>(GenericGoalAspectFactory.class, LongGoalAspectFactory.class);
-    }
-
-    @Bean
     public GoalManagerFactoryFacade goalManagerFactoryFacade(
-        @Qualifier("shortGoalManagerFactory") ClembleManagerFactory<ShortGoalConfiguration> shortGoalManagerFactory,
-        @Qualifier("longGoalManagerFactory") ClembleManagerFactory<LongGoalConfiguration> longGoalManagerFactory,
+        @Qualifier("shortGoalManagerFactory") ClembleManagerFactory<GoalConfiguration> shortGoalManagerFactory,
         GoalRecordRepository recordRepository,
         ShortGoalStateRepository shortGoalStateRepository,
         @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
-        return new GoalManagerFactoryFacade(shortGoalManagerFactory, longGoalManagerFactory, recordRepository, shortGoalStateRepository, notificationService);
+        return new GoalManagerFactoryFacade(shortGoalManagerFactory, recordRepository, shortGoalStateRepository, notificationService);
     }
 
     @Bean

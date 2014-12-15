@@ -1,11 +1,9 @@
 package com.clemble.casino.goal.aspect.persistence;
 
 import com.clemble.casino.client.event.EventTypeSelector;
-import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.aspect.ShortGoalAspect;
 import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
-import com.clemble.casino.goal.lifecycle.management.ShortGoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.repository.ShortGoalStateRepository;
 
@@ -14,10 +12,10 @@ import com.clemble.casino.goal.repository.ShortGoalStateRepository;
  */
 public class ShortGoalStatePersistenceAspect extends ShortGoalAspect<GoalEvent> {
 
-    final private ShortGoalState state;
+    final private GoalState state;
     final private ShortGoalStateRepository stateRepository;
 
-    public ShortGoalStatePersistenceAspect(ShortGoalState state, ShortGoalStateRepository stateRepository) {
+    public ShortGoalStatePersistenceAspect(GoalState state, ShortGoalStateRepository stateRepository) {
         super(new EventTypeSelector(GoalEvent.class));
         this.state = state;
         this.stateRepository = stateRepository;

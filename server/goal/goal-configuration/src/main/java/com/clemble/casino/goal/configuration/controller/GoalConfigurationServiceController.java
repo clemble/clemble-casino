@@ -2,7 +2,6 @@ package com.clemble.casino.goal.configuration.controller;
 
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
@@ -13,6 +12,7 @@ import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishm
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
+import com.google.common.collect.ImmutableList;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,11 +29,11 @@ import static com.clemble.casino.WebMapping.PRODUCES;
  * Created by mavarazy on 9/1/14.
  */
 @RestController
-public class GoalConfigurationServiceController<T extends GoalConfiguration> implements GoalConfigurationService<T> {
+public class GoalConfigurationServiceController implements GoalConfigurationService {
 
     // TODO replace with SMART configurations
-    final private static GoalConfiguration[] DEFAULT_CONFIGURATIONS = new GoalConfiguration[]{
-        new ShortGoalConfiguration(
+    final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
+         new GoalConfiguration(
             "Solo",
             new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
             ForbiddenBetRule.INSTANCE,
@@ -43,7 +43,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
             new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
         ),
-        new ShortGoalConfiguration(
+        new GoalConfiguration(
             "Friends",
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
             MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
@@ -53,7 +53,7 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
             new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
         ),
-        new ShortGoalConfiguration(
+        new GoalConfiguration(
             "World",
             new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
             MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),
@@ -63,16 +63,11 @@ public class GoalConfigurationServiceController<T extends GoalConfiguration> imp
             new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
             new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
         )
-    };
-
-    public List<T> getConfigurations() {
-        throw new UnsupportedOperationException();
-    }
+    );
 
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
-    public GoalConfiguration[] getConfigurationsArray(){
-        // This is done to work around ObjectMapper limits (It serializes type with array, but not with List of inherited type)
+    public List<GoalConfiguration> getConfigurations() {
         return DEFAULT_CONFIGURATIONS;
     }
 

@@ -1,6 +1,6 @@
 package com.clemble.casino.goal.spring;
 
-import com.clemble.casino.goal.lifecycle.management.ShortGoalState;
+import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.repository.ShortGoalStateRepository;
 import com.clemble.test.random.ObjectGenerator;
 import org.junit.Assert;
@@ -17,7 +17,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { GoalManagementSpringConfiguration.class })
-public class ShortGoalStateRepositoryTest {
+public class GoalStateRepositoryTest {
 
     @Autowired
     public ShortGoalStateRepository stateRepository;
@@ -25,11 +25,11 @@ public class ShortGoalStateRepositoryTest {
     @Test
     public void simpleTest() {
         // Step 1. Generating short goal state
-        ShortGoalState shortGoalState = ObjectGenerator.generate(ShortGoalState.class);
+        GoalState shortGoalState = ObjectGenerator.generate(GoalState.class);
         // Step 2. Saving short goal state
         stateRepository.save(shortGoalState);
         // Step 3. Checking short goal state, can be fetched
-        ShortGoalState goalState = (ShortGoalState) stateRepository.findByPlayer(shortGoalState.getPlayer()).get(0);
+        GoalState goalState = (GoalState) stateRepository.findByPlayer(shortGoalState.getPlayer()).get(0);
         // Step 4. Check values match
         Assert.assertEquals(goalState, shortGoalState);
     }

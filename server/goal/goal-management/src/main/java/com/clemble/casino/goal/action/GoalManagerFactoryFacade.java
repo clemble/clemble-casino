@@ -1,12 +1,10 @@
 package com.clemble.casino.goal.action;
 
 import com.clemble.casino.goal.event.GoalEvent;
-import com.clemble.casino.goal.lifecycle.configuration.LongGoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
-import com.clemble.casino.goal.lifecycle.management.ShortGoalState;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.ShortGoalStateRepository;
 import com.clemble.casino.server.action.ClembleManager;
@@ -22,8 +20,7 @@ public class GoalManagerFactoryFacade {
     final private ShortGoalManagerFactory shortGoalManagerFactory;
 
     public GoalManagerFactoryFacade(
-        ClembleManagerFactory<ShortGoalConfiguration> shortGoalManagerFactory,
-        ClembleManagerFactory<LongGoalConfiguration> longGoalManagerFactory,
+        ClembleManagerFactory<GoalConfiguration> shortGoalManagerFactory,
         GoalRecordRepository recordRepository,
         ShortGoalStateRepository stateRepository,
         ServerNotificationService notificationService) {
@@ -42,8 +39,8 @@ public class GoalManagerFactoryFacade {
 
     public ClembleManager<GoalEvent, ? extends GoalState> get(String goalKey) {
         GoalState state = stateRepository.findOne(goalKey);
-        if (state instanceof ShortGoalState) {
-            return shortGoalManagerFactory.create((ShortGoalState) state);
+        if (state instanceof GoalState) {
+            return shortGoalManagerFactory.create((GoalState) state);
         }
         return null;
     }

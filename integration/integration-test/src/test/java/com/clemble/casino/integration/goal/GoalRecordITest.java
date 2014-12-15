@@ -4,7 +4,6 @@ import com.clemble.casino.bet.Bid;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.goal.event.action.GoalReachedAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.ShortGoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
@@ -44,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class GoalRecordITest {
 
-    GoalConfiguration CONFIGURATION = new ShortGoalConfiguration(
+    GoalConfiguration CONFIGURATION = new GoalConfiguration(
         "basic",
         new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
         LimitedBetRule.create(5, 50),
