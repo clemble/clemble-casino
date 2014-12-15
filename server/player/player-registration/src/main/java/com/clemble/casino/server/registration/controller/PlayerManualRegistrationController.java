@@ -138,7 +138,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
             playerCredentials.getEmail(),
             passwordEncoder.encode(loginRequest.getPlayerCredential().getPassword())
         );
-        serverPlayerCredential = playerCredentialRepository.save(serverPlayerCredential);
+        playerCredentialRepository.save(serverPlayerCredential);
         // Step 2. Generating default image redirect
         String imageRedirect = GravatarService.toRedirect(playerCredentials.getEmail());
         notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));
