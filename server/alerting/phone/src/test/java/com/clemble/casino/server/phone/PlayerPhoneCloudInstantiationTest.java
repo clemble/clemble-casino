@@ -12,19 +12,19 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Created by mavarazy on 12/8/14.
+ * Created by mavarazy on 12/15/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@Ignore
+@ActiveProfiles(SpringConfiguration.CLOUD)
 @ContextConfiguration(classes = PlayerPhoneSpringConfiguration.class)
-public class PlayerPhoneSpringConfigurationTest {
+public class PlayerPhoneCloudInstantiationTest {
 
     @Autowired
     public ServerSMSSender smsSender;
 
     @Test
     public void testSMSSend(){
-        smsSender.send("+972525460951", "Test message");
     }
 
 }
-
