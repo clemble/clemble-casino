@@ -67,7 +67,7 @@
         <jackson.version>2.4.4</jackson.version>
         <!-- Test dependencies -->
         <com.clemble.test.version>0.1.4-SNAPSHOT</com.clemble.test.version>
-        <h2.database.version>1.4.182</h2.database.version>
+        <h2.database.version>1.4.183</h2.database.version>
         <junit.version>4.12</junit.version>
         <weberknecht.version>0.1.1</weberknecht.version>
         <gozirra-client.version>0.4.1</gozirra-client.version>
