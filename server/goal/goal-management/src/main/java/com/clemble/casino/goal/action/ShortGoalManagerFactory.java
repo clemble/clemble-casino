@@ -5,6 +5,7 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
 import com.clemble.casino.goal.lifecycle.management.GoalPlayerContext;
+import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.record.GoalRecord;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
@@ -43,7 +44,7 @@ public class ShortGoalManagerFactory implements GoalManagerFactory {
         // Step 1. Saving record
         GoalRecord record = recordRepository.save(initiation.toRecord());
         // Step 2. Creating state
-        GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), PlayerClock.create(record.getConfiguration()));
+        GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), GoalRole.hero.name(), PlayerClock.create(record.getConfiguration()));
         GoalContext goalContext = new GoalContext(parent, Collections.singletonList(playerContext));
         GoalState state = new GoalState(initiation.getGoalKey(), initiation.getPlayer(), record.getBank(), initiation.getGoal(), (GoalConfiguration) initiation.getConfiguration(), goalContext, "Go for it");
         // Step 3. Saving state
