@@ -4,6 +4,7 @@ import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
 import com.clemble.casino.goal.service.EmailReminderService;
@@ -11,6 +12,7 @@ import com.clemble.casino.server.aspect.ClembleAspect;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.core.Ordered;
 
 import java.util.concurrent.ExecutionException;
@@ -39,7 +41,8 @@ public class EmailReminderRuleAspectFactory implements GenericGoalAspectFactory<
     @Override
     public ClembleAspect<GoalManagementEvent> construct(GoalConfiguration configuration, GoalState state) {
         try {
-            return CACHE.get(configuration.getEmailReminderRule());
+            EmailReminderRule emailReminderRule = configuration.getRoleConfigurations().get(0).getEmailReminderRule();
+            return CACHE.get(emailReminderRule);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }

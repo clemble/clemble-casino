@@ -39,7 +39,8 @@ public class PhoneReminderRuleAspectFactory implements GenericGoalAspectFactory<
     @Override
     public ClembleAspect<GoalManagementEvent> construct(GoalConfiguration configuration, GoalState state) {
         try {
-            return CACHE.get(configuration.getPhoneReminderRule());
+            PhoneReminderRule phoneReminderRule = configuration.getRoleConfigurations().get(0).getPhoneReminderRule();
+            return CACHE.get(phoneReminderRule);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }

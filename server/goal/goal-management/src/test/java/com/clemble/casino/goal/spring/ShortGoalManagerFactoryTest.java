@@ -3,9 +3,11 @@ package com.clemble.casino.goal.spring;
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
+import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
@@ -56,8 +58,13 @@ public class ShortGoalManagerFactoryTest {
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
-        new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-        new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
+        ImmutableList.of(
+            new GoalRoleConfiguration(
+                GoalRole.hero,
+                new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
+                new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+            )
+        ),
         ImmutableList.of()
     );
 

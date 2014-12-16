@@ -3,9 +3,11 @@ package com.clemble.casino.goal.configuration.controller;
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.ChallengeConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
+import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.lifecycle.configuration.rule.bet.*;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -41,8 +43,13 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
-            new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
+            ImmutableList.of(
+                new GoalRoleConfiguration(
+                    GoalRole.hero,
+                    new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
+                    new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+                )
+            ),
             ImmutableList.of(new ChallengeConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
                 MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
@@ -58,8 +65,13 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.friends,
-            new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
+            ImmutableList.of(
+                new GoalRoleConfiguration(
+                    GoalRole.hero,
+                    new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
+                    new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+                )
+            ),
             ImmutableList.of(new ChallengeConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
                 MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
@@ -75,8 +87,13 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.world,
-            new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
+            ImmutableList.of(
+                new GoalRoleConfiguration(
+                    GoalRole.hero,
+                    new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
+                    new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+                )
+            ),
             ImmutableList.of(new ChallengeConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
                 MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),

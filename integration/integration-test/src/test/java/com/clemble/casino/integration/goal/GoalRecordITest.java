@@ -4,10 +4,12 @@ import com.clemble.casino.bet.Bid;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.goal.event.action.GoalReachedAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
+import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -51,8 +53,13 @@ public class GoalRecordITest {
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
-        new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-        new PhoneReminderRule(TimeUnit.HOURS.toMillis(2)),
+        ImmutableList.of(
+            new GoalRoleConfiguration(
+                GoalRole.hero,
+                new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
+                new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+            )
+        ),
         ImmutableList.of()
     );
 
