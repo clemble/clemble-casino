@@ -5,8 +5,7 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.goal.event.action.GoalReachedAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
@@ -56,8 +55,8 @@ public class GoalRecordITest {
         ImmutableList.of(
             new GoalRoleConfiguration(
                 GoalRole.hero,
-                new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-                new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+                new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
+                new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
             )
         ),
         ImmutableList.of()

@@ -1,10 +1,10 @@
 package com.clemble.casino.goal.aspect.reminder;
 
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
-import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.ReminderRule;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
 import com.clemble.casino.goal.service.EmailReminderService;
@@ -12,7 +12,6 @@ import com.clemble.casino.server.aspect.ClembleAspect;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import org.hibernate.validator.constraints.Email;
 import org.springframework.core.Ordered;
 
 import java.util.concurrent.ExecutionException;
@@ -23,12 +22,12 @@ import java.util.concurrent.ExecutionException;
 public class EmailReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalManagementEvent> {
 
     final private EmailReminderService emailReminderService;
-    final private LoadingCache<EmailReminderRule, EmailReminderRuleAspect> CACHE = CacheBuilder.
+    final private LoadingCache<BasicReminderRule, EmailReminderRuleAspect> CACHE = CacheBuilder.
         newBuilder().
         build(
-            new CacheLoader<EmailReminderRule, EmailReminderRuleAspect>() {
+            new CacheLoader<BasicReminderRule, EmailReminderRuleAspect>() {
                 @Override
-                public EmailReminderRuleAspect load(EmailReminderRule reminderRule) {
+                public EmailReminderRuleAspect load(BasicReminderRule reminderRule) {
                     return new EmailReminderRuleAspect(reminderRule, emailReminderService);
                 }
             }
@@ -41,8 +40,12 @@ public class EmailReminderRuleAspectFactory implements GenericGoalAspectFactory<
     @Override
     public ClembleAspect<GoalManagementEvent> construct(GoalConfiguration configuration, GoalState state) {
         try {
-            EmailReminderRule emailReminderRule = configuration.getRoleConfigurations().get(0).getEmailReminderRule();
-            return CACHE.get(emailReminderRule);
+            ReminderRule emailReminderRule = configuration.getRoleConfigurations().get(0).getEmailReminderRule();
+            if (emailReminderRule instanceof NoReminderRule) {
+                return null;
+            } else {
+                return CACHE.get((BasicReminderRule) emailReminderRule);
+            }
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }

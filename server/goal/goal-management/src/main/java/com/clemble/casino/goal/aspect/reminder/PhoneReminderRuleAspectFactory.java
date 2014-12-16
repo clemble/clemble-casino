@@ -1,9 +1,10 @@
 package com.clemble.casino.goal.aspect.reminder;
 
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
-import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.ReminderRule;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
 import com.clemble.casino.goal.service.PhoneReminderService;
@@ -21,12 +22,12 @@ import java.util.concurrent.ExecutionException;
 public class PhoneReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalManagementEvent> {
 
     final private PhoneReminderService reminderService;
-    final private LoadingCache<PhoneReminderRule, PhoneReminderRuleAspect> CACHE = CacheBuilder.
+    final private LoadingCache<BasicReminderRule, PhoneReminderRuleAspect> CACHE = CacheBuilder.
         newBuilder().
         build(
-            new CacheLoader<PhoneReminderRule, PhoneReminderRuleAspect>() {
+            new CacheLoader<BasicReminderRule, PhoneReminderRuleAspect>() {
                 @Override
-                public PhoneReminderRuleAspect load(PhoneReminderRule reminderRule) {
+                public PhoneReminderRuleAspect load(BasicReminderRule reminderRule) {
                     return new PhoneReminderRuleAspect(reminderRule, reminderService);
                 }
             }
@@ -39,8 +40,12 @@ public class PhoneReminderRuleAspectFactory implements GenericGoalAspectFactory<
     @Override
     public ClembleAspect<GoalManagementEvent> construct(GoalConfiguration configuration, GoalState state) {
         try {
-            PhoneReminderRule phoneReminderRule = configuration.getRoleConfigurations().get(0).getPhoneReminderRule();
-            return CACHE.get(phoneReminderRule);
+            ReminderRule phoneReminderRule = configuration.getRoleConfigurations().get(0).getPhoneReminderRule();
+            if (phoneReminderRule instanceof NoReminderRule) {
+                return null;
+            } else {
+                return CACHE.get((BasicReminderRule) phoneReminderRule);
+            }
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }

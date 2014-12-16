@@ -4,8 +4,7 @@ import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.ChallengeConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.PhoneReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.lifecycle.configuration.rule.bet.*;
@@ -46,8 +45,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             ImmutableList.of(
                 new GoalRoleConfiguration(
                     GoalRole.hero,
-                    new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-                    new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
                 )
             ),
             ImmutableList.of(new ChallengeConfiguration(
@@ -68,8 +67,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             ImmutableList.of(
                 new GoalRoleConfiguration(
                     GoalRole.hero,
-                    new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-                    new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
                 )
             ),
             ImmutableList.of(new ChallengeConfiguration(
@@ -90,8 +89,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             ImmutableList.of(
                 new GoalRoleConfiguration(
                     GoalRole.hero,
-                    new EmailReminderRule(TimeUnit.HOURS.toMillis(4)),
-                    new PhoneReminderRule(TimeUnit.HOURS.toMillis(2))
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
                 )
             ),
             ImmutableList.of(new ChallengeConfiguration(

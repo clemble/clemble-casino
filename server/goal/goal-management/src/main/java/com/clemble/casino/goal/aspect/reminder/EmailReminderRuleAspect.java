@@ -2,7 +2,7 @@ package com.clemble.casino.goal.aspect.reminder;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.goal.aspect.GoalAspect;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.EmailReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
 import com.clemble.casino.goal.service.EmailReminderService;
@@ -17,10 +17,10 @@ import java.util.concurrent.TimeUnit;
 public class EmailReminderRuleAspect extends GoalAspect<GoalManagementEvent>{
 
     final private long hoursToReminder;
-    final private EmailReminderRule reminderRule;
+    final private BasicReminderRule reminderRule;
     final private EmailReminderService reminderService;
 
-    public EmailReminderRuleAspect(EmailReminderRule reminderRule, EmailReminderService reminderService) {
+    public EmailReminderRuleAspect(BasicReminderRule reminderRule, EmailReminderService reminderService) {
         super(new EventTypeSelector(GoalManagementEvent.class));
         this.reminderRule = reminderRule;
         this.reminderService = reminderService;
