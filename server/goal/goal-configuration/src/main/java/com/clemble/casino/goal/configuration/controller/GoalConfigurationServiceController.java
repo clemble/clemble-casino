@@ -36,7 +36,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
     final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
         new GoalConfiguration(
             "Solo",
-            new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
+            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             ForbiddenBetRule.INSTANCE,
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
@@ -46,13 +46,14 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             ImmutableList.of(new ChallengeConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
                 MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
+                new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
                 new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance())
                 )
             )
         ),
         new GoalConfiguration(
             "Friends",
-            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
+            new Bid(Money.create(Currency.FakeMoney, 150), Money.create(Currency.FakeMoney, 75)),
             MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
@@ -62,13 +63,14 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             ImmutableList.of(new ChallengeConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
                 MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
+                new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
                 new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance())
                 )
             )
         ),
         new GoalConfiguration(
             "World",
-            new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
+            new Bid(Money.create(Currency.FakeMoney, 200), Money.create(Currency.FakeMoney, 150)),
             MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
@@ -78,6 +80,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             ImmutableList.of(new ChallengeConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
                 MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),
+                new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
                 new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance())
             )
         )

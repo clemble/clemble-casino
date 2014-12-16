@@ -1,7 +1,5 @@
 package com.clemble.casino.server.social;
 
-import com.clemble.casino.player.PlayerPresence;
-import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
