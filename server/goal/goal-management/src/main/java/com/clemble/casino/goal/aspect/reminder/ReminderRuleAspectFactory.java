@@ -7,44 +7,50 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderR
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.ReminderRule;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
-import com.clemble.casino.goal.service.PhoneReminderService;
+import com.clemble.casino.goal.service.ReminderService;
 import com.clemble.casino.server.aspect.ClembleAspect;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import org.springframework.core.Ordered;
 
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 /**
  * Created by mavarazy on 12/12/14.
  */
-public class PhoneReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalManagementEvent> {
+public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalManagementEvent> {
 
-    final private PhoneReminderService reminderService;
-    final private LoadingCache<BasicReminderRule, PhoneReminderRuleAspect> CACHE = CacheBuilder.
+    final private ReminderService reminderService;
+    final private Function<GoalConfiguration, ReminderRule> roleExtractor;
+    final private int order;
+
+    final private LoadingCache<BasicReminderRule, ReminderRuleAspect> CACHE = CacheBuilder.
         newBuilder().
         build(
-            new CacheLoader<BasicReminderRule, PhoneReminderRuleAspect>() {
+            new CacheLoader<BasicReminderRule, ReminderRuleAspect>() {
                 @Override
-                public PhoneReminderRuleAspect load(BasicReminderRule reminderRule) {
-                    return new PhoneReminderRuleAspect(reminderRule, reminderService);
+                public ReminderRuleAspect load(BasicReminderRule reminderRule) {
+                    return new ReminderRuleAspect(reminderRule, reminderService);
                 }
             }
         );
 
-    public PhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
-        this.reminderService = reminderService;
+    // TODO not the best solution think of something better
+    public ReminderRuleAspectFactory(int order, ReminderService emailReminderService, Function<GoalConfiguration, ReminderRule> roleExtractor) {
+        this.order = order;
+        this.roleExtractor = roleExtractor;
+        this.reminderService = emailReminderService;
     }
 
     @Override
     public ClembleAspect<GoalManagementEvent> construct(GoalConfiguration configuration, GoalState state) {
         try {
-            ReminderRule phoneReminderRule = configuration.getRoleConfigurations().get(0).getPhoneReminderRule();
-            if (phoneReminderRule instanceof NoReminderRule) {
+            ReminderRule emailReminderRule = roleExtractor.apply(configuration);
+            if (emailReminderRule instanceof NoReminderRule) {
                 return null;
             } else {
-                return CACHE.get((BasicReminderRule) phoneReminderRule);
+                return CACHE.get((BasicReminderRule) emailReminderRule);
             }
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
@@ -53,8 +59,7 @@ public class PhoneReminderRuleAspectFactory implements GenericGoalAspectFactory<
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE + 3;
+        return order;
     }
 
 }
-

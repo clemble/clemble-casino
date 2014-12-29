@@ -8,13 +8,13 @@ import com.clemble.casino.goal.aspect.outcome.ShortGoalLostOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.ShortGoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.ShortGoalStatePersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
-import com.clemble.casino.goal.aspect.reminder.EmailReminderRuleAspectFactory;
-import com.clemble.casino.goal.aspect.reminder.PhoneReminderRuleAspectFactory;
+import com.clemble.casino.goal.aspect.reminder.ReminderRuleAspectFactory;
 import com.clemble.casino.goal.aspect.time.ShortGoalTimeAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.controller.FriendGoalServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.Ordered;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 
 /**
@@ -71,8 +72,17 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public EmailReminderRuleAspectFactory emailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
-        return new EmailReminderRuleAspectFactory(emailReminderService);
+    public ReminderRuleAspectFactory heroEmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
+        return new ReminderRuleAspectFactory(Ordered.HIGHEST_PRECEDENCE + 4, emailReminderService, (configuration) ->
+            configuration.getRoleConfiguration(GoalRole.hero).getEmailReminderRule()
+        );
+    }
+
+    @Bean
+    public ReminderRuleAspectFactory supportEmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
+        return new ReminderRuleAspectFactory(Ordered.HIGHEST_PRECEDENCE + 5, emailReminderService, (configuration) ->
+            configuration.getRoleConfiguration(GoalRole.supporter).getEmailReminderRule()
+        );
     }
 
     @Bean
@@ -81,8 +91,17 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PhoneReminderRuleAspectFactory phoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
-        return new PhoneReminderRuleAspectFactory(reminderService);
+    public ReminderRuleAspectFactory heroPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
+        return new ReminderRuleAspectFactory(Ordered.HIGHEST_PRECEDENCE + 6, reminderService,  (configuration) ->
+            configuration.getRoleConfiguration(GoalRole.hero).getPhoneReminderRule()
+        );
+    }
+
+    @Bean
+    public ReminderRuleAspectFactory supportPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
+        return new ReminderRuleAspectFactory(Ordered.HIGHEST_PRECEDENCE + 7, reminderService,  (configuration) ->
+            configuration.getRoleConfiguration(GoalRole.supporter).getPhoneReminderRule()
+        );
     }
 
     @Bean
