@@ -46,11 +46,11 @@ public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalM
     @Override
     public ClembleAspect<GoalManagementEvent> construct(GoalConfiguration configuration, GoalState state) {
         try {
-            ReminderRule emailReminderRule = roleExtractor.apply(configuration);
-            if (emailReminderRule instanceof NoReminderRule) {
+            ReminderRule reminderRule = roleExtractor.apply(configuration);
+            if (reminderRule == null || reminderRule instanceof NoReminderRule) {
                 return null;
             } else {
-                return CACHE.get((BasicReminderRule) emailReminderRule);
+                return CACHE.get((BasicReminderRule) reminderRule);
             }
         } catch (ExecutionException e) {
             throw new RuntimeException(e);

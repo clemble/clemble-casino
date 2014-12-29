@@ -31,15 +31,15 @@ public class ClembleManagerFactory<C extends Configuration> implements Applicati
 
     public <R extends Event, S extends State<R, ?>> ClembleManager<R, S> create(S state, C configuration) {
         // Step 1. Constructing GameAspects
-        Collection<ClembleAspect<?>> gameAspects = new ArrayList<>(aspectFactories.size());
+        Collection<ClembleAspect<?>> aspects = new ArrayList<>(aspectFactories.size());
         for (ClembleAspectFactory<?, C, State> aspectFactory : aspectFactories) {
-            ClembleAspect<?> gameAspect = aspectFactory.construct(configuration, (State) state);
-            LOG.debug("processing aspect factory {} with aspect {}", aspectFactory, gameAspect);
-            if(gameAspect != null) {
-                gameAspects.add(gameAspect);
+            ClembleAspect<?> aspect = aspectFactory.construct(configuration, (State) state);
+            LOG.debug("processing aspect factory {} with aspect {}", aspectFactory, aspect);
+            if(aspect != null) {
+                aspects.add(aspect);
             }
         }
-        return new ClembleManager<R, S>(state, gameAspects);
+        return new ClembleManager<R, S>(state, aspects);
     }
 
     @Override
