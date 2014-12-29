@@ -5,6 +5,7 @@ import com.clemble.casino.goal.lifecycle.configuration.ChallengeConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.lifecycle.configuration.rule.bet.*;
@@ -47,6 +48,11 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                     GoalRole.hero,
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
+                ),
+                new GoalRoleConfiguration(
+                    GoalRole.supporter,
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                    NoReminderRule.INSTANCE
                 )
             ),
             ImmutableList.of(new ChallengeConfiguration(
@@ -69,6 +75,11 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                     GoalRole.hero,
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
+                ),
+                new GoalRoleConfiguration(
+                    GoalRole.supporter,
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                    NoReminderRule.INSTANCE
                 )
             ),
             ImmutableList.of(new ChallengeConfiguration(
@@ -91,6 +102,11 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                     GoalRole.hero,
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
+                ),
+                new GoalRoleConfiguration(
+                    GoalRole.supporter,
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                    NoReminderRule.INSTANCE
                 )
             ),
             ImmutableList.of(new ChallengeConfiguration(
