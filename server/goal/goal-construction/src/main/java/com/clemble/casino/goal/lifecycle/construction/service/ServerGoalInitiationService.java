@@ -4,6 +4,7 @@ import com.clemble.casino.bet.Bid;
 import com.clemble.casino.bet.PlayerBid;
 import com.clemble.casino.goal.lifecycle.initiation.event.GoalInitiationChangedEvent;
 import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
+import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
@@ -68,7 +69,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         notificationService.send(initiation.getConfiguration().getPrivacyRule(), GoalInitiationCreatedEvent.create(initiation));
         // Step 4. Freezing amount for a player
         LOG.debug("Freezing amount for a player {}", initiation.getPlayer());
-        Money amount = initiation.getConfiguration().getBid().getAmount();
+        Money amount = initiation.getConfiguration().getRoleConfiguration(GoalRole.hero).getBid().getAmount();
         Set<PaymentOperation> operations = ImmutableSet.<PaymentOperation>of(
             new PaymentOperation(initiation.getPlayer(), amount, Operation.Credit),
             new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Debit)
@@ -116,13 +117,15 @@ public class ServerGoalInitiationService implements GoalInitiationService {
     }
 
     @Override
-    public GoalInitiation bid(String goalKey, Bid bid) {
+    public GoalInitiation bid(String goalKey, GoalRole role) {
         throw new UnsupportedOperationException();
     }
 
-    public GoalInitiation bid(String goalKey, PlayerBid playerBid) {
+    public GoalInitiation bid(String goalKey, String player, GoalRole role) {
         // Step 1. Fetching goal initiation
         GoalInitiation initiation = initiationRepository.findOne(goalKey);
+
+        PlayerBid playerBid = new PlayerBid(player, initiation.getConfiguration().getRoleConfiguration(role).getBid());
         // Step 2. Processing GoalInitiaiton
         initiation.getBank().add(playerBid);
         // Step 3. Freezing amount on account

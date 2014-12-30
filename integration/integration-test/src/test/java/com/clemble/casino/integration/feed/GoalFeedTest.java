@@ -7,6 +7,7 @@ import com.clemble.casino.goal.event.action.GoalStatusUpdateAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
+import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.post.*;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -59,7 +60,7 @@ public class GoalFeedTest {
         // Step 4. Checking post appeared in player feed
         CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
         // Step 5. Bidding on goal appeared
-        goalB.initiationService().bid(constructionA.getGoalKey(), ((MonoBidRule) configuration.getBetRule()).getBid());
+        goalB.initiationService().bid(constructionA.getGoalKey(), GoalRole.supporter);
         // Step 6. Checking bid appeared
         CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalBidPost);
     }

@@ -1,14 +1,12 @@
 package com.clemble.casino.goal.configuration.controller;
 
 import com.clemble.casino.bet.Bid;
-import com.clemble.casino.goal.lifecycle.configuration.ChallengeConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
-import com.clemble.casino.lifecycle.configuration.rule.bet.*;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
@@ -38,85 +36,83 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
     final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
         new GoalConfiguration(
             "Solo",
-            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
-            ForbiddenBetRule.INSTANCE,
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
             ImmutableList.of(
                 new GoalRoleConfiguration(
                     GoalRole.hero,
+                    new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 100)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
                 ),
                 new GoalRoleConfiguration(
                     GoalRole.supporter,
+                    new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
                     NoReminderRule.INSTANCE
-                )
-            ),
-            ImmutableList.of(new ChallengeConfiguration(
-                new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
-                MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
-                new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
-                new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance())
+                ),
+                new GoalRoleConfiguration(
+                    GoalRole.observer,
+                    new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                    NoReminderRule.INSTANCE
                 )
             )
         ),
         new GoalConfiguration(
             "Friends",
-            new Bid(Money.create(Currency.FakeMoney, 150), Money.create(Currency.FakeMoney, 75)),
-            MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.friends,
             ImmutableList.of(
                 new GoalRoleConfiguration(
                     GoalRole.hero,
+                    new Bid(Money.create(Currency.FakeMoney, 150), Money.create(Currency.FakeMoney, 75)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
                 ),
                 new GoalRoleConfiguration(
                     GoalRole.supporter,
+                    new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
                     NoReminderRule.INSTANCE
-                )
-            ),
-            ImmutableList.of(new ChallengeConfiguration(
-                new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 20)),
-                MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5))),
-                new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
-                new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance())
+                ),
+                new GoalRoleConfiguration(
+                    GoalRole.observer,
+                    new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                    NoReminderRule.INSTANCE
                 )
             )
         ),
         new GoalConfiguration(
             "World",
-            new Bid(Money.create(Currency.FakeMoney, 200), Money.create(Currency.FakeMoney, 150)),
-            MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.world,
             ImmutableList.of(
                 new GoalRoleConfiguration(
                     GoalRole.hero,
+                    new Bid(Money.create(Currency.FakeMoney, 200), Money.create(Currency.FakeMoney, 150)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
                 ),
                 new GoalRoleConfiguration(
                     GoalRole.supporter,
+                    new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+                    new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                    NoReminderRule.INSTANCE
+                ),
+                new GoalRoleConfiguration(
+                    GoalRole.observer,
+                    new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
                     new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
                     NoReminderRule.INSTANCE
                 )
-            ),
-            ImmutableList.of(new ChallengeConfiguration(
-                new Bid(Money.create(Currency.FakeMoney, 120), Money.create(Currency.FakeMoney, 30)),
-                MonoBidRule.create(new Bid(Money.create(Currency.FakeMoney, 75), Money.create(Currency.FakeMoney, 15))),
-                new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
-                new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance())
             )
         )
-    ));
+    );
 
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)

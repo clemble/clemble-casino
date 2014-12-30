@@ -1,10 +1,9 @@
 package com.clemble.casino.goal.construction.controller;
 
-import com.clemble.casino.bet.Bid;
-import com.clemble.casino.bet.PlayerBid;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
 import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalInitiationService;
+import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,17 +54,15 @@ public class GoalInitiationServiceController implements GoalInitiationService {
     }
 
     @Override
-    public GoalInitiation bid(String goalKey, Bid bid) {
+    public GoalInitiation bid(String goalKey, GoalRole role) {
         throw new UnsupportedOperationException();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = GOAL_INITIATION_BID, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public GoalInitiation bid(@CookieValue("player") String player, @PathVariable("goalKey") String goalKey, @RequestBody Bid bid) {
-        // Step 1. Generating player bid
-        PlayerBid playerBid = new PlayerBid(player, bid);
-        // Step 2. Processing player bid
-        return initiationService.bid(goalKey, playerBid);
+    public GoalInitiation bid(@CookieValue("player") String player, @PathVariable("goalKey") String goalKey, @RequestBody GoalRole role) {
+        // Step 1. Processing player bid
+        return initiationService.bid(goalKey, player, role);
     }
 
 }
