@@ -26,6 +26,8 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 
+import com.clemble.casino.server.template.MustacheTemplateService;
+
 import java.io.IOException;
 
 /**
@@ -54,7 +56,7 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
         ServerEmailSender emailSender,
         PlayerEmailRepository emailRepository,
         SystemNotificationServiceListener notificationServiceListener) {
-        SystemEmailSendRequestEventListener emailAddedEventListener = new SystemEmailSendRequestEventListener(emailSender, emailRepository);
+        SystemEmailSendRequestEventListener emailAddedEventListener = new SystemEmailSendRequestEventListener(new MustacheTemplateService(),emailSender, emailRepository);
         notificationServiceListener.subscribe(emailAddedEventListener);
         return emailAddedEventListener;
     }

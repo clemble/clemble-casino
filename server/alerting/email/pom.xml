@@ -17,6 +17,10 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>common-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>template</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.mandrillapp.wrapper.lutung</groupId>
@@ -27,6 +31,10 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.samskivert</groupId>
+            <artifactId>jmustache</artifactId>
         </dependency>
     </dependencies>
 

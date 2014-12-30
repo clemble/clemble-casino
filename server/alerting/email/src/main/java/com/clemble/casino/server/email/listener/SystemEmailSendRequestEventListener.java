@@ -5,19 +5,24 @@ import com.clemble.casino.server.email.service.ServerEmailSender;
 import com.clemble.casino.server.event.email.SystemEmailSendRequestEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 
+import com.clemble.casino.server.template.TemplateService;
+
 /**
  * Created by mavarazy on 12/8/14.
  */
 public class SystemEmailSendRequestEventListener implements SystemEventListener<SystemEmailSendRequestEvent>{
 
     final private ServerEmailSender emailSender;
+    final private TemplateService templateService;
     final private PlayerEmailRepository emailRepository;
 
     public SystemEmailSendRequestEventListener(
+        TemplateService templateService,
         ServerEmailSender emailSender,
         PlayerEmailRepository emailRepository
     ) {
         this.emailSender = emailSender;
+        this.templateService = templateService;
         this.emailRepository = emailRepository;
     }
 
@@ -25,8 +30,10 @@ public class SystemEmailSendRequestEventListener implements SystemEventListener<
     public void onEvent(SystemEmailSendRequestEvent event) {
         // Step 1. Fetching email
         String email = emailRepository.findOne(event.getPlayer()).getEmail();
-        // Step 2. Sending email
-        emailSender.send(email, event.getText());
+        // Step 2. Generating text
+        String text = templateService.produce(event.getTemplate(), event.getParams());
+        // Step 3. Sending email
+        emailSender.send(email, text);
     }
 
     @Override

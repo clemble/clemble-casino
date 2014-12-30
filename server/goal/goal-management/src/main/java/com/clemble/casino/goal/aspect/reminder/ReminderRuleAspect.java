@@ -6,6 +6,7 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicRemind
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
 import com.clemble.casino.goal.service.ReminderService;
+import com.google.common.collect.ImmutableMap;
 
 import java.util.Date;
 import java.util.Set;
@@ -45,7 +46,8 @@ public class ReminderRuleAspect extends GoalAspect<GoalManagementEvent> {
                 reminderService.scheduleReminder(
                     player,
                     event.getBody().getGoalKey(),
-                    hoursToReminder + " hours to " + goal,
+                    "goal_due",
+                    ImmutableMap.<String, String>of("text", hoursToReminder + " hours to " + goal),
                     new Date(remindTime)
                 )
             );

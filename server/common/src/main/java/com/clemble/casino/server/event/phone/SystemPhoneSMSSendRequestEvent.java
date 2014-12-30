@@ -3,6 +3,8 @@ package com.clemble.casino.server.event.phone;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Map;
+
 /**
  * Created by mavarazy on 12/8/14.
  */
@@ -11,14 +13,17 @@ public class SystemPhoneSMSSendRequestEvent implements SystemPhoneEvent {
     final public static String CHANNEL = "sys:phone:sms:send";
 
     final private String player;
-    final private String text;
+    final private String template;
+    final private Map<String, String> params;
 
     @JsonCreator
     public SystemPhoneSMSSendRequestEvent(
         @JsonProperty(PLAYER) String player,
-        @JsonProperty("text") String text) {
+        @JsonProperty("template") String template,
+        @JsonProperty("params") Map<String, String> params) {
         this.player = player;
-        this.text = text;
+        this.template = template;
+        this.params = params;
     }
 
     @Override
@@ -26,8 +31,12 @@ public class SystemPhoneSMSSendRequestEvent implements SystemPhoneEvent {
         return player;
     }
 
-    public String getText() {
-        return text;
+    public String getTemplate() {
+        return template;
+    }
+
+    public Map<String, String> getParams() {
+        return params;
     }
 
     @Override
@@ -43,7 +52,7 @@ public class SystemPhoneSMSSendRequestEvent implements SystemPhoneEvent {
         SystemPhoneSMSSendRequestEvent that = (SystemPhoneSMSSendRequestEvent) o;
 
         if (!player.equals(that.player)) return false;
-        if (!text.equals(that.text)) return false;
+        if (!template.equals(that.template)) return false;
 
         return true;
     }
@@ -51,7 +60,7 @@ public class SystemPhoneSMSSendRequestEvent implements SystemPhoneEvent {
     @Override
     public int hashCode() {
         int result = player.hashCode();
-        result = 31 * result + text.hashCode();
+        result = 31 * result + template.hashCode();
         return result;
     }
 

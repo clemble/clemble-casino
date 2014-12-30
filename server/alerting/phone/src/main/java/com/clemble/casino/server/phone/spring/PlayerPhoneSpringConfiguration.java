@@ -13,6 +13,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationServiceLi
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
+import com.clemble.casino.server.template.MustacheTemplateService;
 import com.twilio.sdk.TwilioRestClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -58,7 +59,7 @@ public class PlayerPhoneSpringConfiguration implements SpringConfiguration {
         ServerSMSSender smsSender,
         PlayerPhoneRepository phoneRepository,
         SystemNotificationServiceListener notificationServiceListener) {
-        SystemPhoneSMSRequestEventListener smsSendEventListener = new SystemPhoneSMSRequestEventListener(smsSender, phoneRepository);
+        SystemPhoneSMSRequestEventListener smsSendEventListener = new SystemPhoneSMSRequestEventListener(new MustacheTemplateService(), smsSender, phoneRepository);
         notificationServiceListener.subscribe(smsSendEventListener);
         return smsSendEventListener;
     }

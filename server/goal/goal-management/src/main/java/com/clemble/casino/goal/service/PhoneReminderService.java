@@ -7,6 +7,7 @@ import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by mavarazy on 12/12/14.
@@ -20,13 +21,13 @@ public class PhoneReminderService implements ReminderService {
     }
 
     @Override
-    public void scheduleReminder(String player, String goalKey, String text, Date breachTime) {
+    public void scheduleReminder(String player, String goalKey, String template, Map<String, String> params, Date breachTime) {
         String key = toKey(player);
         // Step 1. Cancel reminder
         notificationService.send(new SystemRemoveJobScheduleEvent(goalKey, key));
         // Step 2. Schedule notification for a new breach time
         // Step 2.1 Generate email notification
-        SystemPhoneSMSSendRequestEvent smsRequest = new SystemPhoneSMSSendRequestEvent(player, text);
+        SystemPhoneSMSSendRequestEvent smsRequest = new SystemPhoneSMSSendRequestEvent(player, template, params);
         // Step 2.2 Schedule email notification
         notificationService.send(new SystemAddJobScheduleEvent(goalKey, key, smsRequest, breachTime));
     }
