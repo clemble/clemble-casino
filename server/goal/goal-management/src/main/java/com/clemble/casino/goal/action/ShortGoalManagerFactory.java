@@ -44,7 +44,7 @@ public class ShortGoalManagerFactory implements GoalManagerFactory {
         // Step 1. Saving record
         GoalRecord record = recordRepository.save(initiation.toRecord());
         // Step 2. Creating state
-        GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), GoalRole.hero.name(), PlayerClock.create(record.getConfiguration()));
+        GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), PlayerClock.create(record.getConfiguration()));
         GoalContext goalContext = new GoalContext(parent, Collections.singletonList(playerContext));
         GoalState state = new GoalState(initiation.getGoalKey(), initiation.getPlayer(), record.getBank(), initiation.getGoal(), (GoalConfiguration) initiation.getConfiguration(), goalContext, initiation.getObservers(), initiation.getSupporters(), "Go for it");
         // Step 3. Saving state

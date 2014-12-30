@@ -126,6 +126,16 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         GoalInitiation initiation = initiationRepository.findOne(goalKey);
         if (initiation.getPlayer().equals(player) || initiation.getSupporters().contains(player) || initiation.getObservers().contains(player))
             throw new IllegalAccessError();
+        switch (role) {
+            case supporter:
+                initiation.getSupporters().add(player);
+                break;
+            case observer:
+                initiation.getObservers().add(player);
+                break;
+            default:
+                throw new IllegalAccessError();
+        }
         PlayerBid playerBid = new PlayerBid(player, initiation.getConfiguration().getRoleConfiguration(role).getBid());
         // Step 2. Processing GoalInitiaiton
         initiation.getBank().add(playerBid);
