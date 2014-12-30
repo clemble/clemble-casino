@@ -5,6 +5,7 @@ import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
@@ -59,7 +60,8 @@ public class ShortGoalManagerFactoryTest {
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
-        ImmutableList.<GoalRoleConfiguration>of()
+        new GoalRoleConfiguration(GoalRole.supporter, new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
+        new GoalRoleConfiguration(GoalRole.observer, new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE)
     );
 
     @Test

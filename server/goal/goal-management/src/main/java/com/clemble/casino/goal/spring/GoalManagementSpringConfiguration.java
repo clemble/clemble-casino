@@ -90,7 +90,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
             emailReminderService,
             (state) -> state.getSupporters(),
             (configuration) -> {
-                GoalRoleConfiguration roleConfiguration = configuration.getRoleConfiguration(GoalRole.supporter);
+                GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
                 return roleConfiguration != null ? roleConfiguration.getEmailReminderRule() : null;
             }
         );
@@ -118,7 +118,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
             reminderService,
             (state) -> state.getSupporters(),
             (configuration) -> {
-                GoalRoleConfiguration roleConfiguration = configuration.getRoleConfiguration(GoalRole.supporter);
+                GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
                 return roleConfiguration != null ? roleConfiguration.getPhoneReminderRule() : null;
             }
         );
