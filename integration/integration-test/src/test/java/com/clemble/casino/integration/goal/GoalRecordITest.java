@@ -47,17 +47,13 @@ public class GoalRecordITest {
 
     GoalConfiguration CONFIGURATION = new GoalConfiguration(
         "basic",
+        new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
+        new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
+        new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
-        ImmutableList.of(
-            new GoalRoleConfiguration(
-                GoalRole.hero,
-                new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
-                new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
-                new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
-            )
-        )
+        ImmutableList.of()
     );
 
     @Autowired

@@ -69,7 +69,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         notificationService.send(initiation.getConfiguration().getPrivacyRule(), GoalInitiationCreatedEvent.create(initiation));
         // Step 4. Freezing amount for a player
         LOG.debug("Freezing amount for a player {}", initiation.getPlayer());
-        Money amount = initiation.getConfiguration().getRoleConfiguration(GoalRole.hero).getBid().getAmount();
+        Money amount = initiation.getConfiguration().getBid().getAmount();
         Set<PaymentOperation> operations = ImmutableSet.<PaymentOperation>of(
             new PaymentOperation(initiation.getPlayer(), amount, Operation.Credit),
             new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Debit)

@@ -52,17 +52,13 @@ public class ShortGoalManagerFactoryTest {
 
     final private GoalConfiguration configuration = new GoalConfiguration(
         "basic",
+        new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
+        new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
+        new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
         new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
         new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
         PrivacyRule.me,
-        ImmutableList.of(
-            new GoalRoleConfiguration(
-                GoalRole.hero,
-                new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
-                new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
-                new BasicReminderRule(TimeUnit.HOURS.toMillis(2))
-            )
-        )
+        ImmutableList.<GoalRoleConfiguration>of()
     );
 
     @Test
@@ -73,7 +69,7 @@ public class ShortGoalManagerFactoryTest {
         GoalInitiation initiation = new GoalInitiation(
             goalKey,
             InitiationState.initiated,
-            Bank.create(player, configuration.getRoleConfiguration(GoalRole.hero).getBid()),
+            Bank.create(player, configuration.getBid()),
             player,
             "Create goal state",
             configuration,
@@ -93,7 +89,7 @@ public class ShortGoalManagerFactoryTest {
         GoalInitiation initiation = new GoalInitiation(
                 goalKey,
                 InitiationState.initiated,
-                Bank.create(player, configuration.getRoleConfiguration(GoalRole.hero).getBid()),
+                Bank.create(player, configuration.getBid()),
                 player,
                 "Create goal state",
                 configuration,

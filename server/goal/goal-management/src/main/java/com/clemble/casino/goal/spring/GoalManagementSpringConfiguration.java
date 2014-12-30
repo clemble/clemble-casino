@@ -74,10 +74,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ReminderRuleAspectFactory heroEmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
-        return new ReminderRuleAspectFactory(Ordered.HIGHEST_PRECEDENCE + 4, emailReminderService, (configuration) -> {
-            GoalRoleConfiguration roleConfiguration = configuration.getRoleConfiguration(GoalRole.hero);
-            return roleConfiguration != null ? roleConfiguration.getEmailReminderRule() : null;
-        });
+        return new ReminderRuleAspectFactory(Ordered.HIGHEST_PRECEDENCE + 4, emailReminderService, (configuration) -> configuration.getEmailReminderRule());
     }
 
     @Bean
@@ -95,10 +92,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ReminderRuleAspectFactory heroPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
-        return new ReminderRuleAspectFactory(Ordered.HIGHEST_PRECEDENCE + 6, reminderService,  (configuration) -> {
-            GoalRoleConfiguration roleConfiguration = configuration.getRoleConfiguration(GoalRole.hero);
-            return roleConfiguration != null ? roleConfiguration.getPhoneReminderRule() : null;
-        });
+        return new ReminderRuleAspectFactory(Ordered.HIGHEST_PRECEDENCE + 6, reminderService,  (configuration) -> configuration.getPhoneReminderRule());
     }
 
     @Bean
