@@ -33,6 +33,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -73,6 +74,8 @@ public class ShortGoalManagerFactoryTest {
             player,
             "Create goal state",
             configuration,
+            new HashSet<>(),
+            new HashSet<>(),
             new Date());
         // Step 2. Starting initiation
         managerFactory.start(null, initiation);
@@ -93,6 +96,8 @@ public class ShortGoalManagerFactoryTest {
                 player,
                 "Create goal state",
                 configuration,
+                new HashSet<>(),
+                new HashSet<>(),
                 new Date());
         // Step 2. Starting initiation
         managerFactory.start(null, initiation);

@@ -25,17 +25,6 @@ public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalM
     final private Function<GoalConfiguration, ReminderRule> roleExtractor;
     final private int order;
 
-    final private LoadingCache<BasicReminderRule, ReminderRuleAspect> CACHE = CacheBuilder.
-        newBuilder().
-        build(
-            new CacheLoader<BasicReminderRule, ReminderRuleAspect>() {
-                @Override
-                public ReminderRuleAspect load(BasicReminderRule reminderRule) {
-                    return new ReminderRuleAspect(reminderRule, reminderService);
-                }
-            }
-        );
-
     // TODO not the best solution think of something better
     public ReminderRuleAspectFactory(int order, ReminderService emailReminderService, Function<GoalConfiguration, ReminderRule> roleExtractor) {
         this.order = order;
@@ -45,15 +34,11 @@ public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalM
 
     @Override
     public ClembleAspect<GoalManagementEvent> construct(GoalConfiguration configuration, GoalState state) {
-        try {
-            ReminderRule reminderRule = roleExtractor.apply(configuration);
-            if (reminderRule == null || reminderRule instanceof NoReminderRule) {
-                return null;
-            } else {
-                return CACHE.get((BasicReminderRule) reminderRule);
-            }
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+        ReminderRule reminderRule = roleExtractor.apply(configuration);
+        if (reminderRule == null || reminderRule instanceof NoReminderRule) {
+            return null;
+        } else {
+            return new ReminderRuleAspect(state.getPlayer(), (BasicReminderRule)reminderRule, reminderService);
         }
     }
 
