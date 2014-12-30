@@ -52,7 +52,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                 new GoalRoleConfiguration(
                     GoalRole.observer,
                     new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
-                    new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                    NoReminderRule.INSTANCE,
                     NoReminderRule.INSTANCE
                 )
             )
@@ -75,7 +75,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                 new GoalRoleConfiguration(
                     GoalRole.observer,
                     new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
-                    new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                    NoReminderRule.INSTANCE,
                     NoReminderRule.INSTANCE
                 )
             )
@@ -98,7 +98,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                 new GoalRoleConfiguration(
                     GoalRole.observer,
                     new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
-                    new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                    NoReminderRule.INSTANCE,
                     NoReminderRule.INSTANCE
                 )
             )

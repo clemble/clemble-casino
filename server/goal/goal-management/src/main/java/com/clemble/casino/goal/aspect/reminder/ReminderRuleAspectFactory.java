@@ -13,6 +13,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
@@ -23,12 +25,14 @@ public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalM
 
     final private ReminderService reminderService;
     final private Function<GoalConfiguration, ReminderRule> roleExtractor;
+    final private Function<GoalState, Set<String>> playersExtractor;
     final private int order;
 
     // TODO not the best solution think of something better
-    public ReminderRuleAspectFactory(int order, ReminderService emailReminderService, Function<GoalConfiguration, ReminderRule> roleExtractor) {
+    public ReminderRuleAspectFactory(int order, ReminderService emailReminderService, Function<GoalState, Set<String>> playersExtractor, Function<GoalConfiguration, ReminderRule> roleExtractor) {
         this.order = order;
         this.roleExtractor = roleExtractor;
+        this.playersExtractor = playersExtractor;
         this.reminderService = emailReminderService;
     }
 
@@ -38,7 +42,8 @@ public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalM
         if (reminderRule == null || reminderRule instanceof NoReminderRule) {
             return null;
         } else {
-            return new ReminderRuleAspect(state.getPlayer(), (BasicReminderRule)reminderRule, reminderService);
+            Set<String> players = playersExtractor.apply(state);
+            return new ReminderRuleAspect(players, (BasicReminderRule) reminderRule, reminderService);
         }
     }
 
