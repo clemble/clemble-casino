@@ -25,6 +25,9 @@ public class PlayerProfileCreationEventListener implements SystemEventListener<S
 
     @Override
     public void onEvent(SystemPlayerProfileRegisteredEvent event) {
+        // Step 0. Checking this is a new profile, ignore otherwise
+        if (profileRepository.findOne(event.getPlayer()) != null)
+            return;
         // Step 1. Saving player profile
         profileRepository.save(event.getPlayerProfile());
         // Step 2. Sending notification to outside world
