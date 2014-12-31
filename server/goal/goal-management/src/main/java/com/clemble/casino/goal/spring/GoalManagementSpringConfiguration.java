@@ -97,6 +97,19 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public ReminderRuleAspectFactory observerEmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
+        return new ReminderRuleAspectFactory(
+            Ordered.HIGHEST_PRECEDENCE + 6,
+            emailReminderService,
+            (state) -> state.getObservers(),
+            (configuration) -> {
+                GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
+                return roleConfiguration != null ? roleConfiguration.getEmailReminderRule() : null;
+            }
+        );
+    }
+
+    @Bean
     public PhoneReminderService phoneReminderService(SystemNotificationService systemNotificationService) {
         return new PhoneReminderService(systemNotificationService);
     }
@@ -104,7 +117,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public ReminderRuleAspectFactory heroPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
         return new ReminderRuleAspectFactory(
-            Ordered.HIGHEST_PRECEDENCE + 6,
+            Ordered.HIGHEST_PRECEDENCE + 7,
             reminderService,
             (state) -> ImmutableSet.<String>of(state.getPlayer()),
             (configuration) -> configuration.getPhoneReminderRule()
@@ -114,9 +127,22 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public ReminderRuleAspectFactory supportPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
         return new ReminderRuleAspectFactory(
-            Ordered.HIGHEST_PRECEDENCE + 7,
+            Ordered.HIGHEST_PRECEDENCE + 8,
             reminderService,
             (state) -> state.getSupporters(),
+            (configuration) -> {
+                GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
+                return roleConfiguration != null ? roleConfiguration.getPhoneReminderRule() : null;
+            }
+        );
+    }
+
+    @Bean
+    public ReminderRuleAspectFactory observerPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
+        return new ReminderRuleAspectFactory(
+            Ordered.HIGHEST_PRECEDENCE + 9,
+            reminderService,
+            (state) -> state.getObservers(),
             (configuration) -> {
                 GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
                 return roleConfiguration != null ? roleConfiguration.getPhoneReminderRule() : null;

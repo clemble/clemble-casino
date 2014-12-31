@@ -11,6 +11,7 @@ import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.goal.configuration.spring.GoalConfigurationSpringConfiguration;
 import com.clemble.casino.goal.construction.spring.GoalConstructionSpringConfiguration;
 import com.clemble.casino.goal.spring.GoalManagementSpringConfiguration;
+import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.lifecycle.configuration.rule.bet.UnlimitedBetRule;
 import com.clemble.casino.game.lifecycle.configuration.rule.construct.PlayerNumberRule;
@@ -141,15 +142,17 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
             };
         }
 
-        @PostConstruct
-        public void integrationSystemEventListener() {
+        @Bean
+        public EventAccumulator<SystemEvent> systemEventAccumulator() {
             JsonSubTypes annotation = SystemEvent.class.getDeclaredAnnotation(JsonSubTypes.class);
+            EventAccumulator<SystemEvent> eventAccumulator = new EventAccumulator<>();
             for(JsonSubTypes.Type type: annotation.value()){
                 final String channel = type.name();
                 serviceListener.subscribe(new SystemEventListener<SystemEvent>() {
+
                     @Override
                     public void onEvent(SystemEvent event) {
-                        System.out.println("integration:system:listener " + event);
+                        eventAccumulator.onEvent(event);
                     }
 
                     @Override
@@ -161,9 +164,10 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                     public String getQueueName() {
                         return "integration:" + channel;
                     }
+
                 });
             }
-
+            return eventAccumulator;
         }
 
         @Autowired
