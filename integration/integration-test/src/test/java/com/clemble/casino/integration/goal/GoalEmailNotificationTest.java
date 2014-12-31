@@ -52,6 +52,7 @@ public class GoalEmailNotificationTest {
 
     final private GoalConfiguration CONFIGURATION = new GoalConfiguration(
         "email:notification:test",
+        "Email Notification Test",
         new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,

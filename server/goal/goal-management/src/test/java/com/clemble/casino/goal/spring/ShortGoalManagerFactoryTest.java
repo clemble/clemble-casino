@@ -54,6 +54,7 @@ public class ShortGoalManagerFactoryTest {
 
     final private GoalConfiguration configuration = new GoalConfiguration(
         "basic",
+        "Basic",
         new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),

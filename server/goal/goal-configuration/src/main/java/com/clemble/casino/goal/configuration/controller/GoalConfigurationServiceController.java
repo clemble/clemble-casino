@@ -35,55 +35,14 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
     // TODO replace with SMART configurations
     final private static List<GoalConfiguration> DEFAULT_CONFIGURATIONS = ImmutableList.of(
         new GoalConfiguration(
-            "Solo",
-            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 100)),
+            "week",
+            "Week",
+            new Bid(Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 200)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
             new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
             new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
             PrivacyRule.me,
-            new GoalRoleConfiguration(
-                GoalRole.supporter,
-                new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
-                new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
-                NoReminderRule.INSTANCE
-            ),
-            new GoalRoleConfiguration(
-                GoalRole.observer,
-                new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
-                NoReminderRule.INSTANCE,
-                NoReminderRule.INSTANCE
-            )
-        ),
-        new GoalConfiguration(
-            "Friends",
-            new Bid(Money.create(Currency.FakeMoney, 150), Money.create(Currency.FakeMoney, 75)),
-            new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
-            new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
-            PrivacyRule.friends,
-            new GoalRoleConfiguration(
-                GoalRole.supporter,
-                new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
-                new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
-                NoReminderRule.INSTANCE
-            ),
-            new GoalRoleConfiguration(
-                GoalRole.observer,
-                new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
-                NoReminderRule.INSTANCE,
-                NoReminderRule.INSTANCE
-            )
-        ),
-        new GoalConfiguration(
-            "World",
-            new Bid(Money.create(Currency.FakeMoney, 200), Money.create(Currency.FakeMoney, 150)),
-            new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
-            new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
-            new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
-            PrivacyRule.world,
             new GoalRoleConfiguration(
                 GoalRole.supporter,
                 new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
@@ -92,7 +51,51 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             ),
             new GoalRoleConfiguration(
                 GoalRole.observer,
-                new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 5)),
+                new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 20)),
+                NoReminderRule.INSTANCE,
+                NoReminderRule.INSTANCE
+            )
+        ),
+        new GoalConfiguration(
+            "2weeks",
+            "2 Weeks",
+            new Bid(Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 500)),
+            new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
+            new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
+            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
+            new TotalTimeRule(TimeUnit.DAYS.toMillis(14), LooseBreachPunishment.getInstance()),
+            PrivacyRule.friends,
+            new GoalRoleConfiguration(
+                GoalRole.supporter,
+                new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 110)),
+                new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                NoReminderRule.INSTANCE
+            ),
+            new GoalRoleConfiguration(
+                GoalRole.observer,
+                new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 40)),
+                NoReminderRule.INSTANCE,
+                NoReminderRule.INSTANCE
+            )
+        ),
+        new GoalConfiguration(
+            "month",
+            "Month",
+            new Bid(Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 1000)),
+            new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
+            new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
+            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
+            new TotalTimeRule(TimeUnit.DAYS.toMillis(30), LooseBreachPunishment.getInstance()),
+            PrivacyRule.world,
+            new GoalRoleConfiguration(
+                GoalRole.supporter,
+                new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 220)),
+                new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
+                NoReminderRule.INSTANCE
+            ),
+            new GoalRoleConfiguration(
+                GoalRole.observer,
+                new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 80)),
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
             )

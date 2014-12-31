@@ -53,7 +53,8 @@ public class GoalPhoneNotificationTest {
     public EventAccumulator<SystemEvent> systemEventAccumulator;
 
     final private GoalConfiguration CONFIGURATION = new GoalConfiguration(
-        "email:notification:test",
+        "phone:notification:test",
+        "Email Notification Test",
         new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
         NoReminderRule.INSTANCE,
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
