@@ -27,11 +27,15 @@ abstract public class AbstractWebApplicationInitializer implements WebApplicatio
         // Step 1. Creating CORS filter
         FilterRegistration.Dynamic filter = container.addFilter("CORS", CORSFilter.class);
         if(filter != null) {
-            filter.setInitParameters(ImmutableMap.of("cors.allowOrigin", "*", "cors.supportedHeaders", "Accept, Origin, Content-Type, playerId, sessionId, tableId"));
+            filter.setInitParameters(ImmutableMap.of(
+                "cors.allowOrigin", "*",
+                "cors.supportedHeaders", "Accept, Origin, Content-Type, playerId, sessionId, tableId",
+                "cors.supportedMethods", "GET, POST, HEAD, OPTIONS, DELETE"
+            ));
             filter.addMappingForUrlPatterns(null, false, "/*");
         }
         // Step 2. Proceeding to actual initialization
-                // Step 2. Create the 'root' Spring application context
+        // Step 2. Create the 'root' Spring application context
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         for(Class<?> configuration: configurations)
             rootContext.register(configuration);
