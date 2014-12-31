@@ -27,6 +27,7 @@ public class PlayerNotificationServiceController implements PlayerNotificationSe
         throw new UnsupportedOperationException();
     }
 
+
     @RequestMapping(method = RequestMethod.GET, value = PlayerNotificationWebMapping.MY_NOTIFICATIONS, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public PlayerNotification[] myNotifications(@CookieValue("player") String player) {
@@ -38,4 +39,14 @@ public class PlayerNotificationServiceController implements PlayerNotificationSe
             toArray(new PlayerNotification[0]);
     }
 
+    @Override
+    public void delete(String key) {
+        throw new IllegalArgumentException();
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = PlayerNotificationWebMapping.MY_NOTIFICATIONS_DELETE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void delete(@CookieValue("player") String player, @PathVariable("key") String key) {
+        notificationRepository.delete(key);
+    }
 }

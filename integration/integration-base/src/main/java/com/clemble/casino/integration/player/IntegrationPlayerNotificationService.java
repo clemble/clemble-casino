@@ -22,4 +22,10 @@ public class IntegrationPlayerNotificationService implements PlayerNotificationS
     public PlayerNotification[] myNotifications() {
         return notificationService.myNotifications(player);
     }
+
+    @Override
+    public void delete(String key) {
+        notificationService.delete(player, key);
+    }
+
 }
