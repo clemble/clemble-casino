@@ -57,12 +57,14 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ConnectionFactoryRegistry connectionFactoryLocator(
-            SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
-            FacebookConnectionFactory facebookConnectionFactory,
-            GoogleConnectionFactory googleConnectionFactory,
-            LinkedInConnectionFactory linkedInConnectionFactory,
-            TwitterConnectionFactory twitterConnectionFactory,
-            VKontakteConnectionFactory vKontakteConnectionFactory) {
+        @Value("${clemble.social.google.key}") String googleKey,
+        @Value("${clemble.social.google.secret}") String googleSecret,
+        SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
+        FacebookConnectionFactory facebookConnectionFactory,
+        GoogleConnectionFactory googleConnectionFactory,
+        LinkedInConnectionFactory linkedInConnectionFactory,
+        TwitterConnectionFactory twitterConnectionFactory,
+        VKontakteConnectionFactory vKontakteConnectionFactory) {
         ConnectionFactoryRegistry connectionFactoryRegistry = new ConnectionFactoryRegistry();
         // Step 1.1 Registering FB
         connectionFactoryRegistry.addConnectionFactory(facebookConnectionFactory);
@@ -78,7 +80,7 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
         socialConnectionAdapterRegistry.register(new LinkedInSocialAdapter(linkedInConnectionFactory));
         // Step 1.5 Registering Google
         connectionFactoryRegistry.addConnectionFactory(googleConnectionFactory);
-        socialConnectionAdapterRegistry.register(new GoogleSocialAdapter(googleConnectionFactory));
+        socialConnectionAdapterRegistry.register(new GoogleSocialAdapter(googleKey, googleSecret, googleConnectionFactory));
         // Step 2. Returning connection registry
         return connectionFactoryRegistry;
     }

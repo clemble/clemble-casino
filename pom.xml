@@ -59,6 +59,7 @@
         <spring.social.twitter.version>1.1.0.RELEASE</spring.social.twitter.version>
         <spring.social.vkontakte.version>1.1.1.BUILD-SNAPSHOT</spring.social.vkontakte.version>
         <spring.social.google.version>1.0.0.RELEASE</spring.social.google.version>
+        <google.plus.domain.version>v1-rev104-1.19.0</google.plus.domain.version>
         <google.calendar.api.version>v3-rev111-1.19.0</google.calendar.api.version>
         <!-- Generic dependencies -->
         <logback.version>1.1.2</logback.version>
@@ -542,7 +543,11 @@
                 <artifactId>google-api-services-calendar</artifactId>
                 <version>${google.calendar.api.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.google.apis</groupId>
+                <artifactId>google-api-services-plusDomains</artifactId>
+                <version>${google.plus.domain.version}</version>
+            </dependency>
 
             <!-- Quartz dependencies -->
 
