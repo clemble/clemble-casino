@@ -10,11 +10,13 @@ import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfiguration
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.lifecycle.construction.service.GoalConstructionService;
+import com.clemble.casino.goal.lifecycle.construction.service.GoalSuggestionService;
 import com.clemble.casino.goal.lifecycle.initiation.service.FriendInitiationService;
 import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
 import com.clemble.casino.goal.lifecycle.management.service.GoalActionService;
 import com.clemble.casino.goal.lifecycle.management.service.FriendGoalService;
 import com.clemble.casino.goal.lifecycle.record.service.GoalRecordService;
+import com.clemble.casino.goal.suggestion.controller.GoalSuggestionServiceController;
 
 /**
  * Created by mavarazy on 9/15/14.
@@ -23,6 +25,7 @@ public class IntegrationGoalOperations implements GoalOperations {
 
     final private GoalConfigurationService configurationService;
     final private GoalConstructionService constructionService;
+    final private GoalSuggestionService suggestionService;
     final private GoalRecordService recordService;
     final private FriendGoalService friendGoalService;
     final private GoalInitiationService initiationService;
@@ -32,6 +35,7 @@ public class IntegrationGoalOperations implements GoalOperations {
     public IntegrationGoalOperations(String player,
         GoalConfigurationServiceController configurationService,
         GoalInitiationServiceController initiationService,
+        GoalSuggestionServiceController suggestionService,
         FriendInitiationServiceController friendInitiationService,
         GoalConstructionServiceController constructionService,
         GoalActionServiceController actionService,
@@ -39,6 +43,7 @@ public class IntegrationGoalOperations implements GoalOperations {
         GoalRecordServiceController recordService) {
         this.recordService = new IntegrationGoalRecordService(player, recordService);
         this.configurationService = new IntegrationGoalConfigurationService(player, configurationService);
+        this.suggestionService = new IntegrationGoalSuggestionService(player, suggestionService);
         this.initiationService = new IntegrationGoalInitiationService(player, initiationService);
         this.friendGoalService = new IntegrationFriendGoalService(player, friendGoalService);
         this.constructionService = new IntegrationGoalConstructionService(player, constructionService);
@@ -54,6 +59,11 @@ public class IntegrationGoalOperations implements GoalOperations {
     @Override
     public GoalConstructionService constructionService() {
         return constructionService;
+    }
+
+    @Override
+    public GoalSuggestionService suggestionService() {
+        return suggestionService;
     }
 
     @Override
