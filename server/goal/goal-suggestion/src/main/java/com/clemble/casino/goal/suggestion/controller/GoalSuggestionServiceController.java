@@ -1,5 +1,8 @@
 package com.clemble.casino.goal.suggestion.controller;
 
+import com.clemble.casino.goal.lifecycle.construction.event.GoalSuggestionAcceptedEvent;
+import com.clemble.casino.goal.lifecycle.construction.event.GoalSuggestionCreatedEvent;
+import com.clemble.casino.goal.lifecycle.construction.event.GoalSuggestionDeclinedEvent;
 import com.clemble.casino.goal.suggestion.*;
 import static com.clemble.casino.goal.GoalWebMapping.*;
 
@@ -8,8 +11,9 @@ import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionRequest;
 import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionState;
 import com.clemble.casino.goal.lifecycle.construction.service.GoalSuggestionService;
 import com.clemble.casino.goal.suggestion.repository.GoalSuggestionRepository;
-import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
+import com.clemble.casino.player.service.PlayerNotificationService;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationStartedEvent;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +27,19 @@ import java.util.List;
 public class GoalSuggestionServiceController implements GoalSuggestionService {
 
     final private GoalSuggestionKeyGenerator keyGenerator;
+    final private ServerNotificationService playerNotificationService;
     final private GoalSuggestionRepository suggestionRepository;
     final private SystemNotificationService notificationService;
 
-    public GoalSuggestionServiceController(GoalSuggestionKeyGenerator keyGenerator, SystemNotificationService notificationService, GoalSuggestionRepository suggestionRepository) {
+    public GoalSuggestionServiceController(
+        GoalSuggestionKeyGenerator keyGenerator,
+        ServerNotificationService playerNotificationService,
+        SystemNotificationService notificationService,
+        GoalSuggestionRepository suggestionRepository) {
         this.keyGenerator = keyGenerator;
         this.notificationService = notificationService;
         this.suggestionRepository = suggestionRepository;
+        this.playerNotificationService = playerNotificationService;
     }
 
     @Override
@@ -71,7 +81,11 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
             suggestionRequest.getConfiguration(),
             GoalSuggestionState.pending);
         // Step 2. Saving and returning new suggestion
-        return suggestionRepository.save(suggestion);
+        suggestion = suggestionRepository.save(suggestion);
+        // Step 3. Sending notification, to user
+        playerNotificationService.send(new GoalSuggestionCreatedEvent(player, suggestion));
+        // Step 4. Sending suggestion
+        return suggestion;
     }
 
     @Override
@@ -88,15 +102,16 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
         // Step 2. Changing state
         if (accept) {
             suggestion = suggestion.copyWithStatus(GoalSuggestionState.accepted);
-            //
             notificationService.send(new SystemGoalInitiationStartedEvent(suggestion.getGoalKey(), suggestion.toInitiation()));
+            playerNotificationService.send(new GoalSuggestionAcceptedEvent(player, suggestion));
         } else {
             suggestion = suggestion.copyWithStatus(GoalSuggestionState.declined);
+            playerNotificationService.send(new GoalSuggestionDeclinedEvent(player, suggestion));
         }
         // Step 3. Saving new suggestion state
         suggestion = suggestionRepository.save(suggestion);
-        // Step 4. Sending notification, to start new goal
-
+        // Step 4. Sending notification, to user
         return suggestion;
     }
+
 }

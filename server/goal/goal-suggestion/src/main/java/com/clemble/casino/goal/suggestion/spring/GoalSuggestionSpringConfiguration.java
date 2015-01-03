@@ -4,11 +4,10 @@ import com.clemble.casino.goal.suggestion.*;
 import com.clemble.casino.goal.suggestion.controller.GoalSuggestionServiceController;
 import com.clemble.casino.goal.suggestion.repository.GoalSuggestionRepository;
 import com.clemble.casino.server.key.RedisKeyFactory;
+import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
-import com.clemble.casino.server.spring.common.PaymentClientSpringConfiguration;
-import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
+import com.clemble.casino.server.spring.common.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -23,7 +22,8 @@ import redis.clients.jedis.JedisPool;
     CommonSpringConfiguration.class,
     PaymentClientSpringConfiguration.class,
     MongoSpringConfiguration.class,
-    RedisSpringConfiguration.class})
+    RedisSpringConfiguration.class,
+    RabbitSpringConfiguration.class})
 public class GoalSuggestionSpringConfiguration {
 
     @Bean
@@ -37,8 +37,16 @@ public class GoalSuggestionSpringConfiguration {
     }
 
     @Bean
-    public GoalSuggestionServiceController goalSuggestionServiceController(GoalSuggestionKeyGenerator goalKeyGenerator, SystemNotificationService notificationService, GoalSuggestionRepository suggestionRepository){
-        return new GoalSuggestionServiceController(goalKeyGenerator, notificationService, suggestionRepository);
+    public GoalSuggestionServiceController goalSuggestionServiceController(
+        GoalSuggestionKeyGenerator goalKeyGenerator,
+        SystemNotificationService notificationService,
+        @Qualifier("playerNotificationService") ServerNotificationService playerNotificationService,
+        GoalSuggestionRepository suggestionRepository){
+        return new GoalSuggestionServiceController(
+            goalKeyGenerator,
+            playerNotificationService,
+            notificationService,
+            suggestionRepository);
     }
 
 }
