@@ -34,7 +34,7 @@ public class TestSimpleEmailVerification {
         // Step 1. Generating URL
         String url = playerEmailService.add(player, email, false);
         Assert.assertNotNull(url);
-        String verificationCode = url.substring(url.lastIndexOf("/") + 1);
+        String verificationCode = url.substring(url.lastIndexOf("=") + 1);
         Assert.assertTrue(playerEmailService.verify(verificationCode));
         // Step 2. Checking values match
         Assert.assertEquals(emailRepository.findOne(player).getEmail(), email);
