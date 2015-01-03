@@ -11,6 +11,7 @@ import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.goal.configuration.spring.GoalConfigurationSpringConfiguration;
 import com.clemble.casino.goal.construction.spring.GoalConstructionSpringConfiguration;
 import com.clemble.casino.goal.spring.GoalManagementSpringConfiguration;
+import com.clemble.casino.goal.suggestion.spring.GoalSuggestionSpringConfiguration;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.lifecycle.configuration.rule.bet.UnlimitedBetRule;
@@ -106,6 +107,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         GoalConfigurationSpringConfiguration.class,
         GoalManagementSpringConfiguration.class,
         WebJsonSpringConfiguration.class,
+        GoalSuggestionSpringConfiguration.class,
         PlayerEmailSpringConfiguration.class,
         PlayerFeedSpringConfiguration.class,
         ScheduleSpringConfiguration.class// For testing MappingJackson2HttpMessageConverter
