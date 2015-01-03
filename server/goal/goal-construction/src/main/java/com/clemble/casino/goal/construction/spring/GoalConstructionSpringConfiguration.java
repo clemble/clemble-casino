@@ -5,11 +5,12 @@ import com.clemble.casino.goal.construction.controller.FriendInitiationServiceCo
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.construction.listener.SystemGoalInitiationDueEventListener;
+import com.clemble.casino.goal.construction.listener.SystemGoalInitiationStartedEventListener;
 import com.clemble.casino.goal.construction.repository.GoalConstructionRepository;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
-import com.clemble.casino.goal.lifecycle.construction.service.SelfGoalConstructionService;
-import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalConstructionService;
-import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalInitiationService;
+import com.clemble.casino.goal.construction.service.SelfGoalConstructionService;
+import com.clemble.casino.goal.construction.service.ServerGoalConstructionService;
+import com.clemble.casino.goal.construction.service.ServerGoalInitiationService;
 import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.key.RedisKeyFactory;
@@ -84,9 +85,9 @@ public class GoalConstructionSpringConfiguration {
     public SelfGoalConstructionService selfGoalConstructionService(
         GoalKeyGenerator keyGenerator,
         GoalConstructionRepository constructionRepository,
-        ServerGoalInitiationService initiationService,
+        SystemNotificationService notificationService,
         @Qualifier("playerAccountClient") PlayerAccountService accountServiceContract) {
-        return new SelfGoalConstructionService(keyGenerator, initiationService, constructionRepository, accountServiceContract);
+        return new SelfGoalConstructionService(keyGenerator, notificationService, constructionRepository, accountServiceContract);
     }
 
     @Bean
@@ -96,6 +97,19 @@ public class GoalConstructionSpringConfiguration {
         GoalInitiationRepository initiationRepository) {
         SystemGoalInitiationDueEventListener eventListener = new SystemGoalInitiationDueEventListener(notificationService, initiationRepository);
         notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
+    @Bean
+    public SystemGoalInitiationStartedEventListener systemGoalInitiationStartedEventListener(
+        SystemNotificationServiceListener notificationServiceListener,
+        ServerGoalInitiationService initiationService
+    ) {
+        // Step 1. Generating event listener
+        SystemGoalInitiationStartedEventListener eventListener = new SystemGoalInitiationStartedEventListener(initiationService);
+        // Step 2. Subscribing to event listener
+        notificationServiceListener.subscribe(eventListener);
+        // Step 3. Returning event listener
         return eventListener;
     }
 

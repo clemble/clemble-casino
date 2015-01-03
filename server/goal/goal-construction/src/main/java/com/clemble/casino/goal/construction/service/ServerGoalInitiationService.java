@@ -1,4 +1,4 @@
-package com.clemble.casino.goal.lifecycle.construction.service;
+package com.clemble.casino.goal.construction.service;
 
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.bet.PlayerBid;

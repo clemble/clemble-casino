@@ -46,6 +46,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemGoalInitiationDueEvent.CHANNEL, value = SystemGoalInitiationDueEvent.class),
     @JsonSubTypes.Type(name = SystemGoalStartedEvent.CHANNEL, value = SystemGoalStartedEvent.class),
     @JsonSubTypes.Type(name = SystemGoalTimeoutEvent.CHANNEL, value = SystemGoalTimeoutEvent.class),
+    @JsonSubTypes.Type(name = SystemGoalInitiationStartedEvent.CHANNEL, value = SystemGoalInitiationStartedEvent.class),
     @JsonSubTypes.Type(name = SystemAddJobScheduleEvent.CHANNEL, value = SystemAddJobScheduleEvent.class),
     @JsonSubTypes.Type(name = SystemRemoveJobScheduleEvent.CHANNEL, value = SystemRemoveJobScheduleEvent.class),
     @JsonSubTypes.Type(name = SystemNotificationAddEvent.CHANNEL, value = SystemNotificationAddEvent.class),

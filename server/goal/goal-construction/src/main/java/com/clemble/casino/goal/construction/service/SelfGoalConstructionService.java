@@ -1,7 +1,7 @@
-package com.clemble.casino.goal.lifecycle.construction.service;
+package com.clemble.casino.goal.construction.service;
 
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.management.GoalRole;
+import com.clemble.casino.goal.lifecycle.construction.service.GoalConstructionService;
 import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
@@ -11,6 +11,8 @@ import com.clemble.casino.goal.construction.GoalKeyGenerator;
 import com.clemble.casino.goal.construction.repository.GoalConstructionRepository;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.service.PlayerAccountService;
+import com.clemble.casino.server.event.goal.SystemGoalInitiationStartedEvent;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,18 +23,18 @@ import java.util.Collections;
 public class SelfGoalConstructionService implements GoalConstructionService {
 
     final private GoalKeyGenerator keyGenerator;
-    final private ServerGoalInitiationService initiationService;
+    final private SystemNotificationService notificationService;
     final private GoalConstructionRepository constructionRepository;
     final private PlayerAccountService accountService;
 
     public SelfGoalConstructionService(
         GoalKeyGenerator keyGenerator,
-        ServerGoalInitiationService initiationService,
+        SystemNotificationService notificationService,
         GoalConstructionRepository constructionRepository,
         PlayerAccountService accountService) {
         this.keyGenerator = keyGenerator;
         this.accountService = accountService;
-        this.initiationService = initiationService;
+        this.notificationService = notificationService;
         this.constructionRepository = constructionRepository;
     }
 
@@ -60,7 +62,7 @@ public class SelfGoalConstructionService implements GoalConstructionService {
         // Step 3. Saving game construction
         GoalConstruction savedConstruction =  constructionRepository.save(construction);
         // Step 4. Initiating saved session right away
-        initiationService.start(savedConstruction.toInitiation());
+        notificationService.send(new SystemGoalInitiationStartedEvent(savedConstruction.getGoalKey(), savedConstruction.toInitiation()));
         // Step 5. Returning saved construction
         return savedConstruction;
     }

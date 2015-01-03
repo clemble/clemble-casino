@@ -4,6 +4,7 @@ import com.clemble.casino.goal.suggestion.*;
 import com.clemble.casino.goal.suggestion.controller.GoalSuggestionServiceController;
 import com.clemble.casino.goal.suggestion.repository.GoalSuggestionRepository;
 import com.clemble.casino.server.key.RedisKeyFactory;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.PaymentClientSpringConfiguration;
@@ -36,7 +37,8 @@ public class GoalSuggestionSpringConfiguration {
     }
 
     @Bean
-    public GoalSuggestionServiceController goalSuggestionServiceController(GoalSuggestionKeyGenerator goalKeyGenerator, GoalSuggestionRepository suggestionRepository){
-        return new GoalSuggestionServiceController(goalKeyGenerator, suggestionRepository);
+    public GoalSuggestionServiceController goalSuggestionServiceController(GoalSuggestionKeyGenerator goalKeyGenerator, SystemNotificationService notificationService, GoalSuggestionRepository suggestionRepository){
+        return new GoalSuggestionServiceController(goalKeyGenerator, notificationService, suggestionRepository);
     }
+
 }

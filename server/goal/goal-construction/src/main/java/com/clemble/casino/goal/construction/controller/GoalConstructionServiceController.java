@@ -3,7 +3,7 @@ package com.clemble.casino.goal.construction.controller;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.lifecycle.construction.service.GoalConstructionService;
-import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalConstructionService;
+import com.clemble.casino.goal.construction.service.ServerGoalConstructionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

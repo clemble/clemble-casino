@@ -2,7 +2,7 @@ package com.clemble.casino.goal.construction.controller;
 
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
-import com.clemble.casino.goal.lifecycle.construction.service.ServerGoalInitiationService;
+import com.clemble.casino.goal.construction.service.ServerGoalInitiationService;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

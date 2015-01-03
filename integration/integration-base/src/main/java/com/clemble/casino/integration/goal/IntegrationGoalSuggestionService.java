@@ -40,4 +40,9 @@ public class IntegrationGoalSuggestionService implements GoalSuggestionService {
         return suggestionService.addSuggestion(this.player, player, suggestionRequest);
     }
 
+    @Override
+    public GoalSuggestion reply(String goalKey, boolean accept) {
+        return suggestionService.reply(player, goalKey, accept);
+    }
+
 }
