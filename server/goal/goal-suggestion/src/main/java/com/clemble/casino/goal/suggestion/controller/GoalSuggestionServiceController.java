@@ -33,7 +33,7 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_SUGGESTIONS, produces = PRODUCES)
-    public List<GoalSuggestion> listMy(String player) {
+    public List<GoalSuggestion> listMy(@CookieValue("player") String player) {
         return suggestionRepository.findByPlayer(player);
     }
 
