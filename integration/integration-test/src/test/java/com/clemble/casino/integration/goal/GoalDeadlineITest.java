@@ -27,7 +27,7 @@ import java.util.Date;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
-public class GoalDeadlineTest {
+public class GoalDeadlineITest {
 
     @Autowired
     public PlayerScenarios playerScenarios;
