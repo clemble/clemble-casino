@@ -28,25 +28,26 @@ after_success:
 
   -  aws s3 rm s3://clemble/production/api --recursive
 
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-registration/target/player-registration-0.14.0-SNAPSHOT.war  s3://clemble/production/api/player/registration.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-social/target/player-social-0.14.0-SNAPSHOT.war              s3://clemble/production/api/player/social.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-presence/target/player-presence-0.14.0-SNAPSHOT.war          s3://clemble/production/api/player/presence.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-profile/target/player-profile-0.14.0-SNAPSHOT.war            s3://clemble/production/api/player/profile.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-connection/target/player-connection-0.14.0-SNAPSHOT.war      s3://clemble/production/api/player/connection.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-feed/target/player-feed-0.14.0-SNAPSHOT.war                  s3://clemble/production/api/player/feed.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-registration/target/player-registration-0.15.0-SNAPSHOT.war  s3://clemble/production/api/player/registration.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-social/target/player-social-0.15.0-SNAPSHOT.war              s3://clemble/production/api/player/social.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-presence/target/player-presence-0.15.0-SNAPSHOT.war          s3://clemble/production/api/player/presence.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-profile/target/player-profile-0.15.0-SNAPSHOT.war            s3://clemble/production/api/player/profile.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-connection/target/player-connection-0.15.0-SNAPSHOT.war      s3://clemble/production/api/player/connection.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/player/player-feed/target/player-feed-0.15.0-SNAPSHOT.war                  s3://clemble/production/api/player/feed.war && break || sleep 15; done
 
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/alerting/notification/target/notification-0.14.0-SNAPSHOT.war              s3://clemble/production/api/alerting/notification.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/alerting/email/target/email-0.14.0-SNAPSHOT.war                            s3://clemble/production/api/alerting/email.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/alerting/phone/target/phone-0.14.0-SNAPSHOT.war                            s3://clemble/production/api/alerting/phone.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/alerting/notification/target/notification-0.15.0-SNAPSHOT.war              s3://clemble/production/api/alerting/notification.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/alerting/email/target/email-0.15.0-SNAPSHOT.war                            s3://clemble/production/api/alerting/email.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/alerting/phone/target/phone-0.15.0-SNAPSHOT.war                            s3://clemble/production/api/alerting/phone.war && break || sleep 15; done
 
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/payment/payment-transaction/target/payment-transaction-0.14.0-SNAPSHOT.war s3://clemble/production/api/payment/payment.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/payment/payment-bonus/target/payment-bonus-0.14.0-SNAPSHOT.war             s3://clemble/production/api/payment/bonus.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/payment/payment-transaction/target/payment-transaction-0.15.0-SNAPSHOT.war s3://clemble/production/api/payment/payment.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/payment/payment-bonus/target/payment-bonus-0.15.0-SNAPSHOT.war             s3://clemble/production/api/payment/bonus.war && break || sleep 15; done
 
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/goal/goal-configuration/target/goal-configuration-0.14.0-SNAPSHOT.war      s3://clemble/production/api/goal/configuration.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/goal/goal-construction/target/goal-construction-0.14.0-SNAPSHOT.war        s3://clemble/production/api/goal/construction.war && break || sleep 15; done
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/goal/goal-management/target/goal-management-0.14.0-SNAPSHOT.war            s3://clemble/production/api/goal/management.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/goal/goal-configuration/target/goal-configuration-0.15.0-SNAPSHOT.war      s3://clemble/production/api/goal/configuration.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/goal/goal-construction/target/goal-construction-0.15.0-SNAPSHOT.war        s3://clemble/production/api/goal/construction.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/goal/goal-management/target/goal-management-0.15.0-SNAPSHOT.war            s3://clemble/production/api/goal/management.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/goal/goal-suggestion/target/goal-suggestion-0.15.0-SNAPSHOT.war            s3://clemble/production/api/goal/suggestion.war && break || sleep 15; done
 
-  - for i in 1 2 3 4 5; do aws s3 cp ./server/schedule/target/schedule-0.14.0-SNAPSHOT.war                               s3://clemble/production/api/schedule.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/schedule/target/schedule-0.15.0-SNAPSHOT.war                               s3://clemble/production/api/schedule.war && break || sleep 15; done
 
   # Deploying apps
   # bonus
