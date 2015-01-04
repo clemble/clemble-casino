@@ -23,7 +23,7 @@ public class EmailReminderService implements ReminderService {
     public void scheduleReminder(String player, String goalKey, String template, Map<String, String> parameters, Date breachTime) {
         String key = toKey(player);
         // Step 1. Cancel reminder
-        cancelReminder(player, goalKey);
+        // WARNING Since this is asynchronous, this might cause problems, it's better to do it in reminder service cancelReminder(player, goalKey);
         // Step 2. Schedule notification for a new breach time
         // Step 2.1 Generate email notification
         SystemEmailSendRequestEvent emailRequest = new SystemEmailSendRequestEvent(player, template, parameters);

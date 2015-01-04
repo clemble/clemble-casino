@@ -36,7 +36,7 @@ public class RabbitSystemNotificationService implements SystemNotificationServic
         this.rabbitTemplate.setExchange(SystemEventListener.EXCHANGE);
         // Step 4. Ensuring exchange exists
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-        rabbitAdmin.declareExchange(new TopicExchange(SystemEventListener.EXCHANGE, true, false, null));
+        rabbitAdmin.declareExchange(new TopicExchange(SystemEventListener.EXCHANGE, true, false));
     }
 
     @Override
@@ -44,4 +44,5 @@ public class RabbitSystemNotificationService implements SystemNotificationServic
         LOG.debug("Notifying {} of {}", event.getChannel(), event);
         rabbitTemplate.convertAndSend(event.getChannel(), event);
     }
+
 }

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
@@ -48,9 +49,8 @@ public class GamePaymentTransactionITest {
         // Step 3. Synching players
         B.syncWith(A);
         // Step 4. Checking payment transaction complete
-        PaymentEvent event = paymentListener.poll(5, TimeUnit.SECONDS);
+        PaymentCompleteEvent event = paymentListener.waitFor(new EventTypeSelector(PaymentCompleteEvent.class));
         assertNotNull(event);
-        assertTrue(event instanceof PaymentCompleteEvent);
         // Step 5. Checking transaction key is the same as game construction
         String transactionKey = ((PaymentCompleteEvent) event).getTransactionKey();
         String sessionKey = A.getSessionKey();

@@ -11,23 +11,22 @@ import org.slf4j.LoggerFactory;
 
 import static org.quartz.JobBuilder.*;
 import static org.quartz.TriggerBuilder.*;
-import static org.quartz.SimpleScheduleBuilder.*;
 
 import static com.google.common.base.Preconditions.*;
 
 /**
  * Created by mavarazy on 11/8/14.
  */
-public class ScheduleAddJobListener implements SystemEventListener<SystemAddJobScheduleEvent>{
+public class SystemAddJobScheduleEventListener implements SystemEventListener<SystemAddJobScheduleEvent>{
 
     final public static String EVENT_KEY = "EVENT";
 
-    final private Logger LOG = LoggerFactory.getLogger(ScheduleAddJobListener.class);
+    final private Logger LOG = LoggerFactory.getLogger(SystemAddJobScheduleEventListener.class);
 
     final private Scheduler scheduler;
     final private ObjectMapper objectMapper;
 
-    public ScheduleAddJobListener(ObjectMapper objectMapper, Scheduler scheduler) {
+    public SystemAddJobScheduleEventListener(ObjectMapper objectMapper, Scheduler scheduler) {
         this.scheduler = checkNotNull(scheduler);
         this.objectMapper = checkNotNull(objectMapper);
     }

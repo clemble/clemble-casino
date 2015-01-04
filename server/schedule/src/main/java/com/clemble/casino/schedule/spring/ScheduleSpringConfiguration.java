@@ -2,18 +2,15 @@ package com.clemble.casino.schedule.spring;
 
 import com.clemble.casino.schedule.job.ScheduleJobExecutor;
 import com.clemble.casino.schedule.job.ScheduleJobExecutorFactory;
-import com.clemble.casino.schedule.listener.ScheduleAddJobListener;
-import com.clemble.casino.schedule.listener.ScheduleRemoveJobListener;
+import com.clemble.casino.schedule.listener.SystemAddJobScheduleEventListener;
+import com.clemble.casino.schedule.listener.SystemRemoveJobScheduleEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
-import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
-import com.clemble.casino.server.spring.common.RabbitSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,23 +36,23 @@ public class ScheduleSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ScheduleAddJobListener scheduleAddJobListener(
+    public SystemAddJobScheduleEventListener scheduleAddJobListener(
         ObjectMapper objectMapper,
         Scheduler scheduler,
         SystemNotificationServiceListener notificationServiceListener) {
-        ScheduleAddJobListener scheduleAddJobListener = new ScheduleAddJobListener(objectMapper, scheduler);
-        notificationServiceListener.subscribe(scheduleAddJobListener);
-        return scheduleAddJobListener;
+        SystemAddJobScheduleEventListener systemAddJobScheduleEventListener = new SystemAddJobScheduleEventListener(objectMapper, scheduler);
+        notificationServiceListener.subscribe(systemAddJobScheduleEventListener);
+        return systemAddJobScheduleEventListener;
     }
 
     @Bean
-    public ScheduleRemoveJobListener scheduleRemoveJobListener(
+    public SystemRemoveJobScheduleEventListener scheduleRemoveJobListener(
         ObjectMapper objectMapper,
         Scheduler scheduler,
         SystemNotificationServiceListener notificationServiceListener) {
-        ScheduleRemoveJobListener scheduleRemoveJobListener = new ScheduleRemoveJobListener(scheduler);
-        notificationServiceListener.subscribe(scheduleRemoveJobListener);
-        return scheduleRemoveJobListener;
+        SystemRemoveJobScheduleEventListener systemRemoveJobScheduleEventListener = new SystemRemoveJobScheduleEventListener(scheduler);
+        notificationServiceListener.subscribe(systemRemoveJobScheduleEventListener);
+        return systemRemoveJobScheduleEventListener;
     }
 
     @Bean

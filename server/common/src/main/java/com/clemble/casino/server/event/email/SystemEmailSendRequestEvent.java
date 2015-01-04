@@ -62,4 +62,9 @@ public class SystemEmailSendRequestEvent implements SystemEmailEvent{
         return result;
     }
 
+    @Override
+    public String toString() {
+        return player + " > " + CHANNEL;
+    }
+
 }

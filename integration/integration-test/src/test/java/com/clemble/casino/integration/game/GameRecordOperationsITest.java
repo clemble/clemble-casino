@@ -1,5 +1,6 @@
 package com.clemble.casino.integration.game;
 
+import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.integration.event.EventAccumulator;
@@ -54,9 +55,8 @@ public class GameRecordOperationsITest {
         // Step 3. Synching players
         B.syncWith(A);
         // Step 4. Checking payment transaction complete
-        PaymentEvent event = paymentListener.poll(5, TimeUnit.SECONDS);
+        PaymentCompleteEvent event = paymentListener.waitFor(new EventTypeSelector(PaymentCompleteEvent.class));
         assertNotNull(event);
-        assertTrue(event instanceof PaymentCompleteEvent);
         // Step 5. Checking transaction key is the same as game construction
         String transactionKey = ((PaymentCompleteEvent) event).getTransactionKey();
         String sessionKey = A.getSessionKey();

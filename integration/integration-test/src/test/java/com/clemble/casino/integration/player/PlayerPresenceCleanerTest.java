@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GameSessionAware;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -52,7 +53,7 @@ public class PlayerPresenceCleanerTest {
             jedisPool.returnResource(jedis);
         }
         // Step 4. Check player is offline
-        PlayerPresenceChangedEvent presenceChangedEvent = accumulator.poll(2, TimeUnit.SECONDS);
+        PlayerPresenceChangedEvent presenceChangedEvent = accumulator.waitFor(new EventTypeSelector(PlayerPresenceChangedEvent.class));
         // Player notification is not immediate, it's done by background,
         // calling get triggers key expire event
         if(presenceChangedEvent == null) {
@@ -62,7 +63,7 @@ public class PlayerPresenceCleanerTest {
             }finally {
                 jedisPool.returnResource(jedis);
             }
-            presenceChangedEvent = accumulator.poll(5, TimeUnit.SECONDS);
+            presenceChangedEvent = accumulator.waitFor(new EventTypeSelector(PlayerPresenceChangedEvent.class));
         }
         assertNotNull(presenceChangedEvent);
         assertEquals(presenceChangedEvent.getPresence(), Presence.offline);

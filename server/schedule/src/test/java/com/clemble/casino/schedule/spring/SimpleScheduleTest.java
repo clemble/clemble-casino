@@ -1,6 +1,6 @@
 package com.clemble.casino.schedule.spring;
 
-import com.clemble.casino.schedule.listener.ScheduleAddJobListener;
+import com.clemble.casino.schedule.listener.SystemAddJobScheduleEventListener;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.bet.SystemBetCompletedEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
@@ -49,7 +49,7 @@ public class SimpleScheduleTest {
     }
 
     @Autowired
-    public ScheduleAddJobListener scheduleAddJobListener;
+    public SystemAddJobScheduleEventListener systemAddJobScheduleEventListener;
 
     @Autowired
     public SystemNotificationServiceListener notificationServiceListener;
@@ -63,7 +63,7 @@ public class SimpleScheduleTest {
         // Step 1. Generating new add job event
         SystemAddJobScheduleEvent event = new SystemAddJobScheduleEvent(RandomStringUtils.random(5), RandomStringUtils.random(5), new SystemBetCompletedEvent("t:a", "a"), new Date(System.currentTimeMillis() + 300));
         // Step 2. Generating onEvent
-        scheduleAddJobListener.onEvent(event);
+        systemAddJobScheduleEventListener.onEvent(event);
         // Step 3. Checking event received
         AsyncCompletionUtils.equals(new Get<Integer>() {
             @Override

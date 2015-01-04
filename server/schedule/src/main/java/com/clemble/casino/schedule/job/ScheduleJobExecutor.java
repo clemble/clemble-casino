@@ -1,6 +1,6 @@
 package com.clemble.casino.schedule.job;
 
-import com.clemble.casino.schedule.listener.ScheduleAddJobListener;
+import com.clemble.casino.schedule.listener.SystemAddJobScheduleEventListener;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
@@ -21,7 +20,7 @@ import static com.google.common.base.Preconditions.*;
  */
 public class ScheduleJobExecutor implements Job {
 
-    final private Logger LOG = LoggerFactory.getLogger(ScheduleAddJobListener.class);
+    final private Logger LOG = LoggerFactory.getLogger(SystemAddJobScheduleEventListener.class);
 
     final private SystemNotificationService notificationService;
     final private ObjectMapper objectMapper;
@@ -35,7 +34,7 @@ public class ScheduleJobExecutor implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         // Step 1. Fetching job data
         JobDataMap jobData = context.getMergedJobDataMap();
-        String eventString = jobData.getString(ScheduleAddJobListener.EVENT_KEY);
+        String eventString = jobData.getString(SystemAddJobScheduleEventListener.EVENT_KEY);
         // Step 2. Reading event
         SystemEvent event = null;
         try {

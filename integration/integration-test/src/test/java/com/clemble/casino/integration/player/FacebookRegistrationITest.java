@@ -168,7 +168,7 @@ public class FacebookRegistrationITest {
         SocialAccessGrant grantB = new SocialAccessGrant("facebook", fbAccoB.accessToken());
         playerScenarios.createPlayer(grantB);
         // Step 3. Checking connection were mapped internally
-        assertNotNull(discoveryListener.poll(60, TimeUnit.SECONDS));
+        assertNotNull(discoveryListener.waitFor(new EventTypeSelector(PlayerDiscoveredConnectionEvent.class)));
     }
 
     private SocialAccessGrant randomSocialGrant() throws JsonParseException, JsonMappingException, IOException{

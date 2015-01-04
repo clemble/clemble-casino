@@ -24,7 +24,7 @@ public class PhoneReminderService implements ReminderService {
     public void scheduleReminder(String player, String goalKey, String template, Map<String, String> params, Date breachTime) {
         String key = toKey(player);
         // Step 1. Cancel reminder
-        notificationService.send(new SystemRemoveJobScheduleEvent(goalKey, key));
+        // WARNING Since this is asynchronous, this might cause problems, it's better to do it in reminder service notificationService.send(new SystemRemoveJobScheduleEvent(goalKey, key));
         // Step 2. Schedule notification for a new breach time
         // Step 2.1 Generate email notification
         SystemPhoneSMSSendRequestEvent smsRequest = new SystemPhoneSMSSendRequestEvent(player, template, params);

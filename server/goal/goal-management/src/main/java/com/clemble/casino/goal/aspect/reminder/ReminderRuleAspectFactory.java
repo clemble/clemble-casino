@@ -5,6 +5,7 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.ReminderRule;
+import com.clemble.casino.goal.lifecycle.management.GoalRoleExtractor;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
 import com.clemble.casino.goal.service.ReminderService;
@@ -24,12 +25,12 @@ import java.util.function.Function;
 public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalManagementEvent> {
 
     final private ReminderService reminderService;
+    final private GoalRoleExtractor playersExtractor;
     final private Function<GoalConfiguration, ReminderRule> roleExtractor;
-    final private Function<GoalState, Set<String>> playersExtractor;
     final private int order;
 
     // TODO not the best solution think of something better
-    public ReminderRuleAspectFactory(int order, ReminderService emailReminderService, Function<GoalState, Set<String>> playersExtractor, Function<GoalConfiguration, ReminderRule> roleExtractor) {
+    public ReminderRuleAspectFactory(int order, ReminderService emailReminderService, GoalRoleExtractor playersExtractor, Function<GoalConfiguration, ReminderRule> roleExtractor) {
         this.order = order;
         this.roleExtractor = roleExtractor;
         this.playersExtractor = playersExtractor;
@@ -42,7 +43,7 @@ public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalM
         if (reminderRule == null || reminderRule instanceof NoReminderRule) {
             return null;
         } else {
-            Set<String> players = playersExtractor.apply(state);
+            Set<String> players = playersExtractor.extract(state);
             return new ReminderRuleAspect(players, (BasicReminderRule) reminderRule, reminderService);
         }
     }

@@ -110,7 +110,7 @@ public class GoalPhoneNotificationTest {
             where(new PlayerEventSelector(B.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(1)));
+        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
         CheckUtils.check((i) ->
@@ -138,7 +138,7 @@ public class GoalPhoneNotificationTest {
             where(new PlayerEventSelector(B.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(1)));
+        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
         CheckUtils.check((i) ->

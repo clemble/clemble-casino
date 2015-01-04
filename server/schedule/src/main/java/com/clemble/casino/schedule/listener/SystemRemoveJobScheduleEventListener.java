@@ -13,12 +13,12 @@ import static com.google.common.base.Preconditions.*;
 /**
  * Created by mavarazy on 11/8/14.
  */
-public class ScheduleRemoveJobListener implements SystemEventListener<SystemRemoveJobScheduleEvent>{
+public class SystemRemoveJobScheduleEventListener implements SystemEventListener<SystemRemoveJobScheduleEvent>{
 
-    final private Logger LOG = LoggerFactory.getLogger(ScheduleRemoveJobListener.class);
+    final private Logger LOG = LoggerFactory.getLogger(SystemRemoveJobScheduleEventListener.class);
     final private Scheduler scheduler;
 
-    public ScheduleRemoveJobListener(Scheduler scheduler) {
+    public SystemRemoveJobScheduleEventListener(Scheduler scheduler) {
         this.scheduler = checkNotNull(scheduler);
     }
 
