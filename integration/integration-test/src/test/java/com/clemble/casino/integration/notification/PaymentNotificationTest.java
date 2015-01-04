@@ -34,10 +34,9 @@ public class PaymentNotificationTest {
         // Step 2. Check notification appeared
         CheckUtils.check((i) -> A.notificationService().myNotifications().length >= 1);
         // Step 3. Checking registration bonus
-        boolean containsRegistrationBonus = Arrays.asList(A.notificationService().myNotifications()).stream().anyMatch((notification) ->
+        CheckUtils.check((i) -> Arrays.asList(A.notificationService().myNotifications()).stream().anyMatch((notification) ->
             (notification instanceof PaymentNotification && ((PaymentNotification) notification).getSource() instanceof RegistrationBonusPaymentSource)
-        );
-        Assert.assertTrue(containsRegistrationBonus);
+        ));
     }
 
 }
