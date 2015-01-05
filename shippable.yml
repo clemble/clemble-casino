@@ -81,6 +81,8 @@ after_success:
   - aws opsworks create-deployment --stack-id $AWS_STACK --app-id ce49643b-6ea2-4f74-99c9-ab8d77c6c092 --command '{"Name":"deploy"}'
   # goal goal management
   - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 39a8bd2a-cd0a-4775-bb83-1ffb0488fc19 --command '{"Name":"deploy"}'
+  # goal goal suggestion
+  - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 3cd11555-069e-4b04-b48d-203552cb0bdb --command '{"Name":"deploy"}'
 
   # schedule deploy
   - aws opsworks create-deployment --stack-id $AWS_STACK --app-id 72a71cd7-f5e8-4563-bcba-a70d07ef071b --command '{"Name":"deploy"}'
