@@ -32,6 +32,7 @@ public class ScheduleJobExecutor implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
+        LOG.debug("triggering {} {}", context.getJobDetail().getKey().getGroup(), context.getJobDetail().getKey().getName());
         // Step 1. Fetching job data
         JobDataMap jobData = context.getMergedJobDataMap();
         String eventString = jobData.getString(SystemAddJobScheduleEventListener.EVENT_KEY);

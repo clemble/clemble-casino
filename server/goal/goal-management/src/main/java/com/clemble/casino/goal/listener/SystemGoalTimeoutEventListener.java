@@ -69,6 +69,6 @@ public class SystemGoalTimeoutEventListener implements SystemEventListener<Syste
 
     @Override
     public String getQueueName() {
-        return SystemGoalTimeoutEvent.CHANNEL + " > game:management";
+        return SystemGoalTimeoutEvent.CHANNEL + " > goal:management";
     }
 }

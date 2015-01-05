@@ -57,7 +57,7 @@ public class GoalPhoneNotificationTest {
 
     final private GoalConfiguration CONFIGURATION = new GoalConfiguration(
         "phone:notification:test",
-        "Email Notification Test",
+        "Phone Notification Test",
         new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
         NoReminderRule.INSTANCE,
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
@@ -88,14 +88,14 @@ public class GoalPhoneNotificationTest {
     public void testNotification() {
         // Step 1. Create player
         ClembleCasinoOperations A = playerScenarios.createPlayer();
-        EventSelector emailSelector = EventSelectors.
+        EventSelector smsSelector = EventSelectors.
             where(new PlayerEventSelector(A.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 2. Create construction
-        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new Date());
+        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test sms notification", new Date());
         A.goalOperations().constructionService().construct(requestA);
-        // Step 3. Checking timeout email notification received
-        SystemPhoneSMSSendRequestEvent reminderNotification = (SystemPhoneSMSSendRequestEvent) systemEventAccumulator.waitFor(emailSelector);
+        // Step 3. Checking timeout sms notification received
+        SystemPhoneSMSSendRequestEvent reminderNotification = (SystemPhoneSMSSendRequestEvent) systemEventAccumulator.waitFor(smsSelector);
         Assert.assertNotNull(reminderNotification);
         Assert.assertEquals(reminderNotification.getTemplate(), "goal_due");
     }
@@ -104,16 +104,13 @@ public class GoalPhoneNotificationTest {
     public void testSupporterNotification() {
         // Step 1. Create player
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
-        final EventSelector AEmailSelector = EventSelectors.
-            where(new PlayerEventSelector(A.getPlayer())).
-            and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 2. Create supporter
         final ClembleCasinoOperations B = playerScenarios.createPlayer();
-        final EventSelector BEmailSelector = EventSelectors.
+        final EventSelector BSMSSelector = EventSelectors.
             where(new PlayerEventSelector(B.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
+        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test supporter phone notification", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
         CheckUtils.check((i) ->
@@ -123,7 +120,7 @@ public class GoalPhoneNotificationTest {
         // Step 5. Starting goal A
         A.goalOperations().initiationService().confirm(constructionA.getGoalKey());
         // Step 6. Checking value
-        SystemPhoneSMSSendRequestEvent reminderNotification = (SystemPhoneSMSSendRequestEvent) systemEventAccumulator.waitFor(BEmailSelector);
+        SystemPhoneSMSSendRequestEvent reminderNotification = (SystemPhoneSMSSendRequestEvent) systemEventAccumulator.waitFor(BSMSSelector);
         Assert.assertNotNull(reminderNotification);
         Assert.assertEquals(reminderNotification.getTemplate(), "goal_due");
     }
@@ -132,16 +129,13 @@ public class GoalPhoneNotificationTest {
     public void testObserverNotification() {
         // Step 1. Create player
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
-        final EventSelector AEmailSelector = EventSelectors.
-            where(new PlayerEventSelector(A.getPlayer())).
-            and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 2. Create supporter
         final ClembleCasinoOperations B = playerScenarios.createPlayer();
-        final EventSelector BEmailSelector = EventSelectors.
+        final EventSelector BSMSSelector = EventSelectors.
             where(new PlayerEventSelector(B.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
+        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test phone observer notification", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
         CheckUtils.check((i) ->
@@ -151,7 +145,7 @@ public class GoalPhoneNotificationTest {
         // Step 5. Starting goal A
         A.goalOperations().initiationService().confirm(constructionA.getGoalKey());
         // Step 6. Checking value
-        SystemPhoneSMSSendRequestEvent reminderNotification = (SystemPhoneSMSSendRequestEvent) systemEventAccumulator.waitFor(BEmailSelector);
+        SystemPhoneSMSSendRequestEvent reminderNotification = (SystemPhoneSMSSendRequestEvent) systemEventAccumulator.waitFor(BSMSSelector);
         Assert.assertNotNull(reminderNotification);
         Assert.assertEquals(reminderNotification.getTemplate(), "goal_due");
     }
