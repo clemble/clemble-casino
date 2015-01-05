@@ -7,6 +7,8 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicRemind
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
+import com.clemble.casino.lifecycle.configuration.rule.timeout.EODTimeoutCalculator;
+import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
@@ -40,8 +42,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new Bid(Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 500)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
-            new TotalTimeRule(TimeUnit.DAYS.toMillis(7), LooseBreachPunishment.getInstance()),
+            new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(1)),
+            new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
             PrivacyRule.me,
             new GoalRoleConfiguration(
                 GoalRole.supporter,
@@ -62,8 +64,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new Bid(Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 800)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
-            new TotalTimeRule(TimeUnit.DAYS.toMillis(14), LooseBreachPunishment.getInstance()),
+            new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(1)),
+            new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(14)),
             PrivacyRule.friends,
             new GoalRoleConfiguration(
                 GoalRole.supporter,
@@ -84,8 +86,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new Bid(Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 1300)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new MoveTimeRule(TimeUnit.DAYS.toMillis(1), LooseBreachPunishment.getInstance()),
-            new TotalTimeRule(TimeUnit.DAYS.toMillis(30), LooseBreachPunishment.getInstance()),
+            new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(1)),
+            new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(30)),
             PrivacyRule.world,
             new GoalRoleConfiguration(
                 GoalRole.supporter,

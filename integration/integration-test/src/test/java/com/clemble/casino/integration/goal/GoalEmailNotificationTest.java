@@ -21,6 +21,9 @@ import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishm
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
+import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
+import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
+import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.event.SystemEvent;
@@ -56,8 +59,8 @@ public class GoalEmailNotificationTest {
         new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
-        new MoveTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
-        new TotalTimeRule(TimeUnit.HOURS.toMillis(4), LooseBreachPunishment.getInstance()),
+        new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
+        new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         PrivacyRule.world,
         new GoalRoleConfiguration(
             GoalRole.supporter,

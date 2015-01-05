@@ -15,6 +15,10 @@ import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishm
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
+import com.clemble.casino.lifecycle.configuration.rule.timeout.EODTimeoutCalculator;
+import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
+import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
+import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.lifecycle.record.EventRecord;
 import com.clemble.casino.money.Currency;
@@ -58,8 +62,8 @@ public class ShortGoalManagerFactoryTest {
         new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-        new MoveTimeRule(TimeUnit.SECONDS.toMillis(1), LooseBreachPunishment.getInstance()),
-        new TotalTimeRule(TimeUnit.SECONDS.toMillis(2), LooseBreachPunishment.getInstance()),
+        new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
+        new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(3))),
         PrivacyRule.me,
         new GoalRoleConfiguration(GoalRole.supporter, new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
         new GoalRoleConfiguration(GoalRole.observer, new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE)

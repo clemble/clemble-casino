@@ -9,13 +9,12 @@ import com.clemble.casino.goal.aspect.outcome.ShortGoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.ShortGoalStatePersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.ReminderRuleAspectFactory;
-import com.clemble.casino.goal.aspect.time.ShortGoalTimeAspectFactory;
+import com.clemble.casino.goal.aspect.timeout.GoalTimeoutAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.controller.FriendGoalServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
-import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.lifecycle.management.ObserversGoalRoleExtractor;
 import com.clemble.casino.goal.lifecycle.management.PlayerGoalRoleExtractor;
 import com.clemble.casino.goal.lifecycle.management.SupportersGoalRoleExtractor;
@@ -31,7 +30,6 @@ import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.*;
-import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -202,8 +200,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ShortGoalTimeAspectFactory goalTimeAspectFactory(SystemNotificationService systemNotificationService){
-        return new ShortGoalTimeAspectFactory(systemNotificationService);
+    public GoalTimeoutAspectFactory goalTimeAspectFactory(SystemNotificationService systemNotificationService){
+        return new GoalTimeoutAspectFactory(systemNotificationService);
     }
 
     @Bean
