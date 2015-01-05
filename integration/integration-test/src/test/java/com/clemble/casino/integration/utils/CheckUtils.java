@@ -15,7 +15,11 @@ public class CheckUtils {
         long timeout = System.currentTimeMillis() + 30_000;
         int i = 0;
         while(timeout > System.currentTimeMillis()) {
-            boolean result = check.apply(i++);
+            boolean result = false;
+                try {
+                    result = check.apply(i++);
+                } catch (Throwable throwable) {
+                }
             if (result) {
                 return true;
             }
