@@ -17,13 +17,13 @@ import com.clemble.casino.server.event.player.SystemPlayerSocialAddedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 
-public class SocialNetworkPopulatorEventListener implements SystemEventListener<SystemPlayerSocialAddedEvent> {
+public class SystemPlayerSocialAddedEventListener implements SystemEventListener<SystemPlayerSocialAddedEvent> {
 
     final private SocialAdapterRegistry socialAdapterRegistry;
     final private UsersConnectionRepository usersConnectionRepository;
     final private SystemNotificationService notificationService;
 
-    public SocialNetworkPopulatorEventListener(
+    public SystemPlayerSocialAddedEventListener(
         SocialAdapterRegistry socialAdapterRegistry,
         UsersConnectionRepository usersConnectionRepository,
         SystemNotificationService notificationService) {
@@ -53,7 +53,7 @@ public class SocialNetworkPopulatorEventListener implements SystemEventListener<
 
     @Override
     public String getQueueName() {
-        return SystemPlayerSocialAddedEvent.CHANNEL + " > player:social:populator";
+        return SystemPlayerSocialAddedEvent.CHANNEL + " > player:social";
     }
 
 }

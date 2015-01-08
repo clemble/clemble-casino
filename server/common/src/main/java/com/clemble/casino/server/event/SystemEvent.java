@@ -17,6 +17,7 @@ import com.clemble.casino.server.event.player.*;
 import com.clemble.casino.server.event.post.SystemPostAddEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
+import com.clemble.casino.server.event.share.SystemSharePostEvent;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -55,7 +56,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemEmailVerifiedEvent.CHANNEL, value = SystemEmailVerifiedEvent.class),
     @JsonSubTypes.Type(name = SystemEmailSendRequestEvent.CHANNEL, value = SystemEmailSendRequestEvent.class),
     @JsonSubTypes.Type(name = SystemPhoneVerifiedEvent.CHANNEL, value = SystemPhoneVerifiedEvent.class),
-    @JsonSubTypes.Type(name = SystemPhoneSMSSendRequestEvent.CHANNEL, value = SystemPhoneSMSSendRequestEvent.class)
+    @JsonSubTypes.Type(name = SystemPhoneSMSSendRequestEvent.CHANNEL, value = SystemPhoneSMSSendRequestEvent.class),
+    @JsonSubTypes.Type(name = SystemSharePostEvent.CHANNEL, value = SystemSharePostEvent.class)
 })
 public interface SystemEvent extends Event {
 
