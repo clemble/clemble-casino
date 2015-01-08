@@ -34,7 +34,7 @@ public class GoogleCircleFetchTest {
     public UsersConnectionRepository usersConnectionRepository;
 
     @Autowired
-    public SocialConnectionAdapterRegistry adapterRegistry;
+    public SocialAdapterRegistry adapterRegistry;
 
     @Test
     public void fetchCircle() {

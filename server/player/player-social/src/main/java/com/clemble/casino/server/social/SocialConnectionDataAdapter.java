@@ -31,13 +31,13 @@ public class SocialConnectionDataAdapter {
 
     final private ConnectionFactoryLocator connectionFactoryLocator;
     final private UsersConnectionRepository usersConnectionRepository;
-    final private SocialConnectionAdapterRegistry socialAdapterRegistry;
+    final private SocialAdapterRegistry socialAdapterRegistry;
     final private SystemNotificationService notificationService;
 
     public SocialConnectionDataAdapter(
             final ConnectionFactoryLocator connectionFactoryLocator,
             final UsersConnectionRepository usersConnectionRepository,
-            final SocialConnectionAdapterRegistry socialAdapterRegistry,
+            final SocialAdapterRegistry socialAdapterRegistry,
             final SystemNotificationService notificationService) {
         this.connectionFactoryLocator = checkNotNull(connectionFactoryLocator);
         this.usersConnectionRepository = checkNotNull(usersConnectionRepository);

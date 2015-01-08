@@ -1,17 +1,23 @@
 package com.clemble.casino.server.social;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.player.PlayerProfile;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.social.ApiBinding;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionKey;
 
-public class SocialConnectionAdapterRegistry {
+public class SocialAdapterRegistry {
 
     final private Map<String, SocialAdapter<?>> ADAPTERS_MAP = new HashMap<String, SocialAdapter<?>>();
 
-    public SocialConnectionAdapterRegistry() {
+    public SocialAdapterRegistry() {
     }
 
     public SocialAdapter<?> register(SocialAdapter<?> socialAdapter) {

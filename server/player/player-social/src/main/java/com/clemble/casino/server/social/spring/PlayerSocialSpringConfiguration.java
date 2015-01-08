@@ -49,7 +49,7 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     @Bean
     public SocialConnectionDataAdapter socialConnectionDataAdapter(
             UsersConnectionRepository usersConnectionRepository,
-            SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
+            SocialAdapterRegistry socialConnectionAdapterRegistry,
             ConnectionFactoryRegistry connectionFactoryLocator,
             SystemNotificationService systemNotificationService) {
         return new SocialConnectionDataAdapter(connectionFactoryLocator, usersConnectionRepository, socialConnectionAdapterRegistry, systemNotificationService);
@@ -59,7 +59,7 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     public ConnectionFactoryRegistry connectionFactoryLocator(
         @Value("${clemble.social.google.key}") String googleKey,
         @Value("${clemble.social.google.secret}") String googleSecret,
-        SocialConnectionAdapterRegistry socialConnectionAdapterRegistry,
+        SocialAdapterRegistry socialConnectionAdapterRegistry,
         FacebookConnectionFactory facebookConnectionFactory,
         GoogleConnectionFactory googleConnectionFactory,
         LinkedInConnectionFactory linkedInConnectionFactory,
@@ -87,7 +87,7 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public SocialNetworkPopulatorEventListener socialNetworkPopulator(
-            SocialConnectionAdapterRegistry socialAdapterRegistry,
+            SocialAdapterRegistry socialAdapterRegistry,
             SystemNotificationService notificationService,
             UsersConnectionRepository usersConnectionRepository,
             SystemNotificationServiceListener serviceListener) {
@@ -132,8 +132,8 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public SocialConnectionAdapterRegistry socialAdapterRegistry() {
-        return new SocialConnectionAdapterRegistry();
+    public SocialAdapterRegistry socialAdapterRegistry() {
+        return new SocialAdapterRegistry();
     }
 
     @Bean

@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import com.clemble.casino.server.event.player.SystemPlayerConnectionsFetchedEvent;
 import com.clemble.casino.server.social.SocialAdapter;
-import com.clemble.casino.server.social.SocialConnectionAdapterRegistry;
+import com.clemble.casino.server.social.SocialAdapterRegistry;
 import org.springframework.social.ApiBinding;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionKey;
@@ -19,12 +19,12 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 
 public class SocialNetworkPopulatorEventListener implements SystemEventListener<SystemPlayerSocialAddedEvent> {
 
-    final private SocialConnectionAdapterRegistry socialAdapterRegistry;
+    final private SocialAdapterRegistry socialAdapterRegistry;
     final private UsersConnectionRepository usersConnectionRepository;
     final private SystemNotificationService notificationService;
 
     public SocialNetworkPopulatorEventListener(
-        SocialConnectionAdapterRegistry socialAdapterRegistry,
+        SocialAdapterRegistry socialAdapterRegistry,
         UsersConnectionRepository usersConnectionRepository,
         SystemNotificationService notificationService) {
         this.socialAdapterRegistry = checkNotNull(socialAdapterRegistry);
