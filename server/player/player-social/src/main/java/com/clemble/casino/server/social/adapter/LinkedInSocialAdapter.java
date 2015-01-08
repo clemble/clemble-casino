@@ -82,12 +82,6 @@ public class LinkedInSocialAdapter implements SocialAdapter<LinkedIn> {
     }
 
     @Override
-    public ConnectionData toConnectionData(SocialAccessGrant accessGrant) {
-        Connection<LinkedIn> linkedInConnection = linkedInConnectionFactory.createConnection(accessGrant.toAccessGrant());
-        return linkedInConnection.createData();
-    }
-
-    @Override
     public ConnectionData toConnectionData(SocialConnectionData connectionData) {
         return new ConnectionData(connectionData.getProviderId(),
                 connectionData.getProviderUserId(),

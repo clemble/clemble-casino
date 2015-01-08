@@ -95,14 +95,6 @@ public class FacebookSocialAdapter implements SocialAdapter<Facebook> {
     }
 
     @Override
-    public ConnectionData toConnectionData(SocialAccessGrant accessGrant) {
-        // Step 1. Establishing connection with Facebook
-        Connection<Facebook> connection = facebookConnectionFactory.createConnection(accessGrant.toAccessGrant());
-        // Step 2. Generating appropriate ConnectionData
-        return connection.createData();
-    }
-
-    @Override
     public ConnectionData toConnectionData(SocialConnectionData connectionData) {
         return new ConnectionData(connectionData.getProviderId(),
                    connectionData.getProviderUserId(),

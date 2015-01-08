@@ -10,6 +10,8 @@ import org.springframework.social.connect.ConnectionKey;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
+import org.springframework.social.connect.support.OAuth1ConnectionFactory;
+import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 
 import java.util.Collection;
 
@@ -25,7 +27,18 @@ public interface SocialAdapter<A extends ApiBinding> {
 
     Pair<String, String> toImageUrl(Connection<A> connectionKey);
 
-    ConnectionData toConnectionData(SocialAccessGrant accessGrant);
+    default ConnectionData toConnectionData(SocialAccessGrant accessGrant) {
+        ConnectionFactory<A> connectionFactory = getConnectionFactory();
+        if (connectionFactory instanceof OAuth2ConnectionFactory) {
+            Connection<A> connection = ((OAuth2ConnectionFactory) connectionFactory).createConnection(accessGrant.toAccessGrant());
+            return connection.createData();
+        } else if (connectionFactory instanceof OAuth1ConnectionFactory) {
+            Connection<A> connection = ((OAuth1ConnectionFactory) connectionFactory).createConnection(accessGrant.toOAuthToken());
+            return connection.createData();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
 
     ConnectionData toConnectionData(SocialConnectionData connectionData);
 

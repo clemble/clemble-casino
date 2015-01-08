@@ -71,12 +71,6 @@ public class TwitterSocialAdapter implements SocialAdapter<Twitter> {
     }
 
     @Override
-    public ConnectionData toConnectionData(SocialAccessGrant accessGrant) {
-        Connection<Twitter> twitterConnection = twitterConnectionFactory.createConnection(accessGrant.toOAuthToken());
-        return twitterConnection.createData();
-    }
-
-    @Override
     public ConnectionData toConnectionData(SocialConnectionData connectionData) {
         return new ConnectionData(connectionData.getProviderId(),
                 connectionData.getProviderUserId(),

@@ -96,12 +96,6 @@ public class GoogleSocialAdapter implements SocialAdapter<Google> {
     }
 
     @Override
-    public ConnectionData toConnectionData(SocialAccessGrant accessGrant) {
-        Connection<Google> google = googleFactory.createConnection(accessGrant.toAccessGrant());
-        return google.createData();
-    }
-
-    @Override
     public ConnectionData toConnectionData(SocialConnectionData connectionData) {
         return new ConnectionData(connectionData.getProviderId(),
             connectionData.getProviderUserId(),

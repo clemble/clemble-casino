@@ -3,7 +3,6 @@ package com.clemble.casino.server.social.adapter;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.social.SocialAdapter;
-import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -72,14 +71,6 @@ public class VKontakteSocialAdapter implements SocialAdapter<VKontakte> {
         return new ImmutablePair<String, String>(profile.getPhotoBig(), profile.getPhotoMedium());
     }
 
-@Override
-    public ConnectionData toConnectionData(SocialAccessGrant accessGrant) {
-        // Step 1. Establishing connection with Facebook
-        Connection<VKontakte> connection = vKontakteConnectionFactory.createConnection(accessGrant.toAccessGrant());
-        // Step 2. Generating appropriate ConnectionData
-        return connection.createData();
-    }
-
     @Override
     public ConnectionData toConnectionData(SocialConnectionData connectionData) {
         return new ConnectionData(connectionData.getProviderId(),
@@ -93,7 +84,7 @@ public class VKontakteSocialAdapter implements SocialAdapter<VKontakte> {
             connectionData.getExpireTime());
     }
 
-    public Date toDate(VKontakteDate date) {
+    private Date toDate(VKontakteDate date) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(date.getYear(), date.getMonth(), date.getDay());
         return calendar.getTime();
