@@ -1,11 +1,10 @@
 package com.clemble.casino.server.social;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.social.ApiBinding;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionKey;
 
 import com.clemble.casino.player.PlayerProfile;
@@ -14,35 +13,24 @@ import com.clemble.casino.social.SocialConnectionData;
 
 import java.util.Collection;
 
-public abstract class SocialConnectionAdapter<A> {
+public interface SocialConnectionAdapter<A extends ApiBinding> {
 
-    final private String providerId;
+    ConnectionFactory<A> getConnectionFactory();
 
-    // TODO forbid email related to the social to be recreated as a separate user
-    // For example FB account A has email abc@cba.com, don't allow to create user with email abc@cba.com
+    PlayerProfile fetchPlayerProfile(A api);
 
-    protected SocialConnectionAdapter(final String provider) {
-        this.providerId = checkNotNull(provider);
-    }
+    String getEmail(A api);
 
-    public String getProviderId() {
-        return providerId;
-    }
+    Collection<ConnectionKey> fetchConnections(A api);
 
-    abstract public PlayerProfile fetchPlayerProfile(A api);
+    Pair<String, String> toImageUrl(Connection<A> connectionKey);
 
-    abstract public String getEmail(A api);
+    ConnectionData toConnectionData(SocialAccessGrant accessGrant);
 
-    abstract public Collection<ConnectionKey> fetchConnections(A api);
+    ConnectionData toConnectionData(SocialConnectionData connectionData);
 
-    abstract public Pair<String, String> toImageUrl(Connection<A> connectionKey);
-
-    abstract public ConnectionData toConnectionData(SocialAccessGrant accessGrant);
-
-    abstract public ConnectionData toConnectionData(SocialConnectionData connectionData);
-
-    public ConnectionKey toConnectionKey(String id) {
-        return new ConnectionKey(providerId, id);
+    default ConnectionKey toConnectionKey(String id) {
+        return new ConnectionKey(getConnectionFactory().getProviderId(), id);
     }
 
 }

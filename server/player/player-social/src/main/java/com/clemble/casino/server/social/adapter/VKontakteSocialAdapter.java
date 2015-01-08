@@ -9,8 +9,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionKey;
-import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.vkontakte.api.VKontakte;
 import org.springframework.social.vkontakte.api.VKontakteDate;
 import org.springframework.social.vkontakte.api.VKontakteProfile;
@@ -18,22 +18,22 @@ import org.springframework.social.vkontakte.connect.VKontakteConnectionFactory;
 
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Collectors;
 
 /**
  * Created by mavarazy on 11/24/14.
  */
-public class VKontakteSocialAdapter extends SocialConnectionAdapter<VKontakte>{
+public class VKontakteSocialAdapter implements SocialConnectionAdapter<VKontakte>{
 
-    final private String providerId;
     final private VKontakteConnectionFactory vKontakteConnectionFactory;
 
     public VKontakteSocialAdapter(VKontakteConnectionFactory vKontakteConnectionFactory) {
-        super(vKontakteConnectionFactory.getProviderId());
-        this.providerId = vKontakteConnectionFactory.getProviderId();
         this.vKontakteConnectionFactory = vKontakteConnectionFactory;
+    }
+
+    public ConnectionFactory<VKontakte> getConnectionFactory() {
+        return vKontakteConnectionFactory;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class VKontakteSocialAdapter extends SocialConnectionAdapter<VKontakte>{
             friendsOperations().
             get().
             stream().
-            map((profile) -> new ConnectionKey(providerId, profile.getUid())).
+            map((profile) -> toConnectionKey(profile.getUid())).
             collect(Collectors.toList());
         return connections;
     }

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
@@ -24,18 +25,18 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.server.social.SocialConnectionAdapter;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
-public class FacebookSocialAdapter extends SocialConnectionAdapter<Facebook> {
+public class FacebookSocialAdapter implements SocialConnectionAdapter<Facebook> {
 
     final private FacebookConnectionFactory facebookConnectionFactory;
 
-    public FacebookSocialAdapter(
-        FacebookConnectionFactory facebookConnectionFactory
-    ) {
-        super("facebook");
+    public FacebookSocialAdapter(FacebookConnectionFactory facebookConnectionFactory) {
         this.facebookConnectionFactory = checkNotNull(facebookConnectionFactory);
+    }
+
+    @Override
+    public ConnectionFactory<Facebook> getConnectionFactory() {
+        return facebookConnectionFactory;
     }
 
     private Date readDate(String facebookBirthDate) {

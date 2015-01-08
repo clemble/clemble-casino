@@ -14,6 +14,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.api.plus.Person;
@@ -31,17 +32,21 @@ import java.util.stream.Collectors;
 /**
  * Created by mavarazy on 11/30/14.
  */
-public class GoogleSocialAdapter extends SocialConnectionAdapter<Google>{
+public class GoogleSocialAdapter implements SocialConnectionAdapter<Google>{
 
     final private String clientId;
     final private String clientSecret;
     final private GoogleConnectionFactory googleFactory;
 
     public GoogleSocialAdapter(String clientId, String clientSecret, GoogleConnectionFactory googleFactory) {
-        super("google");
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.googleFactory = googleFactory;
+    }
+
+    @Override
+    public ConnectionFactory<Google> getConnectionFactory() {
+        return googleFactory;
     }
 
     @Override

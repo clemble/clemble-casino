@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.linkedin.api.LinkedIn;
 import org.springframework.social.linkedin.api.LinkedInProfile;
@@ -26,13 +27,17 @@ import com.clemble.casino.server.social.SocialConnectionAdapter;
  * Time: 18:16
  * To change this template use File | Settings | File Templates.
  */
-public class LinkedInSocialAdapter extends SocialConnectionAdapter<LinkedIn> {
+public class LinkedInSocialAdapter implements SocialConnectionAdapter<LinkedIn> {
 
     final private LinkedInConnectionFactory linkedInConnectionFactory;
 
     public LinkedInSocialAdapter(LinkedInConnectionFactory connectionFactory) {
-        super("linkedin");
         this.linkedInConnectionFactory = connectionFactory;
+    }
+
+    @Override
+    public ConnectionFactory<LinkedIn> getConnectionFactory() {
+        return linkedInConnectionFactory;
     }
 
     @Override
