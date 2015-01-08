@@ -19,6 +19,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.server.social.SocialAdapter;
+import org.springframework.social.twitter.api.Twitter;
 
 /**
  * Created with IntelliJ IDEA.
@@ -79,6 +80,11 @@ public class LinkedInSocialAdapter implements SocialAdapter<LinkedIn> {
         } while(colleagues.size() == 500);
         // Step 2. Returning created PlayerProfile
         return connections;
+    }
+
+    @Override
+    public String share(String userId, String message, LinkedIn api) {
+        throw new IllegalAccessError();
     }
 
 }

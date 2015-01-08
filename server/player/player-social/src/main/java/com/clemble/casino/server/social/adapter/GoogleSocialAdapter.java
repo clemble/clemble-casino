@@ -95,6 +95,11 @@ public class GoogleSocialAdapter implements SocialAdapter<Google> {
         return new ImmutablePair<String, String>(imageUrl, imageUrl);
     }
 
+    @Override
+    public String share(String userId, String message, Google api) {
+        throw new IllegalAccessError();
+    }
+
     public PlusDomains plusDomains(Google google) {
         GoogleCredential credential = new GoogleCredential.Builder()
             .setTransport(new NetHttpTransport())

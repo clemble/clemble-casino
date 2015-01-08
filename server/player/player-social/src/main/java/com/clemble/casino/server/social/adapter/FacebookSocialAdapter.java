@@ -94,4 +94,9 @@ public class FacebookSocialAdapter implements SocialAdapter<Facebook> {
         return connections;
     }
 
+    @Override
+    public String share(String userId, String message, Facebook api) {
+        return api.feedOperations().post(userId, message);
+    }
+
 }

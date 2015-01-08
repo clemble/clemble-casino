@@ -2,10 +2,7 @@ package com.clemble.casino.server.social;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.ApiBinding;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionData;
-import org.springframework.social.connect.ConnectionFactory;
-import org.springframework.social.connect.ConnectionKey;
+import org.springframework.social.connect.*;
 
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.social.SocialAccessGrant;
@@ -24,6 +21,8 @@ public interface SocialAdapter<A extends ApiBinding> {
     String getEmail(A api);
 
     Collection<ConnectionKey> fetchConnections(A api);
+
+    String share(String userId, String message, A api);
 
     Pair<String, String> toImageUrl(Connection<A> connectionKey);
 

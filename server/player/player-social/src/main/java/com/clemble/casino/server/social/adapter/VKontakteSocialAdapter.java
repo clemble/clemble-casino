@@ -3,13 +3,12 @@ package com.clemble.casino.server.social.adapter;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.social.SocialAdapter;
-import com.clemble.casino.social.SocialConnectionData;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionKey;
+import org.springframework.social.vkontakte.api.PostData;
 import org.springframework.social.vkontakte.api.VKontakte;
 import org.springframework.social.vkontakte.api.VKontakteDate;
 import org.springframework.social.vkontakte.api.VKontakteProfile;
@@ -77,4 +76,7 @@ public class VKontakteSocialAdapter implements SocialAdapter<VKontakte> {
         return calendar.getTime();
     }
 
+    public String share(String userId, String message, VKontakte vk) {
+        return vk.wallOperations().post(new PostData(userId, message)).getPostId();
+    }
 }

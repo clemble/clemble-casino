@@ -70,4 +70,8 @@ public class TwitterSocialAdapter implements SocialAdapter<Twitter> {
         return connections;
     }
 
+    @Override
+    public String share(String userId, String message, Twitter api) {
+        return String.valueOf(api.timelineOperations().updateStatus(message).getId());
+    }
 }
