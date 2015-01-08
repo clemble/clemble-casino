@@ -95,19 +95,6 @@ public class GoogleSocialAdapter implements SocialAdapter<Google> {
         return new ImmutablePair<String, String>(imageUrl, imageUrl);
     }
 
-    @Override
-    public ConnectionData toConnectionData(SocialConnectionData connectionData) {
-        return new ConnectionData(connectionData.getProviderId(),
-            connectionData.getProviderUserId(),
-            "",
-            "",
-            "",
-            connectionData.getAccessToken(),
-            connectionData.getSecret(),
-            connectionData.getRefreshToken(),
-            connectionData.getExpireTime());
-    }
-
     public PlusDomains plusDomains(Google google) {
         GoogleCredential credential = new GoogleCredential.Builder()
             .setTransport(new NetHttpTransport())

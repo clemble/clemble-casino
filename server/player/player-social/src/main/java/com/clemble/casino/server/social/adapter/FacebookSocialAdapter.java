@@ -94,17 +94,4 @@ public class FacebookSocialAdapter implements SocialAdapter<Facebook> {
         return connections;
     }
 
-    @Override
-    public ConnectionData toConnectionData(SocialConnectionData connectionData) {
-        return new ConnectionData(connectionData.getProviderId(),
-                   connectionData.getProviderUserId(),
-                   "",
-                   "http://facebook.com/profile.php?id=" + connectionData.getProviderUserId(),
-                   "http://graph.facebook.com/" + connectionData.getProviderUserId() + "/picture",
-                   connectionData.getAccessToken(),
-                   connectionData.getSecret(),
-                   connectionData.getRefreshToken(),
-                   connectionData.getExpireTime());
-    }
-
 }

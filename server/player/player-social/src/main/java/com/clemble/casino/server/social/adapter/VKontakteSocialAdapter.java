@@ -71,19 +71,6 @@ public class VKontakteSocialAdapter implements SocialAdapter<VKontakte> {
         return new ImmutablePair<String, String>(profile.getPhotoBig(), profile.getPhotoMedium());
     }
 
-    @Override
-    public ConnectionData toConnectionData(SocialConnectionData connectionData) {
-        return new ConnectionData(connectionData.getProviderId(),
-            connectionData.getProviderUserId(),
-            "",
-            "https://api.vk.com/method/users.get?users=" + connectionData.getProviderUserId(),
-            "",
-            connectionData.getAccessToken(),
-            connectionData.getSecret(),
-            connectionData.getRefreshToken(),
-            connectionData.getExpireTime());
-    }
-
     private Date toDate(VKontakteDate date) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(date.getYear(), date.getMonth(), date.getDay());

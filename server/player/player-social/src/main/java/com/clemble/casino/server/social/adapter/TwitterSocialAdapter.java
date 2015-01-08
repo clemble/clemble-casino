@@ -70,18 +70,4 @@ public class TwitterSocialAdapter implements SocialAdapter<Twitter> {
         return connections;
     }
 
-    @Override
-    public ConnectionData toConnectionData(SocialConnectionData connectionData) {
-        return new ConnectionData(connectionData.getProviderId(),
-                connectionData.getProviderUserId(),
-                "",
-                "",
-                "",
-                connectionData.getAccessToken(),
-                connectionData.getSecret(),
-                connectionData.getRefreshToken(),
-                connectionData.getExpireTime());
-
-    }
-
 }

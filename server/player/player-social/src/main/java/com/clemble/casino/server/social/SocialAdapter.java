@@ -40,7 +40,17 @@ public interface SocialAdapter<A extends ApiBinding> {
         }
     }
 
-    ConnectionData toConnectionData(SocialConnectionData connectionData);
+    default ConnectionData toConnectionData(SocialConnectionData connectionData) {
+        return new ConnectionData(connectionData.getProviderId(),
+            connectionData.getProviderUserId(),
+            "",
+            "",
+            "",
+            connectionData.getAccessToken(),
+            connectionData.getSecret(),
+            connectionData.getRefreshToken(),
+            connectionData.getExpireTime());
+    }
 
     default ConnectionKey toConnectionKey(String id) {
         return new ConnectionKey(getConnectionFactory().getProviderId(), id);
