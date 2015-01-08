@@ -24,9 +24,9 @@ import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
-import com.clemble.casino.server.social.SocialConnectionAdapter;
+import com.clemble.casino.server.social.SocialAdapter;
 
-public class FacebookSocialAdapter implements SocialConnectionAdapter<Facebook> {
+public class FacebookSocialAdapter implements SocialAdapter<Facebook> {
 
     final private FacebookConnectionFactory facebookConnectionFactory;
 

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Twitter;
@@ -13,7 +14,7 @@ import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
-import com.clemble.casino.server.social.SocialConnectionAdapter;
+import com.clemble.casino.server.social.SocialAdapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,13 +26,16 @@ import java.util.Collection;
  * Time: 06:55
  * To change this template use File | Settings | File Templates.
  */
-public class TwitterSocialAdapter extends SocialConnectionAdapter<Twitter>{
+public class TwitterSocialAdapter implements SocialAdapter<Twitter> {
 
     final private TwitterConnectionFactory twitterConnectionFactory;
 
     public TwitterSocialAdapter(TwitterConnectionFactory twitterConnectionFactory) {
-        super("twitter");
         this.twitterConnectionFactory = twitterConnectionFactory;
+    }
+
+    public ConnectionFactory<Twitter> getConnectionFactory() {
+        return twitterConnectionFactory;
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.clemble.casino.server.social.adapter;
 
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.server.social.SocialConnectionAdapter;
+import com.clemble.casino.server.social.SocialAdapter;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * Created by mavarazy on 11/30/14.
  */
-public class GoogleSocialAdapter implements SocialConnectionAdapter<Google>{
+public class GoogleSocialAdapter implements SocialAdapter<Google> {
 
     final private String clientId;
     final private String clientSecret;

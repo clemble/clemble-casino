@@ -13,7 +13,7 @@ import com.clemble.casino.social.SocialConnectionData;
 
 import java.util.Collection;
 
-public interface SocialConnectionAdapter<A extends ApiBinding> {
+public interface SocialAdapter<A extends ApiBinding> {
 
     ConnectionFactory<A> getConnectionFactory();
 

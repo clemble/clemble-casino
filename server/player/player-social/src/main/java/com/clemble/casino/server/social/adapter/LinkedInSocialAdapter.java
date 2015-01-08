@@ -18,7 +18,7 @@ import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
-import com.clemble.casino.server.social.SocialConnectionAdapter;
+import com.clemble.casino.server.social.SocialAdapter;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +27,7 @@ import com.clemble.casino.server.social.SocialConnectionAdapter;
  * Time: 18:16
  * To change this template use File | Settings | File Templates.
  */
-public class LinkedInSocialAdapter implements SocialConnectionAdapter<LinkedIn> {
+public class LinkedInSocialAdapter implements SocialAdapter<LinkedIn> {
 
     final private LinkedInConnectionFactory linkedInConnectionFactory;
 

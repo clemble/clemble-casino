@@ -11,6 +11,7 @@ import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.social.ApiBinding;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionFactoryLocator;
@@ -107,8 +108,8 @@ public class SocialConnectionDataAdapter {
         String player = usersConnectionRepository.findUserIdsWithConnection(connection).iterator().next();
         LOG.error("register {} created with connection {}", player, connection.getKey());
         // Step 5. Fetching player profile
-        SocialConnectionAdapter adapter = socialAdapterRegistry.getSocialAdapter(connection.getKey().getProviderId());
-        Object api = connection.getApi();
+        SocialAdapter adapter = socialAdapterRegistry.getSocialAdapter(connection.getKey().getProviderId());
+        ApiBinding api = (ApiBinding) connection.getApi();
         PlayerProfile playerProfile = adapter.fetchPlayerProfile(api);
         playerProfile.setPlayer(player);
         LOG.error("register {} created player profile {}", player, playerProfile);

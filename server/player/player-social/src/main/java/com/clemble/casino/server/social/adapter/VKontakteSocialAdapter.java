@@ -2,7 +2,7 @@ package com.clemble.casino.server.social.adapter;
 
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.server.social.SocialConnectionAdapter;
+import com.clemble.casino.server.social.SocialAdapter;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Created by mavarazy on 11/24/14.
  */
-public class VKontakteSocialAdapter implements SocialConnectionAdapter<VKontakte>{
+public class VKontakteSocialAdapter implements SocialAdapter<VKontakte> {
 
     final private VKontakteConnectionFactory vKontakteConnectionFactory;
 
