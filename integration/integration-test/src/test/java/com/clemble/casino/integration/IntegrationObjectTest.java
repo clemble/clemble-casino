@@ -86,6 +86,7 @@ public class IntegrationObjectTest {
                 return new GoalCreatedPost(
                     "",
                     "",
+                    "",
                     new Bank(Collections.emptyList(), new Bid(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
                     ObjectGenerator.generate(GoalConfiguration.class),
                     "",
