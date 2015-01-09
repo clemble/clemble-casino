@@ -8,6 +8,7 @@ import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.notification.PlayerNotification;
 import com.clemble.casino.payment.notification.PaymentNotification;
+import com.clemble.casino.player.notification.PlayerConnectedNotification;
 import com.clemble.casino.server.notification.repository.PlayerNotificationRepository;
 import com.clemble.casino.server.notification.spring.PlayerNotificationSpringConfiguration;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -46,13 +47,15 @@ public class PlayerNotificationSpringConfigurationTest {
             Operation.Credit,
             new GoalPaymentSource("goal", new NoOutcome()),
             new Date());
+        PlayerConnectedNotification connectedNotification = new PlayerConnectedNotification("AB", "B", "F", new Date());
         // Step 2. Save notification
         repository.save(notification);
-        repository.save(notification);
+        repository.save(connectedNotification);
         // Step 3. Checking notification
         List<PlayerNotification> notifications = repository.findByPlayerOrderByCreatedDesc(notification.getPlayer());
-        Assert.assertEquals(notifications.size(), 1);
-        Assert.assertEquals(notifications.get(0), notification);
+        Assert.assertEquals(notifications.size(), 2);
+        Assert.assertTrue(notifications.contains(notification));
+        Assert.assertTrue(notifications.contains(connectedNotification));
     }
 
 }

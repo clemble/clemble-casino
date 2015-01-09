@@ -93,7 +93,8 @@ public class IntegrationObjectTest {
                     new Date(),
                     0,
                     Collections.emptySet(),
-                    Collections.emptySet()
+                    Collections.emptySet(),
+                    new Date()
                 );
             }
         });

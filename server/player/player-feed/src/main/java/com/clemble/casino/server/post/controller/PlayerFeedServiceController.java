@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
  * Created by mavarazy on 11/30/14.
@@ -47,11 +46,7 @@ public class PlayerFeedServiceController implements PlayerFeedService {
         Collection<String> connections = new ArrayList<String>(connectionService.getConnections(player));
         connections.add(player);
         // Step 2. Fetching player connections
-        return postRepository.
-            findByPlayerInOrderByCreatedDesc(connections).
-            stream().
-            map(sps -> sps.getPost()).
-            collect(Collectors.toList()).toArray(new PlayerPost[0]);
+        return postRepository.findByPlayerInOrderByCreatedDesc(connections).toArray(new PlayerPost[0]);
     }
 
     @Override
@@ -64,7 +59,7 @@ public class PlayerFeedServiceController implements PlayerFeedService {
     public PlayerPost share(@CookieValue("player")String player, @PathVariable("postKey") String key, @RequestBody String provider) {
         // Step 1. Fetching post
         // Fix this
-        GoalPost post = (GoalPost) postRepository.findOne(key).getPost();
+        GoalPost post = (GoalPost) postRepository.findOne(key);
         // Step 2. Share post using provider.
         notificationService.send(new SystemSharePostEvent(player, provider, post));
         return post;
