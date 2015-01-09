@@ -2,6 +2,8 @@ package com.clemble.casino.server.event.share;
 
 import com.clemble.casino.goal.post.GoalPost;
 import com.clemble.casino.player.PlayerAware;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by mavarazy on 1/8/15.
@@ -14,7 +16,8 @@ public class SystemSharePostEvent implements SystemShareEvent, PlayerAware {
     final private String providerId;
     final private GoalPost post;
 
-    public SystemSharePostEvent(String player, String providerId, GoalPost post) {
+    @JsonCreator
+    public SystemSharePostEvent(@JsonProperty(PLAYER) String player, @JsonProperty("providerId") String providerId, @JsonProperty("post") GoalPost post) {
         this.player = player;
         this.providerId = providerId;
         this.post = post;

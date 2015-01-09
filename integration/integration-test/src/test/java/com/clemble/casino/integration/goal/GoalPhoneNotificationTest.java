@@ -48,7 +48,6 @@ import java.util.concurrent.TimeUnit;
 @ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
 public class GoalPhoneNotificationTest {
 
-
     @Autowired
     public PlayerScenarios playerScenarios;
 
