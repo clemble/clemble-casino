@@ -90,7 +90,9 @@ public class IntegrationObjectTest {
                     ObjectGenerator.generate(GoalConfiguration.class),
                     "",
                     new Date(),
-                    0
+                    0,
+                    Collections.emptySet(),
+                    Collections.emptySet()
                 );
             }
         });
