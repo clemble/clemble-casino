@@ -1,7 +1,10 @@
 package com.clemble.casino.integration.feed;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.client.event.EventSelector;
+import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.client.event.PlayerEventSelector;
 import com.clemble.casino.client.goal.GoalOperations;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
@@ -56,7 +59,8 @@ public class GoalFeedShareTest {
         // Step 6. Checking share works
         A.feedService().share(post.getKey(), "facebook");
         // Step 7. Checking notification was send
-        SystemSharePostEvent shareEvent = systemEventAccumulator.waitFor(new EventTypeSelector(SystemSharePostEvent.class));
+        EventSelector postSelector = EventSelectors.where(new EventTypeSelector(SystemSharePostEvent.class)).and(new PlayerEventSelector(A.getPlayer()));
+        SystemSharePostEvent shareEvent = systemEventAccumulator.waitFor(postSelector);
         Assert.assertEquals(shareEvent.getPlayer(), A.getPlayer());
         Assert.assertEquals(shareEvent.getProviderId(), "facebook");
         Assert.assertEquals(shareEvent.getPost(), post);
