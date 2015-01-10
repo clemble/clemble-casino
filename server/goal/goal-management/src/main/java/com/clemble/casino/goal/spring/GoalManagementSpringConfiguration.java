@@ -9,6 +9,7 @@ import com.clemble.casino.goal.aspect.outcome.ShortGoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.ShortGoalStatePersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.ReminderRuleAspectFactory;
+import com.clemble.casino.goal.aspect.share.ShareRuleAspectFactory;
 import com.clemble.casino.goal.aspect.timeout.GoalTimeoutAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
@@ -123,6 +124,11 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
             new PlayerGoalRoleExtractor(),
             (configuration) -> configuration.getPhoneReminderRule()
         );
+    }
+
+    @Bean
+    public ShareRuleAspectFactory shareRuleAspectFactory(SystemNotificationService notificationService) {
+        return new ShareRuleAspectFactory(notificationService);
     }
 
     @Bean

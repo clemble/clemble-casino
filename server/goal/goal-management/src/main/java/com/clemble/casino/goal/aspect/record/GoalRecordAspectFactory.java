@@ -3,7 +3,6 @@ package com.clemble.casino.goal.aspect.record;
 import com.clemble.casino.event.Event;
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.GoalAspect;
-import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
@@ -25,7 +24,7 @@ public class GoalRecordAspectFactory implements GenericGoalAspectFactory<Event> 
 
     @Override
     public GoalAspect<Event> construct(GoalConfiguration configuration, GoalState state) {
-        return new GoalRecordEventAspect(state.getGoalKey(), recordRepository, notificationService);
+        return new GoalRecordAspect(state.getGoalKey(), recordRepository, notificationService);
     }
 
     @Override

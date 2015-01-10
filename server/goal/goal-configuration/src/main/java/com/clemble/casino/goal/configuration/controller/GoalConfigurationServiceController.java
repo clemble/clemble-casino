@@ -5,6 +5,7 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.share.ShareRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.lifecycle.configuration.rule.breach.PenaltyBreachPunishment;
@@ -57,7 +58,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                 new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 70)),
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
-            )
+            ),
+            ShareRule.none
         ),
         new GoalConfiguration(
             "2weeks",
@@ -79,7 +81,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                 new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 90)),
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
-            )
+            ),
+            ShareRule.none
         ),
         new GoalConfiguration(
             "month",
@@ -101,7 +104,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                 new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)),
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
-            )
+            ),
+            ShareRule.twitter
         )
     );
 

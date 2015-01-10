@@ -17,13 +17,13 @@ import java.util.Date;
 /**
  * Created by mavarazy on 10/03/14.
  */
-public class GoalRecordEventAspect extends GoalAspect<Event> implements GoalAware {
+public class GoalRecordAspect extends GoalAspect<Event> implements GoalAware {
 
     final private String goalKey;
     final private GoalRecordRepository recordRepository;
     final private ServerNotificationService notificationService;
 
-    public GoalRecordEventAspect(
+    public GoalRecordAspect(
         String goalKey,
         GoalRecordRepository recordRepository,
         ServerNotificationService notificationService) {

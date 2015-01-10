@@ -6,6 +6,7 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.share.ShareRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
@@ -63,7 +64,8 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
-        )
+        ),
+        ShareRule.none
     );
 
     final private GoalConfiguration PENALTY_PUNISHMENT = new GoalConfiguration(
@@ -86,7 +88,8 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
-        )
+        ),
+        ShareRule.none
     );
 
     final private GoalConfiguration COUNTDOWN_PUNISHMENT = new GoalConfiguration(
@@ -109,7 +112,8 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
-        )
+        ),
+        ShareRule.none
     );
 
 

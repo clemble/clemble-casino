@@ -7,6 +7,7 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.share.ShareRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.lifecycle.management.GoalRole;
@@ -59,7 +60,8 @@ public class GoalRecordITest {
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
         PrivacyRule.me,
         new GoalRoleConfiguration(GoalRole.supporter, new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
-        new GoalRoleConfiguration(GoalRole.observer, new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE)
+        new GoalRoleConfiguration(GoalRole.observer, new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
+        ShareRule.none
     );
 
     @Autowired
