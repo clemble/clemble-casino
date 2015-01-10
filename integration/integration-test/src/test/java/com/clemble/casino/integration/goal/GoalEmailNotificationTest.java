@@ -64,13 +64,11 @@ public class GoalEmailNotificationTest {
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         PrivacyRule.world,
         new GoalRoleConfiguration(
-            GoalRole.supporter,
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
         ),
         new GoalRoleConfiguration(
-            GoalRole.supporter,
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE

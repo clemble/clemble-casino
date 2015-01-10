@@ -1,13 +1,12 @@
 package com.clemble.casino.goal.configuration.controller;
 
 import com.clemble.casino.bet.Bid;
-import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
+import com.clemble.casino.goal.lifecycle.configuration.*;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
+import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.ReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.share.ShareRule;
 import com.clemble.casino.goal.lifecycle.configuration.service.GoalConfigurationService;
-import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.lifecycle.configuration.rule.breach.PenaltyBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.EODTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
@@ -15,8 +14,6 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
-import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
-import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
 import com.google.common.collect.ImmutableList;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.clemble.casino.goal.GoalWebMapping.MY_CONFIGURATIONS;
+import static com.clemble.casino.goal.GoalWebMapping.*;
 import static com.clemble.casino.WebMapping.PRODUCES;
 
 /**
@@ -48,13 +45,11 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
             PrivacyRule.me,
             new GoalRoleConfiguration(
-                GoalRole.supporter,
                 new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 150)),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
                 NoReminderRule.INSTANCE
             ),
             new GoalRoleConfiguration(
-                GoalRole.observer,
                 new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 70)),
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
@@ -71,13 +66,11 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(14)),
             PrivacyRule.friends,
             new GoalRoleConfiguration(
-                GoalRole.supporter,
                 new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 210)),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
                 NoReminderRule.INSTANCE
             ),
             new GoalRoleConfiguration(
-                GoalRole.observer,
                 new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 90)),
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
@@ -93,24 +86,54 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(1)),
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(30)),
             PrivacyRule.world,
-            new GoalRoleConfiguration(
-                GoalRole.supporter,
-                new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 320)),
-                new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
-                NoReminderRule.INSTANCE
-            ),
-            new GoalRoleConfiguration(
-                GoalRole.observer,
-                new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)),
-                NoReminderRule.INSTANCE,
-                NoReminderRule.INSTANCE
-            ),
+            new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 320)), new BasicReminderRule(TimeUnit.HOURS.toMillis(3)), NoReminderRule.INSTANCE),
+            new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
             ShareRule.twitter
         )
     );
 
+    final private GoalConfigurationChoices choices = new GoalConfigurationChoices(
+        ImmutableList.of(Money.create(Currency.FakeMoney, 200), Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 400)),
+        new GoalConfigurationOption<TimeoutRule>(ImmutableList.of(
+            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)), 30),
+            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(14)), 70),
+            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(21)), 130),
+            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(35)), 190)
+        )),
+        new GoalConfigurationOption<TimeoutRule>(ImmutableList.of(
+            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 0)
+        )),
+        new GoalConfigurationOption<ReminderRule>(ImmutableList.of(
+            new GoalConfigurationValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(4)), 0)
+        )),
+        new GoalConfigurationOption<ReminderRule>(ImmutableList.of(
+            new GoalConfigurationValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(2)), 0)
+        )),
+        new GoalConfigurationOption<PrivacyRule>(ImmutableList.of(
+            new GoalConfigurationValue<PrivacyRule>(PrivacyRule.world, 0)
+        )),
+        new GoalConfigurationOption<GoalRoleConfiguration>(ImmutableList.of(
+            new GoalConfigurationValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 320)), new BasicReminderRule(TimeUnit.HOURS.toMillis(3)), NoReminderRule.INSTANCE), 10)
+        )),
+        new GoalConfigurationOption<GoalRoleConfiguration>(ImmutableList.of(
+            new GoalConfigurationValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)
+        )),
+        new GoalConfigurationOption<ShareRule>(ImmutableList.of(
+            new GoalConfigurationValue<ShareRule>(ShareRule.none, 0),
+            new GoalConfigurationValue<ShareRule>(ShareRule.twitter, 20)
+        ))
+    );
+
+    @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS_CHOICES, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.OK)
+    @Override
+    public GoalConfigurationChoices getChoices() {
+        return choices;
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
+    @Override
     public List<GoalConfiguration> getConfigurations() {
         return DEFAULT_CONFIGURATIONS;
     }

@@ -20,8 +20,6 @@ import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
-import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
-import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
@@ -65,13 +63,11 @@ public class GoalPhoneNotificationTest {
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(4))),
         PrivacyRule.world,
         new GoalRoleConfiguration(
-            GoalRole.supporter,
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             NoReminderRule.INSTANCE,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1))
         ),
         new GoalRoleConfiguration(
-            GoalRole.supporter,
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             NoReminderRule.INSTANCE,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1))
