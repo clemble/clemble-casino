@@ -48,7 +48,6 @@ public class PlayerPostSpringConfigurationTest {
             new Date(),
             0,
             Collections.emptySet(),
-            Collections.emptySet(),
             new Date()
         );
         // Step 2. Saving player post twice

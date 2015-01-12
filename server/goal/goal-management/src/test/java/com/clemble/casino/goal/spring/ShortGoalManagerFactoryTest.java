@@ -67,7 +67,6 @@ public class ShortGoalManagerFactoryTest {
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(3))),
         PrivacyRule.me,
         new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
-        new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
         ShareRule.none
     );
 
@@ -83,7 +82,6 @@ public class ShortGoalManagerFactoryTest {
             player,
             "Create goal state",
             configuration,
-            new HashSet<>(),
             new HashSet<>(),
             new Date());
         // Step 2. Starting initiation
@@ -105,7 +103,6 @@ public class ShortGoalManagerFactoryTest {
                 player,
                 "Create goal state",
                 configuration,
-                new HashSet<>(),
                 new HashSet<>(),
                 new Date());
         // Step 2. Starting initiation

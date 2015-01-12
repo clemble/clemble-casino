@@ -58,11 +58,6 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
         ),
-        new GoalRoleConfiguration(
-            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
-            new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
-            NoReminderRule.INSTANCE
-        ),
         ShareRule.none
     );
 
@@ -80,11 +75,6 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
         ),
-        new GoalRoleConfiguration(
-            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
-            new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
-            NoReminderRule.INSTANCE
-        ),
         ShareRule.none
     );
 
@@ -97,11 +87,6 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         new TimeoutRule(new CountdownBreachPunishment(Money.create(Currency.FakeMoney, 10), 100), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(new CountdownBreachPunishment(Money.create(Currency.FakeMoney, 10), 100), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         PrivacyRule.world,
-        new GoalRoleConfiguration(
-            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
-            new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
-            NoReminderRule.INSTANCE
-        ),
         new GoalRoleConfiguration(
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),

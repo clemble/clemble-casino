@@ -45,11 +45,6 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
             PrivacyRule.me,
             new GoalRoleConfiguration(
-                new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 150)),
-                new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
-                NoReminderRule.INSTANCE
-            ),
-            new GoalRoleConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 70)),
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
@@ -66,11 +61,6 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(14)),
             PrivacyRule.friends,
             new GoalRoleConfiguration(
-                new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 210)),
-                new BasicReminderRule(TimeUnit.HOURS.toMillis(3)),
-                NoReminderRule.INSTANCE
-            ),
-            new GoalRoleConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 90)),
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
@@ -86,7 +76,6 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(1)),
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(30)),
             PrivacyRule.world,
-            new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 320)), new BasicReminderRule(TimeUnit.HOURS.toMillis(3)), NoReminderRule.INSTANCE),
             new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
             ShareRule.twitter
         )

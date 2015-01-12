@@ -68,11 +68,6 @@ public class GoalEmailNotificationTest {
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
         ),
-        new GoalRoleConfiguration(
-            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
-            new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
-            NoReminderRule.INSTANCE
-        ),
         ShareRule.none
     );
 
@@ -126,32 +121,32 @@ public class GoalEmailNotificationTest {
         Assert.assertEquals(reminderNotification.getTemplate(), "goal_due");
     }
 
-    @Test
-    public void testObserverNotification() {
-        // Step 1. Create player
-        final ClembleCasinoOperations A = playerScenarios.createPlayer();
-        final EventSelector AEmailSelector = EventSelectors.
-            where(new PlayerEventSelector(A.getPlayer())).
-            and(new EventTypeSelector(SystemEmailSendRequestEvent.class));
-        // Step 2. Create supporter
-        final ClembleCasinoOperations B = playerScenarios.createPlayer();
-        final EventSelector BEmailSelector = EventSelectors.
-            where(new PlayerEventSelector(B.getPlayer())).
-            and(new EventTypeSelector(SystemEmailSendRequestEvent.class));
-        // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
-        final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
-        // Step 4. Checking Requests
-        CheckUtils.check((i) ->
-            A.goalOperations().initiationService().get(constructionA.getGoalKey()) != null
-        );
-        B.goalOperations().initiationService().bid(constructionA.getGoalKey(), GoalRole.observer);
-        // Step 5. Starting goal A
-        A.goalOperations().initiationService().confirm(constructionA.getGoalKey());
-        // Step 6. Checking value
-        SystemEmailSendRequestEvent reminderNotification = (SystemEmailSendRequestEvent) systemEventAccumulator.waitFor(BEmailSelector);
-        Assert.assertNotNull(reminderNotification);
-        Assert.assertEquals(reminderNotification.getTemplate(), "goal_due");
-    }
+//    @Test
+//    public void testObserverNotification() {
+//        // Step 1. Create player
+//        final ClembleCasinoOperations A = playerScenarios.createPlayer();
+//        final EventSelector AEmailSelector = EventSelectors.
+//            where(new PlayerEventSelector(A.getPlayer())).
+//            and(new EventTypeSelector(SystemEmailSendRequestEvent.class));
+//        // Step 2. Create supporter
+//        final ClembleCasinoOperations B = playerScenarios.createPlayer();
+//        final EventSelector BEmailSelector = EventSelectors.
+//            where(new PlayerEventSelector(B.getPlayer())).
+//            and(new EventTypeSelector(SystemEmailSendRequestEvent.class));
+//        // Step 3. Creating requests
+//        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
+//        final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
+//        // Step 4. Checking Requests
+//        CheckUtils.check((i) ->
+//            A.goalOperations().initiationService().get(constructionA.getGoalKey()) != null
+//        );
+//        B.goalOperations().initiationService().bid(constructionA.getGoalKey(), GoalRole.observer);
+//        // Step 5. Starting goal A
+//        A.goalOperations().initiationService().confirm(constructionA.getGoalKey());
+//        // Step 6. Checking value
+//        SystemEmailSendRequestEvent reminderNotification = (SystemEmailSendRequestEvent) systemEventAccumulator.waitFor(BEmailSelector);
+//        Assert.assertNotNull(reminderNotification);
+//        Assert.assertEquals(reminderNotification.getTemplate(), "goal_due");
+//    }
 
 }

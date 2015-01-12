@@ -16,7 +16,6 @@ import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.controller.FriendGoalServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
-import com.clemble.casino.goal.lifecycle.management.ObserversGoalRoleExtractor;
 import com.clemble.casino.goal.lifecycle.management.PlayerGoalRoleExtractor;
 import com.clemble.casino.goal.lifecycle.management.SupportersGoalRoleExtractor;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
@@ -99,19 +98,6 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ReminderRuleAspectFactory observerEmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
-        return new ReminderRuleAspectFactory(
-            Ordered.HIGHEST_PRECEDENCE + 6,
-            emailReminderService,
-            new ObserversGoalRoleExtractor(),
-            (configuration) -> {
-                GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
-                return roleConfiguration != null ? roleConfiguration.getEmailReminderRule() : null;
-            }
-        );
-    }
-
-    @Bean
     public PhoneReminderService phoneReminderService(SystemNotificationService systemNotificationService) {
         return new PhoneReminderService(systemNotificationService);
     }
@@ -137,19 +123,6 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
             Ordered.HIGHEST_PRECEDENCE + 8,
             reminderService,
             new SupportersGoalRoleExtractor(),
-            (configuration) -> {
-                GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
-                return roleConfiguration != null ? roleConfiguration.getPhoneReminderRule() : null;
-            }
-        );
-    }
-
-    @Bean
-    public ReminderRuleAspectFactory observerPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
-        return new ReminderRuleAspectFactory(
-            Ordered.HIGHEST_PRECEDENCE + 9,
-            reminderService,
-            new ObserversGoalRoleExtractor(),
             (configuration) -> {
                 GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
                 return roleConfiguration != null ? roleConfiguration.getPhoneReminderRule() : null;
