@@ -103,9 +103,6 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new GoalConfigurationValue<PrivacyRule>(PrivacyRule.friends, 30)
         ),
         ImmutableList.of(
-            new GoalConfigurationValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 320)), new BasicReminderRule(TimeUnit.HOURS.toMillis(3)), NoReminderRule.INSTANCE), 10)
-        ),
-        ImmutableList.of(
             new GoalConfigurationValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)
         ),
         ImmutableList.of(
