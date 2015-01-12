@@ -5,35 +5,26 @@ import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.ReminderRule;
-import com.clemble.casino.goal.lifecycle.management.GoalRoleExtractor;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
 import com.clemble.casino.goal.service.ReminderService;
 import com.clemble.casino.server.aspect.ClembleAspect;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
 /**
- * Created by mavarazy on 12/12/14.
+ * Created by mavarazy on 1/12/15.
  */
-public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalManagementEvent> {
+public class SupporterReminderRuleAspectFactory  implements GenericGoalAspectFactory<GoalManagementEvent> {
 
     final private ReminderService reminderService;
-    final private GoalRoleExtractor playersExtractor;
     final private Function<GoalConfiguration, ReminderRule> roleExtractor;
     final private int order;
 
     // TODO not the best solution think of something better
-    public ReminderRuleAspectFactory(int order, ReminderService emailReminderService, GoalRoleExtractor playersExtractor, Function<GoalConfiguration, ReminderRule> roleExtractor) {
+    public SupporterReminderRuleAspectFactory(int order, ReminderService emailReminderService, Function<GoalConfiguration, ReminderRule> roleExtractor) {
         this.order = order;
         this.roleExtractor = roleExtractor;
-        this.playersExtractor = playersExtractor;
         this.reminderService = emailReminderService;
     }
 
@@ -43,8 +34,7 @@ public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalM
         if (reminderRule == null || reminderRule instanceof NoReminderRule) {
             return null;
         } else {
-            Set<String> players = playersExtractor.extract(state);
-            return new ReminderRuleAspect(players, (BasicReminderRule) reminderRule, reminderService);
+            return new SupporterReminderRuleAspect((BasicReminderRule) reminderRule, reminderService);
         }
     }
 
@@ -54,3 +44,4 @@ public class ReminderRuleAspectFactory implements GenericGoalAspectFactory<GoalM
     }
 
 }
+

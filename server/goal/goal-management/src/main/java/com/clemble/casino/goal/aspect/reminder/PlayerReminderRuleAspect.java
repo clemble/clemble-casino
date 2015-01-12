@@ -15,16 +15,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by mavarazy on 12/10/14.
  */
-public class ReminderRuleAspect extends GoalAspect<GoalManagementEvent> {
+public class PlayerReminderRuleAspect extends GoalAspect<GoalManagementEvent> {
 
-    final private Set<String> players;
     final private long hoursToReminder;
     final private BasicReminderRule reminderRule;
     final private ReminderService reminderService;
 
-    public ReminderRuleAspect(Set<String> players, BasicReminderRule reminderRule, ReminderService reminderService) {
+    public PlayerReminderRuleAspect(BasicReminderRule reminderRule, ReminderService reminderService) {
         super(new EventTypeSelector(GoalManagementEvent.class));
-        this.players = players;
         this.reminderRule = reminderRule;
         this.reminderService = reminderService;
         this.hoursToReminder = TimeUnit.MILLISECONDS.toHours(reminderRule.getReminder());
@@ -37,19 +35,17 @@ public class ReminderRuleAspect extends GoalAspect<GoalManagementEvent> {
         // Step 2. Generating reminder dates
         long breachTime = event.getBody().getContext().getPlayerContexts().get(0).getClock().getBreachTime();
         if (event instanceof GoalEndedEvent) {
-            players.forEach((player) -> reminderService.cancelReminder(player, event.getBody().getGoalKey()));
+            reminderService.cancelReminder(event.getBody().getPlayer(), event.getBody().getGoalKey());
         } else {
             // Step 2.1. Generating remind time
             long remindTime = breachTime - reminderRule.getReminder();
             // Step 2.2. Scheduling reminder
-            players.forEach((player) ->
-                reminderService.scheduleReminder(
-                    player,
-                    event.getBody().getGoalKey(),
-                    "goal_due",
-                    ImmutableMap.<String, String>of("text", hoursToReminder + " hours to " + goal),
-                    new Date(remindTime)
-                )
+            reminderService.scheduleReminder(
+                event.getBody().getPlayer(),
+                event.getBody().getGoalKey(),
+                "goal_due",
+                ImmutableMap.<String, String>of("text", hoursToReminder + " hours to " + goal),
+                new Date(remindTime)
             );
         }
     }

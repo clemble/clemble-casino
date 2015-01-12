@@ -8,7 +8,8 @@ import com.clemble.casino.goal.aspect.outcome.ShortGoalLostOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.ShortGoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.ShortGoalStatePersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
-import com.clemble.casino.goal.aspect.reminder.ReminderRuleAspectFactory;
+import com.clemble.casino.goal.aspect.reminder.PlayerReminderRuleAspectFactory;
+import com.clemble.casino.goal.aspect.reminder.SupporterReminderRuleAspectFactory;
 import com.clemble.casino.goal.aspect.share.ShareRuleAspectFactory;
 import com.clemble.casino.goal.aspect.timeout.GoalTimeoutAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
@@ -16,8 +17,6 @@ import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.controller.FriendGoalServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
-import com.clemble.casino.goal.lifecycle.management.PlayerGoalRoleExtractor;
-import com.clemble.casino.goal.lifecycle.management.SupportersGoalRoleExtractor;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
@@ -75,21 +74,19 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ReminderRuleAspectFactory heroEmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
-        return new ReminderRuleAspectFactory(
+    public PlayerReminderRuleAspectFactory heroEmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
+        return new PlayerReminderRuleAspectFactory(
             Ordered.HIGHEST_PRECEDENCE + 4,
             emailReminderService,
-            new PlayerGoalRoleExtractor(),
             (configuration) -> configuration.getEmailReminderRule()
         );
     }
 
     @Bean
-    public ReminderRuleAspectFactory supportEmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
-        return new ReminderRuleAspectFactory(
+    public SupporterReminderRuleAspectFactory supportEmailReminderRuleAspectFactory(EmailReminderService emailReminderService) {
+        return new SupporterReminderRuleAspectFactory(
             Ordered.HIGHEST_PRECEDENCE + 5,
             emailReminderService,
-            new SupportersGoalRoleExtractor(),
             (configuration) -> {
                 GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
                 return roleConfiguration != null ? roleConfiguration.getEmailReminderRule() : null;
@@ -103,11 +100,10 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ReminderRuleAspectFactory heroPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
-        return new ReminderRuleAspectFactory(
+    public PlayerReminderRuleAspectFactory heroPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
+        return new PlayerReminderRuleAspectFactory(
             Ordered.HIGHEST_PRECEDENCE + 7,
             reminderService,
-            new PlayerGoalRoleExtractor(),
             (configuration) -> configuration.getPhoneReminderRule()
         );
     }
@@ -118,11 +114,10 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ReminderRuleAspectFactory supportPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
-        return new ReminderRuleAspectFactory(
+    public SupporterReminderRuleAspectFactory supportPhoneReminderRuleAspectFactory(PhoneReminderService reminderService) {
+        return new SupporterReminderRuleAspectFactory(
             Ordered.HIGHEST_PRECEDENCE + 8,
             reminderService,
-            new SupportersGoalRoleExtractor(),
             (configuration) -> {
                 GoalRoleConfiguration roleConfiguration = configuration.getSupporterConfiguration();
                 return roleConfiguration != null ? roleConfiguration.getPhoneReminderRule() : null;
