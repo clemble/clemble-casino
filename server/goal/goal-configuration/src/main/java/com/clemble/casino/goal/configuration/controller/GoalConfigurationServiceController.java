@@ -86,8 +86,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
         ImmutableList.of(
             new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)), 30),
             new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(14)), 70),
-            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(21)), 130),
-            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(35)), 220)
+            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(21)), 130)
         ),
         ImmutableList.of(
             new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 0)
