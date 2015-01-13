@@ -1,7 +1,6 @@
 package com.clemble.casino.goal.construction.spring;
 
 import com.clemble.casino.goal.construction.GoalKeyGenerator;
-import com.clemble.casino.goal.construction.controller.FriendInitiationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.construction.listener.SystemGoalInitiationDueEventListener;
@@ -59,13 +58,6 @@ public class GoalConstructionSpringConfiguration {
     @Bean
     public GoalInitiationServiceController goalInitiationServiceController(ServerGoalInitiationService initiationService) {
         return new GoalInitiationServiceController(initiationService);
-    }
-
-    @Bean
-    public FriendInitiationServiceController friendInitiationServiceController(
-        GoalInitiationRepository initiationRepository,
-        @Qualifier("playerConnectionClient") PlayerConnectionService connectionService) {
-        return new FriendInitiationServiceController(initiationRepository, connectionService);
     }
 
     @Bean

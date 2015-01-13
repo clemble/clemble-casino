@@ -2,7 +2,6 @@ package com.clemble.casino.integration.goal;
 
 import com.clemble.casino.client.goal.GoalOperations;
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
-import com.clemble.casino.goal.construction.controller.FriendInitiationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
@@ -17,7 +16,6 @@ public class IntegrationGoalOperationsFactory {
     final private GoalConfigurationServiceController configurationService;
     final private GoalInitiationServiceController initiationService;
     final private GoalSuggestionServiceController suggestionService;
-    final private FriendInitiationServiceController friendInitiationService;
     final private GoalConstructionServiceController constructionService;
     final private GoalActionServiceController actionService;
     final private GoalRecordServiceController recordService;
@@ -26,14 +24,12 @@ public class IntegrationGoalOperationsFactory {
         GoalConfigurationServiceController configurationService,
         GoalInitiationServiceController initiationService,
         GoalSuggestionServiceController suggestionService,
-        FriendInitiationServiceController friendInitiationService,
         GoalConstructionServiceController constructionService,
         GoalActionServiceController actionService,
         GoalRecordServiceController recordService) {
         this.configurationService = configurationService;
         this.initiationService = initiationService;
         this.suggestionService = suggestionService;
-        this.friendInitiationService = friendInitiationService;
         this.constructionService = constructionService;
         this.actionService = actionService;
         this.recordService = recordService;
@@ -44,7 +40,6 @@ public class IntegrationGoalOperationsFactory {
             configurationService,
             initiationService,
             suggestionService,
-            friendInitiationService,
             constructionService,
             actionService,
             recordService);

@@ -7,7 +7,6 @@ import java.security.NoSuchAlgorithmException;
 import javax.annotation.PostConstruct;
 
 import com.clemble.casino.goal.configuration.controller.GoalConfigurationServiceController;
-import com.clemble.casino.goal.construction.controller.FriendInitiationServiceController;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
@@ -118,14 +117,12 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             GoalConfigurationServiceController configurationService,
             GoalInitiationServiceController initiationService,
             GoalSuggestionServiceController suggestionService,
-            FriendInitiationServiceController friendInitiationService,
             GoalConstructionServiceController constructionService,
             GoalActionServiceController actionServiceController,
             GoalRecordServiceController recordServiceController) {
             return new IntegrationGoalOperationsFactory(configurationService,
                 initiationService,
                 suggestionService,
-                friendInitiationService,
                 constructionService,
                 actionServiceController,
                 recordServiceController);
