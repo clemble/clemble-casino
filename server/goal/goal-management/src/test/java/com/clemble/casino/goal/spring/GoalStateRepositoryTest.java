@@ -43,6 +43,7 @@ public class GoalStateRepositoryTest {
             ObjectGenerator.generate(GoalConfiguration.class),
             new GoalContext(null, Collections.emptyList()),
             Collections.<String>singleton(ObjectGenerator.generate(String.class)),
+            ObjectGenerator.generate(boolean.class),
             ObjectGenerator.generate(String.class)
         );
         // Step 2. Saving short goal state

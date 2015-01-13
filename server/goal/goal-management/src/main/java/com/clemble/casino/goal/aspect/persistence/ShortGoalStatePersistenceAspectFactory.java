@@ -21,7 +21,7 @@ public class ShortGoalStatePersistenceAspectFactory implements ShortGoalAspectFa
 
     @Override
     public ClembleAspect<GoalEvent> construct(GoalConfiguration configuration, GoalState context) {
-        return new ShortGoalStatePersistenceAspect(context, stateRepository);
+        return new GoalStatePersistenceAspect(context, stateRepository);
     }
 
     @Override

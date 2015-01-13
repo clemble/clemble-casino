@@ -22,7 +22,7 @@ public class ShortGoalLostOutcomeAspectFactory implements ShortGoalAspectFactory
     @Override
     public ClembleAspect<GoalEndedEvent> construct(GoalConfiguration configuration, GoalState context) {
         // Step 1. Checking player bid
-        return new ShortGoalLostOutcomeAspect(context.getBank().getBids(), systemNotificationService);
+        return new GoalLostOutcomeAspect(context.getBank().getBids(), systemNotificationService);
     }
 
     @Override

@@ -22,14 +22,14 @@ import java.util.Date;
 /**
  * Created by mavarazy on 10/9/14.
  */
-public class ShortGoalWonOutcomeAspect
+public class GoalWonOutcomeAspect
     extends GoalAspect<GoalEndedEvent>
     implements PlayerBidAware {
 
     final private Collection<PlayerBid> bids;
     final private SystemNotificationService systemNotificationService;
 
-    public ShortGoalWonOutcomeAspect(Collection<PlayerBid> playerBids, SystemNotificationService systemNotificationService) {
+    public GoalWonOutcomeAspect(Collection<PlayerBid> playerBids, SystemNotificationService systemNotificationService) {
         super(EventSelectors.
                 where(new EventTypeSelector(GoalEndedEvent.class)).
                 and(new OutcomeTypeSelector(PlayerWonOutcome.class)));
