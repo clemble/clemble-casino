@@ -46,6 +46,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             PrivacyRule.me,
             new GoalRoleConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 70)),
+                3,
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
             ),
@@ -62,6 +63,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             PrivacyRule.friends,
             new GoalRoleConfiguration(
                 new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 90)),
+                7,
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
             ),
@@ -76,7 +78,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(1)),
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(30)),
             PrivacyRule.world,
-            new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
+            new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), 15, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
             ShareRule.twitter
         )
     );
@@ -102,7 +104,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new GoalConfigurationValue<PrivacyRule>(PrivacyRule.friends, 30)
         ),
         ImmutableList.of(
-            new GoalConfigurationValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)
+            new GoalConfigurationValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)
         ),
         ImmutableList.of(
             new GoalConfigurationValue<ShareRule>(ShareRule.none, 0),

@@ -64,6 +64,7 @@ public class GoalPhoneNotificationTest {
         PrivacyRule.world,
         new GoalRoleConfiguration(
             new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+            3,
             NoReminderRule.INSTANCE,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1))
         ),

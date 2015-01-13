@@ -59,7 +59,7 @@ public class GoalRecordITest {
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
         PrivacyRule.me,
-        new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
+        new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
         ShareRule.none
     );
 
