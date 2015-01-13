@@ -3,6 +3,7 @@ package com.clemble.casino.goal.spring;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
+import com.clemble.casino.goal.aspect.bid.GoalBetForbidAspectFactory;
 import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.ShortGoalLostOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.ShortGoalWonOutcomeAspectFactory;
@@ -16,13 +17,13 @@ import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
+import com.clemble.casino.goal.listener.SystemGoalForbidBetEventListener;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.ShortGoalStateRepository;
 import com.clemble.casino.goal.service.EmailReminderService;
 import com.clemble.casino.goal.service.PhoneReminderService;
-import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -158,6 +159,15 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
+    public SystemGoalForbidBetEventListener systemGoalForbidBetEventListener(
+        SystemNotificationServiceListener notificationServiceListener,
+        ShortGoalStateRepository stateRepository) {
+        SystemGoalForbidBetEventListener eventListener = new SystemGoalForbidBetEventListener(stateRepository);
+        notificationServiceListener.subscribe(eventListener);
+        return eventListener;
+    }
+
+    @Bean
     public GoalRecordAspectFactory goalRecordAspectFactory(
         GoalRecordRepository recordRepository,
         @Qualifier("playerNotificationService") ServerNotificationService notificationService){
@@ -188,6 +198,12 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     public GoalPlayerNotificationAspectFactory goalPlayerNotificationAspectFactory(
         @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
         return new GoalPlayerNotificationAspectFactory(notificationService);
+    }
+
+    @Bean
+    public GoalBetForbidAspectFactory goalBetForbidAspectFactory(
+        SystemNotificationService notificationService) {
+        return new GoalBetForbidAspectFactory(notificationService);
     }
 
 }
