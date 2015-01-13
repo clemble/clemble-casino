@@ -14,7 +14,6 @@ import com.clemble.casino.goal.aspect.share.ShareRuleAspectFactory;
 import com.clemble.casino.goal.aspect.timeout.GoalTimeoutAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
-import com.clemble.casino.goal.controller.FriendGoalServiceController;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
@@ -123,14 +122,6 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
                 return roleConfiguration != null ? roleConfiguration.getPhoneReminderRule() : null;
             }
         );
-    }
-
-    @Bean
-    public FriendGoalServiceController timelineServiceController(
-        ShortGoalStateRepository shortGoalStateRepository,
-        @Qualifier("playerConnectionClient") PlayerConnectionService playerConnectionClient
-    ) {
-        return new FriendGoalServiceController(shortGoalStateRepository, playerConnectionClient);
     }
 
     @Bean
