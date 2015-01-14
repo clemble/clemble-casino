@@ -9,6 +9,7 @@ import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.goal.SystemGoalForbidBetEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,7 @@ public class GoalBetForbidAspect extends GoalAspect<GoalStartedEvent> {
         // Step 1. Calculating trigger time
         long triggerTime = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(state.getConfiguration().getSupporterConfiguration().getBetDays());
         // Step 2. Generating shedule event
-        SystemEvent sysEvent = new SystemAddJobScheduleEvent(state.getGoalKey(), "forbid", new SystemGoalForbidBetEvent(state.getGoalKey()), new Date(triggerTime));
+        SystemEvent sysEvent = new SystemAddJobScheduleEvent(state.getGoalKey(), "forbid", new SystemGoalForbidBetEvent(state.getGoalKey()), new DateTime(triggerTime));
         // Step 3. Scheduling trigger
         notificationService.send(sysEvent);
     }

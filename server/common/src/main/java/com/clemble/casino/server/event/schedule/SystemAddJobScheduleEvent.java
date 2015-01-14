@@ -3,6 +3,7 @@ package com.clemble.casino.server.event.schedule;
 import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 
@@ -16,10 +17,10 @@ public class SystemAddJobScheduleEvent implements SystemScheduleEvent {
     final private String group;
     final private String key;
     final private SystemEvent event;
-    final private Date triggerStartTime;
+    final private DateTime triggerStartTime;
 
     @JsonCreator
-    public SystemAddJobScheduleEvent(@JsonProperty("group") String group, @JsonProperty("key") String key, @JsonProperty("event") SystemEvent event, @JsonProperty("triggerStartTime") Date triggerStartTime) {
+    public SystemAddJobScheduleEvent(@JsonProperty("group") String group, @JsonProperty("key") String key, @JsonProperty("event") SystemEvent event, @JsonProperty("triggerStartTime") DateTime triggerStartTime) {
         this.group = group;
         this.key = key;
         this.triggerStartTime = triggerStartTime;
@@ -36,7 +37,7 @@ public class SystemAddJobScheduleEvent implements SystemScheduleEvent {
         return group;
     }
 
-    public Date getTriggerStartTime() {
+    public DateTime getTriggerStartTime() {
         return triggerStartTime;
     }
 

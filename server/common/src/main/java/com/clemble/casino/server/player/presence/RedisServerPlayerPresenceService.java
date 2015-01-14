@@ -8,6 +8,7 @@ import com.clemble.casino.player.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -135,17 +136,17 @@ public class RedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     }
 
     @Override
-    public Date markAvailable(String player) {
+    public DateTime markAvailable(String player) {
         return markOnline(player);
     }
 
     @Override
-    public Date markOnline(final String player) {
+    public DateTime markOnline(final String player) {
         // Step 1. Setting new expiration time
-        Date newExpirationTime = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
+        DateTime newExpirationTime = new DateTime(System.currentTimeMillis() + EXPIRATION_TIME);
         BoundValueOperations<String, String> valueOperations = redisTemplate.boundValueOps(player);
         valueOperations.set(GameSessionAware.DEFAULT_SESSION);
-        valueOperations.expireAt(newExpirationTime);
+        valueOperations.expireAt(newExpirationTime.toDate());
         // Step 2. Sending notification, for player state update
         notifyStateChange(PlayerPresence.online(player));
         return newExpirationTime;

@@ -9,6 +9,7 @@ import com.clemble.casino.server.payment.repository.PaymentTransactionRepository
 import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +38,7 @@ public class PaymentTransactionRepositoryTest {
         // Step 1. Creating stub transaction
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(player + RandomStringUtils.randomAlphanumeric(5))
-            .setTransactionDate(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
+            .setTransactionDate(new DateTime(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
             .addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
             .addOperation(new PaymentOperation(player, amount, Operation.Debit));
         // Step 2. Saving transaction in repository

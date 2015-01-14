@@ -4,6 +4,7 @@ import com.clemble.casino.server.event.email.SystemEmailSendRequestEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class EmailReminderService implements ReminderService {
     }
 
     @Override
-    public void scheduleReminder(String player, String goalKey, String template, Map<String, String> parameters, Date breachTime) {
+    public void scheduleReminder(String player, String goalKey, String template, Map<String, String> parameters, DateTime breachTime) {
         String key = toKey(player);
         // Step 1. Cancel reminder
         // WARNING Since this is asynchronous, this might cause problems, it's better to do it in reminder service cancelReminder(player, goalKey);

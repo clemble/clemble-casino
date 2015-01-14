@@ -4,6 +4,8 @@ import com.clemble.casino.money.Operation;
 import com.clemble.casino.payment.*;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.player.PlayerAware;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.util.Date;
 
@@ -49,7 +51,7 @@ public class BonusPaymentTransaction implements PlayerAware, AmountAware, Paymen
     public PaymentTransaction toTransaction() {
         return new PaymentTransaction().
             setTransactionKey(transactionKey).
-            setTransactionDate(new Date()).
+            setTransactionDate(DateTime.now(DateTimeZone.UTC)).
             addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit)).
             addOperation(new PaymentOperation(player, amount, Operation.Debit)).
             setSource(source);

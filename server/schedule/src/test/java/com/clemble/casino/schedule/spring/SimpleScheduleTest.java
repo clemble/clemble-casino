@@ -9,6 +9,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationServiceLi
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Get;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class SimpleScheduleTest {
         // Step 0.1. Subscribing to event listener
         notificationServiceListener.subscribe(eventListener);
         // Step 1. Generating new add job event
-        SystemAddJobScheduleEvent event = new SystemAddJobScheduleEvent(RandomStringUtils.random(5), RandomStringUtils.random(5), new SystemBetCompletedEvent("t:a", "a"), new Date(System.currentTimeMillis() + 300));
+        SystemAddJobScheduleEvent event = new SystemAddJobScheduleEvent(RandomStringUtils.random(5), RandomStringUtils.random(5), new SystemBetCompletedEvent("t:a", "a"), new DateTime(System.currentTimeMillis() + 300));
         // Step 2. Generating onEvent
         systemAddJobScheduleEventListener.onEvent(event);
         // Step 3. Checking event received

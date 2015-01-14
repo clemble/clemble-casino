@@ -9,6 +9,8 @@ import com.clemble.casino.payment.bonus.DailyBonusPaymentSource;
 import com.clemble.casino.server.event.player.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.bonus.BonusPaymentTransaction;
 import com.clemble.casino.server.bonus.BonusService;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 public class DailyBonusEventListener implements BonusEventListener<SystemPlayerEnteredEvent> {
 
@@ -26,7 +28,7 @@ public class DailyBonusEventListener implements BonusEventListener<SystemPlayerE
         if (event == null)
             return;
         // Step 2. Generating unique bonus marker for the day
-        DailyBonusPaymentSource paymentSource = new DailyBonusPaymentSource(new Date());
+        DailyBonusPaymentSource paymentSource = new DailyBonusPaymentSource(DateTime.now(DateTimeZone.UTC));
         String transactionKey = paymentSource.toTransactionKey(event.getPlayer());
         // Step 3. Processing bonus in bonusService 
         bonusService.process(new BonusPaymentTransaction(event.getPlayer(), paymentSource, amount));

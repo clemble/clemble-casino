@@ -1,5 +1,6 @@
 package org.eluder.spring.social.mongodb;
 
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
@@ -16,7 +17,7 @@ public class MongoConnection {
 
     @Id
     private String id;
-    private Date created;
+    private DateTime created;
     private String userId;
     private String providerId;
     private String providerUserId;
@@ -36,11 +37,11 @@ public class MongoConnection {
         this.id = id;
     }
 
-    public Date getCreated() {
+    public DateTime getCreated() {
         return created;
     }
 
-    public void setCreated(final Date created) {
+    public void setCreated(final DateTime created) {
         this.created = created;
     }
 

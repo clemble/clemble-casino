@@ -7,6 +7,7 @@ import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
 import com.clemble.casino.goal.service.ReminderService;
 import com.google.common.collect.ImmutableMap;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +46,7 @@ public class SupporterReminderRuleAspect extends GoalAspect<GoalManagementEvent>
                     event.getBody().getGoalKey(),
                     "goal_due",
                     ImmutableMap.<String, String>of("text", hoursToReminder + " hours to " + goal),
-                    new Date(remindTime)
+                    new DateTime(remindTime)
                 )
             );
         }

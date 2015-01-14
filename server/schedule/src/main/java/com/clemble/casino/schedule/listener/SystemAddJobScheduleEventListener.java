@@ -49,7 +49,7 @@ public class SystemAddJobScheduleEventListener implements SystemEventListener<Sy
         // Step 2. Adding simple trigger
         Trigger trigger = newTrigger().
             withIdentity(event.getKey(), event.getGroup()).
-            startAt(event.getTriggerStartTime()).
+            startAt(event.getTriggerStartTime().toDate()).
             build();
         // Step 3. Actually adding job to Scheduler
         try {

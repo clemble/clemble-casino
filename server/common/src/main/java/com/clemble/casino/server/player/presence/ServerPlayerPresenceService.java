@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.clemble.casino.player.PlayerPresence;
 import com.clemble.casino.server.ServerService;
+import org.joda.time.DateTime;
 
 public interface ServerPlayerPresenceService extends ServerService {
 
@@ -17,9 +18,9 @@ public interface ServerPlayerPresenceService extends ServerService {
 
     public List<PlayerPresence> getPresences(Collection<String> presences);
 
-    public Date markAvailable(String player);
+    public DateTime markAvailable(String player);
 
-    public Date markOnline(String player);
+    public DateTime markOnline(String player);
 
     public void markOffline(String player);
 

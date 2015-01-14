@@ -11,6 +11,7 @@ import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.lifecycle.record.EventRecord;
 import com.clemble.casino.lifecycle.record.RecordState;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 
@@ -41,7 +42,7 @@ public class GoalRecordAspect extends GoalAspect<Event> implements GoalAware {
     @Override
     protected void doEvent(Event event) {
         // Step 1. Constructing event record
-        EventRecord move = new EventRecord(event, new Date());
+        EventRecord move = new EventRecord(event, new DateTime());
         // Step 2. Saving event record
         GoalRecord record = recordRepository.findOne(goalKey);
         record.getEventRecords().add(move);

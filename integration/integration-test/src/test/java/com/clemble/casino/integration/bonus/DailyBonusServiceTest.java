@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class DailyBonusServiceTest {
         Money amount = Money.create(Currency.FakeMoney, 100);
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey("dailybonus" + player)
-            .setTransactionDate(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
+            .setTransactionDate(new DateTime(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))
             .addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Credit))
             .addOperation(new PaymentOperation(player, amount, Operation.Debit));
         transactionRepository.save(paymentTransaction);

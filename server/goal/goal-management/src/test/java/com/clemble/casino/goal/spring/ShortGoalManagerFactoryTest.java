@@ -29,6 +29,8 @@ import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -83,7 +85,7 @@ public class ShortGoalManagerFactoryTest {
             "Create goal state",
             configuration,
             new HashSet<>(),
-            new Date());
+            DateTime.now(DateTimeZone.UTC));
         // Step 2. Starting initiation
         managerFactory.start(null, initiation);
         // Step 3. Checking there is a state for the game
@@ -97,14 +99,14 @@ public class ShortGoalManagerFactoryTest {
         final String goalKey = RandomStringUtils.randomAlphabetic(10);
         String player = RandomStringUtils.randomAlphabetic(10);
         GoalInitiation initiation = new GoalInitiation(
-                goalKey,
-                InitiationState.initiated,
-                Bank.create(player, configuration.getBid()),
-                player,
-                "Create goal state",
-                configuration,
-                new HashSet<>(),
-                new Date());
+            goalKey,
+            InitiationState.initiated,
+            Bank.create(player, configuration.getBid()),
+            player,
+            "Create goal state",
+            configuration,
+            new HashSet<>(),
+            DateTime.now(DateTimeZone.UTC));
         // Step 2. Starting initiation
         managerFactory.start(null, initiation);
         // Step 3. Checking there is a state for the game

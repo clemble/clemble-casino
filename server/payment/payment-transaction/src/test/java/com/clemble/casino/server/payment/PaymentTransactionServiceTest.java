@@ -8,6 +8,8 @@ import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.payment.listener.SystemPlayerAccountCreationEventListener;
 import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +60,7 @@ public class PaymentTransactionServiceTest {
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(transactionKey)
-            .setTransactionDate(new Date())
+            .setTransactionDate(DateTime.now(DateTimeZone.UTC))
             .addOperation(new PaymentOperation(playerFrom, amount, Operation.Credit))
             .addOperation(new PaymentOperation(playerTo, amount, Operation.Debit));
 

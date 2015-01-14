@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -42,7 +43,7 @@ public class PlayerProfileOperationsITest {
 
     private PlayerProfile randomProfile() {
         PlayerProfile randomProfile = ObjectGenerator.generate(PlayerProfile.class)
-            .setBirthDate(new Date(0))
+            .setBirthDate(new DateTime(0))
             .setSocialConnections(new HashSet<ConnectionKey>());
         return randomProfile;
     }

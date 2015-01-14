@@ -13,6 +13,8 @@ import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEv
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
 import com.clemble.test.random.ObjectGenerator;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,12 +62,12 @@ public class PaymentTransactionOperationsTest {
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(ObjectGenerator.generate(String.class))
-            .setTransactionDate(new Date())
-            .setProcessingDate(new Date())
+            .setTransactionDate(DateTime.now(DateTimeZone.UTC))
+            .setProcessingDate(DateTime.now(DateTimeZone.UTC))
             .addOperation(
-                    new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 60), Operation.Credit))
+                new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 60), Operation.Credit))
             .addOperation(
-                    new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionDebitAndCreditNotMatched));
 
@@ -79,7 +81,7 @@ public class PaymentTransactionOperationsTest {
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(ObjectGenerator.generate(String.class))
-                .setTransactionDate(new Date())
+                .setTransactionDate(DateTime.now(DateTimeZone.UTC))
                 .addOperation(
                         new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
                 .addOperation(
@@ -101,7 +103,7 @@ public class PaymentTransactionOperationsTest {
 
         PaymentTransaction paymentTransaction = new PaymentTransaction()
                 .setTransactionKey(transactionId)
-                .setTransactionDate(new Date())
+                .setTransactionDate(DateTime.now(DateTimeZone.UTC))
                 .addOperation(
                         new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
                 .addOperation(

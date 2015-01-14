@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class PlayerManualRegistrationServiceITest {
             RandomStringUtils.randomAlphabetic(10) + "@gmail.com",
             RandomStringUtils.random(10));
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class)
-                .setBirthDate(new Date(0))
+                .setBirthDate(new DateTime(0))
                 .setSocialConnections(null);
         // Step 2. Creating CasinoOperations with this credentials and Profile
         ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
@@ -56,7 +57,7 @@ public class PlayerManualRegistrationServiceITest {
             RandomStringUtils.random(10));
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class)
                 .setNickName(null)
-                .setBirthDate(new Date(0))
+                .setBirthDate(new DateTime(0))
                 .setSocialConnections(null);
         // Step 2. Creating CasinoOperations with this credentials and Profile
         ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);

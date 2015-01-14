@@ -3,6 +3,7 @@ package com.clemble.casino.integration.player;
 import java.util.Date;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -35,7 +36,7 @@ public class InvalidPlayerRegistraionITest {
     @Test
     public void registerInvalidProfile() {
         PlayerProfile playerProfile = new PlayerProfile().
-            setBirthDate(new Date(0)).
+            setBirthDate(new DateTime(0)).
             setFirstName(RandomStringUtils.randomAlphabetic(10)).
             setGender(PlayerGender.M).
             setLastName(RandomStringUtils.randomAlphabetic(10)).

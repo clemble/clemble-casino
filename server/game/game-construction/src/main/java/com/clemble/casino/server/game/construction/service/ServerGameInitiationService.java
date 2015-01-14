@@ -15,6 +15,7 @@ import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.event.game.SystemGameStartedEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,7 @@ public class ServerGameInitiationService implements GameInitiationService, Serve
             initiation.getSessionKey(),
             "initiation",
             new SystemGameInitiationDueEvent(initiation.getSessionKey()),
-            new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(CANCEL_TIMEOUT_SECONDS)));
+            new DateTime(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(CANCEL_TIMEOUT_SECONDS)));
         systemNotificationService.send(scheduleEvent);
     }
 

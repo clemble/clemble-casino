@@ -15,6 +15,8 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.util.Collection;
 import java.util.Date;
@@ -47,7 +49,7 @@ public class GoalWonOutcomeAspect
         // Step 1. Generating payment transaction
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(event.getBody().getGoalKey())
-            .setTransactionDate(new Date())
+            .setTransactionDate(DateTime.now(DateTimeZone.UTC))
             .setSource(new GoalPaymentSource(event.getBody().getGoalKey(), event.getOutcome()));
         // Step 2. Processing payment transaction
         for(PlayerBid playerBid: bids) {

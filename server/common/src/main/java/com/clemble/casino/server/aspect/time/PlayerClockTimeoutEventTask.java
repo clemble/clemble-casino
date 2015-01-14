@@ -8,6 +8,7 @@ import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 import java.util.function.Function;
@@ -71,7 +72,7 @@ public class PlayerClockTimeoutEventTask implements PlayerAware, Comparable<Play
             key,
             player,
             eventFactory.apply(key),
-            new Date(clock.getBreachTime()));
+            new DateTime(clock.getBreachTime()));
         this.notificationService.send(addJobScheduleEvent);
     }
 

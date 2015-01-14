@@ -12,6 +12,8 @@ import com.clemble.casino.player.notification.PlayerConnectedNotification;
 import com.clemble.casino.server.notification.repository.PlayerNotificationRepository;
 import com.clemble.casino.server.notification.spring.PlayerNotificationSpringConfiguration;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +48,8 @@ public class PlayerNotificationSpringConfigurationTest {
             Money.create(Currency.DEFAULT, 50),
             Operation.Credit,
             new GoalPaymentSource("goal", new NoOutcome()),
-            new Date());
-        PlayerConnectedNotification connectedNotification = new PlayerConnectedNotification("AB", "B", "F", new Date());
+            DateTime.now(DateTimeZone.UTC));
+        PlayerConnectedNotification connectedNotification = new PlayerConnectedNotification("AB", "B", "F", DateTime.now(DateTimeZone.UTC));
         // Step 2. Save notification
         repository.save(notification);
         repository.save(connectedNotification);

@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.clemble.casino.server.profile.spring.PlayerProfileSpringConfiguration;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,7 +43,7 @@ public class PlayerProfileRepositoryTest {
     @Test
     public void testSave() {
         PlayerProfile playerProfile = ObjectGenerator.generate(PlayerProfile.class);
-        playerProfile.setBirthDate(new Date(0));
+        playerProfile.setBirthDate(new DateTime(0));
         playerProfile.setPlayer(RandomStringUtils.random(5));
         PlayerProfile savedProfile = playerProfileRepository.save(playerProfile);
         assertEquals(savedProfile.getPlayer(), playerProfile.getPlayer());

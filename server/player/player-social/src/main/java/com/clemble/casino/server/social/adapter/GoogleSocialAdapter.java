@@ -12,6 +12,7 @@ import com.google.api.services.plusDomains.PlusDomains;
 import com.google.api.services.plusDomains.model.PeopleFeed;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.joda.time.DateTime;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionFactory;
@@ -56,7 +57,7 @@ public class GoogleSocialAdapter implements SocialAdapter<Google> {
         // Step 2. Converting google profile to Player Profile
         return new PlayerProfile().
             addSocialConnection(new ConnectionKey("google", profile.getId())).
-            setBirthDate(profile.getBirthday()).
+            setBirthDate(new DateTime(profile.getBirthday())).
             setFirstName(profile.getGivenName()).
             setGender(PlayerGender.parse(profile.getGender())).
             setLastName(profile.getFamilyName()).

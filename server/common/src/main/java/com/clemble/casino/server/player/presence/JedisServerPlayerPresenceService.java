@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,7 +141,7 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     }
 
     @Override
-    public Date markAvailable(String player) {
+    public DateTime markAvailable(String player) {
         // Step 1. Notifying player entered event
         systemNotificationService.send(new SystemPlayerEnteredEvent(player));
         // Step 2. Generating expiration date
@@ -148,13 +149,13 @@ public class JedisServerPlayerPresenceService implements ServerPlayerPresenceSer
     }
 
     @Override
-    public Date markOnline(final String player) {
-        Date newExpirationTime = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
+    public DateTime markOnline(final String player) {
+        DateTime newExpirationTime = new DateTime(System.currentTimeMillis() + EXPIRATION_TIME);
         Jedis jedis = jedisPool.getResource();
         try {
             // Step 1. Setting new expiration time
             jedis.set(player, GameSessionAware.DEFAULT_SESSION);
-            jedis.expireAt(player, newExpirationTime.getTime());
+            jedis.expireAt(player, newExpirationTime.getMillis());
         } finally {
             jedisPool.returnResource(jedis);
         }

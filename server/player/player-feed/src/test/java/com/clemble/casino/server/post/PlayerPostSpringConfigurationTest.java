@@ -10,6 +10,8 @@ import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.server.post.repository.PlayerPostRepository;
 import com.clemble.casino.server.post.spring.PlayerFeedSpringConfiguration;
 import com.clemble.test.random.ObjectGenerator;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,10 +47,10 @@ public class PlayerPostSpringConfigurationTest {
             new Bank(Collections.emptyList(), new Bid(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
             ObjectGenerator.generate(GoalConfiguration.class),
             "",
-            new Date(),
+            DateTime.now(DateTimeZone.UTC),
             0,
             Collections.emptySet(),
-            new Date()
+            DateTime.now(DateTimeZone.UTC)
         );
         // Step 2. Saving player post twice
         postRepository.save(post);

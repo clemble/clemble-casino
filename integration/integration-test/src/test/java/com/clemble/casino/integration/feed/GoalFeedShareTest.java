@@ -17,6 +17,7 @@ import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.share.SystemSharePostEvent;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +51,7 @@ public class GoalFeedShareTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(2))));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", new DateTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(2))));
         // Step 4. Checking post appeared in player feed
         CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
         // Step 5. Checking share works

@@ -10,6 +10,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.joda.time.DateTime;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionFactory;
@@ -39,14 +40,14 @@ public class FacebookSocialAdapter implements SocialAdapter<Facebook> {
         return facebookConnectionFactory;
     }
 
-    private Date readDate(String facebookBirthDate) {
+    private DateTime readDate(String facebookBirthDate) {
         if (!isNullOrEmpty(facebookBirthDate)) {
             String[] date = facebookBirthDate.split("/");
             if(date.length != 3) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.clear();
                 calendar.set(Integer.valueOf(date[2]), 1 + Integer.valueOf(date[0]), Integer.valueOf(date[1]));
-                return calendar.getTime();
+                return new DateTime(calendar.getTime());
             }
         }
         return null;

@@ -13,6 +13,8 @@ import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEv
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.RoundGameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +57,7 @@ public class RoundWonByPriceRuleAspect extends RoundGameAspect<GameEndedEvent> {
             // Step 2. Generating payment transaction
             PaymentTransaction transaction = new PaymentTransaction()
                     .setTransactionKey(context.getSessionKey())
-                    .setTransactionDate(new Date())
+                    .setTransactionDate(DateTime.now(DateTimeZone.UTC))
                     .setSource(new GamePaymentSource(context.getSessionKey(), event.getOutcome()));
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 if (!playerContext.getPlayer().equals(winnerId)) {

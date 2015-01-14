@@ -1,6 +1,8 @@
 package org.eluder.spring.social.mongodb;
 
 import com.google.common.base.Function;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
@@ -64,7 +66,7 @@ public class MongoConnectionTransformers {
                 }
                 final ConnectionData cd = input.createData();
                 final MongoConnection mongoConnection = new MongoConnection();
-                mongoConnection.setCreated(new Date());
+                mongoConnection.setCreated(DateTime.now(DateTimeZone.UTC));
                 mongoConnection.setUserId(userId);
                 mongoConnection.setProviderId(cd.getProviderId());
                 mongoConnection.setProviderUserId(cd.getProviderUserId());

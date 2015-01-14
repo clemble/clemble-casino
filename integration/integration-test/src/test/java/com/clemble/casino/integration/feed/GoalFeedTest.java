@@ -13,6 +13,8 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.lifecycle.configuration.rule.bet.MonoBidRule;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", new Date()));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
         // Step 4. Checking post appeared in player feed
         CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
     }
@@ -56,7 +58,7 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(1);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", new Date()));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
         // Step 4. Checking post appeared in player feed
         CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
         // Step 5. Bidding on goal appeared
@@ -73,7 +75,7 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", new Date()));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
         // Step 4. Checking post appeared in player feed
         CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
         // Step 5. Constructing
@@ -90,7 +92,7 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", new Date()));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
         // Step 4. Checking post appeared in player feed
         CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
         // Step 5. Constructing
@@ -111,7 +113,7 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", new Date()));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
         // Step 4. Checking post appeared in player feed
         CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
         // Step 5. Constructing

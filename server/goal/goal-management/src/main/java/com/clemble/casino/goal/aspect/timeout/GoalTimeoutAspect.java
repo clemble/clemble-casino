@@ -14,6 +14,7 @@ import com.clemble.casino.server.event.goal.SystemGoalTimeoutEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 
@@ -53,7 +54,7 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
                     breachTime = deadline;
                 }
                 c.getClock().start(startTime, breachTime, deadline, punishment);
-                notificationService.send(new SystemAddJobScheduleEvent(goalKey, toKey(c.getPlayer()), new SystemGoalTimeoutEvent(goalKey), new Date(breachTime)));
+                notificationService.send(new SystemAddJobScheduleEvent(goalKey, toKey(c.getPlayer()), new SystemGoalTimeoutEvent(goalKey), new DateTime(breachTime)));
             });
         } else if (event instanceof GoalEndedEvent) {
             // Case 2. Goal ended
@@ -76,7 +77,7 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
                     breachTime = deadline;
                 }
                 c.getClock().start(startTime, breachTime, deadline, punishment);
-                notificationService.send(new SystemAddJobScheduleEvent(goalKey, toKey(c.getPlayer()), new SystemGoalTimeoutEvent(goalKey), new Date(breachTime)));
+                notificationService.send(new SystemAddJobScheduleEvent(goalKey, toKey(c.getPlayer()), new SystemGoalTimeoutEvent(goalKey), new DateTime(breachTime)));
             });
         }
     }

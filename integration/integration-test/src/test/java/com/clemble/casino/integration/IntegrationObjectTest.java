@@ -42,6 +42,8 @@ import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Ignore;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
@@ -74,10 +76,16 @@ import com.google.common.collect.ImmutableList;
 public class IntegrationObjectTest {
 
     static {
+        ObjectGenerator.register(DateTime.class, new AbstractValueGenerator<DateTime>() {
+            @Override
+            public DateTime generate() {
+                return new DateTime(ObjectGenerator.generate(long.class));
+            }
+        });
         ObjectGenerator.register(SystemAddJobScheduleEvent.class, new AbstractValueGenerator<SystemAddJobScheduleEvent>() {
             @Override
             public SystemAddJobScheduleEvent generate() {
-                return new SystemAddJobScheduleEvent(RandomStringUtils.random(5), RandomStringUtils.random(5), new SystemGameInitiationDueEvent("a"), new Date());
+                return new SystemAddJobScheduleEvent(RandomStringUtils.random(5), RandomStringUtils.random(5), new SystemGameInitiationDueEvent("a"), DateTime.now(DateTimeZone.UTC));
             }
         });
         ObjectGenerator.register(PlayerPost.class, new AbstractValueGenerator<PlayerPost>() {
@@ -90,17 +98,17 @@ public class IntegrationObjectTest {
                     new Bank(Collections.emptyList(), new Bid(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
                     ObjectGenerator.generate(GoalConfiguration.class),
                     "",
-                    new Date(),
+                    DateTime.now(DateTimeZone.UTC),
                     0,
                     Collections.emptySet(),
-                    new Date()
+                    DateTime.now(DateTimeZone.UTC)
                 );
             }
         });
         ObjectGenerator.register(PlayerNotification.class, new AbstractValueGenerator<PlayerNotification>() {
             @Override
             public PlayerNotification generate() {
-                return new PlayerConnectedNotification("A:B", "A", "B", new Date());
+                return new PlayerConnectedNotification("A:B", "A", "B", DateTime.now(DateTimeZone.UTC));
             }
         });
         ObjectGenerator.register(FixedBidRule.class, new AbstractValueGenerator<FixedBidRule>() {
@@ -213,12 +221,12 @@ public class IntegrationObjectTest {
             public PaymentTransaction generate() {
                 return new PaymentTransaction()
                         .setTransactionKey(RandomStringUtils.random(5))
-                        .setTransactionDate(new Date())
-                        .setProcessingDate(new Date())
+                        .setTransactionDate(DateTime.now(DateTimeZone.UTC))
+                        .setProcessingDate(DateTime.now(DateTimeZone.UTC))
                         .addOperation(
-                                new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Credit))
+                            new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Credit))
                         .addOperation(
-                                new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                            new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Debit));
             }
         });
         register(PlayerCredential.class, new AbstractValueGenerator<PlayerCredential>() {
@@ -230,7 +238,7 @@ public class IntegrationObjectTest {
         register(PlayerProfile.class, new AbstractValueGenerator<PlayerProfile>() {
             @Override
             public PlayerProfile generate() {
-                return new PlayerProfile().setBirthDate(new Date(0)).setFirstName(RandomStringUtils.randomAlphabetic(10))
+                return new PlayerProfile().setBirthDate(new DateTime(0)).setFirstName(RandomStringUtils.randomAlphabetic(10))
                         .setGender(PlayerGender.M).setLastName(RandomStringUtils.randomAlphabetic(10)).setNickName(RandomStringUtils.randomAlphabetic(10))
                         .setPlayer(RandomStringUtils.random(5));
             }

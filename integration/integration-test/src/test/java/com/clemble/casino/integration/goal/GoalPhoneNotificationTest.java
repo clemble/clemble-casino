@@ -27,6 +27,8 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.phone.SystemPhoneSMSSendRequestEvent;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,7 +87,7 @@ public class GoalPhoneNotificationTest {
             where(new PlayerEventSelector(A.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 2. Create construction
-        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test sms notification", new Date());
+        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test sms notification", DateTime.now(DateTimeZone.UTC));
         A.goalOperations().constructionService().construct(requestA);
         // Step 3. Checking timeout sms notification received
         SystemPhoneSMSSendRequestEvent reminderNotification = (SystemPhoneSMSSendRequestEvent) systemEventAccumulator.waitFor(smsSelector);
@@ -103,7 +105,7 @@ public class GoalPhoneNotificationTest {
             where(new PlayerEventSelector(B.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test supporter phone notification", new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
+        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test supporter phone notification", new DateTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
         CheckUtils.check((i) ->

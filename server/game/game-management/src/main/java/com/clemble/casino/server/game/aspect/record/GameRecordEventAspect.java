@@ -9,6 +9,8 @@ import com.clemble.casino.lifecycle.record.EventRecord;
 import com.clemble.casino.lifecycle.record.RecordState;
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.repository.GameRecordRepository;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.util.Date;
 
@@ -34,7 +36,7 @@ public class GameRecordEventAspect extends GameAspect<Event> implements GameSess
     @Override
     protected void doEvent(Event event) {
         // Step 1. Constructing event record
-        EventRecord move = new EventRecord(event, new Date());
+        EventRecord move = new EventRecord(event, DateTime.now(DateTimeZone.UTC));
         // Step 2. Saving event record
         GameRecord record = recordRepository.findOne(sessionKey);
         record.getEventRecords().add(move);

@@ -24,6 +24,8 @@ import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEv
 import com.clemble.casino.server.game.aspect.GameAspect;
 import com.clemble.casino.server.game.aspect.RoundGameAspect;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 /**
  * Created by mavarazy on 23/12/13.
@@ -48,7 +50,7 @@ public class RoundDrawByOwnedRuleAspect extends RoundGameAspect<RoundEndedEvent>
         // Step 2. Generating payment transaction
         PaymentTransaction paymentTransaction = new PaymentTransaction().
             setTransactionKey(context.getSessionKey()).
-            setTransactionDate(new Date()).
+            setTransactionDate(DateTime.now(DateTimeZone.UTC)).
             setSource(new GamePaymentSource(context.getSessionKey(), event.getOutcome()));
         for (GamePlayerContext playerContext : context.getPlayerContexts()) {
             GamePlayerAccount playerAccount = playerContext.getAccount();

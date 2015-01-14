@@ -5,6 +5,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.social.SocialAdapter;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.joda.time.DateTime;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionKey;
@@ -70,10 +71,10 @@ public class VKontakteSocialAdapter implements SocialAdapter<VKontakte> {
         return new ImmutablePair<String, String>(profile.getPhotoBig(), profile.getPhotoMedium());
     }
 
-    private Date toDate(VKontakteDate date) {
+    private DateTime toDate(VKontakteDate date) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(date.getYear(), date.getMonth(), date.getDay());
-        return calendar.getTime();
+        return new DateTime(calendar.getTime());
     }
 
     public String share(String userId, String message, VKontakte vk) {
