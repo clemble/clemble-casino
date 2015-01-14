@@ -1,12 +1,9 @@
 package com.clemble.casino.server.security;
 
-import com.clemble.casino.registration.PlayerToken;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mavarazy on 8/8/14.
@@ -14,10 +11,10 @@ import java.util.concurrent.TimeUnit;
 public class PlayerTokenUtils {
 
     final private int maxAge;
-    final private String domain;
+    final private String host;
 
-    public PlayerTokenUtils(String domain, int maxAge) {
-        this.domain = domain;
+    public PlayerTokenUtils(String host, int maxAge) {
+        this.host = host;
         this.maxAge = maxAge;
     }
 
@@ -32,7 +29,7 @@ public class PlayerTokenUtils {
         // Step 2. Setting cookie for the player
         Cookie cookie = new Cookie("player", encodedPlayer);
         cookie.setPath("/");
-        cookie.setDomain(domain);
+        cookie.setDomain(host);
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }
@@ -41,7 +38,7 @@ public class PlayerTokenUtils {
         // Step 1. Removing player
         Cookie cookie = new Cookie("player", "done");
         cookie.setPath("/");
-        cookie.setDomain(domain);
+        cookie.setDomain(host);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
     }

@@ -89,8 +89,10 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerSignOutServiceController playerSignOutServiceController(PlayerTokenUtils tokenUtils) {
-        return new PlayerSignOutServiceController(tokenUtils);
+    public PlayerSignOutServiceController playerSignOutServiceController(
+        @Value("${clemble.registration.token.host}") String host,
+        PlayerTokenUtils tokenUtils) {
+        return new PlayerSignOutServiceController("http://" + host.substring(1), tokenUtils);
     }
 
 }
