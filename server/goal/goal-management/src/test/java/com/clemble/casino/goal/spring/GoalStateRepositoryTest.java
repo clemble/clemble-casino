@@ -3,23 +3,18 @@ package com.clemble.casino.goal.spring;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
-import com.clemble.casino.goal.repository.ShortGoalStateRepository;
+import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.payment.Bank;
 import com.clemble.test.random.ObjectGenerator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ImmutableSet;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.parboiled.common.ImmutableLinkedList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import scala.collection.mutable.HashSet;
 
 import java.util.Collections;
-import java.util.Set;
 
 /**
  * Created by mavarazy on 12/14/14.
@@ -30,7 +25,7 @@ import java.util.Set;
 public class GoalStateRepositoryTest {
 
     @Autowired
-    public ShortGoalStateRepository stateRepository;
+    public GoalStateRepository stateRepository;
 
     @Test
     public void simpleTest() {

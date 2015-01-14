@@ -4,21 +4,15 @@ import com.clemble.casino.WebMapping;
 import com.clemble.casino.goal.GoalWebMapping;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.event.GoalEvent;
-import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
-import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.service.GoalActionService;
-import com.clemble.casino.goal.repository.ShortGoalStateRepository;
+import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.lifecycle.management.event.action.Action;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
-import com.clemble.casino.server.action.ClembleManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static com.clemble.casino.WebMapping.PRODUCES;
-import static com.clemble.casino.goal.GoalWebMapping.GOAL_INITIATION_BID;
 
 /**
  * Created by mavarazy on 10/9/14.
@@ -27,11 +21,11 @@ import static com.clemble.casino.goal.GoalWebMapping.GOAL_INITIATION_BID;
 public class GoalActionServiceController implements GoalActionService {
 
     final private GoalManagerFactoryFacade factoryFacade;
-    final private ShortGoalStateRepository stateRepository;
+    final private GoalStateRepository stateRepository;
 
     public GoalActionServiceController(
         GoalManagerFactoryFacade factoryFacade,
-        ShortGoalStateRepository stateRepository) {
+        GoalStateRepository stateRepository) {
         this.factoryFacade = factoryFacade;
         this.stateRepository = stateRepository;
     }

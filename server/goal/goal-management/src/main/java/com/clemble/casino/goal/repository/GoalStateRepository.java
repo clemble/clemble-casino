@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Created by mavarazy on 10/9/14.
  */
-public interface ShortGoalStateRepository extends MongoRepository<GoalState, String> {
+public interface GoalStateRepository extends MongoRepository<GoalState, String> {
 
     List<GoalState> findByPlayer(String player);
 

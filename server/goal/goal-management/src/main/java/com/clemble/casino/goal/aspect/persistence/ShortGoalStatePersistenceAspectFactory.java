@@ -4,7 +4,7 @@ import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
 import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
-import com.clemble.casino.goal.repository.ShortGoalStateRepository;
+import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.server.aspect.ClembleAspect;
 import org.springframework.core.Ordered;
 
@@ -13,9 +13,9 @@ import org.springframework.core.Ordered;
  */
 public class ShortGoalStatePersistenceAspectFactory implements ShortGoalAspectFactory<GoalEvent> {
 
-    final private ShortGoalStateRepository stateRepository;
+    final private GoalStateRepository stateRepository;
 
-    public ShortGoalStatePersistenceAspectFactory(ShortGoalStateRepository stateRepository) {
+    public ShortGoalStatePersistenceAspectFactory(GoalStateRepository stateRepository) {
         this.stateRepository = stateRepository;
     }
 

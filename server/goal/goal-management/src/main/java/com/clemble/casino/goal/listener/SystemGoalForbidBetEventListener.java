@@ -1,9 +1,8 @@
 package com.clemble.casino.goal.listener;
 
 import com.clemble.casino.goal.lifecycle.management.GoalState;
-import com.clemble.casino.goal.repository.ShortGoalStateRepository;
+import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.server.event.goal.SystemGoalForbidBetEvent;
-import com.clemble.casino.server.event.goal.SystemGoalStartedEvent;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 
 /**
@@ -11,9 +10,9 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
  */
 public class SystemGoalForbidBetEventListener implements SystemEventListener<SystemGoalForbidBetEvent> {
 
-    final private ShortGoalStateRepository stateRepository;
+    final private GoalStateRepository stateRepository;
 
-    public SystemGoalForbidBetEventListener(ShortGoalStateRepository stateRepository) {
+    public SystemGoalForbidBetEventListener(GoalStateRepository stateRepository) {
         this.stateRepository = stateRepository;
     }
 

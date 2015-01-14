@@ -21,7 +21,7 @@ import com.clemble.casino.goal.listener.SystemGoalForbidBetEventListener;
 import com.clemble.casino.goal.listener.SystemGoalStartedEventListener;
 import com.clemble.casino.goal.listener.SystemGoalTimeoutEventListener;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
-import com.clemble.casino.goal.repository.ShortGoalStateRepository;
+import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.goal.service.EmailReminderService;
 import com.clemble.casino.goal.service.PhoneReminderService;
 import com.clemble.casino.server.action.ClembleManagerFactory;
@@ -52,8 +52,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ShortGoalStateRepository goalStateRepository(MongoRepositoryFactory repositoryFactory) {
-        return repositoryFactory.getRepository(ShortGoalStateRepository.class);
+    public GoalStateRepository goalStateRepository(MongoRepositoryFactory repositoryFactory) {
+        return repositoryFactory.getRepository(GoalStateRepository.class);
     }
 
     @Bean
@@ -64,8 +64,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public GoalActionServiceController goalActionServiceController(
         GoalManagerFactoryFacade factoryFacade,
-        ShortGoalStateRepository shortGoalStateRepository) {
-        return new GoalActionServiceController(factoryFacade, shortGoalStateRepository);
+        GoalStateRepository goalStateRepository) {
+        return new GoalActionServiceController(factoryFacade, goalStateRepository);
     }
 
     @Bean
@@ -134,9 +134,9 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     public GoalManagerFactoryFacade goalManagerFactoryFacade(
         @Qualifier("shortGoalManagerFactory") ClembleManagerFactory<GoalConfiguration> shortGoalManagerFactory,
         GoalRecordRepository recordRepository,
-        ShortGoalStateRepository shortGoalStateRepository,
+        GoalStateRepository goalStateRepository,
         @Qualifier("playerNotificationService") ServerNotificationService notificationService) {
-        return new GoalManagerFactoryFacade(shortGoalManagerFactory, recordRepository, shortGoalStateRepository, notificationService);
+        return new GoalManagerFactoryFacade(shortGoalManagerFactory, recordRepository, goalStateRepository, notificationService);
     }
 
     @Bean
@@ -161,7 +161,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public SystemGoalForbidBetEventListener systemGoalForbidBetEventListener(
         SystemNotificationServiceListener notificationServiceListener,
-        ShortGoalStateRepository stateRepository) {
+        GoalStateRepository stateRepository) {
         SystemGoalForbidBetEventListener eventListener = new SystemGoalForbidBetEventListener(stateRepository);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
@@ -180,7 +180,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ShortGoalStatePersistenceAspectFactory goalPersistenceAspectFactory(ShortGoalStateRepository stateRepository) {
+    public ShortGoalStatePersistenceAspectFactory goalPersistenceAspectFactory(GoalStateRepository stateRepository) {
         return new ShortGoalStatePersistenceAspectFactory(stateRepository);
     }
 
