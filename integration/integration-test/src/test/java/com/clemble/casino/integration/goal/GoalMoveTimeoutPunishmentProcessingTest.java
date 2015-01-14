@@ -108,7 +108,7 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         // Step 1. Creating player A
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 2. Creating goal request
-        GoalConstruction AC = A.goalOperations().constructionService().construct(new GoalConstructionRequest(LOOSE_PUNISHMENT, "Test loose timeout", new DateTime(Long.MAX_VALUE)));
+        GoalConstruction AC = A.goalOperations().constructionService().construct(new GoalConstructionRequest(LOOSE_PUNISHMENT, "Test loose timeout", DateTime.now().plusYears(1)));
         CheckUtils.checkNotNull((i) -> A.goalOperations().initiationService().get(AC.getGoalKey()));
         A.goalOperations().initiationService().confirm(AC.getGoalKey());
         // Step 3. Checking AC
@@ -122,7 +122,7 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         // Step 1. Creating player A
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 2. Creating goal request
-        GoalConstruction AC = A.goalOperations().constructionService().construct(new GoalConstructionRequest(PENALTY_PUNISHMENT, "Test penalty timeout", new DateTime(Long.MAX_VALUE)));
+        GoalConstruction AC = A.goalOperations().constructionService().construct(new GoalConstructionRequest(PENALTY_PUNISHMENT, "Test penalty timeout", DateTime.now().plusYears(1)));
         CheckUtils.checkNotNull((i) -> A.goalOperations().initiationService().get(AC.getGoalKey()));
         Bank originalBank = A.goalOperations().initiationService().get(AC.getGoalKey()).getBank();
         A.goalOperations().initiationService().confirm(AC.getGoalKey());
