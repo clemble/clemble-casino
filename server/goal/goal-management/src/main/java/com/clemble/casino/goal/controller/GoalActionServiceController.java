@@ -53,7 +53,7 @@ public class GoalActionServiceController implements GoalActionService {
         throw new IllegalAccessError();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = GoalWebMapping.GOAL_ACTIONS, produces = WebMapping.PRODUCES)
+    @RequestMapping(method = RequestMethod.POST, value = GoalWebMapping.GOAL_STATE_ACTION, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public GoalEvent process(@PathVariable("goalKey") String goalKey, @CookieValue("player") String player, @RequestBody Action action) {
         PlayerAction playerAction = new PlayerAction(goalKey, player, action);

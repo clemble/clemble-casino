@@ -37,7 +37,7 @@ public class GoalConstructionServiceController implements GoalConstructionServic
 
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GOAL_CONSTRUCTION_PENDING, produces = PRODUCES)
+    @RequestMapping(method = RequestMethod.GET, value = MY_GOAL_CONSTRUCTION_PENDING, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
     public Collection<GoalConstruction> getPending(@CookieValue("player") String player) {
         return delegate.getPending(player);
