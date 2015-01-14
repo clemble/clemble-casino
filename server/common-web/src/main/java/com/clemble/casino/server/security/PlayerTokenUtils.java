@@ -22,15 +22,28 @@ public class PlayerTokenUtils {
     }
 
     public void updateResponse(String player, HttpServletResponse response) {
+        // Step 1. Encoding player URL
+        String encodedPlayer = null;
         try {
-            Cookie cookie = new Cookie("player", URLEncoder.encode(player, "UTF-8"));
-            cookie.setPath("/");
-//            cookie.setHttpOnly(true);
-            cookie.setDomain(domain);
-            cookie.setMaxAge(maxAge);
-            response.addCookie(cookie);
+            encodedPlayer = URLEncoder.encode(player, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+        // Step 2. Setting cookie for the player
+        Cookie cookie = new Cookie("player", encodedPlayer);
+        cookie.setPath("/");
+        cookie.setDomain(domain);
+        cookie.setMaxAge(maxAge);
+        response.addCookie(cookie);
     }
+
+    public void signOut(HttpServletResponse response) {
+        // Step 1. Removing player
+        Cookie cookie = new Cookie("player", "done");
+        cookie.setPath("/");
+        cookie.setDomain(domain);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+
 }

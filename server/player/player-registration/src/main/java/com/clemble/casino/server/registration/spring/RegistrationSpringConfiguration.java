@@ -7,6 +7,7 @@ import com.clemble.casino.server.key.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
 import com.clemble.casino.server.registration.ServerPlayerCredential;
+import com.clemble.casino.server.registration.controller.PlayerSignOutServiceController;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
@@ -27,6 +28,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import scala.beans.BeanDescription;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -85,4 +87,10 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     ){
         return new PlayerTokenUtils(host, maxAge);
     }
+
+    @Bean
+    public PlayerSignOutServiceController playerSignOutServiceController(PlayerTokenUtils tokenUtils) {
+        return new PlayerSignOutServiceController(tokenUtils);
+    }
+
 }

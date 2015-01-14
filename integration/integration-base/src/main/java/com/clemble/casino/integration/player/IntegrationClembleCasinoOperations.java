@@ -214,6 +214,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         throw new UnsupportedOperationException();
     }
 
+
     @Override
     public boolean isAuthorized() {
         return true;
@@ -227,6 +228,11 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     @Override
     public GameRecordService gameRecordOperations() {
         return recordService;
+    }
+
+    @Override
+    public void signOut() {
+        throw new UnsupportedOperationException();
     }
 
 }
