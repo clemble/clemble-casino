@@ -11,11 +11,11 @@ import org.springframework.core.Ordered;
 /**
  * Created by mavarazy on 14/10/14.
  */
-public class ShortGoalStatePersistenceAspectFactory implements ShortGoalAspectFactory<GoalEvent> {
+public class GoalStatePersistenceAspectFactory implements ShortGoalAspectFactory<GoalEvent> {
 
     final private GoalStateRepository stateRepository;
 
-    public ShortGoalStatePersistenceAspectFactory(GoalStateRepository stateRepository) {
+    public GoalStatePersistenceAspectFactory(GoalStateRepository stateRepository) {
         this.stateRepository = stateRepository;
     }
 

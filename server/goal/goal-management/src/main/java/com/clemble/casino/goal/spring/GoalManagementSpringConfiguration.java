@@ -5,9 +5,9 @@ import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
 import com.clemble.casino.goal.aspect.bid.GoalBetForbidAspectFactory;
 import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
-import com.clemble.casino.goal.aspect.outcome.ShortGoalLostOutcomeAspectFactory;
-import com.clemble.casino.goal.aspect.outcome.ShortGoalWonOutcomeAspectFactory;
-import com.clemble.casino.goal.aspect.persistence.ShortGoalStatePersistenceAspectFactory;
+import com.clemble.casino.goal.aspect.outcome.GoalLostOutcomeAspectFactory;
+import com.clemble.casino.goal.aspect.outcome.GoalWonOutcomeAspectFactory;
+import com.clemble.casino.goal.aspect.persistence.GoalStatePersistenceAspectFactory;
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.PlayerReminderRuleAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.SupporterReminderRuleAspectFactory;
@@ -180,18 +180,18 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ShortGoalStatePersistenceAspectFactory goalPersistenceAspectFactory(GoalStateRepository stateRepository) {
-        return new ShortGoalStatePersistenceAspectFactory(stateRepository);
+    public GoalStatePersistenceAspectFactory goalPersistenceAspectFactory(GoalStateRepository stateRepository) {
+        return new GoalStatePersistenceAspectFactory(stateRepository);
     }
 
     @Bean
-    public ShortGoalLostOutcomeAspectFactory goalMissedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
-        return new ShortGoalLostOutcomeAspectFactory(systemNotificationService);
+    public GoalLostOutcomeAspectFactory goalMissedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
+        return new GoalLostOutcomeAspectFactory(systemNotificationService);
     }
 
     @Bean
-    public ShortGoalWonOutcomeAspectFactory goalReachedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
-        return new ShortGoalWonOutcomeAspectFactory(systemNotificationService);
+    public GoalWonOutcomeAspectFactory goalReachedOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
+        return new GoalWonOutcomeAspectFactory(systemNotificationService);
     }
 
     @Bean

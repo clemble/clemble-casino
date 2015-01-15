@@ -11,11 +11,11 @@ import org.springframework.core.Ordered;
 /**
  * Created by mavarazy on 10/9/14.
  */
-public class ShortGoalLostOutcomeAspectFactory implements ShortGoalAspectFactory<GoalEndedEvent> {
+public class GoalLostOutcomeAspectFactory implements ShortGoalAspectFactory<GoalEndedEvent> {
 
     final private SystemNotificationService systemNotificationService;
 
-    public ShortGoalLostOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
+    public GoalLostOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
         this.systemNotificationService = systemNotificationService;
     }
 

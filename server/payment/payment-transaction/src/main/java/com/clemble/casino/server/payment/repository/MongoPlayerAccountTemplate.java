@@ -55,7 +55,12 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
                     pendingOperation = pOperation;
             }
             account.getPendingOperations().remove(pendingOperation);
-            // Step 2. Performing actual debit operation
+            // Step 2. Considering already frozen amount before running operation
+            if (pendingOperation != null) {
+                PaymentOperation frozenPayment = new PaymentOperation(player, pendingOperation.getAmount(), pendingOperation.getOperation().toOpposite());
+                operation = operation.combine(frozenPayment);
+            }
+            // Step 3. Performing actual debit operation
             Money amount = operation.toDebit().getAmount();
             Money debit = account.getMoney(amount.getCurrency());
             account.getMoney().put(amount.getCurrency(), amount.add(debit));
