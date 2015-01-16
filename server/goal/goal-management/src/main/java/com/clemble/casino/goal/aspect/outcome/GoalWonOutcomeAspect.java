@@ -55,6 +55,8 @@ public class GoalWonOutcomeAspect
         for(PlayerBid playerBid: bids) {
             paymentTransaction.
                 addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBid().getInterest(), Operation.Debit)).
+                addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBid().getAmount(), Operation.Credit)).
+                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBid().getAmount(), Operation.Debit)).
                 addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBid().getInterest(), Operation.Credit));
         }
         // Step 3. Checking value

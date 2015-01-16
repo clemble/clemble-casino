@@ -12,7 +12,9 @@ import com.clemble.casino.goal.post.*;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.utils.CheckUtils;
-import com.clemble.casino.lifecycle.configuration.rule.bet.MonoBidRule;
+import com.clemble.casino.player.service.PlayerFeedService;
+import com.clemble.casino.post.PlayerPost;
+import org.junit.Assert;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Test;
@@ -43,9 +45,9 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC).plusHours(1)));
         // Step 4. Checking post appeared in player feed
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost));
     }
 
     @Test
@@ -58,30 +60,37 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(1);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC).plusHours(1)));
         // Step 4. Checking post appeared in player feed
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost));
         // Step 5. Bidding on goal appeared
         goalB.initiationService().bid(constructionA.getGoalKey(), GoalRole.supporter);
         // Step 6. Checking bid appeared
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalBidPost);
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalBidPost));
     }
 
     @Test
     public void testStartedPost() {
         // Step 1. Creating player A
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
+        final PlayerFeedService feedA = A.feedService();
         final GoalOperations goalA = A.goalOperations();
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC).plusHours(1)));
         // Step 4. Checking post appeared in player feed
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> {
+            PlayerPost[] posts = feedA.myFeed();
+            return posts.length == 1 && posts[0] instanceof GoalCreatedPost;
+        }));
         // Step 5. Constructing
         goalA.initiationService().confirm(constructionA.getGoalKey());
         // Step 6. Checking started event
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalStartedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> {
+            PlayerPost[] posts = feedA.myFeed();
+            return posts.length == 1 && posts[0] instanceof GoalStartedPost;
+        }));
     }
 
     @Test
@@ -92,17 +101,17 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC).plusHours(1)));
         // Step 4. Checking post appeared in player feed
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost));
         // Step 5. Constructing
         goalA.initiationService().confirm(constructionA.getGoalKey());
         // Step 6. Checking started event
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalStartedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 7. Updating status
         goalA.actionService().process(constructionA.getGoalKey(), new GoalStatusUpdateAction("Update action"));
         // Step 8. Checking post
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalUpdatedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalUpdatedPost));
     }
 
     @Test
@@ -113,17 +122,17 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC)));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTime.now(DateTimeZone.UTC).plusHours(1)));
         // Step 4. Checking post appeared in player feed
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalCreatedPost));
         // Step 5. Constructing
         goalA.initiationService().confirm(constructionA.getGoalKey());
         // Step 6. Checking started event
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalStartedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 7. Updating status
         goalA.actionService().process(constructionA.getGoalKey(), new GoalReachedAction("Update action"));
         // Step 8. Checking post
-        CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalReachedPost);
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalReachedPost));
     }
 
 }

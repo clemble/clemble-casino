@@ -116,7 +116,7 @@ public class PlayerAccountRepositoryTest {
         playerAccountTemplate.process(transactionKey, new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Debit));
         PlayerAccount afterProcessing = playerAccountTemplate.findOne(player);
         // Step 5. Checking final amount return to the original
-        Assert.assertEquals(afterProcessing.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 500));
+        Assert.assertEquals(afterProcessing.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 550));
         Assert.assertEquals(afterProcessing.getPendingOperations().iterator().hasNext(), false);
     }
 
@@ -141,7 +141,7 @@ public class PlayerAccountRepositoryTest {
         playerAccountTemplate.process(transactionKey, new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit));
         PlayerAccount afterProcessing = playerAccountTemplate.findOne(player);
         // Step 5. Checking final amount return to the original
-        Assert.assertEquals(afterProcessing.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 400));
+        Assert.assertEquals(afterProcessing.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
         Assert.assertEquals(afterProcessing.getPendingOperations().iterator().hasNext(), false);
     }
 

@@ -45,25 +45,14 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
 
     private PlayerAccount tryProcess(String transactionKey, PaymentOperation operation) {
         try {
+            // TODO CASINO needs to be processed separately
             String player = operation.getPlayer();
             PlayerAccount account = accountRepository.findOne(player);
-            // Step 1. Fetching pendingOperation
-            // TODO Check case multiple bets for the same operation
-            PendingOperation pendingOperation = null;
-            for(PendingOperation pOperation: account.getPendingOperations()) {
-                if (transactionKey.equals(pOperation.getTransactionKey()))
-                    pendingOperation = pOperation;
-            }
-            account.getPendingOperations().remove(pendingOperation);
-            // Step 2. Considering already frozen amount before running operation
-            if (pendingOperation != null) {
-                PaymentOperation frozenPayment = new PaymentOperation(player, pendingOperation.getAmount(), pendingOperation.getOperation().toOpposite());
-                operation = operation.combine(frozenPayment);
-            }
-            // Step 3. Performing actual debit operation
-            Money amount = operation.toDebit().getAmount();
-            Money debit = account.getMoney(amount.getCurrency());
-            account.getMoney().put(amount.getCurrency(), amount.add(debit));
+            // Step 1. Releasing frozen amount
+            account.unFreeze(transactionKey);
+            // Step 2. Performing actual operation
+            account.process(operation);
+            // Step 3. Saving account repository
             return accountRepository.save(account);
         } catch (OptimisticLockingFailureException e) {
             // TODO This is dangerous approach to this problem
@@ -111,11 +100,7 @@ public class MongoPlayerAccountTemplate implements PlayerAccountTemplate {
             PlayerAccount account = accountRepository.findOne(player);
             // Step 1. Fetching pendingOperation
             // TODO Check case multiple bets for the same operation
-            account.getPendingOperations().add(PendingOperation.fromOperation(transactionKey, operation));
-            // Step 2. Performing actual debit operation
-            Money amount = operation.toDebit().getAmount();
-            Money debit = account.getMoney(amount.getCurrency());
-            account.getMoney().put(amount.getCurrency(), amount.add(debit));
+            account.freeze(transactionKey, operation);
             return accountRepository.save(account);
         } catch (OptimisticLockingFailureException e) {
             // TODO This is dangerous approach to this problem
