@@ -5,6 +5,7 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
+import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
 import com.clemble.casino.payment.event.PaymentEvent;
 import com.clemble.casino.player.PlayerAware;
@@ -76,8 +77,8 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
         // Step 1. Processing payment transactions
         for (PaymentOperation paymentOperation : paymentTransaction.getOperations()) {
             LOG.debug("Processing {}", paymentOperation);
-            accountTemplate.process(paymentTransaction.getTransactionKey(), paymentOperation);
-            paymentEvents.add(new PaymentCompleteEvent(paymentTransaction.getTransactionKey(), paymentOperation, paymentTransaction.getSource()));
+            PlayerAccount playerAccount = accountTemplate.process(paymentTransaction.getTransactionKey(), paymentOperation);
+            paymentEvents.add(new PaymentCompleteEvent(paymentTransaction.getTransactionKey(), paymentOperation, paymentTransaction.getSource(), playerAccount));
         }
         // Step 3. Saving account transaction
         PaymentTransaction transaction = paymentTransactionRepository.save(paymentTransaction);
