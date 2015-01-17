@@ -116,42 +116,4 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         return initiationRepository.findOne(key);
     }
 
-    @Override
-    public GoalInitiation bid(String goalKey, GoalRole role) {
-        throw new UnsupportedOperationException();
-    }
-
-    public GoalInitiation bid(String goalKey, String player, GoalRole role) {
-        // Step 1. Fetching goal initiation
-        GoalInitiation initiation = initiationRepository.findOne(goalKey);
-        if (initiation.getPlayer().equals(player) || initiation.getSupporters().contains(player))
-            throw new IllegalAccessError();
-        Bid bid = null;
-        switch (role) {
-            case supporter:
-                initiation.getSupporters().add(player);
-                bid = initiation.getConfiguration().getSupporterConfiguration().getBid();
-                break;
-            default:
-                throw new IllegalAccessError();
-        }
-        PlayerBid playerBid = new PlayerBid(player, bid);
-        // Step 2. Processing GoalInitiaiton
-        initiation.getBank().add(playerBid);
-        // Step 3. Freezing amount on account
-        // TODO add check can afford
-        Money amount = playerBid.getBid().getAmount();
-        Set<PaymentOperation> operations = ImmutableSet.<PaymentOperation>of(
-            new PaymentOperation(playerBid.getPlayer(), amount, Operation.Credit),
-            new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Debit)
-        );
-        SystemEvent freezeRequest = new SystemPaymentFreezeRequestEvent(new PendingTransaction(initiation.getGoalKey(), operations, null));
-        systemNotificationService.send(freezeRequest);
-        // Step 3. Saving updated GoalInitiation
-        initiationRepository.save(initiation);
-        notificationService.send(initiation.getConfiguration().getPrivacyRule(), GoalInitiationChangedEvent.create(playerBid, initiation));
-        // Step 4. Returning initiation
-        return initiation;
-    }
-
 }
