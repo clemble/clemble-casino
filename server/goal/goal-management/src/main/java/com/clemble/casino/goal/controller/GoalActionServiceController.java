@@ -1,7 +1,6 @@
 package com.clemble.casino.goal.controller;
 
-import com.clemble.casino.WebMapping;
-import com.clemble.casino.goal.GoalWebMapping;
+import static com.clemble.casino.goal.GoalWebMapping.*;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
@@ -9,8 +8,9 @@ import com.clemble.casino.goal.lifecycle.management.service.GoalActionService;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.lifecycle.management.event.action.Action;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
-import org.springframework.http.HttpStatus;
+import static org.springframework.http.HttpStatus.*;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import java.util.List;
 
@@ -35,15 +35,15 @@ public class GoalActionServiceController implements GoalActionService {
         throw new IllegalAccessError();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.MY_ACTIVE_GOALS, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
+    @RequestMapping(method = GET, value = MY_ACTIVE_GOALS, produces = PRODUCES)
+    @ResponseStatus(value = OK)
     public List<GoalState> myActive(@CookieValue("player") String player) {
         return (List<GoalState>)(List<?>) stateRepository.findByPlayer(player);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.PLAYER_ACTIVE_GOALS, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
+    @RequestMapping(method = GET, value = PLAYER_ACTIVE_GOALS, produces = PRODUCES)
+    @ResponseStatus(value = OK)
     public List<GoalState> getActive(@PathVariable("player") String player) {
         return (List<GoalState>)(List<?>) stateRepository.findByPlayer(player);
     }
@@ -53,30 +53,30 @@ public class GoalActionServiceController implements GoalActionService {
         throw new IllegalAccessError();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = GoalWebMapping.GOAL_STATE_ACTION, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
+    @RequestMapping(method = POST, value = GOAL_STATE_ACTION, produces = PRODUCES)
+    @ResponseStatus(value = OK)
     public GoalEvent process(@PathVariable("goalKey") String goalKey, @CookieValue("player") String player, @RequestBody Action action) {
         PlayerAction playerAction = new PlayerAction(goalKey, player, action);
         return factoryFacade.get(goalKey).process(playerAction);
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = GoalWebMapping.GOAL_STATE, produces = WebMapping.PRODUCES)
-    @ResponseStatus(value = HttpStatus.OK)
+    @RequestMapping(method = GET, value = GOAL_STATE, produces = PRODUCES)
+    @ResponseStatus(value = OK)
     public GoalState getState(@PathVariable("goalKey") String goalKey) {
         return factoryFacade.get(goalKey).getState();
     }
 
-//    @Override
-//    public GoalState bid(String goalKey, GoalRole role) {
-//        throw new UnsupportedOperationException();
-//    }
-//
-//    @RequestMapping(method = RequestMethod.POST, value = GOAL_INITIATION_BID, produces = PRODUCES)
-//    @ResponseStatus(value = HttpStatus.OK)
-//    public GoalState bid(@CookieValue("player") String player, @PathVariable("goalKey") String goalKey, @RequestBody GoalRole role) {
-//        // Step 1. Processing player bid
-//        throw new UnsupportedOperationException();
-//    }
+    @Override
+    public GoalState bet(String goalKey) {
+        throw new UnsupportedOperationException();
+    }
+
+    @RequestMapping(method = POST, value = GOAL_STATE_BET, produces = PRODUCES)
+    @ResponseStatus(value = OK)
+    public GoalState bet(@CookieValue("player") String player, @PathVariable("goalKey") String goalKey) {
+        // Step 1. Processing player bid
+        throw new UnsupportedOperationException();
+    }
 
 }

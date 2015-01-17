@@ -6,6 +6,7 @@ import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.payment.Bank;
 import com.clemble.test.random.ObjectGenerator;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,7 @@ public class GoalStateRepositoryTest {
         // Step 1. Generating short goal state
         GoalState shortGoalState = new GoalState(
             ObjectGenerator.generate(String.class),
+            ObjectGenerator.generate(DateTime.class),
             ObjectGenerator.generate(String.class),
             ObjectGenerator.generate(Bank.class),
             ObjectGenerator.generate(String.class),

@@ -41,4 +41,9 @@ public class IntegrationGoalActionService implements GoalActionService {
         return actionService.getState(goalKey);
     }
 
+    @Override
+    public GoalState bet(String goalKey) {
+        return actionService.bet(player, goalKey);
+    }
+
 }

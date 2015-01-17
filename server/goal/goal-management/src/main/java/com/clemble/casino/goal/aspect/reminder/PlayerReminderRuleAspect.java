@@ -1,16 +1,14 @@
 package com.clemble.casino.goal.aspect.reminder;
 
+import static com.clemble.casino.client.event.EventSelectors.*;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
-import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
-import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
+import com.clemble.casino.goal.lifecycle.management.event.*;
 import com.clemble.casino.goal.service.ReminderService;
 import com.google.common.collect.ImmutableMap;
 import org.joda.time.DateTime;
 
-import java.util.Date;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,7 +21,10 @@ public class PlayerReminderRuleAspect extends GoalAspect<GoalManagementEvent> {
     final private ReminderService reminderService;
 
     public PlayerReminderRuleAspect(BasicReminderRule reminderRule, ReminderService reminderService) {
-        super(new EventTypeSelector(GoalManagementEvent.class));
+        super(
+            where(new EventTypeSelector(GoalManagementEvent.class)).
+            and(not(new EventTypeSelector(GoalChangedBetEvent.class)))
+        );
         this.reminderRule = reminderRule;
         this.reminderService = reminderService;
         this.hoursToReminder = TimeUnit.MILLISECONDS.toHours(reminderRule.getReminder());

@@ -3,7 +3,7 @@ package com.clemble.casino.goal.spring;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
-import com.clemble.casino.goal.aspect.bid.GoalBetForbidAspectFactory;
+import com.clemble.casino.goal.aspect.bet.GoalBetForbidAspectFactory;
 import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalLostOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalWonOutcomeAspectFactory;

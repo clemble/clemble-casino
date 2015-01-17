@@ -1,7 +1,6 @@
-package com.clemble.casino.goal.aspect.bid;
+package com.clemble.casino.goal.aspect.bet;
 
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
-import com.clemble.casino.goal.aspect.GoalAspectFactory;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalStartedEvent;

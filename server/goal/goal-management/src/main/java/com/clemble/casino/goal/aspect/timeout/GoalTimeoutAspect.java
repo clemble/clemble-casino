@@ -3,20 +3,17 @@ package com.clemble.casino.goal.aspect.timeout;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
-import com.clemble.casino.goal.lifecycle.management.event.GoalChangedEvent;
-import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
-import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
-import com.clemble.casino.goal.lifecycle.management.event.GoalStartedEvent;
+import com.clemble.casino.goal.lifecycle.management.event.*;
 import com.clemble.casino.lifecycle.configuration.rule.breach.BreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
-import com.clemble.casino.lifecycle.management.PlayerContext;
 import com.clemble.casino.server.event.goal.SystemGoalTimeoutEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import org.joda.time.DateTime;
 
-import java.util.Date;
+import static com.clemble.casino.client.event.EventSelectors.not;
+import static com.clemble.casino.client.event.EventSelectors.where;
 
 /**
  * Created by mavarazy on 1/4/15.
@@ -28,7 +25,10 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
     final private SystemNotificationService notificationService;
 
     public GoalTimeoutAspect(TimeoutRule moveTimeoutRule, TimeoutRule totalTimeoutRule, SystemNotificationService notificationService) {
-        super(new EventTypeSelector(GoalManagementEvent.class));
+        super(
+            where(new EventTypeSelector(GoalManagementEvent.class)).
+            and(not(new EventTypeSelector(GoalChangedBetEvent.class)))
+        );
         this.moveTimeoutRule = moveTimeoutRule;
         this.totalTimeoutRule = totalTimeoutRule;
         this.notificationService = notificationService;
@@ -62,7 +62,7 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
                 c.getClock().stop();
                 notificationService.send(new SystemRemoveJobScheduleEvent(goalKey, toKey(c.getPlayer())));
             });
-        } else if (event instanceof GoalChangedEvent) {
+        } else if (event instanceof GoalChangedStatusEvent) {
             // Case 3. Goal changed
             context.getPlayerContexts().forEach((c) -> {
                 c.getClock().stop();

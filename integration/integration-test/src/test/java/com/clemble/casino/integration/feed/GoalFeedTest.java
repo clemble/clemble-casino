@@ -24,8 +24,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.Date;
-
 /**
  * Created by mavarazy on 12/1/14.
  */
@@ -66,7 +64,7 @@ public class GoalFeedTest {
         // Step 5. Bidding on goal appeared
         goalB.initiationService().bid(constructionA.getGoalKey(), GoalRole.supporter);
         // Step 6. Checking bid appeared
-        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalBidPost));
+        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalBetPost));
     }
 
     @Test
