@@ -1,6 +1,6 @@
 package com.clemble.casino.goal.spring;
 
-import com.clemble.casino.bet.Bid;
+import com.clemble.casino.bet.Bet;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
@@ -8,15 +8,10 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicRemind
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.share.ShareRule;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
-import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
-import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
-import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
-import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
-import com.clemble.casino.lifecycle.configuration.rule.timeout.EODTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
@@ -27,7 +22,6 @@ import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.Bank;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -40,7 +34,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -62,13 +55,13 @@ public class ShortGoalManagerFactoryTest {
     final private GoalConfiguration configuration = new GoalConfiguration(
         "basic",
         "Basic",
-        new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
+        new Bet(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(3))),
         PrivacyRule.me,
-        new GoalRoleConfiguration(new Bid(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
+        new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
         ShareRule.none
     );
 
@@ -80,7 +73,7 @@ public class ShortGoalManagerFactoryTest {
         GoalInitiation initiation = new GoalInitiation(
             goalKey,
             InitiationState.initiated,
-            Bank.create(player, configuration.getBid()),
+            Bank.create(player, configuration.getBet()),
             player,
             "Create goal state",
             configuration,
@@ -101,7 +94,7 @@ public class ShortGoalManagerFactoryTest {
         GoalInitiation initiation = new GoalInitiation(
             goalKey,
             InitiationState.initiated,
-            Bank.create(player, configuration.getBid()),
+            Bank.create(player, configuration.getBet()),
             player,
             "Create goal state",
             configuration,

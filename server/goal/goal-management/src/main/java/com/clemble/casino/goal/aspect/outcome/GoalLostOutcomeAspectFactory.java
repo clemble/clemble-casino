@@ -13,16 +13,15 @@ import org.springframework.core.Ordered;
  */
 public class GoalLostOutcomeAspectFactory implements ShortGoalAspectFactory<GoalEndedEvent> {
 
-    final private SystemNotificationService systemNotificationService;
+    final private GoalLostOutcomeAspect INSTANCE;
 
-    public GoalLostOutcomeAspectFactory(SystemNotificationService systemNotificationService) {
-        this.systemNotificationService = systemNotificationService;
+    public GoalLostOutcomeAspectFactory(SystemNotificationService notificationService) {
+        this.INSTANCE = new GoalLostOutcomeAspect(notificationService);
     }
 
     @Override
     public ClembleAspect<GoalEndedEvent> construct(GoalConfiguration configuration, GoalState context) {
-        // Step 1. Checking player bid
-        return new GoalLostOutcomeAspect(context.getBank().getBids(), systemNotificationService);
+        return INSTANCE;
     }
 
     @Override

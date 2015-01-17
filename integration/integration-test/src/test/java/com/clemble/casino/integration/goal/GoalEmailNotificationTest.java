@@ -1,6 +1,6 @@
 package com.clemble.casino.integration.goal;
 
-import com.clemble.casino.bet.Bid;
+import com.clemble.casino.bet.Bet;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventSelector;
 import com.clemble.casino.client.event.EventSelectors;
@@ -13,15 +13,12 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderR
 import com.clemble.casino.goal.lifecycle.configuration.rule.share.ShareRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
-import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
-import com.clemble.casino.lifecycle.configuration.rule.time.MoveTimeRule;
-import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
@@ -30,7 +27,6 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.email.SystemEmailSendRequestEvent;
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,7 +36,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -60,14 +55,14 @@ public class GoalEmailNotificationTest {
     final private GoalConfiguration CONFIGURATION = new GoalConfiguration(
         "email:notification:test",
         "Email Notification Test",
-        new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+        new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         PrivacyRule.world,
         new GoalRoleConfiguration(
-            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+            new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             3,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE

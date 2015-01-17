@@ -11,7 +11,7 @@ import java.util.*;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import com.clemble.casino.bet.Bid;
+import com.clemble.casino.bet.Bet;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.post.GoalStartedPost;
 import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBidRule;
@@ -39,7 +39,6 @@ import com.clemble.casino.player.notification.PlayerConnectedNotification;
 import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
@@ -95,7 +94,7 @@ public class IntegrationObjectTest {
                     "",
                     "",
                     "",
-                    new Bank(Collections.emptyList(), new Bid(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
+                    new Bank(Collections.emptyList(), new Bet(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
                     ObjectGenerator.generate(GoalConfiguration.class),
                     "",
                     0,
@@ -114,7 +113,7 @@ public class IntegrationObjectTest {
         ObjectGenerator.register(FixedBidRule.class, new AbstractValueGenerator<FixedBidRule>() {
             @Override
             public FixedBidRule generate() {
-                return FixedBidRule.create(ObjectGenerator.generate(Bid.class));
+                return FixedBidRule.create(ObjectGenerator.generate(Bet.class));
             }
         });
         ObjectGenerator.register(TournamentGameState.class, new AbstractValueGenerator<TournamentGameState>() {

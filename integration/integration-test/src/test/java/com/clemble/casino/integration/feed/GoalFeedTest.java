@@ -1,18 +1,16 @@
 package com.clemble.casino.integration.feed;
 
-import com.clemble.casino.bet.Bid;
+import com.clemble.casino.bet.Bet;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.goal.GoalOperations;
 import com.clemble.casino.goal.event.action.GoalReachedAction;
 import com.clemble.casino.goal.event.action.GoalStatusUpdateAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.configuration.GoalRoleConfiguration;
-import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.share.ShareRule;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
-import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.goal.post.*;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -25,10 +23,7 @@ import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalcu
 import com.clemble.casino.lifecycle.management.event.action.bet.BidAction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.player.service.PlayerFeedService;
-import com.clemble.casino.post.PlayerPost;
 import org.junit.Assert;
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -143,14 +138,14 @@ public class GoalFeedTest {
     final private GoalConfiguration FORBID_CONFIGURATION = new GoalConfiguration(
         "forbid",
         "Forbid Test",
-        new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+        new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
         NoReminderRule.INSTANCE,
         NoReminderRule.INSTANCE,
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         PrivacyRule.world,
         new GoalRoleConfiguration(
-            new Bid(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+            new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
             0,
             NoReminderRule.INSTANCE,
             NoReminderRule.INSTANCE

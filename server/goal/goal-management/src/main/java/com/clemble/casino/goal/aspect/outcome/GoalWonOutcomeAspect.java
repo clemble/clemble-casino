@@ -1,7 +1,7 @@
 package com.clemble.casino.goal.aspect.outcome;
 
-import com.clemble.casino.bet.PlayerBid;
-import com.clemble.casino.bet.PlayerBidAware;
+import com.clemble.casino.bet.PlayerBet;
+import com.clemble.casino.bet.PlayerBetAware;
 import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.OutcomeTypeSelector;
@@ -19,45 +19,37 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * Created by mavarazy on 10/9/14.
  */
 public class GoalWonOutcomeAspect
-    extends GoalAspect<GoalEndedEvent>
-    implements PlayerBidAware {
+    extends GoalAspect<GoalEndedEvent> {
 
-    final private Collection<PlayerBid> bids;
     final private SystemNotificationService systemNotificationService;
 
-    public GoalWonOutcomeAspect(Collection<PlayerBid> playerBids, SystemNotificationService systemNotificationService) {
+    public GoalWonOutcomeAspect(SystemNotificationService systemNotificationService) {
         super(EventSelectors.
                 where(new EventTypeSelector(GoalEndedEvent.class)).
                 and(new OutcomeTypeSelector(PlayerWonOutcome.class)));
-        this.bids = playerBids;
         this.systemNotificationService = systemNotificationService;
     }
 
     @Override
-    public Collection<PlayerBid> getBids() {
-        return bids;
-    }
-
-    @Override
     protected void doEvent(GoalEndedEvent event) {
+        Collection<PlayerBet> bets = event.getBody().getBank().getBets();
         // Step 1. Generating payment transaction
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(event.getBody().getGoalKey())
             .setTransactionDate(DateTime.now(DateTimeZone.UTC))
             .setSource(new GoalPaymentSource(event.getBody().getGoalKey(), event.getOutcome()));
         // Step 2. Processing payment transaction
-        for(PlayerBid playerBid: bids) {
+        for(PlayerBet playerBid: bets) {
             paymentTransaction.
-                addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBid().getInterest(), Operation.Debit)).
-                addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBid().getAmount(), Operation.Credit)).
-                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBid().getAmount(), Operation.Debit)).
-                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBid().getInterest(), Operation.Credit));
+                addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBet().getInterest(), Operation.Debit)).
+                addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBet().getAmount(), Operation.Credit)).
+                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBet().getAmount(), Operation.Debit)).
+                addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBet().getInterest(), Operation.Credit));
         }
         // Step 3. Checking value
         systemNotificationService.send(new SystemPaymentTransactionRequestEvent(paymentTransaction));

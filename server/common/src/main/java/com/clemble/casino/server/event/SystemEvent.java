@@ -58,7 +58,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(name = SystemPhoneVerifiedEvent.CHANNEL, value = SystemPhoneVerifiedEvent.class),
     @JsonSubTypes.Type(name = SystemPhoneSMSSendRequestEvent.CHANNEL, value = SystemPhoneSMSSendRequestEvent.class),
     @JsonSubTypes.Type(name = SystemSharePostEvent.CHANNEL, value = SystemSharePostEvent.class),
-    @JsonSubTypes.Type(name = SystemGoalForbidBetEvent.CHANNEL, value = SystemGoalForbidBetEvent.class)
+    @JsonSubTypes.Type(name = SystemGoalBetOffEvent.CHANNEL, value = SystemGoalBetOffEvent.class)
 })
 public interface SystemEvent extends Event {
 

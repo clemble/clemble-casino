@@ -52,7 +52,7 @@ public class SelfGoalConstructionService implements GoalConstructionService {
         if (request.getGoal() == null || request.getGoal().isEmpty())
             throw ClembleCasinoException.fromError(ClembleCasinoError.GoalIsEmpty, player);
         // Step 1.1. Checking there is enough money to complete it
-        Money price = request.getConfiguration().getBid().getAmount();
+        Money price = request.getConfiguration().getBet().getAmount();
         if (!accountService.canAfford(Collections.singleton(player), price.getCurrency(), price.getAmount()).isEmpty()){
             throw ClembleCasinoException.fromError(ClembleCasinoError.GameConstructionInsufficientMoney, player);
         }

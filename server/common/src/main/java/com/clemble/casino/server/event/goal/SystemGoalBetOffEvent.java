@@ -6,14 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Created by mavarazy on 1/13/15.
  */
-public class SystemGoalForbidBetEvent implements SystemGoalEvent {
+public class SystemGoalBetOffEvent implements SystemGoalEvent {
 
     final public static String CHANNEL = "sys:goal:bet:forbid";
 
     final private String goalKey;
 
     @JsonCreator
-    public SystemGoalForbidBetEvent(@JsonProperty("goalKey") String goalKey) {
+    public SystemGoalBetOffEvent(@JsonProperty("goalKey") String goalKey) {
         this.goalKey = goalKey;
     }
 
@@ -32,7 +32,7 @@ public class SystemGoalForbidBetEvent implements SystemGoalEvent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SystemGoalForbidBetEvent that = (SystemGoalForbidBetEvent) o;
+        SystemGoalBetOffEvent that = (SystemGoalBetOffEvent) o;
 
         if (!goalKey.equals(that.goalKey)) return false;
 

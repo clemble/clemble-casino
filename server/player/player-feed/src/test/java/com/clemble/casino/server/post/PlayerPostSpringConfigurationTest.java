@@ -1,6 +1,6 @@
 package com.clemble.casino.server.post;
 
-import com.clemble.casino.bet.Bid;
+import com.clemble.casino.bet.Bet;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.post.GoalStartedPost;
 import com.clemble.casino.money.Currency;
@@ -20,7 +20,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,7 +43,7 @@ public class PlayerPostSpringConfigurationTest {
             "A",
             "AB",
             "B",
-            new Bank(Collections.emptyList(), new Bid(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
+            new Bank(Collections.emptyList(), new Bet(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
             ObjectGenerator.generate(GoalConfiguration.class),
             "",
             0,

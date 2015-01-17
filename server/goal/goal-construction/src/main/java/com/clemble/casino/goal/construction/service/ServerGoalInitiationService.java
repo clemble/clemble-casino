@@ -1,10 +1,6 @@
 package com.clemble.casino.goal.construction.service;
 
-import com.clemble.casino.bet.Bid;
-import com.clemble.casino.bet.PlayerBid;
-import com.clemble.casino.goal.lifecycle.initiation.event.GoalInitiationChangedEvent;
 import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
-import com.clemble.casino.goal.lifecycle.management.GoalRole;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
@@ -69,7 +65,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         notificationService.send(initiation.getConfiguration().getPrivacyRule(), GoalInitiationCreatedEvent.create(initiation));
         // Step 4. Freezing amount for a player
         LOG.debug("Freezing amount for a player {}", initiation.getPlayer());
-        Money amount = initiation.getConfiguration().getBid().getAmount();
+        Money amount = initiation.getConfiguration().getBet().getAmount();
         Set<PaymentOperation> operations = ImmutableSet.<PaymentOperation>of(
             new PaymentOperation(initiation.getPlayer(), amount, Operation.Credit),
             new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Debit)

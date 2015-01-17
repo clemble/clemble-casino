@@ -1,10 +1,8 @@
 package com.clemble.casino.integration.goal;
 
-import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.lifecycle.initiation.service.GoalInitiationService;
-import com.clemble.casino.goal.lifecycle.management.GoalRole;
 
 import java.util.Collection;
 
