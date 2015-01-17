@@ -27,7 +27,7 @@ public class GoalSecurityAspect extends GoalAspect<PlayerAction<?>> implements P
     @Override
     protected void doEvent(PlayerAction<?> event) {
         // Allow only BidActions from different users
-        if (!event.getPlayer().equals(player)) {
+        if (!event.getPlayer().equals(player) && !PlayerAware.DEFAULT_PLAYER.equals(event.getPlayer())) {
             // Case 1. Player is different Player
             if (!(event.getAction() instanceof BidAction))
                 throw new IllegalArgumentException();
