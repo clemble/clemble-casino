@@ -67,16 +67,5 @@ public class GoalActionServiceController implements GoalActionService {
         return factoryFacade.get(goalKey).getState();
     }
 
-    @Override
-    public GoalState bet(String goalKey) {
-        throw new UnsupportedOperationException();
-    }
-
-    @RequestMapping(method = POST, value = GOAL_STATE_BET, produces = PRODUCES)
-    @ResponseStatus(value = OK)
-    public GoalState bet(@CookieValue("player") String player, @PathVariable("goalKey") String goalKey) {
-        // Step 1. Processing player bid
-        throw new UnsupportedOperationException();
-    }
 
 }

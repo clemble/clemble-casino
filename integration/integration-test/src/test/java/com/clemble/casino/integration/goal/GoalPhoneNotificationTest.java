@@ -23,6 +23,7 @@ import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
+import com.clemble.casino.lifecycle.management.event.action.bet.BidAction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.event.SystemEvent;
@@ -87,7 +88,7 @@ public class GoalPhoneNotificationTest {
             where(new PlayerEventSelector(A.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 2. Create construction
-        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test sms notification", DateTime.now(DateTimeZone.UTC));
+        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test sms notification", DateTimeZone.UTC);
         A.goalOperations().constructionService().construct(requestA);
         // Step 3. Checking timeout sms notification received
         SystemPhoneSMSSendRequestEvent reminderNotification = (SystemPhoneSMSSendRequestEvent) systemEventAccumulator.waitFor(smsSelector);
@@ -105,13 +106,13 @@ public class GoalPhoneNotificationTest {
             where(new PlayerEventSelector(B.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test supporter phone notification", new DateTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
+        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test supporter phone notification", DateTimeZone.UTC);
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
         CheckUtils.check((i) ->
                 A.goalOperations().initiationService().get(constructionA.getGoalKey()) != null
         );
-        B.goalOperations().initiationService().bid(constructionA.getGoalKey(), GoalRole.supporter);
+        B.goalOperations().actionService().process(constructionA.getGoalKey(), new BidAction());
         // Step 5. Starting goal A
         A.goalOperations().initiationService().confirm(constructionA.getGoalKey());
         // Step 6. Checking value

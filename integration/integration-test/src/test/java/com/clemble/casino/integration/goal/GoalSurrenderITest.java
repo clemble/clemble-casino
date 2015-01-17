@@ -22,6 +22,7 @@ import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
 import com.google.common.collect.ImmutableList;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +49,7 @@ public class GoalSurrenderITest {
         final GoalOperations AgoalOps = A.goalOperations();
         // Step 2. Create a goal
         final GoalConfiguration Aconf = AgoalOps.configurationService().getConfigurations().get(0);
-        final GoalConstruction AgoalConst = AgoalOps.constructionService().construct(new GoalConstructionRequest(Aconf, "A conf", DateTime.now()));
+        final GoalConstruction AgoalConst = AgoalOps.constructionService().construct(new GoalConstructionRequest(Aconf, "A conf", DateTimeZone.UTC));
         final String goalKey = AgoalConst.getGoalKey();
         CheckUtils.check((i) -> AgoalOps.actionService().getState(goalKey) != null);
         EventAccumulator<PaymentCompleteEvent> paymentAccumulator = new EventAccumulator<PaymentCompleteEvent>();

@@ -120,7 +120,7 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public GoalBetAspectFactory goalBetAspectFactory(
-        @JsonProperty("playerAccountClient") PlayerAccountService accountService,
+        @Qualifier("playerAccountClient") PlayerAccountService accountService,
         SystemNotificationService notificationService) {
         return new GoalBetAspectFactory(accountService, notificationService);
     }

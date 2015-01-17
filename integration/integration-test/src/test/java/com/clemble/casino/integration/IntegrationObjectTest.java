@@ -13,7 +13,7 @@ import javax.crypto.SecretKey;
 
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.post.GoalCreatedPost;
+import com.clemble.casino.goal.post.GoalStartedPost;
 import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBidRule;
 import com.clemble.casino.notification.PlayerNotification;
 import com.clemble.casino.payment.*;
@@ -91,14 +91,13 @@ public class IntegrationObjectTest {
         ObjectGenerator.register(PlayerPost.class, new AbstractValueGenerator<PlayerPost>() {
             @Override
             public PlayerPost generate() {
-                return new GoalCreatedPost(
+                return new GoalStartedPost(
                     "",
                     "",
                     "",
                     new Bank(Collections.emptyList(), new Bid(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
                     ObjectGenerator.generate(GoalConfiguration.class),
                     "",
-                    DateTime.now(DateTimeZone.UTC),
                     0,
                     Collections.emptySet(),
                     DateTime.now(DateTimeZone.UTC),

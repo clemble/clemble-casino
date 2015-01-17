@@ -2,7 +2,7 @@ package com.clemble.casino.server.post;
 
 import com.clemble.casino.bet.Bid;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.post.GoalCreatedPost;
+import com.clemble.casino.goal.post.GoalStartedPost;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.Bank;
@@ -40,14 +40,13 @@ public class PlayerPostSpringConfigurationTest {
     @Test
     public void savePost() {
         // Step 1. Creating post
-        GoalCreatedPost post = new GoalCreatedPost(
+        GoalStartedPost post = new GoalStartedPost(
             "A",
             "AB",
             "B",
             new Bank(Collections.emptyList(), new Bid(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
             ObjectGenerator.generate(GoalConfiguration.class),
             "",
-            DateTime.now(DateTimeZone.UTC),
             0,
             Collections.emptySet(),
             DateTime.now(DateTimeZone.UTC),

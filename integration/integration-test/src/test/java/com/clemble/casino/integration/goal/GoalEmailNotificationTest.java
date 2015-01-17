@@ -25,6 +25,7 @@ import com.clemble.casino.lifecycle.configuration.rule.time.TotalTimeRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
+import com.clemble.casino.lifecycle.management.event.action.bet.BidAction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.event.SystemEvent;
@@ -88,7 +89,7 @@ public class GoalEmailNotificationTest {
             where(new PlayerEventSelector(A.getPlayer())).
             and(new EventTypeSelector(SystemEmailSendRequestEvent.class));
         // Step 2. Create construction
-        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", DateTime.now(DateTimeZone.UTC));
+        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", DateTimeZone.UTC);
         A.goalOperations().constructionService().construct(requestA);
         // Step 3. Checking timeout email notification received
         SystemEmailSendRequestEvent reminderNotification = (SystemEmailSendRequestEvent) systemEventAccumulator.waitFor(emailSelector);
@@ -109,16 +110,14 @@ public class GoalEmailNotificationTest {
             where(new PlayerEventSelector(B.getPlayer())).
             and(new EventTypeSelector(SystemEmailSendRequestEvent.class));
         // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", new DateTime(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)));
+        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", DateTimeZone.UTC);
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
         CheckUtils.check((i) ->
             A.goalOperations().initiationService().get(constructionA.getGoalKey()) != null
         );
-        B.goalOperations().initiationService().bid(constructionA.getGoalKey(), GoalRole.supporter);
-        // Step 5. Starting goal A
-        A.goalOperations().initiationService().confirm(constructionA.getGoalKey());
-        // Step 6. Checking value
+        B.goalOperations().actionService().process(constructionA.getGoalKey(), new BidAction());
+        // Step 5. Checking value
         SystemEmailSendRequestEvent reminderNotification = (SystemEmailSendRequestEvent) systemEventAccumulator.waitFor(BEmailSelector);
         Assert.assertNotNull(reminderNotification);
         Assert.assertEquals(reminderNotification.getTemplate(), "goal_due");
