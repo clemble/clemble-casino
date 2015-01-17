@@ -50,7 +50,8 @@ public class PlayerPostSpringConfigurationTest {
             DateTime.now(DateTimeZone.UTC),
             0,
             Collections.emptySet(),
-            DateTime.now(DateTimeZone.UTC)
+            DateTime.now(DateTimeZone.UTC),
+            false
         );
         // Step 2. Saving player post twice
         postRepository.save(post);

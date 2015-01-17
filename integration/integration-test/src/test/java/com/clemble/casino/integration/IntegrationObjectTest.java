@@ -101,7 +101,8 @@ public class IntegrationObjectTest {
                     DateTime.now(DateTimeZone.UTC),
                     0,
                     Collections.emptySet(),
-                    DateTime.now(DateTimeZone.UTC)
+                    DateTime.now(DateTimeZone.UTC),
+                    false
                 );
             }
         });
