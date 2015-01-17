@@ -62,7 +62,7 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
                 c.getClock().stop();
                 notificationService.send(new SystemRemoveJobScheduleEvent(goalKey, toKey(c.getPlayer())));
             });
-        } else if (event instanceof GoalChangedStatusEvent) {
+        } else if (event instanceof GoalChangedStatusEvent || event instanceof GoalChangedStatusUpdateMissedEvent) {
             // Case 3. Goal changed
             context.getPlayerContexts().forEach((c) -> {
                 c.getClock().stop();
