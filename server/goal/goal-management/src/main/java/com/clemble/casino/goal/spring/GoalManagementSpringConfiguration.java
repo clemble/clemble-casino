@@ -178,8 +178,8 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     @Bean
     public SystemGoalForbidBetEventListener systemGoalForbidBetEventListener(
         SystemNotificationServiceListener notificationServiceListener,
-        GoalStateRepository stateRepository) {
-        SystemGoalForbidBetEventListener eventListener = new SystemGoalForbidBetEventListener(stateRepository);
+        GoalManagerFactoryFacade goalManagerFactoryFacade) {
+        SystemGoalForbidBetEventListener eventListener = new SystemGoalForbidBetEventListener(goalManagerFactoryFacade);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }
