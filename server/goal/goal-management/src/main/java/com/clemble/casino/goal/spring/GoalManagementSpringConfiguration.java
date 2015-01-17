@@ -3,6 +3,7 @@ package com.clemble.casino.goal.spring;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
+import com.clemble.casino.goal.aspect.bet.GoalBetAspectFactory;
 import com.clemble.casino.goal.aspect.bet.GoalBetForbidAspectFactory;
 import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalLostOutcomeAspectFactory;
@@ -11,6 +12,7 @@ import com.clemble.casino.goal.aspect.persistence.GoalStatePersistenceAspectFact
 import com.clemble.casino.goal.aspect.record.GoalRecordAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.PlayerReminderRuleAspectFactory;
 import com.clemble.casino.goal.aspect.reminder.SupporterReminderRuleAspectFactory;
+import com.clemble.casino.goal.aspect.security.GoalSecurityAspectFactory;
 import com.clemble.casino.goal.aspect.share.ShareRuleAspectFactory;
 import com.clemble.casino.goal.aspect.timeout.GoalTimeoutAspectFactory;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
@@ -24,11 +26,13 @@ import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.goal.service.EmailReminderService;
 import com.clemble.casino.goal.service.PhoneReminderService;
+import com.clemble.casino.payment.service.PlayerAccountService;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +46,8 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 @Configuration
 @Import({
     CommonSpringConfiguration.class,
-    MongoSpringConfiguration.class
+    MongoSpringConfiguration.class,
+    PaymentClientSpringConfiguration.class
 })
 public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
@@ -106,6 +111,18 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
             reminderService,
             (configuration) -> configuration.getPhoneReminderRule()
         );
+    }
+
+    @Bean
+    public GoalSecurityAspectFactory goalSecurityAspectFactory() {
+        return new GoalSecurityAspectFactory();
+    }
+
+    @Bean
+    public GoalBetAspectFactory goalBetAspectFactory(
+        @JsonProperty("playerAccountClient") PlayerAccountService accountService,
+        SystemNotificationService notificationService) {
+        return new GoalBetAspectFactory(accountService, notificationService);
     }
 
     @Bean

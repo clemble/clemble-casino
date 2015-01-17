@@ -33,7 +33,7 @@ public class GoalBetAspectFactory implements GenericGoalAspectFactory<GoalChange
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        return Ordered.HIGHEST_PRECEDENCE - 10;
     }
 
 }
