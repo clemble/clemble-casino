@@ -14,7 +14,7 @@ import com.clemble.casino.server.payment.repository.PendingTransactionRepository
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
-import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
+import com.clemble.casino.server.payment.repository.ServerAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,25 +32,15 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
 
     final private Logger LOG = LoggerFactory.getLogger(SystemPaymentTransactionRequestEventListener.class);
 
-    final private PlayerAccountTemplate accountTemplate;
-    final private PendingTransactionRepository pendingTransactionRepository;
-    final private ServerNotificationService notificationService;
+    final private ServerAccountService accountTemplate;
     final private ClembleCasinoValidationService validationService;
-    final private PaymentTransactionRepository paymentTransactionRepository;
 
     public SystemPaymentTransactionRequestEventListener(
-        PaymentTransactionRepository paymentTransactionRepository,
-        PendingTransactionRepository pendingTransactionRepository,
-        PlayerAccountTemplate accountTemplate,
-        ServerNotificationService notificationService,
+        ServerAccountService accountTemplate,
         ClembleCasinoValidationService validationService) {
-        this.paymentTransactionRepository = checkNotNull(paymentTransactionRepository);
-        this.pendingTransactionRepository = checkNotNull(pendingTransactionRepository);
         this.accountTemplate = checkNotNull(accountTemplate);
-        this.notificationService = checkNotNull(notificationService);
         this.validationService = validationService;
     }
-
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -62,32 +52,8 @@ public class SystemPaymentTransactionRequestEventListener implements SystemEvent
             throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionEmpty, PlayerAware.DEFAULT_PLAYER, event.getTransaction().getTransactionKey());
         // Step 2. Processing payment transactions
         validationService.validate(paymentTransaction);
-        processTransaction(paymentTransaction);
+        accountTemplate.process(paymentTransaction);
         LOG.debug("{} finish", paymentTransaction.getTransactionKey());
-    }
-
-    private PaymentTransaction processTransaction(PaymentTransaction paymentTransaction) {
-        // Step 0. Sanity check
-        if(paymentTransactionRepository.exists(paymentTransaction.getTransactionKey())) {
-            LOG.error("Payment transaction already exists {}", paymentTransaction);
-            // TODO maybe you need to throw exception here
-            return paymentTransactionRepository.findOne(paymentTransaction.getTransactionKey());
-        }
-        Collection<PaymentEvent> paymentEvents = new ArrayList<PaymentEvent>();
-        // Step 1. Processing payment transactions
-        for (PaymentOperation paymentOperation : paymentTransaction.getOperations()) {
-            LOG.debug("Processing {}", paymentOperation);
-            PlayerAccount playerAccount = accountTemplate.process(paymentTransaction.getTransactionKey(), paymentOperation);
-            paymentEvents.add(new PaymentCompleteEvent(paymentTransaction.getTransactionKey(), paymentOperation, paymentTransaction.getSource(), playerAccount));
-        }
-        // Step 3. Saving account transaction
-        PaymentTransaction transaction = paymentTransactionRepository.save(paymentTransaction);
-        // Step 4. Sending PaymentEvent notification
-        notificationService.send(paymentEvents);
-        // Step 5. Removing pending transaction
-        // TODO Add transaction verification
-        pendingTransactionRepository.delete(paymentTransaction.getTransactionKey());
-        return transaction;
     }
 
     @Override

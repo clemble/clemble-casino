@@ -8,13 +8,13 @@ import java.util.List;
 
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
+import com.clemble.casino.server.payment.repository.ServerAccountService;
 
 public class BasicServerPlayerAccountService implements ServerPlayerAccountService {
 
-    final private PlayerAccountTemplate playerAccountRepository;
+    final private ServerAccountService playerAccountRepository;
 
-    public BasicServerPlayerAccountService(final PlayerAccountTemplate accountTemplate) {
+    public BasicServerPlayerAccountService(final ServerAccountService accountTemplate) {
         this.playerAccountRepository = checkNotNull(accountTemplate);
     }
 

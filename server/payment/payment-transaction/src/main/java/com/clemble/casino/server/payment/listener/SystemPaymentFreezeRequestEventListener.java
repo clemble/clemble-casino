@@ -3,7 +3,7 @@ package com.clemble.casino.server.payment.listener;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
-import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
+import com.clemble.casino.server.payment.repository.ServerAccountService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 
 /**
@@ -11,11 +11,11 @@ import com.clemble.casino.server.player.notification.SystemEventListener;
  */
 public class SystemPaymentFreezeRequestEventListener implements SystemEventListener<SystemPaymentFreezeRequestEvent> {
 
-    final private PlayerAccountTemplate accountTemplate;
+    final private ServerAccountService accountTemplate;
     final private ClembleCasinoValidationService validationService;
 
     public SystemPaymentFreezeRequestEventListener(
-        PlayerAccountTemplate accountTemplate,
+        ServerAccountService accountTemplate,
         ClembleCasinoValidationService validationService) {
         this.accountTemplate = accountTemplate;
         this.validationService = validationService;

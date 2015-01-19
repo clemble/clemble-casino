@@ -2,7 +2,6 @@ package com.clemble.casino.integration.bonus;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -24,7 +23,7 @@ import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.player.SystemPlayerEnteredEvent;
 import com.clemble.casino.server.bonus.listener.DailyBonusEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
-import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
+import com.clemble.casino.server.payment.repository.ServerAccountService;
 import com.clemble.test.random.ObjectGenerator;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -37,7 +36,7 @@ public class DailyBonusServiceTest {
     public DailyBonusEventListener dailyBonusService;
 
     @Autowired
-    public PlayerAccountTemplate accountRepository;
+    public ServerAccountService accountRepository;
 
     @Autowired
     public PaymentTransactionRepository transactionRepository;

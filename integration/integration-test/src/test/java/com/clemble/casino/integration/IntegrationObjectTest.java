@@ -199,7 +199,6 @@ public class IntegrationObjectTest {
             return new PlayerAccount(
                 RandomStringUtils.random(5),
                 ImmutableMap.of(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500)),
-                Collections.<PendingOperation>emptyList(),
                 null);
             }
         });

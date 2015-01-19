@@ -1,8 +1,8 @@
 package com.clemble.casino.server.payment;
 
-import java.util.Date;
 import java.util.Random;
 
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
@@ -23,7 +23,7 @@ import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
-import com.clemble.casino.server.payment.repository.PlayerAccountTemplate;
+import com.clemble.casino.server.payment.repository.ServerAccountService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = PaymentSpringConfiguration.class)
@@ -35,7 +35,7 @@ public class PaymentTransactionServiceTest {
     public SystemPlayerAccountCreationEventListener accountCreator;
 
     @Autowired
-    public PlayerAccountTemplate accountTemplate;
+    public ServerAccountService accountTemplate;
 
     @Autowired
     public SystemPaymentTransactionRequestEventListener eventListener;
@@ -48,8 +48,13 @@ public class PaymentTransactionServiceTest {
         accountCreator.onEvent(new SystemPlayerCreatedEvent(playerFrom));
         accountCreator.onEvent(new SystemPlayerCreatedEvent(playerTo));
 
-        accountTemplate.process(playerFrom + ":registration", new PaymentOperation(playerFrom, Money.create(Currency.FakeMoney, 100), Operation.Debit));
-        accountTemplate.process(playerTo + ":registration", new PaymentOperation(playerTo, Money.create(Currency.FakeMoney, 100), Operation.Debit));
+        PaymentTransaction transaction = new PaymentTransaction().
+            setTransactionKey(playerFrom + ":" + playerTo).
+            addOperation(new PaymentOperation(playerFrom, Money.create(Currency.FakeMoney, 100), Operation.Debit)).
+            addOperation(new PaymentOperation(playerTo, Money.create(Currency.FakeMoney, 100), Operation.Debit)).
+            addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.FakeMoney, 200), Operation.Credit));
+
+        accountTemplate.process(transaction);
     }
 
     @Test

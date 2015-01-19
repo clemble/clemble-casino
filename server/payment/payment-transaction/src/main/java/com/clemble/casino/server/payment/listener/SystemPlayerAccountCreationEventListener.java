@@ -2,7 +2,6 @@ package com.clemble.casino.server.payment.listener;
 
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.server.event.player.SystemPlayerCreatedEvent;
 import com.clemble.casino.server.payment.repository.PlayerAccountRepository;
 import com.clemble.casino.server.player.notification.SystemEventListener;
@@ -26,7 +25,7 @@ public class SystemPlayerAccountCreationEventListener implements SystemEventList
     @Override
     public void onEvent(SystemPlayerCreatedEvent event) {
         // Step 1. Creating new account
-        PlayerAccount newAccount = new PlayerAccount(event.getPlayer(), Collections.<Currency, Money>emptyMap(), Collections.<PendingOperation>emptyList(), null);
+        PlayerAccount newAccount = new PlayerAccount(event.getPlayer(), Collections.<Currency, Money>emptyMap(), null);
         // Step 2. Adding new account to repository
         accountRepository.save(newAccount);
     }

@@ -5,7 +5,6 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.payment.PaymentOperation;
-import com.clemble.casino.payment.PendingOperation;
 import com.clemble.casino.payment.PendingTransaction;
 import com.clemble.casino.payment.PlayerAccount;
 import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
@@ -23,7 +22,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,14 +46,13 @@ public class PaymentValidationTest {
         String transactionKey = RandomStringUtils.randomAlphabetic(5);
         String player = RandomStringUtils.randomAlphabetic(5);
         Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
-        List<PendingOperation> pendingOperations = Collections.emptyList();
-        PlayerAccount account = new PlayerAccount(player, money, pendingOperations, null);
+        PlayerAccount account = new PlayerAccount(player, money, null);
         PlayerAccount saved = accountRepository.save(account);
-        PendingOperation pendingOperation = new PendingOperation(transactionKey, player, Money.create(Currency.FakeMoney, 50), Operation.Credit);
         // Step 2. Creating appropriate event
         SystemPaymentFreezeRequestEvent event = new SystemPaymentFreezeRequestEvent(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
         // Step 3. Generating exception conditions
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionDebitAndCreditNotMatched));
         freezeRequestEventListener.onEvent(event);
     }
+
 }
