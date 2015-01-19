@@ -7,8 +7,11 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.OutcomeTypeSelector;
 import com.clemble.casino.goal.GoalPaymentSource;
 import com.clemble.casino.goal.aspect.GoalAspect;
+import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.lifecycle.management.outcome.PlayerWonOutcome;
+import com.clemble.casino.money.Currency;
+import com.clemble.casino.money.Money;
 import com.clemble.casino.money.Operation;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
@@ -37,6 +40,7 @@ public class GoalWonOutcomeAspect
 
     @Override
     protected void doEvent(GoalEndedEvent event) {
+        GoalState state = event.getBody();
         Collection<PlayerBet> bets = event.getBody().getBank().getBets();
         // Step 1. Generating payment transaction
         PaymentTransaction paymentTransaction = new PaymentTransaction()
@@ -50,6 +54,15 @@ public class GoalWonOutcomeAspect
                 addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBet().getAmount(), Operation.Credit)).
                 addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBet().getAmount(), Operation.Debit)).
                 addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBet().getInterest(), Operation.Credit));
+            if (state.getPlayer().equals(playerBid.getPlayer())) {
+                paymentTransaction.
+                    addOperation(new PaymentOperation(playerBid.getPlayer(), Money.create(Currency.Victory, 1), Operation.Debit)).
+                    addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.Victory, 1), Operation.Credit));
+            } else {
+                paymentTransaction.
+                    addOperation(new PaymentOperation(playerBid.getPlayer(), Money.create(Currency.Supporter, 1), Operation.Debit)).
+                    addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.Supporter, 1), Operation.Credit));
+            }
         }
         // Step 3. Checking value
         systemNotificationService.send(new SystemPaymentTransactionRequestEvent(paymentTransaction));
