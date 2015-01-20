@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.OptimisticLockingFailureException;
 import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * Created by mavarazy on 15/10/14.
@@ -58,8 +60,8 @@ public class MongoServerAccountService implements ServerAccountService {
             // Step 2. Updating all related accounts
             for(PaymentOperation operation : savedTransaction.getOperations()) {
                 // Step 2.1. Sending notification for processed payment
-                PlayerAccount account = (pendingTransaction != null && pendingTransaction.getOperation(operation.getPlayer()) != null) ?
-                    tryProcess(operation.combine(pendingTransaction.getOperation(operation.getPlayer()).toOpposite())) :
+                PlayerAccount account = (pendingTransaction != null && pendingTransaction.getOperation(operation.getPlayer(), operation.getAmount().getCurrency()) != null) ?
+                    tryProcess(operation.combine(pendingTransaction.getOperation(operation.getPlayer(), operation.getAmount().getCurrency()).toOpposite())) :
                     tryProcess(operation);
                 // Step 2.1. Sending notification for processed payment
                 notificationService.send(new PaymentCompleteEvent(transaction.getTransactionKey(), operation, transaction.getSource(), account));
@@ -92,7 +94,10 @@ public class MongoServerAccountService implements ServerAccountService {
         try {
             // TODO this leaves a control breach for random PaymentAccount creation
             // Step 1. Creating new account
-            PlayerAccount newAccount = new PlayerAccount(player, Collections.<Currency, Money>emptyMap(), null);
+            Map<Currency, Money> moneyMap = new EnumMap<Currency, Money>(Currency.class);
+            for (Currency currency: Currency.values())
+                moneyMap.put(currency, Money.create(currency, 0));
+            PlayerAccount newAccount = new PlayerAccount(player, moneyMap, null);
             // Step 2. Adding new account to repository
             accountRepository.save(newAccount);
         } catch (Throwable throwable) {
