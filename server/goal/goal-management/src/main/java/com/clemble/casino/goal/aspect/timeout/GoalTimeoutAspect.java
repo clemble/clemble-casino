@@ -53,7 +53,7 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
                     punishment = totalTimeoutRule.getPunishment();
                     breachTime = deadline;
                 }
-                c.getClock().start(startTime, breachTime, deadline, punishment);
+                c.getClock().start(startTime, breachTime, new DateTime(deadline), punishment);
                 notificationService.send(new SystemAddJobScheduleEvent(goalKey, toKey(c.getPlayer()), new SystemGoalTimeoutEvent(goalKey), new DateTime(breachTime)));
             });
         } else if (event instanceof GoalEndedEvent) {
@@ -76,7 +76,7 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
                     punishment = totalTimeoutRule.getPunishment();
                     breachTime = deadline;
                 }
-                c.getClock().start(startTime, breachTime, deadline, punishment);
+                c.getClock().start(startTime, breachTime, new DateTime(deadline), punishment);
                 notificationService.send(new SystemAddJobScheduleEvent(goalKey, toKey(c.getPlayer()), new SystemGoalTimeoutEvent(goalKey), new DateTime(breachTime)));
             });
         }

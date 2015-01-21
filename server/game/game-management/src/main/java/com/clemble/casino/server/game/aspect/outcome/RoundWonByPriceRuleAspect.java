@@ -55,15 +55,15 @@ public class RoundWonByPriceRuleAspect extends RoundGameAspect<GameEndedEvent> {
             LOG.debug("Processing won outcome {}", event);
             String winnerId = ((PlayerWonOutcome) outcome).getPlayer();
             // Step 2. Generating payment transaction
-            PaymentTransaction transaction = new PaymentTransaction()
-                    .setTransactionKey(context.getSessionKey())
-                    .setTransactionDate(DateTime.now(DateTimeZone.UTC))
-                    .setSource(new GamePaymentSource(context.getSessionKey(), event.getOutcome()));
+            PaymentTransaction transaction = new PaymentTransaction().
+                setTransactionKey(context.getSessionKey()).
+                setTransactionDate(DateTime.now(DateTimeZone.UTC)).
+                setSource(new GamePaymentSource(context.getSessionKey(), event.getOutcome()));
             for (GamePlayerContext playerContext : context.getPlayerContexts()) {
                 if (!playerContext.getPlayer().equals(winnerId)) {
-                    transaction
-                        .addOperation(new PaymentOperation(playerContext.getPlayer(), price, Operation.Credit))
-                        .addOperation(new PaymentOperation(winnerId, price, Operation.Debit));
+                    transaction.
+                        addOperation(new PaymentOperation(playerContext.getPlayer(), price, Operation.Credit)).
+                        addOperation(new PaymentOperation(winnerId, price, Operation.Debit));
                 }
             }
             // Step 3. Processing payment transaction

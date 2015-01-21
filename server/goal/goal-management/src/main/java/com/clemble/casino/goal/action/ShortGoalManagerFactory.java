@@ -13,6 +13,7 @@ import com.clemble.casino.lifecycle.configuration.rule.time.PlayerClock;
 import com.clemble.casino.server.action.ClembleManager;
 import com.clemble.casino.server.action.ClembleManagerFactory;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
+import org.joda.time.DateTime;
 
 import java.util.Collections;
 
@@ -45,9 +46,11 @@ public class ShortGoalManagerFactory implements GoalManagerFactory {
         // Step 2. Creating state
         GoalPlayerContext playerContext = new GoalPlayerContext(initiation.getPlayer(), PlayerClock.create(record.getConfiguration()));
         GoalContext goalContext = new GoalContext(parent, Collections.singletonList(playerContext));
+        DateTime deadline = new DateTime(goalConfiguration.getTotalTimeoutRule().getTimeoutCalculator().calculate(initiation.getStartDate().getMillis()));
         GoalState state = new GoalState(
             initiation.getGoalKey(),
             initiation.getStartDate(),
+            deadline,
             initiation.getPlayer(),
             record.getBank(),
             initiation.getGoal(),

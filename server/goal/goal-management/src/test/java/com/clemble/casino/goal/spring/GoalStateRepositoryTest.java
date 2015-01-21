@@ -34,6 +34,7 @@ public class GoalStateRepositoryTest {
         GoalState shortGoalState = new GoalState(
             ObjectGenerator.generate(String.class),
             ObjectGenerator.generate(DateTime.class),
+            ObjectGenerator.generate(DateTime.class),
             ObjectGenerator.generate(String.class),
             ObjectGenerator.generate(Bank.class),
             ObjectGenerator.generate(String.class),

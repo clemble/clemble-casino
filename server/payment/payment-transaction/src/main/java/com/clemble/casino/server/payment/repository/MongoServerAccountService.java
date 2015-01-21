@@ -60,9 +60,9 @@ public class MongoServerAccountService implements ServerAccountService {
             // Step 2. Updating all related accounts
             for(PaymentOperation operation : savedTransaction.getOperations()) {
                 // Step 2.1. Sending notification for processed payment
-                PlayerAccount account = (pendingTransaction != null && pendingTransaction.getOperation(operation.getPlayer(), operation.getAmount().getCurrency()) != null) ?
-                    tryProcess(operation.combine(pendingTransaction.getOperation(operation.getPlayer(), operation.getAmount().getCurrency()).toOpposite())) :
-                    tryProcess(operation);
+                PlayerAccount account = (pendingTransaction != null && pendingTransaction.getOperation(operation.getPlayer(), operation.getAmount().getCurrency()) != null)
+                    ? tryProcess(operation.combine(pendingTransaction.getOperation(operation.getPlayer(), operation.getAmount().getCurrency()).toOpposite()))
+                    : tryProcess(operation);
                 // Step 2.1. Sending notification for processed payment
                 notificationService.send(new PaymentCompleteEvent(transaction.getTransactionKey(), operation, transaction.getSource(), account));
             }

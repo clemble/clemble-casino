@@ -124,8 +124,8 @@ public class PlayerAccountOperationsITest {
             assertTrue("Unexpected amount " + cashAbefore.getAmount() + " for " + A.getPlayer(), cashAbefore.getAmount() >= 0);
             assertTrue("Unexpected amount " + cashBbefore.getAmount() + " for " + B.getPlayer(),cashBbefore.getAmount() >= 0);
 
-            RoundGamePlayer AvsB = gameOperations.round(Game.num, A, B.getPlayer());
-            RoundGamePlayer BvsA = gameOperations.accept(AvsB.getSessionKey(), B);
+            final RoundGamePlayer AvsB = gameOperations.round(Game.num, A, B.getPlayer());
+            final RoundGamePlayer BvsA = gameOperations.accept(AvsB.getSessionKey(), B);
 
             AvsB.waitForStart();
             BvsA.waitForStart();
@@ -140,23 +140,20 @@ public class PlayerAccountOperationsITest {
 
             final Money price = AvsB.getConfiguration().getPrice();
 
-            AsyncCompletionUtils.equals(new Get<Money>() {
+            AsyncCompletionUtils.check(new Check() {
                 @Override
-                public Money get() {
-                    return cashAbefore.add(price.negate());
+                public boolean check() {
+                    Money Aexpected = cashAbefore.add(price.negate());
+                    Money Aactual = A.accountService().myAccount().getMoney(Currency.FakeMoney);
+                    return Aexpected.equals(Aactual);
                 }
-            }, new Get<Money>() {
-                @Override
-                public Money get() {
-                    return A.accountService().myAccount().getMoney(Currency.FakeMoney);
-                }
-            });
+            }, 30_000);
             AsyncCompletionUtils.check(new Check(){
                 @Override
                 public boolean check() {
                     return cashBbefore.add(price).equals(B.accountService().myAccount().getMoney(Currency.FakeMoney));
                 }
-            }, 5_000);
+            }, 30_000);
         } while (true);
     }
 

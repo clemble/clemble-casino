@@ -50,7 +50,7 @@ public class GoalDeadlineITest {
         // Step 3. Checking goal has deadline in timeout
         Assert.assertTrue(CheckUtils.checkNotNull((i) -> gA.actionService().getState(goalKey)));
         // Step 3.1. Extracting deadline
-        long deadline = gA.actionService().getState(goalKey).getContext().getPlayerContext(A.getPlayer()).getClock().getDeadline();
+        long deadline = gA.actionService().getState(goalKey).getContext().getPlayerContext(A.getPlayer()).getClock().getDeadline().getMillis();
         Assert.assertNotEquals(deadline, 0L);
     }
 

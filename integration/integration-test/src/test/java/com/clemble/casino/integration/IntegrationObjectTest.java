@@ -97,7 +97,7 @@ public class IntegrationObjectTest {
                     new Bank(Collections.emptyList(), new Bet(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0))),
                     ObjectGenerator.generate(GoalConfiguration.class),
                     "",
-                    0,
+                    new DateTime(0),
                     Collections.emptySet(),
                     DateTime.now(DateTimeZone.UTC),
                     false
