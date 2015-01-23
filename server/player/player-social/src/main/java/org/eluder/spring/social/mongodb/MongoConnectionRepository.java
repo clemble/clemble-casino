@@ -1,5 +1,7 @@
 package org.eluder.spring.social.mongodb;
 
+import com.clemble.casino.server.event.player.SystemPlayerSocialAddedEvent;
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.google.common.collect.ImmutableList;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Sort;
@@ -27,12 +29,19 @@ public class MongoConnectionRepository implements ConnectionRepository {
     private final MongoOperations mongo;
     private final ConnectionFactoryLocator connectionFactoryLocator;
     private final MongoConnectionTransformers mongoConnectionTransformers;
+    private final SystemNotificationService notificationService;
 
-    public MongoConnectionRepository(final String userId, final MongoOperations mongo, final ConnectionFactoryLocator connectionFactoryLocator, final MongoConnectionTransformers mongoConnectionTransformers) {
+    public MongoConnectionRepository(
+        final String userId,
+        final MongoOperations mongo,
+        final ConnectionFactoryLocator connectionFactoryLocator,
+        final MongoConnectionTransformers mongoConnectionTransformers,
+        final SystemNotificationService notificationService) {
         this.userId = userId;
         this.mongo = mongo;
         this.connectionFactoryLocator = connectionFactoryLocator;
         this.mongoConnectionTransformers = mongoConnectionTransformers;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -148,6 +157,7 @@ public class MongoConnectionRepository implements ConnectionRepository {
         } catch (DuplicateKeyException ex) {
             throw new DuplicateConnectionException(connection.getKey());
         }
+        notificationService.send(new SystemPlayerSocialAddedEvent(userId, connection.getKey()));
     }
 
     @Override
@@ -163,6 +173,7 @@ public class MongoConnectionRepository implements ConnectionRepository {
                 .set("refreshToken", mongoConnection.getRefreshToken())
                 .set("expireTime", mongoConnection.getExpireTime());
         mongo.updateFirst(query, update, MongoConnection.class);
+        notificationService.send(new SystemPlayerSocialAddedEvent(userId, connection.getKey()));
     }
 
     @Override

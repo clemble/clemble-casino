@@ -58,21 +58,7 @@ public class FacebookRegistrationITest {
     @PostConstruct
     public void init(){
         try {
-            URLConnection connection = new URL("http://google.com").openConnection();
-            InputStream is = connection.getInputStream();
-            is.close();
             facebookStore = new HttpClientFacebookTestUserStore("262763360540886", "beb651a120e8bf7252ba4e4be4f46437");
-        } catch (Throwable throwable) {
-            Assume.assumeTrue("Connection to google is missing", false);
-        }
-    }
-
-    @Before
-    public void setup() {
-        try {
-            URLConnection connection = new URL("http://google.com").openConnection();
-            InputStream is = connection.getInputStream();
-            is.close();
         } catch (Throwable throwable) {
             Assume.assumeTrue("Connection to google is missing", false);
         }
@@ -165,6 +151,7 @@ public class FacebookRegistrationITest {
         // Step 3. Generating new user B, who is a friend of user A
         FacebookTestUserAccount fbAccoB = facebookStore.createTestUser(true, "email");
         fbAccoA.makeFriends(fbAccoB);
+        fbAccoA.getFriends();
         SocialAccessGrant grantB = new SocialAccessGrant("facebook", fbAccoB.accessToken());
         playerScenarios.createPlayer(grantB);
         // Step 3. Checking connection were mapped internally

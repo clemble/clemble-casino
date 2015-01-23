@@ -5,7 +5,6 @@ import com.clemble.casino.server.security.PlayerTokenUtils;
 import com.clemble.casino.server.social.*;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.social.adapter.*;
-import com.clemble.casino.server.social.connection.ClembleUsersConnectionRepository;
 import com.clemble.casino.server.social.listener.SystemPlayerSocialAddedEventListener;
 import com.clemble.casino.server.social.listener.SystemSharePostEventListener;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
@@ -177,9 +176,7 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
             ConnectionSignUp connectionSignUp,
             ConnectionFactoryRegistry connectionFactoryLocator,
             SystemNotificationService systemNotificationService) {
-        MongoUsersConnectionRepository repository = new MongoUsersConnectionRepository(mongoOperations, connectionFactoryLocator, connectionTransformers);
-        repository.setConnectionSignUp(connectionSignUp);
-        return new ClembleUsersConnectionRepository(repository, systemNotificationService);
+        return new MongoUsersConnectionRepository(connectionSignUp, mongoOperations, connectionFactoryLocator, connectionTransformers, systemNotificationService);
     }
 
     @Bean

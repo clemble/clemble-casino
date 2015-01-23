@@ -1,5 +1,6 @@
 package org.eluder.spring.social.mongodb;
 
+import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -19,17 +20,21 @@ public class MongoUsersConnectionRepository implements UsersConnectionRepository
     private final MongoOperations mongo;
     private final ConnectionFactoryLocator connectionFactoryLocator;
     private final MongoConnectionTransformers mongoConnectionTransformers;
-    private ConnectionSignUp connectionSignUp;
+    private final ConnectionSignUp connectionSignUp;
+    private final SystemNotificationService notificationService;
 
 
-    public MongoUsersConnectionRepository(final MongoOperations mongo, final ConnectionFactoryLocator connectionFactoryLocator, final MongoConnectionTransformers mongoConnectionTransformers) {
+    public MongoUsersConnectionRepository(
+        final ConnectionSignUp connectionSignUp,
+        final MongoOperations mongo,
+        final ConnectionFactoryLocator connectionFactoryLocator,
+        final MongoConnectionTransformers mongoConnectionTransformers,
+        final SystemNotificationService notificationService) {
         this.mongo = mongo;
+        this.connectionSignUp = connectionSignUp;
         this.connectionFactoryLocator = connectionFactoryLocator;
         this.mongoConnectionTransformers = mongoConnectionTransformers;
-    }
-
-    public void setConnectionSignUp(final ConnectionSignUp connectionSignUp) {
-        this.connectionSignUp = connectionSignUp;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -58,6 +63,6 @@ public class MongoUsersConnectionRepository implements UsersConnectionRepository
     @Override
     public ConnectionRepository createConnectionRepository(final String userId) {
         checkArgument(userId != null, "userId must be defined");
-        return new MongoConnectionRepository(userId, mongo, connectionFactoryLocator, mongoConnectionTransformers);
+        return new MongoConnectionRepository(userId, mongo, connectionFactoryLocator, mongoConnectionTransformers, notificationService);
     }
 }

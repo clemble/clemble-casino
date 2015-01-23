@@ -74,7 +74,7 @@ public class SocialConnectionDataAdapter {
         LOG.debug("register search for existing users {}", connectionData);
         Set<String> existingUsers = usersConnectionRepository.findUserIdsConnectedTo(connectionData.getProviderId(), ImmutableSet.<String> of(connectionData.getProviderUserId()));
         LOG.debug("register fetched {}", existingUsers);
-        if (existingUsers.size() != 1)
+        if (existingUsers.size() > 1)
             throw ClembleCasinoException.fromError(ClembleCasinoError.SocialConnectionInvalid);
         // This is for signIn through spring - key generated prior to processing, by the time it reaches
         // here user could already exist
