@@ -3,6 +3,7 @@ package com.clemble.casino.goal.aspect.timeout;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
+import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.*;
 import com.clemble.casino.lifecycle.configuration.rule.breach.BreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
@@ -37,14 +38,15 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
     @Override
     protected void doEvent(GoalManagementEvent event) {
         // Step 1. Preparing for processing
+        GoalState goalState = event.getBody();
         String goalKey = event.getBody().getGoalKey();
         GoalContext context = event.getBody().getContext();
         // Step 2. Process depending on event
+        long deadline = goalState.getDeadline().getMillis();
         if (event instanceof GoalStartedEvent) {
             // Case 1. Goal just started
             context.getPlayerContexts().forEach((c) -> {
                 long startTime = System.currentTimeMillis() + 5_000;
-                long deadline = totalTimeoutRule.getTimeoutCalculator().calculate(startTime);
                 long breachTime = moveTimeoutRule.getTimeoutCalculator().calculate(startTime);
                 BreachPunishment punishment = null;
                 if (breachTime < deadline) {
@@ -67,7 +69,6 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
             context.getPlayerContexts().forEach((c) -> {
                 c.getClock().stop();
                 long startTime = System.currentTimeMillis() + 5_000;
-                long deadline = totalTimeoutRule.getTimeoutCalculator().calculate(startTime, c.getClock().getTimeSpent());
                 long breachTime = moveTimeoutRule.getTimeoutCalculator().calculate(startTime, c.getClock().getTimeSpent());
                 BreachPunishment punishment = null;
                 if (breachTime < deadline) {
