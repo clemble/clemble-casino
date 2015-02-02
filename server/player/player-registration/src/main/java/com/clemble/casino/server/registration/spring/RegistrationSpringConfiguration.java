@@ -8,6 +8,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
 import com.clemble.casino.server.registration.ServerPlayerCredential;
 import com.clemble.casino.server.registration.controller.PlayerSignOutServiceController;
+import com.clemble.casino.server.registration.service.ServerPlayerCredentialManager;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
@@ -61,16 +62,20 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerManualRegistrationController playerRegistrationController(
-        PasswordEncoder passwordEncoder,
+        ServerPlayerCredentialManager credentialManager,
         PlayerTokenUtils tokenUtils,
         @Qualifier("playerKeyGenerator") PlayerKeyGenerator playerKeyGenerator,
-        ServerPlayerCredentialRepository playerCredentialRepository,
         ClembleConsumerDetailsService clembleConsumerDetailsService,
         ClembleCasinoValidationService clembleValidationService,
         PlayerTokenFactory playerTokenFactory,
         SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
-        return new PlayerManualRegistrationController(passwordEncoder, tokenUtils, playerKeyGenerator, playerTokenFactory, playerCredentialRepository,
+        return new PlayerManualRegistrationController(credentialManager, tokenUtils, playerKeyGenerator, playerTokenFactory,
                 clembleConsumerDetailsService, clembleValidationService, systemNotificationService);
+    }
+
+    @Bean
+    public ServerPlayerCredentialManager credentialManager(PasswordEncoder passwordEncoder, ServerPlayerCredentialRepository credentialRepository) {
+        return new ServerPlayerCredentialManager(passwordEncoder, credentialRepository);
     }
 
     @Bean
