@@ -47,12 +47,15 @@ public class PlayerPasswordResetServiceController implements PlayerPasswordReset
     @RequestMapping(method = RequestMethod.POST, value = RESET_PASSWORD, produces = WebMapping.PRODUCES)
     public boolean reset(@Validated @RequestBody PlayerPasswordResetRequest request) {
         // Step 1. Checking player & token match
-        boolean match = tokenService.match(request.getPlayer(), request.getToken());
+        String player = tokenService.verify(request.getToken());
         // Step 2. If they match update player password
-        if (match) {
-            credentialManager.update(request.getPlayer(), request.getPassword());
+        if (player != null) {
+            // Case 1. Player was successfully fetched, and token was verified
+            return credentialManager.update(player, request.getPassword()) != null;
+        } else {
+            // Case 2. Player or token illegal
+            return false;
         }
-        return match;
     }
 
 }

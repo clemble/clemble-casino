@@ -14,6 +14,7 @@ import com.clemble.casino.player.service.*;
 import com.clemble.casino.registration.service.PlayerPasswordResetService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
+import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
@@ -76,6 +77,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     final private GameRecordService recordService;
     final private GoalOperations goalOperations;
     final private PlayerPasswordResetService passwordResetService;
+    final private PlayerEmailService emailService;
 
     public IntegrationClembleCasinoOperations(
         final String host,
@@ -100,7 +102,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final GoalOperations goalOperations,
         final PlayerNotificationServiceController notificationServiceController,
         final PlayerFeedServiceController feedServiceController,
-        final PlayerPasswordResetServiceController passwordResetServiceController
+        final PlayerPasswordResetServiceController passwordResetServiceController,
+        final PlayerEmailServiceController emailService
     ) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new IntegrationPlayerSessionService(player, sessionOperations);
@@ -136,6 +139,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
 
         this.goalOperations = goalOperations;
         this.passwordResetService = passwordResetServiceController;
+        this.emailService = new IntegrationPlayerEmailService(player, emailService);
     }
 
     @Override
@@ -191,6 +195,11 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     @Override
     public PlayerPasswordResetService passwordResetService() {
         return passwordResetService;
+    }
+
+    @Override
+    public PlayerEmailService emailService() {
+        return emailService;
     }
 
     @Override

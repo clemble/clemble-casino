@@ -32,6 +32,8 @@ public class ServerPlayerCredentialManager {
     }
 
     public ServerPlayerCredential update(String player, String password) {
+        if (!credentialRepository.exists(player))
+            return null;
         // Step 1. Looking up player credentials
         ServerPlayerCredential playerCredential = credentialRepository.findOne(player);
         // Step 2. Creating new player credentials

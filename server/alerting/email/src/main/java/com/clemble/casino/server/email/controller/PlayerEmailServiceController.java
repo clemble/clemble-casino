@@ -1,5 +1,6 @@
 package com.clemble.casino.server.email.controller;
 
+import com.clemble.casino.WebMapping;
 import com.clemble.casino.player.PlayerEmailWebMapping;
 import com.clemble.casino.player.service.PlayerEmailService;
 import com.clemble.casino.server.email.service.ServerPlayerEmailService;
@@ -21,6 +22,17 @@ public class PlayerEmailServiceController implements PlayerEmailService {
     public PlayerEmailServiceController(String redirect, ServerPlayerEmailService playerEmailService) {
         this.redirect = redirect;
         this.playerEmailService = playerEmailService;
+    }
+
+    @Override
+    public String myEmail() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, value = PlayerEmailWebMapping.MY, produces = WebMapping.PRODUCES)
+    public String myEmail(@CookieValue("player") String player) {
+        return playerEmailService.myEmail(player);
     }
 
     @Override

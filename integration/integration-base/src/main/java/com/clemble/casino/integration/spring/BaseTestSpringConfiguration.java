@@ -18,6 +18,7 @@ import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistratio
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
+import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
@@ -152,7 +153,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             IntegrationGoalOperationsFactory goalOperationsFactory,
             PlayerNotificationServiceController notificationServiceController,
             PlayerFeedServiceController feedServiceController,
-            PlayerPasswordResetServiceController resetServiceController) {
+            PlayerPasswordResetServiceController resetServiceController,
+            PlayerEmailServiceController emailServiceController) {
             ClembleCasinoRegistrationOperations registrationOperations = new IntegrationClembleCasinoRegistrationOperations(
                 host,
                 objectMapper,
@@ -175,7 +177,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
                 goalOperationsFactory,
                 notificationServiceController,
                 feedServiceController,
-                resetServiceController);
+                resetServiceController,
+                emailServiceController);
             return new IntegrationClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }

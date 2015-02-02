@@ -61,6 +61,18 @@ public class ServerPlayerEmailService implements PlayerEmailService {
     }
 
     @Override
+    public String myEmail() {
+        throw new IllegalArgumentException();
+    }
+
+    public String myEmail(String player) {
+        // Step 1. Fetching player email
+        PlayerEmail playerEmail = emailRepository.findOne(player);
+        // Step 2. Safe return result
+        return playerEmail != null ? playerEmail.getEmail() : null;
+    }
+
+    @Override
     public boolean verify(String verificationCode) {
         // Step 1. Decrypting email
         String decrypted = textEncryptor.decrypt(verificationCode);

@@ -11,6 +11,7 @@ import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.service.PlayerPasswordResetService;
 import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
+import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.AvailabilityGameConstructionController;
 import com.clemble.casino.server.game.construction.controller.GameInitiationServiceController;
@@ -62,6 +63,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     final private PlayerNotificationServiceController notificationServiceController;
     final private PlayerFeedServiceController feedServiceController;
     final private PlayerPasswordResetServiceController passwordResetService;
+    final private PlayerEmailServiceController emailServiceController;
 
     public IntegrationClembleCasinoRegistrationOperations(
         String host,
@@ -85,7 +87,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         IntegrationGoalOperationsFactory goalOperationsFactory,
         PlayerNotificationServiceController notificationServiceController,
         PlayerFeedServiceController feedServiceController,
-        PlayerPasswordResetServiceController passwordResetService) {
+        PlayerPasswordResetServiceController passwordResetService,
+        PlayerEmailServiceController emailServiceController) {
         this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
@@ -108,6 +111,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         this.notificationServiceController = checkNotNull(notificationServiceController);
         this.feedServiceController = feedServiceController;
         this.passwordResetService = passwordResetService;
+        this.emailServiceController = emailServiceController;
     }
 
     @Override
@@ -166,7 +170,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
             goalOperationsFactory.construct(playerIdentity.getPlayer()),
             notificationServiceController,
             feedServiceController,
-            passwordResetService
+            passwordResetService,
+            emailServiceController
         );
     }
 
