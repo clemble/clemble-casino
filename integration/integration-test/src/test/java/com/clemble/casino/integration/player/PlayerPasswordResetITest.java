@@ -12,6 +12,7 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.PlayerPasswordResetRequest;
+import com.clemble.casino.registration.PlayerPasswordRestoreRequest;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.email.SystemEmailSendRequestEvent;
 import org.junit.Assert;
@@ -52,7 +53,7 @@ public class PlayerPasswordResetITest {
         String emailA = A.emailService().myEmail();
         Assert.assertNotNull(emailA);
         // Step 2. Restoring email
-        A.passwordResetService().restore(emailA);
+        A.passwordResetService().restore(new PlayerPasswordRestoreRequest(emailA));
         // Step 3. Checking reset would update password
         String newPassword = RandomStringUtils.randomAlphanumeric(20);
         // Step 4. Fetching update event

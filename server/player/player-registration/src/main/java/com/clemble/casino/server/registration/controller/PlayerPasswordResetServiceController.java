@@ -1,7 +1,10 @@
 package com.clemble.casino.server.registration.controller;
 
 import com.clemble.casino.WebMapping;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.registration.PlayerPasswordResetRequest;
+import com.clemble.casino.registration.PlayerPasswordRestoreRequest;
 import com.clemble.casino.registration.service.PlayerPasswordResetService;
 import com.clemble.casino.server.registration.service.PasswordResetTokenService;
 import com.clemble.casino.server.registration.service.ServerPlayerCredentialManager;
@@ -30,13 +33,13 @@ public class PlayerPasswordResetServiceController implements PlayerPasswordReset
     }
 
     @Override
-    @RequestMapping(method = RequestMethod.GET, value = RESTORE_PASSWORD, produces = WebMapping.PRODUCES)
-    public boolean restore(@RequestBody String email) {
+    @RequestMapping(method = RequestMethod.POST, value = RESTORE_PASSWORD, produces = WebMapping.PRODUCES)
+    public boolean restore(@RequestBody PlayerPasswordRestoreRequest restoreRequest) {
         // Step 1. Looking up player credentials
-        String player = credentialManager.findPlayerByEmail(email);
+        String player = credentialManager.findPlayerByEmail(restoreRequest.getEmail());
         // Step 2. Checking player does exists
         if (player == null)
-            return false;
+            throw ClembleCasinoException.fromError(ClembleCasinoError.EmailInvalid);
         // Step 3. Generate and send email token
         tokenService.generateAndSend(player);
         // Step 4. Consider that everything done
