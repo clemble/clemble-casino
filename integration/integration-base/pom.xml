@@ -37,6 +37,10 @@
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
+            <artifactId>player-registration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
             <artifactId>player-feed</artifactId>
         </dependency>
         <dependency>

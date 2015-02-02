@@ -30,6 +30,7 @@ import com.clemble.casino.server.presence.controller.PlayerPresenceServiceContro
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
+import com.clemble.casino.server.registration.controller.PlayerPasswordResetServiceController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -150,8 +151,31 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             GameRecordService recordService,
             IntegrationGoalOperationsFactory goalOperationsFactory,
             PlayerNotificationServiceController notificationServiceController,
-            PlayerFeedServiceController feedServiceController) {
-            ClembleCasinoRegistrationOperations registrationOperations = new IntegrationClembleCasinoRegistrationOperations(host, objectMapper, listenerOperations, registrationService, profileOperations, imageService, connectionService, invitationService, sessionOperations, accountOperations, paymentTransactionService, presenceService, constructionService, availabilityConstructionService, initiationService, specificationService, actionService, recordService, goalOperationsFactory, notificationServiceController, feedServiceController);
+            PlayerFeedServiceController feedServiceController,
+            PlayerPasswordResetServiceController resetServiceController) {
+            ClembleCasinoRegistrationOperations registrationOperations = new IntegrationClembleCasinoRegistrationOperations(
+                host,
+                objectMapper,
+                listenerOperations,
+                registrationService,
+                profileOperations,
+                imageService,
+                connectionService,
+                invitationService,
+                sessionOperations,
+                accountOperations,
+                paymentTransactionService,
+                presenceService,
+                constructionService,
+                availabilityConstructionService,
+                initiationService,
+                specificationService,
+                actionService,
+                recordService,
+                goalOperationsFactory,
+                notificationServiceController,
+                feedServiceController,
+                resetServiceController);
             return new IntegrationClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }
