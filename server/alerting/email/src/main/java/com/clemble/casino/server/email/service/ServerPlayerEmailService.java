@@ -4,8 +4,10 @@ import com.clemble.casino.player.PlayerEmailWebMapping;
 import com.clemble.casino.player.service.PlayerEmailService;
 import com.clemble.casino.server.email.PlayerEmail;
 import com.clemble.casino.server.email.repository.PlayerEmailRepository;
+import com.clemble.casino.server.event.email.SystemEmailSendDirectRequestEvent;
 import com.clemble.casino.server.event.email.SystemEmailVerifiedEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -55,7 +57,7 @@ public class ServerPlayerEmailService implements PlayerEmailService {
         // WARNING do not change the order, this order is in order to keep no limit on player ids
         String url = host + "verify?code=" + textEncryptor.encrypt(email + ENCRYPT_SEPARATOR + player);
         // Step 4. Sending verification email
-        emailService.sendVerification(email, url);
+        systemNotificationService.send(new SystemEmailSendDirectRequestEvent(player, email, "verify_email", ImmutableMap.of("url", url)));
         // Step 5. Returning url
         return url;
     }

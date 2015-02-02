@@ -17,6 +17,7 @@ import com.google.gson.GsonBuilder;
 import com.microtripit.mandrillapp.lutung.MandrillApi;
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillUserInfo;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -71,7 +72,7 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
     @Bean
     public ServerPlayerEmailService playerEmailService(
         @Value("${clemble.registration.token.host}") String host,
-        TextEncryptor textEncryptor,
+        @Qualifier("emailTextEncryptor") TextEncryptor textEncryptor,
         ServerEmailSender emailService,
         PlayerEmailRepository emailRepository,
         SystemNotificationService systemNotificationService)  {
@@ -88,15 +89,11 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
                 @Override
                 public void send(String email, String text) {
                 }
-
-                @Override
-                public void sendVerification(String email, String url) {
-                }
             };
         }
 
         @Bean
-        public TextEncryptor textEncryptor() {
+        public TextEncryptor emailTextEncryptor() {
             return Encryptors.noOpText();
         }
 
@@ -107,7 +104,7 @@ public class PlayerEmailSpringConfiguration implements SpringConfiguration {
     public static class Cloud implements SpringConfiguration {
 
         @Bean
-        public TextEncryptor textEncryptor(
+        public TextEncryptor emailTextEncryptor(
             @Value("${clemble.email.encryptor.password}") String password,
             @Value("${clemble.email.encryptor.salt}") String salt
         ) {

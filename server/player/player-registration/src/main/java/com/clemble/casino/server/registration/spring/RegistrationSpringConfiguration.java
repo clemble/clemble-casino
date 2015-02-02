@@ -7,8 +7,13 @@ import com.clemble.casino.server.key.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
 import com.clemble.casino.server.registration.ServerPlayerCredential;
+import com.clemble.casino.server.registration.controller.PlayerPasswordResetServiceController;
 import com.clemble.casino.server.registration.controller.PlayerSignOutServiceController;
+import com.clemble.casino.server.registration.repository.ServerPasswordResetTokenRepository;
+import com.clemble.casino.server.registration.service.PasswordResetTokenGenerator;
+import com.clemble.casino.server.registration.service.PasswordResetTokenService;
 import com.clemble.casino.server.registration.service.ServerPlayerCredentialManager;
+import com.clemble.casino.server.registration.service.UUIDPasswordResetTokenGenerator;
 import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
@@ -26,18 +31,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import scala.beans.BeanDescription;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by mavarazy on 7/4/14.
  */
 @Configuration
-@Import({CommonSpringConfiguration.class, OAuthSpringConfiguration.class, PlayerTokenSpringConfiguration.class, RedisSpringConfiguration.class, MongoSpringConfiguration.class})
+@Import({CommonSpringConfiguration.class, OAuthSpringConfiguration.class, PlayerTokenSpringConfiguration.class, RedisSpringConfiguration.class, MongoSpringConfiguration.class, RegistrationSpringConfiguration.Default.class, RegistrationSpringConfiguration.Cloud.class})
 public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
@@ -98,6 +107,64 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
         @Value("${clemble.registration.token.host}") String host,
         PlayerTokenUtils tokenUtils) {
         return new PlayerSignOutServiceController("http://" + host.substring(1), tokenUtils);
+    }
+
+    @Bean
+    public PlayerPasswordResetServiceController passwordResetServiceController(
+        PasswordResetTokenService tokenService,
+        ServerPlayerCredentialManager credentialManager
+    ) {
+        return new PlayerPasswordResetServiceController(tokenService, credentialManager);
+    }
+
+    @Bean
+    public PasswordResetTokenService passwordResetTokenService(
+        @Value("${clemble.registration.token.host}") String host,
+        @Qualifier("passwordTextEncryptor") TextEncryptor textEncryptor,
+        PasswordResetTokenGenerator tokenGenerator,
+        ServerPasswordResetTokenRepository tokenRepository,
+        SystemNotificationService notificationService
+    ) {
+        return new PasswordResetTokenService(host,
+            textEncryptor,
+            tokenGenerator,
+            tokenRepository,
+            notificationService);
+    }
+
+    @Bean
+    public PasswordResetTokenGenerator passwordResetTokenGenerator() {
+        return new UUIDPasswordResetTokenGenerator();
+    }
+
+    @Bean
+    public ServerPasswordResetTokenRepository serverPasswordResetTokenRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+        return mongoRepositoryFactory.getRepository(ServerPasswordResetTokenRepository.class);
+    }
+
+    @Configuration
+    @Profile({SpringConfiguration.TEST, SpringConfiguration.DEFAULT, SpringConfiguration.INTEGRATION_TEST})
+    public static class Default implements SpringConfiguration {
+
+        @Bean
+        public TextEncryptor passwordTextEncryptor() {
+            return Encryptors.noOpText();
+        }
+
+    }
+
+    @Configuration
+    @Profile(SpringConfiguration.CLOUD)
+    public static class Cloud implements SpringConfiguration {
+
+        @Bean
+        public TextEncryptor passwordTextEncryptor(
+            @Value("${clemble.password.encryptor.password}") String password,
+            @Value("${clemble.password.encryptor.salt}") String salt
+        ) {
+            return Encryptors.queryableText(password, salt);
+        }
+
     }
 
 }

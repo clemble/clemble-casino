@@ -13,6 +13,7 @@ import com.clemble.casino.goal.construction.spring.GoalConstructionSpringConfigu
 import com.clemble.casino.goal.spring.GoalManagementSpringConfiguration;
 import com.clemble.casino.goal.suggestion.spring.GoalSuggestionSpringConfiguration;
 import com.clemble.casino.integration.event.EventAccumulator;
+import com.clemble.casino.integration.game.construction.EmailScenarios;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.lifecycle.configuration.rule.bet.UnlimitedBetRule;
 import com.clemble.casino.game.lifecycle.configuration.rule.construct.PlayerNumberRule;
@@ -88,6 +89,11 @@ import javax.annotation.PostConstruct;
     IntegrationTestSpringConfiguration.IntegrationTestConfiguration.class
 })
 public class IntegrationTestSpringConfiguration implements TestSpringConfiguration {
+
+    @Bean
+    public EmailScenarios emailScenarios(EventAccumulator<SystemEvent> systemEventAccumulator) {
+        return new EmailScenarios(systemEventAccumulator);
+    }
 
     @Configuration
     @Profile(DEFAULT)

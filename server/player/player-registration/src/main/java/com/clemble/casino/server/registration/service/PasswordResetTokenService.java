@@ -42,7 +42,7 @@ public class PasswordResetTokenService {
         // Step 3. Sending email notification to the user
         String encryptedToken = textEncryptor.encrypt(token + ENCRYPT_SEPARATOR + player);
         String resetUrl = host + "#/registration/reset/" + player + "/" + encryptedToken;
-        notificationService.send(new SystemEmailSendRequestEvent(player, "restore_email", ImmutableMap.of("url", resetUrl)));
+        notificationService.send(new SystemEmailSendRequestEvent(player, "restore_password", ImmutableMap.of("url", resetUrl)));
         // Step 4. Returning generated token
         return encryptedToken;
     }

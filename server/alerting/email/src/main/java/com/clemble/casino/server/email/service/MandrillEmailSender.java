@@ -30,15 +30,6 @@ public class MandrillEmailSender implements ServerEmailSender {
         send(email, message);
     }
 
-    @Override
-    public void sendVerification(String email, String url) {
-        // Step 1. Creating message
-        MandrillMessage message = new MandrillMessage();
-        message.setSubject("Please verify your email address");
-        message.setHtml("<h1>Hi pal!</h1><br/> Checking email verification does work " + url + "!");
-        send(email, message);
-    }
-
     private void send(String email, MandrillMessage message) {
         message.setAutoText(true);
         message.setFromEmail("notification@clemble.com");

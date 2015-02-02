@@ -1,5 +1,6 @@
 package com.clemble.casino.server.event.email;
 
+import com.clemble.casino.server.event.TemplateAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,9 +9,9 @@ import java.util.Map;
 /**
  * Created by mavarazy on 12/8/14.
  */
-public class SystemEmailSendRequestEvent implements SystemEmailEvent{
+public class SystemEmailSendRequestEvent implements SystemEmailEvent, TemplateAware {
 
-    final public static String CHANNEL = "sys:email:send";
+    final public static String CHANNEL = "sys:email:send:player";
 
     final private String player;
     final private String template;
@@ -28,6 +29,7 @@ public class SystemEmailSendRequestEvent implements SystemEmailEvent{
         return player;
     }
 
+    @Override
     public String getTemplate() {
         return template;
     }

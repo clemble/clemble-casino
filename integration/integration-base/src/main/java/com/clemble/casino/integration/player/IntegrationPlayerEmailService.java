@@ -2,6 +2,9 @@ package com.clemble.casino.integration.player;
 
 import com.clemble.casino.player.service.PlayerEmailService;
 import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
+import org.springframework.mock.web.MockHttpServletResponse;
+
+import java.io.IOException;
 
 /**
  * Created by mavarazy on 2/2/15.
@@ -23,6 +26,13 @@ public class IntegrationPlayerEmailService implements PlayerEmailService {
 
     @Override
     public boolean verify(String verificationCode) {
-        return emailServiceController.verify(verificationCode);
+        try {
+            emailServiceController.verify(verificationCode, new MockHttpServletResponse());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
+
 }

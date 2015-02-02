@@ -250,7 +250,6 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
 
     @Override
     public void signOut() {
-        throw new UnsupportedOperationException();
     }
 
 }
