@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -39,7 +42,12 @@ public class ClembleCasinoHandlerExceptionResolver implements HandlerExceptionRe
         LOGGER.error("Error while processing {} with {}", request, handler);
         LOGGER.error("Log trace ", ex);
         Collection<ClembleCasinoFailure> errors = new ArrayList<>();
-        if (ex instanceof ClembleCasinoException) {
+        if (ex instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException mae = ((MethodArgumentNotValidException) ex);
+            mae.getBindingResult().getAllErrors().stream().forEach((o) ->
+                errors.add(new ClembleCasinoFailure(ClembleCasinoError.forCode(o.getDefaultMessage())))
+            );
+        } else if (ex instanceof ClembleCasinoException) {
             ClembleCasinoFailureDescription clembleFailure = ((ClembleCasinoException) ex).getFailureDescription();
             for(ClembleCasinoFailure failure: clembleFailure.getProblems())
                 errors.add(failure);

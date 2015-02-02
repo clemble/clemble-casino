@@ -125,7 +125,7 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
         ServerPasswordResetTokenRepository tokenRepository,
         SystemNotificationService notificationService
     ) {
-        return new PasswordResetTokenService(host,
+        return new PasswordResetTokenService("http://" + host.substring(1),
             textEncryptor,
             tokenGenerator,
             tokenRepository,
