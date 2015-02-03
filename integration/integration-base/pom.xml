@@ -87,6 +87,10 @@
             <groupId>com.clemble.casino.server</groupId>
             <artifactId>goal-management</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.clemble.casino.server</groupId>
+            <artifactId>tag</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>

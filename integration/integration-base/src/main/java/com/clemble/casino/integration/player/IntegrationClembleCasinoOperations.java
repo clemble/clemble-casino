@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.clemble.casino.client.goal.GoalOperations;
 import com.clemble.casino.game.lifecycle.initiation.event.GameInitiationCreatedEvent;
+import com.clemble.casino.integration.IntegrationPlayerTagServiceController;
 import com.clemble.casino.integration.game.IntegrationAutoGameConstructionService;
 import com.clemble.casino.integration.game.IntegrationAvailabilityGameConstructionService;
 import com.clemble.casino.integration.game.IntegrationGameActionService;
@@ -28,6 +29,8 @@ import com.clemble.casino.server.presence.controller.PlayerSessionServiceControl
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import com.clemble.casino.server.registration.controller.PlayerPasswordResetServiceController;
+import com.clemble.casino.tag.service.PlayerTagService;
+import com.clemble.server.tag.controller.PlayerTagServiceController;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -78,6 +81,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     final private GoalOperations goalOperations;
     final private PlayerPasswordResetService passwordResetService;
     final private PlayerEmailService emailService;
+    final private PlayerTagService tagService;
 
     public IntegrationClembleCasinoOperations(
         final String host,
@@ -103,7 +107,8 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final PlayerNotificationServiceController notificationServiceController,
         final PlayerFeedServiceController feedServiceController,
         final PlayerPasswordResetServiceController passwordResetServiceController,
-        final PlayerEmailServiceController emailService
+        final PlayerEmailServiceController emailService,
+        final PlayerTagServiceController tagServiceController
     ) {
         this.player = playerIdentity.getPlayer();
         this.playerSessionOperations = new IntegrationPlayerSessionService(player, sessionOperations);
@@ -140,6 +145,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         this.goalOperations = goalOperations;
         this.passwordResetService = passwordResetServiceController;
         this.emailService = new IntegrationPlayerEmailService(player, emailService);
+        this.tagService = new IntegrationPlayerTagServiceController(player, tagServiceController);
     }
 
     @Override
@@ -200,6 +206,11 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     @Override
     public PlayerEmailService emailService() {
         return emailService;
+    }
+
+    @Override
+    public PlayerTagService tagService() {
+        return tagService;
     }
 
     @Override

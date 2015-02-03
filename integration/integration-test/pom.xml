@@ -185,6 +185,12 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>com.clemble.casino.server</groupId>
+                                            <artifactId>tag</artifactId>
+                                            <type>war</type>
+                                            <destFileName>tag.war</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>com.clemble.casino.server</groupId>
                                             <artifactId>player-registration</artifactId>
                                             <type>war</type>
                                             <destFileName>player-registration.war</destFileName>
@@ -376,6 +382,10 @@
                                 <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
                                     <war>${project.build.directory}/wars-to-be-tested/schedule.war</war>
                                     <contextPath>/schedule</contextPath>
+                                </contextHandler>
+                                <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
+                                    <war>${project.build.directory}/wars-to-be-tested/tag.war</war>
+                                    <contextPath>/tag</contextPath>
                                 </contextHandler>
                             </contextHandlers>
                             <systemProperties>

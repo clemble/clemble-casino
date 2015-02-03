@@ -32,6 +32,7 @@ import com.clemble.casino.server.presence.controller.PlayerSessionServiceControl
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import com.clemble.casino.server.registration.controller.PlayerPasswordResetServiceController;
+import com.clemble.server.tag.controller.PlayerTagServiceController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -154,7 +155,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             PlayerNotificationServiceController notificationServiceController,
             PlayerFeedServiceController feedServiceController,
             PlayerPasswordResetServiceController resetServiceController,
-            PlayerEmailServiceController emailServiceController) {
+            PlayerEmailServiceController emailServiceController,
+            PlayerTagServiceController tagServiceController) {
             ClembleCasinoRegistrationOperations registrationOperations = new IntegrationClembleCasinoRegistrationOperations(
                 host,
                 objectMapper,
@@ -178,7 +180,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
                 notificationServiceController,
                 feedServiceController,
                 resetServiceController,
-                emailServiceController);
+                emailServiceController,
+                tagServiceController);
             return new IntegrationClembleCasinoRegistrationOperationsWrapper(registrationOperations);
         }
     }

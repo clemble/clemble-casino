@@ -36,6 +36,7 @@ import com.clemble.casino.server.presence.controller.PlayerPresenceServiceContro
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import com.clemble.casino.utils.ClembleConsumerDetailUtils;
+import com.clemble.server.tag.controller.PlayerTagServiceController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.clemble.casino.server.notification.controller.PlayerNotificationServiceController;
 
@@ -64,6 +65,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     final private PlayerFeedServiceController feedServiceController;
     final private PlayerPasswordResetServiceController passwordResetService;
     final private PlayerEmailServiceController emailServiceController;
+    final private PlayerTagServiceController tagServiceController;
 
     public IntegrationClembleCasinoRegistrationOperations(
         String host,
@@ -88,7 +90,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         PlayerNotificationServiceController notificationServiceController,
         PlayerFeedServiceController feedServiceController,
         PlayerPasswordResetServiceController passwordResetService,
-        PlayerEmailServiceController emailServiceController) {
+        PlayerEmailServiceController emailServiceController,
+        PlayerTagServiceController tagServiceController) {
         this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
         this.registrationService = checkNotNull(registrationService);
@@ -112,6 +115,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         this.feedServiceController = feedServiceController;
         this.passwordResetService = passwordResetService;
         this.emailServiceController = emailServiceController;
+        this.tagServiceController = tagServiceController;
     }
 
     @Override
@@ -171,7 +175,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
             notificationServiceController,
             feedServiceController,
             passwordResetService,
-            emailServiceController
+            emailServiceController,
+            tagServiceController
         );
     }
 

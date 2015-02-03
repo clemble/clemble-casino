@@ -56,6 +56,7 @@ import com.clemble.casino.server.profile.spring.PlayerProfileSpringConfiguration
 import com.clemble.casino.server.social.spring.PlayerSocialSpringConfiguration;
 import com.clemble.casino.server.registration.spring.RegistrationSpringConfiguration;
 import com.clemble.casino.server.presence.spring.PlayerPresenceSpringConfiguration;
+import com.clemble.server.tag.spring.TagSpringConfiguration;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         GoalSuggestionSpringConfiguration.class,
         PlayerEmailSpringConfiguration.class,
         PlayerFeedSpringConfiguration.class,
+        TagSpringConfiguration.class,
         ScheduleSpringConfiguration.class// For testing MappingJackson2HttpMessageConverter
     })
     public static class LocalTestConfiguration {

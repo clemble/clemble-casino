@@ -1,6 +1,6 @@
 package com.clemble.server.tag.spring;
 
-import com.clemble.casino.tag.service.ClembleTagService;
+import com.clemble.casino.tag.service.PlayerTagService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class TagSpringConfigurationTest {
 
     @Autowired
-    public ClembleTagService tagService;
+    public PlayerTagService tagService;
 
     @Test
     public void testInitialized() {
