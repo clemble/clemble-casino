@@ -6,6 +6,7 @@ import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
 import com.clemble.casino.goal.aspect.bet.GoalBetAspectFactory;
 import com.clemble.casino.goal.aspect.bet.GoalBetOffAspectFactory;
 import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
+import com.clemble.casino.goal.aspect.notification.SystemGoalReachedNotificationAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalLostOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.outcome.GoalWonOutcomeAspectFactory;
 import com.clemble.casino.goal.aspect.persistence.GoalStatePersistenceAspectFactory;
@@ -220,6 +221,11 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     public GoalBetOffAspectFactory goalBetForbidAspectFactory(
         SystemNotificationService notificationService) {
         return new GoalBetOffAspectFactory(notificationService);
+    }
+
+    @Bean
+    public SystemGoalReachedNotificationAspectFactory systemGoalReachedNotificationAspectFactory(SystemNotificationService notificationService) {
+        return new SystemGoalReachedNotificationAspectFactory(notificationService);
     }
 
 }
