@@ -26,7 +26,7 @@ public class TagSystemPlayerCreatedEventListener implements SystemEventListener<
         if (playerTags != null)
             return;
         // Step 3. Going through player tags
-        tagsRepository.save(new ServerPlayerTags(event.getPlayer(), Collections.emptySet(), 0));
+        tagsRepository.save(new ServerPlayerTags(event.getPlayer(), Collections.emptySet(), null));
     }
 
     @Override
