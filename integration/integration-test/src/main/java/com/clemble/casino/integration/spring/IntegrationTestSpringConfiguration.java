@@ -91,10 +91,6 @@ import javax.annotation.PostConstruct;
 })
 public class IntegrationTestSpringConfiguration implements TestSpringConfiguration {
 
-    @Bean
-    public EmailScenarios emailScenarios(EventAccumulator<SystemEvent> systemEventAccumulator) {
-        return new EmailScenarios(systemEventAccumulator);
-    }
 
     @Configuration
     @Profile(DEFAULT)
@@ -121,6 +117,11 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         ScheduleSpringConfiguration.class// For testing MappingJackson2HttpMessageConverter
     })
     public static class LocalTestConfiguration {
+
+        @Bean
+        public EmailScenarios emailScenarios(EventAccumulator<SystemEvent> systemEventAccumulator) {
+            return new EmailScenarios(systemEventAccumulator);
+        }
 
         @Autowired
         public SystemNotificationServiceListener serviceListener;

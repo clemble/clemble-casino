@@ -32,7 +32,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ClembleIntegrationTest
-public class PlayerPasswordResetITest {
+public class PlayerPasswordResetTest {
 
     @Autowired
     public PlayerScenarios playerScenarios;
