@@ -19,6 +19,7 @@
         <module>game</module>
         <module>schedule</module>
         <module>alerting</module>
+        <module>tag</module>
     </modules>
     <dependencies>
         <dependency>
