@@ -48,6 +48,7 @@ after_success:
   - for i in 1 2 3 4 5; do aws s3 cp ./server/goal/goal-suggestion/target/goal-suggestion-0.15.0-SNAPSHOT.war            s3://clemble/production/api/goal/suggestion.war && break || sleep 15; done
 
   - for i in 1 2 3 4 5; do aws s3 cp ./server/schedule/target/schedule-0.15.0-SNAPSHOT.war                               s3://clemble/production/api/schedule.war && break || sleep 15; done
+  - for i in 1 2 3 4 5; do aws s3 cp ./server/tag/target/tag-0.15.0-SNAPSHOT.war                                         s3://clemble/production/api/tag.war && break || sleep 15; done
 
   # Deploying apps
   # bonus
