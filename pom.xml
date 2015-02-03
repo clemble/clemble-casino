@@ -336,6 +336,11 @@
             </dependency>
             <dependency>
                 <groupId>com.clemble.casino</groupId>
+                <artifactId>api-tag</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.clemble.casino</groupId>
                 <artifactId>api-player</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -15,6 +15,7 @@ import com.clemble.casino.player.service.PlayerNotificationService;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationStartedEvent;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
+import com.clemble.casino.tag.TagUtils;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -76,6 +77,7 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
         GoalSuggestion suggestion = new GoalSuggestion(
             keyGenerator.generate(player),
             suggestionRequest.getGoal(),
+            TagUtils.getTag(suggestionRequest.getGoal()),
             player,
             suggester,
             suggestionRequest.getConfiguration(),
