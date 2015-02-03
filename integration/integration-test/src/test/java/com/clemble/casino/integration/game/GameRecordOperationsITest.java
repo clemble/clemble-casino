@@ -3,6 +3,7 @@ package com.clemble.casino.integration.game;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -31,9 +32,7 @@ import static org.junit.Assert.assertTrue;
  * Created by mavarazy on 09/03/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-//@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class GameRecordOperationsITest {
 
     @Autowired

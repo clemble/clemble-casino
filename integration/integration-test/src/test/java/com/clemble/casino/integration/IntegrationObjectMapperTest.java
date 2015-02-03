@@ -62,8 +62,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class IntegrationObjectMapperTest extends IntegrationObjectTest {
 
     @Autowired

@@ -27,8 +27,7 @@ import com.clemble.casino.server.game.construction.repository.GameConstructionRe
 import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class ObjectPersistenceTest extends IntegrationObjectTest implements ApplicationContextAware {
 
     @SuppressWarnings("rawtypes")

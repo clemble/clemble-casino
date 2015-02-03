@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
@@ -44,8 +45,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class MatchGameConstructionITest {
 
     @Autowired

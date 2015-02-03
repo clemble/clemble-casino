@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
@@ -26,8 +27,7 @@ import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.event.PaymentEvent;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class GamePaymentTransactionITest {
 
     @Autowired

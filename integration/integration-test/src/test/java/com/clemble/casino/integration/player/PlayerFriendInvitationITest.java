@@ -1,6 +1,7 @@
 package com.clemble.casino.integration.player;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.player.Invitation;
@@ -21,8 +22,7 @@ import java.util.List;
  * Created by mavarazy on 11/12/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class PlayerFriendInvitationITest {
 
     @Autowired

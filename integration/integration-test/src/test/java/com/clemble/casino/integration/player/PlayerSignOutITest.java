@@ -3,6 +3,7 @@ package com.clemble.casino.integration.player;
 import com.clemble.casino.android.player.AndroidPlayerFacadeRegistrationService;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
@@ -21,8 +22,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
  * Created by mavarazy on 1/14/15.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class PlayerSignOutITest {
 
     @Rule

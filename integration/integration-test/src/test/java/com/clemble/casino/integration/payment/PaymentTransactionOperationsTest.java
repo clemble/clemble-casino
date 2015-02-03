@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
@@ -39,8 +40,7 @@ import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Get;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class PaymentTransactionOperationsTest {
 
     @Autowired

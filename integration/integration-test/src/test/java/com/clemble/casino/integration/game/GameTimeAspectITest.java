@@ -2,6 +2,7 @@ package com.clemble.casino.integration.game;
 
 import java.util.List;
 
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.test.util.ClembleCasinoExceptionMatcherFactory;
 import org.junit.Assert;
@@ -20,8 +21,7 @@ import com.clemble.casino.game.Game;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class GameTimeAspectITest {
 
     @Autowired

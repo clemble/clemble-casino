@@ -3,6 +3,7 @@ package com.clemble.casino.integration.player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,8 +26,7 @@ import com.clemble.test.random.ObjectGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class PlayerOperationsITest {
 
     @Autowired

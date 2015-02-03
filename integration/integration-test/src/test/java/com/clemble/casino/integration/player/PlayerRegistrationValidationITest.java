@@ -1,5 +1,6 @@
 package com.clemble.casino.integration.player;
 
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,8 +19,7 @@ import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class PlayerRegistrationValidationITest {
 
     @Autowired

@@ -4,6 +4,7 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.construction.GoalSuggestion;
 import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionRequest;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.google.common.collect.ImmutableList;
@@ -21,8 +22,7 @@ import java.util.List;
  * Created by mavarazy on 1/3/15.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class GoalSuggestionITest {
 
     @Autowired

@@ -2,6 +2,7 @@ package com.clemble.casino.integration.player;
 
 import java.util.Date;
 
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.junit.Rule;
@@ -23,8 +24,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.PlayerCredential;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class InvalidPlayerRegistraionITest {
 
     @Autowired

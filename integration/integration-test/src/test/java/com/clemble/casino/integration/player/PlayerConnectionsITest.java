@@ -1,6 +1,7 @@
 package com.clemble.casino.integration.player;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import org.junit.Assert;
@@ -17,8 +18,7 @@ import java.util.Set;
  * Created by mavarazy on 7/31/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class PlayerConnectionsITest {
 
     @Autowired

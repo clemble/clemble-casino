@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.clemble.casino.event.action.PlayerExpectedAction;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.player.event.PlayerInvitationAcceptedAction;
 import com.clemble.casino.game.lifecycle.management.RoundState;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -27,9 +28,7 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-//@ActiveProfiles(SpringConfiguration.INTEGRATION_TEST)
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class AvailabilityGameConstructionITest {
 
     @Autowired

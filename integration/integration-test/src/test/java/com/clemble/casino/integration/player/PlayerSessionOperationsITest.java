@@ -1,5 +1,6 @@
 package com.clemble.casino.integration.player;
 
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,8 +20,7 @@ import com.clemble.casino.test.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.player.PlayerSession;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class PlayerSessionOperationsITest {
 
     @Autowired

@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.game.GameSessionAware;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,9 +28,8 @@ import com.clemble.casino.player.event.PlayerPresenceChangedEvent;
 import com.clemble.casino.player.Presence;
 
 @Ignore
-@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = IntegrationTestSpringConfiguration.class)
+@ClembleIntegrationTest
 public class PlayerPresenceCleanerTest {
 
     @Autowired

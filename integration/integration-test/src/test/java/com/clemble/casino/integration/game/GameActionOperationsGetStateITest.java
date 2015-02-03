@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
 import com.clemble.casino.game.lifecycle.management.RoundGameState;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,7 @@ import com.clemble.test.concurrent.Check;
 import com.clemble.test.concurrent.Get;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class GameActionOperationsGetStateITest {
 
     @Autowired

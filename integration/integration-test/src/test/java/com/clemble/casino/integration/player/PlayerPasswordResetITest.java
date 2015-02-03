@@ -6,6 +6,7 @@ import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.PlayerEventSelector;
 import com.clemble.casino.event.Event;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.EmailScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
@@ -30,8 +31,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class PlayerPasswordResetITest {
 
     @Autowired

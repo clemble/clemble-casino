@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.TimeUnit;
 
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
@@ -28,8 +29,7 @@ import com.clemble.test.random.ObjectGenerator;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = IntegrationTestSpringConfiguration.class)
+@ClembleIntegrationTest
 public class DailyBonusServiceTest {
 
     @Autowired

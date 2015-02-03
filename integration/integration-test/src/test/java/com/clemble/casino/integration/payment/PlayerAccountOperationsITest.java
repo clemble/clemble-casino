@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.integration.game.SelectNumberAction;
 import com.clemble.casino.money.MoneySource;
@@ -42,8 +43,7 @@ import com.clemble.test.concurrent.Check;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class PlayerAccountOperationsITest {
 
     @Autowired

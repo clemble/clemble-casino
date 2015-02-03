@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +23,7 @@ import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class InstantGameConstructionITest {
 
     @Autowired

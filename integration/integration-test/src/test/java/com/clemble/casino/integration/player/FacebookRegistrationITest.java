@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import com.clemble.casino.integration.ClembleIntegrationTest;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -42,9 +43,8 @@ import com.jayway.facebooktestjavaapi.testuser.FacebookTestUserStore;
 import com.jayway.facebooktestjavaapi.testuser.impl.HttpClientFacebookTestUserStore;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
 @Ignore
-@ContextConfiguration(classes = { IntegrationTestSpringConfiguration.class })
+@ClembleIntegrationTest
 public class FacebookRegistrationITest {
 
     @Autowired
