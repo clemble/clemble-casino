@@ -1,9 +1,9 @@
 package com.clemble.server.tag.listener;
 
-import com.clemble.casino.player.service.PlayerNotificationService;
 import com.clemble.casino.server.event.goal.SystemGoalReachedEvent;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
+import com.clemble.casino.tag.TagAware;
 import com.clemble.casino.tag.event.ClembleTagAddedEvent;
 import com.clemble.server.tag.ServerPlayerTags;
 import com.clemble.server.tag.repository.ServerPlayerTagsRepository;
@@ -25,17 +25,29 @@ public class TagSystemGoalReachedEventListener implements SystemEventListener<Sy
 
     @Override
     public void onEvent(SystemGoalReachedEvent event) {
-        try {
-            // Step 1. Fetching player tags
-            ServerPlayerTags playerTags = tagsRepository.findOne(event.getPlayer());
-            // Step 2. Add new tag to player tag
-            tagsRepository.save(playerTags.add(event.getTag()));
-            // Step 3. Send notification
-            notificationService.send(event.getPlayer(), new ClembleTagAddedEvent(event.getTag()));
-        } catch (OptimisticLockException e) {
-            onEvent(event);
+        // Step 1. Adding tags for victory
+        addTag(event.getPlayer(), event.getTag());
+        addTag(event.getPlayer(), TagAware.VICTORY_TAG);
+        // Step 2. Adding tags for support
+        for(String supporter: event.getSupporters()) {
+            addTag(supporter, TagAware.SUPPORTER_TAG);
         }
     }
+
+    private void addTag(String player, String tag) {
+        try {
+            // Step 1. Fetching player tags
+            ServerPlayerTags playerTags = tagsRepository.findOne(player);
+            // Step 2. Add new tag to player tag
+            tagsRepository.save(playerTags.add(tag));
+            // Step 3. Send notification
+            notificationService.send(player, new ClembleTagAddedEvent(tag));
+        } catch (OptimisticLockException e) {
+            addTag(player, tag);
+        }
+    }
+
+
 
     @Override
     public String getChannel() {

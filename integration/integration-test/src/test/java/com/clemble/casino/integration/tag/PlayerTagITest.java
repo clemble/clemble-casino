@@ -47,8 +47,10 @@ public class PlayerTagITest {
             Set<ClembleTag> tags = A.tagService().myTags();
             if(tags.isEmpty())
                 return false;
-            ClembleTag tag = tags.iterator().next();
-            return tag.getPower() == 1 && tag.getTag().equals("sport");
+            for(ClembleTag tag: tags)
+                if(tag.getPower() == 1 && tag.getTag().equals("sport"))
+                    return true;
+            return false;
         }));
     }
 

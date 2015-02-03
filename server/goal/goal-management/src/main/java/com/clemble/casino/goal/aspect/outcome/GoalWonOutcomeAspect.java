@@ -54,15 +54,6 @@ public class GoalWonOutcomeAspect
                 addOperation(new PaymentOperation(playerBid.getPlayer(), playerBid.getBet().getAmount(), Operation.Credit)).
                 addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBet().getAmount(), Operation.Debit)).
                 addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, playerBid.getBet().getInterest(), Operation.Credit));
-            if (state.getPlayer().equals(playerBid.getPlayer())) {
-                paymentTransaction.
-                    addOperation(new PaymentOperation(playerBid.getPlayer(), Money.create(Currency.Victory, 1), Operation.Debit)).
-                    addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.Victory, 1), Operation.Credit));
-            } else {
-                paymentTransaction.
-                    addOperation(new PaymentOperation(playerBid.getPlayer(), Money.create(Currency.Supporter, 1), Operation.Debit)).
-                    addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.Supporter, 1), Operation.Credit));
-            }
         }
         // Step 3. Checking value
         systemNotificationService.send(new SystemPaymentTransactionRequestEvent(paymentTransaction));
