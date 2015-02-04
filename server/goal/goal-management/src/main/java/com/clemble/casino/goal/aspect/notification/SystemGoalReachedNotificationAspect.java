@@ -29,7 +29,7 @@ public class SystemGoalReachedNotificationAspect extends ClembleAspect<GoalEnded
         // Step 1. Extracting state
         GoalState state = event.getBody();
         // Step 2. Publishing goal reached aspect
-        notificationService.send(new SystemGoalReachedEvent(state.getGoalKey(), state.getPlayer(), state.getSupporters(), state.getGoal(), state.getTag()));
+        notificationService.send(new SystemGoalReachedEvent(state.getGoalKey(), state.getPlayer(), state.getSupporters(), state.getGoal(), state.getReward(), state.getTag()));
     }
 
 }

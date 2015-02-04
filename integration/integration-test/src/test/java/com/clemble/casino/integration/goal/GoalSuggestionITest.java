@@ -37,7 +37,7 @@ public class GoalSuggestionITest {
         Assert.assertEquals(A.goalOperations().suggestionService().listMy().size(), 0);
         Assert.assertEquals(B.goalOperations().suggestionService().listMy().size(), 0);
         GoalConfiguration configuration = A.goalOperations().configurationService().getConfigurations().get(0);
-        GoalSuggestion suggestionAtoB = A.goalOperations().suggestionService().addSuggestion(B.getPlayer(), new GoalSuggestionRequest("Test goal A", configuration));
+        GoalSuggestion suggestionAtoB = A.goalOperations().suggestionService().addSuggestion(B.getPlayer(), new GoalSuggestionRequest("Test goal A", "", configuration));
         // Step 3. Checking B have suggestion
         List<GoalSuggestion> suggestionAB = B.goalOperations().suggestionService().listMy();
         Assert.assertEquals(ImmutableList.of(suggestionAtoB), suggestionAB);

@@ -37,7 +37,7 @@ public class PlayerTagITest {
         GoalOperations Agoal = A.goalOperations();
         // Step 3. Creating new goal with a tag
         GoalConfiguration configuration = Agoal.configurationService().getConfigurations().get(0);
-        GoalConstruction construction = Agoal.constructionService().construct(new GoalConstructionRequest(configuration, "#sport goal", DateTimeZone.UTC));
+        GoalConstruction construction = Agoal.constructionService().construct(new GoalConstructionRequest(configuration, "#sport goal", "", DateTimeZone.UTC));
         // Step 4. Checking goal started
         Assert.assertTrue(CheckUtils.checkNotNull((i) -> Agoal.actionService().getState(construction.getGoalKey())));
         // Step 5. Sending goal reached event

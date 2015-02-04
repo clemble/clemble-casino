@@ -77,6 +77,7 @@ public class ShortGoalManagerFactoryTest {
             player,
             "Create goal state",
             "",
+            "",
             configuration,
             new HashSet<>(),
             DateTime.now(DateTimeZone.UTC));
@@ -98,6 +99,7 @@ public class ShortGoalManagerFactoryTest {
             Bank.create(player, configuration.getBet()),
             player,
             "Create goal state",
+            "",
             "",
             configuration,
             new HashSet<>(),
