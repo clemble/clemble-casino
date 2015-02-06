@@ -3,6 +3,7 @@ package com.clemble.casino.goal.configuration.controller;
 import com.clemble.casino.bet.Bet;
 import com.clemble.casino.goal.lifecycle.configuration.*;
 import com.clemble.casino.goal.lifecycle.configuration.rule.GoalRuleValue;
+import com.clemble.casino.goal.lifecycle.configuration.rule.IntervalGoalRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.ReminderRule;
@@ -84,7 +85,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
         )
     );
 
-    final private GoalConfigurationChoices choices = new GoalConfigurationChoices(
+    final private GoalConfigurationChoices DEFAULT_CHOICES = new GoalConfigurationChoices(
         ImmutableList.of(Money.create(Currency.FakeMoney, 200), Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 400)),
         ImmutableList.of(
             new GoalRuleValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)), 30),
@@ -113,18 +114,56 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
         )
     );
 
-    @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS_CHOICES, produces = PRODUCES)
-    @ResponseStatus(HttpStatus.OK)
-    @Override
-    public GoalConfigurationChoices getChoices() {
-        return choices;
-    }
+    final private IntervalGoalConfigurationBuilder DEFAULT_INTERVAL_BUILDER = new IntervalGoalConfigurationBuilder(
+        new GoalConfiguration(
+            "week",
+            "Week",
+            new Bet(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0)),
+            new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
+            new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
+            new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(7)),
+            new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
+            PrivacyRule.me,
+            new GoalRoleConfiguration(
+                new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 70)),
+                3,
+                NoReminderRule.INSTANCE,
+                NoReminderRule.INSTANCE
+            ),
+            ShareRule.none
+        ),
+        100,
+        300,
+        30,
+        ImmutableList.<IntervalGoalRule>of(
+            new IntervalGoalRule(PrivacyRule.friends, 50, 5),
+            new IntervalGoalRule(PrivacyRule.world, 50, 5),
+            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(2)), 50, 5),
+            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 50, 5),
+            new IntervalGoalRule(ShareRule.twitter, 50, 5),
+            new IntervalGoalRule(ShareRule.facebook, 50, 5)
+        )
+    );
 
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
     @Override
     public List<GoalConfiguration> getConfigurations() {
         return DEFAULT_CONFIGURATIONS;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS_CHOICES, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.OK)
+    @Override
+    public GoalConfigurationChoices getDEFAULT_CHOICES() {
+        return DEFAULT_CHOICES;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS_INTERVAL, produces = PRODUCES)
+    @ResponseStatus(HttpStatus.OK)
+    @Override
+    public IntervalGoalConfigurationBuilder getIntervalConfigurationBuilder() {
+        return DEFAULT_INTERVAL_BUILDER;
     }
 
 }
