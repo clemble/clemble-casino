@@ -2,6 +2,7 @@ package com.clemble.casino.goal.configuration.controller;
 
 import com.clemble.casino.bet.Bet;
 import com.clemble.casino.goal.lifecycle.configuration.*;
+import com.clemble.casino.goal.lifecycle.configuration.rule.GoalRuleValue;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.BasicReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.NoReminderRule;
 import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.ReminderRule;
@@ -86,29 +87,29 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
     final private GoalConfigurationChoices choices = new GoalConfigurationChoices(
         ImmutableList.of(Money.create(Currency.FakeMoney, 200), Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 400)),
         ImmutableList.of(
-            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)), 30),
-            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(14)), 70),
-            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(21)), 130)
+            new GoalRuleValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)), 30),
+            new GoalRuleValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(14)), 70),
+            new GoalRuleValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(21)), 130)
         ),
         ImmutableList.of(
-            new GoalConfigurationValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 0)
+            new GoalRuleValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 0)
         ),
         ImmutableList.of(
-            new GoalConfigurationValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(4)), 0)
+            new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(4)), 0)
         ),
         ImmutableList.of(
-            new GoalConfigurationValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(2)), 0)
+            new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(2)), 0)
         ),
         ImmutableList.of(
-            new GoalConfigurationValue<PrivacyRule>(PrivacyRule.me, 0),
-            new GoalConfigurationValue<PrivacyRule>(PrivacyRule.friends, 30)
+            new GoalRuleValue<PrivacyRule>(PrivacyRule.me, 0),
+            new GoalRuleValue<PrivacyRule>(PrivacyRule.friends, 30)
         ),
         ImmutableList.of(
-            new GoalConfigurationValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)
+            new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)
         ),
         ImmutableList.of(
-            new GoalConfigurationValue<ShareRule>(ShareRule.none, 0),
-            new GoalConfigurationValue<ShareRule>(ShareRule.twitter, 50)
+            new GoalRuleValue<ShareRule>(ShareRule.none, 0),
+            new GoalRuleValue<ShareRule>(ShareRule.twitter, 50)
         )
     );
 
