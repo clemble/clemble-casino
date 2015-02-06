@@ -23,8 +23,8 @@ public class IntegrationGoalConfigurationService implements GoalConfigurationSer
     }
 
     @Override
-    public GoalConfigurationChoices getDEFAULT_CHOICES() {
-        return configurationService.getDEFAULT_CHOICES();
+    public GoalConfigurationChoices getChoises() {
+        return configurationService.getChoises();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class IntegrationGoalConfigurationService implements GoalConfigurationSer
     }
 
     @Override
-    public IntervalGoalConfigurationBuilder getIntervalConfigurationBuilder() {
+    public IntervalGoalConfigurationBuilder getIntervalBuilder() {
         return null;
     }
 

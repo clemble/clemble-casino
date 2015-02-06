@@ -2,6 +2,7 @@ package com.clemble.casino.goal.construction.controller;
 
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
+import com.clemble.casino.goal.lifecycle.construction.IntervalGoalConstructionRequest;
 import com.clemble.casino.goal.lifecycle.construction.service.GoalConstructionService;
 import com.clemble.casino.goal.construction.service.ServerGoalConstructionService;
 import org.springframework.http.HttpStatus;
@@ -29,12 +30,22 @@ public class GoalConstructionServiceController implements GoalConstructionServic
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public GoalConstruction construct(IntervalGoalConstructionRequest intervalRequest) {
+        throw new UnsupportedOperationException();
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = GOAL_CONSTRUCTION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public GoalConstruction construct(@CookieValue("player") String player, @RequestBody GoalConstructionRequest request) {
         return delegate.construct(player, request);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = GOAL_CONSTRUCTION_INTERVAL, produces = PRODUCES)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public GoalConstruction construct(@CookieValue("player") String player, @RequestBody IntervalGoalConstructionRequest intervalRequest) {
+        return delegate.construct(player, intervalRequest.toConstructionRequest());
+    }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = MY_GOAL_CONSTRUCTION_PENDING, produces = PRODUCES)

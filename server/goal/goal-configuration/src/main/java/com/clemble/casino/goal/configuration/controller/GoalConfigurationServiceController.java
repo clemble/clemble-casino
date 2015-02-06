@@ -155,14 +155,14 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS_CHOICES, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
     @Override
-    public GoalConfigurationChoices getDEFAULT_CHOICES() {
+    public GoalConfigurationChoices getChoises() {
         return DEFAULT_CHOICES;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = MY_CONFIGURATIONS_INTERVAL, produces = PRODUCES)
     @ResponseStatus(HttpStatus.OK)
     @Override
-    public IntervalGoalConfigurationBuilder getIntervalConfigurationBuilder() {
+    public IntervalGoalConfigurationBuilder getIntervalBuilder() {
         return DEFAULT_INTERVAL_BUILDER;
     }
 
