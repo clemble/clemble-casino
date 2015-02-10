@@ -1,7 +1,6 @@
 package com.clemble.casino.goal.construction.service;
 
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.construction.IntervalGoalConstructionRequest;
 import com.clemble.casino.goal.lifecycle.construction.service.GoalConstructionService;
 import com.clemble.casino.lifecycle.construction.ConstructionState;
 import com.clemble.casino.error.ClembleCasinoError;
@@ -41,11 +40,6 @@ public class SelfGoalConstructionService implements GoalConstructionService {
 
     @Override
     public GoalConstruction construct(GoalConstructionRequest request) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public GoalConstruction construct(IntervalGoalConstructionRequest intervalRequest) {
         throw new UnsupportedOperationException();
     }
 

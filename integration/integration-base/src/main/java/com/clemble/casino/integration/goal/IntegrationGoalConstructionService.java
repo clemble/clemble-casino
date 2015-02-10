@@ -3,7 +3,6 @@ package com.clemble.casino.integration.goal;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.construction.controller.GoalConstructionServiceController;
-import com.clemble.casino.goal.lifecycle.construction.IntervalGoalConstructionRequest;
 import com.clemble.casino.goal.lifecycle.construction.service.GoalConstructionService;
 
 import java.util.Collection;
@@ -24,11 +23,6 @@ public class IntegrationGoalConstructionService implements GoalConstructionServi
     @Override
     public GoalConstruction construct(GoalConstructionRequest request) {
         return constructionService.construct(player, request);
-    }
-
-    @Override
-    public GoalConstruction construct(IntervalGoalConstructionRequest intervalRequest) {
-        return constructionService.construct(player, intervalRequest);
     }
 
     @Override
