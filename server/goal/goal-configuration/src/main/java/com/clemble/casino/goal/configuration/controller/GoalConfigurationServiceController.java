@@ -133,15 +133,15 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             ShareRule.none
         ),
         100,
-        300,
+        50,
         30,
         ImmutableList.<IntervalGoalRule>of(
-            new IntervalGoalRule(PrivacyRule.friends, 50, 5),
-            new IntervalGoalRule(PrivacyRule.world, 50, 5),
-            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(2)), 50, 5),
-            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 50, 5),
-            new IntervalGoalRule(ShareRule.twitter, 50, 5),
-            new IntervalGoalRule(ShareRule.facebook, 50, 5)
+            new IntervalGoalRule(PrivacyRule.friends, 50, 15),
+            new IntervalGoalRule(PrivacyRule.world, 50, 15),
+            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(2)), 50, 15),
+            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 50, 15),
+            new IntervalGoalRule(ShareRule.twitter, 50, 15),
+            new IntervalGoalRule(ShareRule.facebook, 50, 15)
         )
     );
 

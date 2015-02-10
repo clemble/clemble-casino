@@ -47,11 +47,11 @@ abstract class AbstractServerNotificationService implements ServerNotificationSe
     final public <T extends PlayerAware & Event> boolean send(PrivacyRule privacyRule, T event) {
         boolean sendResult = doSend(event.getPlayer(), event);
         // Check 1. Event is convertible to notification
-        if (event instanceof PlayerNotificationConvertible) {
+        if (event instanceof PlayerNotificationConvertible && !PlayerAware.DEFAULT_PLAYER.equals(event.getPlayer())) {
             systemNotificationService.send(new SystemNotificationAddEvent(privacyRule, ((PlayerNotificationConvertible) event).toNotification()));
         }
         // Check 2. Event is convertible to post
-        if (event instanceof PlayerPostConvertible) {
+        if (event instanceof PlayerPostConvertible && !PlayerAware.DEFAULT_PLAYER.equals(event.getPlayer())) {
             systemNotificationService.send(new SystemPostAddEvent(((PlayerPostConvertible) event).toPost()));
         }
         return sendResult;
