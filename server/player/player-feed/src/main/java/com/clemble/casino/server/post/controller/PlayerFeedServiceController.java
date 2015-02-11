@@ -50,6 +50,14 @@ public class PlayerFeedServiceController implements PlayerFeedService {
     }
 
     @Override
+    @RequestMapping(method = RequestMethod.GET, value = PlayerPostWebMapping.GET_POSTS, produces = WebMapping.PRODUCES)
+    @ResponseStatus(value = HttpStatus.OK)
+    public PlayerPost[] getFeed(@PathVariable("player") String player) {
+        // Step 1. Fetching player connections
+        return postRepository.findByPlayerOrderByCreatedDesc(player).toArray(new PlayerPost[0]);
+    }
+
+    @Override
     public PlayerPost share(String key, String provider) {
         throw new UnsupportedOperationException();
     }

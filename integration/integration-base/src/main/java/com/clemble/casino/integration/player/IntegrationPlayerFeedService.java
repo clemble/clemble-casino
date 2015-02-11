@@ -25,6 +25,11 @@ public class IntegrationPlayerFeedService implements PlayerFeedService {
     }
 
     @Override
+    public PlayerPost[] getFeed(String player) {
+        return feedService.getFeed(player);
+    }
+
+    @Override
     public PlayerPost share(String key, String provider) {
         return feedService.share(player, key, provider);
     }
