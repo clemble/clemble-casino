@@ -86,7 +86,6 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
         if (!goal.equals(that.goal)) return false;
         if (!reward.equals(that.reward)) return false;
         if (!goalKey.equals(that.goalKey)) return false;
-        if (!tag.equals(that.tag)) return false;
         if (!player.equals(that.player)) return false;
 
         return true;
@@ -96,7 +95,6 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
     public int hashCode() {
         int result = goalKey.hashCode();
         result = 31 * result + goal.hashCode();
-        result = 31 * result + tag.hashCode();
         result = 31 * result + player.hashCode();
         return result;
     }
