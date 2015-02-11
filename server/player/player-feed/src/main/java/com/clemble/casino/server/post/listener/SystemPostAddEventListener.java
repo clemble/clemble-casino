@@ -1,5 +1,6 @@
 package com.clemble.casino.server.post.listener;
 
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.server.event.post.SystemPostAddEvent;
@@ -31,6 +32,9 @@ public class SystemPostAddEventListener implements SystemEventListener<SystemPos
 
     @Override
     public void onEvent(SystemPostAddEvent event) {
+        // Step 0. Ignoring default player "casino"
+        if (PlayerAware.DEFAULT_PLAYER.equals(event.getPost().getPlayer()))
+            return;
         PlayerPost post = event.getPost();
         // Step 1. Saving post
         postRepository.save(post);

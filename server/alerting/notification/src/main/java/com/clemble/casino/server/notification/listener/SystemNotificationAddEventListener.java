@@ -1,6 +1,7 @@
 package com.clemble.casino.server.notification.listener;
 
 import com.clemble.casino.notification.PlayerNotification;
+import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.player.service.PlayerConnectionService;
 import com.clemble.casino.server.event.notification.SystemNotificationAddEvent;
@@ -34,6 +35,9 @@ public class SystemNotificationAddEventListener implements SystemEventListener<S
 
     @Override
     public void onEvent(SystemNotificationAddEvent event) {
+        // Step 0. Don't store any notifications for the player
+        if (PlayerAware.DEFAULT_PLAYER.equals(event.getNotification().getPlayer()))
+            return;
         PlayerNotification notification = event.getNotification();
         // Step 1. Generating new notifications list
         Collection<PlayerNotification> notifications = new ArrayList<>();
@@ -45,8 +49,9 @@ public class SystemNotificationAddEventListener implements SystemEventListener<S
             case friends:
             case world:
                 Set<String> connections = connectionService.getConnections(notification.getPlayer());
-                for(String connection: connections)
+                for(String connection: connections) {
                     notifications.add(notification);
+                }
                 break;
         }
         // Step 3. Saving player notifications
