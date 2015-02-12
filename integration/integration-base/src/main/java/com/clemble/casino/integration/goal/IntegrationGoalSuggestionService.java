@@ -31,6 +31,16 @@ public class IntegrationGoalSuggestionService implements GoalSuggestionService {
     }
 
     @Override
+    public List<GoalSuggestion> listMySuggested() {
+        return suggestionService.listMySuggested(player);
+    }
+
+    @Override
+    public List<GoalSuggestion> listSuggested(String player) {
+        return suggestionService.listSuggested(player);
+    }
+
+    @Override
     public GoalSuggestion getSuggestion(String goalKey) {
         return suggestionService.getSuggestion(goalKey);
     }

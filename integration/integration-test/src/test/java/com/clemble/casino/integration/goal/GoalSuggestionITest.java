@@ -4,6 +4,7 @@ import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.construction.GoalSuggestion;
 import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionRequest;
+import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionState;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
@@ -41,6 +42,64 @@ public class GoalSuggestionITest {
         // Step 3. Checking B have suggestion
         List<GoalSuggestion> suggestionAB = B.goalOperations().suggestionService().listMy();
         Assert.assertEquals(ImmutableList.of(suggestionAtoB), suggestionAB);
+    }
+
+    @Test
+    public void testSuggested() {
+        // Step 1. Creating 2 players
+        ClembleCasinoOperations A = playerScenarios.createPlayer();
+        ClembleCasinoOperations B = playerScenarios.createPlayer();
+        // Step 2. Suggesting new goal for player A
+        Assert.assertEquals(A.goalOperations().suggestionService().listMy().size(), 0);
+        Assert.assertEquals(B.goalOperations().suggestionService().listMy().size(), 0);
+        GoalConfiguration configuration = A.goalOperations().configurationService().getConfigurations().get(0);
+        GoalSuggestion suggestionAtoB = A.goalOperations().suggestionService().addSuggestion(B.getPlayer(), new GoalSuggestionRequest("Test goal A", "", configuration));
+        // Step 3. Checking B have suggestion
+        List<GoalSuggestion> suggestionAB = B.goalOperations().suggestionService().listMy();
+        Assert.assertEquals(ImmutableList.of(suggestionAtoB), suggestionAB);
+        // Step 4. Checking A has suggestion in pending
+        List<GoalSuggestion> suggestedA = A.goalOperations().suggestionService().listMySuggested();
+        Assert.assertEquals(suggestionAB, suggestedA);
+    }
+
+    @Test
+    public void testApprovedInSuggested() {
+        // Step 1. Creating 2 players
+        ClembleCasinoOperations A = playerScenarios.createPlayer();
+        ClembleCasinoOperations B = playerScenarios.createPlayer();
+        // Step 2. Suggesting new goal for player A
+        Assert.assertEquals(A.goalOperations().suggestionService().listMy().size(), 0);
+        Assert.assertEquals(B.goalOperations().suggestionService().listMy().size(), 0);
+        GoalConfiguration configuration = A.goalOperations().configurationService().getConfigurations().get(0);
+        GoalSuggestion suggestionAtoB = A.goalOperations().suggestionService().addSuggestion(B.getPlayer(), new GoalSuggestionRequest("Test goal A", "", configuration));
+        // Step 3. Checking B have suggestion
+        List<GoalSuggestion> suggestionAB = B.goalOperations().suggestionService().listMy();
+        Assert.assertEquals(ImmutableList.of(suggestionAtoB), suggestionAB);
+        // Step 4. Accepting suggestion
+        B.goalOperations().suggestionService().reply(suggestionAtoB.getGoalKey(), true);
+        // Step 5. Checking suggestion in the list of suggestions
+        List<GoalSuggestion> suggestedA = A.goalOperations().suggestionService().listMySuggested();
+        Assert.assertEquals(GoalSuggestionState.accepted, suggestedA.get(0).getState());
+    }
+
+    @Test
+    public void testDeclinedInSuggested() {
+        // Step 1. Creating 2 players
+        ClembleCasinoOperations A = playerScenarios.createPlayer();
+        ClembleCasinoOperations B = playerScenarios.createPlayer();
+        // Step 2. Suggesting new goal for player A
+        Assert.assertEquals(A.goalOperations().suggestionService().listMy().size(), 0);
+        Assert.assertEquals(B.goalOperations().suggestionService().listMy().size(), 0);
+        GoalConfiguration configuration = A.goalOperations().configurationService().getConfigurations().get(0);
+        GoalSuggestion suggestionAtoB = A.goalOperations().suggestionService().addSuggestion(B.getPlayer(), new GoalSuggestionRequest("Test goal A", "", configuration));
+        // Step 3. Checking B have suggestion
+        List<GoalSuggestion> suggestionAB = B.goalOperations().suggestionService().listMy();
+        Assert.assertEquals(ImmutableList.of(suggestionAtoB), suggestionAB);
+        // Step 4. Accepting suggestion
+        B.goalOperations().suggestionService().reply(suggestionAtoB.getGoalKey(), false);
+        // Step 5. Checking suggestion in the list of suggestions
+        List<GoalSuggestion> suggestedA = A.goalOperations().suggestionService().listMySuggested();
+        Assert.assertEquals(GoalSuggestionState.declined, suggestedA.get(0).getState());
     }
 
 }

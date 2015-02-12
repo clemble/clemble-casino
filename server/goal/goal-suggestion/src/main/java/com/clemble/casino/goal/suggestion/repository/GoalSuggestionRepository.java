@@ -15,4 +15,6 @@ public interface GoalSuggestionRepository extends MongoRepository<GoalSuggestion
 
     List<GoalSuggestion> findByPlayerAndState(String player, GoalSuggestionState state);
 
+    List<GoalSuggestion> findBySuggester(String player);
+
 }
