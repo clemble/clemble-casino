@@ -17,6 +17,7 @@ import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.share.SystemSharePostEvent;
+import com.clemble.casino.social.SocialProvider;
 import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
@@ -54,12 +55,12 @@ public class GoalFeedShareTest {
         GoalStartedPost post = (GoalStartedPost) A.feedService().myFeed()[0];
         Assert.assertNotNull(post);
         // Step 6. Checking share works
-        A.feedService().share(post.getKey(), "facebook");
+        A.feedService().share(post.getKey(), SocialProvider.facebook);
         // Step 7. Checking notification was send
         EventSelector postSelector = EventSelectors.where(new EventTypeSelector(SystemSharePostEvent.class)).and(new PlayerEventSelector(A.getPlayer()));
         SystemSharePostEvent shareEvent = systemEventAccumulator.waitFor(postSelector);
         Assert.assertEquals(shareEvent.getPlayer(), A.getPlayer());
-        Assert.assertEquals(shareEvent.getProviderId(), "facebook");
+        Assert.assertEquals(shareEvent.getProviderId(), SocialProvider.facebook);
         Assert.assertEquals(shareEvent.getPost(), post);
     }
 

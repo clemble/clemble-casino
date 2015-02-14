@@ -3,6 +3,7 @@ package com.clemble.casino.server.social;
 import com.clemble.casino.server.social.adapter.GoogleSocialAdapter;
 import com.clemble.casino.server.social.spring.PlayerSocialSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
+import com.clemble.casino.social.SocialProvider;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class GoogleCircleFetchTest {
         Connection<Google> connection = connectionRepository.findConnections(Google.class).get(0);
         Google google = connection.getApi();
         // Step 4. Checking SocialAdapter can fetch connected users
-        GoogleSocialAdapter socialAdapter = (GoogleSocialAdapter) adapterRegistry.getSocialAdapter("google");
+        GoogleSocialAdapter socialAdapter = (GoogleSocialAdapter) adapterRegistry.getSocialAdapter(SocialProvider.google);
         // Step 5. Fetching connection keys
         Collection<ConnectionKey> connectionKeys = socialAdapter.fetchConnections(google);
         // Step 6. Checking size of connection keys

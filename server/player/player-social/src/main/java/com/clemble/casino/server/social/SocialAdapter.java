@@ -40,7 +40,7 @@ public interface SocialAdapter<A extends ApiBinding> {
     }
 
     default ConnectionData toConnectionData(SocialConnectionData connectionData) {
-        return new ConnectionData(connectionData.getProviderId(),
+        return new ConnectionData(connectionData.getProviderId().name(),
             connectionData.getProviderUserId(),
             "",
             "",

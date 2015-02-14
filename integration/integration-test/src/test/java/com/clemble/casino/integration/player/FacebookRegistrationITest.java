@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 
 import com.clemble.casino.integration.ClembleIntegrationTest;
+import com.clemble.casino.social.SocialProvider;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -73,7 +74,7 @@ public class FacebookRegistrationITest {
         assertNotNull(fbAccount);
         assertNotNull(fb);
         // Step 2. Converting to SocialConnectionData
-        SocialConnectionData connectionData = new SocialConnectionData("facebook", fb.get("id").asText(), fbAccount.accessToken(), "", "",
+        SocialConnectionData connectionData = new SocialConnectionData(SocialProvider.facebook, fb.get("id").asText(), fbAccount.accessToken(), "", "",
                 System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
         ClembleCasinoOperations casinoOperations = playerScenarios.createPlayer(connectionData);
         assertNotNull(casinoOperations);
@@ -93,7 +94,7 @@ public class FacebookRegistrationITest {
         assertNotNull(fbAccount);
         assertNotNull(fb);
         // Step 2. Converting to SocialConnectionData
-        SocialConnectionData connectionData = new SocialConnectionData("facebook", fb.get("id").asText(), fbAccount.accessToken(), "", "",
+        SocialConnectionData connectionData = new SocialConnectionData(SocialProvider.facebook, fb.get("id").asText(), fbAccount.accessToken(), "", "",
                 System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
         ClembleCasinoOperations A = playerScenarios.createPlayer(connectionData);
         assertNotNull(A);
@@ -143,7 +144,7 @@ public class FacebookRegistrationITest {
     public void testAutoDiscovery() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
         // Step 1. Generating Facebook test user
         FacebookTestUserAccount fbAccoA = facebookStore.createTestUser(true, "email");
-        SocialAccessGrant grantA = new SocialAccessGrant("facebook", fbAccoA.accessToken());
+        SocialAccessGrant grantA = new SocialAccessGrant(SocialProvider.facebook, fbAccoA.accessToken());
         ClembleCasinoOperations A = playerScenarios.createPlayer(grantA);
         // Step 2. Adding discovery event listener
         EventAccumulator<PlayerDiscoveredConnectionEvent> discoveryListener = new EventAccumulator<>();
@@ -152,7 +153,7 @@ public class FacebookRegistrationITest {
         FacebookTestUserAccount fbAccoB = facebookStore.createTestUser(true, "email");
         fbAccoA.makeFriends(fbAccoB);
         fbAccoA.getFriends();
-        SocialAccessGrant grantB = new SocialAccessGrant("facebook", fbAccoB.accessToken());
+        SocialAccessGrant grantB = new SocialAccessGrant(SocialProvider.facebook, fbAccoB.accessToken());
         playerScenarios.createPlayer(grantB);
         // Step 3. Checking connection were mapped internally
         assertNotNull(discoveryListener.waitFor(new EventTypeSelector(PlayerDiscoveredConnectionEvent.class)));
@@ -163,7 +164,7 @@ public class FacebookRegistrationITest {
         FacebookTestUserAccount fbAccount = facebookStore.createTestUser(true, "email");
         assertNotNull(fbAccount);
         // Step 2. Converting to SocialConnectionData
-        return new SocialAccessGrant("facebook", fbAccount.accessToken());
+        return new SocialAccessGrant(SocialProvider.facebook, fbAccount.accessToken());
     }
 
 }

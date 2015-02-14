@@ -2,6 +2,7 @@ package com.clemble.casino.server.event.share;
 
 import com.clemble.casino.goal.post.GoalPost;
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.social.SocialProvider;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,11 +14,11 @@ public class SystemSharePostEvent implements SystemShareEvent, PlayerAware {
     final public static String CHANNEL = "sys:share:post";
 
     final private String player;
-    final private String providerId;
+    final private SocialProvider providerId;
     final private GoalPost post;
 
     @JsonCreator
-    public SystemSharePostEvent(@JsonProperty(PLAYER) String player, @JsonProperty("providerId") String providerId, @JsonProperty("post") GoalPost post) {
+    public SystemSharePostEvent(@JsonProperty(PLAYER) String player, @JsonProperty("providerId") SocialProvider providerId, @JsonProperty("post") GoalPost post) {
         this.player = player;
         this.providerId = providerId;
         this.post = post;
@@ -28,7 +29,7 @@ public class SystemSharePostEvent implements SystemShareEvent, PlayerAware {
         return player;
     }
 
-    public String getProviderId() {
+    public SocialProvider getProviderId() {
         return providerId;
     }
 

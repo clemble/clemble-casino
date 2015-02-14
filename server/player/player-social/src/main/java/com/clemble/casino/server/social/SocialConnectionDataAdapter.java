@@ -8,6 +8,7 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
+import com.clemble.casino.social.SocialProvider;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,7 +109,8 @@ public class SocialConnectionDataAdapter {
         String player = usersConnectionRepository.findUserIdsWithConnection(connection).iterator().next();
         LOG.error("register {} created with connection {}", player, connection.getKey());
         // Step 5. Fetching player profile
-        SocialAdapter adapter = socialAdapterRegistry.getSocialAdapter(connection.getKey().getProviderId());
+        SocialProvider provider = SocialProvider.valueOf(connection.getKey().getProviderId());
+        SocialAdapter adapter = socialAdapterRegistry.getSocialAdapter(provider);
         ApiBinding api = (ApiBinding) connection.getApi();
         PlayerProfile playerProfile = adapter.fetchPlayerProfile(api);
         playerProfile.setPlayer(player);
@@ -139,7 +141,7 @@ public class SocialConnectionDataAdapter {
         ConnectionData connectionData = socialAdapterRegistry.getSocialAdapter(socialConnectionData.getProviderId()).toConnectionData(socialConnectionData);
         Connection<?> connection = connectionFactoryLocator.getConnectionFactory(connectionData.getProviderId()).createConnection(connectionData);
         // Step 3. Checking user is valid
-        Set<String> existingUsers = usersConnectionRepository.findUserIdsConnectedTo(socialConnectionData.getProviderId(), ImmutableSet.<String> of(socialConnectionData.getProviderUserId()));
+        Set<String> existingUsers = usersConnectionRepository.findUserIdsConnectedTo(socialConnectionData.getProviderId().name(), ImmutableSet.<String> of(socialConnectionData.getProviderUserId()));
         if (existingUsers.size() == 1) {
             String existingUser = existingUsers.iterator().next();
             if (!existingUser.equals(player)) {

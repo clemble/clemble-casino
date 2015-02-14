@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
+import com.clemble.casino.social.SocialProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ContextConfiguration(classes = { CommonSpringConfiguration.class })
 public class SocialConnectionDataSerializationTest {
 
-    final private String PROVIDER_ID = "facebook";
+    final private SocialProvider PROVIDER_ID = SocialProvider.facebook;
     final private String PROVIDER_USER_ID = "1232424243";
     final private String SECRET = "reedeerfest";
     final private String ACCESS_TOKEN = "23rddse2fefssdce13443";

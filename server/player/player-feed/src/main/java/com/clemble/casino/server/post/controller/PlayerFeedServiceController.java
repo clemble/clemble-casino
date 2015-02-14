@@ -9,6 +9,7 @@ import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.server.event.share.SystemSharePostEvent;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.post.repository.PlayerPostRepository;
+import com.clemble.casino.social.SocialProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,13 +59,13 @@ public class PlayerFeedServiceController implements PlayerFeedService {
     }
 
     @Override
-    public PlayerPost share(String key, String provider) {
+    public PlayerPost share(String key, SocialProvider provider) {
         throw new UnsupportedOperationException();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = PlayerPostWebMapping.POST_SHARE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public PlayerPost share(@CookieValue("player")String player, @PathVariable("postKey") String key, @RequestBody String provider) {
+    public PlayerPost share(@CookieValue("player")String player, @PathVariable("postKey") String key, @RequestBody SocialProvider provider) {
         // Step 1. Fetching post
         // Fix this
         GoalPost post = (GoalPost) postRepository.findOne(key);

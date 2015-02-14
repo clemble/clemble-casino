@@ -3,6 +3,7 @@ package com.clemble.casino.integration.player;
 import com.clemble.casino.player.service.PlayerFeedService;
 import com.clemble.casino.post.PlayerPost;
 import com.clemble.casino.server.post.controller.PlayerFeedServiceController;
+import com.clemble.casino.social.SocialProvider;
 
 /**
  * Created by mavarazy on 12/1/14.
@@ -30,7 +31,7 @@ public class IntegrationPlayerFeedService implements PlayerFeedService {
     }
 
     @Override
-    public PlayerPost share(String key, String provider) {
+    public PlayerPost share(String key, SocialProvider provider) {
         return feedService.share(player, key, provider);
     }
 }

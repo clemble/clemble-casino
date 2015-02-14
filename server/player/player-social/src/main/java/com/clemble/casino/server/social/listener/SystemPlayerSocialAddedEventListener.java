@@ -7,6 +7,7 @@ import java.util.Collection;
 import com.clemble.casino.server.event.player.SystemPlayerConnectionsFetchedEvent;
 import com.clemble.casino.server.social.SocialAdapter;
 import com.clemble.casino.server.social.SocialAdapterRegistry;
+import com.clemble.casino.social.SocialProvider;
 import org.springframework.social.ApiBinding;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionKey;
@@ -35,8 +36,9 @@ public class SystemPlayerSocialAddedEventListener implements SystemEventListener
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void onEvent(SystemPlayerSocialAddedEvent event) {
+        SocialProvider provider = SocialProvider.valueOf(event.getConnection().getProviderId());
         // Step 1. Finding appropriate SocialConnectionAdapter
-        SocialAdapter socialAdapter = socialAdapterRegistry.getSocialAdapter(event.getConnection().getProviderId());
+        SocialAdapter socialAdapter = socialAdapterRegistry.getSocialAdapter(provider);
         // Step 2. Fetching connection
         ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(event.getPlayer());
         Connection<?> connection = connectionRepository.getConnection(event.getConnection());
