@@ -11,11 +11,11 @@ import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionRequest;
 import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionState;
 import com.clemble.casino.goal.lifecycle.construction.service.GoalSuggestionService;
 import com.clemble.casino.goal.suggestion.repository.GoalSuggestionRepository;
-import com.clemble.casino.player.service.PlayerNotificationService;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationStartedEvent;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.tag.TagUtils;
+import org.joda.time.DateTime;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -50,7 +50,7 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
 
     @RequestMapping(method = RequestMethod.GET, value = MY_SUGGESTIONS, produces = PRODUCES)
     public List<GoalSuggestion> listMy(@CookieValue("player") String player) {
-        return suggestionRepository.findByPlayerAndState(player, GoalSuggestionState.pending);
+        return suggestionRepository.findByPlayerAndStateOrderByCreatedDesc(player, GoalSuggestionState.pending);
     }
 
     @Override
@@ -60,20 +60,20 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
 
     @RequestMapping(method = RequestMethod.GET, value = MY_SUGGESTED, produces = PRODUCES)
     public List<GoalSuggestion> listMySuggested(@CookieValue("player") String player) {
-        return suggestionRepository.findBySuggester(player);
+        return suggestionRepository.findBySuggesterOrderByCreatedDesc(player);
     }
 
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_SUGGESTED, produces = PRODUCES)
     public List<GoalSuggestion> listSuggested(@PathVariable("player") String player) {
-        return suggestionRepository.findBySuggester(player);
+        return suggestionRepository.findBySuggesterOrderByCreatedDesc(player);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_SUGGESTIONS, produces = PRODUCES)
     public List<GoalSuggestion> list(@PathVariable("player") String player) {
-        return suggestionRepository.findByPlayerAndState(player, GoalSuggestionState.pending);
+        return suggestionRepository.findByPlayerAndStateOrderByCreatedDesc(player, GoalSuggestionState.pending);
     }
 
     @Override
@@ -99,7 +99,8 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
             player,
             suggester,
             suggestionRequest.getConfiguration(),
-            GoalSuggestionState.pending);
+            GoalSuggestionState.pending,
+            DateTime.now());
         // Step 2. Saving and returning new suggestion
         suggestion = suggestionRepository.save(suggestion);
         // Step 3. Sending notification, to user
