@@ -150,7 +150,7 @@ public class GoalFeedTest {
             NoReminderRule.INSTANCE,
             NoReminderRule.INSTANCE
         ),
-        ShareRule.none
+        ShareRule.EMPTY
     );
 
     @Test

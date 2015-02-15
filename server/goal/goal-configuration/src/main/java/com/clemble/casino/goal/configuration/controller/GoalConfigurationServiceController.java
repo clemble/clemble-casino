@@ -16,7 +16,9 @@ import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
+import com.clemble.casino.social.SocialProvider;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,7 +54,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
             ),
-            ShareRule.none
+            ShareRule.EMPTY
         ),
         new GoalConfiguration(
             "2weeks",
@@ -69,7 +71,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
             ),
-            ShareRule.none
+            ShareRule.EMPTY
         ),
         new GoalConfiguration(
             "month",
@@ -81,7 +83,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(30)),
             PrivacyRule.world,
             new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), 15, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
-            ShareRule.twitter
+            new ShareRule(ImmutableSet.of(SocialProvider.twitter))
         )
     );
 
@@ -109,8 +111,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)
         ),
         ImmutableList.of(
-            new GoalRuleValue<ShareRule>(ShareRule.none, 0),
-            new GoalRuleValue<ShareRule>(ShareRule.twitter, 50)
+            new GoalRuleValue<ShareRule>(ShareRule.EMPTY, 0),
+            new GoalRuleValue<ShareRule>(new ShareRule(ImmutableSet.of(SocialProvider.twitter)), 50)
         )
     );
 
@@ -130,7 +132,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
             ),
-            ShareRule.none
+            ShareRule.EMPTY
         ),
         100,
         50,
@@ -140,8 +142,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new IntervalGoalRule(PrivacyRule.world, 50, 15),
             new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(2)), 50, 15),
             new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 50, 15),
-            new IntervalGoalRule(ShareRule.twitter, 50, 15),
-            new IntervalGoalRule(ShareRule.facebook, 50, 15)
+            new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.twitter)), 50, 15),
+            new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.twitter, SocialProvider.facebook)), 50, 15)
         )
     );
 

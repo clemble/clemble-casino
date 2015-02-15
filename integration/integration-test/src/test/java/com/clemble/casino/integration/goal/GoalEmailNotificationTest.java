@@ -67,7 +67,7 @@ public class GoalEmailNotificationTest {
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
         ),
-        ShareRule.none
+        ShareRule.EMPTY
     );
 
     @Test

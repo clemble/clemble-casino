@@ -58,7 +58,7 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
         ),
-        ShareRule.none
+        ShareRule.EMPTY
     );
 
     final private GoalConfiguration PENALTY_PUNISHMENT = new GoalConfiguration(
@@ -76,7 +76,7 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
         ),
-        ShareRule.none
+        ShareRule.EMPTY
     );
 
     final private GoalConfiguration COUNTDOWN_PUNISHMENT = new GoalConfiguration(
@@ -94,7 +94,7 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
         ),
-        ShareRule.none
+        ShareRule.EMPTY
     );
 
 

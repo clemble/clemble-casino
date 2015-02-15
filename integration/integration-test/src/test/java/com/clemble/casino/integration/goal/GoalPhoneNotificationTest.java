@@ -68,7 +68,7 @@ public class GoalPhoneNotificationTest {
             NoReminderRule.INSTANCE,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1))
         ),
-        ShareRule.none
+        ShareRule.EMPTY
     );
 
     @Test

@@ -13,15 +13,13 @@ import com.clemble.casino.social.SocialProvider;
  */
 public class ShareRuleAspect extends GoalAspect<GoalManagementEvent>{
 
-    final private ShareRule shareRule;
     final private SocialProvider provider;
     final private SystemNotificationService notificationService;
 
-    public ShareRuleAspect(ShareRule shareRule, SystemNotificationService notificationService) {
+    public ShareRuleAspect(SocialProvider provider, SystemNotificationService notificationService) {
         super(new EventTypeSelector(GoalManagementEvent.class));
-        this.shareRule = shareRule;
+        this.provider = provider;
         this.notificationService = notificationService;
-        this.provider = SocialProvider.valueOf(shareRule.getName());
     }
 
     @Override

@@ -55,7 +55,7 @@ public class GoalRecordITest {
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
         PrivacyRule.me,
         new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
-        ShareRule.none
+        ShareRule.EMPTY
     );
 
     @Autowired

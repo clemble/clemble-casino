@@ -33,6 +33,7 @@ import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.spring.common.*;
+import com.clemble.casino.social.SocialProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -126,8 +127,13 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ShareRuleAspectFactory shareRuleAspectFactory(SystemNotificationService notificationService) {
-        return new ShareRuleAspectFactory(notificationService);
+    public ShareRuleAspectFactory twitterShareRuleAspectFactory(SystemNotificationService notificationService) {
+        return new ShareRuleAspectFactory(SocialProvider.twitter, notificationService);
+    }
+
+    @Bean
+    public ShareRuleAspectFactory facebookShareRuleAspectFactory(SystemNotificationService notificationService) {
+        return new ShareRuleAspectFactory(SocialProvider.facebook, notificationService);
     }
 
     @Bean
