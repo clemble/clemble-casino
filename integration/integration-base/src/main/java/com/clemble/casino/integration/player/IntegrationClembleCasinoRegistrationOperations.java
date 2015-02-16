@@ -9,6 +9,7 @@ import com.clemble.casino.game.lifecycle.record.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.player.PlayerProfile;
+import com.clemble.casino.registration.*;
 import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
 import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
@@ -21,10 +22,6 @@ import com.clemble.casino.server.registration.controller.PlayerPasswordResetServ
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.security.ClembleConsumerDetails;
-import com.clemble.casino.registration.PlayerCredential;
-import com.clemble.casino.registration.PlayerRegistrationRequest;
-import com.clemble.casino.registration.PlayerSocialGrantRegistrationRequest;
-import com.clemble.casino.registration.PlayerSocialRegistrationRequest;
 import com.clemble.casino.registration.service.FacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
@@ -116,39 +113,37 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     }
 
     @Override
-    public ClembleCasinoOperations login(PlayerCredential playerCredentials) {
+    public ClembleCasinoOperations login(PlayerLoginRequest playerCredentials) {
         String player = registrationService.login(playerCredentials);
-        return create(player, playerCredentials);
+        return create(player);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerCredential playerCredential, PlayerProfile playerProfile) {
         PlayerRegistrationRequest loginRequest = new PlayerRegistrationRequest(playerCredential, playerProfile);
         String player = registrationService.register(loginRequest);
-        return create(player, playerCredential);
+        return create(player);
     }
 
     @Override
     public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
         PlayerSocialRegistrationRequest loginRequest = new PlayerSocialRegistrationRequest(playerCredential, socialConnectionData);
         String player = registrationService.register(loginRequest);
-        return create(player, playerCredential);
+        return create(player);
     }
 
     @Override
     public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
-        ClembleConsumerDetails consumerDetails = ClembleConsumerDetailUtils.generateDetails();
         PlayerSocialGrantRegistrationRequest loginRequest = new PlayerSocialGrantRegistrationRequest(playerCredential, accessGrant);
         String token = registrationService.register(loginRequest);
-        return create(token, playerCredential);
+        return create(token);
     }
 
-    private ClembleCasinoOperations create(String player, PlayerCredential credential) {
+    private ClembleCasinoOperations create(String player) {
         return new IntegrationClembleCasinoOperations(
             host,
             objectMapper,
             player,
-            credential,
             profileOperations,
             imageService,
             connectionService,

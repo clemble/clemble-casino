@@ -127,7 +127,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
             return new FacadeRegistrationService() {
 
                 @Override
-                public String login(PlayerCredential loginRequest) {
+                public String login(PlayerLoginRequest loginRequest) {
                     return registrationService.login(loginRequest);
                 }
 

@@ -12,6 +12,7 @@ import com.clemble.casino.integration.game.construction.EmailScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.registration.PlayerCredential;
+import com.clemble.casino.registration.PlayerLoginRequest;
 import com.clemble.casino.registration.PlayerPasswordResetRequest;
 import com.clemble.casino.registration.PlayerPasswordRestoreRequest;
 import com.clemble.casino.server.event.SystemEvent;
@@ -73,7 +74,7 @@ public class PlayerPasswordResetTest {
         A.passwordResetService().reset(passwordResetRequest);
         A.signOut();
         // Step 6. Checking login with new password works
-        ClembleCasinoOperations A1 = playerScenarios.login(new PlayerCredential(emailA, newPassword));
+        ClembleCasinoOperations A1 = playerScenarios.login(new PlayerLoginRequest(emailA, newPassword));
         Assert.assertNotNull(A1);
         Assert.assertEquals(A1.getPlayer(), player);
     }

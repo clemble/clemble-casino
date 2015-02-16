@@ -54,7 +54,8 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ServerPlayerCredentialRepository playerCredentialRepository(MongoTemplate template, MongoRepositoryFactory mongoRepositoryFactory) {
-        template.indexOps(PlayerCredential.class).ensureIndex(new Index().on("email", Sort.Direction.ASC).unique(Index.Duplicates.DROP));
+        template.indexOps(PlayerCredential.class).ensureIndex(new Index().on("email", Sort.Direction.DESC).unique(Index.Duplicates.DROP));
+        template.indexOps(PlayerCredential.class).ensureIndex(new Index().on("nickName", Sort.Direction.DESC).unique(Index.Duplicates.DROP));
         return mongoRepositoryFactory.getRepository(ServerPlayerCredentialRepository.class);
     }
 
@@ -73,15 +74,11 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
         ServerPlayerCredentialManager credentialManager,
         PlayerTokenUtils tokenUtils,
         @Qualifier("playerKeyGenerator") PlayerKeyGenerator playerKeyGenerator,
-        ClembleConsumerDetailsService clembleConsumerDetailsService,
-        ClembleCasinoValidationService clembleValidationService,
-        PlayerTokenFactory playerTokenFactory,
         SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
         return new PlayerRegistrationController(
             credentialManager,
             tokenUtils,
             playerKeyGenerator,
-            clembleValidationService,
             systemNotificationService);
     }
 

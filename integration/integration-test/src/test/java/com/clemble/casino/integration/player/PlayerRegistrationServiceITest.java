@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Date;
 
 import com.clemble.casino.integration.ClembleIntegrationTest;
+import com.clemble.casino.registration.PlayerLoginRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class PlayerRegistrationServiceITest {
         // Step 2. Creating CasinoOperations with this credentials and Profile
         ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
         // Step 3. Creating CasinoOperations by just login
-        ClembleCasinoOperations origB = playerScenarios.login(credential);
+        ClembleCasinoOperations origB = playerScenarios.login(PlayerLoginRequest.create(credential));
         // Step 4. Checking they are the same
         assertEquals(origA.getPlayer(), origB.getPlayer());
         assertEquals(origA.profileOperations().myProfile(), origB.profileOperations().myProfile());

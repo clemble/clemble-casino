@@ -11,4 +11,7 @@ public interface ServerPlayerCredentialRepository extends MongoRepository<Server
 
     public ServerPlayerCredential findByEmail(String email);
 
+    public ServerPlayerCredential findByEmailOrNickName(String email, String nickName);
+
+    public ServerPlayerCredential findByNickName(String nickName);
 }

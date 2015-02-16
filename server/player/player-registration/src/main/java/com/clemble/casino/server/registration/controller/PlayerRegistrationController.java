@@ -3,6 +3,7 @@ package com.clemble.casino.server.registration.controller;
 import static com.clemble.casino.registration.RegistrationWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.registration.PlayerLoginRequest;
 import com.clemble.casino.registration.service.PlayerRegistrationService;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
-import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
@@ -35,33 +35,31 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     final private PlayerKeyGenerator playerKeyGenerator;
     final private ServerPlayerCredentialManager credentialManager;
     final private SystemNotificationService notificationService;
-    final private ClembleCasinoValidationService validationService;
 
     public PlayerRegistrationController(
         ServerPlayerCredentialManager credentialManager,
         PlayerTokenUtils tokenUtils,
         PlayerKeyGenerator playerKeyGenerator,
-        ClembleCasinoValidationService validationService,
         SystemNotificationService notificationService) {
         this.tokenUtils = checkNotNull(tokenUtils);
         this.playerKeyGenerator = checkNotNull(playerKeyGenerator);
         this.credentialManager = credentialManager;
-        this.validationService = checkNotNull(validationService);
         this.notificationService = checkNotNull(notificationService);
     }
 
     @Override
-    public String login(PlayerCredential playerCredentials) {
+    public String login(PlayerLoginRequest loginRequest) {
+        String player = credentialManager.verify(loginRequest.getEmailOrNickName(), loginRequest.getPassword());
         // Step 1. Checking password match
-        if (!credentialManager.matches(playerCredentials.getEmail(), playerCredentials.getPassword()))
+        if (player == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
         // Step 4. Everything is fine, return Identity
-        return credentialManager.findPlayerByEmail(playerCredentials.getEmail());
+        return player;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public String httpLogin(@Validated @RequestBody PlayerCredential playerCredentials, HttpServletResponse response) {
+    public String httpLogin(@Validated @RequestBody PlayerLoginRequest playerCredentials, HttpServletResponse response) {
         String player = login(playerCredentials);
         tokenUtils.updateResponse(player, response);
         return player;
@@ -69,12 +67,13 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
 
     @Override
     public String register(final PlayerRegistrationRequest registrationRequest) {
-        // Step 1. Validating input data prior to any actions
-        validationService.validate(registrationRequest.getPlayerCredential());
-        validationService.validate(registrationRequest.getPlayerProfile());
         // Step 1.1 Checking user not already exists
-        if (null != credentialManager.findPlayerByEmail(registrationRequest.getPlayerCredential().getEmail()))
-            return login(registrationRequest.getPlayerCredential());
+        String registeredPlayer = credentialManager.findPlayerByEmail(registrationRequest.getPlayerCredential().getEmail());
+        if (registeredPlayer != null) {
+            PlayerLoginRequest loginRequest = PlayerLoginRequest.create(registrationRequest.getPlayerCredential());
+            // Step 1.2. Verify password matches
+            return login(loginRequest);
+        }
         // Step 2. Creating appropriate PlayerProfile
         String player = playerKeyGenerator.generate();
         // Step 3. Adding initial fields to PlayerProfile
@@ -84,11 +83,8 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
             throw ClembleCasinoException.fromError(ClembleCasinoError.ProfileSocialMustBeEmpty);
         PlayerProfile normalizedProfile = registrationRequest.getPlayerProfile();
         normalizedProfile.setPlayer(player);
-        if(normalizedProfile.getNickName() == null) {
-            String email = registrationRequest.getPlayerCredential().getEmail();
-            normalizedProfile.setNickName(email.substring(0, email.indexOf("@")));
-        }
-        validationService.validate(normalizedProfile);
+        if (credentialManager.existsByNickname(normalizedProfile.getNickName()))
+            throw ClembleCasinoException.fromError(ClembleCasinoError.NickAlreadyOccupied);
         // Step 4. Registration done through separate registration service
         register(registrationRequest.getPlayerCredential(), player);
         // Step 5. Notifying system of new user
@@ -101,7 +97,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String httpCreatePlayer(@Validated @RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
+    public String httpRegister(@Validated @RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
         String player = register(registrationRequest);
         tokenUtils.updateResponse(player, response);
         return player;

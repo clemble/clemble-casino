@@ -48,11 +48,17 @@ public class ServerPlayerCredentialManager {
         return credentialRepository.save(newCredentials);
     }
 
-    public boolean matches(String email, String password) {
+    public String verify(String emailOrNickName, String password) {
         // Step 1. Looking up player credentials
-        ServerPlayerCredential playerCredential = credentialRepository.findByEmail(email);
-        // Step 2. Checking password remainl
-        return passwordEncoder.matches(password, playerCredential.getHash());
+        ServerPlayerCredential playerCredential = credentialRepository.findByEmailOrNickName(emailOrNickName, emailOrNickName);
+        // Step 2. Checking password matches
+        if (passwordEncoder.matches(password, playerCredential.getHash())) {
+            // Case 1. Matches return player
+            return playerCredential.getPlayer();
+        } else {
+            // Case 2. Does not match return null
+            return null;
+        }
     }
 
     public String findPlayerByEmail(String email) {
@@ -60,5 +66,9 @@ public class ServerPlayerCredentialManager {
         ServerPlayerCredential playerCredential = credentialRepository.findByEmail(email);
         // Step 2. Return player associated with the email
         return playerCredential != null ? playerCredential.getPlayer() : null;
+    }
+
+    public boolean existsByNickname(String nickName) {
+        return credentialRepository.findByNickName(nickName) != null;
     }
 }

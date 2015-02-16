@@ -87,7 +87,6 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final String host,
         final ObjectMapper objectMapper,
         final String player,
-        final PlayerCredential credential,
         final PlayerProfileServiceController playerProfileService,
         final PlayerImageServiceController imageService,
         final PlayerConnectionServiceController playerConnectionService,
