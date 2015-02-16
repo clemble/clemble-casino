@@ -9,6 +9,8 @@ import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.lifecycle.management.event.action.Action;
 import com.clemble.casino.lifecycle.management.event.action.PlayerAction;
 import static org.springframework.http.HttpStatus.*;
+
+import com.clemble.casino.server.action.ClembleManager;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -64,7 +66,10 @@ public class GoalActionServiceController implements GoalActionService {
     @RequestMapping(method = GET, value = GOAL_STATE, produces = PRODUCES)
     @ResponseStatus(value = OK)
     public GoalState getState(@PathVariable("goalKey") String goalKey) {
-        return factoryFacade.get(goalKey).getState();
+        // Step 1. Fetching manager
+        ClembleManager<GoalEvent, ? extends GoalState> manager = factoryFacade.get(goalKey);
+        // Step 2. If there is no manager return null
+        return manager != null ? manager.getState() : null;
     }
 
 

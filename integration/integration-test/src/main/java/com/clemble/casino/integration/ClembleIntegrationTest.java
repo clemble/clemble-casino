@@ -2,6 +2,8 @@ package com.clemble.casino.integration;
 
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
+import com.clemble.casino.server.spring.common.SpringConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.web.WebAppConfiguration;
