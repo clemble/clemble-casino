@@ -2,7 +2,6 @@ package com.clemble.casino.server.registration.spring;
 
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.registration.PlayerCredential;
-import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.server.key.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
@@ -24,7 +23,7 @@ import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
-import com.clemble.casino.server.registration.controller.PlayerManualRegistrationController;
+import com.clemble.casino.server.registration.controller.PlayerRegistrationController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -70,7 +69,7 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerManualRegistrationController playerRegistrationController(
+    public PlayerRegistrationController playerRegistrationController(
         ServerPlayerCredentialManager credentialManager,
         PlayerTokenUtils tokenUtils,
         @Qualifier("playerKeyGenerator") PlayerKeyGenerator playerKeyGenerator,
@@ -78,7 +77,7 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
         ClembleCasinoValidationService clembleValidationService,
         PlayerTokenFactory playerTokenFactory,
         SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
-        return new PlayerManualRegistrationController(
+        return new PlayerRegistrationController(
             credentialManager,
             tokenUtils,
             playerKeyGenerator,

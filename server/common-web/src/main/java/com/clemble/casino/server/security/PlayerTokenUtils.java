@@ -35,7 +35,7 @@ public class PlayerTokenUtils {
         response.addCookie(cookie);
         // Step 3. Specifying player in response
         try {
-            response.getOutputStream().write(player.getBytes());
+            response.getOutputStream().write(("\"" + player + "\"").getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

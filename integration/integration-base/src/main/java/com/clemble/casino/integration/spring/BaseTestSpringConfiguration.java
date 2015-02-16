@@ -15,7 +15,7 @@ import com.clemble.casino.goal.suggestion.controller.GoalSuggestionServiceContro
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperations;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
-import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
+import com.clemble.casino.registration.service.FacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
 import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
@@ -136,7 +136,7 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             @Value("${clemble.host}") String host,
             ObjectMapper objectMapper,
             EventListenerOperationsFactory listenerOperations,
-            PlayerFacadeRegistrationService registrationService,
+            FacadeRegistrationService registrationService,
             PlayerProfileServiceController profileOperations,
             PlayerImageServiceController imageService,
             @Qualifier("playerConnectionController") PlayerConnectionServiceController connectionService,

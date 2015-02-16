@@ -3,7 +3,7 @@ package com.clemble.casino.server.registration.controller;
 import static com.clemble.casino.registration.RegistrationWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.registration.service.PlayerManualRegistrationService;
+import com.clemble.casino.registration.service.PlayerRegistrationService;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
@@ -20,17 +20,15 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.PlayerCredential;
-import com.clemble.casino.registration.PlayerLoginRequest;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.WebMapping;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 @RestController
-public class PlayerManualRegistrationController implements PlayerManualRegistrationService, ExternalController {
+public class PlayerRegistrationController implements PlayerRegistrationService, ExternalController {
     // !!!TODO need a safe restoration process for all Registrations not only for login!!!
 
     final private PlayerTokenUtils tokenUtils;
@@ -39,7 +37,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     final private SystemNotificationService notificationService;
     final private ClembleCasinoValidationService validationService;
 
-    public PlayerManualRegistrationController(
+    public PlayerRegistrationController(
         ServerPlayerCredentialManager credentialManager,
         PlayerTokenUtils tokenUtils,
         PlayerKeyGenerator playerKeyGenerator,
@@ -70,7 +68,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     }
 
     @Override
-    public String createPlayer(final PlayerRegistrationRequest registrationRequest) {
+    public String register(final PlayerRegistrationRequest registrationRequest) {
         // Step 1. Validating input data prior to any actions
         validationService.validate(registrationRequest.getPlayerCredential());
         validationService.validate(registrationRequest.getPlayerProfile());
@@ -104,7 +102,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
     public String httpCreatePlayer(@Validated @RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
-        String player = createPlayer(registrationRequest);
+        String player = register(registrationRequest);
         tokenUtils.updateResponse(player, response);
         return player;
     }

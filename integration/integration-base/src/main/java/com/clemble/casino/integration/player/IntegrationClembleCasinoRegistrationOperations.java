@@ -9,7 +9,6 @@ import com.clemble.casino.game.lifecycle.record.service.GameRecordService;
 import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.player.PlayerProfile;
-import com.clemble.casino.registration.service.PlayerPasswordResetService;
 import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
 import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
@@ -23,12 +22,10 @@ import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.security.ClembleConsumerDetails;
 import com.clemble.casino.registration.PlayerCredential;
-import com.clemble.casino.registration.PlayerToken;
-import com.clemble.casino.registration.PlayerLoginRequest;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.registration.PlayerSocialGrantRegistrationRequest;
 import com.clemble.casino.registration.PlayerSocialRegistrationRequest;
-import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
+import com.clemble.casino.registration.service.FacadeRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.payment.controller.PaymentTransactionServiceController;
 import com.clemble.casino.server.payment.controller.PlayerAccountServiceController;
@@ -44,7 +41,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
 
     final private String host;
     final private ObjectMapper objectMapper;
-    final private PlayerFacadeRegistrationService registrationService;
+    final private FacadeRegistrationService registrationService;
     final private PlayerProfileServiceController profileOperations;
     final private PlayerImageServiceController imageService;
     final private PlayerConnectionServiceController connectionService;
@@ -71,7 +68,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         String host,
         ObjectMapper objectMapper,
         EventListenerOperationsFactory listenerOperations,
-        PlayerFacadeRegistrationService registrationService,
+        FacadeRegistrationService registrationService,
         PlayerProfileServiceController profileOperations,
         PlayerImageServiceController imageService,
         PlayerConnectionServiceController connectionService,
@@ -127,14 +124,14 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     @Override
     public ClembleCasinoOperations createPlayer(PlayerCredential playerCredential, PlayerProfile playerProfile) {
         PlayerRegistrationRequest loginRequest = new PlayerRegistrationRequest(playerCredential, playerProfile);
-        String player = registrationService.createPlayer(loginRequest);
+        String player = registrationService.register(loginRequest);
         return create(player, playerCredential);
     }
 
     @Override
     public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
         PlayerSocialRegistrationRequest loginRequest = new PlayerSocialRegistrationRequest(playerCredential, socialConnectionData);
-        String player = registrationService.createSocialPlayer(loginRequest);
+        String player = registrationService.register(loginRequest);
         return create(player, playerCredential);
     }
 
@@ -142,7 +139,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
     public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
         ClembleConsumerDetails consumerDetails = ClembleConsumerDetailUtils.generateDetails();
         PlayerSocialGrantRegistrationRequest loginRequest = new PlayerSocialGrantRegistrationRequest(playerCredential, accessGrant);
-        String token = registrationService.createSocialGrantPlayer(loginRequest);
+        String token = registrationService.register(loginRequest);
         return create(token, playerCredential);
     }
 

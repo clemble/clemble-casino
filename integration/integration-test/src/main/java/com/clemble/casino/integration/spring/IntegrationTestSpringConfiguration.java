@@ -29,7 +29,7 @@ import com.clemble.casino.json.ObjectMapperUtils;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.registration.*;
-import com.clemble.casino.registration.service.PlayerManualRegistrationService;
+import com.clemble.casino.registration.service.PlayerRegistrationService;
 import com.clemble.casino.registration.service.PlayerSocialRegistrationService;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
@@ -67,10 +67,10 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.android.AndroidCasinoRegistrationTemplate;
-import com.clemble.casino.android.player.AndroidPlayerFacadeRegistrationService;
+import com.clemble.casino.android.player.AndroidFacadeRegistrationService;
 import com.clemble.casino.client.ClembleCasinoRegistrationOperations;
 import com.clemble.casino.client.error.ClembleCasinoResponseErrorHandler;
-import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
+import com.clemble.casino.registration.service.FacadeRegistrationService;
 import com.clemble.casino.server.spring.common.JsonSpringConfiguration;
 import com.clemble.casino.server.spring.web.ClientRestCommonSpringConfiguration;
 import com.clemble.casino.server.payment.spring.PaymentSpringConfiguration;
@@ -123,8 +123,8 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         public SystemNotificationServiceListener serviceListener;
 
         @Bean
-        public PlayerFacadeRegistrationService playerFacadeRegistrationService(final PlayerManualRegistrationService registrationService, final PlayerSocialRegistrationService socialRegistrationService) {
-            return new PlayerFacadeRegistrationService() {
+        public FacadeRegistrationService playerFacadeRegistrationService(final PlayerRegistrationService registrationService, final PlayerSocialRegistrationService socialRegistrationService) {
+            return new FacadeRegistrationService() {
 
                 @Override
                 public String login(PlayerCredential loginRequest) {
@@ -132,18 +132,18 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                 }
 
                 @Override
-                public String createPlayer(PlayerRegistrationRequest registrationRequest) {
-                    return registrationService.createPlayer(registrationRequest);
+                public String register(PlayerRegistrationRequest registrationRequest) {
+                    return registrationService.register(registrationRequest);
                 }
 
                 @Override
-                public String createSocialPlayer(PlayerSocialRegistrationRequest socialRegistrationRequest) {
-                    return socialRegistrationService.createSocialPlayer(socialRegistrationRequest);
+                public String register(PlayerSocialRegistrationRequest socialRegistrationRequest) {
+                    return socialRegistrationService.register(socialRegistrationRequest);
                 }
 
                 @Override
-                public String createSocialGrantPlayer(PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
-                    return socialRegistrationService.createSocialGrantPlayer(grantRegistrationRequest);
+                public String register(PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
+                    return socialRegistrationService.register(grantRegistrationRequest);
                 }
 
             };
@@ -252,8 +252,8 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
         }
 
         @Bean
-        public PlayerFacadeRegistrationService playerRegistrationService() {
-            return new AndroidPlayerFacadeRegistrationService(baseUrl);
+        public FacadeRegistrationService playerRegistrationService() {
+            return new AndroidFacadeRegistrationService(baseUrl);
         }
 
     }

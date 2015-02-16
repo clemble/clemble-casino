@@ -1,12 +1,11 @@
 package com.clemble.casino.integration.player;
 
-import com.clemble.casino.android.player.AndroidPlayerFacadeRegistrationService;
+import com.clemble.casino.android.player.AndroidFacadeRegistrationService;
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.registration.service.PlayerFacadeRegistrationService;
+import com.clemble.casino.registration.service.FacadeRegistrationService;
 import com.clemble.casino.test.util.ClembleCasinoExceptionMatcherFactory;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -14,9 +13,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  * Created by mavarazy on 1/14/15.
@@ -32,11 +29,11 @@ public class PlayerSignOutITest {
     public PlayerScenarios playerScenarios;
 
     @Autowired
-    public PlayerFacadeRegistrationService facadeRegistrationService;
+    public FacadeRegistrationService facadeRegistrationService;
 
     @Test
     public void testSignOut() {
-        if (!(facadeRegistrationService instanceof AndroidPlayerFacadeRegistrationService))
+        if (!(facadeRegistrationService instanceof AndroidFacadeRegistrationService))
             return;
         // Step 1. Creating player
         ClembleCasinoOperations A = playerScenarios.createPlayer();

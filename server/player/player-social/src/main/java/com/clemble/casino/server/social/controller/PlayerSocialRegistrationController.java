@@ -34,7 +34,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
     @Override
     @RequestMapping(method = RequestMethod.POST, value = SOCIAL_REGISTRATION_DESCRIPTION, produces = PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String createSocialPlayer(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
+    public String register(@RequestBody PlayerSocialRegistrationRequest socialRegistrationRequest) {
         validationService.validate(socialRegistrationRequest.getSocialConnectionData());
         // Step 1. Checking if this user already exists
         String player = registrationService.register(socialRegistrationRequest.getSocialConnectionData());
@@ -45,7 +45,7 @@ public class PlayerSocialRegistrationController implements PlayerSocialRegistrat
     @Override
     @RequestMapping(method = RequestMethod.POST, value = SOCIAL_REGISTRATION_GRANT, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String createSocialGrantPlayer(@RequestBody PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
+    public String register(@RequestBody PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
         validationService.validate(grantRegistrationRequest.getAccessGrant());
         // Step 1. Checking if this user already exists
         String player = registrationService.register(grantRegistrationRequest.getAccessGrant());
