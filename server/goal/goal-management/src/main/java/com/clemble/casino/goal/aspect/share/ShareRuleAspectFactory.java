@@ -16,10 +16,12 @@ public class ShareRuleAspectFactory implements GenericGoalAspectFactory<GoalMana
 
     final private SocialProvider provider;
     final private ShareRuleAspect shareRule;
+    final private int order;
 
-    public ShareRuleAspectFactory(SocialProvider provider, SystemNotificationService notificationService) {
+    public ShareRuleAspectFactory(SocialProvider provider, SystemNotificationService notificationService, int order) {
         this.provider = provider;
         this.shareRule = new ShareRuleAspect(provider, notificationService);
+        this.order = order;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class ShareRuleAspectFactory implements GenericGoalAspectFactory<GoalMana
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE - 10;
+        return order;
     }
 
 }

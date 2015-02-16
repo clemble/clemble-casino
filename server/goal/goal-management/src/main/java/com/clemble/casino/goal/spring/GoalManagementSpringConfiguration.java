@@ -128,12 +128,12 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ShareRuleAspectFactory twitterShareRuleAspectFactory(SystemNotificationService notificationService) {
-        return new ShareRuleAspectFactory(SocialProvider.twitter, notificationService);
+        return new ShareRuleAspectFactory(SocialProvider.twitter, notificationService, Ordered.LOWEST_PRECEDENCE - 101);
     }
 
     @Bean
     public ShareRuleAspectFactory facebookShareRuleAspectFactory(SystemNotificationService notificationService) {
-        return new ShareRuleAspectFactory(SocialProvider.facebook, notificationService);
+        return new ShareRuleAspectFactory(SocialProvider.facebook, notificationService, Ordered.LOWEST_PRECEDENCE - 100);
     }
 
     @Bean
